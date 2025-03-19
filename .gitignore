@@ -1,0 +1,9 @@
+moode_def.sqlite
+base_datos/config.yaml
+menu_blogs/mpv/lastfm_credentials.py
+actualizaciones/scripts_config.json
+config.json
+.content
+base_datos/config_database_creator.json
+modules/__pycache__
+menu_blogs/mpv/lastfm_credentials.py
