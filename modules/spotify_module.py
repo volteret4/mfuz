@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                             QLineEdit, QListWidget, QComboBox, QMessageBox,
                             QListWidgetItem, QSplitter, QLabel, QGroupBox,
-                            QInputDialog)
+                            QInputDialog, QDialog, QTextEdit)
 from PyQt6.QtCore import Qt
 from base_module import BaseModule, THEMES
 import spotipy
@@ -30,7 +30,8 @@ class SpotifyPlaylistManager(BaseModule):
         super().__init__(parent, theme)        
         if cache_path is None:
             cache_path = str(Path.home() / ".cache" / "spotify_token.txt")
-        
+        if not client_id or not client_secret:
+            raise ValueError("Client ID y Client Secret son obligatorios")
         # Definir rutas de cache
         self.cache_dir = Path.home() / ".cache" / "spotify_manager"
         self.playlists_cache = self.cache_dir / "playlists.json"
@@ -47,7 +48,7 @@ class SpotifyPlaylistManager(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
-        self.init_ui()
+        #self.init_ui()
         self.load_playlists()
 
 
@@ -67,32 +68,21 @@ class SpotifyPlaylistManager(BaseModule):
             print(f"Using token cache path: {token_cache_path}")
             
             scope = "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative"
+            
+            # Create a new OAuth instance
             self.sp_oauth = SpotifyOAuth(
                 client_id=client_id,
                 client_secret=client_secret,
-                redirect_uri='http://127.0.0.1:8090',
+                redirect_uri='http://localhost:8998',
                 scope=scope,
                 open_browser=False,
                 cache_path=str(token_cache_path)
             )
             
-            # Try to get existing token with better error handling
-            try:
-                token_info = self.sp_oauth.get_cached_token()
-                print(f"Cached token available: {bool(token_info)}")
-            except Exception as e:
-                print(f"Error reading cached token: {str(e)}")
-                token_info = None
+            # Try to get a valid token or initiate authentication
+            token_info = self.get_token_or_authenticate()
             
-            if not token_info:
-                print("No cached token found, starting authentication flow")
-                # Get new token through authentication process
-                token_info = self.handle_authentication()
-                
-                # Ensure we have a valid token
-                if not token_info:
-                    raise Exception("No se pudo obtener un token de autenticación válido")
-            
+            # Create Spotify client with the token
             print("Creating Spotify client with token")
             self.sp = spotipy.Spotify(auth=token_info['access_token'])
             
@@ -107,118 +97,178 @@ class SpotifyPlaylistManager(BaseModule):
             QMessageBox.critical(self, "Error", f"Error de autenticación con Spotify: {str(e)}")
             raise
 
-    def handle_authentication(self):
-        """Manejar proceso de autenticación con servidor temporal y UI mejorada"""
+    def get_token_or_authenticate(self):
+        """Obtener token válido o iniciar autenticación"""
+        try:
+            # Check if we have a valid cached token
+            token_info = None
+            try:
+                cached_token = self.sp_oauth.get_cached_token()
+                if cached_token and not self.sp_oauth.is_token_expired(cached_token):
+                    print("Using valid cached token")
+                    return cached_token
+                elif cached_token:
+                    print("Cached token is expired, trying to refresh")
+                    try:
+                        new_token = self.sp_oauth.refresh_access_token(cached_token['refresh_token'])
+                        print("Token refreshed successfully")
+                        return new_token
+                    except Exception as e:
+                        print(f"Token refresh failed: {str(e)}")
+                        # If refresh fails, we'll continue to new authentication
+                else:
+                    print("No valid cached token found")
+            except Exception as e:
+                print(f"Error checking cached token: {str(e)}")
+                # Continue to new authentication
+            
+            # If we get here, we need to authenticate from scratch
+            print("Starting new authentication flow")
+            return self.perform_new_authentication()
+        except Exception as e:
+            print(f"Error in get_token_or_authenticate: {str(e)}")
+            traceback.print_exc()
+            raise
+
+    def perform_new_authentication(self):
+        """Realizar autenticación nueva desde cero"""
+        # Get the authorization URL
         auth_url = self.sp_oauth.get_authorize_url()
         
-        # Show dialog with better instructions
-        response = QMessageBox.information(
-            self,
-            "Autorización Spotify",
-            f"Se abrirá una página web para autorizar esta aplicación en Spotify.\n\n"
-            f"1. Inicie sesión en Spotify si se le solicita\n"
-            f"2. Haga clic en 'Agree' para autorizar la aplicación\n"
-            f"3. Será redirigido automáticamente a esta aplicación\n\n"
-            f"Si tiene problemas, copie la URL después de autorizar y péguelo cuando se le solicite.",
-            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel
+        # Show instructions dialog with the URL
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("Autorización de Spotify")
+        msg_box.setText(
+            "Para usar las funciones de Spotify, necesita autorizar esta aplicación.\n\n"
+            "1. Copie el siguiente enlace y ábralo manualmente en su navegador:\n\n"
+            f"{auth_url}\n\n"
+            "2. Inicie sesión en Spotify si se le solicita.\n"
+            "3. Haga clic en 'Agree' para autorizar la aplicación.\n"
+            "4. Será redirigido a una página. Copie la URL completa de esa página."
         )
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+        msg_box.button(QMessageBox.StandardButton.Ok).setText("Continuar")
         
-        if response == QMessageBox.StandardButton.Cancel:
+        if msg_box.exec() == QMessageBox.StandardButton.Cancel:
             raise Exception("Autorización cancelada por el usuario")
         
-        token_info = None
-        server_thread = None
+        # No abrimos el navegador automáticamente
+        # webbrowser.open(auth_url)  # Comentado para evitar apertura automática
         
+        # Usar QInputDialog en lugar de QDialog personalizado
+        redirect_url, ok = QInputDialog.getText(
+            self,
+            "Ingrese URL de redirección",
+            "Después de autorizar en Spotify, copie la URL completa de la página a la que fue redirigido:",
+            QLineEdit.EchoMode.Normal,
+            ""
+        )
+        
+        if not ok or not redirect_url:
+            raise Exception("Autorización cancelada por el usuario")
+        
+        # Process the URL to get the authorization code
         try:
-            # Print for debugging
-            print(f"Opening authorization URL: {auth_url}")
-            webbrowser.open(auth_url)
+            # Handle URL-encoded URLs
+            if '%3A' in redirect_url or '%2F' in redirect_url:
+                redirect_url = urllib.parse.unquote(redirect_url)
             
-            # Start temporary server with improved error handling
-            server_thread = self.start_temporary_server()
+            print(f"Processing redirect URL: {redirect_url[:30]}...")
             
-            # Wait for token with better feedback
-            print("Waiting for authorization callback...")
-            for i in range(60):
-                if hasattr(self, '_callback_token'):
-                    print(f"Callback received: {self._callback_token}")
-                    try:
-                        # Extract code from the full URL
-                        code = self.sp_oauth.parse_response_code(self._callback_token)
-                        if code != self._callback_token:  # Ensure we got a valid code
-                            print(f"Extracted code: {code}")
-                            token_info = self.sp_oauth.get_access_token(code)
-                            print(f"Token obtained successfully: {bool(token_info)}")
-                            delattr(self, '_callback_token')
-                            break
-                        else:
-                            print("Failed to extract valid code from callback URL")
-                    except Exception as e:
-                        print(f"Exception processing callback: {str(e)}")
-                
-                # Show progress
-                if i % 5 == 0:
-                    print(f"Waiting for callback... ({i}s)")
-                time.sleep(1)
-        
+            # Extract the code from the URL
+            code = None
+            if redirect_url.startswith('http'):
+                code = self.sp_oauth.parse_response_code(redirect_url)
+            elif 'code=' in redirect_url:
+                code = redirect_url.split('code=')[1].split('&')[0]
+            else:
+                code = redirect_url
+            
+            if not code or code == redirect_url:
+                raise Exception("No se pudo extraer el código de autorización")
+            
+            print(f"Extracted code: {code[:5]}...")
+            
+            # Get token with the code
+            token_info = self.sp_oauth.get_access_token(code)
+            
+            if not token_info or 'access_token' not in token_info:
+                raise Exception("No se pudo obtener el token de acceso")
+            
+            print("Authentication successful")
+            return token_info
+            
         except Exception as e:
-            print(f"Error in authentication process: {str(e)}")
+            print(f"Error processing authentication: {str(e)}")
             traceback.print_exc()
-        
-        finally:
-            # Stop server more gracefully
-            if server_thread and server_thread.is_alive():
-                print("Stopping temporary server...")
-                try:
-                    server_thread.join(timeout=3)
-                    print("Server stopped")
-                except Exception as e:
-                    print(f"Error stopping server: {str(e)}")
-        
-        # If automatic process failed, ask for manual URL input with better instructions
-        if not token_info:
-            print("Automatic authentication failed, requesting manual URL input")
-            text, ok = QInputDialog.getText(
-                self, 
-                "Introduzca URL",
-                "No se detectó la redirección automática.\n\n"
-                "Por favor:\n"
-                "1. Copie la URL completa después de autorizar en el navegador\n"
-                "2. Debe ser similar a http://localhost:8090/... o http://127.0.0.1:8090/...\n"
-                "3. Pegue la URL completa a continuación:",
-                QLineEdit.EchoMode.Normal
+            
+            # Show error and offer retry
+            retry = QMessageBox.question(
+                self,
+                "Error de autenticación",
+                f"Ocurrió un error: {str(e)}\n\n¿Desea intentar nuevamente?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
             )
             
-            if ok and text:
-                try:
-                    print(f"Manually entered URL: {text}")
-                    if 'code=' in text:
-                        code = self.sp_oauth.parse_response_code(text)
-                        print(f"Extracted code from manual URL: {code}")
-                        token_info = self.sp_oauth.get_access_token(code)
-                        print(f"Manual token obtained: {bool(token_info)}")
-                    else:
-                        raise Exception("La URL proporcionada no contiene un código de autorización")
-                except Exception as e:
-                    print(f"Error processing manual URL: {str(e)}")
-                    traceback.print_exc()
-                    raise Exception(f"Error procesando la URL: {str(e)}")
+            if retry == QMessageBox.StandardButton.Yes:
+                return self.perform_new_authentication()
             else:
-                print("User cancelled manual URL entry")
-                raise Exception("Autorización cancelada por el usuario")
-        
-        if not token_info:
-            print("Failed to obtain authentication token")
-            raise Exception("No se pudo obtener el token de autorización")
-        
-        print("Authentication completed successfully")
-        return token_info
+                raise Exception("Autenticación fallida")
+
+    def refresh_token(self):
+        """Renovar token si es necesario"""
+        try:
+            token_info = self.sp_oauth.get_cached_token()
+            if token_info and self.sp_oauth.is_token_expired(token_info):
+                print("Refreshing expired token")
+                token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
+                self.sp = spotipy.Spotify(auth=token_info['access_token'])
+                return True
+            return False
+        except Exception as e:
+            print(f"Error refreshing token: {str(e)}")
+            traceback.print_exc()
+            
+            # If refresh fails, try getting a new token
+            try:
+                print("Attempting new authentication after refresh failure")
+                token_info = self.perform_new_authentication()
+                self.sp = spotipy.Spotify(auth=token_info['access_token'])
+                return True
+            except Exception as e2:
+                print(f"New authentication also failed: {str(e2)}")
+                QMessageBox.critical(self, "Error", f"Error renovando token: {str(e)}")
+                return False
+
+    def api_call_with_retry(self, func, *args, **kwargs):
+        """Ejecutar llamada API con reintento si el token expira"""
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                print(f"API call failed (attempt {attempt+1}/{max_retries}): {str(e)}")
+                
+                if attempt < max_retries - 1:
+                    if "token" in str(e).lower():
+                        print("Token error detected, refreshing...")
+                        if self.refresh_token():
+                            print("Token refreshed, retrying...")
+                            continue
+                        else:
+                            print("Token refresh failed")
+                    else:
+                        print("Non-token error")
+                
+                # Last attempt failed or it's not a token error
+                raise
+
 
 
     def start_temporary_server(self):
         """Iniciar servidor HTTP temporal para capturar el token de redirección"""
         
-        # Definir manejador de solicitudes con mejor manejo de errores
+        # Definir manejador de solicitudes
         class TokenRequestHandler(http.server.BaseHTTPRequestHandler):
             def log_message(self, format, *args):
                 # Override to reduce console spam
@@ -234,7 +284,11 @@ class SpotifyPlaylistManager(BaseModule):
                     self.end_headers()
                     
                     # Capture full URL with the code
-                    full_url = f"http://127.0.0.1:8090{self.path}"
+                    full_url = f"http://localhost:8998{self.path}"
+                    
+                    # Decode URL if it's encoded
+                    if '%3A' in full_url or '%2F' in full_url:
+                        full_url = urllib.parse.unquote(full_url)
                     
                     print(f"Callback URL: {full_url}")
                     
@@ -279,65 +333,36 @@ class SpotifyPlaylistManager(BaseModule):
                     self.wfile.write(response.encode('utf-8'))
                 except Exception as e:
                     print(f"Error handling request: {str(e)}")
+                    try:
+                        error_response = f"""
+                        <html><body><h1>Error</h1><p>{str(e)}</p></body></html>
+                        """.encode('utf-8')
+                        self.wfile.write(error_response)
+                    except:
+                        pass
         
-        # Improved server configuration
+        # Configuración del servidor
         try:
             # Allow port reuse to avoid "address already in use" errors
             socketserver.TCPServer.allow_reuse_address = True
-            httpd = socketserver.TCPServer(("127.0.0.1", 8090), TokenRequestHandler)
+            httpd = socketserver.TCPServer(("localhost", 8998), TokenRequestHandler)
             httpd.timeout = 1  # Short timeout for faster shutdown
             httpd.spotify_manager = self
             
-            print(f"Starting temporary server on http://127.0.0.1:8090")
+            print("Starting temporary server on http://localhost:8998")
             
             # Start in separate thread
             server_thread = threading.Thread(target=httpd.serve_forever)
             server_thread.daemon = True
             server_thread.start()
             
-            # Schedule server shutdown after 2 minutes
-            def shutdown_server():
-                print("Server shutdown timer triggered")
-                try:
-                    print("Shutting down temporary server...")
-                    httpd.shutdown()
-                    print("Server shutdown complete")
-                except Exception as e:
-                    print(f"Error shutting down server: {str(e)}")
-            
-            shutdown_timer = threading.Timer(120, shutdown_server)
-            shutdown_timer.daemon = True
-            shutdown_timer.start()
-            
-            return server_thread
-            
+            return server_thread, httpd
         except Exception as e:
             print(f"Error starting temporary server: {str(e)}")
-            raise
+            print("Continuing with manual fallback only")
+            return None, None
 
 
-
-    def refresh_token(self):
-        """Renovar token si es necesario"""
-        try:
-            token_info = self.sp_oauth.get_cached_token()
-            if self.sp_oauth.is_token_expired(token_info):
-                token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
-                self.sp = spotipy.Spotify(auth=token_info['access_token'])
-                return True
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Error renovando token: {str(e)}")
-            return False
-
-
-    def api_call_with_retry(self, func, *args, **kwargs):
-        """Ejecutar llamada API con reintento si el token expira"""
-        try:
-            return func(*args, **kwargs)
-        except Exception as e:
-            if "token" in str(e).lower() and self.refresh_token():
-                return func(*args, **kwargs)
-            raise
 
 
     def init_ui(self):

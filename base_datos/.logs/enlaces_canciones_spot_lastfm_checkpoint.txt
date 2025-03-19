@@ -1,17 +1,17 @@
 {
-  "processed": 1424,
-  "skipped": 246,
-  "updated": 1177,
+  "processed": 1524,
+  "skipped": 247,
+  "updated": 1276,
   "failed": 0,
   "deleted": 0,
   "by_service": {
-    "youtube": 0,
-    "spotify": 1177,
+    "youtube": 91,
+    "spotify": 1274,
     "bandcamp": 0,
     "soundcloud": 0,
     "boomkat": 0
   },
   "start_time": "2025-03-18T05:53:25.592165",
-  "end_time": "2025-03-18T06:07:43.410865",
-  "last_processed_id": 1647
+  "end_time": "2025-03-19T20:01:29.841328",
+  "last_processed_id": 33406
 }

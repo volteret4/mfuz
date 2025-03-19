@@ -7,3 +7,11 @@ config.json
 base_datos/config_database_creator.json
 modules/__pycache__
 menu_blogs/mpv/lastfm_credentials.py
+config.json
+modules/__pycache__
+.content/**
+.content/*
+.content/cache/token
+base_datos/config_database_creator.json
+.cache
+**/__pycache__/
