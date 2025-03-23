@@ -257,31 +257,42 @@ class MultiLyricsManager:
         
         return None, None
     
-    def save_state(self, song_ids, current_index, processed, success):
+    def save_state(self, song_ids, current_index, processed, success, force_update=False):
         """Guarda el estado actual del proceso para continuar más tarde."""
         state = {
             "song_ids": song_ids,
             "current_index": current_index,
             "processed": processed,
             "success": success,
+            "force_update": force_update,
             "timestamp": datetime.now().isoformat()
         }
         
-        with open(self.state_file, 'w', encoding='utf-8') as f:
+        # Usar un archivo diferente según el modo
+        state_file = self.state_file
+        if force_update:
+            state_file = "lyrics_update_state_force.json"
+        else:
+            state_file = "lyrics_update_state_normal.json"
+        
+        with open(state_file, 'w', encoding='utf-8') as f:
             json.dump(state, f, ensure_ascii=False, indent=2)
         
-        self.logger.info(f"Estado guardado: procesadas {processed} canciones, {success} actualizadas correctamente")
+        self.logger.info(f"Estado guardado en {state_file}: procesadas {processed} canciones, {success} actualizadas correctamente")
     
-    def load_state(self):
+    def load_state(self, force_update=False):
         """Carga el estado anterior si existe."""
-        if os.path.exists(self.state_file):
+        # Determinar qué archivo de estado cargar
+        state_file = "lyrics_update_state_force.json" if force_update else "lyrics_update_state_normal.json"
+        
+        if os.path.exists(state_file):
             try:
-                with open(self.state_file, 'r', encoding='utf-8') as f:
+                with open(state_file, 'r', encoding='utf-8') as f:
                     state = json.load(f)
-                self.logger.info(f"Estado cargado: continuando desde canción {state['current_index']} de {len(state['song_ids'])}")
+                self.logger.info(f"Estado cargado desde {state_file}: continuando desde canción {state['current_index']} de {len(state['song_ids'])}")
                 return state
             except Exception as e:
-                self.logger.error(f"Error cargando estado: {str(e)}")
+                self.logger.error(f"Error cargando estado desde {state_file}: {str(e)}")
         return None
     
     def get_songs_to_update(self, force_update=False):
@@ -289,8 +300,11 @@ class MultiLyricsManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
+        self.logger.info(f"Obteniendo canciones para actualizar. Force update: {force_update}")
+        
         if force_update:
             # Usamos los datos directos de la tabla songs
+            self.logger.info("Modo force_update: obteniendo todas las canciones...")
             c.execute("""
                 SELECT s.id, s.artist, s.title 
                 FROM songs s
@@ -300,6 +314,7 @@ class MultiLyricsManager:
             """)
         else:
             # Obtener solo canciones sin letras
+            self.logger.info("Modo normal: obteniendo solo canciones sin letras...")
             c.execute("""
                 SELECT s.id, s.artist, s.title 
                 FROM songs s 
@@ -312,28 +327,68 @@ class MultiLyricsManager:
         
         songs = c.fetchall()
         conn.close()
+        self.logger.info(f"Se encontraron {len(songs)} canciones para procesar")
         return songs
     
-    def update_lyrics(self, force_update=False, resume=True):
+    def update_lyrics(self, resume=True, force_update=False):
         """Actualiza las letras de las canciones en la base de datos, con soporte para pausar/continuar."""
         # Verificar si hay un estado guardado para continuar
         state = None
-        if resume:
-            state = self.load_state()
         
+        # Si estamos en modo force_update, ignoramos el archivo de estado anterior
+        # porque probablemente contenga canciones de una ejecución normal
+        if resume and not force_update:
+            state = self.load_state(force_update)  # Pasar el modo a load_state        
+
         if state:
             # Continuamos desde el estado guardado
             song_ids = state["song_ids"]
             current_index = state["current_index"]
             processed = state["processed"]
             success = state["success"]
+            
+            # Logging más detallado
+            self.logger.info(f"Reanudando desde estado guardado. Posición: {current_index}/{len(song_ids)}")
         else:
-            # Comenzamos un nuevo proceso
-            songs_to_update = self.get_songs_to_update(force_update)
+            # Comenzamos un nuevo proceso - aquí está el cambio clave
+            if force_update:
+                self.logger.info("MODO FORCE UPDATE: Procesando TODAS las canciones (incluso las que ya tienen letras)")
+                # Usamos los datos directos de la tabla songs
+                conn = sqlite3.connect(self.db_path)
+                c = conn.cursor()
+                c.execute("""
+                    SELECT s.id, s.artist, s.title 
+                    FROM songs s
+                    LEFT JOIN artists a ON s.artist = a.name
+                    WHERE s.artist IS NOT NULL AND s.title IS NOT NULL
+                    ORDER BY a.total_albums DESC, s.added_timestamp DESC
+                """)
+            else:
+                self.logger.info("MODO NORMAL: Procesando SOLO canciones SIN letras")
+                # Obtener solo canciones sin letras
+                conn = sqlite3.connect(self.db_path)
+                c = conn.cursor()
+                c.execute("""
+                    SELECT s.id, s.artist, s.title 
+                    FROM songs s 
+                    LEFT JOIN lyrics l ON s.id = l.track_id 
+                    LEFT JOIN artists a ON s.artist = a.name
+                    WHERE (l.id IS NULL OR s.has_lyrics = 0) 
+                    AND s.artist IS NOT NULL AND s.title IS NOT NULL
+                    ORDER BY a.total_albums DESC, s.added_timestamp DESC
+                """)
+            
+            songs_to_update = c.fetchall()
+            conn.close()
+            
+            # Logging más detallado
+            self.logger.info(f"Se encontraron {len(songs_to_update)} canciones para procesar")
+            
             song_ids = [(song_id, artist, title) for song_id, artist, title in songs_to_update]
             current_index = 0
             processed = 0
             success = 0
+            self.logger.info(f"Iniciando nuevo proceso (force_update={force_update})")
         
         total_songs = len(song_ids)
         self.logger.info(f"Total de canciones para procesar: {total_songs}")
@@ -422,7 +477,7 @@ class MultiLyricsManager:
                 
                 # Guardar estado y salir después de cada lote
                 if (i - batch_start + 1) >= self.batch_size:
-                    self.save_state(song_ids, i + 1, processed, success)
+                    self.save_state(song_ids, i + 1, processed, success, force_update)
                     self.logger.info(f"Lote completado. Procesando siguiente lote en la próxima ejecución.")
                     break
         
@@ -511,9 +566,16 @@ def main(config=None):
             final_config['db_path'], 
             batch_size=final_config['batch_size']
         )
+        
+        print("\n" + "="*50)
+        print("INICIANDO ACTUALIZACIÓN DE LETRAS")
+        print(f"- Modo force_update: {'ACTIVADO' if final_config['force_update'] else 'DESACTIVADO'}")
+        print(f"- Modo resume: {'ACTIVADO' if not final_config['no_resume'] else 'DESACTIVADO'}")
+        print("="*50 + "\n")
+        
         manager.update_lyrics(
-            force_update=final_config['force_update'], 
-            resume=not final_config['no_resume']
+            resume=not final_config['no_resume'],
+            force_update=final_config['force_update']
         )
     except KeyboardInterrupt:
         print("\nProceso interrumpido por el usuario")

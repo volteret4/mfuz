@@ -322,16 +322,34 @@ def analyze_specific_cases(db_path):
     
     # Casos específicos para tabla lyrics
     try:
-        cursor.execute("SELECT COUNT(*) FROM lyrics WHERE lyrics IS NULL OR lyrics = ''")
-        lyrics_empty = cursor.fetchone()[0]
-        
-        cursor.execute("SELECT COUNT(*) FROM lyrics WHERE source IS NULL OR source = ''")
-        lyrics_no_source = cursor.fetchone()[0]
-        
-        specific_cases["lyrics"] = {
-            "sin_contenido": lyrics_empty,
-            "sin_fuente": lyrics_no_source
-        }
+        # Primero verificar si la tabla existe
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='lyrics'")
+        if cursor.fetchone():
+            # Verificar la estructura de la tabla
+            cursor.execute("PRAGMA table_info(lyrics)")
+            columns = [col[1] for col in cursor.fetchall()]
+            
+            # Si la columna 'lyrics' existe en la tabla
+            if 'lyrics' in columns:
+                cursor.execute("SELECT COUNT(*) FROM lyrics WHERE lyrics IS NULL OR lyrics = ''")
+                lyrics_empty = cursor.fetchone()[0]
+            else:
+                # Si no existe, puede ser que la columna tenga otro nombre como 'content'
+                lyrics_column = 'content' if 'content' in columns else 'text'
+                cursor.execute(f"SELECT COUNT(*) FROM lyrics WHERE {lyrics_column} IS NULL OR {lyrics_column} = ''")
+                lyrics_empty = cursor.fetchone()[0]
+            
+            # Verificar si existe la columna source
+            if 'source' in columns:
+                cursor.execute("SELECT COUNT(*) FROM lyrics WHERE source IS NULL OR source = ''")
+                lyrics_no_source = cursor.fetchone()[0]
+            else:
+                lyrics_no_source = 0
+                
+            specific_cases["lyrics"] = {
+                "sin_contenido": lyrics_empty,
+                "sin_fuente": lyrics_no_source
+            }
     except sqlite3.OperationalError:
         specific_cases["lyrics"] = "Error al analizar tabla"
     
@@ -386,6 +404,41 @@ def analyze_specific_cases(db_path):
     except sqlite3.OperationalError:
         specific_cases["song_links"] = "Error al analizar tabla"
     
+    # Casos específicos para tabla album_links
+    try:
+        cursor.execute("SELECT COUNT(*) FROM album_links WHERE url IS NULL OR url = ''")
+        album_links_no_url = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM album_links WHERE service_name IS NULL OR service_name = ''")
+        album_links_no_service = cursor.fetchone()[0]
+        
+        specific_cases["album_links"] = {
+            "sin_url": album_links_no_url,
+            "sin_nombre_servicio": album_links_no_service
+        }
+    except sqlite3.OperationalError:
+        specific_cases["album_links"] = "Error al analizar tabla"
+
+    # Casos específicos para tabla album_reviews
+    try:
+        cursor.execute("SELECT COUNT(*) FROM album_reviews WHERE content IS NULL OR content = ''")
+        reviews_no_content = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM album_reviews WHERE source IS NULL OR source = ''")
+        reviews_no_source = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT COUNT(*) FROM album_reviews WHERE url IS NULL OR url = ''")
+        reviews_no_url = cursor.fetchone()[0]
+        
+        specific_cases["album_reviews"] = {
+            "sin_contenido": reviews_no_content,
+            "sin_fuente": reviews_no_source,
+            "sin_url": reviews_no_url
+        }
+    except sqlite3.OperationalError:
+        specific_cases["album_reviews"] = "Error al analizar tabla"
+
+
     # Analizar tablas de scrobbles y listens si existen
     try:
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scrobbles'")

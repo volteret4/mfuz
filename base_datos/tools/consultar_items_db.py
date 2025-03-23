@@ -670,9 +670,156 @@ class MusicDatabaseQuery:
         self.conn.close()
 
 
+    def get_latest_albums(self, limit=100000):
+        """
+        Obtiene el álbum más reciente de cada artista basado en el año de lanzamiento
+        
+        :param limit: Número máximo de álbumes a retornar (por defecto 100000)
+        :return: Lista de diccionarios con información del álbum más reciente de cada artista
+        """
+        query = """
+        SELECT 
+            albums.name,
+            artists.name,
+            albums.year,
+            albums.mbid
+        FROM albums
+        JOIN artists ON albums.artist_id = artists.id
+        WHERE albums.year IS NOT NULL AND albums.year != ''
+        ORDER BY albums.year DESC, albums.name
+        LIMIT ?
+        """
+        
+        self.cursor.execute(query, (limit,))
+        
+        all_albums = []
+        for row in self.cursor.fetchall():
+            album = {
+                'album': row[0],
+                'artist': row[1],
+                'year': row[2],
+                'mbid': row[3]
+            }
+            all_albums.append(album)
+        
+        # Filtrar para obtener solo el álbum más reciente de cada artista
+        latest_albums = {}
+        for album in all_albums:
+            artist = album['artist']
+            
+            # Convertir el año a entero para comparar correctamente
+            try:
+                year = int(album['year'])
+            except (ValueError, TypeError):
+                continue  # Saltar álbumes con años no válidos
+            
+            # Si el artista no está en el diccionario o este álbum es más reciente
+            if artist not in latest_albums or int(latest_albums[artist]['year']) < year:
+                latest_albums[artist] = album  # Guardar el álbum completo
+        
+        # Convertir el diccionario de vuelta a una lista
+        results = list(latest_albums.values())
+        
+        return results
+
+    def get_all_entries_with_mbid(self, entry_type, limite=10000):
+        """
+        Obtiene todos los artistas, álbumes o canciones que existen en la base de datos incluyendo sus MBIDs
+        :param entry_type: Tipo de entrada ('artistas', 'albums', 'canciones')
+        :param limite: Número máximo de resultados a devolver
+        :return: Lista de diccionarios con la información incluyendo MBID
+        """
+        if entry_type.lower() == 'artistas':
+            query = "SELECT name, mbid FROM artists ORDER BY name LIMIT ?"
+            self.cursor.execute(query, (limite,))
+            return [{"nombre": row[0], "mbid": row[1]} for row in self.cursor.fetchall()]
+            
+        elif entry_type.lower() == 'albums':
+            query = """
+            SELECT albums.name, artists.name, albums.mbid 
+            FROM albums 
+            JOIN artists ON albums.artist_id = artists.id 
+            ORDER BY albums.name, artists.name 
+            LIMIT ?
+            """
+            self.cursor.execute(query, (limite,))
+            return [{"album": row[0], "artista": row[1], "mbid": row[2]} for row in self.cursor.fetchall()]
+            
+        elif entry_type.lower() == 'canciones':
+            query = """
+            SELECT title, artist, album, mbid 
+            FROM songs 
+            ORDER BY title, artist, album 
+            LIMIT ?
+            """
+            self.cursor.execute(query, (limite,))
+            return [{"titulo": row[0], "artista": row[1], "album": row[2], "mbid": row[3]} for row in self.cursor.fetchall()]
+            
+        else:
+            return None
+
+    def get_album_links(self, album_id):
+        """Obtener todos los enlaces asociados a un álbum."""
+        self.cursor.execute("""
+            SELECT id, album_id, service_name, url, last_updated 
+            FROM album_links 
+            WHERE album_id = ?
+        """, (album_id,))
+        
+        columns = ['id', 'album_id', 'service_name', 'url', 'last_updated']
+        results = []
+        
+        for row in self.cursor.fetchall():
+            result = dict(zip(columns, row))
+            results.append(result)
+        
+        return results
+
+    def get_album_reviews(self, album_id):
+        """Obtener todas las reseñas asociadas a un álbum."""
+        self.cursor.execute("""
+            SELECT id, album_id, source, content, url, last_updated 
+            FROM album_reviews 
+            WHERE album_id = ?
+        """, (album_id,))
+        
+        columns = ['id', 'album_id', 'source', 'content', 'url', 'last_updated']
+        results = []
+        
+        for row in self.cursor.fetchall():
+            result = dict(zip(columns, row))
+            results.append(result)
+        
+        return results
+
+    def add_album_link(self, album_id, service_name, url):
+        """Añadir un nuevo enlace a un álbum."""
+        try:
+            self.cursor.execute("""
+                INSERT INTO album_links (album_id, service_name, url)
+                VALUES (?, ?, ?)
+            """, (album_id, service_name, url))
+            
+            self.conn.commit()
+            return {"success": True, "message": "Enlace añadido correctamente", "id": self.cursor.lastrowid}
+        except Exception as e:
+            return {"success": False, "message": f"Error al añadir enlace: {str(e)}"}
+
+    def add_album_review(self, album_id, source_review, content_review, url):
+        """Añadir una nueva reseña a un álbum."""
+        try:
+            self.cursor.execute("""
+                INSERT INTO album_reviews (album_id, source, content, url)
+                VALUES (?, ?, ?, ?)
+            """, (album_id, source_review, content_review, url))
+            
+            self.conn.commit()
+            return {"success": True, "message": "Reseña añadida correctamente", "id": self.cursor.lastrowid}
+        except Exception as e:
+            return {"success": False, "message": f"Error al añadir reseña: {str(e)}"}
 
 
-
+        
 def main():
     parser = argparse.ArgumentParser(description='Consultas a base de datos musical')
     parser.add_argument('--db', required=True, help='Ruta a la base de datos SQLite')
@@ -695,6 +842,19 @@ def main():
     parser.add_argument('--path-existente', action='store_true', help='Verificar si existe un archivo y devolver su ruta')
     parser.add_argument('--letra-desconocida', help='Buscar texto en letras de canciones')
     parser.add_argument('--listar', choices=['artistas', 'albums', 'canciones'], help='Listar todos los artistas, álbumes o canciones')
+    # Añadir este argumento en el parser
+    parser.add_argument('--ultimos', action='store_true', help='Obtener los álbumes más recientes')
+    parser.add_argument('--limite', type=int, default=10000, help='Limitar el número de resultados últimos!(por defecto 10)')
+    parser.add_argument('--buscar', help='Término de búsqueda para artistas, álbumes o canciones')
+    # Añadir estos argumentos al parser
+    parser.add_argument('--album-links', type=int, help='Obtener enlaces de un álbum por su ID')
+    parser.add_argument('--album-reviews', type=int, help='Obtener reseñas de un álbum por su ID')
+    parser.add_argument('--add-link', action='store_true', help='Añadir un nuevo enlace a un álbum')
+    parser.add_argument('--add-review', action='store_true', help='Añadir una nueva reseña a un álbum')
+    parser.add_argument('--service-name', help='Nombre del servicio para el enlace')
+    parser.add_argument('--source-review', help='Fuente de la reseña')
+    parser.add_argument('--content-review', help='Contenido de la reseña')
+    parser.add_argument('--url', help='URL para el enlace o la reseña')
 
     args = parser.parse_args()
 
@@ -706,6 +866,33 @@ def main():
         if args.mbid and args.artist and args.album:
             print(json.dumps(db.get_mbid_by_album_artist(args.artist, args.album)))
         
+        elif args.ultimos:
+            print(json.dumps(db.get_latest_albums(args.limite)))
+
+        # Consulta de enlaces de álbum
+        elif args.album_links:
+            print(json.dumps(db.get_album_links(args.album_links)))
+
+        # Consulta de reseñas de álbum
+        elif args.album_reviews:
+            print(json.dumps(db.get_album_reviews(args.album_reviews)))
+
+        # Añadir un nuevo enlace
+        elif args.add_link and args.album_id and args.service_name and args.url:
+            print(json.dumps(db.add_album_link(args.album_id, args.service_name, args.url)))
+
+        # Añadir una nueva reseña
+        elif args.add_review and args.album_id and args.source_review and args.content_review and args.url:
+            print(json.dumps(db.add_album_review(args.album_id, args.source_review, args.content_review, args.url)))
+
+
+        # Funcionalidad de búsqueda con MBID
+        elif args.buscar and args.limite:
+            print(json.dumps(db.get_all_entries_with_mbid(args.buscar, args.limite)))
+        elif args.buscar:
+            print(json.dumps(db.get_all_entries_with_mbid(args.busca)))
+
+
         elif args.mbid and args.album and args.song:
             print(json.dumps(db.get_mbid_by_album_track(args.album, args.song)))
         

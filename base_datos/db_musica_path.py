@@ -365,7 +365,7 @@ class MusicLibraryManager:
                 "CREATE INDEX IF NOT EXISTS idx_artists_name ON artists(name)",
                 "CREATE INDEX IF NOT EXISTS idx_albums_name ON albums(name)",
                 "CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)",
-                "CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)"
+                "CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)",
                 "CREATE INDEX IF NOT EXISTS idx_albums_year ON albums(year)"
             ]
             
@@ -416,27 +416,34 @@ class MusicLibraryManager:
                 except sqlite3.OperationalError as e:
                     # Algunos índices pueden fallar si la columna no existe todavía
                     self.logger.warning(f"Índice no creado: {e}")
-            
-            # 7. Restricciones de clave foránea (si no existen ya)
+
+            # 7. Enable foreign keys without trying to alter existing tables
             try:
                 c.execute("PRAGMA foreign_keys = ON")
+                self.logger.info("Foreign keys enabled for future operations")
+            except sqlite3.OperationalError as e:
+                self.logger.warning(f"Could not enable foreign keys: {e}")
+            
+            # # 7. Restricciones de clave foránea (si no existen ya)
+            # try:
+            #     c.execute("PRAGMA foreign_keys = ON")
                 
-                # Verificar si ya existen las restricciones antes de añadirlas
-                c.execute("PRAGMA foreign_key_list(songs)")
-                if not c.fetchall():
-                    c.execute("ALTER TABLE songs ADD CONSTRAINT fk_songs_lyrics FOREIGN KEY (lyrics_id) REFERENCES lyrics(id)")
+            #     # Verificar si ya existen las restricciones antes de añadirlas
+            #     c.execute("PRAGMA foreign_key_list(songs)")
+            #     if not c.fetchall():
+            #         c.execute("ALTER TABLE songs ADD CONSTRAINT fk_songs_lyrics FOREIGN KEY (lyrics_id) REFERENCES lyrics(id)")
                 
-                c.execute("PRAGMA foreign_key_list(lyrics)")
-                if not c.fetchall():
-                    c.execute("ALTER TABLE lyrics ADD CONSTRAINT fk_lyrics_songs FOREIGN KEY (track_id) REFERENCES songs(id)")
+            #     c.execute("PRAGMA foreign_key_list(lyrics)")
+            #     if not c.fetchall():
+            #         c.execute("ALTER TABLE lyrics ADD CONSTRAINT fk_lyrics_songs FOREIGN KEY (track_id) REFERENCES songs(id)")
                 
-                c.execute("PRAGMA foreign_key_list(albums)")
-                if not c.fetchall():
-                    c.execute("ALTER TABLE albums ADD CONSTRAINT fk_albums_artists FOREIGN KEY (artist_id) REFERENCES artists(id)")
+            #     c.execute("PRAGMA foreign_key_list(albums)")
+            #     if not c.fetchall():
+            #         c.execute("ALTER TABLE albums ADD CONSTRAINT fk_albums_artists FOREIGN KEY (artist_id) REFERENCES artists(id)")
                 
-                c.execute("PRAGMA foreign_key_list(song_links)")
-                if not c.fetchall():
-                    c.execute("ALTER TABLE song_links ADD CONSTRAINT fk_song_links_songs FOREIGN KEY (song_id) REFERENCES songs(id)")
+            #     c.execute("PRAGMA foreign_key_list(song_links)")
+            #     if not c.fetchall():
+            #         c.execute("ALTER TABLE song_links ADD CONSTRAINT fk_song_links_songs FOREIGN KEY (song_id) REFERENCES songs(id)")
             
             except sqlite3.OperationalError as e:
                 self.logger.warning(f"No se pudieron crear restricciones de clave foránea: {e}")

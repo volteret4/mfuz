@@ -86,6 +86,7 @@ class TabManager(QMainWindow):
 
         # Crear el widget de pestañas
         self.tab_widget = QTabWidget()
+
         layout.addWidget(self.tab_widget)
 
         self.apply_theme(self.font_size)
@@ -177,6 +178,7 @@ class TabManager(QMainWindow):
                 color: {theme['fg']};
                 font-family: {self.font_family};
                 font-size: {self.font_size};
+                border: none
             }}
             
             /* Main Window */
@@ -192,6 +194,7 @@ class TabManager(QMainWindow):
                 border-radius: 3px;
             }}
             
+
             QTabBar::tab {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
@@ -205,6 +208,7 @@ class TabManager(QMainWindow):
             QTabBar::tab:selected {{
                 background-color: {theme['bg']};
                 border-bottom-color: {theme['bg']};
+                color: {theme['fg']};
             }}
             
             QTabBar::tab:hover {{
@@ -215,11 +219,14 @@ class TabManager(QMainWindow):
             QLineEdit, QTextEdit, QPlainTextEdit {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border: 1px solid {theme['border']};
+                border: 0.5 px solid {theme['border']};
                 padding: 5px;
                 border-radius: 3px;
             }}
-            
+            QLineEdit:focus {{
+                border: 1px solid {theme['border']};
+            }}
+
             QComboBox {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
@@ -281,7 +288,7 @@ class TabManager(QMainWindow):
                 alternate-background-color: {theme['bg']};
                 color: {theme['fg']};
                 border: 1px solid {theme['border']};
-                border-radius: 3px;
+                
                 padding: 5px;
             }}
             

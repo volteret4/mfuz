@@ -1,0 +1,20 @@
+{
+    "Tokyo Night": {
+        "bg": "#1a1b26",
+        "fg": "#cba6f7",
+        "secondary_bg": "#24283b",
+        "border": "#414868",
+        "accent": "#7aa2f7",
+        "selection": "#565f89",
+        "button_hover": "#cba6f7"
+    },
+    "Light": {
+        "bg": "#ffffff",
+        "fg": "#000000",
+        "secondary_bg": "#f0f0f0",
+        "border": "#d0d0d0",
+        "accent": "#0078d7",
+        "selection": "#b3d7ff",
+        "button_hover": "#e5f1fb"
+    }
+}

@@ -1,17 +1,19 @@
 import sys
 import os
+import json
+from pathlib import Path
 import subprocess
 import requests
 import logging
 import datetime
-from base_module import BaseModule, THEMES
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                              QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
-                             QTableWidgetItem, QHeaderView)
+                             QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox)
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QColor, QTextDocument
 
-
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -20,7 +22,8 @@ logger = logging.getLogger(__name__)
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
                 muspy_username=None, 
-                muspy_api_key=None, 
+                muspy_api_key=None,
+                muspy_password=None,
                 muspy_id=None,
                 artists_file=None,
                 query_db_script_path=None,
@@ -42,9 +45,11 @@ class MuspyArtistModule(BaseModule):
             parent (QWidget, optional): Parent widget
             theme (str, optional): UI theme
         """
+
         self.muspy_username = muspy_username
+        self.muspy_password = muspy_password
         self.muspy_api_key = muspy_api_key
-        self.muspy_id = muspy_id
+        self.muspy_id = muspy_api_key
         # Intentar obtener el Muspy ID si no está configurado
         if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
             self.get_muspy_id()
@@ -99,15 +104,15 @@ class MuspyArtistModule(BaseModule):
         self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
         bottom_layout.addWidget(self.sync_lastfm_button)
         
-        self.get_releases_button = QPushButton("Get My Releases")
+        self.get_releases_button = QPushButton("Mis próximos discos")
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         bottom_layout.addWidget(self.get_releases_button)
         
-        self.get_new_releases_button = QPushButton("Get New Releases")
+        self.get_new_releases_button = QPushButton("Discos ausentes")
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
         bottom_layout.addWidget(self.get_new_releases_button)
         
-        self.get_my_releases_button = QPushButton("Get All My Releases")
+        self.get_my_releases_button = QPushButton("Obtener todo...")
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
         bottom_layout.addWidget(self.get_my_releases_button)
 
@@ -153,22 +158,156 @@ class MuspyArtistModule(BaseModule):
 
 
     def load_artists_from_file(self):
-        """Load artists from a text file"""
-        if not self.artists_file:
-            self.artists_file = QFileDialog.getOpenFileName(self, "Select Artists File", "", "Text Files (*.txt)")[0]
-        
-        if not self.artists_file:
-            return
-
+        """
+        Ejecuta un script para cargar artistas desde la base de datos, 
+        muestra un diálogo con checkboxes para seleccionar artistas y
+        guarda los seleccionados en un archivo JSON
+        """
         try:
-            with open(self.artists_file, 'r', encoding='utf-8') as f:
-                self.artists = [line.strip() for line in f if line.strip()]
-            
-            self.results_text.clear()
-            self.results_text.append(f"Loaded {len(self.artists)} artists from {self.artists_file}\n")
+            # Asegurar que tenemos PROJECT_ROOT
+            self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
+
+            # Construir la ruta al script
+            script_path = PROJECT_ROOT / "base_datos" / "tools" / "consultar_items_db.py"
+            
+            # Ejecutar el script de consulta
+            self.results_text.clear()
+            self.results_text.append("Ejecutando consulta de artistas en la base de datos...")
+            QApplication.processEvents()  # Actualizar UI
+            
+            cmd = f"python {script_path} --db {self.db_path} --buscar artistas"
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                self.results_text.append(f"Error al ejecutar el script: {result.stderr}")
+                return
+            
+            # Cargar los resultados como JSON
+            try:
+                artists_data = json.loads(result.stdout)
+            except json.JSONDecodeError as e:
+                self.results_text.append(f"Error al procesar la salida del script: {e}")
+                return
+            
+            # Verificar si hay artistas
+            if not artists_data:
+                self.results_text.append("No se encontraron artistas en la base de datos.")
+                return
+            
+            # Cargar artistas existentes si el archivo ya existe
+            json_path = PROJECT_ROOT / "artists_selected.json"
+            existing_artists = []
+            if json_path.exists():
+                try:
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        existing_artists = json.load(f)
+                except Exception as e:
+                    self.results_text.append(f"Error al cargar artistas existentes: {e}")
+            
+            # Crear una lista de nombres de artistas existentes para verificaciones más rápidas
+            existing_names = {artist["nombre"] for artist in existing_artists}
+            
+            # Crear un diálogo para seleccionar artistas
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Seleccionar Artistas")
+            dialog.setMinimumWidth(600)
+            dialog.setMinimumHeight(600)
+            
+            # Layout principal
+            layout = QVBoxLayout(dialog)
+            
+            # Etiqueta informativa
+            info_label = QLabel(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
+            layout.addWidget(info_label)
+            
+            # Campo de búsqueda
+            search_layout = QHBoxLayout()
+            search_label = QLabel("Buscar:")
+            search_input = QLineEdit()
+            search_layout.addWidget(search_label)
+            search_layout.addWidget(search_input)
+            layout.addLayout(search_layout)
+            
+            # Área de scroll con checkboxes
+            scroll_area = QWidget()
+            scroll_layout = QVBoxLayout(scroll_area)
+            
+            # Lista para almacenar los checkboxes
+            checkboxes = []
+            
+            # Crear un checkbox para cada artista
+            for artist in artists_data:
+                checkbox = QCheckBox(f"{artist['nombre']} ({artist['mbid']})")
+                checkbox.setChecked(artist['nombre'] in existing_names)  # Pre-seleccionar si ya existe
+                checkbox.setProperty("artist_data", artist)  # Almacenar datos del artista en el checkbox
+                checkboxes.append(checkbox)
+                scroll_layout.addWidget(checkbox)
+            
+            # Crear área de desplazamiento
+            scroll_widget = QScrollArea()
+            scroll_widget.setWidgetResizable(True)
+            scroll_widget.setWidget(scroll_area)
+            layout.addWidget(scroll_widget)
+            
+            # Botones de selección
+            button_layout = QHBoxLayout()
+            select_all_button = QPushButton("Seleccionar Todos")
+            deselect_all_button = QPushButton("Deseleccionar Todos")
+            button_layout.addWidget(select_all_button)
+            button_layout.addWidget(deselect_all_button)
+            layout.addLayout(button_layout)
+            
+            # Botones de aceptar/cancelar
+            buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+            layout.addWidget(buttons)
+            
+            buttons.accepted.connect(dialog.accept)
+            buttons.rejected.connect(dialog.reject)
+            
+            # Función de búsqueda para filtrar los artistas
+            def filter_artists():
+                search_text = search_input.text().lower()
+                for checkbox in checkboxes:
+                    artist_data = checkbox.property("artist_data")
+                    visible = search_text in artist_data["nombre"].lower()
+                    checkbox.setVisible(visible)
+            
+            # Conectar señales
+            search_input.textChanged.connect(filter_artists)
+            select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
+            deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
+            buttons.accepted.connect(dialog.accept)
+            buttons.rejected.connect(dialog.reject)
+            
+            # Mostrar el diálogo
+            if dialog.exec() == 1:  # 1 generalmente significa "aceptado"
+                self.results_text.append("Diálogo aceptado, procesando selección...")
+            else:
+                self.results_text.append("Operación cancelada por el usuario.")
+                return
+            
+            # Recopilar artistas seleccionados
+            selected_artists = []
+            for checkbox in checkboxes:
+                if checkbox.isChecked():
+                    selected_artists.append(checkbox.property("artist_data"))
+            
+            # Guardar artistas seleccionados en JSON
+            try:
+                with open(json_path, 'w', encoding='utf-8') as f:
+                    json.dump(selected_artists, f, ensure_ascii=False, indent=2)
+                
+                # Actualizar artists en la instancia
+                self.artists = [artist["nombre"] for artist in selected_artists]
+                
+                self.results_text.append(f"Se guardaron {len(selected_artists)} artistas en {json_path}")
+            except Exception as e:
+                self.results_text.append(f"Error al guardar los artistas: {e}")
+        
         except Exception as e:
-            self.results_text.append(f"Error loading file: {e}\n")
+            self.results_text.append(f"Error: {str(e)}")
+            logger.error(f"Error en load_artists_from_file: {e}", exc_info=True)
 
 
     def search_and_get_releases(self):
@@ -253,49 +392,109 @@ class MuspyArtistModule(BaseModule):
         else:
             QMessageBox.warning(self, "Error", "No artist currently selected")
 
-    def get_new_releases(self):
+    def get_new_releases(self, PROJECT_ROOT):
         """
-        Retrieve new releases using the Muspy API endpoint for all users
-        
+        Retrieve new releases using the Muspy API endpoint
+        Gets a list of album MBIDs from a local script and checks for new releases since each album
         Displays new releases in a QTableWidget
         """
         try:
-            # This endpoint doesn't require authentication for general releases
-            url = f"{self.base_url}/releases"
+            script_path = PROJECT_ROOT / "base_datos" / "tools" / "consultar_items_db.py"
+            # Ejecutar el script que devuelve el JSON de álbumes
+            result = subprocess.run(
+                f"python {script_pat}",
+                shell=True,
+                capture_output=True,
+                text=True
+            )
             
-            response = requests.get(url)
+            if result.returncode != 0:
+                QMessageBox.warning(self, "Error", f"Error ejecutando el script: {result.stderr}")
+                return
             
-            if response.status_code == 200:
-                all_releases = response.json()
+            # Cargar el JSON de álbumes
+            try:
+                albums = json.loads(result.stdout)
+            except json.JSONDecodeError:
+                QMessageBox.warning(self, "Error", "Error al parsear la respuesta del script")
+                return
+            
+            # Lista para almacenar todos los nuevos lanzamientos
+            all_new_releases = []
+            
+            # Consultar a muspy por cada MBID
+            for album in albums:
+                mbid = album.get('mbid')
+                if not mbid:
+                    continue
+                    
+                # Construir la URL con el parámetro 'since'
+                url = f"{self.base_url}/releases"
+                params = {'since': mbid}
                 
-                # Filter for future releases
-                today = datetime.date.today().strftime("%Y-%m-%d")
-                future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                response = requests.get(url, params=params)
                 
-                if not future_releases:
-                    QMessageBox.information(self, "No New Releases", "No new releases available")
-                    return
-                
-                # Display releases in table
-                self.display_releases_table(future_releases)
-            else:
-                QMessageBox.warning(self, "Error", f"Error retrieving new releases: {response.text}")
-        
+                if response.status_code == 200:
+                    releases = response.json()
+                    # Filtrar lanzamientos futuros
+                    today = datetime.date.today().strftime("%Y-%m-%d")
+                    future_releases = [release for release in releases if release.get('date', '0000-00-00') >= today]
+                    
+                    # Agregar a la lista de todos los lanzamientos
+                    all_new_releases.extend(future_releases)
+                else:
+                    print(f"Error consultando lanzamientos para MBID {mbid}: {response.text}")
+            
+            # Eliminar duplicados (si el mismo lanzamiento aparece para varios álbumes)
+            unique_releases = []
+            seen_ids = set()
+            for release in all_new_releases:
+                if release.get('mbid') not in seen_ids:
+                    seen_ids.add(release.get('mbid'))
+                    unique_releases.append(release)
+            
+            # Ordenar por fecha
+            unique_releases.sort(key=lambda x: x.get('date', '0000-00-00'))
+            
+            if not unique_releases:
+                QMessageBox.information(self, "No New Releases", "No new releases available")
+                return
+            
+            # Mostrar en la tabla
+            self.display_releases_table(unique_releases)
+            
         except Exception as e:
-            QMessageBox.warning(self, "Connection Error", f"Connection error with Muspy: {e}")
+            QMessageBox.warning(self, "Error", f"Error al obtener nuevos lanzamientos: {str(e)}")
 
     def sync_artists_with_muspy(self):
-        """Synchronize artists from file with Muspy"""
-        if not hasattr(self, 'artists') or not self.artists:
-            QMessageBox.warning(self, "Error", "No artists loaded. First load a file.")
+        """Synchronize artists from JSON file with Muspy"""
+        # Ruta al archivo JSON
+        json_path = PROJECT_ROOT / "artists_selected.json"
+        
+        # Verificar si el archivo existe
+        if not json_path.exists():
+            QMessageBox.warning(self, "Error", "El archivo artists_selected.json no existe.")
             return
-
+        
+        # Leer el archivo JSON
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al leer el archivo JSON: {e}")
+            return
+        
+        # Verificar si hay artistas en el JSON
+        if not artists_data:
+            QMessageBox.warning(self, "Error", "No hay artistas en el archivo JSON.")
+            return
+            
         # Limpiar solo una vez al principio
         self.results_text.clear()
-        self.results_text.append("Comenzando sincronización de artistas...\n")
+        self.results_text.append("Comenzando sincronización de artistas desde JSON...\n")
         
         # Mostrar una barra de progreso simple
-        total_artists = len(self.artists)
+        total_artists = len(artists_data)
         self.results_text.append(f"Total artistas a sincronizar: {total_artists}\n")
         self.results_text.append("Progreso: [" + "-" * 50 + "]\n")
         
@@ -305,12 +504,13 @@ class MuspyArtistModule(BaseModule):
         duplicates = 0
         
         # Procesar por lotes para no sobrecargar la interfaz
-        for i, artist_name in enumerate(self.artists):
+        for i, artist_data in enumerate(artists_data):
             try:
-                # Obtener el MBID
-                mbid = self.get_mbid_artist_searched(artist_name)
+                # Obtener el nombre y MBID directamente del JSON
+                artist_name = artist_data["nombre"]
+                mbid = artist_data["mbid"]
                 
-                # Intentar añadir el artista si se encontró el MBID
+                # Intentar añadir el artista con el MBID proporcionado
                 if mbid:
                     response = self.add_artist_to_muspy_silent(mbid, artist_name)
                     if response == 1:
@@ -320,6 +520,7 @@ class MuspyArtistModule(BaseModule):
                     else:
                         failed_adds += 1
                 else:
+                    logger.error(f"MBID no válido para el artista {artist_name}")
                     failed_adds += 1
                 
                 # Actualizar la barra de progreso cada 5 artistas o al final
@@ -332,7 +533,7 @@ class MuspyArtistModule(BaseModule):
                     QApplication.processEvents()  # Permite que la interfaz se actualice
             
             except Exception as e:
-                logger.error(f"Error al sincronizar artista {artist_name}: {e}")
+                logger.error(f"Error al sincronizar artista {artist_name if 'artist_name' in locals() else 'desconocido'}: {e}")
                 failed_adds += 1
         
         # Mostrar el resumen final
@@ -363,7 +564,7 @@ class MuspyArtistModule(BaseModule):
         try:
             # Follow artist by MBID
             url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
-            auth = (self.muspy_username, self.muspy_api_key)
+            auth = (self.muspy_username, self.muspy_password)
             
             response = requests.put(url, auth=auth)
             
@@ -575,7 +776,7 @@ class MuspyArtistModule(BaseModule):
             return
 
         try:
-            url = f"{self.base_url}/releases"
+            url = f"{self.base_url}/releases/{self.muspy_api_key}"
             # Usar autenticación básica en lugar de token
             auth = (self.muspy_username, self.muspy_api_key)
             
@@ -608,7 +809,7 @@ class MuspyArtistModule(BaseModule):
         
         Handles pagination to get all releases even when there are many artists
         """
-        if not self.muspy_id:
+        if not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Muspy ID not available. Please check your configuration.")
             return
 
@@ -701,7 +902,7 @@ class MuspyArtistModule(BaseModule):
         # Create the table
         table = QTableWidget()
         table.setColumnCount(5)
-        table.setHorizontalHeaderLabels(['Artist', 'Release Title', 'Type', 'Date', 'Details'])
+        table.setHorizontalHeaderLabels(['Artist', 'Release Title', 'Type', 'Date', 'Disambiguation'])
         table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         
         # Add a label showing how many releases we're displaying
@@ -735,7 +936,9 @@ class MuspyArtistModule(BaseModule):
             date_str = release.get('date', 'No date')
             date_item = QTableWidgetItem(date_str)
             
-            # Highlight dates that are within the next month
+            # Highlight dates that are within the next month  
+            
+            
             try:
                 release_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
                 today = datetime.date.today()
@@ -743,10 +946,10 @@ class MuspyArtistModule(BaseModule):
                 
                 if release_date <= today + datetime.timedelta(days=7):
                     # Coming very soon - red
-                    date_item.setBackground(QColor(255, 200, 200))
+                    date_item.setBackground(QColor(31, 60, 28))
                 elif release_date <= one_month:
                     # Coming in a month - yellow
-                    date_item.setBackground(QColor(255, 255, 200))
+                    date_item.setBackground(QColor(60, 28, 31))
             except ValueError:
                 # If date parsing fails, don't color
                 pass
@@ -761,7 +964,10 @@ class MuspyArtistModule(BaseModule):
                 details.append(f"Tracks: {release.get('tracks')}")
             if release.get('country'):
                 details.append(f"Country: {release.get('country')}")
-            
+            if artist.get('disambiguation'):
+                details.append(artist.get('disambiguation'))
+
+
             details_item = QTableWidgetItem("; ".join(details) if details else "")
             table.setItem(row, 4, details_item)
         
@@ -822,10 +1028,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-    

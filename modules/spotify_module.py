@@ -1,9 +1,8 @@
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                             QLineEdit, QListWidget, QComboBox, QMessageBox,
                             QListWidgetItem, QSplitter, QLabel, QGroupBox,
-                            QInputDialog, QDialog, QTextEdit)
+                            QInputDialog, QDialog, QTextEdit, QListView)
 from PyQt6.QtCore import Qt
-from base_module import BaseModule, THEMES
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from typing import Dict, List
@@ -18,6 +17,10 @@ import socketserver
 import urllib.parse
 import time
 import logging
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -263,8 +266,6 @@ class SpotifyPlaylistManager(BaseModule):
                 # Last attempt failed or it's not a token error
                 raise
 
-
-
     def start_temporary_server(self):
         """Iniciar servidor HTTP temporal para capturar el token de redirección"""
         
@@ -385,6 +386,20 @@ class SpotifyPlaylistManager(BaseModule):
         
         # Search section
         search_container = QWidget(self)
+        search_container.setStyleSheet("""
+            QWidget::tab-bar {
+                alignment: center;
+            }
+            QWidget::tab {
+                border-radius: 10px;
+                padding: 5px;
+                margin: 5px;
+            }
+            QWidget::tab:selected {
+                background: #dcdcdc;
+                border: 2px solid #a0a0a0;
+            }
+        """)
         search_layout = QHBoxLayout(search_container)
         search_layout.setContentsMargins(0, 0, 0, 0)
         
@@ -401,27 +416,76 @@ class SpotifyPlaylistManager(BaseModule):
         
         # Splitter para dividir resultados y creador de playlists
         self.results_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.results_splitter.setStyleSheet("""
+            QSplitter::handle {
+                background-color: transparent;
+                width: 1px;
+            }
+        """)
         
         # Search results (panel izquierdo)
         search_results_group = QGroupBox("Resultados de búsqueda")
+        search_results_group.setStyleSheet("""
+            QGroupBox {
+                border: none;
+                background-color: transparent;
+                padding: 5px;
+                margin-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+            }
+        """)
         search_results_layout = QVBoxLayout(search_results_group)
         
         self.search_results = QListWidget()
         self.search_results.setMinimumHeight(200)
+        self.search_results.setResizeMode(QListView.ResizeMode.Adjust)
+        self.search_results.setTextElideMode(Qt.TextElideMode.ElideNone)
+        self.search_results.setWordWrap(True)
+        self.search_results.setUniformItemSizes(False)  # Permitir alturas diferentes
+
         search_results_layout.addWidget(self.search_results)
         
         self.results_splitter.addWidget(search_results_group)
         
         # Creador de playlists (panel derecho)
         playlist_creator_group = QGroupBox("Creador de playlists")
+        playlist_creator_group.setStyleSheet("""
+            QGroupBox {
+                border: none;
+                background-color: transparent;
+                padding: 5px;
+                margin-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+            }
+        """)
         playlist_creator_layout = QVBoxLayout(playlist_creator_group)
         
         self.playlist_creator = QListWidget()
         self.playlist_creator.setMinimumHeight(200)
+        self.playlist_creator.setResizeMode(QListView.ResizeMode.Adjust)
+        self.playlist_creator.setTextElideMode(Qt.TextElideMode.ElideNone)
+        self.playlist_creator.setWordWrap(True)
+        self.playlist_creator.setUniformItemSizes(False)
         playlist_creator_layout.addWidget(self.playlist_creator)
         
         # Botones para gestionar creador de playlists
         playlist_buttons_container = QWidget()
+        playlist_buttons_container.setStyleSheet("""
+            QWidget {
+                background-color: {theme['bg']};
+                color: {theme['fg']};
+                font-family: {self.font_family};
+                font-size: {self.font_size};
+                border: none
+            }
+        """)
+            
         playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
         
         self.save_playlist_button = QPushButton("Guardar playlist")
@@ -441,6 +505,20 @@ class SpotifyPlaylistManager(BaseModule):
         
         # New playlist section
         playlist_container = QWidget(self)
+        playlist_container.setStyleSheet("""
+            QWidget::tab-bar {
+                alignment: center;
+            }
+            QWidget::tab {
+                border-radius: 10px;
+                padding: 5px;
+                margin: 5px;
+            }
+            QWidget::tab:selected {
+                background: #dcdcdc;
+                border: 2px solid #a0a0a0;
+            }
+        """)
         new_playlist_layout = QHBoxLayout(playlist_container)
         new_playlist_layout.setContentsMargins(0, 0, 0, 0)
         
@@ -457,6 +535,20 @@ class SpotifyPlaylistManager(BaseModule):
         
         # Playlist selector
         selector_container = QWidget(self)
+        selector_container.setStyleSheet("""
+            QWidget::tab-bar {
+                alignment: center;
+            }
+            QWidget::tab {
+                border-radius: 10px;
+                padding: 5px;
+                margin: 5px;
+            }
+            QWidget::tab:selected {
+                background: #dcdcdc;
+                border: 2px solid #a0a0a0;
+            }
+        """)
         add_to_playlist_layout = QHBoxLayout(selector_container)
         add_to_playlist_layout.setContentsMargins(0, 0, 0, 0)
         
@@ -504,10 +596,20 @@ class SpotifyPlaylistManager(BaseModule):
             self.playlists[playlist['name']] = playlist['id']
             
             item_widget = QWidget(self.playlist_list)
+            # Aplicar estilo al widget para que sea invisible/sin bordes
+            item_widget.setStyleSheet("""
+                QWidget {
+                    border: none;
+                    background-color: transparent;
+                    padding: 2px
+                }
+            """)
+
             item_layout = QHBoxLayout(item_widget)
-            item_layout.setContentsMargins(5, 5, 5, 5)
+            item_layout.setContentsMargins(3, 5, 3, 5)
             
             playlist_button = QPushButton(playlist['name'], item_widget)
+            playlist_button.setFixedHeight(30)
             playlist_button.setStyleSheet("""
                 QPushButton {
                     text-align: left;
@@ -611,6 +713,16 @@ class SpotifyPlaylistManager(BaseModule):
                 display_text = f"{track['name']} - {artist_names}"
                 
                 item_widget = QWidget()
+                item_widget.setStyleSheet("""
+                    QWidget {
+                        border: none;
+                        background-color: transparent;
+                        padding: 2px
+                    }
+                    QWidget:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+                """)
                 item_layout = QHBoxLayout(item_widget)
                 item_layout.setContentsMargins(5, 5, 5, 5)
                 
@@ -715,6 +827,15 @@ class SpotifyPlaylistManager(BaseModule):
                 
                 # Crear widget para contener track y botones
                 item_widget = QWidget()
+                item_widget.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(0, 255, 0, 0.2);
+                    }
+                """)
                 item_layout = QHBoxLayout(item_widget)
                 item_layout.setContentsMargins(5, 5, 5, 5)
                 
@@ -790,6 +911,16 @@ class SpotifyPlaylistManager(BaseModule):
         
         # Crear widget para la canción en el creador
         item_widget = QWidget()
+        item_widget.setStyleSheet("""
+            QPushButton {
+                border: none;
+                background-color: transparent
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 255, 0, 0.2);
+            }
+        """)
         item_layout = QHBoxLayout(item_widget)
         item_layout.setContentsMargins(5, 5, 5, 5)
         
@@ -866,6 +997,15 @@ class SpotifyPlaylistManager(BaseModule):
         for i, track in enumerate(self.temp_playlist_tracks):
             # Crear widget para la canción
             item_widget = QWidget()
+            item_widget.setStyleSheet("""
+                QPushButton {
+                    border: none;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: rgba(0, 255, 0, 0.2);
+                }
+            """)
             item_layout = QHBoxLayout(item_widget)
             item_layout.setContentsMargins(5, 5, 5, 5)
             

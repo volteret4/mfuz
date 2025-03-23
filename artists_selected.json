@@ -1,0 +1,5406 @@
+[
+  {
+    "mbid": "d6d45dda-2377-4faa-947b-e071efa085c0",
+    "nombre": "100 gecs"
+  },
+  {
+    "mbid": "7a6506cc-6f12-442d-9d3e-149bc838792e",
+    "nombre": "79.5"
+  },
+  {
+    "mbid": "b343730d-a34e-44d5-9191-a83f00231716",
+    "nombre": "A Guy Called Gerald"
+  },
+  {
+    "mbid": "440a4d3b-f7b7-46a0-a647-da3e99b389cf",
+    "nombre": "A Homeboy, A Hippie"
+  },
+  {
+    "mbid": "54a55229-e611-439f-928e-d89919ff9d29",
+    "nombre": "A Silver Mt. Zion"
+  },
+  {
+    "mbid": "c7f2e7e7-2a34-4fbf-aae4-499c2f00b43c",
+    "nombre": "A Song for You"
+  },
+  {
+    "mbid": "8fb61843-e724-41b4-86bd-6e3b3dfe9c6e",
+    "nombre": "A Taste of Honey"
+  },
+  {
+    "mbid": "9689aa5a-4471-4fb4-9721-07cecda0fa9f",
+    "nombre": "A Tribe Called Quest"
+  },
+  {
+    "mbid": "139c9f6c-84f0-4bb2-9592-52a45732477c",
+    "nombre": "ADHD"
+  },
+  {
+    "mbid": "ed5cd4a2-0eb1-4e3b-a9b5-73547a6447da",
+    "nombre": "AES Dana"
+  },
+  {
+    "mbid": "91b67275-db2c-4fc2-b51f-82978aeb5c41",
+    "nombre": "ANOHNI"
+  },
+  {
+    "mbid": "484a4e90-6899-4e4b-a948-a2255d365340",
+    "nombre": "AURORA"
+  },
+  {
+    "mbid": "ce8cbced-8719-47b9-b728-6024e8b19b15",
+    "nombre": "Abbey Lincoln"
+  },
+  {
+    "mbid": "1176a080-c6fe-4681-b0e6-1af80b20b883",
+    "nombre": "Abul Mogard"
+  },
+  {
+    "mbid": "824488af-c5c3-440b-adbe-da72df0a9920",
+    "nombre": "AceMo"
+  },
+  {
+    "mbid": "a4ac255f-9775-4c16-8642-7f51502e45dd",
+    "nombre": "Acid King"
+  },
+  {
+    "mbid": "49f03c14-8aa9-426c-a7f4-8e36409451a0",
+    "nombre": "Acid Mothers Temple"
+  },
+  {
+    "mbid": "2601675e-1ed5-4730-878d-1762e70f30e0",
+    "nombre": "Acidwolf"
+  },
+  {
+    "mbid": "34027f62-1ef5-4c52-84a9-5e4333b5b9fb",
+    "nombre": "Acronym"
+  },
+  {
+    "mbid": "973321d1-9565-4214-a6ef-a77f1890c294",
+    "nombre": "Actress"
+  },
+  {
+    "mbid": "38712b4c-0fd4-4c65-8c7a-45676fecc973",
+    "nombre": "Actress × London Contemporary Orchestra"
+  },
+  {
+    "mbid": "203fa511-5748-4c22-bd55-29aa55e41c18",
+    "nombre": "Admas"
+  },
+  {
+    "mbid": "cbfcdb48-c199-45af-80da-100d4e53253e",
+    "nombre": "Adrian Sherwood"
+  },
+  {
+    "mbid": "71232c74-a712-41ff-b790-3332499f31e0",
+    "nombre": "Aeva"
+  },
+  {
+    "mbid": "d33310ad-f44f-486f-bf98-a3e461f152ca",
+    "nombre": "Afriquoi"
+  },
+  {
+    "mbid": "05d4916a-7a49-4e51-adf9-f80fe3f8bba0",
+    "nombre": "AfroCubism"
+  },
+  {
+    "mbid": "c8e6242c-bc88-446c-8723-e354b806243d",
+    "nombre": "Against All Logic"
+  },
+  {
+    "mbid": "f0edc96a-5883-45aa-b590-d8d91757d3d6",
+    "nombre": "Agar Agar"
+  },
+  {
+    "mbid": "eea85c38-427d-438a-8c59-6036e1c05d0e",
+    "nombre": "Aidan Baker"
+  },
+  {
+    "mbid": "cb67438a-7f50-4f2b-a6f1-2bb2729fd538",
+    "nombre": "Air France"
+  },
+  {
+    "mbid": "09c0f334-f9de-4970-b9ee-ef799cd093be",
+    "nombre": "Al Di Meola"
+  },
+  {
+    "mbid": "ab7d49fa-c383-4c41-b890-3fe68e559dc4",
+    "nombre": "Al Stewart"
+  },
+  {
+    "mbid": "40419b33-18e9-4d5a-a674-30b4bb14bac2",
+    "nombre": "Alabama Shakes"
+  },
+  {
+    "mbid": "4c1d0414-f5d7-4882-92fc-ba2421b82d40",
+    "nombre": "Alabaster dePlume"
+  },
+  {
+    "mbid": "dd77b8da-cdc7-46b8-8a7f-10894ca0490e",
+    "nombre": "Alcest"
+  },
+  {
+    "mbid": "0e908adf-fa74-441d-939e-6da4d211d7f5",
+    "nombre": "Aleksandir"
+  },
+  {
+    "mbid": "7b88250d-891d-4186-9b16-b94c930be1b2",
+    "nombre": "Alessandro Cortini"
+  },
+  {
+    "mbid": "f5b41828-248a-449d-95b8-fff92db97629",
+    "nombre": "Alfa Mist"
+  },
+  {
+    "mbid": "258e8672-1db1-469a-a505-00a42aaf0973",
+    "nombre": "Algiers"
+  },
+  {
+    "mbid": "00fa3579-6b4e-4efc-bd26-03a93302ebdc",
+    "nombre": "Ali Akbar Khan"
+  },
+  {
+    "mbid": "9be2a5ac-8201-489b-b5f6-91f958bf9060",
+    "nombre": "Ali Farka Touré"
+  },
+  {
+    "mbid": "b625448e-bf4a-41c3-a421-72ad46cdb831",
+    "nombre": "Alice Coltrane"
+  },
+  {
+    "mbid": "156f2e34-903e-4a2f-9d35-81a3a739891c",
+    "nombre": "Alina Bzhezhinska"
+  },
+  {
+    "mbid": "cd5799f6-e6cf-4322-a659-96f5de4a2f6c",
+    "nombre": "Altın Gün"
+  },
+  {
+    "mbid": "48ec4bb6-47a6-4e2c-8287-7617464eb193",
+    "nombre": "Alva Noto"
+  },
+  {
+    "mbid": "6edc70bb-c340-4ae6-bdd4-d5fb0c7411de",
+    "nombre": "Alva Noto + Ryuichi Sakamoto"
+  },
+  {
+    "mbid": "b94ca4ff-3bff-4d89-8748-8aa6f7745194",
+    "nombre": "Amanda Whiting"
+  },
+  {
+    "mbid": "0f74b263-65bf-4027-9708-45aadf40122d",
+    "nombre": "Amyl and the Sniffers"
+  },
+  {
+    "mbid": "407fe493-a0f5-4dcd-bd86-bde9d7dc14e5",
+    "nombre": "An-tonio"
+  },
+  {
+    "mbid": "c01557ad-d41e-4316-a285-605769e2ab3b",
+    "nombre": "AnD"
+  },
+  {
+    "mbid": "5f70831a-193c-463f-800d-e2c8e1377e1e",
+    "nombre": "Ana Silvera"
+  },
+  {
+    "mbid": "f6746081-942c-4392-91e5-35a43d86b02d",
+    "nombre": "Ancient Methods"
+  },
+  {
+    "mbid": "c5a0a216-c33c-42dc-92b8-4b60236f8dad",
+    "nombre": "Andrea Bocelli"
+  },
+  {
+    "mbid": "6438bd71-ddc1-4619-a383-20d28ee55b43",
+    "nombre": "Andreas Vollenweider"
+  },
+  {
+    "mbid": "4f4fd405-6ede-4da0-9b74-c422d8e09bed",
+    "nombre": "Andrew Weatherall"
+  },
+  {
+    "mbid": "a7811ad0-0405-4a43-846a-a950bc0d289a",
+    "nombre": "Androo"
+  },
+  {
+    "mbid": "ecf5ab37-019f-4cc1-9fdc-218de6a41b65",
+    "nombre": "Andy Stott"
+  },
+  {
+    "mbid": "5894dac5-0260-4175-b36e-e34680a859d6",
+    "nombre": "Angelo Badalamenti"
+  },
+  {
+    "mbid": "b0fe8ef0-d59b-4d41-afee-2d21b59112ab",
+    "nombre": "Angra"
+  },
+  {
+    "mbid": "a7bdc71f-697a-45d9-92b2-a01fbbe50272",
+    "nombre": "Ani DiFranco"
+  },
+  {
+    "mbid": "0c751690-c784-4a4f-b1e4-c1de27d47581",
+    "nombre": "Animal Collective"
+  },
+  {
+    "mbid": "5ffe7875-614f-4823-879b-1fd66574a36d",
+    "nombre": "Anita Ward"
+  },
+  {
+    "mbid": "462a9ce0-e1f3-4cbc-a21e-0998003d9386",
+    "nombre": "Anna Calvi"
+  },
+  {
+    "mbid": "6bd920ac-3b7c-47e0-8f0f-c390f63f5112",
+    "nombre": "Anna von Hausswolff"
+  },
+  {
+    "mbid": "a019a8cf-2601-4a81-b3c3-7b279a873713",
+    "nombre": "Anne Clark"
+  },
+  {
+    "mbid": "32387307-bc5f-4b5d-b6b2-008290ec94b2",
+    "nombre": "Anodyne"
+  },
+  {
+    "mbid": "f2db511c-76ac-490a-8881-b4ee31283d79",
+    "nombre": "Ansome"
+  },
+  {
+    "mbid": "249649cb-390e-4169-80aa-8449ef43489b",
+    "nombre": "Anthony Naples"
+  },
+  {
+    "mbid": "ad79836d-9849-44df-8789-180bbc823f3c",
+    "nombre": "Antonio Forcione"
+  },
+  {
+    "mbid": "f22942a1-6f70-4f48-866e-238cb2308fbd",
+    "nombre": "Aphex Twin"
+  },
+  {
+    "mbid": "84800c46-2211-43e0-8a87-bdcbecf91932",
+    "nombre": "Aphrodite"
+  },
+  {
+    "mbid": "2ddcbe3e-6e46-4c8c-b264-c41a3dec3543",
+    "nombre": "Aquiles Navarro"
+  },
+  {
+    "mbid": "f7625f34-1799-42a4-a1c6-22b5377c767b",
+    "nombre": "Arca"
+  },
+  {
+    "mbid": "2f9ecbed-27be-40e6-abca-6de49d50299e",
+    "nombre": "Aretha Franklin"
+  },
+  {
+    "mbid": "b825214f-7cc3-42d8-93c2-616dde1efeb2",
+    "nombre": "Arianna Puello"
+  },
+  {
+    "mbid": "601e7466-eaf5-4a91-9909-ffd770b7e04a",
+    "nombre": "Art Blakey"
+  },
+  {
+    "mbid": "d4eaad9c-22e8-467c-a9b9-6df902702d83",
+    "nombre": "Art of Tones"
+  },
+  {
+    "mbid": "20ff3303-4fe2-4a47-a1b6-291e26aa3438",
+    "nombre": "Arthur Brown"
+  },
+  {
+    "mbid": "b236b897-8db4-4823-b28e-c211683254ac",
+    "nombre": "Arthur Verocai"
+  },
+  {
+    "mbid": "a2a9d60c-6e40-4d4c-8329-e752bd891874",
+    "nombre": "Artisti Vari"
+  },
+  {
+    "mbid": "0efa1646-360b-45b8-bd00-29ae7c0ffc34",
+    "nombre": "Arve Henriksen"
+  },
+  {
+    "mbid": "ae0b2424-d4c5-4c54-82ac-fe3be5453270",
+    "nombre": "Arvo Pärt"
+  },
+  {
+    "mbid": "ae0b2424-d4c5-4c54-82ac-fe3be5453270",
+    "nombre": "Arvo Pärt; Moscow Virtuosi, Vladimir Spivakov"
+  },
+  {
+    "mbid": "ba147ea0-60c4-4a40-9da6-0d5c2b2e7b03",
+    "nombre": "As I Lay Dying"
+  },
+  {
+    "mbid": "a15ed039-7967-4bf9-b660-7aa89471f9fb",
+    "nombre": "As One"
+  },
+  {
+    "mbid": "7e62de5d-1cc6-4779-a588-8923cf9fe09d",
+    "nombre": "Ash Ra Tempel"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "Ashley Beedle presents The London Heavy Disco Revue"
+  },
+  {
+    "mbid": "07604f0c-218b-4233-94d9-57c4a5432c3a",
+    "nombre": "Astrid Monroe"
+  },
+  {
+    "mbid": "c6f09ec1-7173-42e2-8f29-30cbcbff8878",
+    "nombre": "Attom"
+  },
+  {
+    "mbid": "75823c6e-aa7c-40cd-a1b7-441b705750bf",
+    "nombre": "Aurora Halal"
+  },
+  {
+    "mbid": "f3aa074a-5a28-44be-9510-9d6491ba4dd2",
+    "nombre": "Automatic Tasty"
+  },
+  {
+    "mbid": "c4707a18-2236-4426-9e67-429ce023777c",
+    "nombre": "Avalanch"
+  },
+  {
+    "mbid": "22568c9d-8ef3-4224-b994-8e0658e1082a",
+    "nombre": "Avey Tare and Panda Bear"
+  },
+  {
+    "mbid": "c76da12c-0164-4e4b-9b30-80bc613f6759",
+    "nombre": "Ayax"
+  },
+  {
+    "mbid": "fa8e7fb9-c595-4811-aad9-16b37ac27f5b",
+    "nombre": "Ayax y Prok"
+  },
+  {
+    "mbid": "2e9c624b-f2d6-456d-9778-8d0b004b8ffa",
+    "nombre": "Ayub Ogada"
+  },
+  {
+    "mbid": "5f86a079-be87-4eb3-8709-afe2498afa37",
+    "nombre": "Azymuth"
+  },
+  {
+    "mbid": "88e2147d-0332-46f6-85b2-b5f463ba957b",
+    "nombre": "B.T. Express"
+  },
+  {
+    "mbid": "fa187203-5d60-4e3d-9042-cac7de849649",
+    "nombre": "B12"
+  },
+  {
+    "mbid": "754294d5-d7d2-4ea2-8184-1dcaaf55a56f",
+    "nombre": "BADBADNOTGOOD"
+  },
+  {
+    "mbid": "88e2147d-0332-46f6-85b2-b5f463ba957b",
+    "nombre": "BT"
+  },
+  {
+    "mbid": "149c6fd3-63ed-4e6f-804e-7537d2039c92",
+    "nombre": "Baiuca"
+  },
+  {
+    "mbid": "1507b368-e660-4c15-af94-3f5603561045",
+    "nombre": "Balmorhea"
+  },
+  {
+    "mbid": "c839aef4-4611-40da-891d-64d42b4546a0",
+    "nombre": "Bana Haffar"
+  },
+  {
+    "mbid": "0690cbd1-39d9-4ae1-8253-78692f65047a",
+    "nombre": "Banda Achilifunk"
+  },
+  {
+    "mbid": "cf8ffbfe-02ba-4b91-a608-9783d91f709a",
+    "nombre": "Barbara Mason"
+  },
+  {
+    "mbid": "2ad8bce1-8e55-48db-82ed-d98b52a3a13f",
+    "nombre": "Bardo Pond"
+  },
+  {
+    "mbid": "b904d624-9e05-4398-8f4f-88fbcf022f79",
+    "nombre": "Barry White"
+  },
+  {
+    "mbid": "d145a57e-7afb-4793-8cc4-2fad292374ef",
+    "nombre": "Basic Channel"
+  },
+  {
+    "mbid": "e381664a-edbc-423c-8004-a46f68c2a8de",
+    "nombre": "Bassekou Kouyate, Ngoni Ba, Zoumana Tereta"
+  },
+  {
+    "mbid": "8522b9b6-b295-48d7-9a10-8618fb80beb8",
+    "nombre": "Battles"
+  },
+  {
+    "mbid": "50df8a7c-ca0b-47c8-98e5-d27a57e04073",
+    "nombre": "Baxter Dury"
+  },
+  {
+    "mbid": "f174152d-da33-46bd-8cb4-c8d24b834bf7",
+    "nombre": "Baxter Dury, Étienne de Crécy"
+  },
+  {
+    "mbid": "4849dbcf-4192-434c-825b-077c9057c119",
+    "nombre": "Be Your Own Pet"
+  },
+  {
+    "mbid": "ebfc1398-8d96-47e3-82c3-f782abcdb13d",
+    "nombre": "Beach House"
+  },
+  {
+    "mbid": "94232a04-13fb-40a1-a21a-303fb0643623",
+    "nombre": "Beans"
+  },
+  {
+    "mbid": "795038aa-212d-437f-b0c2-42f3e4b1ebb8",
+    "nombre": "Beardfish"
+  },
+  {
+    "mbid": "36946a1b-4c1b-44bf-af9b-641f83546461",
+    "nombre": "Beat Pharmacy"
+  },
+  {
+    "mbid": "5e477777-787a-4dce-a1c5-306f77f932da",
+    "nombre": "Beaumont Hannant"
+  },
+  {
+    "mbid": "944e398b-4240-4d73-8c54-d4322dbc7ea5",
+    "nombre": "Beck"
+  },
+  {
+    "mbid": "e1a889b7-5e45-447f-baa0-b9c6cbc0d39f",
+    "nombre": "Bela Fleck, Zakir Hussain, Edgar Meyer"
+  },
+  {
+    "mbid": "91eed5fd-9d83-4c44-b5d6-4a86faf616ec",
+    "nombre": "Belief Defect"
+  },
+  {
+    "mbid": "367a400a-ae44-4917-9756-d4912013bfd7",
+    "nombre": "Belong"
+  },
+  {
+    "mbid": "e4f12dfc-1ee7-4250-8e24-549b6d46676d",
+    "nombre": "Ben Böhmer"
+  },
+  {
+    "mbid": "74ce8ef4-7ad6-41ec-92a6-d6c50ecd1637",
+    "nombre": "Ben Frost"
+  },
+  {
+    "mbid": "1582a5b8-538e-45e7-9ae4-4099439a0e79",
+    "nombre": "Ben Harper"
+  },
+  {
+    "mbid": "2dbdbbad-9427-4360-b6c7-13a2f7214627",
+    "nombre": "Ben l’Oncle Soul"
+  },
+  {
+    "mbid": "49ae5227-605a-47a8-9b8e-cd89bf01a97c",
+    "nombre": "Benjamin Tod"
+  },
+  {
+    "mbid": "0a77bec1-12ef-4caa-b36a-f533001fcd29",
+    "nombre": "Bent"
+  },
+  {
+    "mbid": "74cad662-0eb6-4044-908e-04680457957a",
+    "nombre": "Bernard Wright"
+  },
+  {
+    "mbid": "c3f069d6-90a8-4ba1-b7d8-657a25f806d8",
+    "nombre": "Bernard Xolotl"
+  },
+  {
+    "mbid": "5adcb9d9-5ea2-428d-af46-ef626966e106",
+    "nombre": "Beth Gibbons"
+  },
+  {
+    "mbid": "561d854a-6a28-4aa7-8c99-323e6ce46c2a",
+    "nombre": "Betty Davis"
+  },
+  {
+    "mbid": "c7e4e51b-df22-4ff3-9bb3-3a56d801e5be",
+    "nombre": "Beverly Glenn‐Copeland"
+  },
+  {
+    "mbid": "10e8f0df-90f9-4957-aedd-c4e0d187e3a8",
+    "nombre": "Bicep"
+  },
+  {
+    "mbid": "b4013ff1-d7ce-4b1a-af6e-e0b19ca7f378",
+    "nombre": "Big Brother"
+  },
+  {
+    "mbid": "9f81247f-7f57-42f3-a8ba-75bef554e591",
+    "nombre": "Big Thief"
+  },
+  {
+    "mbid": "1d58d218-e1bb-469c-bfa6-91d85755c6de",
+    "nombre": "Bill Ryder-Jones"
+  },
+  {
+    "mbid": "64b94289-9474-4d43-8c93-918ccc1920d1",
+    "nombre": "Billy Bruner"
+  },
+  {
+    "mbid": "64b94289-9474-4d43-8c93-918ccc1920d1",
+    "nombre": "Billy Joel"
+  },
+  {
+    "mbid": "0e422e91-a42a-4b4d-8413-9baff67350f2",
+    "nombre": "Billy Ocean"
+  },
+  {
+    "mbid": "5b74bc37-f0d6-4615-9f2f-092e1beb937a",
+    "nombre": "Binker Golding and Moses Boyd"
+  },
+  {
+    "mbid": "e8b00f67-7311-498f-86d2-5f167efc50aa",
+    "nombre": "Biological-Events"
+  },
+  {
+    "mbid": "a5ee1ebe-a645-45d2-8319-d101fe62e581",
+    "nombre": "Biosphere"
+  },
+  {
+    "mbid": "87c5dedd-371d-4a53-9f7f-80522fb7f3cb",
+    "nombre": "Björk"
+  },
+  {
+    "mbid": "d5be5333-4171-427e-8e12-732087c6b78e",
+    "nombre": "Black Eyed Peas"
+  },
+  {
+    "mbid": "12615109-ea4a-4665-8199-a5517f28c472",
+    "nombre": "Black Science Orchestra"
+  },
+  {
+    "mbid": "92ee5562-3c1b-4e02-ac22-aae6261edac5",
+    "nombre": "Blackalicious"
+  },
+  {
+    "mbid": "0bbc4521-e5ac-4082-aa6c-fabfa606192d",
+    "nombre": "Blanck Mass"
+  },
+  {
+    "mbid": "d034712a-f6b2-49e3-b8eb-4cc93f964b9d",
+    "nombre": "Bleu Toucan"
+  },
+  {
+    "mbid": "7fa7fc04-1011-4876-8095-ecd232edea87",
+    "nombre": "Blind Guardian"
+  },
+  {
+    "mbid": "a5f0f298-776a-4909-bc09-4fd56a680542",
+    "nombre": "Blood Incantation"
+  },
+  {
+    "mbid": "c7423e0c-ab3e-4ab4-be10-cdff5a9d3062",
+    "nombre": "Blue Gas"
+  },
+  {
+    "mbid": "1a151a4b-b482-4358-b19c-30653e7b9dc4",
+    "nombre": "Blue Hawaii"
+  },
+  {
+    "mbid": "ad996aef-cc1c-42ac-af5c-619c370f4b8a",
+    "nombre": "Blue Lake"
+  },
+  {
+    "mbid": "45d17b84-de97-4027-ad7c-4650c8cbf1da",
+    "nombre": "Blue Magic"
+  },
+  {
+    "mbid": "c7423e0c-ab3e-4ab4-be10-cdff5a9d3062",
+    "nombre": "Blue Night"
+  },
+  {
+    "mbid": "18bca353-d128-4503-960e-05ee82b3b909",
+    "nombre": "Blundetto"
+  },
+  {
+    "mbid": "2e924533-601d-4df8-a2c9-a572ecdfa57b",
+    "nombre": "Blutwurst"
+  },
+  {
+    "mbid": "69158f97-4c07-4c4e-baf8-4e4ab1ed666e",
+    "nombre": "Boards Of Canada"
+  },
+  {
+    "mbid": "69158f97-4c07-4c4e-baf8-4e4ab1ed666e",
+    "nombre": "Boards of Canada"
+  },
+  {
+    "mbid": "72c536dc-7137-4477-a521-567eeb840fa8",
+    "nombre": "Bob Blank"
+  },
+  {
+    "mbid": "72c536dc-7137-4477-a521-567eeb840fa8",
+    "nombre": "Bob James"
+  },
+  {
+    "mbid": "9536a0bc-15f1-4bf7-8005-19102bdd4b67",
+    "nombre": "Bob James Trio"
+  },
+  {
+    "mbid": "2d8679f9-35c8-41b0-a09c-4ea3d85baa4d",
+    "nombre": "Bobby Lyle"
+  },
+  {
+    "mbid": "66ebc271-6a26-4fe7-848b-f217da119d92",
+    "nombre": "Bobby “Blue” Bland"
+  },
+  {
+    "mbid": "9bc2888c-f4c8-4cfa-a2c6-7384f331fa01",
+    "nombre": "Bogdan Raczynski"
+  },
+  {
+    "mbid": "f3e46123-bb4b-48fd-a1d0-2be0d0740fe7",
+    "nombre": "Bohren"
+  },
+  {
+    "mbid": "52f78c75-9f2f-4353-a368-ac35e96ca25a",
+    "nombre": "Bolis Pupul"
+  },
+  {
+    "mbid": "0ae49abe-d6af-44fa-8ab0-b9ace5690e6f",
+    "nombre": "Bombay Bicycle Club"
+  },
+  {
+    "mbid": "437a0e49-c6ae-42f6-a6c1-84f25ed366bc",
+    "nombre": "Bon Iver"
+  },
+  {
+    "mbid": "5403bf6e-bc1d-4e62-b31f-926a2bf66a14",
+    "nombre": "Boney M."
+  },
+  {
+    "mbid": "9a709693-b4f8-4da9-8cc1-038c911a61be",
+    "nombre": "Bonobo"
+  },
+  {
+    "mbid": "0a7604d0-a712-4d5c-83cb-cc4ae3d01455",
+    "nombre": "BoomBox"
+  },
+  {
+    "mbid": "b0ca0d85-24a8-4a00-860d-357ff688b69c",
+    "nombre": "Bootsy Collins"
+  },
+  {
+    "mbid": "57652bf8-cfe8-42e7-b9a7-5572a7080d8d",
+    "nombre": "Boris"
+  },
+  {
+    "mbid": "ae0d1794-c9d3-4436-94fc-ceff6130da2c",
+    "nombre": "Boris Brejcha"
+  },
+  {
+    "mbid": "0015bb5a-15bb-4c65-830f-453e8e38f207",
+    "nombre": "Bot1500"
+  },
+  {
+    "mbid": "89cbe6ac-80af-421b-9276-cf373a1480c3",
+    "nombre": "Bowery Electric"
+  },
+  {
+    "mbid": "3b8403b6-72c8-4953-b966-5fc555923baf",
+    "nombre": "Boy Dude"
+  },
+  {
+    "mbid": "6dc9bc09-a0c7-40f9-b491-f90845927533",
+    "nombre": "Boy Harsher"
+  },
+  {
+    "mbid": "18a33653-bbaf-4aa7-884c-73f02a7a4515",
+    "nombre": "Boz Scaggs"
+  },
+  {
+    "mbid": "b7723b3f-9a35-438d-bc42-8ad8b5e027ae",
+    "nombre": "Brad Mehldau"
+  },
+  {
+    "mbid": "5193ce6b-a315-4c50-ae49-54e69ffbc988",
+    "nombre": "Brain Machine"
+  },
+  {
+    "mbid": "563ace2c-6e94-4b64-b544-40099a96b86d",
+    "nombre": "Brainstorm"
+  },
+  {
+    "mbid": "61d68647-258e-43e2-942f-11321df5a96a",
+    "nombre": "Brandee Younger"
+  },
+  {
+    "mbid": "65a8669c-06be-4f95-b079-52edf5d58af4",
+    "nombre": "Brendan Eder Ensemble"
+  },
+  {
+    "mbid": "0182474b-8a1d-46d0-9d0f-e6df353335ea",
+    "nombre": "Brendan Perry"
+  },
+  {
+    "mbid": "ab933426-888f-4efa-83d0-b6518b50d4fb",
+    "nombre": "Brett Naucke"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Brian Eno"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Brian Eno + David Byrne"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Brian Eno and the words of Rick Holland"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Brian Eno x Nicolas Jaar x Grizzly Bear"
+  },
+  {
+    "mbid": "506aa5b0-c6fb-4a69-8dd3-f06a369d5abc",
+    "nombre": "Brittany Howard"
+  },
+  {
+    "mbid": "face3115-8a76-4b83-bf31-94cca824e2aa",
+    "nombre": "BrokenTeeth"
+  },
+  {
+    "mbid": "2229d04c-ce92-4024-94d2-e005b2aa3f60",
+    "nombre": "Brutus"
+  },
+  {
+    "mbid": "1b773510-5c1a-46ef-b3ff-15d24b604223",
+    "nombre": "Brutus The Guru Guru"
+  },
+  {
+    "mbid": "b5179744-f217-4455-9d8b-17b8d4fdeb93",
+    "nombre": "Buckethead"
+  },
+  {
+    "mbid": "2a85ecff-41e9-4be1-aca6-c87054a4c334",
+    "nombre": "Buena Vista Social Club"
+  },
+  {
+    "mbid": "a7835277-ab17-4506-a033-60f018757b84",
+    "nombre": "Bugge Wesseltoft"
+  },
+  {
+    "mbid": "e4acc3d8-6cc2-43ee-bf68-2edb8232e5b6",
+    "nombre": "Bukuru Celestin"
+  },
+  {
+    "mbid": "2061f628-01cd-4343-a078-900f639d67fe",
+    "nombre": "Buraka Som Sistema"
+  },
+  {
+    "mbid": "9ddce51c-2b75-4b3e-ac8c-1db09e7c89c6",
+    "nombre": "Burial"
+  },
+  {
+    "mbid": "3bcff06f-675a-451f-9075-99e8657047e8",
+    "nombre": "Burial + Four Tet"
+  },
+  {
+    "mbid": "8ed2e0b3-aa4c-4e13-bec3-dc7393ed4d6b",
+    "nombre": "Burial + Four Tet + Thom Yorke"
+  },
+  {
+    "mbid": "38fd1c6a-ba2f-400a-926e-f88fac8583cc",
+    "nombre": "Byetone"
+  },
+  {
+    "mbid": "830dce6f-c9ff-4ebe-944b-2ea2ab22fcdf",
+    "nombre": "Béla Fleck and the Flecktones"
+  },
+  {
+    "mbid": "c06cb96b-2a5c-439a-8171-fe3bd7d01ac3",
+    "nombre": "CFCF"
+  },
+  {
+    "mbid": "439a29ad-f4ef-4857-a7cd-3d4a551056c8",
+    "nombre": "Cabaret Voltaire"
+  },
+  {
+    "mbid": "14a70b21-7cab-442e-9d9a-bb220f6c949e",
+    "nombre": "Cacao"
+  },
+  {
+    "mbid": "1015b5e3-8e3d-4d78-806a-c530cf742e66",
+    "nombre": "Cal Tjader"
+  },
+  {
+    "mbid": "72ce04ce-3871-4743-b400-7bbd9f6a23eb",
+    "nombre": "Califato ¾"
+  },
+  {
+    "mbid": "c5d98aa8-5f6b-4910-b4a0-dfcca6694e52",
+    "nombre": "Call Super"
+  },
+  {
+    "mbid": "08379a1c-453b-460a-ab49-a213bb3b4ca6",
+    "nombre": "Calm"
+  },
+  {
+    "mbid": "1f25c419-4084-40bc-9bac-c39f375384c5",
+    "nombre": "Camarón de la Isla"
+  },
+  {
+    "mbid": "299597ae-3a20-4bf1-973e-03704af69f6b",
+    "nombre": "Camarón de la Isla con Royal Philharmonic Orchestra"
+  },
+  {
+    "mbid": "1f25c419-4084-40bc-9bac-c39f375384c5",
+    "nombre": "Camarón de la Isla con Tomatito"
+  },
+  {
+    "mbid": "1f25c419-4084-40bc-9bac-c39f375384c5",
+    "nombre": "Camarón de la Isla con la colaboración especial Paco de Lucía"
+  },
+  {
+    "mbid": "13501c7d-d181-45ba-af52-5f101d8516a0",
+    "nombre": "Can"
+  },
+  {
+    "mbid": "a4c73ebe-b2c7-4f13-b99d-2fe1f9f27da8",
+    "nombre": "Cannonball Adderley"
+  },
+  {
+    "mbid": "93be8f4b-f0d2-464d-aea0-3ddfc7c4456b",
+    "nombre": "Cannonball Adderley Sextet"
+  },
+  {
+    "mbid": "9a6c053b-6547-4a8e-855d-460ae08a3e11",
+    "nombre": "Cantoma"
+  },
+  {
+    "mbid": "5c46a235-aa88-4f83-b0ed-1cd5129664fa",
+    "nombre": "Caoilfhionn Rose"
+  },
+  {
+    "mbid": "0fabbc1d-8d94-4a61-bd1d-1099ad1e4559",
+    "nombre": "Car Seat Headrest"
+  },
+  {
+    "mbid": "735e3514-a8ae-401f-af3b-6300df1b8d2c",
+    "nombre": "Caribou"
+  },
+  {
+    "mbid": "068bd7ab-c38e-4fae-8ed2-cb0c153ed68f",
+    "nombre": "Carl Craig"
+  },
+  {
+    "mbid": "3b2234ea-2169-41dc-9524-0b896fa69c4c",
+    "nombre": "Carla Bley"
+  },
+  {
+    "mbid": "d52ac009-4ed5-4d01-97d5-8280bb7dd460",
+    "nombre": "Carlos Niño"
+  },
+  {
+    "mbid": "3297dbf3-9bbb-4268-941d-3610826d96c6",
+    "nombre": "Carmen Gomes Inc."
+  },
+  {
+    "mbid": "29b0a6c7-ab3a-4bf3-a64f-63c8a3548196",
+    "nombre": "Carmen McRae"
+  },
+  {
+    "mbid": "f8a5d80c-a6b7-414c-9482-c5d710171622",
+    "nombre": "Caspian"
+  },
+  {
+    "mbid": "c5d0c41a-f705-418e-9f0d-069c7c309dba",
+    "nombre": "Cassegrain"
+  },
+  {
+    "mbid": "64008646-aaa4-483b-b70f-db5a8473be46",
+    "nombre": "Caterina Barbieri"
+  },
+  {
+    "mbid": "6ef3e8f1-675d-46e0-8604-2983b42bc7dc",
+    "nombre": "Celer"
+  },
+  {
+    "mbid": "260b6184-8828-48eb-945c-bc4cb6fc34ca",
+    "nombre": "Charli xcx"
+  },
+  {
+    "mbid": "c7356af9-9ea6-4a78-a55b-c73775716312",
+    "nombre": "Charlie"
+  },
+  {
+    "mbid": "a78f1671-3ebf-4822-b2bd-70ccc3088c2d",
+    "nombre": "Charlotte Day Wilson"
+  },
+  {
+    "mbid": "60e8e938-365e-4429-a141-4c79eb49588d",
+    "nombre": "Chelsea Wolfe"
+  },
+  {
+    "mbid": "1ba1d493-7114-45e2-b163-a36d49a0c065",
+    "nombre": "Chet Baker"
+  },
+  {
+    "mbid": "a4ed036b-5f18-439c-b1e1-96d205bab255",
+    "nombre": "Chic"
+  },
+  {
+    "mbid": "8446fcca-109e-4c6d-a2ff-5a269b32b4c2",
+    "nombre": "Chick Corea, Return to Forever"
+  },
+  {
+    "mbid": "c41541e9-2284-4a14-b977-3e4d174e2169",
+    "nombre": "Chris Coco"
+  },
+  {
+    "mbid": "c707b37e-cb5c-4694-be4d-46beefcb2475",
+    "nombre": "Chris Rea"
+  },
+  {
+    "mbid": "a0d91c38-f5dc-487b-9b30-b67de1e7489e",
+    "nombre": "Christian Löffler"
+  },
+  {
+    "mbid": "440fd8aa-2a36-460c-8615-8af2cc06d62e",
+    "nombre": "Christian Scott"
+  },
+  {
+    "mbid": "6ce86050-da12-4dfa-81e5-0bbb4c414f5d",
+    "nombre": "Christy Baron"
+  },
+  {
+    "mbid": "c89ea689-c053-4d97-bada-8b81a6236f58",
+    "nombre": "Chromatics"
+  },
+  {
+    "mbid": "647221d0-f6b1-4e03-924c-c59b8059536f",
+    "nombre": "Chromeo"
+  },
+  {
+    "mbid": "dc4968ba-1fe0-43b9-bba0-81c09acd6326",
+    "nombre": "Cibo Matto"
+  },
+  {
+    "mbid": "34557d8f-ee4a-44ab-ae6e-49bb8ac604d0",
+    "nombre": "Cigarettes After Sex"
+  },
+  {
+    "mbid": "b5861e2b-283d-4ec6-a613-d0228c654b31",
+    "nombre": "Circuit des yeux"
+  },
+  {
+    "mbid": "cee3a45e-de7f-4a03-9f65-1c17b5b0470d",
+    "nombre": "Clive Stevens"
+  },
+  {
+    "mbid": "54eec511-c040-4188-9416-5353663d0ef2",
+    "nombre": "Clive Tanaka y su Orquesta"
+  },
+  {
+    "mbid": "393ce5ee-4550-48e2-97f9-50a47a74bdc1",
+    "nombre": "Cluster"
+  },
+  {
+    "mbid": "d07dbd31-aa19-4c5b-b071-4f52b1f75e40",
+    "nombre": "Cochemea"
+  },
+  {
+    "mbid": "000fc734-b7e1-4a01-92d1-f544261b43f5",
+    "nombre": "Cocteau Twins"
+  },
+  {
+    "mbid": "c01e7631-d025-4dca-8c06-070ca3ad3c84",
+    "nombre": "Collin Walcott"
+  },
+  {
+    "mbid": "b71c880c-2e7c-40ca-8cc7-88e874ea68d5",
+    "nombre": "Comixxx"
+  },
+  {
+    "mbid": "c0a1179b-b14a-4d68-a3c1-1fdab16ed602",
+    "nombre": "Common Saints"
+  },
+  {
+    "mbid": "26ef2dac-1644-4757-91c6-ae04cb5faba3",
+    "nombre": "Congo Natty"
+  },
+  {
+    "mbid": "b52211f1-49a2-4cd2-8535-dd1ba37ea90b",
+    "nombre": "Cowboy Junkies"
+  },
+  {
+    "mbid": "04cd0cfd-bfd1-4c36-bc38-95c35e2c045f",
+    "nombre": "Cream"
+  },
+  {
+    "mbid": "88bd9e36-6f4f-4b10-969c-f5f33d42e213",
+    "nombre": "Cristalli Liquidi"
+  },
+  {
+    "mbid": "e4db7521-fb06-4791-ac59-0f824c984104",
+    "nombre": "Cruel Diagonals"
+  },
+  {
+    "mbid": "2d45574f-6e9f-404b-b87b-51ee318bbc27",
+    "nombre": "Cul de Sac"
+  },
+  {
+    "mbid": "f2f3998a-9155-44b8-8c88-d604883aefa4",
+    "nombre": "Cult Member"
+  },
+  {
+    "mbid": "8dcd7971-9e25-43dd-84aa-4ab5a1853496",
+    "nombre": "Curt Cress"
+  },
+  {
+    "mbid": "d9940800-55a8-4a07-a02e-61bfbb34e69e",
+    "nombre": "Curtis Hairston"
+  },
+  {
+    "mbid": "4dca4bb2-23ba-4103-97e6-5810311db33a",
+    "nombre": "Curtis Mayfield"
+  },
+  {
+    "mbid": "2eb6240d-f5e7-4ba4-8003-2c5b2d651dfb",
+    "nombre": "Cyndee Peters / Eric Bibb"
+  },
+  {
+    "mbid": "1b85c622-6974-4031-bdf1-1c227b7b1c36",
+    "nombre": "D-PULSE"
+  },
+  {
+    "mbid": "b5ff61dd-0154-4e80-b46b-c733f87db602",
+    "nombre": "DIIV"
+  },
+  {
+    "mbid": "e795e03d-b5d5-4a5f-834d-162cfb308a2c",
+    "nombre": "DJ Harvey"
+  },
+  {
+    "mbid": "1f8ad3e8-65c6-453a-b038-36fc00b0dbe3",
+    "nombre": "DJ Healer"
+  },
+  {
+    "mbid": "70f63a33-5476-4739-9a58-d68df2bf6cb1",
+    "nombre": "DJ Normal 4"
+  },
+  {
+    "mbid": "4a5c8526-f8ec-43f1-97af-49722ad88394",
+    "nombre": "DJ Python"
+  },
+  {
+    "mbid": "595058cd-36fe-4994-8933-df92ff68ebd7",
+    "nombre": "DJ Seinfeld"
+  },
+  {
+    "mbid": "efa2c11a-1a35-4b60-bc1b-66d37de88511",
+    "nombre": "DJ Shadow"
+  },
+  {
+    "mbid": "80b374a8-171a-415e-92a4-21043ec64e08",
+    "nombre": "DJ Sofa, Houschyar, Okay Temiz"
+  },
+  {
+    "mbid": "e92ba74d-aea3-46cb-b7b1-915852eb1e42",
+    "nombre": "Dadawah"
+  },
+  {
+    "mbid": "056e4f3e-d505-4dad-8ec1-d04f521cbb56",
+    "nombre": "Daft Punk"
+  },
+  {
+    "mbid": "782f7d7c-ae7e-4783-a7d0-4cf51c6f7ea9",
+    "nombre": "Daisuke Asakura"
+  },
+  {
+    "mbid": "43998a79-a783-44e2-b810-7032d010fc8f",
+    "nombre": "Dale Cooper Quartet"
+  },
+  {
+    "mbid": "3e7aa4a4-5b7e-46a3-a7ff-c57044fa1b64",
+    "nombre": "Daniel Avery"
+  },
+  {
+    "mbid": "7bef3816-0354-446e-ad23-e9c1ef3d02fd",
+    "nombre": "Daniel Blumberg"
+  },
+  {
+    "mbid": "36692ed2-ee62-4dd1-8de5-35f6323149b2",
+    "nombre": "Daniel Melero"
+  },
+  {
+    "mbid": "20ff3303-4fe2-4a47-a1b6-291e26aa3438",
+    "nombre": "Danny Brown"
+  },
+  {
+    "mbid": "5b24fbab-c58f-4c37-a59d-ab232e2d98c4",
+    "nombre": "Danny Daze"
+  },
+  {
+    "mbid": "116b79ab-b049-4299-8fd8-17ac8a18b7f3",
+    "nombre": "Darkside"
+  },
+  {
+    "mbid": "534ee493-bfac-4575-a44a-0ae41e2c3fe4",
+    "nombre": "Dasha Rush"
+  },
+  {
+    "mbid": "7915b61a-da59-4e4e-83d3-bde7a24bd1ba",
+    "nombre": "Dave Grusin"
+  },
+  {
+    "mbid": "07e748f1-075e-428d-85dc-ce3be434e906",
+    "nombre": "Dave Pike"
+  },
+  {
+    "mbid": "5441c29d-3602-4898-b1a1-b77fa23b8e50",
+    "nombre": "David Axelrod"
+  },
+  {
+    "mbid": "d4659efb-b8eb-4f03-95e9-f69ce35967a9",
+    "nombre": "David Byrne"
+  },
+  {
+    "mbid": "5441c29d-3602-4898-b1a1-b77fa23b8e50",
+    "nombre": "David Cordero"
+  },
+  {
+    "mbid": "5441c29d-3602-4898-b1a1-b77fa23b8e50",
+    "nombre": "David Harpur, Lenny Ferrari, Chris Stein"
+  },
+  {
+    "mbid": "5441c29d-3602-4898-b1a1-b77fa23b8e50",
+    "nombre": "David Holmes"
+  },
+  {
+    "mbid": "ccda046a-2674-4f7d-97e6-f23d6c156432",
+    "nombre": "Dead Can Dance"
+  },
+  {
+    "mbid": "6faa7ca7-0d99-4a5e-bfa6-1fd5037520c6",
+    "nombre": "Dead Sound"
+  },
+  {
+    "mbid": "f4ccf6c5-ad41-4f8f-bb9e-6e2c6ad23302",
+    "nombre": "Deafheaven"
+  },
+  {
+    "mbid": "0039c7ae-e1a7-4a7d-9b49-0cbc716821a6",
+    "nombre": "Death Cab for Cutie"
+  },
+  {
+    "mbid": "2ec25b79-d5cc-4520-a0f6-aa32338d3eda",
+    "nombre": "Death and Vanilla"
+  },
+  {
+    "mbid": "79491354-3d83-40e3-9d8e-7592d58d790a",
+    "nombre": "Deep 88"
+  },
+  {
+    "mbid": "d70f3879-b92c-4948-a430-fc25d2e3c52d",
+    "nombre": "Delvon Lamarr Organ Trio"
+  },
+  {
+    "mbid": "77e8d853-6fbc-4e6d-bd21-0f12efea6a63",
+    "nombre": "Den Sorte Død"
+  },
+  {
+    "mbid": "8538e728-ca0b-4321-b7e5-cff6565dd4c0",
+    "nombre": "Depeche Mode"
+  },
+  {
+    "mbid": "315030de-14c0-4635-b9cb-ac50896451d1",
+    "nombre": "Derby Motoreta’s Burrito Kachimba"
+  },
+  {
+    "mbid": "ccb4d9b6-1a24-4dd2-8016-1c0773ef470c",
+    "nombre": "Deru"
+  },
+  {
+    "mbid": "1335a684-af9f-4c15-9356-9ea3162f52dc",
+    "nombre": "Dezron Douglas"
+  },
+  {
+    "mbid": "a42d3fd5-55de-4206-86c3-4fbb5404018f",
+    "nombre": "Diamond Version"
+  },
+  {
+    "mbid": "67d2cb7a-9ddb-4a7f-82bf-5a2d1a038e98",
+    "nombre": "Diana Krall"
+  },
+  {
+    "mbid": "60d41417-feda-4734-bbbf-7dcc30e08a83",
+    "nombre": "Diana Ross"
+  },
+  {
+    "mbid": "3d3fdaaa-4e5b-42d0-9358-260229255a17",
+    "nombre": "Die Wilde Jagd"
+  },
+  {
+    "mbid": "614e3804-7d34-41ba-857f-811bad7c2b7a",
+    "nombre": "Dire Straits"
+  },
+  {
+    "mbid": "5403f9e0-4f48-4998-bd02-b41a9bcff27b",
+    "nombre": "Disco Rogues"
+  },
+  {
+    "mbid": "d1932f27-5ab3-46da-803c-0f5398779602",
+    "nombre": "Diskret"
+  },
+  {
+    "mbid": "4603ee86-4f73-471e-8fc7-4a26549ed119",
+    "nombre": "Dj Ariees"
+  },
+  {
+    "mbid": "a80ff520-a853-4d7b-a5fe-77011689ec77",
+    "nombre": "Don Carlos"
+  },
+  {
+    "mbid": "adf3879a-e091-4f73-8792-861a7a3e3abe",
+    "nombre": "Don Cherry"
+  },
+  {
+    "mbid": "7915b61a-da59-4e4e-83d3-bde7a24bd1ba",
+    "nombre": "Don Grusin"
+  },
+  {
+    "mbid": "69f95e5c-4b34-4c8b-b8fe-c59f9296195a",
+    "nombre": "Donald Byrd"
+  },
+  {
+    "mbid": "b145b7d7-06c5-44b8-84b0-ae45161888ac",
+    "nombre": "Donald Byrd and 125th Street, N.Y.C."
+  },
+  {
+    "mbid": "70047e57-0153-4117-b0fc-a1d2e322e5ef",
+    "nombre": "Donald Fagen"
+  },
+  {
+    "mbid": "4a2a0d6b-d871-400b-8d61-bf544854bdf6",
+    "nombre": "Donato Dozzy"
+  },
+  {
+    "mbid": "b60527cc-54f3-4bbe-a01b-dcf34c95ae14",
+    "nombre": "Donna Summer"
+  },
+  {
+    "mbid": "3f6ae36d-ffdb-40cf-98e6-8023cb1c41c9",
+    "nombre": "Donny Hathaway"
+  },
+  {
+    "mbid": "c0b33447-18d5-4d50-93c1-a9aa7463bd48",
+    "nombre": "Dorothy Ashby"
+  },
+  {
+    "mbid": "24e99277-9507-4172-b709-52cb3a06c202",
+    "nombre": "Dos Palos"
+  },
+  {
+    "mbid": "58c2a0ee-183d-463a-a8fb-9c388fedd33d",
+    "nombre": "Dr. Lonnie Smith"
+  },
+  {
+    "mbid": "23d8426c-18c7-46e6-a51d-7395bd43c641",
+    "nombre": "Dream Dolphin"
+  },
+  {
+    "mbid": "01df1ad9-951b-4636-882b-a3f011febc9b",
+    "nombre": "Dreamfish"
+  },
+  {
+    "mbid": "aa1cbb28-e76d-4cfc-b567-dc507226386d",
+    "nombre": "Drew McDowall"
+  },
+  {
+    "mbid": "f2903be0-79a7-4334-8cc5-e45309482a97",
+    "nombre": "Durand Jones"
+  },
+  {
+    "mbid": "9feea1d6-3e4e-4d3c-b84a-87a12f7cbf94",
+    "nombre": "Dusky"
+  },
+  {
+    "mbid": "879d43c6-13a8-42f6-b8df-a9b7d50aa9e2",
+    "nombre": "Duster"
+  },
+  {
+    "mbid": "40c9866d-ae1b-4445-9542-bcc4d5ab9d9e",
+    "nombre": "Dustin O’Halloran"
+  },
+  {
+    "mbid": "5c44b1b8-07ad-4aca-ac5d-ebdad8e62e12",
+    "nombre": "Earl Klugh"
+  },
+  {
+    "mbid": "5c44b1b8-07ad-4aca-ac5d-ebdad8e62e12",
+    "nombre": "Earl Klugh and Bob James"
+  },
+  {
+    "mbid": "bfb6984b-ee02-481a-99cb-b4b44f0ce81b",
+    "nombre": "Earthless"
+  },
+  {
+    "mbid": "3b1464ca-c640-4102-b4a4-aaca9ddca442",
+    "nombre": "Eberhard Weber"
+  },
+  {
+    "mbid": "89fdffe7-4545-4265-9ccc-e7b928e00d22",
+    "nombre": "Ebi Soda"
+  },
+  {
+    "mbid": "66ab36ce-8f58-46fb-9284-396c2c90ecbd",
+    "nombre": "Ecco2K"
+  },
+  {
+    "mbid": "17995d1c-5b3c-4ee9-98f5-105ee3b4ada1",
+    "nombre": "Eddie Chacon"
+  },
+  {
+    "mbid": "42b5af45-312e-4dc1-ad0c-84dea2d5dcb2",
+    "nombre": "Eddie Palmieri"
+  },
+  {
+    "mbid": "3c52a8a3-80b5-4fc0-b66b-1d7fc7bbe268",
+    "nombre": "Edit Select"
+  },
+  {
+    "mbid": "41f1960d-be42-4ca0-8599-8d0fb77ae6d4",
+    "nombre": "Edwin Birdsong"
+  },
+  {
+    "mbid": "8a7bed97-f080-4984-8db5-2ea5c82d8b33",
+    "nombre": "Efterklang"
+  },
+  {
+    "mbid": "21fd8769-5573-4eb0-9528-e8162c24024d",
+    "nombre": "Eivind Aarset"
+  },
+  {
+    "mbid": "100b89f8-2190-42f8-a254-a261a232ffe7",
+    "nombre": "Ekkehard Ehlers"
+  },
+  {
+    "mbid": "aef2fa36-6ab2-46d7-a65b-daf16d5d25e6",
+    "nombre": "El Club de los Poetas Violentos"
+  },
+  {
+    "mbid": "dbf0a5c5-3665-4495-b13b-99438a6a0900",
+    "nombre": "El Michels Affair"
+  },
+  {
+    "mbid": "a92e181b-9d97-4442-8af2-a8967284c974",
+    "nombre": "Elder"
+  },
+  {
+    "mbid": "0c502791-4ee9-4c5f-9696-0602b721ff3b",
+    "nombre": "Electric Octopus"
+  },
+  {
+    "mbid": "da7d57e6-0619-4f0f-8d15-d0b4195c3f55",
+    "nombre": "Electric Wizard"
+  },
+  {
+    "mbid": "1c3ed0c4-8f53-4e4f-8534-d7c98f264406",
+    "nombre": "Elektra"
+  },
+  {
+    "mbid": "d2e06763-1035-4b1a-82c7-b7c08e06ba48",
+    "nombre": "Eliades Ochoa, Compay Segundo, Ibrahim Ferrer, Omara Portuondo"
+  },
+  {
+    "mbid": "32981181-5e3f-4160-a872-625980035593",
+    "nombre": "Eliane Radigue"
+  },
+  {
+    "mbid": "5f602a69-a025-405e-9336-29f9e8d713d3",
+    "nombre": "Elsiane"
+  },
+  {
+    "mbid": "86139012-695b-42f4-98f1-1f353f7230b4",
+    "nombre": "Eluvium"
+  },
+  {
+    "mbid": "8a338e06-d182-46f2-bd16-30a09bc840ba",
+    "nombre": "Elvis Costello"
+  },
+  {
+    "mbid": "50c629c6-6f22-4bf9-a3c2-f2855e6704be",
+    "nombre": "Emmanuel"
+  },
+  {
+    "mbid": "f1d1df24-91af-4d27-83a4-9b4ad29b37eb",
+    "nombre": "Enigma"
+  },
+  {
+    "mbid": "779f54f8-732b-49b9-8fd8-2e9538a272ea",
+    "nombre": "Enrique Morente"
+  },
+  {
+    "mbid": "e3d2dca1-9773-469b-8e17-91812f2669c0",
+    "nombre": "Epoxies"
+  },
+  {
+    "mbid": "badda5cf-f2c5-4dc2-b3d3-07467bdf0f71",
+    "nombre": "Eric Dolphy"
+  },
+  {
+    "mbid": "e1d521ea-5b97-4981-987c-ba988b2a87d7",
+    "nombre": "Erik Satie"
+  },
+  {
+    "mbid": "aecd2d93-082b-4d5a-b519-521f2e18f796",
+    "nombre": "Erik Truffaz"
+  },
+  {
+    "mbid": "54da4dfb-fe73-4168-935f-608ea42ee010",
+    "nombre": "Erik Truffaz Quartet"
+  },
+  {
+    "mbid": "cd27f943-6a8f-433f-9331-119f630d2bf8",
+    "nombre": "Erik Truffaz Quintet"
+  },
+  {
+    "mbid": "3fa65334-e3c4-4e83-b24f-5af5535ba462",
+    "nombre": "Eris Drew / Octo Octa"
+  },
+  {
+    "mbid": "07e0925b-0500-4d6d-9d22-a8f6823ca904",
+    "nombre": "Esprit Fantasy"
+  },
+  {
+    "mbid": "43917ce0-552f-4797-92dd-54a004ca62f7",
+    "nombre": "Etelin"
+  },
+  {
+    "mbid": "4b6d948c-372d-44e0-ba09-a649cc0e5c76",
+    "nombre": "Eumir Deodato"
+  },
+  {
+    "mbid": "6f2dfabb-f0bb-4801-a392-592489a148e7",
+    "nombre": "Eva Cassidy"
+  },
+  {
+    "mbid": "959cf5bf-ee29-4af6-a85a-0b480181d988",
+    "nombre": "Everything but the Girl"
+  },
+  {
+    "mbid": "00f87745-6cd0-4e99-8173-d969f3d0eee1",
+    "nombre": "Evian Christ"
+  },
+  {
+    "mbid": "99814acd-6014-47bd-a47d-64651a8dd2f1",
+    "nombre": "Exploring Birdsong"
+  },
+  {
+    "mbid": "4236acde-2ce2-441c-a3d4-38d55f1b5474",
+    "nombre": "Explosions In The Sky"
+  },
+  {
+    "mbid": "4236acde-2ce2-441c-a3d4-38d55f1b5474",
+    "nombre": "Explosions in the Sky"
+  },
+  {
+    "mbid": "35329bc1-4296-42f2-a2ea-91d9e32f87f5",
+    "nombre": "Exquirla"
+  },
+  {
+    "mbid": "8a032fcd-8798-4ad5-b22f-b893839beaa8",
+    "nombre": "Extrechinato y Tú"
+  },
+  {
+    "mbid": "f59163ba-1a7a-4349-b0fd-fb9582ebe333",
+    "nombre": "Extremoduro"
+  },
+  {
+    "mbid": "a4b03ed4-14bf-4493-acff-743fa14ad9ec",
+    "nombre": "Exuma"
+  },
+  {
+    "mbid": "d51acca9-a88b-4f5c-a2fe-f069de70ca1d",
+    "nombre": "Ezra Collective"
+  },
+  {
+    "mbid": "45fc1a1c-6b33-4a2b-b517-d8bca372b7b0",
+    "nombre": "Ezra Furman"
+  },
+  {
+    "mbid": "20741f23-0e12-49d6-b606-5945ed3e8de0",
+    "nombre": "F.S. Blumm"
+  },
+  {
+    "mbid": "99c0c596-68e9-4226-8089-518addce180c",
+    "nombre": "F.U.S.E."
+  },
+  {
+    "mbid": "efde08b3-d2db-44e8-b2a7-10fc7bcc3604",
+    "nombre": "FACS"
+  },
+  {
+    "mbid": "1e4e9db7-5068-4a9c-bdd0-5777e47172c8",
+    "nombre": "FKA twigs"
+  },
+  {
+    "mbid": "23d9d74d-c95e-46a6-be26-a6075c49747a",
+    "nombre": "Faithless"
+  },
+  {
+    "mbid": "4b9621eb-09d2-4e40-8ef2-a874ffe7eaea",
+    "nombre": "Farley Jackmaster Funk"
+  },
+  {
+    "mbid": "64f6b004-c20b-400e-acf4-6620ff8791b1",
+    "nombre": "Fat Larry’s Band"
+  },
+  {
+    "mbid": "34c63966-445c-4613-afe1-4f0e1e53ae9a",
+    "nombre": "Fatboy Slim"
+  },
+  {
+    "mbid": "b46b2899-1039-48fa-a6e6-0be940f95b5a",
+    "nombre": "Faten Kanaan"
+  },
+  {
+    "mbid": "9aae9381-7d0f-449a-be59-2c004d668052",
+    "nombre": "Faunts"
+  },
+  {
+    "mbid": "1e630442-64d3-4097-b626-93bc541d5f36",
+    "nombre": "Feel Fly"
+  },
+  {
+    "mbid": "6514cffa-fbe0-4965-ad88-e998ead8a82a",
+    "nombre": "Fela Kuti"
+  },
+  {
+    "mbid": "a6f8d42d-d3ff-4268-8d39-ee01341733bb",
+    "nombre": "Fennesz"
+  },
+  {
+    "mbid": "6edc70bb-c340-4ae6-bdd4-d5fb0c7411de",
+    "nombre": "Fennesz + Ryuichi Sakamoto"
+  },
+  {
+    "mbid": "c5b967c7-2f67-4735-ba5a-1b49324eabd7",
+    "nombre": "Fieh"
+  },
+  {
+    "mbid": "b7997ed1-afee-47eb-948e-7afecba5d699",
+    "nombre": "Finis Africae"
+  },
+  {
+    "mbid": "a9ee533f-8871-4f62-a6bb-91eb264abc90",
+    "nombre": "Fiona Apple"
+  },
+  {
+    "mbid": "dc436953-1dc3-437d-9656-da401a0e9134",
+    "nombre": "Fishmans"
+  },
+  {
+    "mbid": "fa97dd36-1b82-43d7-a6e4-2adeafd59cef",
+    "nombre": "Fleet Foxes"
+  },
+  {
+    "mbid": "03bb2212-22c4-42b5-a9d8-30cd3a3a5937",
+    "nombre": "Fleeting Joys"
+  },
+  {
+    "mbid": "69d9c5ba-7bba-4cb7-ab32-8ccc48ad4f97",
+    "nombre": "Floating Points"
+  },
+  {
+    "mbid": "b3a0912a-a62a-4388-9368-7cb21ed5caf9",
+    "nombre": "Floating Points, Pharoah Sanders"
+  },
+  {
+    "mbid": "e501ec17-1220-48ef-802f-ad47d74929e9",
+    "nombre": "Floating World Pictures"
+  },
+  {
+    "mbid": "ec9b48fe-b8b1-47e7-92b0-0b11b17ad4ad",
+    "nombre": "Flowklorikos"
+  },
+  {
+    "mbid": "dfb37fbb-b2eb-41de-9369-d5fd60f5d472",
+    "nombre": "Flyying Colours"
+  },
+  {
+    "mbid": "6aa08af3-d00b-4de9-afa0-96aa1decad9e",
+    "nombre": "Folamour"
+  },
+  {
+    "mbid": "8f381512-516e-4bf9-8050-3c2e86995b92",
+    "nombre": "Fontaines D.C."
+  },
+  {
+    "mbid": "3bcff06f-675a-451f-9075-99e8657047e8",
+    "nombre": "Four Tet"
+  },
+  {
+    "mbid": "5e1ef22b-310a-46ad-885b-4897b8c9c85a",
+    "nombre": "Francis Harris"
+  },
+  {
+    "mbid": "197450cd-0124-4164-b723-3c22dd16494d",
+    "nombre": "Frank T"
+  },
+  {
+    "mbid": "e20747e7-55a4-452e-8766-7b985585082d",
+    "nombre": "Frank Zappa"
+  },
+  {
+    "mbid": "bca46a0c-25c9-42ca-98c2-e64c8a5e337e",
+    "nombre": "Fred again.."
+  },
+  {
+    "mbid": "f4640b20-b76b-40d3-9ffc-a38b6718b273",
+    "nombre": "Fuck Buttons"
+  },
+  {
+    "mbid": "0dbad5db-51d0-49ad-9444-c12e7679d2e0",
+    "nombre": "Function"
+  },
+  {
+    "mbid": "2adb429d-e39c-467b-b175-3f40440ff630",
+    "nombre": "Funki Porcini"
+  },
+  {
+    "mbid": "2469950a-f0ca-425a-bfbc-baf55ea3afde",
+    "nombre": "Funky Gang"
+  },
+  {
+    "mbid": "74963434-dcb6-4b14-98cc-99873b06db66",
+    "nombre": "Future Islands"
+  },
+  {
+    "mbid": "3940a6c3-a334-4fc8-a5d5-1706f59118fe",
+    "nombre": "Föllakzoid"
+  },
+  {
+    "mbid": "4de3cfed-b459-42bd-bfbb-7a843fbc73df",
+    "nombre": "Galaxie 500"
+  },
+  {
+    "mbid": "c7cb9a2e-ff57-4bb8-bd2c-83524e18e369",
+    "nombre": "Gallo (Berlin)"
+  },
+  {
+    "mbid": "0e1ba088-5abb-435a-8111-9baceb61b566",
+    "nombre": "Gaussian Curve"
+  },
+  {
+    "mbid": "78e8cf1c-872e-4c70-9362-ac6c91df3877",
+    "nombre": "Gener"
+  },
+  {
+    "mbid": "ff22d292-3fc0-483f-8a87-0f6c97993d4b",
+    "nombre": "Genesis Breyer P-Orridge"
+  },
+  {
+    "mbid": "8e3fcd7d-bda1-4ca0-b987-b8528d2ee74e",
+    "nombre": "Genesis Owusu"
+  },
+  {
+    "mbid": "c78a77fa-507c-4c07-947a-0355029453bd",
+    "nombre": "Geoffrey O’Connor"
+  },
+  {
+    "mbid": "467f69b6-8d6d-4d2c-bfad-e89adf2806ff",
+    "nombre": "George Benson"
+  },
+  {
+    "mbid": "27870d47-bb98-42d1-bf2b-c7e972e6befc",
+    "nombre": "George Clanton"
+  },
+  {
+    "mbid": "68f19808-1f7b-46d4-bd1d-71aaf0f6b267",
+    "nombre": "Gerry Mulligan"
+  },
+  {
+    "mbid": "68f19808-1f7b-46d4-bd1d-71aaf0f6b267",
+    "nombre": "Gerry Mulligan meets Scott Hamilton"
+  },
+  {
+    "mbid": "963e93e1-3161-4d1d-9366-1be0e6c910a2",
+    "nombre": "Gigi Masin"
+  },
+  {
+    "mbid": "963e93e1-3161-4d1d-9366-1be0e6c910a2",
+    "nombre": "Gigi Masin / Charles Hayward"
+  },
+  {
+    "mbid": "ea3d34ba-7e03-4102-a97b-c36068820da5",
+    "nombre": "Gimbrère"
+  },
+  {
+    "mbid": "f47e4a14-b2b8-439c-948a-a2022ed1ea03",
+    "nombre": "Gimmik"
+  },
+  {
+    "mbid": "38dd6337-19ae-4793-ab4b-313eff523457",
+    "nombre": "Giorgio Moroder"
+  },
+  {
+    "mbid": "ba6bba0c-c9c8-47e9-ac09-f58c03fc56ff",
+    "nombre": "Glitterbust"
+  },
+  {
+    "mbid": "8179e236-86df-459f-bd51-0107138d0a6a",
+    "nombre": "Global Communication"
+  },
+  {
+    "mbid": "18131ab9-2768-4a82-9444-1552f96b3a9d",
+    "nombre": "Gloria Ann Taylor"
+  },
+  {
+    "mbid": "b328de0e-ee48-4d74-9d36-7c7ee16ffc69",
+    "nombre": "GoGo Penguin"
+  },
+  {
+    "mbid": "fcd5caac-6344-40ea-942a-5c4bac5e615f",
+    "nombre": "Goblin"
+  },
+  {
+    "mbid": "e9dfc148-d5f6-425e-b80b-f99ed2bd7c09",
+    "nombre": "God Is An Astronaut"
+  },
+  {
+    "mbid": "e9dfc148-d5f6-425e-b80b-f99ed2bd7c09",
+    "nombre": "God Is an Astronaut"
+  },
+  {
+    "mbid": "864aa861-e22a-4187-8baa-2ef0c215bc0a",
+    "nombre": "Godflesh"
+  },
+  {
+    "mbid": "3648db01-b29d-4ab9-835c-83f6a5068fe4",
+    "nombre": "Godspeed You! Black Emperor"
+  },
+  {
+    "mbid": "46e5aa54-d0a2-4121-8ad8-e5d6147c0c08",
+    "nombre": "Gold Suite"
+  },
+  {
+    "mbid": "75336c3d-2833-46cb-8037-b835cd7d646d",
+    "nombre": "Golden Girls"
+  },
+  {
+    "mbid": "304cdd9d-a04e-4eb2-865c-980a553a0efd",
+    "nombre": "Gomez"
+  },
+  {
+    "mbid": "70053535-a3ae-4aad-a6cd-68c55085b843",
+    "nombre": "Gonzalo Rubalcaba"
+  },
+  {
+    "mbid": "aeee5fe5-38f5-41bc-8ab8-9f9aa23e4f68",
+    "nombre": "Good Night"
+  },
+  {
+    "mbid": "e21857d5-3256-4547-afb3-4b6ded592596",
+    "nombre": "Gorillaz"
+  },
+  {
+    "mbid": "0b5df3f3-7f4c-4ffb-9279-dbab6cd9bea5",
+    "nombre": "Grand River"
+  },
+  {
+    "mbid": "7c86ac0b-81af-42fb-b49a-28d3eee4663c",
+    "nombre": "Greg Foat"
+  },
+  {
+    "mbid": "7e571e09-887e-4544-b993-eb75e7837ec1",
+    "nombre": "Grouper"
+  },
+  {
+    "mbid": "ad93763f-9bab-4a3f-a476-22fc9504bef3",
+    "nombre": "Gyedu-Blay Ambolley"
+  },
+  {
+    "mbid": "ee69197a-ca57-42ba-bd23-93b756391a5d",
+    "nombre": "Gábor Szabó"
+  },
+  {
+    "mbid": "377c4d69-7c77-4186-b536-c4ecd8d97be6",
+    "nombre": "HOMESHAKE"
+  },
+  {
+    "mbid": "cab0df6f-1af5-47be-be37-5207cc822d54",
+    "nombre": "Habitat Ensemble"
+  },
+  {
+    "mbid": "5b9d784c-33eb-4a78-a976-c97b672370fa",
+    "nombre": "Hammock"
+  },
+  {
+    "mbid": "59be490d-21e4-44d4-8cf2-939c8fbca25f",
+    "nombre": "Hania Rani"
+  },
+  {
+    "mbid": "e6de1f3b-6484-491c-88dd-6d619f142abc",
+    "nombre": "Hans Zimmer"
+  },
+  {
+    "mbid": "6a9ced55-b46b-482a-a46b-824631777e22",
+    "nombre": "Harald Grosskopf"
+  },
+  {
+    "mbid": "8f831f50-e409-47c3-8598-71a61bc8cfb3",
+    "nombre": "Harold Alfred Blanchard, Georg Philipp Telemann; Hubert Laws, Quincy Jones, Chick Corea"
+  },
+  {
+    "mbid": "5c864a6f-146e-4225-986d-3295ce90f784",
+    "nombre": "Harold Budd"
+  },
+  {
+    "mbid": "5c864a6f-146e-4225-986d-3295ce90f784",
+    "nombre": "Harold Budd, Simon Raymonde, Robin Guthrie"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Harold Budd/Brian Eno"
+  },
+  {
+    "mbid": "4ef24a03-45e8-40b3-b780-955bec848555",
+    "nombre": "Harold Melvin"
+  },
+  {
+    "mbid": "49c48b7f-1ff1-4f02-a1aa-ca1254b46ef2",
+    "nombre": "Harry Beckett"
+  },
+  {
+    "mbid": "87c86689-b207-489f-ae10-a98a511957a7",
+    "nombre": "Haruomi Hosono"
+  },
+  {
+    "mbid": "8fd0383e-0750-4572-9489-f55b01ae786c",
+    "nombre": "Havana Swim Club"
+  },
+  {
+    "mbid": "70923a5d-d3ba-4ef7-9064-ea5f709aa076",
+    "nombre": "Have a Nice Life"
+  },
+  {
+    "mbid": "aa0a54b3-d37e-4c1d-a53f-b3b94a3dfcad",
+    "nombre": "Helado Negro"
+  },
+  {
+    "mbid": "bce6f3f4-8db1-4fbb-9dbe-8a1224b57dfb",
+    "nombre": "Helen Merrill"
+  },
+  {
+    "mbid": "de6e9f8f-56ef-4697-9090-20a63c2b4d7b",
+    "nombre": "Helena Hauff"
+  },
+  {
+    "mbid": "096379c3-88c9-4109-87ae-a9ee1a8b539d",
+    "nombre": "Helena Hauff Meets Andreas Gehm"
+  },
+  {
+    "mbid": "765774a0-2060-469b-8b7d-612eea48579b",
+    "nombre": "Helloween"
+  },
+  {
+    "mbid": "e8a5a0c1-d076-47f4-b468-2b1ad9c1b71b",
+    "nombre": "Henrik Schwarz / Âme / Dixon"
+  },
+  {
+    "mbid": "82b922a4-410d-4b89-ac2e-c0d1f00136cd",
+    "nombre": "Hermanos Gutiérrez"
+  },
+  {
+    "mbid": "a15dd07b-0112-44e8-9904-592e57dfd069",
+    "nombre": "Hikaru Utada"
+  },
+  {
+    "mbid": "1d7097ef-e244-4393-8b3b-2de80d50855f",
+    "nombre": "Hilary Woods"
+  },
+  {
+    "mbid": "6d25c05f-1221-4368-878c-b164d451d12c",
+    "nombre": "Hillside"
+  },
+  {
+    "mbid": "554da916-46c2-49f0-9acd-ff09a12a4041",
+    "nombre": "Hiroshi Sato"
+  },
+  {
+    "mbid": "3822ee5a-6671-43d1-b483-23a50db5e4aa",
+    "nombre": "Hiroshi Suzuki"
+  },
+  {
+    "mbid": "44089e89-a61c-403e-b652-0fca1121843e",
+    "nombre": "Hiroshi Suzuki - Masahiko Togashi Quintet"
+  },
+  {
+    "mbid": "d9f4c157-f201-4dbf-8a44-b11de86cdd4e",
+    "nombre": "Hiroshi Yoshimura"
+  },
+  {
+    "mbid": "33092def-2536-4bb4-abd6-5baac43160c0",
+    "nombre": "Hoff Ensemble, Anders Jormin, Audun Kleive"
+  },
+  {
+    "mbid": "a48cce8c-8632-4e6f-b46f-40139be33ba0",
+    "nombre": "Holger Czukay"
+  },
+  {
+    "mbid": "d418b334-3028-41a3-be7e-adc1adadc13d",
+    "nombre": "Hollie Kenniff"
+  },
+  {
+    "mbid": "4342cf80-7c06-4402-a431-457e77310474",
+    "nombre": "Holy Fuck"
+  },
+  {
+    "mbid": "a3626f69-2434-4e51-819c-6d4751abc51d",
+    "nombre": "Hugh Hopper"
+  },
+  {
+    "mbid": "f9a4de7f-d3c6-4de8-8892-7aca52610edd",
+    "nombre": "I Hate Models"
+  },
+  {
+    "mbid": "f9a4de7f-d3c6-4de8-8892-7aca52610edd",
+    "nombre": "I Hate Models / Vittorio Di Mango"
+  },
+  {
+    "mbid": "be465d4f-c28d-4ba1-94ab-ebaada7db8af",
+    "nombre": "IDLES"
+  },
+  {
+    "mbid": "270ab891-a8f7-4887-b5b2-7d8e95172a59",
+    "nombre": "ISAN"
+  },
+  {
+    "mbid": "fa905866-03a9-42dd-a5c3-9b07cd1c0bc8",
+    "nombre": "Ian O’Brien"
+  },
+  {
+    "mbid": "b59882b3-26d2-4876-9d28-27f97ca20598",
+    "nombre": "Ichisan"
+  },
+  {
+    "mbid": "318c02c2-d766-4843-9035-e186531fc98c",
+    "nombre": "Idris Muhammad"
+  },
+  {
+    "mbid": "1c7b3786-b99a-40ab-81e4-f3056da19e13",
+    "nombre": "Ike"
+  },
+  {
+    "mbid": "bef913b9-a5df-4d47-9513-e6da7199f5bf",
+    "nombre": "Il Quadro di Troisi"
+  },
+  {
+    "mbid": "5269ba64-7e9d-4e37-a729-5c24fa46a2ab",
+    "nombre": "Illuvia"
+  },
+  {
+    "mbid": "9a3bf45c-347d-4630-894d-7cf3e8e0b632",
+    "nombre": "Ilya Santana"
+  },
+  {
+    "mbid": "685e3fa1-d4da-452b-b351-39f9fa3327c5",
+    "nombre": "International Pony"
+  },
+  {
+    "mbid": "ca891d65-d9b0-4258-89f7-e6ba29d83767",
+    "nombre": "Iron Maiden"
+  },
+  {
+    "mbid": "a2361c7d-ddb6-41c1-a9a0-be09fbbb8d21",
+    "nombre": "Isaac Hayes"
+  },
+  {
+    "mbid": "5e521e8c-0ab2-44c4-8fd8-14d8d3321265",
+    "nombre": "Isis"
+  },
+  {
+    "mbid": "9b69c184-919f-4db2-a2a4-995024f69334",
+    "nombre": "JEFRE CANTU-LEDESMA"
+  },
+  {
+    "mbid": "6857fc86-6356-42b3-8fb8-ba165674a8fa",
+    "nombre": "JKriv"
+  },
+  {
+    "mbid": "91823f68-5bbf-4ae7-ab1d-e003046e0db3",
+    "nombre": "Jacaszek"
+  },
+  {
+    "mbid": "f2d13d28-6f74-4dd5-b596-8bd0b6f67615",
+    "nombre": "Jack DeJohnette"
+  },
+  {
+    "mbid": "b625448e-bf4a-41c3-a421-72ad46cdb831",
+    "nombre": "Jack DeJohnette, Ravi Coltrane, Matthew Garrison"
+  },
+  {
+    "mbid": "c403e44b-76f5-40de-937d-e15e3dd9b565",
+    "nombre": "Jaco Pastorius Big Band"
+  },
+  {
+    "mbid": "904cc1c8-021e-45ac-bbe9-95c01a1f8099",
+    "nombre": "Jah Wobble, The Edge"
+  },
+  {
+    "mbid": "20ff3303-4fe2-4a47-a1b6-291e26aa3438",
+    "nombre": "James Baron"
+  },
+  {
+    "mbid": "569c0d90-28dd-413b-83e4-aaa7c27e667b",
+    "nombre": "James K"
+  },
+  {
+    "mbid": "20ff3303-4fe2-4a47-a1b6-291e26aa3438",
+    "nombre": "James Mason"
+  },
+  {
+    "mbid": "107d0c22-d051-4d98-8206-4e14de02132a",
+    "nombre": "James Taylor"
+  },
+  {
+    "mbid": "d1515727-4a93-4c0d-88cb-d7a9fce01879",
+    "nombre": "Jamie xx"
+  },
+  {
+    "mbid": "f4857fb9-e255-4dc6-bd01-e4ca7cc68544",
+    "nombre": "Jamiroquai"
+  },
+  {
+    "mbid": "ea7aba28-8853-4e30-83b7-7deeb3da36cd",
+    "nombre": "Jan Garbarek"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "Jan Garbarek, The Hilliard Ensemble"
+  },
+  {
+    "mbid": "ac9b829e-9a7c-4331-8abe-ab1eb49d1771",
+    "nombre": "Jan Jelinek avec The Exposures"
+  },
+  {
+    "mbid": "7d623f63-56d0-4c44-915f-7aefc30301f9",
+    "nombre": "Jan Johansson"
+  },
+  {
+    "mbid": "b72f115c-8afa-4dc5-bc6c-11225a53708a",
+    "nombre": "Janis Ian"
+  },
+  {
+    "mbid": "76c9a186-75bd-436a-85c0-823e3efddb7f",
+    "nombre": "Janis Joplin"
+  },
+  {
+    "mbid": "9b7130d0-558a-4599-b721-04b68c43aaad",
+    "nombre": "Jarboe"
+  },
+  {
+    "mbid": "5a97aef5-ca14-4711-ac55-5df1c3a28cea",
+    "nombre": "Jasmine Myra"
+  },
+  {
+    "mbid": "15c4bae8-a606-43c1-8e56-ce0aad8cdcb7",
+    "nombre": "Jaubi"
+  },
+  {
+    "mbid": "69bb7a74-99ee-4da0-bc3d-84586676e4ea",
+    "nombre": "Jean Carne, Adrian Younge"
+  },
+  {
+    "mbid": "691b0e9d-9e57-41cf-932d-a3d21b068e75",
+    "nombre": "Jean Sibelius; London Symphony Orchestra, Sir Colin Davis"
+  },
+  {
+    "mbid": "be50643c-0377-4968-b48c-47e06b2e2a3b",
+    "nombre": "Jean-Claude Pelletier"
+  },
+  {
+    "mbid": "44cd4e2e-0a6a-4cd1-a2a7-e23d9f33df78",
+    "nombre": "Jean‐Luc Ponty"
+  },
+  {
+    "mbid": "470a4ced-1323-4c91-8fd5-0bb3fb4c932a",
+    "nombre": "Jeff Mills"
+  },
+  {
+    "mbid": "c7356af9-9ea6-4a78-a55b-c73775716312",
+    "nombre": "Jeff Parker"
+  },
+  {
+    "mbid": "9b69c184-919f-4db2-a2a4-995024f69334",
+    "nombre": "Jefre Cantu-Ledesma"
+  },
+  {
+    "mbid": "9b69c184-919f-4db2-a2a4-995024f69334",
+    "nombre": "Jefre Cantu‐Ledesma"
+  },
+  {
+    "mbid": "41aa2734-ec86-4197-a074-d44886e7da8d",
+    "nombre": "Jens Lekman"
+  },
+  {
+    "mbid": "7289d10d-d8d2-41ff-8308-c56ec9346e07",
+    "nombre": "Jerez-Texas"
+  },
+  {
+    "mbid": "60f665c4-9567-4eec-b82b-7cd868d97d15",
+    "nombre": "Jerome Sydenham and Kerri Chandler"
+  },
+  {
+    "mbid": "a261c608-3140-4918-805a-7a318b5b2c2b",
+    "nombre": "Jessamine"
+  },
+  {
+    "mbid": "6ed40778-8d03-4a5c-ad35-93cf814627c9",
+    "nombre": "Jessie Ware"
+  },
+  {
+    "mbid": "ae69d81f-552d-4013-8dfc-4778d8f38742",
+    "nombre": "Jesu"
+  },
+  {
+    "mbid": "ef2c6449-d02b-415b-ad8c-c14c08266552",
+    "nombre": "Jesu / Sun Kil Moon"
+  },
+  {
+    "mbid": "2c05faf7-5cc8-4476-9daa-d177ad75cd34",
+    "nombre": "Jim"
+  },
+  {
+    "mbid": "04122c97-2702-4556-ad15-bbb7a8664d2f",
+    "nombre": "Jiro Inagaki"
+  },
+  {
+    "mbid": "d430daff-f500-4037-aa68-fa253b96a7d0",
+    "nombre": "Joan Bibiloni"
+  },
+  {
+    "mbid": "6a628a50-1c5c-4d29-a13a-79a73eb012d9",
+    "nombre": "Jocelyn Brown"
+  },
+  {
+    "mbid": "cfe625e1-a5ce-4c48-a4a4-d781c44fb64f",
+    "nombre": "Joe Goddard"
+  },
+  {
+    "mbid": "07f6d469-38f3-46da-9cfa-2f532422b84e",
+    "nombre": "Joe Jackson"
+  },
+  {
+    "mbid": "c70d12a2-24fe-4f83-a6e6-57d84f8efb51",
+    "nombre": "Johannes Brahms; Sunwook Kim, Hallé Orchestra; Sir Mark Elder"
+  },
+  {
+    "mbid": "53b106e7-0cc6-42cc-ac95-ed8d30a3a98e",
+    "nombre": "John Beltran"
+  },
+  {
+    "mbid": "72c090b6-a68e-4cb9-b330-85278681a714",
+    "nombre": "John Cale"
+  },
+  {
+    "mbid": "b625448e-bf4a-41c3-a421-72ad46cdb831",
+    "nombre": "John Coltrane"
+  },
+  {
+    "mbid": "6e913bad-4812-4286-b6cc-18548422f194",
+    "nombre": "John Foxx, Robin Guthrie"
+  },
+  {
+    "mbid": "e821a756-487f-4931-a02f-27cf11cec7bf",
+    "nombre": "John Martyn"
+  },
+  {
+    "mbid": "53b106e7-0cc6-42cc-ac95-ed8d30a3a98e",
+    "nombre": "John Morales"
+  },
+  {
+    "mbid": "53b106e7-0cc6-42cc-ac95-ed8d30a3a98e",
+    "nombre": "John Parish"
+  },
+  {
+    "mbid": "4da58868-23ff-4839-b7f3-e79b00cf6d6f",
+    "nombre": "John Surman"
+  },
+  {
+    "mbid": "bda6d00e-f8f7-43a5-b8f8-f1ebc55b46d3",
+    "nombre": "John Tejada"
+  },
+  {
+    "mbid": "62fe877d-b7a5-43e8-952e-2610d7614bff",
+    "nombre": "John Williams; Yo‐Yo Ma, Itzhak Perlman"
+  },
+  {
+    "mbid": "7ec4a553-73e5-4c0d-a071-a82b83a309e6",
+    "nombre": "John Zorn"
+  },
+  {
+    "mbid": "0ac4fff0-03e9-4b0d-977b-ba94fb475030",
+    "nombre": "Jon Hassell"
+  },
+  {
+    "mbid": "ff95eb47-41c4-4f7f-a104-cdc30f02e872",
+    "nombre": "Jon Hassell / Brian Eno"
+  },
+  {
+    "mbid": "3edc0ad0-c000-4c1d-b5fc-866832474842",
+    "nombre": "Jonny Nash"
+  },
+  {
+    "mbid": "19499124-36d4-4ccc-b28d-04dde3d2076f",
+    "nombre": "Jorge Ben Jor"
+  },
+  {
+    "mbid": "3a238c56-3790-4a6a-89af-4aa0c71fa732",
+    "nombre": "Jose Padilla"
+  },
+  {
+    "mbid": "d4b3138d-be55-4c4e-bf49-33ca8b40371e",
+    "nombre": "Josh T Pearson"
+  },
+  {
+    "mbid": "bd941ba5-703b-44ec-8f56-1028cb0e30b3",
+    "nombre": "Josquin des Prez, Tomás Luis de Victoria; John Potter"
+  },
+  {
+    "mbid": "3a238c56-3790-4a6a-89af-4aa0c71fa732",
+    "nombre": "José Padilla"
+  },
+  {
+    "mbid": "9a58fda3-f4ed-4080-a3a5-f457aac9fcdd",
+    "nombre": "Joy Division"
+  },
+  {
+    "mbid": "0bbbc496-c7b5-4b3f-bb6d-bd312827d6e5",
+    "nombre": "Joy Orbison"
+  },
+  {
+    "mbid": "496a2897-bed0-4be0-896f-cee82abb23c6",
+    "nombre": "Jozef van Wissem"
+  },
+  {
+    "mbid": "69bb7a74-99ee-4da0-bc3d-84586676e4ea",
+    "nombre": "João Donato, Adrian Younge"
+  },
+  {
+    "mbid": "8f2422ab-0ec6-4c92-80c4-afe9622fab32",
+    "nombre": "João Gilberto/Stan Getz"
+  },
+  {
+    "mbid": "04e4ff1d-9086-4531-a834-d9462771bb08",
+    "nombre": "Ju-Par Universal Orchestra"
+  },
+  {
+    "mbid": "cf3a09cd-6374-4050-8b70-b4de5bafd681",
+    "nombre": "Juan García Esquivel"
+  },
+  {
+    "mbid": "1659a41f-27d3-4823-8a15-bf7cd295cf59",
+    "nombre": "Juan Luis Guerra 4.40"
+  },
+  {
+    "mbid": "3b7865df-3c91-48dd-9126-a71e0dfe7f8d",
+    "nombre": "Julee Cruise"
+  },
+  {
+    "mbid": "ba49bbe3-188b-44d7-95f3-92ff9939af28",
+    "nombre": "Julianna Barwick"
+  },
+  {
+    "mbid": "d4659efb-b8eb-4f03-95e9-f69ce35967a9",
+    "nombre": "Julie Byrne"
+  },
+  {
+    "mbid": "ce3bc975-a76f-415b-a6cd-1e568c5714dd",
+    "nombre": "Jungle"
+  },
+  {
+    "mbid": "7bab7a05-8b0f-4778-b0b8-02dd6deb463a",
+    "nombre": "Just Mustard"
+  },
+  {
+    "mbid": "860b2707-6153-4e3a-aa57-74d2b42c55b5",
+    "nombre": "Justice"
+  },
+  {
+    "mbid": "24f1766e-9635-4d58-a4d4-9413f9f98a4c",
+    "nombre": "Jóhann Jóhannsson"
+  },
+  {
+    "mbid": "793e220b-64f8-46d9-954d-e033dbcfeef4",
+    "nombre": "KIDS SEE GHOSTS"
+  },
+  {
+    "mbid": "821905cc-05ac-405a-84b6-12702b177624",
+    "nombre": "KILN"
+  },
+  {
+    "mbid": "7fdcca4c-b2ea-4fa5-b0b6-59a5a14c1a0d",
+    "nombre": "KMRU"
+  },
+  {
+    "mbid": "2650f0e7-3879-4b2c-8908-d025113cbece",
+    "nombre": "KOKOROKO"
+  },
+  {
+    "mbid": "a0cd6f82-db9d-44b4-a4fb-197ccb3c5973",
+    "nombre": "Kali Malone"
+  },
+  {
+    "mbid": "a4ac255f-9775-4c16-8642-7f51502e45dd",
+    "nombre": "Kali Malone featuring Stephen O’Malley"
+  },
+  {
+    "mbid": "c7a3e868-c6d8-4512-a5ef-f6cbe42899b0",
+    "nombre": "Kamasi Washington"
+  },
+  {
+    "mbid": "db9ee7c8-d0b7-4004-972b-62d99dcd2d15",
+    "nombre": "Kangding Ray"
+  },
+  {
+    "mbid": "30e46d35-274b-41e3-8559-75b21e69c042",
+    "nombre": "Kareem Ali"
+  },
+  {
+    "mbid": "3ef162aa-8497-4062-b6d1-a063f0cbf1ae",
+    "nombre": "Kase.O"
+  },
+  {
+    "mbid": "4b101d21-73b7-405d-a162-65077128d0db",
+    "nombre": "Kayroy"
+  },
+  {
+    "mbid": "bba11721-9195-4a6c-8218-a128c9ef5846",
+    "nombre": "Keiko Matsui"
+  },
+  {
+    "mbid": "7ef355a4-d2a4-43a0-9fcd-e4ce8b82501f",
+    "nombre": "Keith Jarrett, Gary Peacock, Jack DeJohnette"
+  },
+  {
+    "mbid": "045494aa-e913-4e62-bf4e-dcc276e0075a",
+    "nombre": "Kelela"
+  },
+  {
+    "mbid": "868bf8f7-f63a-4791-9fba-c439071ab491",
+    "nombre": "Kelly Finnigan"
+  },
+  {
+    "mbid": "b2233a1e-2b25-4660-a578-b2e2de990792",
+    "nombre": "Kerri Chandler"
+  },
+  {
+    "mbid": "a520b4c6-706e-4951-8abf-88081c12f64c",
+    "nombre": "Kessoncoda"
+  },
+  {
+    "mbid": "d5193bb0-0e00-4774-abe5-ad5268175ba1",
+    "nombre": "Khotin"
+  },
+  {
+    "mbid": "aea4c9b9-9f8d-49dc-b2ca-57d6f26e8634",
+    "nombre": "Khruangbin"
+  },
+  {
+    "mbid": "4b462375-c508-432a-8c88-ceeec38b16ae",
+    "nombre": "Kim Gordon"
+  },
+  {
+    "mbid": "b38225b8-8e5f-42aa-bcdc-7bae5b5bdab3",
+    "nombre": "King Crimson"
+  },
+  {
+    "mbid": "a4ac255f-9775-4c16-8642-7f51502e45dd",
+    "nombre": "King Krule"
+  },
+  {
+    "mbid": "a4ac255f-9775-4c16-8642-7f51502e45dd",
+    "nombre": "King Sporty"
+  },
+  {
+    "mbid": "cf0f4547-ffbd-4011-98ad-0bec9ba022db",
+    "nombre": "Kings of Convenience"
+  },
+  {
+    "mbid": "3292f991-3b65-44e5-9ca4-3ca289b6c86f",
+    "nombre": "Kirk Degiorgio"
+  },
+  {
+    "mbid": "63199829-d8a2-4b8f-ab43-299f8646f5d0",
+    "nombre": "Kl(aüs)"
+  },
+  {
+    "mbid": "2e710b0c-6ff3-4c21-87d5-16ebbbca212c",
+    "nombre": "Klaus Schulze"
+  },
+  {
+    "mbid": "f969f986-97df-4fa0-8cef-ffccd098ff50",
+    "nombre": "Koop"
+  },
+  {
+    "mbid": "82b8fed1-4b47-49e7-bc84-77da58c29f06",
+    "nombre": "Kosmischer Läufer"
+  },
+  {
+    "mbid": "b2bbf316-ebae-4275-a0b2-58e3758a0dd7",
+    "nombre": "Kuniyuki Takahashi"
+  },
+  {
+    "mbid": "f79ad84b-e0de-4d3b-8373-606cc7695e49",
+    "nombre": "Kushal Das"
+  },
+  {
+    "mbid": "773c48db-eb0c-491f-9a36-633d72dcee8d",
+    "nombre": "L.V. Johnson"
+  },
+  {
+    "mbid": "57111f1f-9829-45ea-bb4e-a5aba37cd1d1",
+    "nombre": "L7"
+  },
+  {
+    "mbid": "b98202d3-4fb4-4e32-9ff3-b9e1987d02cf",
+    "nombre": "LEON VYNEHALL"
+  },
+  {
+    "mbid": "e3922bc3-c7dc-4eba-a1ee-ba07e14737f4",
+    "nombre": "LOS ENEMIGOS-DESDE EL JERGÓN"
+  },
+  {
+    "mbid": "c255f226-8bab-4cd3-a66f-a9f7bc4dafd0",
+    "nombre": "La Guardia De La Luz"
+  },
+  {
+    "mbid": "abfb6d3b-2fd2-4617-af1a-54b9cd6e6f2d",
+    "nombre": "La Plazuela"
+  },
+  {
+    "mbid": "875074d3-6458-47b4-b515-f7ecda93bd8d",
+    "nombre": "LaBelle"
+  },
+  {
+    "mbid": "c1982570-8efb-4cf7-bb5b-c9c026c0e8f4",
+    "nombre": "Ladysmith Black Mambazo"
+  },
+  {
+    "mbid": "a8fee308-c305-4ca1-8d30-28d150a8d5f7",
+    "nombre": "Laid Back"
+  },
+  {
+    "mbid": "adf017f5-76d6-4d31-b1b9-a0211675e7c2",
+    "nombre": "Lalo Schifrin"
+  },
+  {
+    "mbid": "249e0ab9-2690-47f3-8c9a-ef7bb62ee466",
+    "nombre": "Laraaji"
+  },
+  {
+    "mbid": "4346875a-2bba-4566-8dc1-680c38ba44c6",
+    "nombre": "Larry Heard"
+  },
+  {
+    "mbid": "01ce7548-dab4-4ca6-8dfc-8e2e4b50d461",
+    "nombre": "Lars Bartkuhn"
+  },
+  {
+    "mbid": "0b7ee619-16ed-4e60-b871-6a2111c12b76",
+    "nombre": "Last Step"
+  },
+  {
+    "mbid": "ec477866-bfaa-48e0-affd-1c151ef61b7b",
+    "nombre": "Laurent Garnier"
+  },
+  {
+    "mbid": "86809b51-cbe2-45f1-804a-e66eed635dea",
+    "nombre": "Laurie Anderson"
+  },
+  {
+    "mbid": "678d88b2-87b0-403b-b63d-5da7465aecc3",
+    "nombre": "Led Zeppelin"
+  },
+  {
+    "mbid": "9136db51-46ba-4208-afd6-7753fb0739aa",
+    "nombre": "Lee Konitz"
+  },
+  {
+    "mbid": "a1235272-3650-4ed7-9317-5a55a08701ec",
+    "nombre": "Lee Morgan"
+  },
+  {
+    "mbid": "321c8d9a-a787-44d8-9713-2e4bac2ddf0c",
+    "nombre": "Leif"
+  },
+  {
+    "mbid": "69d9dfd7-19b7-4a75-8a53-9f733fb5d774",
+    "nombre": "Leon Bridges"
+  },
+  {
+    "mbid": "ee2c33e7-2ea0-45e5-91ec-c7013b63cd44",
+    "nombre": "Leon Lowman"
+  },
+  {
+    "mbid": "b98202d3-4fb4-4e32-9ff3-b9e1987d02cf",
+    "nombre": "Leon Vynehall"
+  },
+  {
+    "mbid": "65314b12-0e08-43fa-ba33-baaa7b874c15",
+    "nombre": "Leonard Cohen"
+  },
+  {
+    "mbid": "410b8630-2fd5-4368-8a5b-dbc5e82f6b1c",
+    "nombre": "Leroy Hutson"
+  },
+  {
+    "mbid": "3ffe2c2b-6ec6-4290-af05-7e35b75264a7",
+    "nombre": "Les Discrets"
+  },
+  {
+    "mbid": "1ce74b72-380d-463a-8f47-ef9ccf8f1048",
+    "nombre": "Less Bells"
+  },
+  {
+    "mbid": "89967ce2-3f9a-4dad-b8c8-491bb87b73fe",
+    "nombre": "Linda Perhacs"
+  },
+  {
+    "mbid": "52c862ff-a616-414a-bfbf-1f669084caf2",
+    "nombre": "Linea Aspera"
+  },
+  {
+    "mbid": "87ae95ad-3808-41a6-bf12-e4e7b405ffb6",
+    "nombre": "Lionel X. Love"
+  },
+  {
+    "mbid": "cd645207-1664-46af-9953-264e9ae54089",
+    "nombre": "Lisa Gerrard"
+  },
+  {
+    "mbid": "85d76093-9865-4605-97fa-8c910929d366",
+    "nombre": "Lisa Walker"
+  },
+  {
+    "mbid": "3016b5eb-866d-4051-a7fb-d9175853049b",
+    "nombre": "Livin’ Joy"
+  },
+  {
+    "mbid": "baf8f274-47ca-4620-bd59-73df2efc59ee",
+    "nombre": "Loket"
+  },
+  {
+    "mbid": "2ac7ee99-4ced-40e3-b3ec-7f9cff588e87",
+    "nombre": "Lola Perrin"
+  },
+  {
+    "mbid": "346fa4f6-3f10-40ec-b8d0-4666e4e8b094",
+    "nombre": "Loleatta Holloway"
+  },
+  {
+    "mbid": "38712b4c-0fd4-4c65-8c7a-45676fecc973",
+    "nombre": "London Symphony Orchestra, Sir Colin Davis"
+  },
+  {
+    "mbid": "aea6c6ff-7420-438f-88b9-9fd8c849d466",
+    "nombre": "Long Island Sound"
+  },
+  {
+    "mbid": "483ccc8e-d789-46db-a88a-3a0ad4b6fae3",
+    "nombre": "Lonnie Holley"
+  },
+  {
+    "mbid": "b7eb7b38-7f51-45e9-b583-64303b24eabe",
+    "nombre": "Lonnie Liston Smith"
+  },
+  {
+    "mbid": "20ff3303-4fe2-4a47-a1b6-291e26aa3438",
+    "nombre": "Loraine James"
+  },
+  {
+    "mbid": "0425f42d-65b3-4471-80c8-d2ae7d38ede7",
+    "nombre": "Lord of the Isles"
+  },
+  {
+    "mbid": "b0e81c40-ea89-40b9-95b3-e63d5cad5e67",
+    "nombre": "Lords of Acid"
+  },
+  {
+    "mbid": "0e826d93-0b1c-46c9-b1ce-d3b5a8e567ca",
+    "nombre": "Lorelle Meets the Obsolete"
+  },
+  {
+    "mbid": "e3922bc3-c7dc-4eba-a1ee-ba07e14737f4",
+    "nombre": "Los Enemigos"
+  },
+  {
+    "mbid": "9df503b5-4e47-4752-92cd-9793a4895868",
+    "nombre": "Los Fronterizos"
+  },
+  {
+    "mbid": "557ac15e-7800-44c3-bb62-d4ab34ac1e28",
+    "nombre": "Los Hermanos"
+  },
+  {
+    "mbid": "6f28b158-4d1a-4f31-9339-7f381e3c4ee1",
+    "nombre": "Los Planetas"
+  },
+  {
+    "mbid": "e8ecd214-1ff2-4e4f-ba01-fc6d24555852",
+    "nombre": "Los Punsetes"
+  },
+  {
+    "mbid": "abc31be8-02b2-4bb1-867d-604d50b7be78",
+    "nombre": "L’Impératrice"
+  },
+  {
+    "mbid": "6d7b7cd4-254b-4c25-83f6-dd20f98ceacd",
+    "nombre": "M83"
+  },
+  {
+    "mbid": "f5e66486-4481-4ebf-b1f9-f87ebabf5897",
+    "nombre": "MFSB"
+  },
+  {
+    "mbid": "c485632c-b784-4ee9-8ea1-c5fb365681fc",
+    "nombre": "MGMT"
+  },
+  {
+    "mbid": "ffe02aed-ef7e-4736-a186-c2f1dd55ce8d",
+    "nombre": "MONO"
+  },
+  {
+    "mbid": "1c55bf58-b45b-4ec8-9e03-372483582589",
+    "nombre": "Macroblank"
+  },
+  {
+    "mbid": "59476fae-d0c9-4ebd-b03c-c38b19b30dff",
+    "nombre": "Makaya McCraven"
+  },
+  {
+    "mbid": "d75a6c36-ea55-41f2-9ec3-b2d3c4317f8a",
+    "nombre": "Malia"
+  },
+  {
+    "mbid": "5fd9d175-1fed-45e5-a2b4-e4e727f34d8b",
+    "nombre": "Mammal Hands"
+  },
+  {
+    "mbid": "e160f589-dbe6-4b8f-88b5-f528ff4443b4",
+    "nombre": "Mannequin Pussy"
+  },
+  {
+    "mbid": "f8e27824-f317-4b67-8f6b-6097fae3c6ed",
+    "nombre": "Manolo Sanlucar"
+  },
+  {
+    "mbid": "f8e27824-f317-4b67-8f6b-6097fae3c6ed",
+    "nombre": "Manolo Sanlúcar"
+  },
+  {
+    "mbid": "826b488f-5164-45ca-abc4-ab11b3c321eb",
+    "nombre": "Manu Dibango"
+  },
+  {
+    "mbid": "2581fa6c-1a78-4c59-9f18-020ed8cb18be",
+    "nombre": "Manu Katché"
+  },
+  {
+    "mbid": "17268036-f51c-427c-a8a2-241fac69d39f",
+    "nombre": "Manuel Goettsching"
+  },
+  {
+    "mbid": "00e3ab6b-4c4f-4ed6-991f-461a0ffa01b3",
+    "nombre": "Manuel Göttsching"
+  },
+  {
+    "mbid": "b35283b3-e1b4-40e3-9fef-940af1058b8e",
+    "nombre": "Marc Ribot y Los cubanos postizos"
+  },
+  {
+    "mbid": "a771caf6-572c-4a29-a9c3-c86d83b65a42",
+    "nombre": "Marcellus Pittman"
+  },
+  {
+    "mbid": "ff16873a-f659-4b78-8c5a-7c45eece4c30",
+    "nombre": "Marco Shuttle"
+  },
+  {
+    "mbid": "da4fb281-2156-442c-87ad-0e02e8a86077",
+    "nombre": "Marea"
+  },
+  {
+    "mbid": "30ce4dae-9038-4343-9bc9-06a7a2988d68",
+    "nombre": "Margaret Wakeley"
+  },
+  {
+    "mbid": "14ed9dea-1bb0-4743-ba32-39674a71da89",
+    "nombre": "Marianne Faithfull"
+  },
+  {
+    "mbid": "72034a05-bcd8-40c2-8255-3ee4ac0e7ef0",
+    "nombre": "Maribou State"
+  },
+  {
+    "mbid": "06ae569e-0b5b-4cd7-aded-98c3ad743ca3",
+    "nombre": "Marissa Nadler"
+  },
+  {
+    "mbid": "212c2275-c448-4129-a2d6-0b476f2a85cc",
+    "nombre": "Mariya Takeuchi"
+  },
+  {
+    "mbid": "be8879de-fd45-4202-8245-5889586ee4cf",
+    "nombre": "Mark Barrott"
+  },
+  {
+    "mbid": "f1db8b18-f950-4231-ac8b-cd936e5b4e07",
+    "nombre": "Mark McGuire"
+  },
+  {
+    "mbid": "afdb7919-059d-43c1-b668-ba1d265e7e42",
+    "nombre": "Marvin Gaye"
+  },
+  {
+    "mbid": "5e2c9a0d-d21d-4b56-8bdb-43e01169c91b",
+    "nombre": "Mary Lattimore"
+  },
+  {
+    "mbid": "bd13909f-1c29-4c27-a874-d4aaf27c5b1a",
+    "nombre": "Mary Lattimore, Mac McCaughan"
+  },
+  {
+    "mbid": "6cc3f3d9-963d-4ded-8990-ec6648e65298",
+    "nombre": "Masayoshi Fujita"
+  },
+  {
+    "mbid": "10adbe5e-a2c0-4bf3-8249-2b4cbf6e6ca8",
+    "nombre": "Massive Attack"
+  },
+  {
+    "mbid": "10adbe5e-a2c0-4bf3-8249-2b4cbf6e6ca8",
+    "nombre": "Massive Attack vs. Burial"
+  },
+  {
+    "mbid": "bd496eba-155e-49ba-9a92-56e3fdfd1ea2",
+    "nombre": "Masterplan"
+  },
+  {
+    "mbid": "955718ae-8a26-4b98-8a34-02c44ab4bfdf",
+    "nombre": "Mathew Jonson"
+  },
+  {
+    "mbid": "88d4e5bf-883b-4a4a-858b-1ecb7ce94245",
+    "nombre": "Mats Erlandsson"
+  },
+  {
+    "mbid": "03ad1736-b7c9-412a-b442-82536d63a5c4",
+    "nombre": "Matt Elliott"
+  },
+  {
+    "mbid": "b191a9d7-9f6b-4fc8-a097-488cf79d0242",
+    "nombre": "Matthew Halsall"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "Maud the moth + Trajedesaliva"
+  },
+  {
+    "mbid": "ee58c59f-8e7f-4430-b8ca-236c4d3745ae",
+    "nombre": "Max Cooper"
+  },
+  {
+    "mbid": "509f20b2-5df3-4aec-9bbc-002131fb3f99",
+    "nombre": "Max Richter"
+  },
+  {
+    "mbid": "509f20b2-5df3-4aec-9bbc-002131fb3f99",
+    "nombre": "Max Richter, Elena Urioste, Chineke! Orchestra"
+  },
+  {
+    "mbid": "62495254-237e-4e9e-8ffb-31fede562cfd",
+    "nombre": "Maybeshewill"
+  },
+  {
+    "mbid": "c48d4327-8122-4286-af66-05e1ee6ac4d8",
+    "nombre": "Mazzy Star"
+  },
+  {
+    "mbid": "36dd810d-8728-4059-bf8f-6e9ea1532be5",
+    "nombre": "Mecánica Clásica"
+  },
+  {
+    "mbid": "bb927dc9-51a1-4e98-be97-e5d22695a1e3",
+    "nombre": "Meg Baird"
+  },
+  {
+    "mbid": "287948f0-d785-4d10-81c2-69a8b6a83a2b",
+    "nombre": "Melanie De Biasio"
+  },
+  {
+    "mbid": "7c46ca01-007e-4cfd-88d6-af9b386db75e",
+    "nombre": "Melvin “Wah Wah” Watson"
+  },
+  {
+    "mbid": "d6652e7b-33fe-49ef-8336-4c863b4f996f",
+    "nombre": "Menahan Street Band"
+  },
+  {
+    "mbid": "324b9329-7be6-491f-9ee1-65bfa10c7577",
+    "nombre": "Mercedes Sosa"
+  },
+  {
+    "mbid": "7b1cf87e-c54f-4abc-893d-90245a31900d",
+    "nombre": "Mercury Rev"
+  },
+  {
+    "mbid": "55a8b485-1cbf-47ee-ae15-d106200fafe8",
+    "nombre": "Meshell Ndegeocello"
+  },
+  {
+    "mbid": "65f4f0c5-ef9e-490c-aee3-909e7ae6b2ab",
+    "nombre": "Metallica"
+  },
+  {
+    "mbid": "a395dfdb-791e-4e57-ad3b-99948a162742",
+    "nombre": "Mezzoforte"
+  },
+  {
+    "mbid": "3215500f-f03e-4adf-94fe-5ca842e17f5b",
+    "nombre": "Michael Hoenig"
+  },
+  {
+    "mbid": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+    "nombre": "Michael Jackson"
+  },
+  {
+    "mbid": "f27ec8db-af05-4f36-916e-3d57f91ecf5e",
+    "nombre": "Michael Moore"
+  },
+  {
+    "mbid": "f24baf0e-bdbc-4900-9557-813c80aed819",
+    "nombre": "Michal Turtle"
+  },
+  {
+    "mbid": "b1091eee-4198-4e66-8b15-05ae12b03353",
+    "nombre": "Mickey Hart, Airto Moreira, Flora Purim"
+  },
+  {
+    "mbid": "18d2dc38-73a9-4b67-92c4-ad97855393b3",
+    "nombre": "Microlith"
+  },
+  {
+    "mbid": "cf558c30-6aca-4da1-a8d2-70d5e78f4995",
+    "nombre": "Midori Takada"
+  },
+  {
+    "mbid": "8e7a7cba-f615-4207-b3bf-1280cc861580",
+    "nombre": "Midwife"
+  },
+  {
+    "mbid": "a1684a49-feaa-4150-b758-d9412fc59f12",
+    "nombre": "Mike Oldfield"
+  },
+  {
+    "mbid": "3e2fb7a8-195a-4d9e-b042-6451ee1e6b8d",
+    "nombre": "Mike Paradinas"
+  },
+  {
+    "mbid": "2b3357cb-cf2d-42f7-ab73-78bf0121fc56",
+    "nombre": "Mildlife"
+  },
+  {
+    "mbid": "561d854a-6a28-4aa7-8c99-323e6ce46c2a",
+    "nombre": "Miles Davis"
+  },
+  {
+    "mbid": "fe7245e7-d734-4ca1-8e26-691883f58201",
+    "nombre": "Miles Davis Quintet"
+  },
+  {
+    "mbid": "50e7cc0b-a74e-44b1-a22f-3cd9361d82dd",
+    "nombre": "Millie Jackson"
+  },
+  {
+    "mbid": "2e38e1de-2890-4620-8467-5b0bb4641cb9",
+    "nombre": "Milt Jackson"
+  },
+  {
+    "mbid": "1bfa27e3-0376-4206-a772-4586e25a64f5",
+    "nombre": "Milton Nascimento"
+  },
+  {
+    "mbid": "7e54d133-2525-4bc0-ae94-65584145a386",
+    "nombre": "Mind Over Rhythm / Plaid"
+  },
+  {
+    "mbid": "e842abf7-8a63-4602-8879-75958c2884a1",
+    "nombre": "Minnie Riperton"
+  },
+  {
+    "mbid": "4a0308e2-6b10-4cd9-9551-c7613c09dc17",
+    "nombre": "Mino Cinelu, Nils Petter Molvær"
+  },
+  {
+    "mbid": "57d9c0d7-3398-4fc8-b9b7-107637be822f",
+    "nombre": "Mirlaqi"
+  },
+  {
+    "mbid": "16e06154-a6c6-4f32-af1f-57fcb2f1c72f",
+    "nombre": "Misc"
+  },
+  {
+    "mbid": "eef9b345-2daa-4209-b595-a3e290335f64",
+    "nombre": "Misha Panfilov"
+  },
+  {
+    "mbid": "fa58cf24-0e44-421d-8519-8bf461dcfaa5",
+    "nombre": "Mitski"
+  },
+  {
+    "mbid": "14e97ed2-4fab-4ae6-b914-bc2fb14e7de9",
+    "nombre": "Moacir Santos"
+  },
+  {
+    "mbid": "9710d91f-bfbd-4f84-9c54-cb04f2a464b1",
+    "nombre": "Modern Cosmology, Lætitia Sadier"
+  },
+  {
+    "mbid": "75472b2f-55ca-47bb-a192-5ac8601350ba",
+    "nombre": "Modern Jazz Quartet"
+  },
+  {
+    "mbid": "d700b3f5-45af-4d02-95ed-57d301bda93e",
+    "nombre": "Mogwai"
+  },
+  {
+    "mbid": "3f593baa-617c-4ffd-96a7-2c7993a3fd14",
+    "nombre": "Moin"
+  },
+  {
+    "mbid": "f1745cca-1cae-4696-a0d3-62553c742b0c",
+    "nombre": "Monophonics"
+  },
+  {
+    "mbid": "7c1f9644-46dc-47fa-b4a7-a7a9cc8a2a8f",
+    "nombre": "Monty Alexander"
+  },
+  {
+    "mbid": "17d69e72-9cf2-496f-aa64-ba238de2087e",
+    "nombre": "Moodymann"
+  },
+  {
+    "mbid": "42689657-cbec-4f66-a9ed-80f939ea23ed",
+    "nombre": "Morphine"
+  },
+  {
+    "mbid": "1e47567e-5192-43b9-af98-75e4998f9e52",
+    "nombre": "Mr. Fingers"
+  },
+  {
+    "mbid": "07de16cf-4979-4f34-9989-3b0af98fa886",
+    "nombre": "Mrs Jynx"
+  },
+  {
+    "mbid": "07de16cf-4979-4f34-9989-3b0af98fa886",
+    "nombre": "Mrs Jynx / Oxynucid"
+  },
+  {
+    "mbid": "aae5b930-c59c-4509-81a1-4e65e8f424e4",
+    "nombre": "Mu‐Ziq"
+  },
+  {
+    "mbid": "8ca01f46-53ac-4af2-8516-55a909c0905e",
+    "nombre": "My Bloody Valentine"
+  },
+  {
+    "mbid": "886a7ba1-3839-48b7-8f27-0f40e2f4fd40",
+    "nombre": "Mystic Jungle"
+  },
+  {
+    "mbid": "c4673a0f-66cc-495b-ab88-f54d15d4036b",
+    "nombre": "Mythic Sunship"
+  },
+  {
+    "mbid": "31559424-7e17-4670-bef2-5198148a4438",
+    "nombre": "Myôhô Takada, Tôgaku Kamba, Geppô Kobori, Sôshô Yamada, Yôdô Fukushiro, Kankei Fujita, Seizan Toda, Kaidô Iwatsuki, Stomu Yamash'ta, Genzan Miyoshi"
+  },
+  {
+    "mbid": "fa3b825f-7c85-4377-b393-d28a2016e293",
+    "nombre": "Mägo de Oz"
+  },
+  {
+    "mbid": "eec63d3c-3b81-4ad4-b1e4-7c147d4d2b61",
+    "nombre": "NO ZU"
+  },
+  {
+    "mbid": "061d409b-2243-4681-a34e-df3ec3841af0",
+    "nombre": "Nadia Struiwigh"
+  },
+  {
+    "mbid": "46a4b150-be30-44b3-a337-e06a72657d33",
+    "nombre": "Nala Sinephro"
+  },
+  {
+    "mbid": "8b477559-946e-4ef2-9fe1-446cff8fdd79",
+    "nombre": "Natasha Bai"
+  },
+  {
+    "mbid": "88927646-0c28-4b1b-a69e-cb33c400d650",
+    "nombre": "Nation of Language"
+  },
+  {
+    "mbid": "6e1758b7-c7dd-430a-a959-6ed93f202cba",
+    "nombre": "Neel"
+  },
+  {
+    "mbid": "75167b8b-44e4-407b-9d35-effe87b223cf",
+    "nombre": "Neil Young"
+  },
+  {
+    "mbid": "adec1fc3-83c1-48f7-9e49-8347ac6d40b0",
+    "nombre": "Neu!"
+  },
+  {
+    "mbid": "df2a6328-e9ed-4016-b499-a018547c8779",
+    "nombre": "New Age Doom"
+  },
+  {
+    "mbid": "5b7385dc-88da-4f01-958f-f7b9baa8217d",
+    "nombre": "New Cool Collective"
+  },
+  {
+    "mbid": "781435a6-5c6c-4a21-871f-facdb9e60a44",
+    "nombre": "New Cool Collective, Matt Bianco, Mark Reilly"
+  },
+  {
+    "mbid": "09d6b57e-9cd9-4a74-b7cb-842b8443a1cd",
+    "nombre": "Nia Archives"
+  },
+  {
+    "mbid": "4aae17a7-9f0c-487b-b60e-f8eafb410b1d",
+    "nombre": "Nick Cave"
+  },
+  {
+    "mbid": "5b9fed02-2003-4999-834d-9faad092dc73",
+    "nombre": "Nihiloxica"
+  },
+  {
+    "mbid": "9fd5479e-9489-49f3-84d1-542e0e088907",
+    "nombre": "Nik Bärtsch’s Ronin"
+  },
+  {
+    "mbid": "d03a54bc-6e07-4c04-a8d4-7fbf2bd07a01",
+    "nombre": "Nils Frahm"
+  },
+  {
+    "mbid": "4a0308e2-6b10-4cd9-9551-c7613c09dc17",
+    "nombre": "Nils Petter Molvær"
+  },
+  {
+    "mbid": "4a0308e2-6b10-4cd9-9551-c7613c09dc17",
+    "nombre": "Nils Petter Molvær, Moritz von Oswald"
+  },
+  {
+    "mbid": "4173ee0d-e003-496a-98eb-a2eaa90cb3f7",
+    "nombre": "Nilüfer Yanya"
+  },
+  {
+    "mbid": "2944824d-4c26-476f-a981-be849081942f",
+    "nombre": "Nina Simone"
+  },
+  {
+    "mbid": "b7ffd2af-418f-4be2-bdd1-22f8b48613da",
+    "nombre": "Nine Inch Nails"
+  },
+  {
+    "mbid": "5b11f4ce-a62d-471e-81fc-a69a8278c7da",
+    "nombre": "Nirvana"
+  },
+  {
+    "mbid": "455d7ca3-629d-498c-93f3-9d428dbfe4e0",
+    "nombre": "Nivhek"
+  },
+  {
+    "mbid": "c6365f22-cdbd-45d2-a2eb-070310d3c316",
+    "nombre": "Niño de Elche"
+  },
+  {
+    "mbid": "eec63d3c-3b81-4ad4-b1e4-7c147d4d2b61",
+    "nombre": "No Joy"
+  },
+  {
+    "mbid": "eec63d3c-3b81-4ad4-b1e4-7c147d4d2b61",
+    "nombre": "No-Man"
+  },
+  {
+    "mbid": "985c709c-7771-4de3-9024-7bda29ebe3f9",
+    "nombre": "Norah Jones"
+  },
+  {
+    "mbid": "6eb70952-31ab-4d94-a68f-b5713b75f01d",
+    "nombre": "Not Waving"
+  },
+  {
+    "mbid": "e86b5e8c-8a11-40ea-9bb0-551df95e99d4",
+    "nombre": "Nothing"
+  },
+  {
+    "mbid": "d5e420e5-b158-4cbd-ac20-ab7b778d24e4",
+    "nombre": "Nouvelle Phénomène"
+  },
+  {
+    "mbid": "42dd1862-7255-47ed-8584-651abce3bf53",
+    "nombre": "Nubya Garcia"
+  },
+  {
+    "mbid": "1924d7e6-c951-47e7-913b-c863d650a6bf",
+    "nombre": "Nuron"
+  },
+  {
+    "mbid": "1924d7e6-c951-47e7-913b-c863d650a6bf",
+    "nombre": "Nuron + Fugue"
+  },
+  {
+    "mbid": "e5b5b78b-811b-4bfb-a463-116e5f4c3114",
+    "nombre": "Nuyorican Soul"
+  },
+  {
+    "mbid": "3fa65334-e3c4-4e83-b24f-5af5535ba462",
+    "nombre": "Octo Octa"
+  },
+  {
+    "mbid": "67e47f12-5257-47d9-8050-96239a05de65",
+    "nombre": "Odyssey"
+  },
+  {
+    "mbid": "552eb96a-7e91-439d-82d2-099804b75939",
+    "nombre": "Off With Their Heads"
+  },
+  {
+    "mbid": "c464a09c-6e10-469b-82a1-0234b189790c",
+    "nombre": "Oliver Coates"
+  },
+  {
+    "mbid": "9cea062d-d476-447f-98b4-e67e14bfd1e4",
+    "nombre": "Oneohtrix Point Never"
+  },
+  {
+    "mbid": "c14b4180-dc87-481e-b17a-64e4150f90f6",
+    "nombre": "Opeth"
+  },
+  {
+    "mbid": "e9d2cdf6-d485-4074-9a53-9990c9a4d8b1",
+    "nombre": "Oranssi Pazuzu"
+  },
+  {
+    "mbid": "f3e2a7d9-c6bb-4848-95e5-04c0a1e2f511",
+    "nombre": "Orbital"
+  },
+  {
+    "mbid": "6d072aa8-c851-49c5-92f9-cbca05f4bed9",
+    "nombre": "Orchestral Manoeuvres in the Dark"
+  },
+  {
+    "mbid": "9ece08c4-048a-4e5f-9c43-9cf16d580db2",
+    "nombre": "Oren Ambarchi"
+  },
+  {
+    "mbid": "cbf11f81-f98d-458d-89e1-194b40ba5b60",
+    "nombre": "Orishas"
+  },
+  {
+    "mbid": "47b84dd1-9de7-404f-9881-977af915936c",
+    "nombre": "Oro Azul"
+  },
+  {
+    "mbid": "194272cc-dcc8-4640-a4a6-66da7d250d5c",
+    "nombre": "Osees"
+  },
+  {
+    "mbid": "b1355867-16a1-4863-ae3b-6a8be122eaaa",
+    "nombre": "Osibisa"
+  },
+  {
+    "mbid": "82b1f5fd-cd31-41a9-b5d4-7e33f0eb9751",
+    "nombre": "Otis Redding"
+  },
+  {
+    "mbid": "73fdb566-a9b1-494c-9f32-51768ec9fd27",
+    "nombre": "OutKast"
+  },
+  {
+    "mbid": "88afd639-e4bd-4abd-b396-2c2d18e3157e",
+    "nombre": "Over the Rhine"
+  },
+  {
+    "mbid": "a6f8d42d-d3ff-4268-8d39-ee01341733bb",
+    "nombre": "Ozmotic | Fennesz"
+  },
+  {
+    "mbid": "1171bba7-9d5a-4c9f-8dda-9e6d9d82091e",
+    "nombre": "O’Donel Levy"
+  },
+  {
+    "mbid": "e795e03d-b5d5-4a5f-834d-162cfb308a2c",
+    "nombre": "PJ Harvey"
+  },
+  {
+    "mbid": "b9acc2e2-1beb-4ea1-8d33-cc5a9d652b67",
+    "nombre": "PONTA BOX"
+  },
+  {
+    "mbid": "3165f5e0-44ff-446a-81d7-c09ec69661ae",
+    "nombre": "PUP"
+  },
+  {
+    "mbid": "c538f335-0b31-48b9-bcf5-3cabbc405915",
+    "nombre": "Pablo’s Eye"
+  },
+  {
+    "mbid": "7bc8dd01-35ea-4b18-a64d-3a364dc76a52",
+    "nombre": "Paco de Lucía"
+  },
+  {
+    "mbid": "7bc8dd01-35ea-4b18-a64d-3a364dc76a52",
+    "nombre": "Paco de Lucía y Ramón de Algeciras"
+  },
+  {
+    "mbid": "09c0f334-f9de-4970-b9ee-ef799cd093be",
+    "nombre": "Paco de Lucía, Al Di Meola"
+  },
+  {
+    "mbid": "f82bcf78-5b69-4622-a5ef-73800768d9ac",
+    "nombre": "Pale Jay"
+  },
+  {
+    "mbid": "1584532a-62ed-4cbe-ad95-6def0af7df35",
+    "nombre": "Pale Saints"
+  },
+  {
+    "mbid": "342fc420-72b8-4f2f-ab09-68484dc6df16",
+    "nombre": "Panama Fleets"
+  },
+  {
+    "mbid": "fd3c3f9f-a471-498e-ab3a-940ac20b6bbd",
+    "nombre": "Panda Bear"
+  },
+  {
+    "mbid": "e0bba46b-e75b-4d07-ba81-8d00155a502d",
+    "nombre": "Panna Cotta"
+  },
+  {
+    "mbid": "d9b1f00a-31a7-4f64-9f29-8481e7be8911",
+    "nombre": "Panopticon"
+  },
+  {
+    "mbid": "ac18992d-d90c-41d0-b56b-66fe1d51608e",
+    "nombre": "Pantha du Prince"
+  },
+  {
+    "mbid": "38712b4c-0fd4-4c65-8c7a-45676fecc973",
+    "nombre": "Paranoid London"
+  },
+  {
+    "mbid": "d1947987-9614-49ae-bd36-8000e6b6f7d0",
+    "nombre": "Parliament"
+  },
+  {
+    "mbid": "e01755e3-58ab-4a5b-a9e9-a0a3bd3dff4c",
+    "nombre": "Parquet Courts"
+  },
+  {
+    "mbid": "7daac7f9-8fcc-485f-a14f-f8091d98cf25",
+    "nombre": "Pat Metheny"
+  },
+  {
+    "mbid": "d6652e7b-33fe-49ef-8336-4c863b4f996f",
+    "nombre": "Pat Thomas and Kwashibu Area Band"
+  },
+  {
+    "mbid": "a247b1b8-8f47-4568-9a89-fa16b4a2b77f",
+    "nombre": "Patrice Rushen"
+  },
+  {
+    "mbid": "a247b1b8-8f47-4568-9a89-fa16b4a2b77f",
+    "nombre": "Patrice Rushen (Patrice Rushen)"
+  },
+  {
+    "mbid": "3e078819-a36c-4e5c-93e1-9b21eb17796d",
+    "nombre": "Patricia Barber"
+  },
+  {
+    "mbid": "a83346a0-9a86-45b1-a8cd-024af78cfa3b",
+    "nombre": "Patrick Holland"
+  },
+  {
+    "mbid": "d5bf3447-c526-4f7c-9931-4b7c80fe34de",
+    "nombre": "Paul Desmond"
+  },
+  {
+    "mbid": "ba550d0e-adac-4864-b88b-407cab5e76af",
+    "nombre": "Paul Giger"
+  },
+  {
+    "mbid": "d6652e7b-33fe-49ef-8336-4c863b4f996f",
+    "nombre": "Pauline Oliveros / Ellen Fullman; Deep Listening Band, The Long String Instrument"
+  },
+  {
+    "mbid": "7087b704-3db0-4e42-8eaa-e06e0998ad3b",
+    "nombre": "Pejzaż"
+  },
+  {
+    "mbid": "beff21d3-88c7-4ee0-8b7a-40b6db22c6d7",
+    "nombre": "Pendulum"
+  },
+  {
+    "mbid": "4dfadf48-e15b-4fc2-a800-2b68702a72d5",
+    "nombre": "Penguin Cafe"
+  },
+  {
+    "mbid": "79c67eb5-3851-4b28-bfe0-3adfcd6f58d7",
+    "nombre": "Pentatonix"
+  },
+  {
+    "mbid": "c4ff10e0-ae5a-467d-a409-6e0b4bf241eb",
+    "nombre": "Perfume Genius"
+  },
+  {
+    "mbid": "be540c02-7898-4b79-9acc-c8122c7d9e83",
+    "nombre": "Pet Shop Boys"
+  },
+  {
+    "mbid": "6e0e0dca-d124-48d7-86e4-567280d83d32",
+    "nombre": "Peter Cat Recording Co."
+  },
+  {
+    "mbid": "8e66ea2b-b57b-47d9-8df0-df4630aeb8e5",
+    "nombre": "Peter Gabriel"
+  },
+  {
+    "mbid": "a21318db-f228-4a4d-8bce-6947a62985a5",
+    "nombre": "Petra Haden and Bill Frisell"
+  },
+  {
+    "mbid": "7b42e4cf-650b-4fe0-bc7d-c95e31247729",
+    "nombre": "Peven  Everett"
+  },
+  {
+    "mbid": "7b42e4cf-650b-4fe0-bc7d-c95e31247729",
+    "nombre": "Peven Everett"
+  },
+  {
+    "mbid": "b3a0912a-a62a-4388-9368-7cb21ed5caf9",
+    "nombre": "Pharoah Sanders"
+  },
+  {
+    "mbid": "44ac33f1-69bf-4845-9a36-fbbb2b35c771",
+    "nombre": "Phase Fatale"
+  },
+  {
+    "mbid": "401c3991-b76b-499d-8082-9f2df958ef78",
+    "nombre": "Phil Mison"
+  },
+  {
+    "mbid": "5ae54dee-4dba-49c0-802a-a3b3b3adfe9b",
+    "nombre": "Philip Glass, Christopher Bowers-Broadbent; Kevin Bowyer"
+  },
+  {
+    "mbid": "5ae54dee-4dba-49c0-802a-a3b3b3adfe9b",
+    "nombre": "Philip Glass; Anton Batagov"
+  },
+  {
+    "mbid": "5ae54dee-4dba-49c0-802a-a3b3b3adfe9b",
+    "nombre": "Philip Glass; Uakti"
+  },
+  {
+    "mbid": "8f831f50-e409-47c3-8598-71a61bc8cfb3",
+    "nombre": "Philipp Otterbach"
+  },
+  {
+    "mbid": "12e4406c-33db-4414-92bb-f63b4602a7f4",
+    "nombre": "Phill Niblock"
+  },
+  {
+    "mbid": "d6ecdfbe-aaa7-48b5-925c-87f066376eaa",
+    "nombre": "Pigeon"
+  },
+  {
+    "mbid": "83d91898-7763-47d7-b03b-b92132375c47",
+    "nombre": "Pink Floyd"
+  },
+  {
+    "mbid": "66c82752-3488-472e-8bc1-89b853da56df",
+    "nombre": "Pink Turns Blue"
+  },
+  {
+    "mbid": "81f2db60-ea05-4d2f-8188-985046e4a97a",
+    "nombre": "Pinkshinyultrablast"
+  },
+  {
+    "mbid": "a105dcb4-5f37-4960-b352-dd0b0964de50",
+    "nombre": "Pino D’Angiò"
+  },
+  {
+    "mbid": "b6b2bb8d-54a9-491f-9607-7b546023b433",
+    "nombre": "Pixies"
+  },
+  {
+    "mbid": "847e8284-8582-4b0e-9c26-b042a4f49e57",
+    "nombre": "Placebo"
+  },
+  {
+    "mbid": "7e54d133-2525-4bc0-ae94-65584145a386",
+    "nombre": "Plaid"
+  },
+  {
+    "mbid": "2b4b6e6b-3e93-4902-8047-fbe76225f794",
+    "nombre": "Platero y Tú"
+  },
+  {
+    "mbid": "0f0eb7ca-8c29-4e04-ba3b-ac6ec8a51823",
+    "nombre": "Pockets"
+  },
+  {
+    "mbid": "f6fe9682-b25c-4291-8060-c85dee4cae96",
+    "nombre": "Polar Inertia"
+  },
+  {
+    "mbid": "7ec2029a-a195-4208-b4e2-b1f2ef5e36fb",
+    "nombre": "Polwechsel"
+  },
+  {
+    "mbid": "aaa78ce4-e4fe-43b6-abe1-733dc83f8eb1",
+    "nombre": "Polygon Window"
+  },
+  {
+    "mbid": "169c4c28-858e-497b-81a4-8bc15e0026ea",
+    "nombre": "Porcupine Tree"
+  },
+  {
+    "mbid": "668e5c58-903a-4aee-ba0d-9166a3bba4cc",
+    "nombre": "Portable"
+  },
+  {
+    "mbid": "0e6e5a3e-b5cb-45ff-97f4-c23c88efc563",
+    "nombre": "Portico Quartet"
+  },
+  {
+    "mbid": "8f6bd1e4-fbe1-4f50-aa9b-94c450ec0f11",
+    "nombre": "Portishead"
+  },
+  {
+    "mbid": "1fd87f72-5fbf-4cad-bd9d-f2fec1359cfc",
+    "nombre": "Prefab Sprout"
+  },
+  {
+    "mbid": "55704c38-224f-4b75-b29f-d43653f8bc9a",
+    "nombre": "Primal Scream"
+  },
+  {
+    "mbid": "4ae3762f-1dcd-4258-a603-cf8826f7d6a9",
+    "nombre": "Prime Minister of Doom"
+  },
+  {
+    "mbid": "070d193a-845c-479f-980e-bef15710653e",
+    "nombre": "Prince"
+  },
+  {
+    "mbid": "4c8ead39-b9df-4c56-a27c-51bc049cfd48",
+    "nombre": "Prince and The Revolution"
+  },
+  {
+    "mbid": "276f08c2-4b4b-4e45-bab8-3ebe6066e080",
+    "nombre": "Prins Thomas"
+  },
+  {
+    "mbid": "ed9a90d2-f4bc-410b-a016-19e0764621e2",
+    "nombre": "Pris"
+  },
+  {
+    "mbid": "abb78302-0413-48d4-ba04-d07655a2baad",
+    "nombre": "Prok"
+  },
+  {
+    "mbid": "9efaf639-6332-44b8-94ae-c25896320ca7",
+    "nombre": "Protomartyr"
+  },
+  {
+    "mbid": "11d94660-1963-4020-8762-4c5907e2ea48",
+    "nombre": "Psychedelic Porn Crumpets"
+  },
+  {
+    "mbid": "d4807769-d346-4aeb-a4af-029181ecb6fb",
+    "nombre": "Psychic Ills"
+  },
+  {
+    "mbid": "68950696-ee9a-49b2-a8c2-d1d6c19355cc",
+    "nombre": "Public Image Ltd"
+  },
+  {
+    "mbid": "0c708cbd-a8d6-4a4b-8fc4-04dc9ebd23b8",
+    "nombre": "Pulse Emitter / Brett Naucke"
+  },
+  {
+    "mbid": "d8fbd94c-cd06-4e8b-a559-761ad969d07e",
+    "nombre": "Pyotr Ilyich Tchaikovsky; Cincinnati Pops Orchestra, Kiev Symphony Chorus, Children's Choir of Greater Cincinnati, Erich Kunzel"
+  },
+  {
+    "mbid": "7c1cc8a1-a237-40b6-ab4a-dca495a8f470",
+    "nombre": "Quadrant"
+  },
+  {
+    "mbid": "f1560407-8826-4ec9-b78f-e0c3fa3ea4f5",
+    "nombre": "Quantic"
+  },
+  {
+    "mbid": "801c3dbb-bd1f-444f-9230-651780f5b4ae",
+    "nombre": "Quantic presenta Flowering Inferno"
+  },
+  {
+    "mbid": "7dc8f5bd-9d0b-4087-9f73-dc164950bbd8",
+    "nombre": "Queens of the Stone Age"
+  },
+  {
+    "mbid": "5803c81e-739a-4057-9a5c-cf84e55db630",
+    "nombre": "Quincy Jones"
+  },
+  {
+    "mbid": "c49d862f-6b82-464a-a39f-b031533df784",
+    "nombre": "Quincy Jones and His Orchestra"
+  },
+  {
+    "mbid": "0a001ff2-86e0-4e52-84fc-48ef237644cc",
+    "nombre": "R de Rumba"
+  },
+  {
+    "mbid": "25f3abd9-63b5-471a-bd25-feb9672dfa11",
+    "nombre": "ROSALÍA"
+  },
+  {
+    "mbid": "a74b1b7f-71a5-4011-9441-d0b5e4122711",
+    "nombre": "Radiohead"
+  },
+  {
+    "mbid": "84eac621-1c5a-49a1-9500-555099c6e184",
+    "nombre": "Rae Spoon"
+  },
+  {
+    "mbid": "6ab555b6-a223-4c1e-babf-d4e2767a8f3f",
+    "nombre": "Rafael Anton Irisarri"
+  },
+  {
+    "mbid": "7bb9ed46-965c-486f-835a-0dcde559c69e",
+    "nombre": "Rafael Lechowski"
+  },
+  {
+    "mbid": "66ebc271-6a26-4fe7-848b-f217da119d92",
+    "nombre": "Rafael Lechowski -  Bobby Blue"
+  },
+  {
+    "mbid": "d0f998d0-eb8e-45be-9c95-69177c368914",
+    "nombre": "Raime"
+  },
+  {
+    "mbid": "b6bc3bb0-3329-4a47-8277-6c5f22b454db",
+    "nombre": "Rainer"
+  },
+  {
+    "mbid": "a9195057-4ae5-4123-856f-d9e2f6db32f7",
+    "nombre": "Rainer Brüninghaus"
+  },
+  {
+    "mbid": "38712b4c-0fd4-4c65-8c7a-45676fecc973",
+    "nombre": "Ralph Vaughan Williams; Bryden Thomson, London Symphony Orchestra, London Symphony Chorus"
+  },
+  {
+    "mbid": "afb8d624-52d7-4a72-8d0b-62fff3e29f79",
+    "nombre": "Ralph Vaughan Williams; Sir Neville Marriner, Sir Adrian Boult, Barry Wordsworth"
+  },
+  {
+    "mbid": "d19bf5bc-152a-4166-81fd-5f9764a348d8",
+    "nombre": "Ramper"
+  },
+  {
+    "mbid": "0682e8bf-7b0c-4d3a-85d3-974c7cef2da9",
+    "nombre": "Ramzi"
+  },
+  {
+    "mbid": "d90aa39d-3a02-41d8-bc5f-f6600d94d087",
+    "nombre": "Rapoon"
+  },
+  {
+    "mbid": "7c44df71-6be1-4fbd-9d04-b701a4857245",
+    "nombre": "Rare Silk"
+  },
+  {
+    "mbid": "2ce02909-598b-44ef-a456-151ba0a3bd70",
+    "nombre": "Ray Charles"
+  },
+  {
+    "mbid": "2ce02909-598b-44ef-a456-151ba0a3bd70",
+    "nombre": "Ray LaMontagne"
+  },
+  {
+    "mbid": "e0f003cc-48ac-432d-bb09-25278a597e07",
+    "nombre": "Rebecca Pidgeon"
+  },
+  {
+    "mbid": "a4a3ecce-7ee9-4599-940a-49be61c2fee9",
+    "nombre": "Recoil"
+  },
+  {
+    "mbid": "54152285-386d-4681-8054-fb9c02cecbad",
+    "nombre": "Recondite"
+  },
+  {
+    "mbid": "d9399921-2d82-437e-825e-16daff591a0c",
+    "nombre": "Red Garland"
+  },
+  {
+    "mbid": "89abed31-3a93-407e-a4a3-a94e193488cd",
+    "nombre": "Red Snapper"
+  },
+  {
+    "mbid": "9ef0d74c-f432-4127-b7f3-ce8806901a0c",
+    "nombre": "Relative"
+  },
+  {
+    "mbid": "b8acf43e-1ad5-4657-85a6-a75cc1f5e5fe",
+    "nombre": "Resavoir"
+  },
+  {
+    "mbid": "f893910f-b8d7-4986-83ed-41ff9be5252b",
+    "nombre": "Reuben Vaun Smith"
+  },
+  {
+    "mbid": "53abc7b7-7059-4cfa-b824-47e200d285a1",
+    "nombre": "Rheinzand"
+  },
+  {
+    "mbid": "aa914efa-d6cb-4816-906f-8edafb08418e",
+    "nombre": "Rhye"
+  },
+  {
+    "mbid": "dee95bdd-55a3-48af-8735-1c61baee5089",
+    "nombre": "Rhythm"
+  },
+  {
+    "mbid": "242a6de4-eae1-4421-a59f-d53b9bfceeb3",
+    "nombre": "Rhyze"
+  },
+  {
+    "mbid": "647221d0-f6b1-4e03-924c-c59b8059536f",
+    "nombre": "Ric Wilson, Chromeo"
+  },
+  {
+    "mbid": "5939a69d-17ea-4af4-9afb-926485fe5526",
+    "nombre": "Ricardo Donoso"
+  },
+  {
+    "mbid": "ce452fe2-9fba-4947-ac88-c70f969feb78",
+    "nombre": "Rich Shapero and Elsiane"
+  },
+  {
+    "mbid": "a0a754e8-6fdf-44f7-b0a6-5d15486d9f38",
+    "nombre": "Richenel"
+  },
+  {
+    "mbid": "cba9cec2-be8d-41bd-91b4-a1cd7de39b0c",
+    "nombre": "Rick James"
+  },
+  {
+    "mbid": "6adcea4e-ba9a-46a1-950b-57ca1c6a06a6",
+    "nombre": "Ricochet Gathering"
+  },
+  {
+    "mbid": "921aeac9-1512-4566-b2f8-c8536e6ada9e",
+    "nombre": "Ringo Deathstarr"
+  },
+  {
+    "mbid": "803f2853-7e3e-4dff-96a7-9f77b5f56de5",
+    "nombre": "Rival Consoles"
+  },
+  {
+    "mbid": "b435c75d-25e8-464c-8b82-12ca0eaec926",
+    "nombre": "Robe"
+  },
+  {
+    "mbid": "3cd3882c-00f8-4362-a0c2-ad89ed248533",
+    "nombre": "Robert Leiner"
+  },
+  {
+    "mbid": "3cd3882c-00f8-4362-a0c2-ad89ed248533",
+    "nombre": "Robert Len"
+  },
+  {
+    "mbid": "bd53f9a7-8be9-46b0-bf7d-1deea3cb57bc",
+    "nombre": "Robert Plant"
+  },
+  {
+    "mbid": "3cd3882c-00f8-4362-a0c2-ad89ed248533",
+    "nombre": "Robert Rich"
+  },
+  {
+    "mbid": "5298bbcb-7330-49bf-a780-2d757f10a20a",
+    "nombre": "Roberta Flack"
+  },
+  {
+    "mbid": "ccf9b52e-27f3-4737-baa1-7234df105c61",
+    "nombre": "Robohands"
+  },
+  {
+    "mbid": "6e1533aa-af4d-4e2f-b8c4-3d9c470b26a8",
+    "nombre": "Robson Jorge"
+  },
+  {
+    "mbid": "5a8e07d5-d932-4484-a7f7-e700793a9c94",
+    "nombre": "Robyn"
+  },
+  {
+    "mbid": "b8ba2ae6-a233-4b9c-bce3-ea7a7803c946",
+    "nombre": "Rocio Zavala"
+  },
+  {
+    "mbid": "a8ed28e3-5c08-4448-b889-867483e251f5",
+    "nombre": "Rodrigo y Gabriela"
+  },
+  {
+    "mbid": "0f50beab-d77d-4f0f-ac26-0b87d3e9b11b",
+    "nombre": "Roger Waters"
+  },
+  {
+    "mbid": "0dafb946-abc2-4c54-9417-7563617db3e9",
+    "nombre": "Roly Porter"
+  },
+  {
+    "mbid": "20d23adf-9657-4f27-a67f-1065ee7aa521",
+    "nombre": "Romy"
+  },
+  {
+    "mbid": "f2c61f11-9c3d-4840-ab44-9e2364f0827e",
+    "nombre": "Rosa Anschütz"
+  },
+  {
+    "mbid": "06e199c1-6f33-477b-a74d-bc8a283bd8f0",
+    "nombre": "Roy Ayers"
+  },
+  {
+    "mbid": "d1501f92-f523-4e95-a787-432875c8d6dc",
+    "nombre": "Roy Ayers Ubiquity"
+  },
+  {
+    "mbid": "69bb7a74-99ee-4da0-bc3d-84586676e4ea",
+    "nombre": "Roy Ayers, Adrian Younge"
+  },
+  {
+    "mbid": "7b42e4cf-650b-4fe0-bc7d-c95e31247729",
+    "nombre": "Roy Davis Jr. featuring Peven Everett"
+  },
+  {
+    "mbid": "0bbbc496-c7b5-4b3f-bb6d-bd312827d6e5",
+    "nombre": "Roy Hargrove"
+  },
+  {
+    "mbid": "d6bc9b64-6480-4d74-b539-651f07ee31b9",
+    "nombre": "Roy Hargrove Quintet"
+  },
+  {
+    "mbid": "f0fa72a7-3dd9-4830-8b86-0fe1617dbc20",
+    "nombre": "Roy Hargrove’s Crisol"
+  },
+  {
+    "mbid": "5803c81e-739a-4057-9a5c-cf84e55db630",
+    "nombre": "Roy Haynes and Quincy Jones"
+  },
+  {
+    "mbid": "0bbbc496-c7b5-4b3f-bb6d-bd312827d6e5",
+    "nombre": "Roy Montgomery"
+  },
+  {
+    "mbid": "a80c5dc5-b12e-4667-9f5a-b568961f3839",
+    "nombre": "Run the Jewels"
+  },
+  {
+    "mbid": "cca40a67-e959-46f8-a3f3-8a3f77d2da9e",
+    "nombre": "Russian Circles"
+  },
+  {
+    "mbid": "6edc70bb-c340-4ae6-bdd4-d5fb0c7411de",
+    "nombre": "Ryuichi Sakamoto"
+  },
+  {
+    "mbid": "6edc70bb-c340-4ae6-bdd4-d5fb0c7411de",
+    "nombre": "Ryūichi Sakamoto"
+  },
+  {
+    "mbid": "dab5cf68-b079-4f84-bb1a-888600cbf4db",
+    "nombre": "Ryūichi Sakamoto / Illuha / Taylor Deupree"
+  },
+  {
+    "mbid": "4c56405d-ba8e-4283-99c3-1dc95bdd50e7",
+    "nombre": "Róisín Murphy"
+  },
+  {
+    "mbid": "1c70a3fc-fa3c-4be1-8b55-c3192db8a884",
+    "nombre": "Röyksopp"
+  },
+  {
+    "mbid": "f4b0e002-e40d-4ade-b3b0-61b9226f4d18",
+    "nombre": "SAINT PEPSI"
+  },
+  {
+    "mbid": "3af0709d-eb0b-4863-8315-a4acb3f09844",
+    "nombre": "SAINT PEPSI // luxury elite"
+  },
+  {
+    "mbid": "3e1fc14c-397f-485a-a763-48f5892d8adf",
+    "nombre": "SALEM"
+  },
+  {
+    "mbid": "23b19bc5-813e-4456-bbae-ac3ca118f535",
+    "nombre": "SAULT"
+  },
+  {
+    "mbid": "3aa0cc15-37d0-4c30-bb76-5d6e5b81c474",
+    "nombre": "SFDK"
+  },
+  {
+    "mbid": "b59ac58d-036e-4bba-8112-c32a34c4575b",
+    "nombre": "SG Lewis"
+  },
+  {
+    "mbid": "29b03124-87df-4ee1-8d81-d46381522ec4",
+    "nombre": "SHXCXCHCXSH"
+  },
+  {
+    "mbid": "a109e801-4761-4a68-958e-e2a3818cd8f2",
+    "nombre": "SIRS"
+  },
+  {
+    "mbid": "3d303095-020a-4b65-9419-b91a574c8c9b",
+    "nombre": "SLIFT"
+  },
+  {
+    "mbid": "25521b37-fcf4-4204-8dca-e28bcda1e004",
+    "nombre": "SPELLLING"
+  },
+  {
+    "mbid": "36359ea7-d7d0-40f3-bff1-9acacbd0bb5c",
+    "nombre": "SQÜRL"
+  },
+  {
+    "mbid": "e24a3b2a-60d4-4b0e-a1c8-faa0b94a14b4",
+    "nombre": "STR4TA"
+  },
+  {
+    "mbid": "53d86951-706c-41c8-9053-a713ea972395",
+    "nombre": "SUMAC"
+  },
+  {
+    "mbid": "96f31a2e-b654-4d6c-8e42-bf478f57e49f",
+    "nombre": "Saariselka"
+  },
+  {
+    "mbid": "67930b3e-e00b-469f-8c74-fd69f20522ec",
+    "nombre": "Sade"
+  },
+  {
+    "mbid": "3b1ca47a-64d9-4794-9f44-1e09074bfe1f",
+    "nombre": "SaffronKeira"
+  },
+  {
+    "mbid": "1834cdf4-a1b9-4d07-9f96-b8a6510e3278",
+    "nombre": "Sagatmanchu"
+  },
+  {
+    "mbid": "2340f89c-3ce0-4e49-a4a2-99b68ac42b0d",
+    "nombre": "Salena Jones"
+  },
+  {
+    "mbid": "130c2184-14f2-4180-a216-04b5a333be57",
+    "nombre": "Sampha"
+  },
+  {
+    "mbid": "19fc62c0-3241-499d-bc75-739e50cab1c1",
+    "nombre": "Sandro Brugnolini / Alessandro Alessandroni / Teimar"
+  },
+  {
+    "mbid": "e0940825-2829-4fcc-85c6-3a6eaf4bc306",
+    "nombre": "Sandwell District"
+  },
+  {
+    "mbid": "43eb8420-2612-4bef-8cd3-8cf8f629ce55",
+    "nombre": "Sangam"
+  },
+  {
+    "mbid": "9a3bf45c-347d-4630-894d-7cf3e8e0b632",
+    "nombre": "Santana"
+  },
+  {
+    "mbid": "ce58d854-7430-4231-aa44-97f0144b3372",
+    "nombre": "Sarah McLachlan"
+  },
+  {
+    "mbid": "351d8bdf-33a1-45e2-8c04-c85fad20da55",
+    "nombre": "Sarah Vaughan"
+  },
+  {
+    "mbid": "42d72c29-8a7a-4c88-89ed-a2ca25d40284",
+    "nombre": "Savages"
+  },
+  {
+    "mbid": "b55479cc-e078-49e2-9ff5-52ace46802d9",
+    "nombre": "Scorn"
+  },
+  {
+    "mbid": "e0dd33f9-09c7-4dab-868b-30b3490f5599",
+    "nombre": "Screen Vinyl Image"
+  },
+  {
+    "mbid": "f053ae01-dae6-4aae-9883-e8c279fdbef4",
+    "nombre": "Seal"
+  },
+  {
+    "mbid": "eb7861ed-906d-44a5-a865-788a9b4b180d",
+    "nombre": "Senking"
+  },
+  {
+    "mbid": "7fdb6168-64a8-4b5a-9a6a-e39803e4aec1",
+    "nombre": "Sermon"
+  },
+  {
+    "mbid": "02e5d1fe-db84-450d-b58f-b4f5a34a7a35",
+    "nombre": "Seun Kuti"
+  },
+  {
+    "mbid": "e4356a15-5acc-400d-a707-592d66922e28",
+    "nombre": "Sevdaliza"
+  },
+  {
+    "mbid": "5b0f26cc-1203-49d8-abe2-90bec87a2e71",
+    "nombre": "Shabaka Hutchings"
+  },
+  {
+    "mbid": "6462c4f6-6f69-4636-a835-02eebe81c90f",
+    "nombre": "Shabazz Palaces"
+  },
+  {
+    "mbid": "6b9b48d9-e409-41a2-b007-e58521e17fc5",
+    "nombre": "Shackleton"
+  },
+  {
+    "mbid": "1eb30e7e-e374-4de7-8d13-ae5855ae6df8",
+    "nombre": "Shakti"
+  },
+  {
+    "mbid": "8d50cd20-34f2-4abe-ba16-0759ee0fb9f5",
+    "nombre": "Sharon Jones and the Dap‐Kings"
+  },
+  {
+    "mbid": "5a2e9cd3-010a-4aae-9f83-629253284202",
+    "nombre": "Sharon Van Etten"
+  },
+  {
+    "mbid": "992023a1-8ee8-4aab-8e84-7825546a2b01",
+    "nombre": "Shawn Lee’s Ping Pong Orchestra"
+  },
+  {
+    "mbid": "bbf19cef-0352-48a1-b37c-8627a5a4bd44",
+    "nombre": "She"
+  },
+  {
+    "mbid": "958c9a97-5bba-447a-b0c1-2cd4623eff73",
+    "nombre": "Sherwood"
+  },
+  {
+    "mbid": "7b05d6fe-91e8-4cb9-a401-2a13b1578716",
+    "nombre": "Shinichiro Yokota"
+  },
+  {
+    "mbid": "4e7fffed-0368-4957-8b7e-43ff9fc06977",
+    "nombre": "Shotta"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "Shye Ben-Tzur, Jonny Greenwood and The Rajasthan Express"
+  },
+  {
+    "mbid": "f6f2326f-6b25-4170-b89d-e235b25508e8",
+    "nombre": "Sigur Rós"
+  },
+  {
+    "mbid": "d31b6d1e-9d0c-4766-80c7-c92c237bb0dd",
+    "nombre": "Silent Servant"
+  },
+  {
+    "mbid": "42e1a761-429e-403c-971a-e85c2f748cfa",
+    "nombre": "Silvio Rodríguez"
+  },
+  {
+    "mbid": "f41490ce-fe39-435d-86c0-ab5ce098b423",
+    "nombre": "Simple Minds"
+  },
+  {
+    "mbid": "d320be5e-ba25-4113-8b22-5c64ab87fcd2",
+    "nombre": "Siniestro Total"
+  },
+  {
+    "mbid": "c78a77fa-507c-4c07-947a-0355029453bd",
+    "nombre": "Sinéad O’Connor"
+  },
+  {
+    "mbid": "a07bba55-2922-4ddd-8975-b204b2c4d3b4",
+    "nombre": "Siril Malmedal Hauge / Jacob Young"
+  },
+  {
+    "mbid": "1ed00158-c6a3-45cd-819c-2f91997fc480",
+    "nombre": "Sister Sledge"
+  },
+  {
+    "mbid": "2b3e25ba-983e-44ac-9def-907e03910cd2",
+    "nombre": "Skee Mask"
+  },
+  {
+    "mbid": "29da6ed6-2501-40bf-83e9-9f22d872dd5a",
+    "nombre": "Slave"
+  },
+  {
+    "mbid": "09d8290b-6ada-422f-8ce3-19349fb1c15d",
+    "nombre": "Sleaford Mods"
+  },
+  {
+    "mbid": "6fc69ec6-3e59-4ff7-849d-b5da932abe4d",
+    "nombre": "Sleep"
+  },
+  {
+    "mbid": "17b30bff-712d-4d8b-94de-3fc60ec11346",
+    "nombre": "Sleeparchive"
+  },
+  {
+    "mbid": "a466c2a2-6517-42fb-a160-1087c3bafd9f",
+    "nombre": "Slipknot"
+  },
+  {
+    "mbid": "a16371b9-7d36-497a-a9d4-42b0a0440c5e",
+    "nombre": "Slowdive"
+  },
+  {
+    "mbid": "6e14dc18-9313-4afa-9344-4b6c2bf80fca",
+    "nombre": "Sly"
+  },
+  {
+    "mbid": "4b913922-5cc8-4d9a-bbd8-19d7f9fa0cd5",
+    "nombre": "Smerz"
+  },
+  {
+    "mbid": "5929a2eb-7463-4a02-b822-94ee015712ef",
+    "nombre": "Smote"
+  },
+  {
+    "mbid": "fe85367e-4036-43c1-874b-b91af81cb4f3",
+    "nombre": "Snarky Puppy"
+  },
+  {
+    "mbid": "d1596d52-04ac-4695-bd94-4dbcf0a5b751",
+    "nombre": "Someday I"
+  },
+  {
+    "mbid": "00bcc2a5-b6d9-4efe-b74f-93664259463a",
+    "nombre": "Someone"
+  },
+  {
+    "mbid": "09bc57df-6fc7-40f7-b7e6-2261481f801e",
+    "nombre": "Somerville"
+  },
+  {
+    "mbid": "5cbef01b-cc35-4f52-af7b-d0df0c4f61b9",
+    "nombre": "Sonic Youth"
+  },
+  {
+    "mbid": "3b47247e-5b57-49b6-a0ed-bad80243802a",
+    "nombre": "Sonny Rollins"
+  },
+  {
+    "mbid": "fee950a2-e68c-4e76-b1ae-ff6efdf68b11",
+    "nombre": "Sons of Kemet"
+  },
+  {
+    "mbid": "244fd7ab-f94c-47b9-88e0-5bbb5cfe862b",
+    "nombre": "Sophia Loizou"
+  },
+  {
+    "mbid": "9dce344f-1f20-41bc-a86c-fbcf48ddbd11",
+    "nombre": "Soshi Takeda"
+  },
+  {
+    "mbid": "c999f4ef-8733-46f8-ae3a-d5628c260ea8",
+    "nombre": "Sound Cipher"
+  },
+  {
+    "mbid": "c999f4ef-8733-46f8-ae3a-d5628c260ea8",
+    "nombre": "Sound Me"
+  },
+  {
+    "mbid": "512be8c3-2da9-4c09-94fa-1d3be420c378",
+    "nombre": "Southpacific"
+  },
+  {
+    "mbid": "1da14893-a125-4632-af7f-44d64480ba46",
+    "nombre": "Space Ghost"
+  },
+  {
+    "mbid": "19e818e4-0bbe-41fc-9589-c444b4165bf1",
+    "nombre": "Spacemen 3"
+  },
+  {
+    "mbid": "f319b57a-a494-40f6-a467-3d196d3484e6",
+    "nombre": "Sparks"
+  },
+  {
+    "mbid": "e88c14f6-c288-4d47-8024-0082f057e343",
+    "nombre": "Special Request"
+  },
+  {
+    "mbid": "0330a83d-f61e-4989-adb3-afce3943c3ba",
+    "nombre": "Special Touch"
+  },
+  {
+    "mbid": "e2ced958-4898-49ef-a215-a2271c61751f",
+    "nombre": "Spectrum"
+  },
+  {
+    "mbid": "65041e06-83d2-4987-ae52-c17a915fc82a",
+    "nombre": "Spiritualized"
+  },
+  {
+    "mbid": "84eac621-1c5a-49a1-9500-555099c6e184",
+    "nombre": "Spoon"
+  },
+  {
+    "mbid": "4d86ad4e-28d8-4e9f-8cf4-735c57060fdc",
+    "nombre": "Squarepusher"
+  },
+  {
+    "mbid": "9a04dc8c-82f1-457a-a25a-3ff19e1b471e",
+    "nombre": "St Germain"
+  },
+  {
+    "mbid": "8f2422ab-0ec6-4c92-80c4-afe9622fab32",
+    "nombre": "Stan Getz"
+  },
+  {
+    "mbid": "8f2422ab-0ec6-4c92-80c4-afe9622fab32",
+    "nombre": "Stan Getz/Charlie Byrd"
+  },
+  {
+    "mbid": "a569ac3b-f21b-4773-84a6-f180a2b2aaf0",
+    "nombre": "Stanley Cowell"
+  },
+  {
+    "mbid": "7ea59c66-f478-4740-b157-cd0256af21bb",
+    "nombre": "Stanley Cowell Trio"
+  },
+  {
+    "mbid": "e01c3376-15fa-40d7-b747-5f219bdefdd7",
+    "nombre": "Steely Dan"
+  },
+  {
+    "mbid": "9d292624-12f0-46b0-a46d-58ab912d11d8",
+    "nombre": "Steffi"
+  },
+  {
+    "mbid": "12ff8858-bfcb-4812-a8dd-7e9debf0cbee",
+    "nombre": "Steppenwolf"
+  },
+  {
+    "mbid": "f8ac8b36-7604-478e-a9bd-35579ebe9265",
+    "nombre": "Steve Cobby"
+  },
+  {
+    "mbid": "bb0ae0c0-16eb-43df-9f99-7f351c53354a",
+    "nombre": "Steve Hillage"
+  },
+  {
+    "mbid": "7daac7f9-8fcc-485f-a14f-f8091d98cf25",
+    "nombre": "Steve Reich; Kronos Quartet, Pat Metheny"
+  },
+  {
+    "mbid": "8347dd6d-b9a2-4e96-a610-d1ed67b189f1",
+    "nombre": "Steve Roach"
+  },
+  {
+    "mbid": "3a51b862-0144-40f6-aa17-6aaeefea29d9",
+    "nombre": "Steven Wilson"
+  },
+  {
+    "mbid": "1ee18fb3-18a6-4c7f-8ba0-bc41cdd0462e",
+    "nombre": "Stevie Wonder"
+  },
+  {
+    "mbid": "6ac47f31-3b2e-4f95-bef0-ce869af4ee98",
+    "nombre": "Stina Nordenstam"
+  },
+  {
+    "mbid": "76d4e40e-549f-4207-afc3-d4f8f3d535db",
+    "nombre": "Stomu Yamash'ta"
+  },
+  {
+    "mbid": "31559424-7e17-4670-bef2-5198148a4438",
+    "nombre": "Stomu Yamashta"
+  },
+  {
+    "mbid": "323c9a5b-ca01-49ad-be39-046223a0c9ae",
+    "nombre": "Stuff"
+  },
+  {
+    "mbid": "576e9f32-1a45-4458-9b90-b7ae038fd729",
+    "nombre": "Subheim"
+  },
+  {
+    "mbid": "01d3c51b-9b98-418a-8d8e-37f6fab59d8c",
+    "nombre": "Sufjan Stevens"
+  },
+  {
+    "mbid": "c37412cd-f0cc-4507-8825-48f95aef3624",
+    "nombre": "Suicide"
+  },
+  {
+    "mbid": "1d3da898-4fb4-4445-b704-cd7315e01789",
+    "nombre": "Sunn O)))"
+  },
+  {
+    "mbid": "e8fe097a-0721-498d-9055-e92b039a20ea",
+    "nombre": "Surfing"
+  },
+  {
+    "mbid": "be809d9a-5841-4733-ad12-979ad6047a22",
+    "nombre": "Surprise Chef"
+  },
+  {
+    "mbid": "678671ee-6010-4354-9311-0353026519b7",
+    "nombre": "Suso Sáiz"
+  },
+  {
+    "mbid": "7b05d6fe-91e8-4cb9-a401-2a13b1578716",
+    "nombre": "Susumu Yokota"
+  },
+  {
+    "mbid": "c2b967c8-e9b5-40a0-86f9-c2941d7434d2",
+    "nombre": "Svaneborg Kardyb"
+  },
+  {
+    "mbid": "3285dc48-9505-469d-ad8a-bdf2d3dba632",
+    "nombre": "Swans"
+  },
+  {
+    "mbid": "dc73bb40-b697-4df9-a2ec-0555bebdba75",
+    "nombre": "Sweet Smoke"
+  },
+  {
+    "mbid": "dc73bb40-b697-4df9-a2ec-0555bebdba75",
+    "nombre": "Sweet Trip"
+  },
+  {
+    "mbid": "c4593b34-2a94-4e44-ae10-4a0f4c0b4da8",
+    "nombre": "Sylvan Esso"
+  },
+  {
+    "mbid": "44098836-acb2-477f-91e7-bee2de7cfa4f",
+    "nombre": "Sylvia Striplin"
+  },
+  {
+    "mbid": "ea23fc81-5d2c-4cf2-9558-d9f82941d763",
+    "nombre": "Synergetic Voice Orchestra"
+  },
+  {
+    "mbid": "6911bdcd-38db-45a8-b73f-f19759636721",
+    "nombre": "Szun Waves"
+  },
+  {
+    "mbid": "44433b08-265a-444f-8456-c72955179020",
+    "nombre": "Sólo los Solo"
+  },
+  {
+    "mbid": "7d3996ec-e9e9-41ec-8f4d-e336f64fc7c6",
+    "nombre": "TOBACCO"
+  },
+  {
+    "mbid": "b8e3d1ae-5983-4af1-b226-aa009b294111",
+    "nombre": "TR/ST"
+  },
+  {
+    "mbid": "4a786ef7-131b-4522-bfca-095a48a53ade",
+    "nombre": "Tabletom"
+  },
+  {
+    "mbid": "ad7ead3e-a3df-4e04-acce-6dfe94ba0f53",
+    "nombre": "Takashi Kokubo"
+  },
+  {
+    "mbid": "6d75cf4b-82b5-4fbe-a09a-5963af6d7576",
+    "nombre": "Takuya Kuroda"
+  },
+  {
+    "mbid": "a74f43e4-50c4-4b19-a2ce-c05ce9bccb03",
+    "nombre": "Talk Talk"
+  },
+  {
+    "mbid": "a94a7155-c79d-4409-9fcf-220cb0e4dc3a",
+    "nombre": "Talking Heads"
+  },
+  {
+    "mbid": "63aa26c3-d59b-4da4-84ac-716b54f1ef4d",
+    "nombre": "Tame Impala"
+  },
+  {
+    "mbid": "23d8426c-18c7-46e6-a51d-7395bd43c641",
+    "nombre": "Tangerine Dream"
+  },
+  {
+    "mbid": "57fab85f-5700-4238-a5b2-5441e7a740d3",
+    "nombre": "Tanukichan"
+  },
+  {
+    "mbid": "511b1817-5adc-49ea-96e7-41497fbf0b27",
+    "nombre": "Tanya Tagaq"
+  },
+  {
+    "mbid": "af5ccf02-b526-41d5-bfa1-f524c233eb57",
+    "nombre": "Tapes and Topographies"
+  },
+  {
+    "mbid": "4ec50019-562f-4f3b-aef8-d77a1ea77482",
+    "nombre": "Tata Vasquez"
+  },
+  {
+    "mbid": "12613250-0db3-4c5c-8062-570d398220d7",
+    "nombre": "Tatsuro Yamashita"
+  },
+  {
+    "mbid": "08b2c88f-6c13-419b-a4f5-182cc3738e49",
+    "nombre": "Tavares"
+  },
+  {
+    "mbid": "7c7f9c94-dee8-4903-892b-6cf44652e2de",
+    "nombre": "Tears for Fears"
+  },
+  {
+    "mbid": "5b6b10fb-514a-4802-8bd8-11dc00e23580",
+    "nombre": "Teebs"
+  },
+  {
+    "mbid": "807f320d-bacc-432f-a383-2101ba78e6b7",
+    "nombre": "Ten City"
+  },
+  {
+    "mbid": "6a5e6105-b1c4-4c5c-97ae-5ee4b7f746b4",
+    "nombre": "Terje Rypdal / Miroslav Vitouš / Jack DeJohnette"
+  },
+  {
+    "mbid": "44f85621-f8db-45dd-93de-e9f069d28d7d",
+    "nombre": "Terry Riley"
+  },
+  {
+    "mbid": "a6af6859-abf0-420b-be61-72812aa9d94e",
+    "nombre": "Tetsu Inoue"
+  },
+  {
+    "mbid": "f7c4ce55-3725-408c-88da-6752bf53cd29",
+    "nombre": "The 7th Plain"
+  },
+  {
+    "mbid": "9e7ca87b-4e3d-4d14-90f1-a74acb645fe2",
+    "nombre": "The Ahmad Jamal Trio"
+  },
+  {
+    "mbid": "f98711e5-06f7-43ed-8239-da0f61a9c460",
+    "nombre": "The Alan Parsons Project"
+  },
+  {
+    "mbid": "7f5dde96-1573-4491-9673-f03fe7c5caaa",
+    "nombre": "The American Analog Set"
+  },
+  {
+    "mbid": "03bd2233-5878-46a4-9a4c-cbfe78dc301c",
+    "nombre": "The Angelic Process"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Avalanches"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Bad Plus Joshua Redman"
+  },
+  {
+    "mbid": "a78d2a35-c083-4179-a5d8-49f84e5ec863",
+    "nombre": "The Black Dog"
+  },
+  {
+    "mbid": "d15721d8-56b4-453d-b506-fc915b14cba2",
+    "nombre": "The Black Keys"
+  },
+  {
+    "mbid": "13453b40-1d9c-4281-b73f-b7c1b45c7ebd",
+    "nombre": "The Blue Nile"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Body"
+  },
+  {
+    "mbid": "cfb830a4-66ca-4d81-a099-033883b39ad8",
+    "nombre": "The Brothers Johnson"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Bug"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Caretaker"
+  },
+  {
+    "mbid": "1946a82a-f927-40c2-8235-38d64f50d043",
+    "nombre": "The Chemical Brothers"
+  },
+  {
+    "mbid": "7c158ea8-c0aa-410e-bdc1-20bba9759577",
+    "nombre": "The Cinematic Orchestra"
+  },
+  {
+    "mbid": "2b82372f-8c85-4b47-a9fc-36fe4d4df5b4",
+    "nombre": "The Comet Is Coming"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Congos"
+  },
+  {
+    "mbid": "6a810a7e-0163-41c5-b198-2edcbb4a33bb",
+    "nombre": "The Congos / The Congos"
+  },
+  {
+    "mbid": "46dc0b48-4b6c-42f6-b6ca-98ae048a4172",
+    "nombre": "The Cosmic Jokers"
+  },
+  {
+    "mbid": "69ee3720-a7cb-4402-b48d-a02c366f2bcf",
+    "nombre": "The Cure"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Cyclist"
+  },
+  {
+    "mbid": "7bf711e9-4e69-4e08-b6e8-c0cb5805f1e7",
+    "nombre": "The Dave Brubeck Quartet"
+  },
+  {
+    "mbid": "9efff43b-3b29-4082-824e-bc82f646f93d",
+    "nombre": "The Doors"
+  },
+  {
+    "mbid": "8577c385-d06a-4a64-b4e7-6ebf25f2cb20",
+    "nombre": "The Dream Syndicate"
+  },
+  {
+    "mbid": "96b07e37-6c19-4241-920e-834496b1f263",
+    "nombre": "The Ecstasy of Saint Theresa"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Ferrymen"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Field"
+  },
+  {
+    "mbid": "1f43d76f-8edf-44f6-aaf1-b65f05ad9402",
+    "nombre": "The Flaming Lips"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Flashbulb"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Floaters"
+  },
+  {
+    "mbid": "0a389268-6fd8-4f8c-ab6e-0dba5ecec66b",
+    "nombre": "The Flower Kings"
+  },
+  {
+    "mbid": "a1d77dd4-8728-4a47-bdfa-9663d791139c",
+    "nombre": "The Future Sound of London"
+  },
+  {
+    "mbid": "79f2c379-7064-429b-884f-68d37511d8e1",
+    "nombre": "The Greg Foat Group"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Gun"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Hair"
+  },
+  {
+    "mbid": "c9224968-d1b7-455f-84f4-2ceefa7d3a4e",
+    "nombre": "The Haxan Cloak"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Heavy"
+  },
+  {
+    "mbid": "ab722b70-b4a8-4918-b13d-2a449f23df16",
+    "nombre": "The Holydrug Couple"
+  },
+  {
+    "mbid": "4837d2d6-2cd5-4855-893c-7e3183c56f44",
+    "nombre": "The Hugo And Luigi Chorus"
+  },
+  {
+    "mbid": "0f9cdfc4-2edc-4e0a-b40f-e9cfdf0b2e39",
+    "nombre": "The Irresistible Force"
+  },
+  {
+    "mbid": "3d7bad43-17ce-42a6-9ca8-c0d5d66e9814",
+    "nombre": "The Jack Wilson Quartet"
+  },
+  {
+    "mbid": "e938a15c-b17e-4e7a-9f68-ff0d536cab44",
+    "nombre": "The Jesus and Mary Chain"
+  },
+  {
+    "mbid": "fced390b-9e20-4472-a99d-32aa78a01678",
+    "nombre": "The Jimmy Cobb Quartet"
+  },
+  {
+    "mbid": "9766c2bb-3dde-44fb-ab25-f5b63a13c3fb",
+    "nombre": "The Lewis Express"
+  },
+  {
+    "mbid": "20883363-1ea4-4d72-ad72-c0e767038f3e",
+    "nombre": "The Mars Volta"
+  },
+  {
+    "mbid": "51da580e-f4fd-48da-92b7-5ac51f30b655",
+    "nombre": "The Mechanical Man"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Messthetics"
+  },
+  {
+    "mbid": "f679518d-3432-4e85-bd9c-339ac103a954",
+    "nombre": "The Midnight Hour"
+  },
+  {
+    "mbid": "75472b2f-55ca-47bb-a192-5ac8601350ba",
+    "nombre": "The Modern Jazz Quartet"
+  },
+  {
+    "mbid": "fce925cd-ed10-4518-8713-6f20d146e4fb",
+    "nombre": "The New Mastersounds"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Orb"
+  },
+  {
+    "mbid": "1dce970e-34bc-48b2-ab51-48d87544a4c2",
+    "nombre": "The Orb featuring David Gilmour"
+  },
+  {
+    "mbid": "b083ec9b-27e0-4fda-801d-cb40861a0578",
+    "nombre": "The Oscar Peterson Trio"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Oscar’s Motet Choir, Torsten Nilsson"
+  },
+  {
+    "mbid": "e8f55abb-a6d5-4e5f-81b4-14f9cc320519",
+    "nombre": "The Pineapple Thief"
+  },
+  {
+    "mbid": "4a4ee089-93b1-4470-af9a-6ff575d32704",
+    "nombre": "The Prodigy"
+  },
+  {
+    "mbid": "4b2c889c-b4ef-45df-b4f0-59bb1b6e2a41",
+    "nombre": "The Quantic Soul Orchestra"
+  },
+  {
+    "mbid": "39c3b473-f919-4c63-b744-e4060b1e6622",
+    "nombre": "The Quincy Jones - Sammy Nestico Orchestra"
+  },
+  {
+    "mbid": "27decac7-06de-4a04-ab45-d214dfae5d19",
+    "nombre": "The RH Factor"
+  },
+  {
+    "mbid": "a5944490-231e-485a-9baf-6d056a9733a3",
+    "nombre": "The Red Garland Quintet"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Roots"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Smile"
+  },
+  {
+    "mbid": "40f5d9e4-2de7-4f2d-ad41-e31a9a9fea27",
+    "nombre": "The Smiths"
+  },
+  {
+    "mbid": "fabe6510-9bb1-4a83-af11-3af75adc1389",
+    "nombre": "The Soft Pink Truth"
+  },
+  {
+    "mbid": "acc1745c-3498-4c85-80f1-890f3ce2880b",
+    "nombre": "The Soul Society"
+  },
+  {
+    "mbid": "453dab0c-aa5f-4091-bf58-64dead0d06b8",
+    "nombre": "The Souljazz Orchestra"
+  },
+  {
+    "mbid": "a380460c-029c-481a-a8c7-0ccc0a7369db",
+    "nombre": "The Supreme Jubilees"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The System"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The The"
+  },
+  {
+    "mbid": "8fc0d417-2e84-43ba-bdce-d4c4a5952933",
+    "nombre": "The Vendetta Suite"
+  },
+  {
+    "mbid": "22f83e2f-525a-4e59-9f7e-398d384051c7",
+    "nombre": "The Western Transient"
+  },
+  {
+    "mbid": "11ae9fbb-f3d7-4a47-936f-4c0a04d3b3b5",
+    "nombre": "The White Stripes"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The Zenmenn"
+  },
+  {
+    "mbid": "b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d",
+    "nombre": "The xx"
+  },
+  {
+    "mbid": "32b87bbc-2363-457a-97b4-3103a569f3a7",
+    "nombre": "Thee Sacred Souls"
+  },
+  {
+    "mbid": "cb327970-cf95-4f2d-91db-b1b787aa51f9",
+    "nombre": "Thelma Houston"
+  },
+  {
+    "mbid": "60ef8ddb-7676-4056-a357-9a8c228d03a6",
+    "nombre": "This Mortal Coil"
+  },
+  {
+    "mbid": "9512eed7-a1a9-4e2f-8cac-c10d1448c1ce",
+    "nombre": "This Will Destroy You"
+  },
+  {
+    "mbid": "8ed2e0b3-aa4c-4e13-bec3-dc7393ed4d6b",
+    "nombre": "Thom Yorke"
+  },
+  {
+    "mbid": "8d1a5451-a106-4cc8-86b7-9905d5f5238a",
+    "nombre": "Thomas Köner"
+  },
+  {
+    "mbid": "348f3a5f-5112-4d72-b33b-11c60b4f9af2",
+    "nombre": "Thomas Newman"
+  },
+  {
+    "mbid": "8e25b24a-1ebf-4f17-b0d3-29f1f6515143",
+    "nombre": "Thomas Strønen, Time Is a Blind Guide"
+  },
+  {
+    "mbid": "f8ba33be-c51b-4507-9de4-ea1e9f154e6c",
+    "nombre": "Thou"
+  },
+  {
+    "mbid": "9107b827-4ce2-4519-8595-c7e8b8163d05",
+    "nombre": "Throttle Elevator Music"
+  },
+  {
+    "mbid": "044fd265-79dd-43eb-afc4-8b20becf7e17",
+    "nombre": "Thundercat"
+  },
+  {
+    "mbid": "8930ec4e-51c7-4905-ac40-684459878085",
+    "nombre": "Tiamat"
+  },
+  {
+    "mbid": "23121875-8f68-49c5-9988-dcb7f8e7a680",
+    "nombre": "Tierra Santa"
+  },
+  {
+    "mbid": "c7ee3bc9-780c-42c0-91e9-4cd70ad692d3",
+    "nombre": "Tim Hecker"
+  },
+  {
+    "mbid": "407fe493-a0f5-4dcd-bd86-bde9d7dc14e5",
+    "nombre": "Tim Koh, An Sun"
+  },
+  {
+    "mbid": "446ac261-09ae-43f4-a7e1-2c753c0813ce",
+    "nombre": "Tim Maia"
+  },
+  {
+    "mbid": "bef67147-b068-4485-986e-5fb171c9fc49",
+    "nombre": "Tim Wynn"
+  },
+  {
+    "mbid": "2c0d04a8-f389-4e49-a9ca-82e29f60ff52",
+    "nombre": "Tin Man"
+  },
+  {
+    "mbid": "9072df14-b61e-42e2-b4f4-6bbb7fdb5586",
+    "nombre": "Tina Turner"
+  },
+  {
+    "mbid": "f0c7b354-e27e-40ec-afae-e2ea67459273",
+    "nombre": "Tino Contreras"
+  },
+  {
+    "mbid": "f19ad155-d809-4770-ab8d-7579467d9f55",
+    "nombre": "Tito Puente"
+  },
+  {
+    "mbid": "fc3e8983-1f51-4c80-b2b5-146bf2162dc2",
+    "nombre": "Tom Misch"
+  },
+  {
+    "mbid": "2abfed42-f8d2-4ae0-af9f-5cd6cdcc2d50",
+    "nombre": "Tomaga"
+  },
+  {
+    "mbid": "f29fd21d-f781-4ca3-8429-64be8159ec3a",
+    "nombre": "Tomasz Stańko New York Quartet"
+  },
+  {
+    "mbid": "67fb65b5-6589-47f0-9371-8a40eb268dfb",
+    "nombre": "Tommy Guerrero"
+  },
+  {
+    "mbid": "2846dbad-8690-4059-9602-9e287ad37904",
+    "nombre": "Tomorrow Comes The Harvest"
+  },
+  {
+    "mbid": "9b18ae47-a695-4880-b636-dc9c14c4049c",
+    "nombre": "Tomotsugu Nakamura"
+  },
+  {
+    "mbid": "18ad935b-8327-4cbe-9ce2-ca82b44f81ec",
+    "nombre": "Tonarunur"
+  },
+  {
+    "mbid": "470a4ced-1323-4c91-8fd5-0bb3fb4c932a",
+    "nombre": "Tony Allen, Jeff Mills"
+  },
+  {
+    "mbid": "66fc5bf8-daa4-4241-b378-9bc9077939d2",
+    "nombre": "Tool"
+  },
+  {
+    "mbid": "cffa260b-016b-478b-aa7c-62bc52b183ef",
+    "nombre": "Tord Gustavsen Quartet"
+  },
+  {
+    "mbid": "02811c5c-3cfc-4354-a116-8a254581ef6e",
+    "nombre": "Tord Gustavsen Trio"
+  },
+  {
+    "mbid": "c0b2500e-0cef-4130-869d-732b23ed9df5",
+    "nombre": "Tori Amos"
+  },
+  {
+    "mbid": "e0953daa-860f-4dc8-9f1a-b12587cdaf17",
+    "nombre": "Tortoise"
+  },
+  {
+    "mbid": "bb11c356-96f7-4195-8955-c9383c383362",
+    "nombre": "Toshifumi Hinata"
+  },
+  {
+    "mbid": "f1faf2a6-6a01-4f98-9f7d-3da9ad4dc3fb",
+    "nombre": "Toshiki Kadomatsu"
+  },
+  {
+    "mbid": "8603b59b-6354-412a-9db8-9fa7e142ea88",
+    "nombre": "Toshio Matsuura"
+  },
+  {
+    "mbid": "c7423e0c-ab3e-4ab4-be10-cdff5a9d3062",
+    "nombre": "Total Blue"
+  },
+  {
+    "mbid": "a4ac255f-9775-4c16-8642-7f51502e45dd",
+    "nombre": "Tote King"
+  },
+  {
+    "mbid": "94c82c5a-60a6-4dd4-8412-0624ab8c0d92",
+    "nombre": "ToteKing"
+  },
+  {
+    "mbid": "b96ba7e7-d882-409a-9825-ed3d6dbb437d",
+    "nombre": "Toumani Diabaté"
+  },
+  {
+    "mbid": "68766d21-1668-4e06-b49d-e881446afc02",
+    "nombre": "Toundra"
+  },
+  {
+    "mbid": "1129817c-488a-4096-80c1-77fc1b107c93",
+    "nombre": "Tracy Chapman"
+  },
+  {
+    "mbid": "7c5acaaa-3f74-4e16-82b2-f8046fce4338",
+    "nombre": "Trans Am"
+  },
+  {
+    "mbid": "d2b83114-af3e-4397-b570-10d81f1dd650",
+    "nombre": "Trans‐Siberian Orchestra"
+  },
+  {
+    "mbid": "da44a210-9995-4272-83c5-688ecf0fbf4f",
+    "nombre": "Traumprinz"
+  },
+  {
+    "mbid": "bc880664-6751-4998-984d-ebdbff15d229",
+    "nombre": "Trent Reznor and Atticus Ross"
+  },
+  {
+    "mbid": "bc880664-6751-4998-984d-ebdbff15d229",
+    "nombre": "Trent Reznor and Atticus Ross, Gustavo Santaolalla, Mogwai"
+  },
+  {
+    "mbid": "95e9aba6-f85c-48a0-9ec9-395d4f0e3875",
+    "nombre": "Trentemøller"
+  },
+  {
+    "mbid": "035813fb-7e1b-4a32-a066-ca280a5a425c",
+    "nombre": "Triana"
+  },
+  {
+    "mbid": "5bf64d94-efd9-4334-96fd-e6197b0b02b8",
+    "nombre": "Tricky"
+  },
+  {
+    "mbid": "569c3eb7-5bcc-4b5e-82c2-29bb27325770",
+    "nombre": "Trio Isao Suzuki"
+  },
+  {
+    "mbid": "e5712ceb-c37a-4c49-a11c-ccf4e21852d4",
+    "nombre": "Troye Sivan"
+  },
+  {
+    "mbid": "1229b090-4f08-43fa-adb2-a5727db11b4d",
+    "nombre": "Tryphème"
+  },
+  {
+    "mbid": "eb6257ff-7430-4908-8f9d-9da00603c5cd",
+    "nombre": "Tuff City Kids"
+  },
+  {
+    "mbid": "4f7077ca-d719-4efc-871e-f48348374fc1",
+    "nombre": "Turtle Creek Chorale"
+  },
+  {
+    "mbid": "e3b208cf-b18f-450e-a661-79f4eabe8090",
+    "nombre": "Two Lone Swordsmen"
+  },
+  {
+    "mbid": "f19d3d49-be22-4ca6-9903-64d86984fbf2",
+    "nombre": "Two People"
+  },
+  {
+    "mbid": "f6beac20-5dfe-4d1f-ae02-0b0a740aafd6",
+    "nombre": "Tyler, The Creator"
+  },
+  {
+    "mbid": "036912f5-c717-498d-8958-6058de17bb70",
+    "nombre": "U.S. Girls"
+  },
+  {
+    "mbid": "6648391e-7890-4f6c-b939-976f215195d3",
+    "nombre": "UNKLE"
+  },
+  {
+    "mbid": "bfe00ef8-f6f2-4810-999e-65e46b5970ab",
+    "nombre": "Ulcerate"
+  },
+  {
+    "mbid": "29f6333a-b4c8-4416-8fdf-598bcef1122a",
+    "nombre": "Ulrich Schnauss"
+  },
+  {
+    "mbid": "7d209631-ccb8-4a87-8516-64abe4c22dba",
+    "nombre": "Ulver"
+  },
+  {
+    "mbid": "ba2f4f3b-0293-4bc8-bb94-2f73b5207343",
+    "nombre": "Underworld"
+  },
+  {
+    "mbid": "125ec42a-7229-4250-afc5-e057484327fe",
+    "nombre": "Unknown Artist"
+  },
+  {
+    "mbid": "e2305342-0bde-4a2c-aed0-4b88694834de",
+    "nombre": "Unknown Mortal Orchestra"
+  },
+  {
+    "mbid": "fccf05c3-8c6d-48e4-bcd2-1b64df215dc3",
+    "nombre": "Uptown Funk Empire"
+  },
+  {
+    "mbid": "760b0a33-e7ca-4775-978e-1f9897fa8770",
+    "nombre": "VVV [Trippin'you]"
+  },
+  {
+    "mbid": "57fca0e2-f9ad-4ae6-af9d-6a6f50cbcd5f",
+    "nombre": "Vangelis"
+  },
+  {
+    "mbid": "487a96f2-eefd-485e-892b-2cf240835bf4",
+    "nombre": "Vanishing Twin"
+  },
+  {
+    "mbid": "89ad4ac3-39f7-470e-963a-56509c546377",
+    "nombre": "Various Artists"
+  },
+  {
+    "mbid": "822297ba-6322-42c0-af04-16c3a88579db",
+    "nombre": "Vatican Shadow"
+  },
+  {
+    "mbid": "b72d50dc-e055-4bed-9995-d18f18ab2ede",
+    "nombre": "Velour 100"
+  },
+  {
+    "mbid": "20244d07-534f-4eff-b4d4-930878889970",
+    "nombre": "Veronica Swift"
+  },
+  {
+    "mbid": "80791234-9e97-454c-9b51-e8fe97dbcf4f",
+    "nombre": "Vessel"
+  },
+  {
+    "mbid": "ebfc1398-8d96-47e3-82c3-f782abcdb13d",
+    "nombre": "Viagra Boys"
+  },
+  {
+    "mbid": "7682d624-9e0b-45b2-b7d0-d1b18b3ebd05",
+    "nombre": "Vieux Farka Touré"
+  },
+  {
+    "mbid": "6ef12fc1-40f4-41ea-ac52-f487840255bd",
+    "nombre": "Vince Clarke"
+  },
+  {
+    "mbid": "78e854b8-9713-4ff2-9218-6b3784893bff",
+    "nombre": "Vince Staples"
+  },
+  {
+    "mbid": "43706fe2-bf24-4b1b-8d0b-28f8439b3d55",
+    "nombre": "Violadores del Verso"
+  },
+  {
+    "mbid": "2aab61bc-67f4-4722-8c6e-e1821b2e32a6",
+    "nombre": "Violent Femmes"
+  },
+  {
+    "mbid": "6a538a8c-ee57-4ee0-b61d-9d2d28a55c75",
+    "nombre": "Visonia"
+  },
+  {
+    "mbid": "58f889ca-00b4-46b7-aa5a-cdddcec9a688",
+    "nombre": "Vito Ricci"
+  },
+  {
+    "mbid": "c7b6a5ef-926e-4351-944a-b0ca40010486",
+    "nombre": "Vivienne Mort"
+  },
+  {
+    "mbid": "039cafb3-4f3d-44a9-b956-7705323f025b",
+    "nombre": "Vladislav Delay"
+  },
+  {
+    "mbid": "70ae57a5-c40c-493f-88de-99ae4bf46677",
+    "nombre": "Voices From the Lake"
+  },
+  {
+    "mbid": "42faad37-8aaa-42e4-a300-5a7dae79ed24",
+    "nombre": "Vox Low"
+  },
+  {
+    "mbid": "126696d8-ce10-474b-a4b9-8fdabe833214",
+    "nombre": "Vril"
+  },
+  {
+    "mbid": "c77f550e-dc57-42f6-a191-b9f3610f99c9",
+    "nombre": "Vyva Melinkolya"
+  },
+  {
+    "mbid": "25c86f9e-bf61-4f4a-896e-4f6c8a04c14b",
+    "nombre": "Waaju"
+  },
+  {
+    "mbid": "692cacf2-ec75-4fbd-a60c-3353c4d7ff9e",
+    "nombre": "Wander"
+  },
+  {
+    "mbid": "3e6bbdb8-66c8-439c-a3d9-87391ce88740",
+    "nombre": "War"
+  },
+  {
+    "mbid": "c6d1fb87-3dfc-4266-ad6c-a69a143b2b6e",
+    "nombre": "WarCry"
+  },
+  {
+    "mbid": "d9fccd7c-a14c-4c1a-8a3b-17d05b2f549c",
+    "nombre": "Warhaus"
+  },
+  {
+    "mbid": "da226744-d744-431f-b662-be2358995243",
+    "nombre": "Warmth"
+  },
+  {
+    "mbid": "a34857cb-a231-44d1-a87f-ccd7d895914c",
+    "nombre": "Waste of Space Orchestra"
+  },
+  {
+    "mbid": "37568120-4da8-4394-bf30-da812938f712",
+    "nombre": "Waveless"
+  },
+  {
+    "mbid": "2379937f-6e0d-46a2-b8ff-633fafd72002",
+    "nombre": "Wayne Shorter"
+  },
+  {
+    "mbid": "0f9997bd-e079-429e-8ccd-9378c9b0c746",
+    "nombre": "Weather Report"
+  },
+  {
+    "mbid": "f4d306f3-e82b-4186-9cca-4e8806db21f8",
+    "nombre": "Wednesday"
+  },
+  {
+    "mbid": "663f8232-8c46-4851-803f-a91d31593b14",
+    "nombre": "Wes Montgomery"
+  },
+  {
+    "mbid": "496c10d0-981c-4816-ac9b-4d073bc32bdc",
+    "nombre": "Westerman"
+  },
+  {
+    "mbid": "3474a13f-899f-40ec-9d5c-e44e41a02900",
+    "nombre": "Whirr"
+  },
+  {
+    "mbid": "b904d624-9e05-4398-8f4f-88fbcf022f79",
+    "nombre": "White Sea"
+  },
+  {
+    "mbid": "42e730c9-1d84-40b0-978c-047276ae54c1",
+    "nombre": "Wil Bolton"
+  },
+  {
+    "mbid": "da5ff827-174b-48d1-9a39-9fa290bb2925",
+    "nombre": "Wild Cherry"
+  },
+  {
+    "mbid": "3b731282-d7f4-41a5-af0a-d0c1c3319802",
+    "nombre": "William Basinski"
+  },
+  {
+    "mbid": "5fe3e1bf-ba2b-4cf6-9bf8-e6700b702b4d",
+    "nombre": "William Onyeabor"
+  },
+  {
+    "mbid": "5d467d10-7018-4cef-9590-380a0c69c2f7",
+    "nombre": "William S. Fischer"
+  },
+  {
+    "mbid": "668fd73c-bf54-4310-a139-305517f05311",
+    "nombre": "Willie Bobo"
+  },
+  {
+    "mbid": "f1edfbed-9315-4550-859c-599cc3fdee57",
+    "nombre": "Willie Colón"
+  },
+  {
+    "mbid": "d3d9bc09-f1c1-49bc-94e0-e7897f60f4c3",
+    "nombre": "Wolf Müller"
+  },
+  {
+    "mbid": "b972f589-fb0e-474e-b64a-803b0364fa75",
+    "nombre": "Wolfgang Muthspiel"
+  },
+  {
+    "mbid": "07a5d2c7-3f68-4c22-8cf2-813307b93cd4",
+    "nombre": "Woma"
+  },
+  {
+    "mbid": "48e78462-2f0b-4a1a-9fa4-0585e2991e80",
+    "nombre": "Womack"
+  },
+  {
+    "mbid": "3754dc74-381e-4237-bd44-65f5600a4d88",
+    "nombre": "Wooden Shjips"
+  },
+  {
+    "mbid": "0febdcf7-4e1f-4661-9493-b40427de2c13",
+    "nombre": "Wu‐Tang Clan"
+  },
+  {
+    "mbid": "0fd82861-8184-4b6e-a6b1-f2093e2b3163",
+    "nombre": "XXYYXX"
+  },
+  {
+    "mbid": "ccf7ad87-59e2-4064-9faf-f4027a8108fe",
+    "nombre": "Xela"
+  },
+  {
+    "mbid": "d0612291-74a8-45bb-afa2-119c35d4515d",
+    "nombre": "Xhelazz"
+  },
+  {
+    "mbid": "8b431ac6-0806-4e4a-9b6b-1734370fa890",
+    "nombre": "Xiu Xiu"
+  },
+  {
+    "mbid": "2d781050-032a-4a4f-b0a9-7b4bc99449e1",
+    "nombre": "Yaeji"
+  },
+  {
+    "mbid": "b4191a7a-5fae-4f23-a695-e8cedf0d036e",
+    "nombre": "Yair Elazar Glotman"
+  },
+  {
+    "mbid": "8894407c-0784-4a9f-bac2-8838d7806c1c",
+    "nombre": "Yan Cook"
+  },
+  {
+    "mbid": "8894407c-0784-4a9f-bac2-8838d7806c1c",
+    "nombre": "Yan Cook / Urbano"
+  },
+  {
+    "mbid": "67b47219-58b2-4a22-893c-58b449f5219c",
+    "nombre": "Yazz Ahmed"
+  },
+  {
+    "mbid": "3feba7fa-3837-424a-b4f1-0077d217f569",
+    "nombre": "Yeasayer"
+  },
+  {
+    "mbid": "1ec92cea-c9d5-48e3-b0b8-2d36c40d4caa",
+    "nombre": "Yelfris Carlos Valdés Espinosa"
+  },
+  {
+    "mbid": "c616aef1-e21f-46f8-864f-b7bad96f41b2",
+    "nombre": "Yello"
+  },
+  {
+    "mbid": "a7f90d97-5f37-411e-b3da-37d57aefec8f",
+    "nombre": "Yellow Days"
+  },
+  {
+    "mbid": "3285dc48-9505-469d-ad8a-bdf2d3dba632",
+    "nombre": "Yellow Swans"
+  },
+  {
+    "mbid": "3f542031-b054-454d-b57b-812fa2a81b11",
+    "nombre": "Yo La Tengo"
+  },
+  {
+    "mbid": "f47738ed-5aba-441f-bae0-8f6c02312286",
+    "nombre": "Yosi Horikawa"
+  },
+  {
+    "mbid": "75167b8b-44e4-407b-9d35-effe87b223cf",
+    "nombre": "Young Fathers"
+  },
+  {
+    "mbid": "4472f89e-5944-49e4-9a33-43358390db40",
+    "nombre": "Yu Su"
+  },
+  {
+    "mbid": "e62344e8-08bc-47b6-a96e-694cbfd897bd",
+    "nombre": "Yui Onodera 小野寺唯"
+  },
+  {
+    "mbid": "12d23614-76e9-4ce4-a0a6-e6bab3909cde",
+    "nombre": "Yuri Gagarin"
+  },
+  {
+    "mbid": "2968722f-03d8-4e2f-88bc-f9975f147503",
+    "nombre": "Yusef Lateef"
+  },
+  {
+    "mbid": "fdbffd97-c991-433c-9137-cafee3ded97a",
+    "nombre": "Yussef Dayes"
+  },
+  {
+    "mbid": "72fd7688-8394-43b6-8f41-278657648a45",
+    "nombre": "Yussef Kamaal"
+  },
+  {
+    "mbid": "bf27c046-38b4-4b0f-ad65-358ed588cddf",
+    "nombre": "Yusuf Islam"
+  },
+  {
+    "mbid": "f38e2527-109f-498b-b403-a1c46c684d6e",
+    "nombre": "Yves De Mey"
+  },
+  {
+    "mbid": "b675f327-4738-4af4-bb83-1adb0003f2d3",
+    "nombre": "Yves Tumor"
+  },
+  {
+    "mbid": "eca0569c-877e-4d72-a280-90581c2adfd5",
+    "nombre": "ZHU"
+  },
+  {
+    "mbid": "dae36f6d-dc92-4eaa-b74d-d6470aa338d3",
+    "nombre": "Zao"
+  },
+  {
+    "mbid": "e37d165a-0114-499a-988c-22c0ba79eaf2",
+    "nombre": "Zebra Katz"
+  },
+  {
+    "mbid": "c35bd778-efb5-424b-ba7b-dae56d01a206",
+    "nombre": "Zola Jesus"
+  },
+  {
+    "mbid": "d2625bce-a521-4e40-8a0f-9c7645ba6e5e",
+    "nombre": "[KRTM]"
+  },
+  {
+    "mbid": "569c0d90-28dd-413b-83e4-aaa7c27e667b",
+    "nombre": "alt‐J"
+  },
+  {
+    "mbid": "94d43a2c-b5f5-4d02-988c-20332d1eebd3",
+    "nombre": "bvdub"
+  },
+  {
+    "mbid": "a496a1e6-0ceb-4489-8280-45dfaf9750be",
+    "nombre": "case/lang/veirs"
+  },
+  {
+    "mbid": "cc94a0fe-e3f0-4217-a5f8-a70d4ccf39e7",
+    "nombre": "claire rousay"
+  },
+  {
+    "mbid": "84ca8fa4-7cca-4948-a90a-cb44db29853d",
+    "nombre": "clipping."
+  },
+  {
+    "mbid": "c9fee792-c51f-4d4f-b68f-caea068eab70",
+    "nombre": "deathcrash"
+  },
+  {
+    "mbid": "0eef9592-ae87-497e-a3bb-168b9da39501",
+    "nombre": "eclectics"
+  },
+  {
+    "mbid": "31676666-8830-4843-85c6-937ecc06b146",
+    "nombre": "hoon"
+  },
+  {
+    "mbid": "4f2c565b-ac40-4678-ba61-4fcf3b97edbc",
+    "nombre": "loscil // Lawrence English"
+  },
+  {
+    "mbid": "3af0709d-eb0b-4863-8315-a4acb3f09844",
+    "nombre": "luxury elite"
+  },
+  {
+    "mbid": "36edfc43-0517-492b-a38d-750e2b4a479d",
+    "nombre": "maya ongaku"
+  },
+  {
+    "mbid": "fb86f7c8-70d6-4da3-b851-5715eac20fa2",
+    "nombre": "sonhos tomam conta"
+  },
+  {
+    "mbid": "438d62fa-a6da-4f2f-ac67-1a6be81e5260",
+    "nombre": "terraplana"
+  },
+  {
+    "mbid": "89ad4ac3-39f7-470e-963a-56509c546377",
+    "nombre": "various artists"
+  },
+  {
+    "mbid": "3bbdd45f-5654-47f3-b6c0-d806752b9fcf",
+    "nombre": "Âme"
+  },
+  {
+    "mbid": "32981181-5e3f-4160-a872-625980035593",
+    "nombre": "Éliane Radigue"
+  },
+  {
+    "mbid": "6655955b-1c1e-4bcb-84e4-81bcd9efab30",
+    "nombre": "Ólafur Arnalds"
+  },
+  {
+    "mbid": "6655955b-1c1e-4bcb-84e4-81bcd9efab30",
+    "nombre": "Ólafur Arnalds and Nils Frahm"
+  },
+  {
+    "mbid": "a63df8c3-28e4-41db-bac2-c6c6e8ff8f28",
+    "nombre": "Ø"
+  },
+  {
+    "mbid": "00ba173d-5a5d-4578-9e17-6c93973694ee",
+    "nombre": "Ø + Noto"
+  },
+  {
+    "mbid": "0f0caf6e-e815-4ad3-93db-fb37be9adcc8",
+    "nombre": "ポルカドットスティングレイ"
+  },
+  {
+    "mbid": "3c2f9f5c-7fef-448e-bef3-ff2c50604537",
+    "nombre": "志方あきこ"
+  }
+]

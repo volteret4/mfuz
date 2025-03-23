@@ -170,14 +170,40 @@ class MusicLinkUpdater():
             ORDER BY s.id ASC
             """
         else:
-            # Comportamiento original: solo procesa canciones sin procesar
-            query = """
-            SELECT s.id, s.title, s.artist, s.album
-            FROM songs s
-            LEFT JOIN song_links sl ON s.id = sl.song_id
-            WHERE s.id > ?
-            ORDER BY s.id ASC
-            """
+            # Comportamiento para procesar solo canciones sin enlaces
+            # Esta consulta selecciona canciones que no tienen enlaces para los servicios solicitados
+            placeholders = []
+            conditions = []
+            
+            if 'youtube' in self.services:
+                conditions.append("(sl.youtube_url IS NULL)")
+            if 'spotify' in self.services:
+                conditions.append("(sl.spotify_url IS NULL)")
+            if 'bandcamp' in self.services:
+                conditions.append("(sl.bandcamp_url IS NULL)")
+            if 'soundcloud' in self.services:
+                conditions.append("(sl.soundcloud_url IS NULL)")
+            if 'boomkat' in self.services:
+                conditions.append("(sl.boomkat_url IS NULL)")
+            
+            # Si no hay servicios específicos para filtrar, usamos la condición original
+            if not conditions:
+                query = """
+                SELECT s.id, s.title, s.artist, s.album
+                FROM songs s
+                LEFT JOIN song_links sl ON s.id = sl.song_id
+                WHERE s.id > ? AND sl.id IS NULL
+                ORDER BY s.id ASC
+                """
+            else:
+                # Creamos una consulta que selecciona canciones que faltan al menos un servicio solicitado
+                query = f"""
+                SELECT s.id, s.title, s.artist, s.album
+                FROM songs s
+                LEFT JOIN song_links sl ON s.id = sl.song_id
+                WHERE s.id > ? AND (sl.id IS NULL OR ({" OR ".join(conditions)}))
+                ORDER BY s.id ASC
+                """
         
         if self.limit:
             query += f" LIMIT {self.limit}"
@@ -850,44 +876,41 @@ class MusicLinkUpdater():
             self.conn.rollback()
             return False
 
+    
     def process_song(self, song: Dict) -> bool:
         """
-        Procesa una canción para actualizar sus enlaces.
+        Procesa una canción buscando enlaces para los servicios configurados.
         
         Args:
             song: Diccionario con información de la canción
             
         Returns:
-            True si se actualizó correctamente, False en caso contrario
+            True si la operación fue exitosa, False en caso contrario
         """
         self.log(f"Procesando canción ID {song['id']}: {song['artist']} - {song['title']}")
         song_id = song['id']
         self.stats["processed"] += 1
         
-        # Verificar si la canción ya tiene enlaces y si no estamos en modo force-update
+        # Verificar si la canción ya tiene enlaces y determinar qué servicios necesitan actualización
+        services_to_update = set(self.services)
+        
         if not self.force_update:
             self.cursor.execute("SELECT * FROM song_links WHERE song_id = ?", (song_id,))
             existing_links = self.cursor.fetchone()
             if existing_links:
-                has_all_services = True
-                for service in self.services:
-                    if service == 'youtube' and not existing_links['youtube_url']:
-                        has_all_services = False
-                        break
-                    elif service == 'spotify' and not existing_links['spotify_url']:
-                        has_all_services = False
-                        break
-                    elif service == 'bandcamp' and not existing_links['bandcamp_url']:
-                        has_all_services = False
-                        break
-                    elif service == 'soundcloud' and not existing_links['soundcloud_url']:
-                        has_all_services = False
-                        break
-                    elif service == 'boomkat' and not existing_links['boomkat_url']:
-                        has_all_services = False
-                        break
+                # Eliminar de services_to_update aquellos servicios que ya tienen enlaces
+                if 'youtube' in services_to_update and existing_links['youtube_url']:
+                    services_to_update.remove('youtube')
+                if 'spotify' in services_to_update and existing_links['spotify_url']:
+                    services_to_update.remove('spotify')
+                if 'bandcamp' in services_to_update and existing_links['bandcamp_url']:
+                    services_to_update.remove('bandcamp')
+                if 'soundcloud' in services_to_update and existing_links['soundcloud_url']:
+                    services_to_update.remove('soundcloud')
+                if 'boomkat' in services_to_update and existing_links['boomkat_url']:
+                    services_to_update.remove('boomkat')
                 
-                if has_all_services:
+                if not services_to_update:
                     self.log(f"Canción ID {song_id} ya tiene todos los enlaces solicitados. Omitiendo.")
                     self.stats["skipped"] += 1
                     return True
@@ -898,17 +921,16 @@ class MusicLinkUpdater():
             self.cursor.execute("SELECT * FROM song_links WHERE song_id = ?", (song_id,))
             row = self.cursor.fetchone()
             if row:
-                for service in self.services:
-                    if service == 'youtube' and row['youtube_url']:
-                        existing_links['youtube'] = True
-                    elif service == 'spotify' and row['spotify_url']:
-                        existing_links['spotify'] = True
-                    elif service == 'bandcamp' and row['bandcamp_url']:
-                        existing_links['bandcamp'] = True
-                    elif service == 'soundcloud' and row['soundcloud_url']:
-                        existing_links['soundcloud'] = True
-                    elif service == 'boomkat' and row['boomkat_url']:
-                        existing_links['boomkat'] = True
+                if 'youtube' in self.services and row['youtube_url']:
+                    existing_links['youtube'] = True
+                if 'spotify' in self.services and row['spotify_url']:
+                    existing_links['spotify'] = True
+                if 'bandcamp' in self.services and row['bandcamp_url']:
+                    existing_links['bandcamp'] = True
+                if 'soundcloud' in self.services and row['soundcloud_url']:
+                    existing_links['soundcloud'] = True
+                if 'boomkat' in self.services and row['boomkat_url']:
+                    existing_links['boomkat'] = True
         
         youtube_url = None
         spotify_url = None
@@ -920,55 +942,51 @@ class MusicLinkUpdater():
         updated = False
         deleted = False
         
-        # Buscar en YouTube
-        if 'youtube' in self.services:
+        # Solo buscar en los servicios que realmente necesitan actualización o están en force_update
+        if 'youtube' in services_to_update or ('youtube' in self.services and self.force_update):
             youtube_url = self.search_youtube(song)
             if youtube_url:
                 self.stats["by_service"]["youtube"] += 1
                 updated = True
             elif self.force_update and self.delete_old and 'youtube' in existing_links:
                 deleted = True
-                self.log(f"Eliminando enlace de YouTube para canción ID {song_id}\n")
+                self.log(f"Eliminando enlace de YouTube para canción ID {song_id}")
                 
-        # Buscar en Spotify
-        if 'spotify' in self.services:
+        if 'spotify' in services_to_update or ('spotify' in self.services and self.force_update):
             spotify_url, spotify_id = self.search_spotify(song, self.spotify_client_id, self.spotify_client_secret)
             if spotify_url:
                 self.stats["by_service"]["spotify"] += 1
                 updated = True
             elif self.force_update and self.delete_old and 'spotify' in existing_links:
                 deleted = True
-                self.log(f"Eliminando enlace de Spotify para canción ID {song_id}\n")
+                self.log(f"Eliminando enlace de Spotify para canción ID {song_id}")
                 
-        # Buscar en Bandcamp
-        if 'bandcamp' in self.services:
+        if 'bandcamp' in services_to_update or ('bandcamp' in self.services and self.force_update):
             bandcamp_url = self.search_bandcamp(song)
             if bandcamp_url:
                 self.stats["by_service"]["bandcamp"] += 1
                 updated = True
             elif self.force_update and self.delete_old and 'bandcamp' in existing_links:
                 deleted = True
-                self.log(f"Eliminando enlace de Bandcamp para canción ID {song_id}\n")
+                self.log(f"Eliminando enlace de Bandcamp para canción ID {song_id}")
                 
-        # Buscar en SoundCloud
-        if 'soundcloud' in self.services:
+        if 'soundcloud' in services_to_update or ('soundcloud' in self.services and self.force_update):
             soundcloud_url = self.search_soundcloud(song)
             if soundcloud_url:
                 self.stats["by_service"]["soundcloud"] += 1
                 updated = True
             elif self.force_update and self.delete_old and 'soundcloud' in existing_links:
                 deleted = True
-                self.log(f"Eliminando enlace de SoundCloud para canción ID {song_id}\n")
+                self.log(f"Eliminando enlace de SoundCloud para canción ID {song_id}")
 
-        # Buscar en Boomkat
-        if 'boomkat' in self.services:
+        if 'boomkat' in services_to_update or ('boomkat' in self.services and self.force_update):
             boomkat_url = self.search_boomkat(song)
             if boomkat_url:
                 self.stats["by_service"]["boomkat"] += 1
                 updated = True
             elif self.force_update and self.delete_old and 'boomkat' in existing_links:
                 deleted = True
-                self.log(f"Eliminando enlace de Boomkat para canción ID {song_id}\n")
+                self.log(f"Eliminando enlace de Boomkat para canción ID {song_id}")
                 
         # Actualizar la base de datos
         if updated or deleted:

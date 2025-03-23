@@ -18,7 +18,6 @@ from PyQt6.QtWidgets import (
     QScrollArea, QInputDialog, QMenu
 )
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from base_module import BaseModule, THEMES
 import yt_dlp
 import logging
 import os
@@ -32,7 +31,10 @@ from collections import defaultdict
 from urllib.parse import urlparse, parse_qs, quote
 from typing import List, Dict
 import threading
+import sys
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +48,7 @@ class BlogPlaylists(BaseModule):
     def __init__(self, **kwargs):
         # Extract theme-related arguments
         self.available_themes = kwargs.pop('temas', [])
+        self.PROJECT_ROOT = PROJECT_ROOT
         self.selected_theme = kwargs.pop('tema_seleccionado', None)
         
         # Remove 'theme' if it exists to prevent passing it to the parent class
@@ -787,9 +790,12 @@ class MpvPlayerThread(threading.Thread):
         self.playlist_data = playlist_data
         
     def run(self):
+        from base_module import PROJECT_ROOT
+        script_path = PROJECT_ROOT / "menu_blogs" / "mpv" / "mpv_lastfm_starter.sh"
+        
         try:
             process = subprocess.run(
-                ["/home/huan/Scripts/menus/musica/menu_blogs/mpv/mpv_lastfm_starter.sh", 
+                [script_path, 
                  "--player-operation-mode=pseudo-gui", 
                  "--force-window=yes", 
                  str(self.playlist_path)]
