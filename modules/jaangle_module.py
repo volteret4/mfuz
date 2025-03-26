@@ -19,6 +19,45 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+class ScalableLabel(QLabel):
+    def __init__(self, text="", min_font_size=8, max_font_size=16):
+        super().__init__(text)
+        self._min_font_size = min_font_size
+        self._max_font_size = max_font_size
+        self._base_font_size = 10  # Tamaño base de fuente
+        
+        # Configuración inicial de la fuente
+        font = self.font()
+        font.setPointSize(self._base_font_size)
+        self.setFont(font)
+        
+        # Permitir que el texto se ajuste
+        self.setWordWrap(True)
+        self.setScaledContents(True)
+        
+    def resizeEvent(self, event):
+        """Ajustar tamaño de fuente al redimensionar"""
+        super().resizeEvent(event)
+        self.adjust_font_size()
+    
+    def adjust_font_size(self):
+        """Calcular y establecer el tamaño de fuente óptimo"""
+        font = self.font()
+        
+        # Calcular tamaño de fuente basado en el alto del widget
+        new_font_size = max(self._min_font_size, 
+                             min(self._max_font_size, 
+                                 int(self.height() * 0.4)))  # Ajuste empírico
+        
+        font.setPointSize(new_font_size)
+        self.setFont(font)
+        
+    def set_font_range(self, min_size=8, max_size=16):
+        """Método para cambiar el rango de tamaño de fuente"""
+        self._min_font_size = min_size
+        self._max_font_size = max_size
+        self.adjust_font_size()
+
 
 class MusicQuiz(BaseModule):
     """Módulo de quiz musical que permite a los usuarios adivinar canciones."""
@@ -93,6 +132,13 @@ class MusicQuiz(BaseModule):
         
         # Widget contenedor para el contenido
         scroll_content = QWidget()
+        # scroll_content.setStyleSheet("""
+        #     QWidget {
+        #             border: none;
+        #             background-color: transparent;
+        #             padding: 2px
+        #         }
+        # """)
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setSpacing(20)
         
@@ -125,18 +171,54 @@ class MusicQuiz(BaseModule):
         # Botones para filtros en la configuración
         filter_layout = QGridLayout()
         self.filter_artists_btn = QPushButton("Filtrar Artistas")
+        self.filter_artists_btn.setStyleSheet("""
+            QPushButton {
+                border: none;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 0, 0, 0.2);
+            }
+        """)
         self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
         filter_layout.addWidget(self.filter_artists_btn, 0, 0)
         
         self.filter_albums_btn = QPushButton("Filtrar Álbumes")
+        self.filter_albums_btn.setStyleSheet("""
+            QPushButton {
+                border: none;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 0, 0, 0.2);
+            }
+        """)
         self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
         filter_layout.addWidget(self.filter_albums_btn, 0, 1)
         
         self.filter_folders_btn = QPushButton("Filtrar Carpetas")
+        self.filter_folders_btn.setStyleSheet("""
+            QPushButton {
+                border: none;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 0, 0, 0.2);
+            }
+        """)
         self.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
         filter_layout.addWidget(self.filter_folders_btn, 1, 0)
         
         self.filter_genres_btn = QPushButton("Filtrar Géneros")
+        self.filter_genres_btn.setStyleSheet("""
+            QPushButton {
+                border: none;
+                padding: 5px;
+            }
+            QPushButton:hover {
+                background-color: rgba(255, 0, 0, 0.2);
+            }
+        """)
         self.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
         filter_layout.addWidget(self.filter_genres_btn, 1, 1)
         
@@ -207,9 +289,9 @@ class MusicQuiz(BaseModule):
             
             # Información de la canción
             song_info = QVBoxLayout()
-            song_label = QLabel("Título:")
-            artist_label = QLabel("Artista:")
-            album_label = QLabel("Álbum:")
+            song_label = ScalableLabel("Título:")
+            artist_label = ScalableLabel("Artista:")
+            album_label = ScalableLabel("Álbum:")
             
             song_info.addWidget(song_label)
             song_info.addWidget(artist_label)
@@ -272,6 +354,7 @@ class MusicQuiz(BaseModule):
         
         # Deshabilitar opciones al inicio
         self.enable_options(False)
+
 
     def connect_to_database(self):
         """Establece la conexión con la base de datos."""

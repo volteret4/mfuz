@@ -108,14 +108,26 @@ def process_relationships(song_id, mbid, cursor, conn):
                 conn.commit()
 
 # Main function
-def main():
+def main(config=None):
     parser = argparse.ArgumentParser(description='Extract MusicBrainz links and reviews for albums')
+    parser.add_argument('--config', help='Path to json config ')
     parser.add_argument('--db-path', required=True, help='Path to the SQLite database')
 
     args = parser.parse_args()
     
+    with open(args.config, 'r') as f:
+        config_data = json.load(f)
+        
+    # Combinar configuraciones
+    config = {}
+    config.update(config_data.get("common", {}))
+    config.update(config_data.get("mb_data_canciones", {}))
+
+    db_path = args.db_path or config['db_path']
+
+    
     # Connect to the SQLite database
-    conn = sqlite3.connect('db_path')
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     # Check if mb_data_songs table exists, create if not

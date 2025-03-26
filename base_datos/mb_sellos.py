@@ -448,6 +448,8 @@ def fetch_label_by_album(db_path, album_mbid, existing_conn=None):
                             if label_id and album_id:
                                 catalog_number = label_info.get('catalog-number')
                                 
+                                max_retries = 3
+
                                 retry_count = 0
                                 while retry_count < max_retries:
                                     try:
@@ -528,13 +530,24 @@ def update_all_albums_with_labels(db_path):
             pass
 
 
-def main():
+def main(config=None):
     parser = argparse.ArgumentParser(description='Extract MusicBrainz links and reviews for albums')
-    parser.add_argument('--db-path', required=True, help='Path to the SQLite database')
+    parser.add_argument('--config', help='Path to json config ')
+    parser.add_argument('--db-path', help='Path to the SQLite database')
 
     args = parser.parse_args()
 
-    db_path = args.db_path
+
+        
+    with open(args.config, 'r') as f:
+        config_data = json.load(f)
+        
+    # Combinar configuraciones
+    config = {}
+    config.update(config_data.get("common", {}))
+    config.update(config_data.get("mb_sellos", {}))
+
+    db_path = args.db_path or config['db_path']
 
     if not db_path:
         db_path = input("Enter the path to your SQLite database file: ")

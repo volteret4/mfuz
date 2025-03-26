@@ -10,22 +10,23 @@ from pathlib import Path
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Obtener listens de ListenBrainz y añadirlos a la base de datos')
-    parser.add_argument('--user', type=str, required=True, help='Usuario de ListenBrainz')
-    parser.add_argument('--token', type=str, required=True, help='Token de autenticación de ListenBrainz')
-    parser.add_argument('--db-path', type=str, required=True, help='Ruta al archivo de base de datos SQLite')
-    parser.add_argument('--force-update', action='store_true', help='Forzar actualización completa')
+    parser.add_argument('--config',  help='Archivo de configuración')
+    parser.add_argument('--user', type=str,  help='Usuario de ListenBrainz')
+    parser.add_argument('--token', type=str,  help='Token de autenticación de ListenBrainz')
+    parser.add_argument('--db-path', type=str,  help='Ruta al archivo de base de datos SQLite')
+    parser.add_argument('--force-update', default=False, help='Forzar actualización completa')
     parser.add_argument('--output-json', type=str, help='Ruta para guardar todos los listens en formato JSON (opcional)')
     parser.add_argument('--max-items', type=int, default=1000, help='Número máximo de listens a obtener por llamada (opcional)')
     parser.add_argument('--limit-process', type=int, help='Número máximo de listens a procesar (opcional)')
-    parser.add_argument('--reprocess-existing', action='store_true', help='Reprocesar listens existentes con los métodos de coincidencia seleccionados')
+    parser.add_argument('--reprocess-existing', default=False, help='Reprocesar listens existentes con los métodos de coincidencia seleccionados')
 
     # Nuevas opciones para las mejoras de coincidencia
-    parser.add_argument('--normalize-strings', action='store_true', help='Usar normalización de strings para mejorar coincidencias')
-    parser.add_argument('--enhanced-matching', action='store_true', help='Crear y usar tablas normalizadas para buscar coincidencias')
-    parser.add_argument('--mbid-matching', action='store_true', help='Intentar coincidencia por MusicBrainz IDs')
-    parser.add_argument('--fuzzy-matching', action='store_true', help='Usar coincidencia difusa para encontrar canciones')
-    parser.add_argument('--analyze-mismatches', action='store_true', help='Analizar razones de discrepancias')
-    parser.add_argument('--use-all-matching', action='store_true', help='Utilizar todas las técnicas de coincidencia mejoradas')
+    parser.add_argument('--normalize-strings', default=False, help='Usar normalización de strings para mejorar coincidencias')
+    parser.add_argument('--enhanced-matching', default=False, help='Crear y usar tablas normalizadas para buscar coincidencias')
+    parser.add_argument('--mbid-matching', default=False, help='Intentar coincidencia por MusicBrainz IDs')
+    parser.add_argument('--fuzzy-matching', default=False, help='Usar coincidencia difusa para encontrar canciones')
+    parser.add_argument('--analyze-mismatches', default=False, help='Analizar razones de discrepancias')
+    parser.add_argument('--use-all-matching', default=False, help='Utilizar todas las técnicas de coincidencia mejoradas')
     
     return parser.parse_args()
 
@@ -68,7 +69,6 @@ def setup_database(conn):
     """)
     
     conn.commit()
-
 def get_existing_items(conn):
     """Obtiene los artistas, álbumes y canciones existentes en la base de datos"""
     cursor = conn.cursor()
@@ -79,22 +79,26 @@ def get_existing_items(conn):
     artists = {row[1].lower(): row[0] for row in artists_rows}
     
     # Obtener álbumes existentes
+    # Usando solo el nombre del álbum y el nombre del artista
     cursor.execute("""
-        SELECT a.id, a.name, ar.name, a.artist_id
+        SELECT a.name, ar.name as artist_name
         FROM albums a 
-        JOIN artists ar ON a.artist_id = ar.id
+        LEFT JOIN artists ar ON a.name = ar.name
     """)
     albums_rows = cursor.fetchall()
-    albums = {(row[1].lower(), row[2].lower()): (row[0], row[3]) for row in albums_rows}
+    albums = {(row[0].lower(), row[1].lower() if row[1] else ''): (None, None) for row in albums_rows}
     
     # Obtener canciones existentes
+    # Usando solo nombres de canción, artista y álbum
     cursor.execute("""
-        SELECT s.id, s.title, s.artist, s.album
-        FROM songs s
+        SELECT title, artist, album
+        FROM songs
     """)
     songs_rows = cursor.fetchall()
-    songs = {(row[1].lower(), row[2].lower(), row[3].lower() if row[3] else None): row[0] 
-             for row in songs_rows}
+    songs = {
+        (row[0].lower(), row[1].lower() if row[1] else '', row[2].lower() if row[2] else None): None 
+        for row in songs_rows
+    }
     
     return artists, albums, songs
 
@@ -128,162 +132,115 @@ def save_last_timestamp(conn, timestamp, username):
     
     conn.commit()
 
-def get_listenbrainz_listens(username, token, from_timestamp=0, max_items=1000, limit_total=None):
+
+
+def get_listenbrainz_listens(username, token, from_timestamp=0, max_items=100000, limit_total=100000):
     """Obtiene los listens de ListenBrainz para un usuario desde un timestamp específico"""
     all_listens = []
-    
+    print(f"usuario {username}")
     headers = {
-        'Authorization': f'Token {token}',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Authorization': f'Token {token}'  # Added token authorization
     }
     
     base_url = 'https://api.listenbrainz.org/1/user/'
     
-    # Estrategia de paginación:
-    # 1. Si hay timestamp, empezamos desde ahí con "min_ts"
-    # 2. Obtenemos listens en lotes usando "max_ts" para ir hacia atrás en el tiempo
+    # Convert from_timestamp to integer if it's not already
+    try:
+        from_timestamp = int(from_timestamp)
+    except (ValueError, TypeError):
+        from_timestamp = 0
     
     if from_timestamp > 0:
-        # Comenzamos con los listens más recientes después del último timestamp guardado
         min_ts = from_timestamp
         endpoint = f'{username}/listens'
         params = {'min_ts': min_ts, 'count': max_items}
-        direction = "forward"  # Obtener listens más recientes primero
+        direction = "forward"
     else:
-        # Sin timestamp inicial, empezamos con los más recientes
         endpoint = f'{username}/listens'
         params = {'count': max_items}
-        direction = "backward"  # Luego vamos hacia atrás en el tiempo
+        direction = "backward"
     
-    # Primera llamada para obtener los listens más recientes
     url = f"{base_url}{endpoint}"
-    response = requests.get(url, headers=headers, params=params)
     
-    if response.status_code != 200:
-        print(f"Error al obtener listens: {response.status_code}")
-        if response.text:
-            print(f"Detalles: {response.text}")
-        return []
+    def safe_get_timestamp(listen):
+        """Safely extract timestamp, converting to integer"""
+        try:
+            # Ensure timestamp is converted to integer
+            ts = listen.get('listened_at', 0)
+            return int(ts) if ts is not None else 0
+        except (ValueError, TypeError):
+            return 0
     
-    data = response.json()
+    def fetch_listens(params):
+        """Helper function to fetch listens with error handling"""
+        try:
+            response = requests.get(url, headers=headers, params=params)
+            
+            if response.status_code != 200:
+                print(f"Error al obtener listens: {response.status_code}")
+                print(f"Detalles: {response.text}")
+                return None
+            
+            return response.json()
+        except Exception as e:
+            print(f"Excepción al obtener listens: {e}")
+            return None
     
-    # Comprobar si hay listens en la respuesta
-    if 'payload' not in data or 'listens' not in data['payload'] or not data['payload']['listens']:
+    # First call to get recent listens
+    data = fetch_listens(params)
+    
+    if not data or 'payload' not in data or 'listens' not in data['payload']:
         print("No se encontraron listens")
         return []
     
-    # Añadir el primer lote de listens
+    # Add first batch of listens
     listens = data['payload']['listens']
     all_listens.extend(listens)
     print(f"Obtenidos {len(listens)} listens iniciales")
     
-    # Verificar si ya hemos alcanzado el límite total
+    # Check if we've reached total limit
     if limit_total and len(all_listens) >= limit_total:
         print(f"Alcanzado límite de {limit_total} listens")
         return all_listens[:limit_total]
     
-    # Si no teníamos timestamp inicial o queríamos todos los listens,
-    # ahora continuamos hacia atrás en el tiempo
+    # Fetch additional listens based on direction
     if direction == "backward":
         has_more = True
-        while has_more and len(listens) > 0:
-            # Si se estableció un límite y ya lo alcanzamos, salir del bucle
+        while has_more and listens:
             if limit_total and len(all_listens) >= limit_total:
                 print(f"Alcanzado límite de {limit_total} listens")
                 break
-                
-            # Obtener el timestamp más antiguo como punto de referencia para la siguiente llamada
-            oldest_listen_ts = min([listen.get('listened_at', 0) for listen in listens])
-            max_ts = oldest_listen_ts - 1  # Para evitar duplicados
             
-            if max_ts <= 0:
-                break
-                
-            # Preparar parámetros para obtener listens anteriores
+            # Safely get the oldest timestamp
+            oldest_listen_ts = min([safe_get_timestamp(listen) for listen in listens])
+            max_ts = max(0, oldest_listen_ts - 1)  # Avoid negative timestamps
+            
             params = {'max_ts': max_ts, 'count': max_items}
-            
-            # Pausa para no saturar la API
             time.sleep(0.5)
             
-            # Hacer la siguiente llamada
-            response = requests.get(url, headers=headers, params=params)
-            
-            if response.status_code != 200:
-                print(f"Error al obtener listens anteriores: {response.status_code}")
+            data = fetch_listens(params)
+            if not data or 'payload' not in data or 'listens' not in data['payload']:
                 break
-                
-            data = response.json()
             
-            if 'payload' not in data or 'listens' not in data['payload']:
-                has_more = False
-                break
-                
             listens = data['payload']['listens']
-            
             if not listens:
-                has_more = False
                 break
-                
+            
             all_listens.extend(listens)
             print(f"Obtenidos {len(listens)} listens adicionales (total: {len(all_listens)})")
     
-    # Si teníamos un timestamp inicial y queríamos los listens más recientes,
-    # comprobamos si hay más después del último obtenido
-    elif direction == "forward" and 'payload' in data and 'latest_listen_ts' in data['payload']:
-        # Si hay más listens recientes, continuamos obteniendo los siguientes
-        latest_ts = data['payload']['latest_listen_ts']
-        has_more = True
-        
-        while has_more:
-            # Si se estableció un límite y ya lo alcanzamos, salir del bucle
-            if limit_total and len(all_listens) >= limit_total:
-                print(f"Alcanzado límite de {limit_total} listens")
-                break
-                
-            # Nueva llamada con min_ts actualizado
-            min_ts = latest_ts + 1
-            params = {'min_ts': min_ts, 'count': max_items}
-            
-            # Pausa para no saturar la API
-            time.sleep(0.5)
-            
-            # Hacer la siguiente llamada
-            response = requests.get(url, headers=headers, params=params)
-            
-            if response.status_code != 200:
-                print(f"Error al obtener listens más recientes: {response.status_code}")
-                break
-                
-            data = response.json()
-            
-            if 'payload' not in data or 'listens' not in data['payload']:
-                has_more = False
-                break
-                
-            listens = data['payload']['listens']
-            
-            if not listens:
-                has_more = False
-                break
-                
-            all_listens.extend(listens)
-            print(f"Obtenidos {len(listens)} listens adicionales (total: {len(all_listens)})")
-            
-            # Actualizar latest_ts para la siguiente iteración
-            if 'latest_listen_ts' in data['payload']:
-                latest_ts = data['payload']['latest_listen_ts']
-            else:
-                has_more = False
+    # Sort listens by timestamp
+    all_listens.sort(key=lambda x: int(safe_get_timestamp(x)))
     
-    # Ordenar listens por timestamp (de más antiguos a más recientes)
-    all_listens.sort(key=lambda x: x.get('listened_at', 0))
-    
-    # Aplicar límite total si se especificó
+    # Apply total limit if specified
     if limit_total and len(all_listens) > limit_total:
         all_listens = all_listens[:limit_total]
         print(f"Limitado a {limit_total} listens")
     
     return all_listens
+
+    
 def process_listens(conn, listens, existing_artists, existing_albums, existing_songs, 
                     normalize_strings=False, use_mbid=False, use_fuzzy=False, limit=None):
     """
@@ -342,7 +299,10 @@ def process_listens(conn, listens, existing_artists, existing_albums, existing_s
             album_name = track_metadata.get('release_name', '')
         
         # En ListenBrainz, el timestamp está en seconds desde epoch
-        timestamp = listen.get('listened_at', 0)
+        try:
+            timestamp = int(listen.get('listened_at', 0))
+        except (ValueError, TypeError):
+            timestamp = 0
         listen_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
         
         # Construir URL de ListenBrainz para el listen
@@ -438,18 +398,32 @@ def process_listens(conn, listens, existing_artists, existing_albums, existing_s
                 if result:
                     song_id = result[0]
         
-        # Si encontramos la canción, obtener los IDs relacionados
-        if song_id and (not artist_id or not album_id):
+        # Si encontramos la canción, usar su información de texto
+        if song_id:
             cursor.execute("""
-                SELECT artist_id, album_id FROM songs 
+                SELECT title, artist, album FROM songs 
                 WHERE id = ?
             """, (song_id,))
             result = cursor.fetchone()
             if result:
-                if not artist_id:
-                    artist_id = result[0]
-                if not album_id:
-                    album_id = result[1]
+                # Usar la información de texto para búsquedas adicionales
+                existing_artist_name = result[1]
+                existing_album_name = result[2]
+                
+                # Intentar obtener artist_id basado en el nombre del artista
+                if existing_artist_name:
+                    artist_name_key = existing_artist_name.lower()
+                    if normalize_strings:
+                        artist_name_key = normalize_string(existing_artist_name)
+                    artist_id = existing_artists.get(artist_name_key)
+                
+                # Intentar obtener album_id basado en nombre de álbum y artista
+                if existing_album_name and existing_artist_name:
+                    album_key = (existing_album_name.lower(), existing_artist_name.lower())
+                    if normalize_strings:
+                        album_key = (normalize_string(existing_album_name), normalize_string(existing_artist_name))
+                    if album_key in existing_albums:
+                        album_id, _ = existing_albums.get(album_key)
         
         # Recoger información para depuración si no se encontró coincidencia
         if not song_id and processed_count < 50:  # Limitar para no llenar la memoria
@@ -689,73 +663,78 @@ def improve_process_listens(conn, listens, existing_artists, existing_albums, ex
         if not album_name and 'release_name' in track_metadata:
             album_name = track_metadata.get('release_name', '')
         
-        timestamp = listen.get('listened_at', 0)
-        listen_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        listenbrainz_url = f"https://listenbrainz.org/user/{listen.get('user_name', '')}"
+        try:
+            timestamp = int(listen.get('listened_at', 0))
+            listen_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+            listenbrainz_url = f"https://listenbrainz.org/user/{listen.get('user_name', '')}"
         
-        newest_timestamp = max(newest_timestamp, timestamp)
-        
-        # Verificar duplicados
-        cursor.execute("SELECT id FROM listens WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
-                      (timestamp, artist_name, track_name))
-        existing = cursor.fetchone()
-        if existing:
-            # Si ya existe pero queremos reprocesarlo con nuevos métodos, actualizamos los metadatos
-            store_track_metadata(conn, existing[0], listen)
-            continue
-        
-        # Estrategias de coincidencia mejoradas
-        song_id = None
-        artist_id = None
-        album_id = None
-        
-        # 1. Intentar coincidencia por MusicBrainz IDs
-        song_id = find_song_by_mbid(conn, listen)
-        
-        if not song_id:
-            # 2. Intentar coincidencia difusa si no hay MBID
-            song_id = fuzzy_match_song(conn, track_name, artist_name, album_name)
-        
-        # Si encontramos la canción, obtener los IDs del artista y álbum
-        if song_id:
-            cursor.execute("SELECT artist_id, album_id FROM songs WHERE id = ?", (song_id,))
-            result = cursor.fetchone()
-            if result:
-                artist_id, album_id = result
-        else:
-            # Si no se encontró la canción, intentar buscar el artista y álbum por separado
-            if artist_name:
-                artist_id = existing_artists.get(artist_name.lower())
+            newest_timestamp = max(newest_timestamp, timestamp)
             
-            if album_name and artist_name:
-                album_key = (album_name.lower(), artist_name.lower())
-                if album_key in existing_albums:
-                    album_id, _ = existing_albums.get(album_key)
-        
-        # Insertar el listen en la tabla
-        cursor.execute("""
-            INSERT INTO listens 
-            (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id))
-        
-        listen_id = cursor.lastrowid
-        
-        # Almacenar metadatos completos del track
-        store_track_metadata(conn, listen_id, listen)
-        
-        processed_count += 1
-        
-        if song_id:
-            linked_count += 1
-            # Actualizar song_links si el song_id existe
+            # Verificar duplicados
+            cursor.execute("SELECT id FROM listens WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
+                          (timestamp, artist_name, track_name))
+            existing = cursor.fetchone()
+            if existing:
+                # Si ya existe pero queremos reprocesarlo con nuevos métodos, actualizamos los metadatos
+                store_track_metadata(conn, existing[0], listen)
+                continue
+            
+            # Estrategias de coincidencia mejoradas
+            song_id = None
+            artist_id = None
+            album_id = None
+            
+            # 1. Intentar coincidencia por MusicBrainz IDs
+            song_id = find_song_by_mbid(conn, listen)
+            
+            if not song_id:
+                # 2. Intentar coincidencia difusa si no hay MBID
+                song_id = fuzzy_match_song(conn, track_name, artist_name, album_name)
+            
+            # Si encontramos la canción, obtener los IDs del artista y álbum
+            if song_id:
+                cursor.execute("SELECT artist, album FROM songs WHERE id = ?", (song_id,))
+                result = cursor.fetchone()
+                if result:
+                    artist_id, album_id = result
+            else:
+                # Si no se encontró la canción, intentar buscar el artista y álbum por separado
+                if artist_name:
+                    artist_id = existing_artists.get(artist_name.lower())
+                
+                if album_name and artist_name:
+                    album_key = (album_name.lower(), artist_name.lower())
+                    if album_key in existing_albums:
+                        album_id, artist_id = existing_albums.get(album_key)
+            
+            # Insertar el listen en la tabla
             cursor.execute("""
-                UPDATE song_links 
-                SET links_updated = datetime('now')
-                WHERE song_id = ?
-            """, (song_id,))
-        else:
-            unlinked_count += 1
+                INSERT INTO listens 
+                (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id))
+            
+            listen_id = cursor.lastrowid
+            
+            # Almacenar metadatos completos del track
+            store_track_metadata(conn, listen_id, listen)
+            
+            processed_count += 1
+            
+            if song_id:
+                linked_count += 1
+                # Actualizar song_links si el song_id existe
+                cursor.execute("""
+                    UPDATE song_links 
+                    SET links_updated = datetime('now')
+                    WHERE song_id = ?
+                """, (song_id,))
+            else:
+                unlinked_count += 1
+        
+        except (ValueError, TypeError):
+            # Manejar errores de timestamp
+            continue
     
     conn.commit()
     
@@ -825,6 +804,7 @@ def analyze_mismatch_reasons(conn):
     print(f"   - Sin información de álbum: {no_album_count} ({no_album_count/total_unmatched*100:.1f}% del total sin coincidencia)")
     
     return True
+
 def custom_process_listens(conn, listens, existing_artists, existing_albums, existing_songs, use_mbid=False, use_fuzzy=False, limit=None):
     """Procesa los listens utilizando las técnicas de coincidencia seleccionadas"""
     cursor = conn.cursor()
@@ -856,94 +836,109 @@ def custom_process_listens(conn, listens, existing_artists, existing_albums, exi
         if not album_name and 'release_name' in track_metadata:
             album_name = track_metadata.get('release_name', '')
         
-        timestamp = listen.get('listened_at', 0)
-        listen_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        listenbrainz_url = f"https://listenbrainz.org/user/{listen.get('user_name', '')}"
+        try:
+            timestamp = int(listen.get('listened_at', 0))
+            listen_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+            listenbrainz_url = f"https://listenbrainz.org/user/{listen.get('user_name', '')}"
         
-        newest_timestamp = max(newest_timestamp, timestamp)
-        
-        # Verificar duplicados
-        cursor.execute("SELECT id FROM listens WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
-                      (timestamp, artist_name, track_name))
-        existing = cursor.fetchone()
-        if existing:
-            # Si ya existe pero queremos reprocesarlo con nuevos métodos, actualizamos los metadatos
-            store_track_metadata(conn, existing[0], listen)
-            continue
-        
-        # Inicializar IDs
-        song_id = None
-        artist_id = None
-        album_id = None
-        
-        # Aplicar estrategias de coincidencia según los parámetros
-        if use_mbid:
-            # Intentar coincidencia por MusicBrainz IDs
-            song_id = find_song_by_mbid(conn, listen)
-        
-        if not song_id and use_fuzzy:
-            # Intentar coincidencia difusa
-            song_id = fuzzy_match_song(conn, track_name, artist_name, album_name)
-        
-        # Si no se encontró con las técnicas avanzadas, intentar con la estrategia estándar
-        if not song_id:
-            # Buscar IDs existentes con estrategias estándar
-            if artist_name:
-                artist_id = existing_artists.get(artist_name.lower())
+            newest_timestamp = max(newest_timestamp, timestamp)
             
-            if album_name and artist_name:
-                album_key = (album_name.lower(), artist_name.lower())
-                if album_key in existing_albums:
-                    album_id, _ = existing_albums.get(album_key)
+            # Verificar duplicados
+            cursor.execute("SELECT id FROM listens WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
+                        (timestamp, artist_name, track_name))
+            existing = cursor.fetchone()
+            if existing:
+                # Si ya existe pero queremos reprocesarlo con nuevos métodos, actualizamos los metadatos
+                store_track_metadata(conn, existing[0], listen)
+                continue
             
-            # Intentar buscar la canción con estrategias estándar
-            if track_name and artist_name:
-                song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
-                if song_key in existing_songs:
-                    song_id = existing_songs.get(song_key)
-                else:
-                    # Intentar sin álbum
-                    song_key = (track_name.lower(), artist_name.lower(), None)
+            # Inicializar IDs
+            song_id = None
+            artist_id = None
+            album_id = None
+            
+            # Aplicar estrategias de coincidencia según los parámetros
+            if use_mbid:
+                # Intentar coincidencia por MusicBrainz IDs
+                song_id = find_song_by_mbid(conn, listen)
+            
+            if not song_id and use_fuzzy:
+                # Intentar coincidencia difusa
+                song_id = fuzzy_match_song(conn, track_name, artist_name, album_name)
+            
+            # Si no se encontró con las técnicas avanzadas, intentar con la estrategia estándar
+            if not song_id:
+                # Buscar IDs existentes con estrategias estándar
+                if artist_name:
+                    artist_id = existing_artists.get(artist_name.lower())
+                
+                if album_name and artist_name:
+                    album_key = (album_name.lower(), artist_name.lower())
+                    if album_key in existing_albums:
+                        album_id, artist_id = existing_albums.get(album_key)
+                
+                # Intentar buscar la canción con estrategias estándar
+                if track_name and artist_name:
+                    song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
                     if song_key in existing_songs:
                         song_id = existing_songs.get(song_key)
-        
-        # Si se encontró la canción, obtener los IDs de artista y álbum
-        if song_id and (not artist_id or not album_id):
+                    else:
+                        # Intentar sin álbum
+                        song_key = (track_name.lower(), artist_name.lower(), None)
+                        if song_key in existing_songs:
+                            song_id = existing_songs.get(song_key)
+            
+            # Si se encontró la canción, obtener los IDs de artista y álbum
+            if song_id and (not artist_id or not album_id):
+                cursor.execute("""
+                    SELECT artist_id, album_id FROM songs 
+                    WHERE id = ?
+                """, (song_id,))
+                result = cursor.fetchone()
+                if result:
+                    if not artist_id:
+                        artist_id = result[0]
+                    if not album_id:
+                        album_id = result[1]
+            
+            # Si no se encontró artist_id, buscar en la tabla de artistas
+            if not artist_id and artist_name:
+                cursor.execute("""
+                    SELECT id FROM artists 
+                    WHERE lower(name) = lower(?)
+                """, (artist_name,))
+                artist_result = cursor.fetchone()
+                if artist_result:
+                    artist_id = artist_result[0]
+            
+            # Insertar el listen en la tabla
             cursor.execute("""
-                SELECT artist_id, album_id FROM songs 
-                WHERE id = ?
-            """, (song_id,))
-            result = cursor.fetchone()
-            if result:
-                if not artist_id:
-                    artist_id = result[0]
-                if not album_id:
-                    album_id = result[1]
+                INSERT INTO listens 
+                (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id))
+            
+            listen_id = cursor.lastrowid
+            
+            # Almacenar metadatos completos del track
+            store_track_metadata(conn, listen_id, listen)
+            
+            processed_count += 1
+            
+            if song_id:
+                linked_count += 1
+                # Actualizar song_links si el song_id existe
+                cursor.execute("""
+                    UPDATE song_links 
+                    SET links_updated = datetime('now')
+                    WHERE song_id = ?
+                """, (song_id,))
+            else:
+                unlinked_count += 1
         
-        # Insertar el listen en la tabla
-        cursor.execute("""
-            INSERT INTO listens 
-            (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (track_name, album_name, artist_name, timestamp, listen_date, listenbrainz_url, song_id, album_id, artist_id))
-        
-        listen_id = cursor.lastrowid
-        
-        # Almacenar metadatos completos del track
-        store_track_metadata(conn, listen_id, listen)
-        
-        processed_count += 1
-        
-        if song_id:
-            linked_count += 1
-            # Actualizar song_links si el song_id existe
-            cursor.execute("""
-                UPDATE song_links 
-                SET links_updated = datetime('now')
-                WHERE song_id = ?
-            """, (song_id,))
-        else:
-            unlinked_count += 1
+        except (ValueError, TypeError):
+            # Manejar errores de timestamp
+            continue
     
     conn.commit()
     
@@ -1050,7 +1045,7 @@ def reprocess_existing_listens(conn, existing_artists, existing_albums, existing
             if album_name and artist_name:
                 album_key = (album_name.lower(), artist_name.lower())
                 if album_key in existing_albums:
-                    album_id, _ = existing_albums.get(album_key)
+                    album_id, artist_id = existing_albums.get(album_key)
             
             if track_name and artist_name:
                 song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
@@ -1105,12 +1100,153 @@ def reprocess_existing_listens(conn, existing_artists, existing_albums, existing
     return updated
 
 
+def debug_listens_timestamps(listens):
+    """
+    Detailed debugging for ListenBrainz listen timestamps
+    
+    Args:
+        listens (list): List of listen records
+    """
+    print("Timestamp Debugging")
+    print("-" * 40)
+    
+    if not listens:
+        print("No listens to analyze")
+        return
+    
+    # Analyze timestamp information
+    timestamp_types = {}
+    timestamp_values = []
+    problematic_listens = []
+    
+    for i, listen in enumerate(listens, 1):
+        timestamp = listen.get('listened_at')
+        
+        # Track type distribution
+        type_name = type(timestamp).__name__
+        timestamp_types[type_name] = timestamp_types.get(type_name, 0) + 1
+        
+        # Try converting to integer
+        try:
+            int_timestamp = int(timestamp)
+            timestamp_values.append(int_timestamp)
+        except (ValueError, TypeError) as e:
+            problematic_listens.append({
+                'index': i,
+                'timestamp': timestamp,
+                'type': type(timestamp).__name__,
+                'error': str(e)
+            })
+    
+    # Print summary
+    print("\nTimestamp Type Distribution:")
+    for type_name, count in timestamp_types.items():
+        print(f"  {type_name}: {count} listens")
+    
+    print("\nTimestamp Value Range:")
+    if timestamp_values:
+        print(f"  Min: {min(timestamp_values)}")
+        print(f"  Max: {max(timestamp_values)}")
+        print(f"  Total valid timestamps: {len(timestamp_values)}")
+    
+    print("\nProblematic Listens:")
+    for listen in problematic_listens[:10]:  # Show first 10
+        print(f"  Listen {listen['index']}: "
+              f"timestamp={listen['timestamp']}, "
+              f"type={listen['type']}, "
+              f"error={listen['error']}")
+    
+    return problematic_listens
+
+def safe_convert_timestamps(listens):
+    """
+    Safely convert ListenBrainz listen timestamps to integers
+    
+    Args:
+        listens (list): List of listen records
+    
+    Returns:
+        list: Updated listens with converted timestamps
+    """
+    converted_listens = []
+    
+    for listen in listens:
+        try:
+            # Try multiple conversion strategies
+            timestamp = listen.get('listened_at')
+            
+            # Strategy 1: Direct integer conversion
+            if isinstance(timestamp, int):
+                converted_listen = listen.copy()
+                converted_listen['listened_at'] = timestamp
+                converted_listens.append(converted_listen)
+                continue
+            
+            # Strategy 2: String to integer
+            if isinstance(timestamp, str):
+                int_timestamp = int(float(timestamp))
+                converted_listen = listen.copy()
+                converted_listen['listened_at'] = int_timestamp
+                converted_listens.append(converted_listen)
+                continue
+            
+            # Strategy 3: Extract timestamp from nested structures
+            if isinstance(timestamp, dict):
+                for key in ['timestamp', 'listened_at', 'time']:
+                    if key in timestamp:
+                        int_timestamp = int(float(timestamp[key]))
+                        converted_listen = listen.copy()
+                        converted_listen['listened_at'] = int_timestamp
+                        converted_listens.append(converted_listen)
+                        break
+            
+            # If no conversion worked, skip this listen
+            print(f"Could not convert timestamp: {timestamp}")
+        
+        except (ValueError, TypeError) as e:
+            print(f"Timestamp conversion error: {e}")
+    
+    return converted_listens
+
+
 
 def main():
     args = parse_args()
     
+    
+    with open(args.config, 'r') as f:
+        config_data = json.load(f)
+    
+    config = {}
+    config.update(config_data.get("common", {}))
+    config.update(config_data.get("scrobbles_listenbrainz", {}))
+
+    db_path = args.db_path or config['db_path']
+    if not db_path: 
+        print("Añade db_path al json o usa --db-path")
+
+    user = args.user or config['user']
+    token = args.token or config['token']
+    output_json = args.output_json or config['output_json']
+    max_items = args.max_items or config['max_items']
+    limit_process = args.limit_process or config['limit_process']
+    
+    
+    
+    force_update = args.force_update or config['force_update']
+    reprocess_existing = args.reprocess_existing or config['reprocess_existing']
+    normalize_strings = args.normalize_strings or config['normalize_strings']
+    mbid_matching = args.mbid_matching or config['mbid_matching']
+    fuzzy_matching = args.fuzzy_matching or config['fuzzy_matching']
+    use_all_matching = args.use_all_matching or config['use_all_matching']
+    analyze_mismatches = args.analyze_mismatches or config['analyze_mismatches']
+    
+    enhanced_matching = args.enhanced_matching or config['enhanced_matching']
+    
+
+
     # Conectar a la base de datos
-    conn = sqlite3.connect(args.db_path)
+    conn = sqlite3.connect(db_path)
     
     try:
         # Configurar la base de datos
@@ -1120,84 +1256,86 @@ def main():
         existing_artists, existing_albums, existing_songs = get_existing_items(conn)
         print(f"Elementos existentes: {len(existing_artists)} artistas, {len(existing_albums)} álbumes, {len(existing_songs)} canciones")
         
-        # Aplicar normalización de strings si se solicita
-        if args.normalize_strings or args.use_all_matching:
-            print("Usando normalización de strings para mejorar coincidencias")
-            # No es necesario hacer nada aquí, las funciones ya usan normalize_string internamente
-        
+     
         # Crear tablas normalizadas si se solicita
-        if args.enhanced_matching or args.use_all_matching:
+        if enhanced_matching == True or use_all_matching:
             print("Creando tablas normalizadas para mejorar búsquedas")
             conn = enhance_matching(conn, existing_artists, existing_albums, existing_songs)
         
         # Reprocesar listens existentes si se solicita
-        if args.reprocess_existing:
+        if reprocess_existing == True:
             print("Reprocesando listens existentes...")
             updated = reprocess_existing_listens(
                 conn, 
                 existing_artists, 
                 existing_albums, 
                 existing_songs,
-                use_mbid=args.mbid_matching or args.use_all_matching,
-                use_fuzzy=args.fuzzy_matching or args.use_all_matching,
-                limit=args.limit_process
+                use_mbid=mbid_matching or use_all_matching,
+                use_fuzzy=fuzzy_matching or use_all_matching,
+                limit=limit_process
             )
             print(f"Reprocesamiento completado: {updated} listens actualizados")
         
         # Obtener el último timestamp procesado
-        from_timestamp = 0 if args.force_update else get_last_timestamp(conn)
-        if from_timestamp > 0:
-            print(f"Obteniendo listens desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
+        if force_update == True:
+            from_timestamp = 0
             print("Obteniendo todos los listens (esto puede tardar)")
-        
+        else:
+            from_timestamp = get_last_timestamp(conn)
+            print(f"Obteniendo listens desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
+
+
+
         # Obtener listens de ListenBrainz
-        listens = get_listenbrainz_listens(args.user, args.token, from_timestamp, args.max_items, args.limit_process)
+        listens = get_listenbrainz_listens(user, token, from_timestamp, max_items, limit_process)
         print(f"Obtenidos {len(listens)} listens")
-        
+        debug_listens_timestamps(listens)
+        listens = safe_convert_timestamps(listens)
+
+
         # Guardar todos los listens en JSON si se especificó
-        if args.output_json and listens:
-            with open(args.output_json, 'w') as f:
+        if output_json and listens:
+            with open(output_json, 'w') as f:
                 json.dump(listens, f, indent=2)
-            print(f"Guardados todos los listens en {args.output_json}")
+            print(f"Guardados todos los listens en {output_json}")
         
         # Procesar listens según las opciones seleccionadas
         if listens:
-            if args.use_all_matching:
+            if use_all_matching:
                 # Usar el proceso mejorado con todas las técnicas
                 processed, linked, unlinked, newest_timestamp = improve_process_listens(
-                    conn, listens, existing_artists, existing_albums, existing_songs, args.limit_process
+                    conn, listens, existing_artists, existing_albums, existing_songs, limit_process
                 )
             else:
                 # Determinar qué funciones usar basado en los argumentos
-                if args.mbid_matching or args.fuzzy_matching:
+                if mbid_matching == True or fuzzy_matching == True:
                     # Función personalizada según las opciones seleccionadas
                     processed, linked, unlinked, newest_timestamp = custom_process_listens(
                         conn, listens, existing_artists, existing_albums, existing_songs,
-                        use_mbid=args.mbid_matching, use_fuzzy=args.fuzzy_matching,
-                        limit=args.limit_process
+                        use_mbid=mbid_matching, use_fuzzy=fuzzy_matching,
+                        limit=limit_process
                     )
                 else:
                     # Usar el proceso estándar con opciones de normalización si se especificó
                     processed, linked, unlinked, newest_timestamp = process_listens(
                         conn, listens, existing_artists, existing_albums, existing_songs,
-                        normalize_strings=args.normalize_strings,
-                        use_mbid=args.mbid_matching,
-                        use_fuzzy=args.fuzzy_matching,
-                        limit=args.limit_process
+                        normalize_strings=normalize_strings,
+                        use_mbid=mbid_matching,
+                        use_fuzzy=fuzzy_matching,
+                        limit=limit_process
                     )
             
             print(f"Procesados {processed} listens: {linked} enlazados, {unlinked} no enlazados")
             
             # Guardar el timestamp más reciente para la próxima ejecución
             if newest_timestamp > 0:
-                save_last_timestamp(conn, newest_timestamp, args.user)
+                save_last_timestamp(conn, newest_timestamp, user)
                 print(f"Guardado último timestamp: {datetime.datetime.fromtimestamp(newest_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
         else:
             print("No se encontraron nuevos listens para procesar")
         
         # Analizar discrepancias si se solicita
-        if args.analyze_mismatches:
+        if analyze_mismatches == True:
             analyze_mismatch_reasons(conn)
         
         # Mostrar estadísticas generales

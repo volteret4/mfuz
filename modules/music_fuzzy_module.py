@@ -465,6 +465,7 @@ class MusicBrowser(BaseModule):
         self.metadata_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         self.metadata_label.setMinimumWidth(1600)  # Ajusta este valor según necesites
         
+        
         # Agregar las etiquetas al layout
         self.info_layout.addWidget(self.lastfm_label)
         self.info_layout.addWidget(self.metadata_label)

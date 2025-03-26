@@ -74,11 +74,11 @@ class MuspyArtistModule(BaseModule):
         top_layout = QHBoxLayout()
         
         self.artist_input = QLineEdit()
-        self.artist_input.setPlaceholderText("Enter artist name")
+        self.artist_input.setPlaceholderText("Introduce el nombre de un artista para buscar discos anunciados")
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         top_layout.addWidget(self.artist_input)
 
-        self.search_button = QPushButton("Search Releases")
+        self.search_button = QPushButton("Voy a tener suerte")
         self.search_button.clicked.connect(self.search_and_get_releases)
         top_layout.addWidget(self.search_button)
 
@@ -86,17 +86,28 @@ class MuspyArtistModule(BaseModule):
 
         # Results area (will be replaced by table when getting releases)
         self.results_text = QTextEdit()
+        self.results_text.append("""
+            \n\n\n\n
+            Leer db: Mostrará una selección con los artistas a escoger para sincronizar con muspy
+            Sincronizar artistas: Añadirá los artistas faltantes a Muspy
+            Sincronizar Lastfm: Sincronizará artistas seguidos en lastfm en Muspy
+            Mis Próximos discos: Buscará lanzamientos anunciados de tus artistas seguidos
+            Discos ausentes: Comprobará qué discos de los artistas seleccionados no existe en tu base de datos
+            Obtener todo: Obtiene TODO lo anunciado, serán decenas de miles...
+            \n\n\n\n
+            """)
+
         self.results_text.setReadOnly(True)
         main_layout.addWidget(self.results_text)
 
         # Bottom buttons layout
         bottom_layout = QHBoxLayout()
         
-        self.load_artists_button = QPushButton("Load Artists")
+        self.load_artists_button = QPushButton("Leer db")
         self.load_artists_button.clicked.connect(self.load_artists_from_file)
         bottom_layout.addWidget(self.load_artists_button)
 
-        self.sync_artists_button = QPushButton("Sync Artists")
+        self.sync_artists_button = QPushButton("Sincronizar Artistas")
         self.sync_artists_button.clicked.connect(self.sync_artists_with_muspy)
         bottom_layout.addWidget(self.sync_artists_button)
 

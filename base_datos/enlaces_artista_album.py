@@ -176,6 +176,15 @@ class MusicLinksManager:
         if 'bandcamp_url' not in artist_columns:
             c.execute("ALTER TABLE artists ADD COLUMN bandcamp_url TEXT")
         
+        # Añadir columna bandcamp_url a artistas si no existe
+        if 'member_of' not in artist_columns:
+            c.execute("ALTER TABLE artists ADD COLUMN member_of TEXT")
+
+        # Añadir columna aliases a artistas si no existe
+        if 'aliases' not in artist_columns:
+            c.execute("ALTER TABLE artists ADD COLUMN aliases TEXT")
+
+
         # Añadir columna MBID a álbumes si no existe
         c.execute("PRAGMA table_info(albums)")
         album_columns = {col[1] for col in c.fetchall()}

@@ -34,7 +34,7 @@ class ConfigEditorModule(BaseModule):
                 "enable_individual_themes": True,
                 "shared_db_paths": {
                     # Example of how shared database paths might be configured
-                    "music_database": "/home/huan/Scripts/MOODE.sqlite"
+                    "music_database": "/home/huan/gits/musica/m/falla_pls.sqlite"
                 }
             },
             
@@ -48,9 +48,9 @@ class ConfigEditorModule(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
         
+        super().__init__(parent, theme, **kwargs)
         self.load_config()
         
-        super().__init__(parent, theme)
         
 
     def apply_theme(self, theme_name=None):

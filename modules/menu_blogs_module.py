@@ -85,9 +85,9 @@ class BlogPlaylists(BaseModule):
         super().apply_theme(theme_name)
 
     def init_ui(self):
-        if self.layout() is not None:
-            logging.info("Layout already exists, not creating a new one")
-            return
+        # if self.layout() is not None:
+        #     logging.info("Layout already exists, not creating a new one")
+        #     return
 
         layout = QVBoxLayout(self)
         

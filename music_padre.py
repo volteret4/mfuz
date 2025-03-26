@@ -246,8 +246,8 @@ class TabManager(QMainWindow):
             QComboBox::down-arrow {{
                 border: none;
                 background-color: {theme['accent']};
-                width: 8px;
-                height: 8px;
+                width: 10px;
+                height: 10px;
             }}
             
             QComboBox QAbstractItemView {{
@@ -312,7 +312,7 @@ class TabManager(QMainWindow):
             /* Scroll Bars */
             QScrollBar:vertical {{
                 background-color: {theme['bg']};
-                width: 14px;
+                width: 10px;
                 margin: 0px;
             }}
             

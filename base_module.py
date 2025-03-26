@@ -246,7 +246,7 @@ class BaseModule(QWidget):
 
         
 
-def find_project_root(marker_files=('requirements.txt', 'base_module.py', 'music_padre.py')):
+def find_project_root(marker_files=('requirements.txt', 'base_module.py', 'music_padre.py', 'designer_module.py')):
     """Busca la raíz del proyecto basándose en archivos distintivos."""
     path = Path(__file__).resolve().parent  # Directorio donde está el módulo actual
     while path != path.parent:

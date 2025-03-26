@@ -455,11 +455,30 @@ class QueryOptimizer:
             return False
 
 
-if __name__ == "__main__":
-    # Ejemplo de uso
-    db_path = input("Ingresa la ruta completa a tu base de datos SQLite: ")
+def main(config=None):
+    if config is None:
+        parser = argparse.ArgumentParser(description='enlaces_artista_album')
+        parser.add_argument('--config', required=True, help='Archivo de configuración')
+        args = parser.parse_args()
+        
+        with open(args.config, 'r') as f:
+            config_data = json.load(f)
+            
+        # Combinar configuraciones
+        config = {}
+        config.update(config_data.get("common", {}))
+        config.update(config_data.get("optimiza_db_lastpass", {}))
+
+
+    db_path = args.db_path or config['db_path']
+    
+    #db_path = input("Ingresa la ruta completa a tu base de datos SQLite: ")
     if os.path.exists(db_path):
         optimizer = QueryOptimizer(db_path)
         optimizer.run_query_optimization()
     else:
         print(f"El archivo {db_path} no existe.")
+
+
+if __name__ == "__main__":
+    main()

@@ -515,8 +515,8 @@ class SpotifyPlaylistManager(BaseModule):
                 margin: 5px;
             }
             QWidget::tab:selected {
-                background: #dcdcdc;
-                border: 2px solid #a0a0a0;
+                background: transparent;
+                border: none;
             }
         """)
         new_playlist_layout = QHBoxLayout(playlist_container)

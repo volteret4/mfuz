@@ -3,19 +3,12 @@ import sqlite3
 import requests
 import json
 import argparse
+import json
 import datetime
 import time
 import os
 from pathlib import Path
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Obtener scrobbles de Last.fm y añadirlos a la base de datos')
-    parser.add_argument('--user', type=str, required=True, help='Usuario de Last.fm')
-    parser.add_argument('--lastfm-api-key', type=str, required=True, help='API key de Last.fm')
-    parser.add_argument('--db-path', type=str, required=True, help='Ruta al archivo de base de datos SQLite')
-    parser.add_argument('--force-update', action='store_true', help='Forzar actualización completa')
-    parser.add_argument('--output-json', type=str, help='Ruta para guardar todos los scrobbles en formato JSON (opcional)')
-    return parser.parse_args()
 
 def setup_database(conn):
     """Configura la base de datos con las tablas necesarias para scrobbles"""
@@ -49,7 +42,7 @@ def setup_database(conn):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS lastfm_config (
         id INTEGER PRIMARY KEY CHECK (id = 1),
-        username TEXT,
+        lastfm_username TEXT,
         last_timestamp INTEGER,
         last_updated TIMESTAMP
     )
@@ -96,27 +89,27 @@ def get_last_timestamp(conn):
         return result[0]
     return 0
 
-def save_last_timestamp(conn, timestamp, username):
+def save_last_timestamp(conn, timestamp, lastfm_username):
     """Guarda el timestamp del último scrobble procesado en la tabla de configuración"""
     cursor = conn.cursor()
     
     # Intentar actualizar primero
     cursor.execute("""
         UPDATE lastfm_config 
-        SET last_timestamp = ?, username = ?, last_updated = datetime('now')
+        SET last_timestamp = ?, lastfm_username = ?, last_updated = datetime('now')
         WHERE id = 1
-    """, (timestamp, username))
+    """, (timestamp, lastfm_username))
     
     # Si no se actualizó ninguna fila, insertar
     if cursor.rowcount == 0:
         cursor.execute("""
-            INSERT INTO lastfm_config (id, username, last_timestamp, last_updated)
+            INSERT INTO lastfm_config (id, lastfm_username, last_timestamp, last_updated)
             VALUES (1, ?, ?, datetime('now'))
-        """, (username, timestamp))
+        """, (lastfm_username, timestamp))
     
     conn.commit()
 
-def get_lastfm_scrobbles(username, lastfm_api_key, from_timestamp=0, limit=200):
+def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limit=200):
     """Obtiene los scrobbles de Last.fm para un usuario desde un timestamp específico"""
     all_tracks = []
     page = 1
@@ -125,7 +118,7 @@ def get_lastfm_scrobbles(username, lastfm_api_key, from_timestamp=0, limit=200):
     while page <= total_pages:
         params = {
             'method': 'user.getrecenttracks',
-            'user': username,
+            'user': lastfm_username,
             'api_key': lastfm_api_key,
             'format': 'json',
             'limit': limit,
@@ -250,11 +243,61 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
     conn.commit()
     return processed_count, linked_count, unlinked_count, newest_timestamp
 
-def main():
-    args = parse_args()
+# def load_config(config_file):
+#     """Load configuration from a JSON file"""
+#     with open(config_file, 'r') as f:
+#         config = json.load(f)
     
+#     # Validate required keys
+#     required_keys = ['db_path', 'lastfm_user', 'lastfm_api_key']
+#     for key in required_keys:
+#         if key not in config:
+#             raise ValueError(f"Missing required configuration key: {key}")
+    
+#     return config
+
+def main(config=None):
+    # Cargar configuración
+    parser = argparse.ArgumentParser(description='enlaces_artista_album')
+    parser.add_argument('--config', required=True, help='Archivo de configuración')
+    parser.add_argument('--lastfm_user', type=str, help='Usuario de Last.fm')
+    parser.add_argument('--lastfm-api-key', type=str, help='API key de Last.fm')
+    parser.add_argument('--db-path', type=str, help='Ruta al archivo de base de datos SQLite')
+    parser.add_argument('--force-update', default=False, help='Forzar actualización completa')
+    parser.add_argument('--output-json', type=str, help='Ruta para guardar todos los scrobbles en formato JSON (opcional)')
+            
+    args = parser.parse_args()
+        
+    
+    with open(args.config, 'r') as f:
+        config_data = json.load(f)
+        
+    # Combinar configuraciones
+    config = {}
+    config.update(config_data.get("common", {}))
+    config.update(config_data.get("scrobbles_lastfm", {}))
+
+    
+    db_path = args.db_path or config['db_path']
+    if not db_path: 
+        print("Añade db_path al json o usa --db-path")
+
+    lastfm_user = args.lastfm_user or config['lastfm_user']
+    if not lastfm_user: 
+        print("Añade lastfm_user al json o usa --lastfm-user especificando tu usuario en lastfm")
+
+    lastfm_api_key = args.lastfm_api_key or config['lastfm_api_key']
+    if not lastfm_api_key:
+        print("Añade lastfm_api_key al json o usa --lastfm-api-key especificando tu api key en lastfm")
+
+    output_json = config.get("output_json", ".content/cache/scrobbles_lastfm.json")
+
+    force_update = args.force_update or config['force_update']
+
+
+
     # Conectar a la base de datos
-    conn = sqlite3.connect(args.db_path)
+    conn = sqlite3.connect(db_path)
     
     try:
         # Configurar la base de datos
@@ -265,21 +308,24 @@ def main():
         print(f"Elementos existentes: {len(existing_artists)} artistas, {len(existing_albums)} álbumes, {len(existing_songs)} canciones")
         
         # Obtener el último timestamp procesado
-        from_timestamp = 0 if args.force_update else get_last_timestamp(conn)
-        if from_timestamp > 0:
-            print(f"Obteniendo scrobbles desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
+        #from_timestamp = 0 if force_update else get_last_timestamp(conn)
+        if force_update == True:
+            from_timestamp = 0
             print("Obteniendo todos los scrobbles (esto puede tardar)")
+        else:
+            from_timestamp = get_last_timestamp(conn)
+            print(f"Obteniendo scrobbles desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
+
         
         # Obtener scrobbles
-        tracks = get_lastfm_scrobbles(args.user, args.lastfm_api_key, from_timestamp)
+        tracks = get_lastfm_scrobbles(lastfm_user, lastfm_api_key, from_timestamp)
         print(f"Obtenidos {len(tracks)} scrobbles")
         
         # Guardar todos los scrobbles en JSON si se especificó
-        if args.output_json and tracks:
-            with open(args.output_json, 'w') as f:
+        if output_json and tracks:
+            with open(output_json, 'w') as f:
                 json.dump(tracks, f, indent=2)
-            print(f"Guardados todos los scrobbles en {args.output_json}")
+            print(f"Guardados todos los scrobbles en {output_json}")
         
         # Procesar scrobbles
         if tracks:
@@ -290,7 +336,7 @@ def main():
             
             # Guardar el timestamp más reciente para la próxima ejecución
             if newest_timestamp > 0:
-                save_last_timestamp(conn, newest_timestamp, args.user)
+                save_last_timestamp(conn, newest_timestamp, lastfm_user)
                 print(f"Guardado último timestamp: {datetime.datetime.fromtimestamp(newest_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
         else:
             print("No se encontraron nuevos scrobbles para procesar")

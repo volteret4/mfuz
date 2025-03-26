@@ -758,21 +758,42 @@ def update_content_only(db_path, entity_type):
     print(f"\nActualización de contenido para {entity_type} completada.")
 
 
+def load_config(config_file):
+    """Load configuration from a JSON file"""
+    with open(config_file, 'r') as f:
+        return json.load(f)
+
 def main():
     # Configurar argumentos de línea de comandos
     parser = argparse.ArgumentParser(description='Actualizar enlaces y contenido de Wikipedia en la base de datos de música')
-    parser.add_argument('log_file', help='Archivo de registro para seguimiento del progreso')
-    parser.add_argument('db_path', help='Ruta a la base de datos SQLite')
+    parser.add_argument('--config', required=True, help='Archivo de configuración JSON')
+    parser.add_argument('--log-file', help='Archivo de registro para seguimiento del progreso')
+    parser.add_argument('--db-path', help='Ruta a la base de datos SQLite')
     parser.add_argument('type', choices=['artists', 'albums', 'artists_content', 'albums_content'], 
                         help='Tipo de entidad a actualizar (artists, albums, artists_content, albums_content)')
     
     args = parser.parse_args()
     
+    # Cargar configuración
+    config = load_config(args.config)
+
+    
+    db_path = args.db_path or config.get('db_path')
+    if not db_path:
+        print("Debes añadir un db-path como argumento o en la configuracion")
+    
+    log_file = args.log_file or config.get('log_file', 'db_wiki_update.log')
+    
+    update_type = args.type or config.get('type', None)
+    if not update_type:
+        print("Error: Debe especificar tipo de actualización. --type o en config_db_creator.json")
+
+
     # Inicializar la base de datos
-    init_database(args.db_path)
+    init_database(db_path)
     
     # Mostrar estadísticas iniciales
-    stats = get_database_stats(args.db_path)
+    stats = get_database_stats(db_path)
     print("\n=== Estadísticas de Enlaces y Contenido ===")
     print(f"Artistas: {stats['artists_with_wiki']}/{stats['total_artists']} enlaces ({stats['artists_missing_wiki']} faltan)")
     print(f"Artistas: {stats['artists_with_content']}/{stats['total_artists']} con contenido")
@@ -781,17 +802,17 @@ def main():
     print("==========================================\n")
     
     # Ejecutar la actualización según el tipo
-    if args.type == 'artists':
-        update_artists_wikipedia(args.db_path, args.log_file)
-    elif args.type == 'albums':
-        update_albums_wikipedia(args.db_path, args.log_file)
-    elif args.type == 'artists_content':
-        update_content_only(args.db_path, 'artists')
-    elif args.type == 'albums_content':
-        update_content_only(args.db_path, 'albums')
+    if update_type == 'artists':
+        update_artists_wikipedia(db_path, log_file)
+    elif update_type == 'albums':
+        update_albums_wikipedia(db_path, log_file)
+    elif update_type == 'artists_content':
+        update_content_only(db_path, 'artists')
+    elif update_type == 'albums_content':
+        update_content_only(db_path, 'albums')
     
     # Mostrar estadísticas finales
-    stats = get_database_stats(args.db_path)
+    stats = get_database_stats(db_path)
     print("\n=== Estadísticas Finales ===")
     print(f"Artistas: {stats['artists_with_wiki']}/{stats['total_artists']} enlaces ({stats['artists_missing_wiki']} faltan)")
     print(f"Artistas: {stats['artists_with_content']}/{stats['total_artists']} con contenido")

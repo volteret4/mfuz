@@ -819,6 +819,295 @@ class MusicDatabaseQuery:
             return {"success": False, "message": f"Error al añadir reseña: {str(e)}"}
 
 
+    def get_all_service_links(self, services, entity_type, summary_only=False):
+        """
+        Obtiene los enlaces de múltiples servicios para un tipo de entidad.
+        
+        Args:
+            services (list or str): Nombre de servicio(s) (ej. ['bandcamp', 'spotify'])
+            entity_type (str): Tipo de entidad a buscar ('artistas', 'albums', 'canciones')
+            summary_only (bool): Si es True, devuelve solo el resumen
+        
+        Returns:
+            dict: Resultados o resumen de los enlaces
+        """
+        # Convertir services a lista si es un string
+        if isinstance(services, str):
+            services = [services]
+        
+        # Mapeo de tipos de entidad a tablas y columnas
+        entity_config = {
+            'artistas': {
+                'table': 'artists',
+                'name_column': 'name',
+                'service_columns': lambda service: [
+                    col[1] for col in self.cursor.execute(
+                        "PRAGMA table_info(artists)"
+                    ).fetchall() 
+                    if service.lower() in col[1].lower() and '_url' in col[1].lower()
+                ]
+            },
+            'albums': {
+                'table': 'albums',
+                'name_column': 'name',
+                'service_columns': lambda service: [
+                    col[1] for col in self.cursor.execute(
+                        "PRAGMA table_info(albums)"
+                    ).fetchall() 
+                    if service.lower() in col[1].lower() and '_url' in col[1].lower()
+                ]
+            },
+            'canciones': {
+                'table': 'songs',
+                'name_column': 'title',
+                'service_columns': lambda service: [
+                    col[1] for col in self.cursor.execute(
+                        "PRAGMA table_info(song_links)"
+                    ).fetchall() 
+                    if service.lower() in col[1].lower() and '_url' in col[1].lower()
+                ],
+                'join': 'JOIN song_links sl ON songs.id = sl.song_id'
+            }
+        }
+        
+        # Validar el tipo de entidad
+        if entity_type not in entity_config:
+            raise ValueError(f"Tipo de entidad no válido: {entity_type}")
+        
+        config = entity_config[entity_type]
+        
+        # Resultados y resumen
+        results = []
+        summary = {
+            'tipo_entidad': entity_type,
+            'servicios': {},
+            'total_enlaces': 0
+        }
+        
+        # Consulta para cada servicio
+        for service in services:
+            # Obtener columnas de servicio
+            service_columns = config['service_columns'](service)
+            
+            # Verificar si se encontraron columnas de servicio
+            if not service_columns:
+                summary['servicios'][service] = {
+                    'columnas_servicio': [],
+                    'total_enlaces': 0,
+                    'enlaces_por_columna': {}
+                }
+                continue
+            
+            # Inicializar resumen para este servicio
+            service_summary = {
+                'columnas_servicio': service_columns,
+                'total_enlaces': 0,
+                'enlaces_por_columna': {}
+            }
+            
+            # Consulta para cada columna de servicio
+            for column in service_columns:
+                # Construcción dinámica de la consulta
+                if entity_type == 'canciones':
+                    query = f"""
+                    SELECT {config['name_column']}, {column} 
+                    FROM {config['table']} {config.get('join', '')}
+                    WHERE {column} IS NOT NULL 
+                    AND {column} != ''
+                    """
+                else:
+                    query = f"""
+                    SELECT {config['name_column']}, {column} 
+                    FROM {config['table']}
+                    WHERE {column} IS NOT NULL 
+                    AND {column} != ''
+                    """
+                
+                self.cursor.execute(query)
+                column_results = [
+                    {'nombre': row[0], 'enlace': row[1], 'columna': column} 
+                    for row in self.cursor.fetchall()
+                ]
+                
+                # Actualizar resumen del servicio
+                service_summary['enlaces_por_columna'][column] = len(column_results)
+                service_summary['total_enlaces'] += len(column_results)
+                
+                # Actualizar resumen general
+                summary['total_enlaces'] += len(column_results)
+                
+                results.extend(column_results)
+            
+            # Añadir resumen de este servicio
+            summary['servicios'][service] = service_summary
+        
+        # Si solo se solicita el resumen
+        if summary_only:
+            return summary
+        
+        # Devolver resultados con resumen
+        return {
+            'resultados': results,
+            'resumen': summary
+        }
+
+
+def interactive_mode(parser):
+    def categorize_arguments(actions):
+        """Categorizar los argumentos del parser."""
+        categories = {
+            'Identificadores (MBID)': [],
+            'Búsqueda de Información': [],
+            'Listados y Filtros': [],
+            'Contenido Multimedia': [],
+            'Gestión de Links y Reviews': [],
+            'Otras Funciones': []
+        }
+        
+        for action in actions:
+            if not isinstance(action, argparse._StoreAction):
+                continue
+            
+            dest = action.dest
+            help_text = action.help or 'Sin descripción'
+            
+            # Reglas de categorización
+            if 'mbid' in dest:
+                categories['Identificadores (MBID)'].append((dest, help_text))
+            elif any(x in dest for x in ['artist', 'album', 'song', 'wiki', 'info', 'lyrics']):
+                categories['Búsqueda de Información'].append((dest, help_text))
+            elif any(x in dest for x in ['listar', 'year', 'genre', 'label', 'ultimos']):
+                categories['Listados y Filtros'].append((dest, help_text))
+            elif any(x in dest for x in ['links', 'services', 'review']):
+                categories['Gestión de Links y Reviews'].append((dest, help_text))
+            elif 'path' in dest or 'buscar' in dest:
+                categories['Otras Funciones'].append((dest, help_text))
+            else:
+                categories['Otras Funciones'].append((dest, help_text))
+        
+        return {k: v for k, v in categories.items() if v}
+
+    def display_menu(categories):
+        """Mostrar menú interactivo de categorías y argumentos."""
+        print("\n🎵 Menú Interactivo de Base de Datos Musical 🎵")
+        print("Seleccione una categoría:\n")
+        
+        # Mostrar categorías numeradas
+        for i, (categoria, argumentos) in enumerate(categories.items(), 1):
+            print(f"{i}. {categoria}")
+        
+        # Selección de categoría
+        while True:
+            try:
+                categoria_idx = int(input("\nIngrese el número de categoría: ")) - 1
+                categoria_seleccionada = list(categories.keys())[categoria_idx]
+                argumentos_categoria = categories[categoria_seleccionada]
+                break
+            except (ValueError, IndexError):
+                print("Selección inválida. Intente de nuevo.")
+        
+        # Mostrar argumentos de la categoría
+        print(f"\nFunciones en {categoria_seleccionada}:")
+        for i, (argumento, descripcion) in enumerate(argumentos_categoria, 1):
+            print(f"{i}. {argumento}: {descripcion}")
+        
+        # Selección de argumento
+        while True:
+            try:
+                argumento_idx = int(input("\nIngrese el número de función: ")) - 1
+                argumento_seleccionado = argumentos_categoria[argumento_idx][0]
+                break
+            except (ValueError, IndexError):
+                print("Selección inválida. Intente de nuevo.")
+        
+        return argumento_seleccionado
+
+    def collect_arguments(parser, argumento_seleccionado):
+        """Recopilar argumentos necesarios de forma dinámica."""
+        args_requeridos = {}
+        
+        # Buscar la acción correspondiente al argumento
+        for action in parser._actions:
+            if action.dest == argumento_seleccionado:
+                # Si es un flag (store_true), no necesita valor
+                if action.const is True:
+                    return {argumento_seleccionado: True}
+        
+        # Identificar argumentos relacionados que requieren valor
+        for action in parser._actions:
+            # Saltar argumentos que no son obligatorios
+            if not action.required and action.default is not None:
+                continue
+            
+            # Buscar argumentos que podrían relacionarse
+            related_keys = [
+                'artist', 'album', 'song', 'year', 'genre', 
+                'label', 'services', 'url', 'source', 'content'
+            ]
+            
+            # Si el argumento está relacionado o es necesario
+            if (any(key in action.dest.lower() for key in related_keys) or 
+                action.dest == 'listar'):
+                # Solicitar valor para el argumento
+                prompt = f"Ingrese valor para {action.dest}: "
+                if action.type == int:
+                    valor = int(input(prompt))
+                elif action.choices:
+                    print(f"Opciones para {action.dest}: {action.choices}")
+                    valor = input(prompt)
+                    while valor not in action.choices:
+                        print("Opción inválida.")
+                        valor = input(prompt)
+                else:
+                    valor = input(prompt)
+                
+                args_requeridos[action.dest] = valor
+        
+        return args_requeridos
+
+    def main_interactive_loop(parser, db_path):
+        """Bucle principal interactivo."""
+        while True:
+            # Categorizar argumentos
+            categorias = categorize_arguments(parser._actions)
+            
+            # Mostrar menú y seleccionar argumento
+            argumento_seleccionado = display_menu(categorias)
+            
+            # Recopilar argumentos
+            args_adicionales = collect_arguments(parser, argumento_seleccionado)
+            
+            # Preparar namespace de argumentos
+            namespace_args = argparse.Namespace()
+            setattr(namespace_args, argumento_seleccionado, True)
+            
+            # Añadir argumentos adicionales
+            for key, value in args_adicionales.items():
+                setattr(namespace_args, key, value)
+            
+            # Ejecutar lógica principal (similar a tu main original)
+            try:
+                # Aquí iría la lógica de ejecución similar a tu main()
+                # Por ejemplo:
+                if argumento_seleccionado == 'artist_info':
+                    resultado = db.get_artist_info(args_adicionales.get('artist'))
+                    print(json.dumps(resultado))
+                # Añadir más condiciones para cada tipo de consulta
+                
+            except Exception as e:
+                print(f"Error al ejecutar la consulta: {e}")
+            
+            # Preguntar si continuar
+            continuar = input("\n¿Desea realizar otra consulta? (s/n): ").lower()
+            if continuar != 's':
+                break
+        
+        print("\n¡Gracias por usar el modo interactivo!")
+
+    # Retornar la función principal para ser llamada desde main()
+    return main_interactive_loop
+
+
         
 def main():
     parser = argparse.ArgumentParser(description='Consultas a base de datos musical')
@@ -855,17 +1144,47 @@ def main():
     parser.add_argument('--source-review', help='Fuente de la reseña')
     parser.add_argument('--content-review', help='Contenido de la reseña')
     parser.add_argument('--url', help='URL para el enlace o la reseña')
+    parser.add_argument('--resumen', action='store_true', help='Mostrar solo el resumen de enlaces')
+    parser.add_argument('--enlaces-totales', action='store_true', help='Mostrar solo el resumen de todos los enlaces')
+    parser.add_argument('--interactivo', action='store_true', help='Permite un uso sin argumentos.')
 
     args = parser.parse_args()
+
+
 
     try:
         db = MusicDatabaseQuery(args.db)
 
+        if args.interactivo:
+            interactive_func = interactive_mode(db, parser)
+            interactive_func(db)
 
         # Funcionalidad de obtención de MBID
         if args.mbid and args.artist and args.album:
             print(json.dumps(db.get_mbid_by_album_artist(args.artist, args.album)))
         
+        # elif args.interactivo:
+        #     interactive_func = interactive_mode(parser)
+        #     interactive_func(db)
+
+
+
+        elif args.resumen and args.services and args.listar:
+            print(json.dumps(db.get_all_service_links(args.services, args.listar, summary_only=True)))
+            
+        elif args.services and args.listar:
+            print(json.dumps(db.get_all_service_links(args.services, args.listar)))
+
+        elif args.resumen and args.enlaces_totales:
+            # Definir una lista de servicios a consultar
+            servicios = ['lastfm_url', 'musicbrainz', 'spotify', 'bandcamp', 'discogs', 'youtube', 'allmusic', 'soundcloud', 'wikipedia', 'boomkat']
+            
+            for entity_type in ['artistas', 'albums', 'canciones']:
+                #print(f"\nEnlaces para {entity_type}:")
+                resumen = db.get_all_service_links(servicios, entity_type, summary_only=True)
+                print(json.dumps(resumen))
+
+
         elif args.ultimos:
             print(json.dumps(db.get_latest_albums(args.limite)))
 
@@ -957,7 +1276,7 @@ def main():
             results = db.search_lyrics(args.letra_desconocida)
             print(json.dumps(results))
             
-        elif args.listar:
+        elif args.listar and not args.services:
             print(json.dumps(db.get_all_entries(args.listar)))
         
         else:
