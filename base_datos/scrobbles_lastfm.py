@@ -323,6 +323,8 @@ def main(config=None):
         
         # Guardar todos los scrobbles en JSON si se especificó
         if output_json and tracks:
+            if not os.path.exists(output_json):
+                open(output_json, 'w').close()
             with open(output_json, 'w') as f:
                 json.dump(tracks, f, indent=2)
             print(f"Guardados todos los scrobbles en {output_json}")

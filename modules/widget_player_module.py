@@ -1,6 +1,7 @@
 import logging
 import requests
 from bs4 import BeautifulSoup
+import urllib3
 import re
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, 
                             QLabel, QScrollArea, QWidget, QComboBox, QProgressBar,
@@ -8,6 +9,15 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from base_module import BaseModule
+
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+class CustomAdapter:
+    def __init__(self, target):
+        """Adaptador personalizado para solicitudes que maneja certificados SSL de manera más flexible"""
+        self.target = target
+
 
 class MusicSearchModule(BaseModule):
     """Módulo de búsqueda de música en Bandcamp y SoundCloud"""
@@ -244,112 +254,104 @@ class MusicSearchModule(BaseModule):
                 </html>
                 """
                 self.web_view.setHtml(html_content)
-    
+
+
+
+
     def search_bandcamp(self, query):
-        """Search for music on Bandcamp and get embedded players"""
+        """Buscar música en Bandcamp y obtener información para embed"""
         try:
-            # Format search URL
+            # Formatear URL de búsqueda
             search_url = f"https://bandcamp.com/search?q={query.replace(' ', '+')}"
-            # Send request with fake user agent to avoid being blocked
+            
             headers = {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
                 "Accept-Language": "en-US,en;q=0.5",
                 "Referer": "https://bandcamp.com/",
                 "Connection": "keep-alive",
-                "Upgrade-Insecure-Requests": "1",
-                "Cache-Control": "max-age=0"
             }
-            logging.info(f"Realizando búsqueda en Bandcamp: {search_url}")
             
-            # Añadir verificación SSL desactivada para desarrollo
-            response = requests.get(search_url, headers=headers, timeout=15, verify=False)
+            logging.info(f"Realizando búsqueda en Bandcamp: {search_url}")
+            response = requests.get(search_url, headers=headers, timeout=15)
             
             if response.status_code != 200:
                 logging.error(f"Error buscando en Bandcamp: Status code {response.status_code}")
                 return []
             
-            # Parse HTML response
+            # Parsear HTML
             soup = BeautifulSoup(response.text, 'html.parser')
-            # Find results - Bandcamp specific structure
-            results = soup.select('li.searchresult')
             
-            if not results:
-                # Intentar con selector alternativo en caso de cambios en la estructura
-                results = soup.select('.result-items li')
-                logging.info(f"Usando selector alternativo para Bandcamp: encontrados {len(results)} resultados")
+            # Buscar resultados de álbumes y tracks
+            result_selectors = [
+                'div.result-info a.item-title',
+                'div.result-info a.search-result-title'
+            ]
             
             bandcamp_results = []
-            for result in results[:5]:  # Limit to 5 results
-                try:
-                    title_elem = result.select_one('.heading') or result.select_one('div.heading a')
-                    artist_elem = result.select_one('.subhead') or result.select_one('.itemsubtext')
-                    # Buscar enlaces específicos a álbumes/tracks dentro del resultado
-                    album_link = result.select_one('a[href*="/album/"], a[href*="/track/"]')
+            for selector in result_selectors:
+                track_elements = soup.select(selector)
+                if track_elements:
+                    for element in track_elements[:5]:  # Limitar a 5 resultados
+                        try:
+                            track_url = element.get('href', '')
+                            track_name = element.get_text().strip()
+                            
+                            # Intentar obtener información del artista
+                            artist_element = element.find_parent('div', class_='result-info').find('div', class_='result-info-inner').find('a', class_='search-result-artist')
+                            artist_name = artist_element.get_text().strip() if artist_element else "Unknown Artist"
+                            
+                            # Realizar solicitud a la página del álbum/track para obtener información de embed
+                            track_page_response = requests.get(track_url, headers=headers, timeout=15)
+                            track_page_soup = BeautifulSoup(track_page_response.text, 'html.parser')
+                            
+                            # Buscar metadatos para embed
+                            page_properties_meta = track_page_soup.find('meta', attrs={'name': 'bc-page-properties'})
+                            if page_properties_meta:
+                                page_properties = page_properties_meta.get('content', '')
+                                
+                                # Extraer item_id y tipo (album/track)
+                                item_id_match = re.search(r'"item_id":(\d+)', page_properties)
+                                item_type_match = re.search(r'"item_type":"([at])"', page_properties)
+                                
+                                if item_id_match and item_type_match:
+                                    item_id = item_id_match.group(1)
+                                    item_type = 'album' if item_type_match.group(1) == 'a' else 'track'
+                                    
+                                    # Crear embed HTML
+                                    embed_html = f'''
+                                    <iframe style='border: 0; width: 100%; height: 120px;' 
+                                        src='https://bandcamp.com/EmbeddedPlayer/{item_type}={item_id}/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/transparent=true/' 
+                                        seamless>
+                                        <a href='{track_url}'>{track_name}</a>
+                                    </iframe>
+                                    '''
+                                    
+                                    bandcamp_results.append({
+                                        "source": "bandcamp",
+                                        "title": track_name,
+                                        "artist": artist_name,
+                                        "url": track_url,
+                                        "embed_html": embed_html
+                                    })
+                                    
+                                    logging.info(f"Encontrado en Bandcamp: {track_name} - URL: {track_url}")
+                        except Exception as e:
+                            logging.error(f"Error procesando resultado de Bandcamp: {e}")
                     
-                    if not album_link:
-                        link_elem = result.select_one('a.artcont') or result.select_one('a')
-                        url = link_elem['href'] if link_elem and 'href' in link_elem.attrs else None
-                    else:
-                        url = album_link['href']
-                    
-                    if title_elem and url:
-                        title = title_elem.text.strip()
-                        artist = artist_elem.text.strip() if artist_elem else "Unknown Artist"
-                        
-                        # Si la URL no tiene protocolo, añadirlo
-                        if url.startswith('//'):
-                            url = 'https:' + url
-                        elif not url.startswith('http'):
-                            # Si es relativa sin //, añadir dominio completo
-                            url = f"https://bandcamp.com{url}" if url.startswith('/') else f"https://bandcamp.com/{url}"
-                        
-                        # Extraer el ID del álbum o pista de la URL
-                        album_id = None
-                        
-                        # Intentar obtener el ID del álbum desde la URL
-                        # Las URLs típicas de Bandcamp son como: https://artist.bandcamp.com/album/album_name
-                        # o https://bandcamp.com/album/1234567890
-                        album_match = re.search(r'/album/(\d+)', url)
-                        if album_match:
-                            album_id = album_match.group(1)
-                        else:
-                            # Intentar buscar el ID por otro método
-                            track_match = re.search(r'/track/(\d+)', url)
-                            if track_match:
-                                album_id = track_match.group(1)
-                        
-                        # Si no se encontró un ID numérico, usar toda la URL para el embebido
-                        parsed_url = urlparse(url)
-                        domain = parsed_url.netloc
-                        path = parsed_url.path
-                        
-                        # Crear un iframe que use la URL completa en lugar de intentar extraer IDs
-                        embed_html = f'''
-                        <iframe style="border: 0; width: 100%; height: 120px;" 
-                                src="https://bandcamp.com/EmbeddedPlayer/size=large/bgcol=ffffff/linkcol=0687f5/tracklist=false/artwork=small/transparent=true/" 
-                                seamless>
-                            <a href="{url}">{title} by {artist}</a>
-                        </iframe>
-                        '''
-                        bandcamp_results.append({
-                            "source": "bandcamp",
-                            "title": title,
-                            "artist": artist,
-                            "url": url,
-                            "embed_html": embed_html
-                        })
-                        logging.info(f"Encontrado en Bandcamp: {title} - {artist} - URL: {url}")
-                except Exception as e:
-                    logging.error(f"Error analizando resultado de Bandcamp: {e}")
+                    break  # Salir después de encontrar resultados
+            
             return bandcamp_results
+        
         except Exception as e:
             logging.error(f"Error buscando en Bandcamp: {e}")
-            # Mostrar más detalles del error
             import traceback
             logging.error(traceback.format_exc())
             return []
 
+
+
+            
     def search_soundcloud(self, query):
         """Search for music on SoundCloud and get embed URLs"""
         try:

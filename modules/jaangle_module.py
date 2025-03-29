@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QPushButton, 
                           QGroupBox, QGridLayout, QSpinBox, QProgressBar,
                           QComboBox, QWidget, QMessageBox, QScrollArea, QDialog,
-                          QLineEdit, QCheckBox)
+                          QLineEdit, QCheckBox, QTableWidget, QHeaderView)
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from PyQt6.QtGui import QFont, QPixmap
 import random
@@ -853,9 +853,10 @@ class MusicQuiz(BaseModule):
             table = QTableWidget()
             table.setColumnCount(3)
             table.setHorizontalHeaderLabels(["Artista", "Álbumes", "Sellos"])
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+            table.horizontalHeader().setSectionResizeMode(0, QHeaderView)
+            table.horizontalHeader().firstSectionMovable(True)
+            # table.horizontalHeader().setSectionResizeMode(1, QHeaderView)
+            # table.horizontalHeader().setSectionResizeMode(2, QHeaderView)
             
             # Obtener la lista de artistas
             self.cursor.execute("SELECT id, name FROM artists ORDER BY name")

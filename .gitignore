@@ -18,3 +18,6 @@ base_datos/config_database_creator.json
 base_datos/FLAC_config_database_creator.json
 lyrics_update_errors.log
 lyrics_update_state_normal.json
+moode_def.sqlite-shm
+moode_def.sqlite-wal
+test

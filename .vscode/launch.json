@@ -13,12 +13,12 @@
       "args": "/home/huan/gits/pollo/music-fuzzy/config.json"
     },
     {
-      "name": "Python Debugger: Current File with Arguments",
+      "name": "flac_db",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",
       "console": "integratedTerminal",
-      "args": "${command:pickArgs}"
+      "args": "--config /home/huan/gits/pollo/music-fuzzy/base_datos/FLAC_config_database_creator.json"
     }
   ]
 }
