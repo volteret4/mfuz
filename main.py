@@ -4,11 +4,9 @@ import json
 from pathlib import Path
 import importlib.util
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
-                            QVBoxLayout, QTabWidget, QMessageBox,
-                            QTableWidgetItem)
-from PyQt6.QtGui import QColor
-from PyQt6.QtCore import Qt
-from base_module import BaseModule, THEMES
+                            QVBoxLayout, QTabWidget)
+from PyQt6.QtCore import QThread
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 import traceback
 import sys
 import argparse
@@ -76,6 +74,38 @@ class TabManager(QMainWindow):
 
     def init_ui(self):
         """Inicializa la interfaz principal."""
+        # Cargar la UI desde el archivo
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "tab_manager.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                from PyQt6 import uic
+                uic.loadUi(ui_file_path, self)
+                
+                # Asegurarse de que tenemos referencia al widget de pestañas
+                if not hasattr(self, 'tab_widget'):
+                    # Si el nombre no coincide exactamente, intenta buscarlo
+                    tab_widgets = self.findChildren(QTabWidget)
+                    if tab_widgets:
+                        self.tab_widget = tab_widgets[0]
+                    else:
+                        raise AttributeError("No se pudo encontrar QTabWidget en el archivo UI")
+                
+                print(f"UI cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+
+        # Aplicar el tema
+        self.apply_theme(self.font_size)
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla"""
+        print("Usando método fallback para crear UI principal")
         self.setWindowTitle('Multi-Module Manager')
         self.setMinimumSize(1200, 800)
 
@@ -86,10 +116,7 @@ class TabManager(QMainWindow):
 
         # Crear el widget de pestañas
         self.tab_widget = QTabWidget()
-
         layout.addWidget(self.tab_widget)
-
-        self.apply_theme(self.font_size)
 
 
     def load_modules(self):
@@ -107,7 +134,7 @@ class TabManager(QMainWindow):
                 
                 try:
                     # Dynamically load the module
-                    print(f"Attempting to load module from {module_path}\n")
+                    print(f"Intentando cargar módulo desde {module_path}")
                     spec = importlib.util.spec_from_file_location(module_name, module_path)
                     if spec and spec.loader:
                         module = importlib.util.module_from_spec(spec)
@@ -122,32 +149,39 @@ class TabManager(QMainWindow):
                                 break
                                 
                         if main_class:
-                            # Instantiate the module
-                            module_instance = main_class(**module_args)
-                    
-                            # Pass reference to TabManager
-                            if hasattr(module_instance, 'set_tab_manager'):
-                                module_instance.set_tab_manager(self)                           
-
-                            # If it's the config editor, connect the signals
-                            if module_name == "Config Editor":
-                                module_instance.config_updated.connect(self.reload_application)
-                                
-                                # Connect the module theme changed signal
-                                module_instance.module_theme_changed.connect(self.change_module_theme)
+                            try:
+                                # Instantiate the module
+                                module_instance = main_class(**module_args)
                             
-                            # Add to tab manager
-                            self.tab_widget.addTab(module_instance, module_name)
-                            self.tabs[module_name] = module_instance
+                                # Pass reference to TabManager
+                                if hasattr(module_instance, 'set_tab_manager'):
+                                    module_instance.set_tab_manager(self)                           
+
+                                # If it's the config editor, connect the signals
+                                if module_name == "Config Editor":
+                                    if hasattr(module_instance, 'config_updated'):
+                                        module_instance.config_updated.connect(self.reload_application)
+                                    
+                                    # Connect the module theme changed signal
+                                    if hasattr(module_instance, 'module_theme_changed'):
+                                        module_instance.module_theme_changed.connect(self.change_module_theme)
+                                
+                                # Add to tab manager
+                                self.tab_widget.addTab(module_instance, module_name)
+                                self.tabs[module_name] = module_instance
+                                print(f"Módulo {module_name} cargado correctamente")
+                            except Exception as e:
+                                print(f"Error instanciando el módulo {module_name}: {e}")
+                                traceback.print_exc()
                         else:
-                            print(f"    No valid class found in module {module_name}")
+                            print(f"No se encontró una clase válida en el módulo {module_name}")
                             
                 except Exception as e:
-                    print(f"Error loading module {module_name}: {e}")
+                    print(f"Error cargando módulo {module_name}: {e}")
                     traceback.print_exc()
                     
         except Exception as e:
-            print(f"Error loading configuration: {e}")
+            print(f"Error cargando configuración: {e}")
             traceback.print_exc()
 
     def change_module_theme(self, module_name, new_theme):

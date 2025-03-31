@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LastFMScrobblerModule</class>
+ <widget class="QWidget" name="LastFMScrobblerModule">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <!-- Left panel - Track queue -->
+     <widget class="QWidget" name="left_panel">
+      <layout class="QVBoxLayout" name="left_layout">
+       <item>
+        <widget class="QLabel" name="queue_label">
+         <property name="text">
+          <string>Cola de canciones para scrobblear</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="queue_table">
+         <property name="dragEnabled">
+          <bool>true</bool>
+         </property>
+         <property name="dragDropMode">
+          <enum>QAbstractItemView::InternalMove</enum>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>false</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Título</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Álbum</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="scrobble_button">
+         <property name="text">
+          <string>Scrobblear Canciones</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <!-- Right panel - Recent scrobbles -->
+     <widget class="QWidget" name="right_panel">
+      <layout class="QVBoxLayout" name="right_layout">
+       <item>
+        <widget class="QLabel" name="scrobbles_label">
+         <property name="text">
+          <string>Últimos scrobbles</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="scrobbles_table">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Timestamp</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Álbum</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Canción</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Sello</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Enlaces</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>En DB</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="refresh_button">
+         <property name="text">
+          <string>Actualizar Scrobbles</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

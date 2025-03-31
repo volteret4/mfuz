@@ -1,3 +1,4 @@
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
                             QLineEdit, QListWidget, QComboBox, QMessageBox,
                             QListWidgetItem, QSplitter, QLabel, QGroupBox,
@@ -20,7 +21,7 @@ import logging
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import BaseModule, THEMES
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -364,22 +365,81 @@ class SpotifyPlaylistManager(BaseModule):
             return None, None
 
 
-
-
     def init_ui(self):
         """Initialize the user interface"""
         # Verificar si los widgets ya existen
-        if hasattr(self, 'playlist_list'):
+        if hasattr(self, 'playlist_list') and self.playlist_list is not None:
             print("La UI ya está inicializada, saltando init_ui()")
             return
         
+        # Lista de widgets requeridos
+        required_widgets = [
+            'playlist_list', 'search_input', 'search_button', 
+            'search_results', 'playlist_creator', 'results_splitter',
+            'save_playlist_button', 'clear_playlist_button',
+            'new_playlist_input', 'new_playlist_button',
+            'playlist_selector', 'add_song_button', 'template_container'
+        ]
+        
+        # Intentar cargar desde archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "spotify_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Guardar referencias a las plantillas
+                self.playlist_item_template = self.findChild(QWidget, "playlist_item_template")
+                self.track_item_template = self.findChild(QWidget, "track_item_template")
+                self.playlist_creator_item_template = self.findChild(QWidget, "playlist_creator_item_template")
+                
+                # Asegurarse de que las plantillas no se muestren
+                if self.template_container:
+                    self.template_container.setVisible(False)
+                
+                # Limpiar cualquier elemento de ejemplo
+                self.clear_example_items()
+                
+                # Configuración adicional para las listas
+                self.configure_lists()
+                
+                print(f"UI SpotifyModule cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI SpotifyModule desde archivo: {e}")
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI SpotifyModule no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Conectar señales
+        self.connect_signals()
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla"""
+        print("Usando método fallback para crear UI de SpotifyModule")
+        
+        # Verificar si ya hay un layout
         layout = self.layout()
         if not layout:
             layout = QVBoxLayout()
             self.setLayout(layout)
         
         # Playlists section
-        print("Creando playlist_list")
         self.playlist_list = QListWidget(self)
         self.playlist_list.setMinimumHeight(200)
         layout.addWidget(self.playlist_list)
@@ -406,9 +466,6 @@ class SpotifyPlaylistManager(BaseModule):
         self.search_input = QLineEdit(search_container)
         self.search_input.setPlaceholderText("Buscar canción o artista...")
         self.search_button = QPushButton("Buscar", search_container)
-        
-        self.search_button.clicked.connect(self.search_tracks)
-        self.search_input.returnPressed.connect(self.search_tracks)
         
         search_layout.addWidget(self.search_input)
         search_layout.addWidget(self.search_button)
@@ -441,11 +498,7 @@ class SpotifyPlaylistManager(BaseModule):
         
         self.search_results = QListWidget()
         self.search_results.setMinimumHeight(200)
-        self.search_results.setResizeMode(QListView.ResizeMode.Adjust)
-        self.search_results.setTextElideMode(Qt.TextElideMode.ElideNone)
-        self.search_results.setWordWrap(True)
-        self.search_results.setUniformItemSizes(False)  # Permitir alturas diferentes
-
+        
         search_results_layout.addWidget(self.search_results)
         
         self.results_splitter.addWidget(search_results_group)
@@ -468,30 +521,14 @@ class SpotifyPlaylistManager(BaseModule):
         
         self.playlist_creator = QListWidget()
         self.playlist_creator.setMinimumHeight(200)
-        self.playlist_creator.setResizeMode(QListView.ResizeMode.Adjust)
-        self.playlist_creator.setTextElideMode(Qt.TextElideMode.ElideNone)
-        self.playlist_creator.setWordWrap(True)
-        self.playlist_creator.setUniformItemSizes(False)
         playlist_creator_layout.addWidget(self.playlist_creator)
         
         # Botones para gestionar creador de playlists
         playlist_buttons_container = QWidget()
-        playlist_buttons_container.setStyleSheet("""
-            QWidget {
-                background-color: {theme['bg']};
-                color: {theme['fg']};
-                font-family: {self.font_family};
-                font-size: {self.font_size};
-                border: none
-            }
-        """)
-            
         playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
         
         self.save_playlist_button = QPushButton("Guardar playlist")
-        self.save_playlist_button.clicked.connect(self.save_temp_playlist)
         self.clear_playlist_button = QPushButton("Limpiar")
-        self.clear_playlist_button.clicked.connect(self.clear_temp_playlist)
         
         playlist_buttons_layout.addWidget(self.save_playlist_button)
         playlist_buttons_layout.addWidget(self.clear_playlist_button)
@@ -526,9 +563,6 @@ class SpotifyPlaylistManager(BaseModule):
         self.new_playlist_input.setPlaceholderText("Nueva playlist...")
         self.new_playlist_button = QPushButton("Crear Playlist", playlist_container)
         
-        self.new_playlist_button.clicked.connect(self.create_playlist)
-        self.new_playlist_input.returnPressed.connect(self.create_playlist)
-        
         new_playlist_layout.addWidget(self.new_playlist_input)
         new_playlist_layout.addWidget(self.new_playlist_button)
         layout.addWidget(playlist_container)
@@ -554,11 +588,84 @@ class SpotifyPlaylistManager(BaseModule):
         
         self.playlist_selector = QComboBox(selector_container)
         self.add_song_button = QPushButton("Añadir canción seleccionada a Playlist", selector_container)
-        self.add_song_button.clicked.connect(self.add_selected_song)
         
         add_to_playlist_layout.addWidget(self.playlist_selector)
         add_to_playlist_layout.addWidget(self.add_song_button)
         layout.addWidget(selector_container)
+
+    def clear_example_items(self):
+        """Elimina los elementos de ejemplo que vienen en el archivo UI"""
+        if hasattr(self, 'playlist_list') and self.playlist_list:
+            self.playlist_list.clear()
+        if hasattr(self, 'search_results') and self.search_results:
+            self.search_results.clear()
+        if hasattr(self, 'playlist_creator') and self.playlist_creator:
+            self.playlist_creator.clear()
+
+
+    def configure_lists(self):
+        """Configura las propiedades adicionales para listas y widgets que no se definen en el archivo UI"""
+        # Configurar lista de resultados de búsqueda
+        if hasattr(self, 'search_results') and self.search_results:
+            # Usa ResizeMode.Adjust solo si existe en tu versión de PyQt
+            try:
+                self.search_results.setResizeMode(QListView.ResizeMode.Adjust)
+            except AttributeError:
+                # Versiones antiguas o diferentes pueden no tener este enum
+                pass
+            
+            self.search_results.setTextElideMode(Qt.TextElideMode.ElideNone)
+            self.search_results.setWordWrap(True)
+            self.search_results.setUniformItemSizes(False)
+        
+        # Configurar creador de playlists
+        if hasattr(self, 'playlist_creator') and self.playlist_creator:
+            try:
+                self.playlist_creator.setResizeMode(QListView.ResizeMode.Adjust)
+            except AttributeError:
+                pass
+            
+            self.playlist_creator.setTextElideMode(Qt.TextElideMode.ElideNone)
+            self.playlist_creator.setWordWrap(True)
+            self.playlist_creator.setUniformItemSizes(False)
+        
+        # Configurar lista de playlists
+        if hasattr(self, 'playlist_list') and self.playlist_list:
+            try:
+                self.playlist_list.setResizeMode(QListView.ResizeMode.Adjust)
+            except AttributeError:
+                pass
+            
+            self.playlist_list.setTextElideMode(Qt.TextElideMode.ElideNone)
+            self.playlist_list.setWordWrap(True)
+            self.playlist_list.setUniformItemSizes(False)
+
+
+    def connect_signals(self):
+        """Conecta las señales de los controles a sus respectivas funciones"""
+        # Verificar que los widgets existen antes de conectar señales
+        if hasattr(self, 'search_button') and self.search_button:
+            self.search_button.clicked.connect(self.search_tracks)
+        
+        if hasattr(self, 'search_input') and self.search_input:
+            self.search_input.returnPressed.connect(self.search_tracks)
+        
+        # Botones de playlist
+        if hasattr(self, 'save_playlist_button') and self.save_playlist_button:
+            self.save_playlist_button.clicked.connect(self.save_temp_playlist)
+        
+        if hasattr(self, 'clear_playlist_button') and self.clear_playlist_button:
+            self.clear_playlist_button.clicked.connect(self.clear_temp_playlist)
+        
+        # Botones de playlist y lista
+        if hasattr(self, 'new_playlist_button') and self.new_playlist_button:
+            self.new_playlist_button.clicked.connect(self.create_playlist)
+        
+        if hasattr(self, 'new_playlist_input') and self.new_playlist_input:
+            self.new_playlist_input.returnPressed.connect(self.create_playlist)
+        
+        if hasattr(self, 'add_song_button') and self.add_song_button:
+            self.add_song_button.clicked.connect(self.add_selected_song)
 
 
     def load_playlists(self, force_update: str = False):
@@ -588,15 +695,22 @@ class SpotifyPlaylistManager(BaseModule):
 
     def update_playlist_ui(self, playlists_data):
         """Update UI with playlist data"""
+        if not hasattr(self, 'playlist_list') or not self.playlist_list:
+            print("playlist_list no está disponible, no se puede actualizar UI")
+            return
+            
         self.playlist_list.clear()
-        self.playlist_selector.clear()
+        
+        if hasattr(self, 'playlist_selector') and self.playlist_selector:
+            self.playlist_selector.clear()
+            
         self.playlists.clear()
         
         for playlist in playlists_data:
             self.playlists[playlist['name']] = playlist['id']
             
+            # Crear widget contenedor
             item_widget = QWidget(self.playlist_list)
-            # Aplicar estilo al widget para que sea invisible/sin bordes
             item_widget.setStyleSheet("""
                 QWidget {
                     border: none;
@@ -605,39 +719,54 @@ class SpotifyPlaylistManager(BaseModule):
                 }
             """)
 
+            # Configurar el layout
             item_layout = QHBoxLayout(item_widget)
             item_layout.setContentsMargins(3, 5, 3, 5)
             
+            # Botón de playlist - usar estilos de la plantilla si está disponible
             playlist_button = QPushButton(playlist['name'], item_widget)
             playlist_button.setFixedHeight(30)
-            playlist_button.setStyleSheet("""
-                QPushButton {
-                    text-align: left;
-                    border: none;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
-                }
-            """)
             
-            # Modificar el handler del botón de playlist para mostrar contenido
+            if hasattr(self, 'playlist_item_template') and self.playlist_item_template:
+                template_button = self.playlist_item_template.findChild(QPushButton, "template_playlist_button")
+                if template_button:
+                    playlist_button.setStyleSheet(template_button.styleSheet())
+            else:
+                playlist_button.setStyleSheet("""
+                    QPushButton {
+                        text-align: left;
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+                """)
+            
+            # Handler para mostrar contenido
             def create_show_handler(pid=playlist['id'], pname=playlist['name']):
                 return lambda: self.show_playlist_content(pid, pname)
             
             playlist_button.clicked.connect(create_show_handler())
             
+            # Botón de reproducción - usar estilos de la plantilla si está disponible
             play_button = QPushButton("▶", item_widget)
             play_button.setFixedWidth(30)
-            play_button.setStyleSheet("""
-                QPushButton {
-                    border: none;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: rgba(0, 255, 0, 0.2);
-                }
-            """)
+            
+            if hasattr(self, 'playlist_item_template') and self.playlist_item_template:
+                template_play = self.playlist_item_template.findChild(QPushButton, "template_play_button")
+                if template_play:
+                    play_button.setStyleSheet(template_play.styleSheet())
+            else:
+                play_button.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(0, 255, 0, 0.2);
+                    }
+                """)
             
             playlist_url = playlist['external_urls']['spotify']
             def create_play_handler(url=playlist_url):
@@ -645,38 +774,53 @@ class SpotifyPlaylistManager(BaseModule):
             
             play_button.clicked.connect(create_play_handler())
             
+            # Botón de eliminación
             delete_button = QPushButton("✖", item_widget)
             delete_button.setFixedWidth(30)
-            delete_button.setStyleSheet("""
-                QPushButton {
-                    border: none;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: rgba(255, 0, 0, 0.2);
-                }
-            """)
+            
+            if hasattr(self, 'playlist_item_template') and self.playlist_item_template:
+                template_delete = self.playlist_item_template.findChild(QPushButton, "template_delete_button")
+                if template_delete:
+                    delete_button.setStyleSheet(template_delete.styleSheet())
+            else:
+                delete_button.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(255, 0, 0, 0.2);
+                    }
+                """)
             
             def create_delete_handler(pid=playlist['id']):
                 return lambda: self.delete_playlist(pid)
             
             delete_button.clicked.connect(create_delete_handler())
             
+            # Añadir widgets al layout
             item_layout.addWidget(playlist_button, stretch=1)
             item_layout.addWidget(play_button)
             item_layout.addWidget(delete_button)
             
+            # Añadir el widget al item
             item = QListWidgetItem(self.playlist_list)
             item.setSizeHint(item_widget.sizeHint())
             self.playlist_list.addItem(item)
             self.playlist_list.setItemWidget(item, item_widget)
             
-            self.playlist_selector.addItem(playlist['name'])
+            # Añadir al selector
+            if hasattr(self, 'playlist_selector') and self.playlist_selector:
+                self.playlist_selector.addItem(playlist['name'])
 
 
     def show_playlist_content(self, playlist_id: str, playlist_name: str, force_update: str = False):
         """Show playlist tracks in search results area"""
         print(f"Mostrando contenido de playlist: {playlist_name}")
+        
+        if not hasattr(self, 'search_results') or not self.search_results:
+            print("search_results no está disponible, no se puede mostrar contenido")
+            return
         
         cache_file = self.tracks_cache_dir / f"{playlist_id}.json"
         
@@ -731,15 +875,22 @@ class SpotifyPlaylistManager(BaseModule):
                 
                 play_button = QPushButton("▶")
                 play_button.setFixedWidth(30)
-                play_button.setStyleSheet("""
-                    QPushButton {
-                        border: none;
-                        padding: 5px;
-                    }
-                    QPushButton:hover {
-                        background-color: rgba(0, 255, 0, 0.2);
-                    }
-                """)
+                
+                # Usar estilo de la plantilla si está disponible
+                if hasattr(self, 'track_item_template') and self.track_item_template:
+                    template_play = self.track_item_template.findChild(QPushButton, "template_track_play_button")
+                    if template_play:
+                        play_button.setStyleSheet(template_play.styleSheet())
+                else:
+                    play_button.setStyleSheet("""
+                        QPushButton {
+                            border: none;
+                            padding: 5px;
+                        }
+                        QPushButton:hover {
+                            background-color: rgba(0, 255, 0, 0.2);
+                        }
+                    """)
                 
                 def create_play_handler(url=track['url']):
                     return lambda: self.play_spotify_entity(url)
@@ -747,15 +898,22 @@ class SpotifyPlaylistManager(BaseModule):
                 
                 add_button = QPushButton("+")
                 add_button.setFixedWidth(30)
-                add_button.setStyleSheet("""
-                    QPushButton {
-                        border: none;
-                        padding: 5px;
-                    }
-                    QPushButton:hover {
-                        background-color: rgba(0, 0, 255, 0.2);
-                    }
-                """)
+                
+                # Usar estilo de la plantilla si está disponible
+                if hasattr(self, 'track_item_template') and self.track_item_template:
+                    template_add = self.track_item_template.findChild(QPushButton, "template_track_add_button")
+                    if template_add:
+                        add_button.setStyleSheet(template_add.styleSheet())
+                else:
+                    add_button.setStyleSheet("""
+                        QPushButton {
+                            border: none;
+                            padding: 5px;
+                        }
+                        QPushButton:hover {
+                            background-color: rgba(0, 0, 255, 0.2);
+                        }
+                    """)
                 
                 def create_add_handler(track_id=track['id'], display=display_text, track_url=track['url']):
                     return lambda: self.add_to_temp_playlist(track_id, display, track_url)
@@ -802,6 +960,15 @@ class SpotifyPlaylistManager(BaseModule):
     def search_tracks(self):
         """Search for tracks on Spotify"""
         print("Iniciando búsqueda...")
+        
+        if not hasattr(self, 'search_input') or not self.search_input:
+            print("search_input no está disponible, no se puede realizar búsqueda")
+            return
+            
+        if not hasattr(self, 'search_results') or not self.search_results:
+            print("search_results no está disponible, no se pueden mostrar resultados")
+            return
+            
         query = self.search_input.text()
         query = query.strip()
         print(f"Término de búsqueda: '{query}'")
@@ -828,12 +995,13 @@ class SpotifyPlaylistManager(BaseModule):
                 # Crear widget para contener track y botones
                 item_widget = QWidget()
                 item_widget.setStyleSheet("""
-                    QPushButton {
+                    QWidget {
                         border: none;
-                        padding: 5px;
+                        background-color: transparent;
+                        padding: 2px
                     }
-                    QPushButton:hover {
-                        background-color: rgba(0, 255, 0, 0.2);
+                    QWidget:hover {
+                        background-color: rgba(255, 255, 255, 0.1);
                     }
                 """)
                 item_layout = QHBoxLayout(item_widget)
@@ -846,15 +1014,22 @@ class SpotifyPlaylistManager(BaseModule):
                 # Botón de reproducir
                 play_button = QPushButton("▶")
                 play_button.setFixedWidth(30)
-                play_button.setStyleSheet("""
-                    QPushButton {
-                        border: none;
-                        padding: 5px;
-                    }
-                    QPushButton:hover {
-                        background-color: rgba(0, 255, 0, 0.2);
-                    }
-                """)
+                
+                # Usar estilo de la plantilla si está disponible
+                if hasattr(self, 'track_item_template') and self.track_item_template:
+                    template_play = self.track_item_template.findChild(QPushButton, "template_track_play_button")
+                    if template_play:
+                        play_button.setStyleSheet(template_play.styleSheet())
+                else:
+                    play_button.setStyleSheet("""
+                        QPushButton {
+                            border: none;
+                            padding: 5px;
+                        }
+                        QPushButton:hover {
+                            background-color: rgba(0, 255, 0, 0.2);
+                        }
+                    """)
                 
                 track_url = track['external_urls']['spotify']
                 def create_play_handler(url=track_url):
@@ -864,15 +1039,22 @@ class SpotifyPlaylistManager(BaseModule):
                 # Botón de añadir al creador de playlists
                 add_button = QPushButton("+")
                 add_button.setFixedWidth(30)
-                add_button.setStyleSheet("""
-                    QPushButton {
-                        border: none;
-                        padding: 5px;
-                    }
-                    QPushButton:hover {
-                        background-color: rgba(0, 0, 255, 0.2);
-                    }
-                """)
+                
+                # Usar estilo de la plantilla si está disponible
+                if hasattr(self, 'track_item_template') and self.track_item_template:
+                    template_add = self.track_item_template.findChild(QPushButton, "template_track_add_button")
+                    if template_add:
+                        add_button.setStyleSheet(template_add.styleSheet())
+                else:
+                    add_button.setStyleSheet("""
+                        QPushButton {
+                            border: none;
+                            padding: 5px;
+                        }
+                        QPushButton:hover {
+                            background-color: rgba(0, 0, 255, 0.2);
+                        }
+                    """)
                 
                 # Crear función de cierre con track_id y display_text
                 def create_add_handler(track_id=track['id'], display=display_text, track_url=track_url):
@@ -894,12 +1076,16 @@ class SpotifyPlaylistManager(BaseModule):
                 
         except Exception as e:
             print(f"Error en búsqueda: {str(e)}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error en la búsqueda: {str(e)}")
-
 
     def add_to_temp_playlist(self, track_id, display_text, track_url):
         """Añadir canción al creador de playlists temporal"""
         print(f"Añadiendo a playlist temporal: {display_text}")
+        
+        if not hasattr(self, 'playlist_creator') or not self.playlist_creator:
+            print("playlist_creator no está disponible, no se puede añadir canción")
+            return
         
         # Guardar información de la canción
         track_info = {
@@ -912,13 +1098,13 @@ class SpotifyPlaylistManager(BaseModule):
         # Crear widget para la canción en el creador
         item_widget = QWidget()
         item_widget.setStyleSheet("""
-            QPushButton {
+            QWidget {
                 border: none;
-                background-color: transparent
-                padding: 5px;
+                background-color: transparent;
+                padding: 2px
             }
-            QPushButton:hover {
-                background-color: rgba(0, 255, 0, 0.2);
+            QWidget:hover {
+                background-color: rgba(255, 255, 255, 0.1);
             }
         """)
         item_layout = QHBoxLayout(item_widget)
@@ -931,15 +1117,22 @@ class SpotifyPlaylistManager(BaseModule):
         # Botón de reproducir
         play_button = QPushButton("▶")
         play_button.setFixedWidth(30)
-        play_button.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(0, 255, 0, 0.2);
-            }
-        """)
+        
+        # Usar estilo de la plantilla si está disponible
+        if hasattr(self, 'playlist_creator_item_template') and self.playlist_creator_item_template:
+            template_play = self.playlist_creator_item_template.findChild(QPushButton, "template_creator_play_button")
+            if template_play:
+                play_button.setStyleSheet(template_play.styleSheet())
+        else:
+            play_button.setStyleSheet("""
+                QPushButton {
+                    border: none;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: rgba(0, 255, 0, 0.2);
+                }
+            """)
         
         def create_play_handler(url=track_url):
             return lambda: self.play_spotify_entity(url)
@@ -948,15 +1141,22 @@ class SpotifyPlaylistManager(BaseModule):
         # Botón de eliminar
         remove_button = QPushButton("✖")
         remove_button.setFixedWidth(30)
-        remove_button.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 0, 0, 0.2);
-            }
-        """)
+        
+        # Usar estilo de la plantilla si está disponible
+        if hasattr(self, 'playlist_creator_item_template') and self.playlist_creator_item_template:
+            template_remove = self.playlist_creator_item_template.findChild(QPushButton, "template_creator_remove_button")
+            if template_remove:
+                remove_button.setStyleSheet(template_remove.styleSheet())
+        else:
+            remove_button.setStyleSheet("""
+                QPushButton {
+                    border: none;
+                    padding: 5px;
+                }
+                QPushButton:hover {
+                    background-color: rgba(255, 0, 0, 0.2);
+                }
+            """)
         
         # Creamos un índice para la posición actual de esta canción
         current_index = len(self.temp_playlist_tracks) - 1
@@ -976,8 +1176,13 @@ class SpotifyPlaylistManager(BaseModule):
         self.playlist_creator.setItemWidget(item, item_widget)
 
 
+
     def remove_from_temp_playlist(self, index):
         """Eliminar canción del creador de playlists temporal"""
+        if not hasattr(self, 'playlist_creator') or not self.playlist_creator:
+            print("playlist_creator no está disponible, no se puede eliminar canción")
+            return
+            
         if 0 <= index < len(self.temp_playlist_tracks):
             # Eliminar del listado visual
             self.playlist_creator.takeItem(index)
@@ -988,22 +1193,28 @@ class SpotifyPlaylistManager(BaseModule):
             
             # Actualizar índices para los botones de eliminar
             self.refresh_temp_playlist_view()
+
             
     
     def refresh_temp_playlist_view(self):
         """Recrea la vista del creador de playlists para actualizar índices"""
+        if not hasattr(self, 'playlist_creator') or not self.playlist_creator:
+            print("playlist_creator no está disponible, no se puede refrescar vista")
+            return
+            
         self.playlist_creator.clear()
         
         for i, track in enumerate(self.temp_playlist_tracks):
             # Crear widget para la canción
             item_widget = QWidget()
             item_widget.setStyleSheet("""
-                QPushButton {
+                QWidget {
                     border: none;
-                    padding: 5px;
+                    background-color: transparent;
+                    padding: 2px
                 }
-                QPushButton:hover {
-                    background-color: rgba(0, 255, 0, 0.2);
+                QWidget:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
                 }
             """)
             item_layout = QHBoxLayout(item_widget)
@@ -1016,15 +1227,22 @@ class SpotifyPlaylistManager(BaseModule):
             # Botón de reproducir
             play_button = QPushButton("▶")
             play_button.setFixedWidth(30)
-            play_button.setStyleSheet("""
-                QPushButton {
-                    border: none;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: rgba(0, 255, 0, 0.2);
-                }
-            """)
+            
+            # Usar estilo de la plantilla si está disponible
+            if hasattr(self, 'playlist_creator_item_template') and self.playlist_creator_item_template:
+                template_play = self.playlist_creator_item_template.findChild(QPushButton, "template_creator_play_button")
+                if template_play:
+                    play_button.setStyleSheet(template_play.styleSheet())
+            else:
+                play_button.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(0, 255, 0, 0.2);
+                    }
+                """)
             
             def create_play_handler(url=track['url']):
                 return lambda: self.play_spotify_entity(url)
@@ -1033,15 +1251,22 @@ class SpotifyPlaylistManager(BaseModule):
             # Botón de eliminar
             remove_button = QPushButton("✖")
             remove_button.setFixedWidth(30)
-            remove_button.setStyleSheet("""
-                QPushButton {
-                    border: none;
-                    padding: 5px;
-                }
-                QPushButton:hover {
-                    background-color: rgba(255, 0, 0, 0.2);
-                }
-            """)
+            
+            # Usar estilo de la plantilla si está disponible
+            if hasattr(self, 'playlist_creator_item_template') and self.playlist_creator_item_template:
+                template_remove = self.playlist_creator_item_template.findChild(QPushButton, "template_creator_remove_button")
+                if template_remove:
+                    remove_button.setStyleSheet(template_remove.styleSheet())
+            else:
+                remove_button.setStyleSheet("""
+                    QPushButton {
+                        border: none;
+                        padding: 5px;
+                    }
+                    QPushButton:hover {
+                        background-color: rgba(255, 0, 0, 0.2);
+                    }
+                """)
             
             def create_remove_handler(index=i):
                 return lambda: self.remove_from_temp_playlist(index)
@@ -1056,10 +1281,15 @@ class SpotifyPlaylistManager(BaseModule):
             item.setSizeHint(item_widget.sizeHint())
             self.playlist_creator.addItem(item)
             self.playlist_creator.setItemWidget(item, item_widget)
+
     
     
     def clear_temp_playlist(self):
         """Limpiar el creador de playlists temporal"""
+        if not hasattr(self, 'playlist_creator') or not self.playlist_creator:
+            print("playlist_creator no está disponible, no se puede limpiar")
+            return
+            
         self.temp_playlist_tracks = []
         self.playlist_creator.clear()
 
@@ -1068,6 +1298,10 @@ class SpotifyPlaylistManager(BaseModule):
         """Guardar las canciones del creador de playlists a una playlist existente"""
         if not self.temp_playlist_tracks:
             QMessageBox.warning(self, "Error", "No hay canciones para guardar")
+            return
+        
+        if not hasattr(self, 'playlist_selector') or not self.playlist_selector:
+            print("playlist_selector no está disponible, no se puede guardar playlist")
             return
             
         playlist_name = self.playlist_selector.currentText()
@@ -1093,12 +1327,19 @@ class SpotifyPlaylistManager(BaseModule):
             self.clear_temp_playlist()
             
         except Exception as e:
+            print(f"Error guardando canciones: {str(e)}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error guardando canciones: {str(e)}")
 
 
     def create_playlist(self):
         """Create a new Spotify playlist"""
         print("Botón crear playlist clickeado")
+        
+        if not hasattr(self, 'new_playlist_input') or not self.new_playlist_input:
+            print("new_playlist_input no está disponible, no se puede crear playlist")
+            return
+            
         name = self.new_playlist_input.text().strip()
         print(f"Intentando crear playlist con nombre: [{name}]")
         if not name:
@@ -1118,7 +1359,10 @@ class SpotifyPlaylistManager(BaseModule):
             QMessageBox.information(self, "Éxito", "Playlist creada correctamente")
             
         except Exception as e:
+            print(f"Error creando playlist: {str(e)}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error creando playlist: {str(e)}")
+
 
 
     def delete_playlist(self, playlist_id: str):
@@ -1137,11 +1381,20 @@ class SpotifyPlaylistManager(BaseModule):
             QMessageBox.information(self, "Éxito", "Playlist eliminada correctamente")
             
         except Exception as e:
+            print(f"Error eliminando playlist: {str(e)}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error eliminando playlist: {str(e)}")
-
 
     def add_selected_song(self):
         """Add selected song from search results to chosen playlist"""
+        if not hasattr(self, 'search_results') or not self.search_results:
+            print("search_results no está disponible, no se puede añadir canción")
+            return
+            
+        if not hasattr(self, 'playlist_selector') or not self.playlist_selector:
+            print("playlist_selector no está disponible, no se puede añadir canción")
+            return
+            
         selected_items = self.search_results.selectedItems()
         if not selected_items:
             QMessageBox.warning(self, "Error", "Por favor selecciona una canción")
@@ -1160,6 +1413,8 @@ class SpotifyPlaylistManager(BaseModule):
             QMessageBox.information(self, "Éxito", "Canción añadida correctamente")
             
         except Exception as e:
+            print(f"Error añadiendo canción: {str(e)}")
+            traceback.print_exc()
             QMessageBox.critical(self, "Error", f"Error añadiendo canción: {str(e)}")
 
 

@@ -3,7 +3,7 @@ import os
 import subprocess
 import json
 import webbrowser
-from base_module import BaseModule, THEMES
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                              QLabel, QLineEdit, QMessageBox, QApplication, QTableWidget, 
                              QTableWidgetItem, QHeaderView)
@@ -12,6 +12,9 @@ from PyQt6.QtGui import QColor, QIcon, QDesktopServices
 import musicbrainzngs
 from datetime import datetime, date
 import logging
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -51,8 +54,53 @@ class MusicBrainzReleasesModule(BaseModule):
         
         super().__init__(parent, theme)
 
+    # Actualización del método init_ui en la clase MusicBrainzReleasesModule
     def init_ui(self):
         """Initialize the user interface for MusicBrainz releases search"""
+        # Lista de widgets requeridos
+        required_widgets = [
+            'artist_input', 'search_button', 'results_table'
+        ]
+        
+        # Intentar cargar desde archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "modulo_enlaces.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Configuración adicional después de cargar UI
+                self._setup_table()
+                
+                print(f"UI MusicBrainzReleasesModule cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI MusicBrainzReleasesModule desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI MusicBrainzReleasesModule no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Conectar señales
+        self._connect_signals()
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
         layout = QVBoxLayout(self)
 
         # Search input and button layout
@@ -60,11 +108,9 @@ class MusicBrainzReleasesModule(BaseModule):
         
         self.artist_input = QLineEdit()
         self.artist_input.setPlaceholderText("Enter artist name")
-        self.artist_input.returnPressed.connect(self.search_artist_releases)
         search_layout.addWidget(self.artist_input)
 
         self.search_button = QPushButton("Search Releases")
-        self.search_button.clicked.connect(self.search_artist_releases)
         search_layout.addWidget(self.search_button)
 
         layout.addLayout(search_layout)
@@ -74,6 +120,36 @@ class MusicBrainzReleasesModule(BaseModule):
         self.results_table = QTableWidget()
         # Columns will be set dynamically when data is received
         layout.addWidget(self.results_table)
+
+
+    def _setup_table(self):
+        """Configuración adicional para la tabla de resultados."""
+        # Si la tabla ya tiene encabezados configurados por el UI, no es necesario hacerlo de nuevo
+        if self.results_table.columnCount() < self.basic_columns:
+            self.results_table.setColumnCount(self.basic_columns)
+            headers = ["In DB", "Checked", "Title", "Date", "Type", "Label"]
+            self.results_table.setHorizontalHeaderLabels(headers)
+        
+        # Configurar comportamiento de selección y edición
+        self.results_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.results_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        
+        # Configurar redimensionado de columnas
+        header = self.results_table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        
+        # Hacer columnas específicas más estrechas
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # In DB
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Checked
+
+    def _connect_signals(self):
+        """Conectar señales a sus respectivos slots."""
+        # Conectar la señal del botón de búsqueda
+        self.search_button.clicked.connect(self.search_artist_releases)
+        
+        # Conectar la señal de Enter en el campo de texto
+        self.artist_input.returnPressed.connect(self.search_artist_releases)
+
 
     def run_external_script(self, script_path, args):
         """

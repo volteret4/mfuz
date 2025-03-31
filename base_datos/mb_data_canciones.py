@@ -3,6 +3,7 @@ import requests
 import time
 import json
 from datetime import datetime
+import argparse
 
 MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2/"
 
@@ -111,7 +112,7 @@ def process_relationships(song_id, mbid, cursor, conn):
 def main(config=None):
     parser = argparse.ArgumentParser(description='Extract MusicBrainz links and reviews for albums')
     parser.add_argument('--config', help='Path to json config ')
-    parser.add_argument('--db-path', required=True, help='Path to the SQLite database')
+    parser.add_argument('--db-path', help='Path to the SQLite database')
 
     args = parser.parse_args()
     
@@ -124,6 +125,7 @@ def main(config=None):
     config.update(config_data.get("mb_data_canciones", {}))
 
     db_path = args.db_path or config['db_path']
+    
 
     
     # Connect to the SQLite database

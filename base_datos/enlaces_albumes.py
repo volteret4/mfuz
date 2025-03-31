@@ -775,7 +775,7 @@ def main(config=None):
         # Combinar configuraciones
         config = {}
         config.update(config_data.get("common", {}))
-        config.update(config_data.get("tuputamadre", {}))
+        config.update(config_data.get("enlaces_albumes", {}))
     
     try:
         # Inicializar y ejecutar el gestor de enlaces

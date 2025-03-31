@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python Debugger: Current File with Arguments",
+      "name": "Music Fuzzy Moode",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",
@@ -13,7 +13,15 @@
       "args": "/home/huan/gits/pollo/music-fuzzy/config.json"
     },
     {
-      "name": "flac_db",
+      "name": "moode_db creator",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "args": "/home/huan/gits/pollo/music-fuzzy/base_datos/conf.database_creator.json"
+    },
+    {
+      "name": "flac_db creator",
       "type": "debugpy",
       "request": "launch",
       "program": "${file}",

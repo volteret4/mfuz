@@ -1,0 +1,41 @@
+{
+    "files": [
+        "config.json",
+        "main.py",
+        "base_module.py",
+
+        "ui/tab_manager.ui",
+        "ui/spotify_module.ui",
+        "ui/music_fuzzy_module.ui",
+        "ui/jaangle_module.ui",
+        "ui/calendar_module.ui",
+        "ui/conciertos_module.ui",
+        "ui/config_editor.ui",
+        "ui/database_editor.ui",
+        "ui/lastfm_scrobbler_module.ui",
+        "ui/menu_blogs_module.ui",
+        "ui/modulo_enlaces.ui",
+        "ui/muspy_release_module.ui",
+        "ui/script_details_dialog.ui",
+        "ui/script_runner.ui",
+        "ui/script_widget.ui",
+        "ui/widget_player_module.ui",
+        "ui/radicale_config_dialog.ui",
+        "ui/event_dialog.ui",
+
+
+        "modules/spotify_module.py",
+        "modules/music_fuzzy_module.py",
+        "modules/jaangle_module.py",
+        "modules/calendar_module.py",
+        "modules/conciertos_module.py",
+        "modules/config_editor_module.py",
+        "modules/editor_module.py",
+        "modules/lastfm_scrobbler_module.py",
+        "modules/menu_blogs_module.py",
+        "modules/modulo_enlaces.py",
+        "modules/muspy_releases_module.py",
+        "modules/scripts_module.py",
+        "modules/widget_player_module.py"
+    ]
+}

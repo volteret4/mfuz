@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 import requests
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QTextEdit,
                             QLabel, QLineEdit, QFileDialog, QMessageBox,
                             QHBoxLayout, QListWidget, QListWidgetItem, QTabWidget,
@@ -128,6 +129,38 @@ class ConciertosModule(BaseModule):
                 self.config[key] = value
     
     def init_ui(self):
+        """Inicializa la interfaz del módulo usando archivo UI"""
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "conciertos_module.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                
+                # Configurar conexiones y valores iniciales
+                self.country_code_input.setText(self.config["country_code"])
+                self.artists_file_input.setText(self.config["artists_file"])
+                self.select_file_btn.clicked.connect(self.select_artists_file)
+                self.fetch_all_btn.clicked.connect(self.fetch_all_services)
+                self.concerts_list.itemDoubleClicked.connect(self.switch_tab_db)
+                
+                # Crear pestañas para los diferentes servicios
+                self.create_service_tabs()
+                
+                # Mensaje inicial del log
+                self.log("Módulo inicializado. Configure los parámetros y haga clic en 'Buscar en Todos los Servicios'.")
+                
+                return True
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Método fallback si falla la carga del UI
+        self._fallback_init_ui()
+        return False
+
+    def _fallback_init_ui(self):
+        """Crea la interfaz de forma manual si no se puede cargar el archivo UI"""
         main_layout = QVBoxLayout(self)
         
         # Configuración global (país y archivo de artistas)
@@ -156,21 +189,8 @@ class ConciertosModule(BaseModule):
         # Pestañas para las diferentes APIs
         self.tabs = QTabWidget()
         
-        # Crear pestañas solo para servicios habilitados
-        if self.config["apis"]["ticketmaster"].get("enabled", False):
-            self.create_ticketmaster_tab()
-        
-        if self.config["apis"]["songkick"].get("enabled", False):
-            self.create_songkick_tab()
-        
-        if self.config["apis"]["concerts_metal"].get("enabled", False):
-            self.create_concerts_metal_tab()
-        
-        if self.config["apis"]["rapidapi"].get("enabled", False):
-            self.create_rapidapi_tab()
-        
-        if self.config["apis"]["bandsintown"].get("enabled", False):
-            self.create_bandsintown_tab()
+        # Crear pestañas para los servicios
+        self.create_service_tabs()
         
         main_layout.addWidget(self.tabs)
         
@@ -203,6 +223,24 @@ class ConciertosModule(BaseModule):
         
         # Inicialización
         self.log("Módulo inicializado. Configure los parámetros y haga clic en 'Buscar en Todos los Servicios'.")
+
+    def create_service_tabs(self):
+        """Crear pestañas para los diferentes servicios de conciertos"""
+        # Crear pestañas solo para servicios habilitados
+        if self.config["apis"]["ticketmaster"].get("enabled", False):
+            self.create_ticketmaster_tab()
+        
+        if self.config["apis"]["songkick"].get("enabled", False):
+            self.create_songkick_tab()
+        
+        if self.config["apis"]["concerts_metal"].get("enabled", False):
+            self.create_concerts_metal_tab()
+        
+        if self.config["apis"]["rapidapi"].get("enabled", False):
+            self.create_rapidapi_tab()
+        
+        if self.config["apis"]["bandsintown"].get("enabled", False):
+            self.create_bandsintown_tab()
     
     def switch_tab_db(self):
         # Obtener el elemento seleccionado
@@ -1118,6 +1156,29 @@ class RadicaleConfigDialog(QDialog):
     """Diálogo para configurar la conexión con el servidor Radicale"""
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "radicale_config_dialog.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                from PyQt6 import uic
+                uic.loadUi(ui_file_path, self)
+                
+                # Conectar botones
+                self.save_button.clicked.connect(self.accept)
+                self.cancel_button.clicked.connect(self.reject)
+                
+                return
+            except Exception as e:
+                print(f"Error cargando UI del diálogo de configuración de Radicale: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Método fallback si falla la carga del UI
+        self._fallback_init_ui()
+    
+    def _fallback_init_ui(self):
+        """Crea la interfaz de diálogo manualmente si no se puede cargar el archivo UI"""
         self.setWindowTitle("Configuración de Calendario")
         self.resize(400, 200)
         
@@ -1141,13 +1202,13 @@ class RadicaleConfigDialog(QDialog):
         
         # Botones
         button_box = QHBoxLayout()
-        save_button = QPushButton("Guardar")
-        save_button.clicked.connect(self.accept)
-        cancel_button = QPushButton("Cancelar")
-        cancel_button.clicked.connect(self.reject)
+        self.save_button = QPushButton("Guardar")
+        self.save_button.clicked.connect(self.accept)
+        self.cancel_button = QPushButton("Cancelar")
+        self.cancel_button.clicked.connect(self.reject)
         
-        button_box.addWidget(save_button)
-        button_box.addWidget(cancel_button)
+        button_box.addWidget(self.save_button)
+        button_box.addWidget(self.cancel_button)
         
         layout.addLayout(button_box)
     

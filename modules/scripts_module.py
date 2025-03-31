@@ -3,12 +3,15 @@ from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
                            QTextEdit, QSplitter, QMessageBox, QComboBox,
                            QDialog, QCheckBox)
 from PyQt6.QtCore import Qt, QProcess, QSettings
+from PyQt6 import uic
 import json
 import sys
-from base_module import BaseModule, THEMES
-from pathlib import Path
 import os
+from pathlib import Path
 import logging
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +34,34 @@ class ScriptRunnerModule(BaseModule):
         super().apply_theme(theme_name)
 
     def init_ui(self):
-        """Inicializa la interfaz del módulo."""
+        """Inicializa la interfaz del módulo usando archivos UI."""
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "script_runner.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                self.toggle_args_btn.clicked.connect(self.toggle_advanced_settings)
+                
+                # Cargar scripts del JSON y la configuración guardada
+                if self.config_file:
+                    self.load_scripts()
+                    self.load_settings()
+                    self.create_script_widgets()
+                else:
+                    self.log_message("No se ha proporcionado un archivo de configuración", error=True)
+                
+                return True
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Si falla la carga del UI, crear la interfaz manualmente (fallback)
+        self._fallback_init_ui()
+        return False
+
+    def _fallback_init_ui(self):
+        """Método fallback para crear la UI manualmente si no se encuentra el archivo UI"""
         # Layout principal
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(10, 10, 10, 10)
@@ -62,11 +92,11 @@ class ScriptRunnerModule(BaseModule):
         main_layout.addLayout(header_layout)
         
         # Área de scripts con scroll invisible
-        scripts_scroll = QScrollArea()
-        scripts_scroll.setWidgetResizable(True)
-        scripts_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        scripts_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        scripts_scroll.setStyleSheet("""
+        self.scripts_scroll = QScrollArea()
+        self.scripts_scroll.setWidgetResizable(True)
+        self.scripts_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.scripts_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scripts_scroll.setStyleSheet("""
             QScrollArea {
                 border: none;
                 background-color: transparent;
@@ -90,7 +120,7 @@ class ScriptRunnerModule(BaseModule):
         self.scripts_layout.setContentsMargins(0, 0, 0, 0)
         self.scripts_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         
-        scripts_scroll.setWidget(scripts_container)
+        self.scripts_scroll.setWidget(scripts_container)
         
         # Cargar scripts del JSON y la configuración guardada
         if self.config_file:
@@ -113,7 +143,7 @@ class ScriptRunnerModule(BaseModule):
         """)
         
         # Añadir widgets al layout principal
-        main_layout.addWidget(scripts_scroll, stretch=1)
+        main_layout.addWidget(self.scripts_scroll)
         main_layout.addWidget(self.log_text)
 
     def load_settings(self):
@@ -122,7 +152,7 @@ class ScriptRunnerModule(BaseModule):
             if not self.config_file:
                 return
                 
-            settings_file = Path(self.config_file).parent / "script_runner_settings.json"
+            settings_file = PROJECT_ROOT / "actualizaciones" / "script_runner_settings.json"
             if settings_file.exists():
                 with open(settings_file, 'r', encoding='utf-8') as f:
                     settings = json.load(f)
@@ -139,7 +169,7 @@ class ScriptRunnerModule(BaseModule):
             if not self.config_file:
                 return
                 
-            settings_file = Path(self.config_file).parent / "script_runner_settings.json"
+            settings_file = PROJECT_ROOT / "actualizaciones" / "script_runner_settings.json"
             settings = {'show_arguments': self.show_args}
             
             with open(settings_file, 'w', encoding='utf-8') as f:

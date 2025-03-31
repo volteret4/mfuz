@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>BlogPlaylists</class>
+ <widget class="QWidget" name="BlogPlaylists">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <!-- Main content area with three panels -->
+   <item>
+    <layout class="QHBoxLayout" name="main_panel">
+     <!-- Left panel (Blogs and Local Playlists) -->
+     <item>
+      <widget class="QWidget" name="left_panel">
+       <layout class="QVBoxLayout" name="left_layout">
+        <item>
+         <widget class="QLabel" name="blog_label">
+          <property name="text">
+           <string>Blogs:</string>
+          </property>
+          <property name="font">
+           <font>
+            <bold>true</bold>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="blog_list"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="local_label">
+          <property name="text">
+           <string>Listas Locales:</string>
+          </property>
+          <property name="font">
+           <font>
+            <bold>true</bold>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="local_list"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     
+     <!-- Middle panel (Playlists) -->
+     <item>
+      <widget class="QWidget" name="middle_panel">
+       <layout class="QVBoxLayout" name="middle_layout">
+        <item>
+         <widget class="QLabel" name="playlist_label">
+          <property name="text">
+           <string>Playlists:</string>
+          </property>
+          <property name="font">
+           <font>
+            <bold>true</bold>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="playlist_list"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="play_button">
+          <property name="text">
+           <string>Reproducir Seleccionado</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     
+     <!-- Right panel (Playlist Content) -->
+     <item>
+      <widget class="QWidget" name="right_panel">
+       <layout class="QVBoxLayout" name="right_layout">
+        <item>
+         <widget class="QLabel" name="content_label">
+          <property name="text">
+           <string>Contenido:</string>
+          </property>
+          <property name="font">
+           <font>
+            <bold>true</bold>
+            <pointsize>14</pointsize>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="content_list"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   
+   <!-- URL Processor at the bottom -->
+   <item>
+    <layout class="QHBoxLayout" name="url_layout">
+     <item>
+      <widget class="QLineEdit" name="url_process_input">
+       <property name="placeholderText">
+        <string>Ingrese URL del blog para procesar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="process_url_button">
+       <property name="text">
+        <string>Procesar URL</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -76,6 +76,7 @@ class MusicQuiz(BaseModule):
         self.min_song_duration = 60  # Duración mínima en segundos
         self.start_from_beginning_chance = 0.3  # 30% de posibilidad de comenzar desde el principio
         self.avoid_last_seconds = 15  # Evitar los últimos 15 segundos
+        self.options_count = 4  # Número de opciones por defecto
         
         # Estado del juego
         self.current_correct_option = None
@@ -88,7 +89,6 @@ class MusicQuiz(BaseModule):
         # Filtros de sesión
         self.session_filters = None
 
-
         # Si hay configuración personalizada, aplicarla
         if config:
             if 'min_song_duration' in config:
@@ -97,6 +97,8 @@ class MusicQuiz(BaseModule):
                 self.start_from_beginning_chance = config['start_from_beginning_chance']
             if 'avoid_last_seconds' in config:
                 self.avoid_last_seconds = config['avoid_last_seconds']
+            if 'options_count' in config:
+                self.options_count = config['options_count']
         
         # Estado del juego
         self.current_correct_option = None
@@ -119,6 +121,52 @@ class MusicQuiz(BaseModule):
 
     def init_ui(self):
         """Inicializa la interfaz de usuario del módulo."""
+        # Cargar la UI desde el archivo
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                from PyQt6 import uic
+                uic.loadUi(ui_file_path, self)
+                
+                # Conectar señales y slots
+                self.toggle_button.clicked.connect(self.toggle_quiz)
+                self.config_button.clicked.connect(self.toggle_config)
+                self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
+                self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
+                self.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
+                self.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
+                self.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
+                self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
+                self.clear_session_btn.clicked.connect(self.clear_session_filters)
+                
+                # Inicializar componentes adicionales que no están en el archivo UI
+                self.init_options_grid()
+                
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Timer para countdown
+        self.timer = QTimer()
+        self.timer.setInterval(1000)  # 1 segundo
+        self.timer.timeout.connect(self.update_countdown)
+        
+        # Timer para el quiz completo
+        self.quiz_timer = QTimer()
+        self.quiz_timer.timeout.connect(self.end_quiz)
+        
+        # Deshabilitar opciones al inicio
+        self.enable_options(False)
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla"""
+        print("Usando método fallback para crear UI del Music Quiz")
         main_layout = QVBoxLayout()
         main_layout.setSpacing(20)
         main_layout.setContentsMargins(20, 20, 20, 20)
@@ -132,13 +180,6 @@ class MusicQuiz(BaseModule):
         
         # Widget contenedor para el contenido
         scroll_content = QWidget()
-        # scroll_content.setStyleSheet("""
-        #     QWidget {
-        #             border: none;
-        #             background-color: transparent;
-        #             padding: 2px
-        #         }
-        # """)
         scroll_layout = QVBoxLayout(scroll_content)
         scroll_layout.setSpacing(20)
         
@@ -167,6 +208,23 @@ class MusicQuiz(BaseModule):
         self.pause_duration_combo.setCurrentIndex(4)  # Default: 5 seg
         config_layout.addWidget(QLabel("Pausa entre canciones:"), 2, 0)
         config_layout.addWidget(self.pause_duration_combo, 2, 1)
+        
+        # Número de opciones (nuevo)
+        self.options_count_combo = QComboBox()
+        self.options_count_combo.addItems(["2", "4", "6", "8"])
+        
+        # Seleccionar el valor por defecto según la configuración
+        default_index = 1  # 4 opciones por defecto (índice 1)
+        if self.options_count == 2:
+            default_index = 0
+        elif self.options_count == 6:
+            default_index = 2
+        elif self.options_count == 8:
+            default_index = 3
+        
+        self.options_count_combo.setCurrentIndex(default_index)
+        config_layout.addWidget(QLabel("Número de opciones:"), 3, 0)
+        config_layout.addWidget(self.options_count_combo, 3, 1)
         
         # Botones para filtros en la configuración
         filter_layout = QGridLayout()
@@ -224,20 +282,19 @@ class MusicQuiz(BaseModule):
         
         self.filter_sellos_btn = QPushButton("Filtrar Sellos")
         self.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
-        filter_layout.addWidget(self.filter_genres_btn, 1, 1)
-
+        filter_layout.addWidget(self.filter_sellos_btn, 2, 0)
 
         # Nuevo botón para filtros de sesión
         self.session_filters_btn = QPushButton("Filtros de Sesión ⭐")
         self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
-        filter_layout.addWidget(self.session_filters_btn, 2, 0)
+        filter_layout.addWidget(self.session_filters_btn, 3, 0)
         
         # Botón para limpiar filtros de sesión
         self.clear_session_btn = QPushButton("Limpiar Filtros Sesión")
         self.clear_session_btn.clicked.connect(self.clear_session_filters)
-        filter_layout.addWidget(self.clear_session_btn, 2, 1)
+        filter_layout.addWidget(self.clear_session_btn, 3, 1)
         
-        config_layout.addLayout(filter_layout, 3, 0, 1, 2)  # Añadir layout de filtros a la configuración
+        config_layout.addLayout(filter_layout, 4, 0, 1, 2)  # Añadir layout de filtros a la configuración
         
         self.config_group.setLayout(config_layout)
         scroll_layout.addWidget(self.config_group)
@@ -270,14 +327,62 @@ class MusicQuiz(BaseModule):
         
         scroll_layout.addLayout(timer_layout)
         
-        # Opciones de canciones con imágenes de álbumes
-        options_layout = QGridLayout()
+        # Contenedor para las opciones de juego
+        options_container = QWidget()
+        options_grid = QGridLayout(options_container)
+        self.options_grid = options_grid  # Guardar referencia al grid para init_options_grid
+        scroll_layout.addWidget(options_container)
+        
+        # Estadísticas
+        stats_layout = QHBoxLayout()
+        self.score_label = QLabel("Aciertos: 0")
+        self.score_label.setFixedHeight(20)
+        self.total_label = QLabel("Total: 0")
+        self.total_label.setFixedHeight(20)
+        self.accuracy_label = QLabel("Precisión: 0%")
+        self.accuracy_label.setFixedHeight(20)
+        
+        stats_layout.addWidget(self.score_label)
+        stats_layout.addWidget(self.total_label)
+        stats_layout.addWidget(self.accuracy_label)
+        
+        scroll_layout.addLayout(stats_layout)
+        
+        # Finalizar configuración del scroll area
+        scroll_area.setWidget(scroll_content)
+        main_layout.addWidget(scroll_area)
+        
+        self.setLayout(main_layout)
+
+  
+    def init_options_grid(self):
+        """Inicializa la cuadrícula de opciones dinámicamente con un número variable de opciones."""
+        # Actualizar el número de opciones desde la configuración en la UI
+        if hasattr(self, 'options_count_combo'):
+            self.options_count = int(self.options_count_combo.currentText())
+        
+        # Comprobar si estamos usando la interfaz cargada desde el archivo UI o la interfaz fallback
+        if hasattr(self, 'options_grid'):
+            options_layout = self.options_grid
+        else:
+            # Si estamos usando el archivo UI, obtener el layout para las opciones
+            options_layout = self.options_container.layout()
+        
+        # Limpiar el layout si ya tiene widgets
+        self.clear_layout(options_layout)
+        
         self.option_buttons = []
         
-        for i in range(4):
-            row, col = divmod(i, 2)
+        # Calcular filas y columnas para una distribución equilibrada
+        if self.options_count <= 4:
+            cols = 2
+        else:
+            cols = 3
+        
+        for i in range(self.options_count):
+            row, col = divmod(i, cols)
             option_group = QGroupBox(f"Opción {i+1}")
-            option_layout = QHBoxLayout()  # Cambiado a horizontal para imagen + info
+            option_layout = QHBoxLayout()
             
             # Imagen del álbum
             album_image = QLabel()
@@ -319,41 +424,20 @@ class MusicQuiz(BaseModule):
             
             options_layout.addWidget(option_group, row, col)
             self.option_buttons.append(select_button)
-        
-        scroll_layout.addLayout(options_layout)
-        
-        # Estadísticas
-        stats_layout = QHBoxLayout()
-        self.score_label = QLabel("Aciertos: 0")
-        self.score_label.setFixedHeight(20)
-        self.total_label = QLabel("Total: 0")
-        self.total_label.setFixedHeight(20)
-        self.accuracy_label = QLabel("Precisión: 0%")
-        self.accuracy_label.setFixedHeight(20)
-        
-        stats_layout.addWidget(self.score_label)
-        stats_layout.addWidget(self.total_label)
-        stats_layout.addWidget(self.accuracy_label)
-        
-        scroll_layout.addLayout(stats_layout)
-        
-        # Finalizar configuración del scroll area
-        scroll_area.setWidget(scroll_content)
-        main_layout.addWidget(scroll_area)
-        
-        # Timer para countdown
-        self.timer = QTimer()
-        self.timer.setInterval(1000)  # 1 segundo
-        self.timer.timeout.connect(self.update_countdown)
-        
-        # Timer para el quiz completo
-        self.quiz_timer = QTimer()
-        self.quiz_timer.timeout.connect(self.end_quiz)
-        
-        self.setLayout(main_layout)
-        
-        # Deshabilitar opciones al inicio
-        self.enable_options(False)
+
+    # Método auxiliar para limpiar un layout
+    def clear_layout(self, layout):
+        """Limpia todos los widgets de un layout."""
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    sublayout = item.layout()
+                    if sublayout is not None:
+                        self.clear_layout(sublayout)
 
 
     def connect_to_database(self):
@@ -407,6 +491,14 @@ class MusicQuiz(BaseModule):
         self.song_duration_seconds = int(self.song_duration_combo.currentText().split()[0])
         self.pause_between_songs = int(self.pause_duration_combo.currentText().split()[0])
         
+        # Actualizar el número de opciones y reconstruir la cuadrícula
+        old_options_count = self.options_count
+        self.options_count = int(self.options_count_combo.currentText())
+        
+        # Solo reconstruir si cambió el número de opciones
+        if old_options_count != self.options_count:
+            self.init_options_grid()
+        
         # Reiniciar estadísticas
         self.score = 0
         self.total_played = 0
@@ -415,8 +507,7 @@ class MusicQuiz(BaseModule):
         # Activar el juego
         self.game_active = True
         
-        # Actualizar estados de botones - elegir una de estas opciones dependiendo de tu diseño:
-        # Opción 1: Si usas botones separados de inicio y parada
+        # Actualizar estados de botones
         if hasattr(self, 'start_button') and hasattr(self, 'stop_button'):
             self.start_button.setEnabled(False)
             self.stop_button.setEnabled(True)
@@ -427,7 +518,6 @@ class MusicQuiz(BaseModule):
         # Programar el final del quiz
         total_duration_ms = self.quiz_duration_minutes * 60 * 1000
         self.quiz_timer.start(total_duration_ms)
-
     def stop_quiz(self):
         """Detiene el juego en curso."""
         self.game_active = False
@@ -571,13 +661,13 @@ class MusicQuiz(BaseModule):
                 
                 # Si no hay suficientes canciones válidas, intentar de nuevo con menos filtros
                 retries += 1
-                print(f"No se encontraron suficientes canciones válidas. Reintento {retries}/{max_retries}")
+                print(f"No se encontraron suficientes canciones válidas para {count} opciones. Reintento {retries}/{max_retries}")
             except Exception as e:
                 print(f"Error al obtener canciones aleatorias: {e}")
                 retries += 1
         
         # Si llegamos aquí, no pudimos obtener suficientes canciones
-        print("Error: No se pudieron obtener suficientes canciones válidas después de varios intentos")
+        print(f"Error: No se pudieron obtener suficientes canciones válidas ({count}) después de varios intentos")
         return []
 
     def load_album_art(self, album_art_path):
@@ -603,23 +693,23 @@ class MusicQuiz(BaseModule):
         return None
 
     def show_next_question(self):
-        """Muestra la siguiente pregunta del quiz."""
+        """Muestra la siguiente pregunta del quiz con un número variable de opciones."""
         if not self.game_active:
             return
             
         # Detener la reproducción anterior si existe
         self.player.stop()
         
-        # Obtener las canciones aleatorias
-        songs = self.get_random_songs(4)
+        # Obtener las canciones aleatorias (ahora con número variable)
+        songs = self.get_random_songs(self.options_count)
         
-        if not songs or len(songs) < 4:
-            self.show_error_message("Error", "No hay suficientes canciones en la base de datos.")
+        if not songs or len(songs) < self.options_count:
+            self.show_error_message("Error", f"No hay suficientes canciones en la base de datos para mostrar {self.options_count} opciones.")
             self.stop_quiz()
             return
             
         # Elegir una canción aleatoria como correcta
-        self.current_correct_option = random.randint(0, 3)
+        self.current_correct_option = random.randint(0, self.options_count - 1)
         self.current_song = songs[self.current_correct_option]
         
         # Configurar las opciones

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MuspyArtistModule</class>
+ <widget class="QWidget" name="MuspyArtistModule">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <!-- Top section with search -->
+   <item>
+    <layout class="QHBoxLayout" name="top_layout">
+     <item>
+      <widget class="QLineEdit" name="artist_input">
+       <property name="placeholderText">
+        <string>Introduce el nombre de un artista para buscar discos anunciados</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="search_button">
+       <property name="text">
+        <string>Voy a tener suerte</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   
+   <!-- Results text area -->
+   <item>
+    <widget class="QTextEdit" name="results_text">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="html">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Leer db: Mostrará una selección con los artistas a escoger para sincronizar con muspy&lt;/p&gt;&lt;p&gt;Sincronizar artistas: Añadirá los artistas faltantes a Muspy&lt;/p&gt;&lt;p&gt;Sincronizar Lastfm: Sincronizará artistas seguidos en lastfm en Muspy&lt;/p&gt;&lt;p&gt;Mis Próximos discos: Buscará lanzamientos anunciados de tus artistas seguidos&lt;/p&gt;&lt;p&gt;Discos ausentes: Comprobará qué discos de los artistas seleccionados no existe en tu base de datos&lt;/p&gt;&lt;p&gt;Obtener todo: Obtiene TODO lo anunciado, serán decenas de miles...&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   
+   <!-- Bottom buttons layout -->
+   <item>
+    <layout class="QHBoxLayout" name="bottom_layout">
+     <item>
+      <widget class="QPushButton" name="load_artists_button">
+       <property name="text">
+        <string>Leer db</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sync_artists_button">
+       <property name="text">
+        <string>Sincronizar Artistas</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sync_lastfm_button">
+       <property name="text">
+        <string>Sync Lastfm</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="get_releases_button">
+       <property name="text">
+        <string>Mis próximos discos</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="get_new_releases_button">
+       <property name="text">
+        <string>Discos ausentes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="get_my_releases_button">
+       <property name="text">
+        <string>Obtener todo...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

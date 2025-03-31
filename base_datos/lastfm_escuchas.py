@@ -259,7 +259,7 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
 def main(config=None):
     # Cargar configuración
     parser = argparse.ArgumentParser(description='enlaces_artista_album')
-    parser.add_argument('--config', required=True, help='Archivo de configuración')
+    parser.add_argument('--config', help='Archivo de configuración')
     parser.add_argument('--lastfm_user', type=str, help='Usuario de Last.fm')
     parser.add_argument('--lastfm-api-key', type=str, help='API key de Last.fm')
     parser.add_argument('--db-path', type=str, help='Ruta al archivo de base de datos SQLite')

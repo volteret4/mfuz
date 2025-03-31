@@ -4,6 +4,7 @@ import json
 from typing import List, Dict, Any, Optional, Tuple
 import traceback
 from datetime import datetime
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTabWidget, 
                            QLineEdit, QPushButton, QComboBox, QTableWidget, 
                            QTableWidgetItem, QLabel, QFormLayout, QMessageBox,
@@ -41,7 +42,55 @@ class DatabaseEditor(BaseModule):
         super().__init__(parent, theme)
         
     def init_ui(self):
-        """Inicializa la interfaz del módulo."""
+        """Inicializa la interfaz del módulo usando archivos UI."""
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "database_editor.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                
+                # Configurar eventos y comportamientos
+                self.table_selector.currentTextChanged.connect(self.change_table)
+                self.search_button.clicked.connect(self.search_database)
+                self.search_input.returnPressed.connect(self.search_database)
+                self.edit_button.clicked.connect(self.edit_selected_item)
+                self.new_button.clicked.connect(self.create_new_item)
+                self.delete_button.clicked.connect(self.delete_selected_item)
+                self.save_layout_button.clicked.connect(self.save_column_order_to_config)
+                self.save_button.clicked.connect(self.save_item)
+                self.cancel_button.clicked.connect(lambda: self.tab_widget.setCurrentIndex(0))
+                
+                # Configurar comportamiento de la tabla de resultados
+                self.results_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+                self.results_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+                self.results_table.setAlternatingRowColors(True)
+                self.results_table.itemDoubleClicked.connect(self.load_item_for_edit)
+                
+                # Permitir mover y ordenar columnas
+                self.results_table.horizontalHeader().setSectionsMovable(True)
+                self.results_table.horizontalHeader().setSortIndicatorShown(True)
+                self.results_table.horizontalHeader().sortIndicatorChanged.connect(self.sort_table)
+                self.results_table.horizontalHeader().sectionMoved.connect(self.column_moved)
+                
+                # Añadir solo las tablas principales, no las tablas FTS internas
+                main_tables = ["songs", "artists", "albums", "genres", "lyrics", "scrobbles", "listens", "song_links"]
+                self.table_selector.addItems(main_tables)
+                
+                # Inicializar campos de búsqueda para la tabla seleccionada
+                self.change_table(self.current_table)
+                
+                return True
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Si falla la carga del UI, usar el método original para crear la interfaz
+        self._fallback_init_ui()
+        return False
+
+    def _fallback_init_ui(self):
+        """Método fallback para crear la UI manualmente si no se encuentra el archivo UI"""
         layout = QVBoxLayout(self)
         
         # Panel superior para búsqueda
@@ -71,7 +120,6 @@ class DatabaseEditor(BaseModule):
         
         layout.addWidget(search_panel)
         
-        # El resto de la función sigue igual...
         # Pestañas para resultados y edición
         self.tab_widget = QTabWidget()
         

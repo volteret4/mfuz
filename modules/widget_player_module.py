@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import urllib3
 import re
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, 
                             QLabel, QScrollArea, QWidget, QComboBox, QProgressBar,
                             QSplitter, QFrame, QSizePolicy)
@@ -32,7 +33,57 @@ class MusicSearchModule(BaseModule):
     
     
     def init_ui(self):
-        """Inicializa la interfaz del módulo"""
+        """Inicializa la interfaz del módulo usando archivo UI"""
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "widget_player_module.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                
+                # Configurar opciones iniciales del combo
+                self.source_combo.addItems(["Todos", "Bandcamp", "SoundCloud"])
+                
+                # Conectar señales
+                self.search_input.returnPressed.connect(self.perform_search)
+                self.search_button.clicked.connect(self.perform_search)
+                
+                # Ocultar la barra de progreso inicialmente
+                self.progress_bar.setVisible(False)
+                
+                # Crear el WebView para el reproductor
+                try:
+                    from PyQt6.QtWebEngineWidgets import QWebEngineView
+                    self.web_view = QWebEngineView()
+                    self.web_view.setMinimumHeight(150)
+                    self.web_view.setMaximumHeight(200)
+                    self.info_layout.addWidget(self.web_view)
+                except Exception as e:
+                    logging.error(f"Error creando QWebEngineView: {e}")
+                    self.web_view = None
+                    self.info_layout.addWidget(QLabel("No se pudo cargar el reproductor web. Verifica la instalación de QtWebEngine."))
+                
+                # Configurar tamaños iniciales del splitter
+                self.splitter.setSizes([2000, 1000])
+                
+                # Estado inicial
+                self.search_results = []
+                self.current_result = None
+                
+                # Configuración adicional
+                self.setup_module()
+                
+                return True
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Método fallback si falla la carga del UI
+        self._fallback_init_ui()
+        return False
+
+    def _fallback_init_ui(self):
+        """Crea la interfaz de forma manual si no se puede cargar el archivo UI"""
         # Layout principal
         self.main_layout = QVBoxLayout(self)
         
@@ -83,6 +134,7 @@ class MusicSearchModule(BaseModule):
         
         # WebView para mostrar el iframe embebido
         try:
+            from PyQt6.QtWebEngineWidgets import QWebEngineView
             self.web_view = QWebEngineView()
             self.web_view.setMinimumHeight(150)
             self.web_view.setMaximumHeight(200)

@@ -5,6 +5,7 @@ from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 import sqlite3
 import json
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
                             QHBoxLayout, QLineEdit, QPushButton, QListWidget,
                             QListWidgetItem, QLabel, QScrollArea, QSplitter,
@@ -15,12 +16,16 @@ from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence, QColor
 from PyQt6.QtCore import Qt, QSize, QDate
 import subprocess
 import importlib.util
-from base_module import BaseModule, THEMES  # Importar la clase base
 import glob
 import random
 import urllib.parse
 import time
 import logging
+import traceback
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT  # Importar la clase base
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -232,8 +237,63 @@ class MusicBrowser(BaseModule):
         self.search_parser = SearchParser()
         self.setup_shortcuts()
 
+    # Actualización del método init_ui en la clase MusicBrowser
     def init_ui(self):
         """Inicializa la interfaz del módulo."""
+        # Lista de widgets requeridos
+        required_widgets = [
+            'search_box', 'play_button', 'folder_button', 'advanced_settings_check',
+            'custom_button1', 'custom_button2', 'custom_button3', 'time_filters_widget',
+            'time_value', 'time_unit', 'apply_time_filter', 'month_combo', 'year_spin',
+            'apply_month_year', 'year_only_spin', 'apply_year', 'main_splitter',
+            'results_list', 'right_tabs', 'details_splitter', 'cover_label',
+            'artist_image_label', 'info_scroll', 'playlist_table', 'clear_playlist_button',
+            'playlist_button1', 'playlist_button2', 'playlist_button3', 'playlist_button4',
+            'spotify_button'
+        ]
+        
+        # Intentar cargar la UI desde el archivo
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Configuración adicional después de cargar UI
+                self._setup_widgets()
+                
+                print(f"UI MusicBrowser cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI MusicBrowser desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Configuración común (independiente del método de carga)
+        self.setup_info_widget()
+        self.setup_shortcuts()
+        self.apply_theme()
+        self.connect_signals()
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
         layout = QVBoxLayout(self)
         layout.setSpacing(5)
         layout.setContentsMargins(10, 10, 10, 10)
@@ -251,17 +311,10 @@ class MusicBrowser(BaseModule):
         self.custom_button2 = QPushButton('Script 2')
         self.custom_button3 = QPushButton('Script 3')
         
-        # Conectar botones
-        self.play_button.clicked.connect(self.play_item)
-        self.folder_button.clicked.connect(self.open_folder)
-        self.custom_button1.clicked.connect(self.buscar_musica_en_reproduccion)
-
         # Barra de búsqueda y checkbox para ajustes avanzados
         search_layout = QHBoxLayout()
         self.search_box = QLineEdit()
         self.search_box.setPlaceholderText('a:artista - b:álbum - g:género - l:sello - t:título - aa:album-artist - br:bitrate - d:fecha - w:semanas - m:meses - y:años - am:mes/año - ay:año')
-        self.search_box.textChanged.connect(self.search)
-        self.search_box.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
         search_layout.addWidget(self.search_box)
 
         # Botones básicos (siempre visibles)
@@ -273,7 +326,6 @@ class MusicBrowser(BaseModule):
         # Checkbox para ajustes avanzados
         self.advanced_settings_check = QCheckBox("Más")
         self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.advanced_settings_check.stateChanged.connect(self.toggle_advanced_settings)
         search_layout.addWidget(self.advanced_settings_check)
         
         # Botones avanzados (inicialmente ocultos)
@@ -305,7 +357,6 @@ class MusicBrowser(BaseModule):
         time_unit_layout.addWidget(self.time_unit)
 
         self.apply_time_filter = QPushButton('Aplicar')
-        self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
         time_unit_layout.addWidget(self.apply_time_filter)
         time_filters_layout.addLayout(time_unit_layout)
 
@@ -324,7 +375,6 @@ class MusicBrowser(BaseModule):
         month_year_layout.addWidget(self.year_spin)
 
         self.apply_month_year = QPushButton('Filtrar por Mes/Año')
-        self.apply_month_year.clicked.connect(self.apply_month_year_filter)
         month_year_layout.addWidget(self.apply_month_year)
         time_filters_layout.addLayout(month_year_layout)
 
@@ -339,38 +389,21 @@ class MusicBrowser(BaseModule):
         year_layout.addWidget(self.year_only_spin)
 
         self.apply_year = QPushButton('Filtrar por Año')
-        self.apply_year.clicked.connect(self.apply_year_filter)
         year_layout.addWidget(self.apply_year)
         time_filters_layout.addLayout(year_layout)
 
         top_layout.addWidget(self.time_filters_widget)
         layout.addWidget(self.top_container)
 
-        # # Leyenda de filtros
-        # legend_label = QLabel(
-        #     '<span style="color: #7aa2f7;">'
-        #     'Filtros: a:artista - b:álbum - g:género - l:sello - t:título - aa:album-artist - br:bitrate - d:fecha - '
-        #     'w:semanas - m:meses - y:años - am:mes/año - ay:año'
-        #     '</span>'
-        # )
-        # legend_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        # legend_label.setWordWrap(True)  # Permite que el texto se ajuste a múltiples líneas
-        # legend_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        # top_layout.addWidget(legend_label)
-
-
         # Splitter principal: lista de resultados y panel de detalles
-        main_splitter = QSplitter(Qt.Orientation.Horizontal)
+        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
         
         # Panel izquierdo (resultados)
         self.results_list = QListWidget()
         self.results_list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.results_list.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.results_list.currentItemChanged.connect(self.handle_item_change)
-        self.results_list.itemClicked.connect(self.handle_item_click)
-        self.results_list.doubleClicked.connect(self.add_to_playlist)  # Conectar doble clic para añadir a playlist
         self.results_list.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        main_splitter.addWidget(self.results_list)
+        self.main_splitter.addWidget(self.results_list)
 
         # Panel derecho (detalles)
         details_widget = QWidget()
@@ -387,7 +420,7 @@ class MusicBrowser(BaseModule):
         details_tab_layout.setContentsMargins(0, 0, 0, 0)
         
         # Splitter vertical para separar imágenes y texto
-        details_splitter = QSplitter(Qt.Orientation.Vertical)
+        self.details_splitter = QSplitter(Qt.Orientation.Vertical)
         
         # Contenedor superior para las imágenes (colocadas horizontalmente)
         images_container = QWidget()
@@ -404,7 +437,7 @@ class MusicBrowser(BaseModule):
         images_layout.addWidget(self.cover_label)
         
         # Añadir margen entre las imagenes
-        images_layout.addSpacing(60)  # Añade un espacio fijo de 20 píxeles
+        images_layout.addSpacing(60)  # Añade un espacio fijo de 60 píxeles
 
         # Imagen del artista
         self.artist_image_label = QLabel()
@@ -423,7 +456,6 @@ class MusicBrowser(BaseModule):
         # Botón para enviar a Spotify
         self.spotify_button = QPushButton("Enviar a Spotify")
         self.spotify_button.setFixedWidth(120)
-        self.spotify_button.clicked.connect(self.handle_spotify_button)
         buttons_layout.addWidget(self.spotify_button)
         
         buttons_layout.addStretch()
@@ -431,9 +463,9 @@ class MusicBrowser(BaseModule):
         # Añadir el contenedor de botones al layout de imágenes
         images_layout.addWidget(buttons_container)
         # Añadir el contenedor de imágenes al splitter vertical
-        details_splitter.addWidget(images_container)
+        self.details_splitter.addWidget(images_container)
         
-        # Contenedor para el scroll con la información
+    # Contenedor para el scroll con la información
         info_container = QWidget()
         info_container_layout = QVBoxLayout(info_container)
         info_container_layout.setContentsMargins(5, 5, 5, 5)
@@ -445,44 +477,18 @@ class MusicBrowser(BaseModule):
         self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.info_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.info_scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.info_scroll.setMinimumWidth(max(self.cover_label.width() + self.artist_image_label.width() + 20, 800))
+        self.info_scroll.setMinimumWidth(800)
         
-        # Widget interior del scroll
-        self.info_widget = QWidget()
-        self.info_layout = QVBoxLayout(self.info_widget)
-        self.info_layout.setContentsMargins(5, 5, 5, 5)
-        
-        # Labels para la información
-        self.lastfm_label = QLabel()
-        self.lastfm_label.setWordWrap(True)
-        self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
-        self.lastfm_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.lastfm_label.setMinimumWidth(1600)  # Ajusta este valor según necesites
-
-        self.metadata_label = QLabel()
-        self.metadata_label.setWordWrap(True)
-        self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-        self.metadata_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.metadata_label.setMinimumWidth(1600)  # Ajusta este valor según necesites
-        
-        
-        # Agregar las etiquetas al layout
-        self.info_layout.addWidget(self.lastfm_label)
-        self.info_layout.addWidget(self.metadata_label)
-        self.info_layout.addStretch()
-        
-        # Configurar el ScrollArea
-        self.info_scroll.setWidget(self.info_widget)
         info_container_layout.addWidget(self.info_scroll)
         
         # Añadir el contenedor de información al splitter vertical
-        details_splitter.addWidget(info_container)
+        self.details_splitter.addWidget(info_container)
         
         # Configurar proporciones iniciales del splitter vertical (imágenes/información)
-        details_splitter.setSizes([200, 800])
+        self.details_splitter.setSizes([200, 800])
         
         # Añadir el splitter vertical al layout del tab de detalles
-        details_tab_layout.addWidget(details_splitter)
+        details_tab_layout.addWidget(self.details_splitter)
         
         # Segundo tab (Playlist)
         playlist_tab = QWidget()
@@ -506,23 +512,18 @@ class MusicBrowser(BaseModule):
         
         # Botones para la playlist
         self.clear_playlist_button = QPushButton("Vaciar Playlist")
-        self.clear_playlist_button.clicked.connect(self.clear_playlist)
         playlist_buttons_layout.addWidget(self.clear_playlist_button)
         
         self.playlist_button1 = QPushButton("Función 1")
-        self.playlist_button1.clicked.connect(self.playlist_function1)
         playlist_buttons_layout.addWidget(self.playlist_button1)
         
         self.playlist_button2 = QPushButton("Función 2")
-        self.playlist_button2.clicked.connect(self.playlist_function2)
         playlist_buttons_layout.addWidget(self.playlist_button2)
         
         self.playlist_button3 = QPushButton("Función 3")
-        self.playlist_button3.clicked.connect(self.playlist_function3)
         playlist_buttons_layout.addWidget(self.playlist_button3)
         
         self.playlist_button4 = QPushButton("Función 4")
-        self.playlist_button4.clicked.connect(self.playlist_function4)
         playlist_buttons_layout.addWidget(self.playlist_button4)
         
         playlist_layout.addWidget(playlist_buttons_container)
@@ -535,19 +536,115 @@ class MusicBrowser(BaseModule):
         details_layout.addWidget(self.right_tabs)
         
         # Añadir el panel de detalles al splitter principal
-        main_splitter.addWidget(details_widget)
+        self.main_splitter.addWidget(details_widget)
         
         # Configurar proporciones iniciales del splitter principal (lista/detalles)
-        main_splitter.setSizes([400, 800])
+        self.main_splitter.setSizes([400, 800])
         
         # Añadir el splitter principal al layout de la ventana
-        layout.addWidget(main_splitter)
+        layout.addWidget(self.main_splitter)
+
+    def _setup_widgets(self):
+        """Configuración adicional para los widgets después de cargar la UI."""
+        # Establecer los meses para el combo box si no se ha hecho
+        if self.month_combo.count() == 0:
+            self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
         
-        # Aplicar el tema
-        self.apply_theme()
+        # Establecer el año actual si no se ha hecho
+        current_year = QDate.currentDate().year()
+        if self.year_spin.value() == 0:
+            self.year_spin.setValue(current_year)
+        if self.year_only_spin.value() == 0:
+            self.year_only_spin.setValue(current_year)
         
-        # Configurar evento para la tecla espacio
-        self.setup_space_key()
+        # Configurar el splitter principal si es necesario
+        if self.main_splitter.sizes() == [0, 0]:
+            self.main_splitter.setSizes([400, 800])
+        
+        # Configurar el splitter de detalles si es necesario
+        if self.details_splitter.sizes() == [0, 0]:
+            self.details_splitter.setSizes([200, 800])
+        
+        # Inicializar la lista de botones avanzados si estamos usando la UI
+        self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
+        
+        # Inicializar la lista para almacenar los elementos de la playlist
+        self.playlist_items = []
+        
+        # Configurar políticas de foco
+        self.results_list.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.search_box.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        
+        for button in [self.play_button, self.folder_button] + self.advanced_buttons:
+            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        
+        self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+
+
+    def setup_info_widget(self):
+        """Configura el widget de información dentro del scroll area."""
+        # Crear el widget para el interior del scroll
+        self.info_widget = QWidget()
+        self.info_layout = QVBoxLayout(self.info_widget)
+        self.info_layout.setContentsMargins(5, 5, 5, 5)
+        
+        # Labels para la información
+        self.lastfm_label = QLabel()
+        self.lastfm_label.setWordWrap(True)
+        self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
+        self.lastfm_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.lastfm_label.setMinimumWidth(1600)
+        
+        self.metadata_label = QLabel()
+        self.metadata_label.setWordWrap(True)
+        self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
+        self.metadata_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+        self.metadata_label.setMinimumWidth(1600)
+        
+        # Agregar las etiquetas al layout
+        self.info_layout.addWidget(self.lastfm_label)
+        self.info_layout.addWidget(self.metadata_label)
+        self.info_layout.addStretch()
+        
+        # Configurar el ScrollArea
+        self.info_scroll.setWidget(self.info_widget)
+
+
+    def connect_signals(self):
+        """Conecta las señales de los widgets con sus manejadores."""
+        # Botones de acción
+        self.play_button.clicked.connect(self.play_item)
+        self.folder_button.clicked.connect(self.open_folder)
+        self.custom_button1.clicked.connect(self.buscar_musica_en_reproduccion)
+        
+        # Filtros temporales
+        self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
+        self.apply_month_year.clicked.connect(self.apply_month_year_filter)
+        self.apply_year.clicked.connect(self.apply_year_filter)
+        
+        # Búsqueda
+        self.search_box.textChanged.connect(self.search)
+        
+        # Checkbox de configuración avanzada
+        self.advanced_settings_check.stateChanged.connect(self.toggle_advanced_settings)
+        
+        # Listas y tablas
+        self.results_list.currentItemChanged.connect(self.handle_item_change)
+        self.results_list.itemClicked.connect(self.handle_item_click)
+        self.results_list.doubleClicked.connect(self.add_to_playlist)
+        
+        # Botones de playlist
+        self.clear_playlist_button.clicked.connect(self.clear_playlist)
+        self.playlist_button1.clicked.connect(self.playlist_function1)
+        self.playlist_button2.clicked.connect(self.playlist_function2)
+        self.playlist_button3.clicked.connect(self.playlist_function3)
+        self.playlist_button4.clicked.connect(self.playlist_function4)
+        
+        # Botón de Spotify
+        self.spotify_button.clicked.connect(self.handle_spotify_button)
+
+
 
     def setup_space_key(self):
         """Configura el evento para añadir a playlist al presionar espacio"""

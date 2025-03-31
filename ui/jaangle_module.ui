@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MusicQuiz</class>
+ <widget class="QWidget" name="MusicQuiz">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Music Quiz</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <property name="spacing">
+    <number>20</number>
+   </property>
+   <property name="leftMargin">
+    <number>20</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>20</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+   <item>
+    <widget class="QScrollArea" name="scroll_area">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <widget class="QWidget" name="scroll_content">
+      <layout class="QVBoxLayout" name="scroll_layout">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="config_group">
+         <property name="title">
+          <string>Configuración</string>
+         </property>
+         <property name="visible">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="config_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="quiz_duration_label">
+            <property name="text">
+             <string>Duración del quiz:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="quiz_duration_combo">
+            <item>
+             <property name="text">
+              <string>1 min</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 min</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 min</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10 min</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="song_duration_label">
+            <property name="text">
+             <string>Tiempo por canción:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="song_duration_combo">
+            <item>
+             <property name="text">
+              <string>5 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>20 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>30 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>60 seg</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="pause_duration_label">
+            <property name="text">
+             <string>Pausa entre canciones:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QComboBox" name="pause_duration_combo">
+            <item>
+             <property name="text">
+              <string>0 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5 seg</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10 seg</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="options_count_label">
+            <property name="text">
+             <string>Número de opciones:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="options_count_combo">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <item>
+             <property name="text">
+              <string>2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>8</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <layout class="QGridLayout" name="filter_layout">
+            <item row="0" column="0">
+             <widget class="QPushButton" name="filter_artists_btn">
+              <property name="text">
+               <string>Filtrar Artistas</string>
+              </property>
+              <property name="styleSheet">
+               <string>QPushButton {
+    border: none;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="filter_albums_btn">
+              <property name="text">
+               <string>Filtrar Álbumes</string>
+              </property>
+              <property name="styleSheet">
+               <string>QPushButton {
+    border: none;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPushButton" name="filter_folders_btn">
+              <property name="text">
+               <string>Filtrar Carpetas</string>
+              </property>
+              <property name="styleSheet">
+               <string>QPushButton {
+    border: none;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="filter_genres_btn">
+              <property name="text">
+               <string>Filtrar Géneros</string>
+              </property>
+              <property name="styleSheet">
+               <string>QPushButton {
+    border: none;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="session_filters_btn">
+              <property name="text">
+               <string>Filtros de Sesión ⭐</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="clear_session_btn">
+              <property name="text">
+               <string>Limpiar Filtros Sesión</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="filter_sellos_btn">
+              <property name="text">
+               <string>Filtrar Sellos</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="timer_layout">
+         <item>
+          <widget class="QLabel" name="countdown_label">
+           <property name="text">
+            <string>30</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="font">
+            <font>
+             <family>Arial</family>
+             <pointsize>18</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QProgressBar" name="progress_bar">
+           <property name="value">
+            <number>100</number>
+           </property>
+           <property name="styleSheet">
+            <string>QProgressBar { border: none; background-color: transparent; }</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="toggle_button">
+           <property name="text">
+            <string>Iniciar Quiz</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="config_button">
+           <property name="text">
+            <string>⚙️</string>
+           </property>
+           <property name="fixedWidth">
+            <number>40</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QWidget" name="options_container">
+         <layout class="QGridLayout" name="options_grid"/>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="stats_layout">
+         <item>
+          <widget class="QLabel" name="score_label">
+           <property name="text">
+            <string>Aciertos: 0</string>
+           </property>
+           <property name="fixedHeight">
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="total_label">
+           <property name="text">
+            <string>Total: 0</string>
+           </property>
+           <property name="fixedHeight">
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="accuracy_label">
+           <property name="text">
+            <string>Precisión: 0%</string>
+           </property>
+           <property name="fixedHeight">
+            <number>20</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

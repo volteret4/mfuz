@@ -12,6 +12,7 @@
 #   Dependencies:  - python3, 
 #
 
+from PyQt6 import uic
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QTextEdit, QLabel,
     QProgressBar, QLineEdit, QListWidget, QListWidgetItem, QMessageBox,
@@ -32,6 +33,7 @@ from urllib.parse import urlparse, parse_qs, quote
 from typing import List, Dict
 import threading
 import sys
+import traceback
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
@@ -85,11 +87,54 @@ class BlogPlaylists(BaseModule):
         super().apply_theme(theme_name)
 
     def init_ui(self):
-        # if self.layout() is not None:
-        #     logging.info("Layout already exists, not creating a new one")
-        #     return
+        """Inicializa la interfaz del módulo."""
+        # Lista de widgets requeridos
+        required_widgets = [
+            'blog_list', 'local_list', 'playlist_list', 'content_list',
+            'url_process_input', 'process_url_button', 'play_button'
+        ]
+        
+        # Cargar la UI desde el archivo
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "menu_blogs_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Configuración adicional después de cargar UI
+                self._setup_widgets()
+                
+                print(f"UI BlogPlaylists cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI BlogPlaylists desde archivo: {e}")
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI BlogPlaylists no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Conectar las señales
+        self._connect_signals()
 
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
         layout = QVBoxLayout(self)
+        layout.setSpacing(5)
+        layout.setContentsMargins(10, 10, 10, 10)
         
         # Main content area with three panels
         main_panel = QHBoxLayout()
@@ -100,14 +145,12 @@ class BlogPlaylists(BaseModule):
         
         # Blogs section
         blog_label = QLabel("Blogs:")
-        #blog_label.setStyleSheet(f"font-weight: bold; font-size: 14px;")
         blog_label.setStyleSheet(f"font-weight: bold; font-size: 14px;")
         self.blog_list = QListWidget()
         self.blog_list.setStyleSheet(self._get_list_style())
         
         # Local playlists section
         local_label = QLabel("Listas Locales:")
-        #local_label.setStyleSheet(f"font-weight: bold; font-size: 14px;")
         local_label.setStyleSheet(f"font-weight: bold; font-size: 14px;")
         
         self.local_list = QListWidget()
@@ -127,8 +170,6 @@ class BlogPlaylists(BaseModule):
         
         self.playlist_list = QListWidget()
         self.playlist_list.setStyleSheet(self._get_list_style())
-        self.playlist_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.playlist_list.customContextMenuRequested.connect(self.show_playlist_context_menu)
         
         self.play_button = QPushButton("Reproducir Seleccionado")
         self.play_button.setStyleSheet(self._get_button_style())
@@ -146,8 +187,6 @@ class BlogPlaylists(BaseModule):
         
         self.content_list = QListWidget()
         self.content_list.setStyleSheet(self._get_list_style())
-        self.content_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.content_list.customContextMenuRequested.connect(self.show_track_context_menu)
         
         right_layout.addWidget(content_label)
         right_layout.addWidget(self.content_list)
@@ -166,21 +205,41 @@ class BlogPlaylists(BaseModule):
         
         self.process_url_button = QPushButton("Procesar URL")
         self.process_url_button.setStyleSheet(self._get_button_style())
-        self.process_url_button.clicked.connect(self.process_url)
         url_layout.addWidget(self.process_url_button)
         layout.addLayout(url_layout)
         
+        # Se establece el layout en el constructor, no necesario aquí
+        # self.setLayout(layout)
+
+
+
+    def _setup_widgets(self):
+        """Configuración adicional para los widgets después de cargar la UI."""
+        # Aplicar estilos a los widgets
+        self.blog_list.setStyleSheet(self._get_list_style())
+        self.local_list.setStyleSheet(self._get_list_style())
+        self.playlist_list.setStyleSheet(self._get_list_style())
+        self.content_list.setStyleSheet(self._get_list_style())
+        self.play_button.setStyleSheet(self._get_button_style())
+        self.process_url_button.setStyleSheet(self._get_button_style())
+        
+        # Configurar políticas de contexto para menús
+        self.playlist_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.content_list.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+
+    def _connect_signals(self):
+        """Conecta las señales de los widgets con sus manejadores."""
         # Connect signals
         self.blog_list.itemSelectionChanged.connect(self.on_blog_select)
         self.local_list.itemSelectionChanged.connect(self.on_local_select)
         self.playlist_list.itemSelectionChanged.connect(self.on_playlist_select)
         self.play_button.clicked.connect(self.play_selected)
         self.playlist_list.itemDoubleClicked.connect(self.play_selected)
-        self.content_list.itemDoubleClicked.connect(self.play_selected_track)  # Añadir esta línea
+        self.content_list.itemDoubleClicked.connect(self.play_selected_track)
+        self.process_url_button.clicked.connect(self.process_url)
+        self.playlist_list.customContextMenuRequested.connect(self.show_playlist_context_menu)
+        self.content_list.customContextMenuRequested.connect(self.show_track_context_menu)
 
-        
-        # Initial refresh
-        self.refresh_lists()
 
     def _get_list_style(self):
         return f"""

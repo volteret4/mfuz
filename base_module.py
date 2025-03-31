@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QMessageBox, QTableWidget, QTableView, QProgressBar, QFrame, QGroupBox
-from typing import Dict, Optional
+from PyQt6.QtWidgets import QWidget, QTableWidget, QTableView, QProgressBar, QFrame, QGroupBox
+from typing import Optional
 from pathlib import Path
+import os
+import traceback
 
 # Default themes
 THEMES = {
@@ -80,8 +82,56 @@ class BaseModule(QWidget):
         self.apply_theme()
 
     def init_ui(self):
-        """Método que deben implementar las clases hijas."""
+        """
+        Método que deben implementar las clases hijas.
+        Si se está usando con archivos UI, cada clase hija debe:
+        1. Intentar cargar su archivo UI correspondiente
+        2. Tener un método fallback para crear la UI manualmente
+        """
         raise NotImplementedError("Subclasses must implement init_ui method")
+
+    def load_ui_file(self, ui_file_name, required_widgets=None):
+        """
+        Método auxiliar para cargar un archivo UI con manejo de errores
+        
+        Args:
+            ui_file_name (str): Nombre del archivo UI (sin ruta)
+            required_widgets (list, optional): Lista de nombres de widgets requeridos
+            
+        Returns:
+            bool: True si se cargó correctamente, False si hubo error
+        """
+        try:
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", ui_file_name)
+            if not os.path.exists(ui_file_path):
+                print(f"Archivo UI no encontrado: {ui_file_path}")
+                return False
+                
+            from PyQt6 import uic
+            uic.loadUi(ui_file_path, self)
+            
+            # Verificar widgets requeridos si se especifican
+            if required_widgets:
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    print(f"Widgets requeridos no encontrados: {', '.join(missing_widgets)}")
+                    return False
+            
+            print(f"UI cargada desde {ui_file_path}")
+            return True
+        except Exception as e:
+            print(f"Error cargando UI desde archivo: {e}")
+            traceback.print_exc()
+            return False
+
 
     def apply_theme(self, theme_name: Optional[str] = None):
         """

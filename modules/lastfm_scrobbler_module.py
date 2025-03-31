@@ -1,3 +1,4 @@
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLabel, QTableWidget, QTableView,
                            QHeaderView, QPushButton, QSplitter, QWidget, QAbstractItemView,
                            QTableWidgetItem, QMenu)
@@ -41,6 +42,50 @@ class LastFMScrobblerModule(BaseModule):
     
     def init_ui(self):
         """Initialize the user interface as required by BaseModule."""
+        # Lista de widgets requeridos
+        required_widgets = [
+            'queue_table', 'scrobble_button', 'scrobbles_table', 
+            'refresh_button', 'splitter', 'left_panel', 'right_panel'
+        ]
+        
+        # Intentar cargar desde archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "lastfm_scrobbler_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Configuración adicional después de cargar UI
+                self._setup_tables()
+                
+                print(f"UI LastFMScrobblerModule cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI LastFMScrobblerModule desde archivo: {e}")
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI LastFMScrobblerModule no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+        
+        # Conectar señales que no están en el archivo UI
+        self.connect_signals()
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
         # Create main layout
         self.main_layout = QVBoxLayout()
         
@@ -68,7 +113,6 @@ class LastFMScrobblerModule(BaseModule):
         
         # Scrobble button
         self.scrobble_button = QPushButton("Scrobblear Canciones")
-        self.scrobble_button.clicked.connect(self.scrobble_songs)
         self.left_layout.addWidget(self.scrobble_button)
         
         # Right panel - Recent scrobbles
@@ -88,12 +132,10 @@ class LastFMScrobblerModule(BaseModule):
         ])
         self.scrobbles_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
         self.scrobbles_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.scrobbles_table.cellClicked.connect(self.handle_cell_click)
         self.right_layout.addWidget(self.scrobbles_table)
         
         # Refresh button
         self.refresh_button = QPushButton("Actualizar Scrobbles")
-        self.refresh_button.clicked.connect(self.load_recent_scrobbles)
         self.right_layout.addWidget(self.refresh_button)
         
         # Add panels to splitter with 1:3 ratio
@@ -107,6 +149,45 @@ class LastFMScrobblerModule(BaseModule):
         # Set the layout for this widget - use self.setLayout as this is a QWidget
         self.setLayout(self.main_layout)
     
+    def _setup_tables(self):
+        """Configuración adicional para las tablas después de cargar la UI."""
+        # Configuración para queue_table si no viene del archivo UI
+        if not self.queue_table.columnCount():
+            self.queue_table.setColumnCount(3)
+            self.queue_table.setHorizontalHeaderLabels(["Título", "Álbum", "Artista"])
+        
+        self.queue_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.queue_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Configuración para scrobbles_table si no viene del archivo UI
+        if not self.scrobbles_table.columnCount():
+            self.scrobbles_table.setColumnCount(7)
+            self.scrobbles_table.setHorizontalHeaderLabels([
+                "Timestamp", "Artista", "Álbum", "Canción", "Sello", 
+                "Enlaces", "En DB"
+            ])
+        
+        # Establecer el número máximo de scrobbles en la etiqueta
+        scrobbles_label = self.findChild(QLabel, "scrobbles_label")
+        if scrobbles_label:
+            scrobbles_label.setText(f"Últimos {self.max_scrobbles} scrobbles")
+        
+        self.scrobbles_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.ResizeToContents)
+        self.scrobbles_table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Conectar la señal de clic de celda que no está en el archivo UI
+        self.scrobbles_table.cellClicked.connect(self.handle_cell_click)
+
+    def connect_signals(self):
+        """Conectar señales a sus respectivos slots."""
+        if hasattr(self, 'scrobble_button') and self.scrobble_button:
+            self.scrobble_button.clicked.connect(self.scrobble_songs)
+        
+        if hasattr(self, 'refresh_button') and self.refresh_button:
+            self.refresh_button.clicked.connect(self.load_recent_scrobbles)
+
+
+
     def connect_to_db(self):
         """Connect to the local database for storing scrobble data."""
         try:

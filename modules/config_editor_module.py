@@ -5,12 +5,15 @@ from PyQt6.QtWidgets import (
     QComboBox, QCheckBox, QInputDialog
 )
 from PyQt6.QtCore import pyqtSignal, Qt
-from base_module import BaseModule, THEMES
+from PyQt6 import uic
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 import json
 from pathlib import Path
 import copy
 import sys
+import os
 import logging
+import traceback
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -51,8 +54,6 @@ class ConfigEditorModule(BaseModule):
         super().__init__(parent, theme, **kwargs)
         self.load_config()
         
-        
-
     def apply_theme(self, theme_name=None):
         super().apply_theme(theme_name)
 
@@ -89,8 +90,56 @@ class ConfigEditorModule(BaseModule):
                 f"Error loading config from {self.config_path}: {str(e)}\nUsing default configuration."
             )
 
-
     def init_ui(self):
+        """Initialize the UI using UI file or create it manually"""
+        # Try to load UI file
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "config_editor.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                # Load UI from file
+                uic.loadUi(ui_file_path, self)
+                
+                # Connect signals to slots
+                self.save_all_button.clicked.connect(lambda: self.save_all_config(
+                    self.enable_individual_themes.isChecked()
+                ))
+                self.reload_button.clicked.connect(self.reload_config)
+                self.add_path_button.clicked.connect(self.add_shared_db_path)
+                self.remove_path_button.clicked.connect(self.remove_shared_db_path)
+                self.db_paths_dropdown.currentTextChanged.connect(self.update_db_path_input)
+                
+                # Add theme field to global group
+                theme_field = ConfigField("Global Theme", list(THEMES.keys()))
+                theme_field.set_value(self.config_data["tema_seleccionado"])
+                self.global_layout.insertWidget(0, theme_field)
+                
+                # Add logging field to global group
+                logging_field = ConfigField("Logging", self.config_data["logging"])
+                logging_field.set_value(self.config_data["logging_state"])
+                self.global_layout.insertWidget(1, logging_field)
+                
+                # Set the checkbox state
+                self.enable_individual_themes.setChecked(
+                    self.config_data.get("global_theme_config", {}).get("enable_individual_themes", True)
+                )
+                
+                # Add database paths to dropdown
+                self.load_database_paths()
+                
+                # Create module groups and add them to their respective layout
+                self.create_module_groups()
+                
+                return True
+            except Exception as e:
+                logger.error(f"Error loading UI file: {e}")
+                logger.error(traceback.format_exc())
+        
+        # Fallback to manual UI creation
+        self._fallback_init_ui()
+        return False
+    
+    def _fallback_init_ui(self):
+        """Manual UI creation if UI file loading fails"""
         # Create main layout
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -245,10 +294,59 @@ class ConfigEditorModule(BaseModule):
         
         # Add flexible space at the end to align everything at the top
         container_layout.addStretch()
-
-
-
     
+    def load_database_paths(self):
+        """Load database paths from config and populate dropdown"""
+        global_theme_config = self.config_data.get("global_theme_config", {})
+        shared_db_paths = global_theme_config.get("shared_db_paths", {})
+        
+        # Clear and add items to dropdown
+        self.db_paths_dropdown.clear()
+        self.db_paths_dropdown.addItems(list(shared_db_paths.keys()))
+        
+        # If there are paths, set the first one in the input
+        if shared_db_paths:
+            first_key = list(shared_db_paths.keys())[0]
+            self.db_path_input.setText(shared_db_paths[first_key])
+    
+    def create_module_groups(self):
+        """Create the module groups and add them to their respective layouts"""
+        # Clear existing modules
+        for i in reversed(range(self.active_modules_layout.count())):
+            if self.active_modules_layout.itemAt(i).widget():
+                self.active_modules_layout.itemAt(i).widget().deleteLater()
+        
+        for i in reversed(range(self.disabled_modules_layout.count())):
+            if self.disabled_modules_layout.itemAt(i).widget():
+                self.disabled_modules_layout.itemAt(i).widget().deleteLater()
+        
+        # Flag to check if any modules exist
+        has_active_modules = False
+        has_disabled_modules = False
+        
+        # Add active modules
+        if self.config_data["modules"]:
+            has_active_modules = True
+            for module in self.config_data["modules"]:
+                module_group = self.create_module_group(module, True)
+                self.active_modules_layout.addWidget(module_group)
+        
+        # Add disabled modules
+        if self.config_data.get("modulos_desactivados", []):
+            has_disabled_modules = True
+            for module in self.config_data["modulos_desactivados"]:
+                module_group = self.create_module_group(module, False)
+                self.disabled_modules_layout.addWidget(module_group)
+        
+        # If no modules, add placeholder labels
+        if not has_active_modules:
+            label = QLabel("No active modules configured.")
+            self.active_modules_layout.addWidget(label)
+        
+        if not has_disabled_modules:
+            label = QLabel("No disabled modules configured.")
+            self.disabled_modules_layout.addWidget(label)
+
     def create_module_group(self, module, is_active):
         """Create a group for a module with enable/disable checkbox and ordering buttons"""
         module_name = module["name"]
@@ -363,8 +461,118 @@ class ConfigEditorModule(BaseModule):
         group.setLayout(group_layout)
         return group
 
+    def update_db_path_input(self, current_key):
+        """Update the path input when a new database is selected from dropdown"""
+        global_theme_config = self.config_data.get("global_theme_config", {})
+        shared_db_paths = global_theme_config.get("shared_db_paths", {})
+        
+        if current_key in shared_db_paths:
+            self.db_path_input.setText(shared_db_paths[current_key])
 
-   # Añadir este nuevo método a la clase ConfigEditorModule
+    def add_shared_db_path(self):
+        """Add a new shared database path"""
+        path = self.db_path_input.text().strip()
+        if not path:
+            QMessageBox.warning(self, "Invalid Input", "Please enter a database path.")
+            return
+        
+        # Prompt for database key
+        key, ok = QInputDialog.getText(self, "Database Key", "Enter a key for this database path:")
+        if not ok or not key:
+            return
+        
+        # Sanitize the key
+        key = key.lower().replace(' ', '_')
+        
+        # Ensure global_theme_config exists
+        if "global_theme_config" not in self.config_data:
+            self.config_data["global_theme_config"] = {}
+        
+        if "shared_db_paths" not in self.config_data["global_theme_config"]:
+            self.config_data["global_theme_config"]["shared_db_paths"] = {}
+        
+        # Check for existing key
+        if key in self.config_data["global_theme_config"]["shared_db_paths"]:
+            reply = QMessageBox.question(self, "Overwrite", 
+                f"A path for '{key}' already exists. Do you want to replace it?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            
+            if reply == QMessageBox.StandardButton.No:
+                return
+        
+        # Add or update the path
+        self.config_data["global_theme_config"]["shared_db_paths"][key] = path
+        
+        # Save the configuration to file
+        try:
+            with open(self.config_path, 'w') as f:
+                json.dump(self.config_data, f, indent=2)
+        except Exception as e:
+            QMessageBox.critical(self, "Save Error", f"Could not save configuration: {str(e)}")
+            return
+        
+        # Update dropdown
+        self.db_paths_dropdown.blockSignals(True)
+        self.db_paths_dropdown.clear()
+        self.db_paths_dropdown.addItems(list(self.config_data["global_theme_config"]["shared_db_paths"].keys()))
+        self.db_paths_dropdown.setCurrentText(key)
+        self.db_paths_dropdown.blockSignals(False)
+        
+        # Update path input
+        self.db_path_input.setText(path)
+        
+        # Emit config updated signal
+        self.config_updated.emit()
+        
+        # Show success message
+        QMessageBox.information(self, "Success", f"Database path '{key}' added successfully.")
+
+    def remove_shared_db_path(self):
+        """Remove selected shared database path"""
+        current_key = self.db_paths_dropdown.currentText()
+        if not current_key:
+            QMessageBox.warning(self, "No Selection", "Please select a database path to remove.")
+            return
+        
+        # Confirmation dialog using StandardButton
+        respuesta = QMessageBox.question(
+            self, 
+            "Confirm Deletion", 
+            f"Are you sure you want to delete the database path '{current_key}'?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if respuesta == QMessageBox.StandardButton.Yes:
+            try:
+                # Ensure the path exists before trying to delete
+                if "global_theme_config" in self.config_data and \
+                "shared_db_paths" in self.config_data["global_theme_config"]:
+                    
+                    db_paths = self.config_data["global_theme_config"]["shared_db_paths"]
+                    if current_key in db_paths:
+                        del db_paths[current_key]
+                    
+                    # Save updated configuration to file
+                    with open(self.config_path, 'w') as f:
+                        json.dump(self.config_data, f, indent=2)
+                    
+                    # Update dropdown
+                    self.db_paths_dropdown.removeItem(self.db_paths_dropdown.currentIndex())
+                    
+                    # Clear input
+                    self.db_path_input.clear()
+                    
+                    # Emit config updated signal
+                    self.config_updated.emit()
+                    
+                    # Show success message
+                    QMessageBox.information(self, "Success", f"Database path '{current_key}' removed.")
+                else:
+                    QMessageBox.warning(self, "Error", "Configuration structure is invalid.")
+            
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Could not remove database path: {str(e)}")
+    
     def move_module(self, module_name, direction):
         """Move a module up or down in its list"""
         # Find the module's current list and position
@@ -423,98 +631,45 @@ class ConfigEditorModule(BaseModule):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error saving configuration: {str(e)}")
-
-
-    def update_db_path_input(self, current_key):
-        """Update the path input when a new database is selected from dropdown"""
-        global_theme_config = self.config_data.get("global_theme_config", {})
-        shared_db_paths = global_theme_config.get("shared_db_paths", {})
-        
-        if current_key in shared_db_paths:
-            self.db_path_input.setText(shared_db_paths[current_key])
-
-
-
-
-    def add_shared_db_path(self):
-        """Add a new shared database path"""
-        path = self.db_path_input.text().strip()
-        if not path:
-            QMessageBox.warning(self, "Invalid Input", "Please enter a database path.")
-            return
-        
-        # Prompt for database key
-        key, ok = QInputDialog.getText(self, "Database Key", "Enter a key for this database path:")
-        if not ok or not key:
-            return
-        
-        # Sanitize the key
-        key = key.lower().replace(' ', '_')
-        
-        # Ensure global_theme_config exists
-        if "global_theme_config" not in self.config_data:
-            self.config_data["global_theme_config"] = {}
-        
-        if "shared_db_paths" not in self.config_data["global_theme_config"]:
-            self.config_data["global_theme_config"]["shared_db_paths"] = {}
-        
-        # Check for existing key
-        if key in self.config_data["global_theme_config"]["shared_db_paths"]:
-            reply = QMessageBox.question(self, "Overwrite", 
-                f"A path for '{key}' already exists. Do you want to replace it?",
-                QMessageBox.Yes | QMessageBox.No)
-            
-            if reply == QMessageBox.No:
-                return
-        
-        # Add or update the path
-        self.config_data["global_theme_config"]["shared_db_paths"][key] = path
-        
-        # Save the configuration to file
-        try:
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
-        except Exception as e:
-            QMessageBox.critical(self, "Save Error", f"Could not save configuration: {str(e)}")
-            return
-        
-        # Update dropdown
-        self.db_paths_dropdown.blockSignals(True)
-        self.db_paths_dropdown.clear()
-        self.db_paths_dropdown.addItems(list(self.config_data["global_theme_config"]["shared_db_paths"].keys()))
-        self.db_paths_dropdown.setCurrentText(key)
-        self.db_paths_dropdown.blockSignals(False)
-        
-        # Update path input
-        self.db_path_input.setText(path)
-        
-        # Emit config updated signal
-        self.config_updated.emit()
-        
-        # Show success message
-        QMessageBox.information(self, "Success", f"Database path '{key}' added successfully.")
-
-
-
-
+    
     def reload_config(self):
         """Reload configuration from file and update UI"""
         try:
             self.load_config()
-            # Clear existing UI
-            for i in reversed(range(self.layout().count())): 
-                widget = self.layout().itemAt(i).widget()
-                if widget is not None:
-                    widget.deleteLater()
             
-            # Reinitialize UI
-            self.init_ui()
+            # If using UI file
+            if hasattr(self, 'container'):
+                # Update enable individual themes checkbox
+                self.enable_individual_themes.setChecked(
+                    self.config_data.get("global_theme_config", {}).get("enable_individual_themes", True)
+                )
+                
+                # Update database paths
+                self.load_database_paths()
+                
+                # Recreate module groups
+                self.create_module_groups()
+                
+                # Update theme fields if they exist
+                for child in self.findChildren(ConfigField):
+                    if child.label.text() == "Global Theme":
+                        child.set_value(self.config_data["tema_seleccionado"])
+                    elif child.label.text() == "Logging":
+                        child.set_value(self.config_data["logging_state"])
+            else:
+                # For manually created UI, recreate everything
+                for i in reversed(range(self.layout().count())): 
+                    widget = self.layout().itemAt(i).widget()
+                    if widget is not None:
+                        widget.deleteLater()
+                
+                # Reinitialize UI
+                self.init_ui()
+            
             QMessageBox.information(self, "Success", "Configuration reloaded successfully")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error reloading configuration: {str(e)}")
-
-
-
+    
     def reset_module_config(self, module_name):
         """Reset a module's configuration to the saved values"""
         try:
@@ -556,54 +711,6 @@ class ConfigEditorModule(BaseModule):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error resetting module configuration: {str(e)}")
-
-    def remove_shared_db_path(self):
-        """Remove selected shared database path"""
-        current_key = self.db_paths_dropdown.currentText()
-        if not current_key:
-            QMessageBox.warning(self, "No Selection", "Please select a database path to remove.")
-            return
-        
-        # Confirmation dialog using StandardButton
-        respuesta = QMessageBox.question(
-            self, 
-            "Confirm Deletion", 
-            f"Are you sure you want to delete the database path '{current_key}'?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        
-        if respuesta == QMessageBox.StandardButton.Yes:
-            try:
-                # Ensure the path exists before trying to delete
-                if "global_theme_config" in self.config_data and \
-                "shared_db_paths" in self.config_data["global_theme_config"]:
-                    
-                    db_paths = self.config_data["global_theme_config"]["shared_db_paths"]
-                    if current_key in db_paths:
-                        del db_paths[current_key]
-                    
-                    # Save updated configuration to file
-                    with open(self.config_path, 'w') as f:
-                        json.dump(self.config_data, f, indent=2)
-                    
-                    # Update dropdown
-                    self.db_paths_dropdown.removeItem(self.db_paths_dropdown.currentIndex())
-                    
-                    # Clear input
-                    self.db_path_input.clear()
-                    
-                    # Emit config updated signal
-                    self.config_updated.emit()
-                    
-                    # Show success message
-                    QMessageBox.information(self, "Success", f"Database path '{current_key}' removed.")
-                else:
-                    QMessageBox.warning(self, "Error", "Configuration structure is invalid.")
-            
-            except Exception as e:
-                QMessageBox.critical(self, "Error", f"Could not remove database path: {str(e)}")
-                
-
     
     def save_module_config(self, module_name: str):
         """Save configuration for a specific module"""
@@ -693,8 +800,7 @@ class ConfigEditorModule(BaseModule):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
-
-
+    
     def save_all_config(self, enable_individual_themes=True):
         """Save all configuration changes"""
         try:
@@ -802,8 +908,6 @@ class ConfigEditorModule(BaseModule):
             return False  # Indicate save failure
 
 
-
-
 class ConfigField(QWidget):
     """Widget para un campo individual de configuración"""
     def __init__(self, label: str, value):
@@ -875,6 +979,7 @@ class ConfigField(QWidget):
         else:
             self.input.setText(str(value))
 
+
 class NestedConfigGroup(QGroupBox):
     """Widget para visualizar y editar configuración anidada"""
     def __init__(self, title: str, config_data: dict, parent=None):
@@ -902,4 +1007,3 @@ class NestedConfigGroup(QGroupBox):
         for key, field in self.fields.items():
             result[key] = field.get_value()
         return result
-

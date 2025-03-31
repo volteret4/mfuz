@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DatabaseEditorForm</class>
+ <widget class="QWidget" name="DatabaseEditorForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Database Editor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QWidget" name="search_panel" native="true">
+     <layout class="QHBoxLayout" name="search_layout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Tabla:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="table_selector"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Campo:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="search_field"/>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="search_input">
+        <property name="placeholderText">
+         <string>Término de búsqueda...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="search_button">
+        <property name="text">
+         <string>Buscar</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tab_widget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="results_tab">
+      <attribute name="title">
+       <string>Resultados de Búsqueda</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="results_layout">
+       <item>
+        <widget class="QTableWidget" name="results_table">
+         <property name="alternatingRowColors">
+          <bool>true</bool>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="buttons_layout">
+         <item>
+          <widget class="QPushButton" name="edit_button">
+           <property name="text">
+            <string>Editar Seleccionado</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="new_button">
+           <property name="text">
+            <string>Nuevo Item</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="delete_button">
+           <property name="text">
+            <string>Eliminar Seleccionado</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="save_layout_button">
+           <property name="text">
+            <string>Guardar Orden de Columnas</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="edit_tab">
+      <attribute name="title">
+       <string>Editar Item</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="edit_tab_layout">
+       <item>
+        <widget class="QScrollArea" name="edit_scroll_area">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="edit_container">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>758</width>
+            <height>499</height>
+           </rect>
+          </property>
+          <layout class="QFormLayout" name="edit_layout">
+           <item row="0" column="0" colspan="2">
+            <widget class="QWidget" name="edit_buttons" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QPushButton" name="save_button">
+                <property name="text">
+                 <string>Guardar Cambios</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="cancel_button">
+                <property name="text">
+                 <string>Cancelar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

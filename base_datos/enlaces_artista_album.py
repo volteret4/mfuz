@@ -206,6 +206,7 @@ class MusicLinksManager:
                 self.logger.error(f"Failed to initialize Last.fm API: {str(e)}")
         else:
             self.lastfm_network = None
+            self.lastfm_enabled = False
             self.logger.info("Last.fm service disabled")
 
     

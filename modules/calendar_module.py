@@ -2,6 +2,7 @@ import sys
 from datetime import datetime, timedelta
 import caldav
 import vobject
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
                            QComboBox, QPushButton, QScrollArea, QFrame,
                            QSizePolicy, QGridLayout, QTimeEdit, QDialog,
@@ -38,8 +39,66 @@ class RadicaleCalendarModule(BaseModule):
         super().apply_theme(theme_name)
 
     def init_ui(self):
-        """Implement the base module's UI initialization method"""
-        self.setup_ui()  # Call the existing setup_ui method
+        """Inicializa la interfaz del módulo usando archivos UI"""
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "calendar_module.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                
+                # Conectar señales
+                self.calendar_selector.currentIndexChanged.connect(self.on_calendar_selected)
+                self.refresh_button.clicked.connect(self.load_calendars)
+                self.add_event_button.clicked.connect(self.create_event)
+                
+                # Crear la vista diaria
+                self.daily_view = DailyCalendarView(self)
+                layout = QVBoxLayout(self.daily_view_container)
+                layout.setContentsMargins(0, 0, 0, 0)
+                layout.addWidget(self.daily_view)
+                
+                return True
+            except Exception as e:
+                print(f"Error cargando UI desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Método fallback si falla la carga del UI
+        self._fallback_init_ui()
+        return False
+
+    def _fallback_init_ui(self):
+        """Crea la interfaz de forma manual si no se puede cargar el archivo UI"""
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
+        
+        # Selector de calendario y botones
+        toolbar_layout = QHBoxLayout()
+        
+        # Selector de calendario
+        toolbar_layout.addWidget(QLabel("Calendario:"))
+        self.calendar_selector = QComboBox()
+        self.calendar_selector.currentIndexChanged.connect(self.on_calendar_selected)
+        toolbar_layout.addWidget(self.calendar_selector)
+        
+        # Espacio
+        toolbar_layout.addStretch()
+        
+        # Botón para actualizar
+        self.refresh_button = QPushButton("Actualizar")
+        self.refresh_button.clicked.connect(self.load_calendars)
+        toolbar_layout.addWidget(self.refresh_button)
+        
+        # Botón para crear evento
+        self.add_event_button = QPushButton("Nuevo Evento")
+        self.add_event_button.clicked.connect(self.create_event)
+        toolbar_layout.addWidget(self.add_event_button)
+        
+        layout.addLayout(toolbar_layout)
+        
+        # Vista diaria
+        self.daily_view = DailyCalendarView(self)
+        layout.addWidget(self.daily_view)
         
     def setup_ui(self):
         """Configura la interfaz del módulo"""
@@ -300,15 +359,39 @@ class RadicaleCalendarModule(BaseModule):
 class EventDialog(QDialog):
     """Diálogo para crear o editar eventos"""
     def __init__(self, parent=None, event=None, calendar=None):
-        super().__init__(parent, theme)
+        super().__init__(parent)
         self.event = event
         self.calendar = calendar
+        
+        # Intentar cargar el archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "event_dialog.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, self)
+                
+                # Conectar señales
+                self.cancel_button.clicked.connect(self.reject)
+                self.save_button.clicked.connect(self.accept)
+                
+                # Inicializar valores
+                self.start_time.setTime(QTime.currentTime())
+                self.end_time.setTime(QTime.currentTime().addSecs(3600))  # +1 hora
+                
+                # Cargar datos del evento si existe
+                if event:
+                    self.load_event_data()
+                
+                return
+            except Exception as e:
+                print(f"Error cargando UI del diálogo de eventos: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        # Método fallback si falla la carga del UI
         self.setup_ui()
-        if event:
-            self.load_event_data()
-
+        
     def setup_ui(self):
-        """Configura la interfaz de usuario del diálogo"""
+        """Configura la interfaz de usuario del diálogo manualmente"""
         self.setWindowTitle("Evento de Calendario")
         self.setMinimumWidth(400)
         
@@ -352,6 +435,11 @@ class EventDialog(QDialog):
         button_layout.addWidget(self.cancel_button)
         button_layout.addWidget(self.save_button)
         layout.addLayout(button_layout)
+        
+        # Cargar datos del evento si existe
+        if self.event:
+            self.load_event_data()
+
 
     def load_event_data(self):
         """Carga los datos del evento al editar"""

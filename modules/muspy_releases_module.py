@@ -6,6 +6,7 @@ import subprocess
 import requests
 import logging
 import datetime
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                              QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
                              QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox)
@@ -65,8 +66,52 @@ class MuspyArtistModule(BaseModule):
         super().__init__(parent, theme)
         
 
+   # Actualización del método init_ui en la clase MuspyArtistModule
     def init_ui(self):
         """Initialize the user interface for Muspy artist management"""
+        # Lista de widgets requeridos
+        required_widgets = [
+            'artist_input', 'search_button', 'results_text', 
+            'load_artists_button', 'sync_artists_button', 'sync_lastfm_button',
+            'get_releases_button', 'get_new_releases_button', 'get_my_releases_button'
+        ]
+        
+        # Intentar cargar desde archivo UI
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_releases_module.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, self)
+                
+                # Verificar que se han cargado los widgets principales
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                        widget = self.findChild(QWidget, widget_name)
+                        if widget:
+                            setattr(self, widget_name, widget)
+                        else:
+                            missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                
+                # Configuración adicional después de cargar UI
+                self._connect_signals()
+                
+                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
+            except Exception as e:
+                print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
+                import traceback
+                traceback.print_exc()
+                self._fallback_init_ui()
+        else:
+            print(f"Archivo UI MuspyArtistModule no encontrado: {ui_file_path}, usando creación manual")
+            self._fallback_init_ui()
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
         # Main vertical layout
         main_layout = QVBoxLayout(self)
 
@@ -75,17 +120,16 @@ class MuspyArtistModule(BaseModule):
         
         self.artist_input = QLineEdit()
         self.artist_input.setPlaceholderText("Introduce el nombre de un artista para buscar discos anunciados")
-        self.artist_input.returnPressed.connect(self.search_and_get_releases)
         top_layout.addWidget(self.artist_input)
 
         self.search_button = QPushButton("Voy a tener suerte")
-        self.search_button.clicked.connect(self.search_and_get_releases)
         top_layout.addWidget(self.search_button)
 
         main_layout.addLayout(top_layout)
 
-        # Results area (will be replaced by table when getting releases)
+        # Results area
         self.results_text = QTextEdit()
+        self.results_text.setReadOnly(True)
         self.results_text.append("""
             \n\n\n\n
             Leer db: Mostrará una selección con los artistas a escoger para sincronizar con muspy
@@ -96,38 +140,47 @@ class MuspyArtistModule(BaseModule):
             Obtener todo: Obtiene TODO lo anunciado, serán decenas de miles...
             \n\n\n\n
             """)
-
-        self.results_text.setReadOnly(True)
         main_layout.addWidget(self.results_text)
 
         # Bottom buttons layout
         bottom_layout = QHBoxLayout()
         
         self.load_artists_button = QPushButton("Leer db")
-        self.load_artists_button.clicked.connect(self.load_artists_from_file)
         bottom_layout.addWidget(self.load_artists_button)
 
         self.sync_artists_button = QPushButton("Sincronizar Artistas")
-        self.sync_artists_button.clicked.connect(self.sync_artists_with_muspy)
         bottom_layout.addWidget(self.sync_artists_button)
 
         self.sync_lastfm_button = QPushButton("Sync Lastfm")
-        self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
         bottom_layout.addWidget(self.sync_lastfm_button)
         
         self.get_releases_button = QPushButton("Mis próximos discos")
-        self.get_releases_button.clicked.connect(self.get_muspy_releases)
         bottom_layout.addWidget(self.get_releases_button)
         
         self.get_new_releases_button = QPushButton("Discos ausentes")
-        self.get_new_releases_button.clicked.connect(self.get_new_releases)
         bottom_layout.addWidget(self.get_new_releases_button)
         
         self.get_my_releases_button = QPushButton("Obtener todo...")
-        self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
         bottom_layout.addWidget(self.get_my_releases_button)
 
         main_layout.addLayout(bottom_layout)
+        
+        # Conectar señales
+        self._connect_signals()
+
+    def _connect_signals(self):
+        """Conectar las señales de los widgets a sus respectivos slots."""
+        # Conectar la señal de búsqueda
+        self.search_button.clicked.connect(self.search_and_get_releases)
+        self.artist_input.returnPressed.connect(self.search_and_get_releases)
+        
+        # Conectar las señales de los botones de acción
+        self.load_artists_button.clicked.connect(self.load_artists_from_file)
+        self.sync_artists_button.clicked.connect(self.sync_artists_with_muspy)
+        self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
+        self.get_releases_button.clicked.connect(self.get_muspy_releases)
+        self.get_new_releases_button.clicked.connect(self.get_new_releases)
+        self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
 
 
     def get_muspy_id(self):

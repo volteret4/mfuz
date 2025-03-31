@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ScriptRunnerForm</class>
+ <widget class="QWidget" name="ScriptRunnerForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Script Runner</string>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
+    <number>10</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="header_layout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="title_label">
+       <property name="text">
+        <string>Script Runner</string>
+       </property>
+       <property name="styleSheet">
+        <string>font-weight: bold; font-size: 14px;</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="toggle_args_btn">
+       <property name="text">
+        <string>Advanced Settings</string>
+       </property>
+       <property name="styleSheet">
+        <string>QPushButton {
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px;
+}</string>
+       </property>
+       <property name="fixedWidth">
+        <number>140</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scripts_scroll">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="styleSheet">
+      <string>QScrollArea {
+  border: none;
+  background-color: transparent;
+}
+QScrollBar:vertical {
+  width: 10px;
+  background: transparent;
+}
+QScrollBar::handle:vertical {
+  background: rgba(128, 128, 128, 0.5);
+  border-radius: 5px;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+  height: 0px;
+}</string>
+     </property>
+     <widget class="QWidget" name="scripts_container">
+      <layout class="QVBoxLayout" name="scripts_layout">
+       <property name="spacing">
+        <number>5</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignTop</set>
+       </property>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="log_text">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+     <property name="maximumHeight">
+      <number>150</number>
+     </property>
+     <property name="styleSheet">
+      <string>QTextEdit {
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px;
+}</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
