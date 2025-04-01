@@ -17,8 +17,30 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+try:
+    from loggin_helper import setup_module_logger
+    logger = setup_module_logger(
+        module_name="MuspyArtistModule",
+        log_level="INFO",
+        log_types=["ERROR", "INFO", "WARNING", "UI"]
+    )
+except ImportError:
+    # Fallback a logging estándar si no está disponible terminal_logger
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger("MuspyArtistModule")
+
+
+# Añade esto después de importar terminal_logger
+class PyQtFilter(logging.Filter):
+    def filter(self, record):
+        # Filtrar mensajes de PyQt
+        if record.name.startswith('PyQt6'):
+            return False
+        return True
+
+# Y aplica el filtro al logger global
+logging.getLogger().addFilter(PyQtFilter())
+
 
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
@@ -46,24 +68,52 @@ class MuspyArtistModule(BaseModule):
             parent (QWidget, optional): Parent widget
             theme (str, optional): UI theme
         """
-
+        # Configuración de logging primero
+        self.module_name = self.__class__.__name__
+        
+        # Obtener configuración de logging
+        self.log_config = kwargs.get('logging', {})
+        self.log_level = self.log_config.get('log_level', 'INFO')
+        self.enable_logging = self.log_config.get('debug_enabled', False)
+        self.log_types = self.log_config.get('log_types', ['ERROR', 'INFO'])
+        
+        # Propiedades de Muspy
         self.muspy_username = muspy_username
         self.muspy_password = muspy_password
         self.muspy_api_key = muspy_api_key
         self.muspy_id = muspy_api_key
+        
         # Intentar obtener el Muspy ID si no está configurado
         if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
             self.get_muspy_id()
+            
         self.base_url = "https://muspy.com/api/1"
         self.artists_file = artists_file
         self.query_db_script_path = query_db_script_path
         self.lastfm_username = lastfm_username
         self.db_path = db_path
 
+        # Usar logger específico para este módulo si está habilitado
+        if self.enable_logging:
+            try:
+                from terminal_logger import setup_module_logger
+                self.logger = setup_module_logger(
+                    module_name=self.module_name,
+                    log_level=self.log_level,
+                    log_types=self.log_types
+                )
+                global logger
+                logger = self.logger  # Actualiza la referencia global
+            except ImportError:
+                self.logger = logger  # Usar el logger global
+        else:
+            self.logger = logger  # Usar el logger global
+
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
         
-        super().__init__(parent, theme)
+        # Llamar al constructor de la superclase AL FINAL
+        super().__init__(parent, theme, **kwargs)
         
 
    # Actualización del método init_ui en la clase MuspyArtistModule
@@ -95,19 +145,20 @@ class MuspyArtistModule(BaseModule):
                             missing_widgets.append(widget_name)
                 
                 if missing_widgets:
+                    logger.error(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
                     raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
                 
                 # Configuración adicional después de cargar UI
                 self._connect_signals()
                 
-                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
+                logger.ui(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
-                print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
+                logger.error(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
                 import traceback
-                traceback.print_exc()
+                logger.debug(traceback.format_exc())
                 self._fallback_init_ui()
         else:
-            print(f"Archivo UI MuspyArtistModule no encontrado: {ui_file_path}, usando creación manual")
+            logger.ui(f"Archivo UI MuspyArtistModule no encontrado: {ui_file_path}, usando creación manual")
             self._fallback_init_ui()
 
     def _fallback_init_ui(self):
@@ -207,7 +258,7 @@ class MuspyArtistModule(BaseModule):
                         user_data = user_response.json()
                         if 'userid' in user_data:
                             self.muspy_id = user_data['userid']
-                            print(f"Muspy ID obtenido: {self.muspy_id}")
+                            logger.debug(f"Muspy ID obtenido: {self.muspy_id}")
                             return self.muspy_id
                         else:
                             logger.error("No se encontró 'userid' en la respuesta JSON")
@@ -230,7 +281,6 @@ class MuspyArtistModule(BaseModule):
         try:
             # Asegurar que tenemos PROJECT_ROOT
             self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
-
 
             # Construir la ruta al script
             script_path = PROJECT_ROOT / "base_datos" / "tools" / "consultar_items_db.py"
@@ -272,77 +322,44 @@ class MuspyArtistModule(BaseModule):
             # Crear una lista de nombres de artistas existentes para verificaciones más rápidas
             existing_names = {artist["nombre"] for artist in existing_artists}
             
-            # Crear un diálogo para seleccionar artistas
+            # Crear el diálogo usando el archivo UI
             dialog = QDialog(self)
-            dialog.setWindowTitle("Seleccionar Artistas")
-            dialog.setMinimumWidth(600)
-            dialog.setMinimumHeight(600)
-            
-            # Layout principal
-            layout = QVBoxLayout(dialog)
-            
-            # Etiqueta informativa
-            info_label = QLabel(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
-            layout.addWidget(info_label)
-            
-            # Campo de búsqueda
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_input = QLineEdit()
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_input)
-            layout.addLayout(search_layout)
-            
-            # Área de scroll con checkboxes
-            scroll_area = QWidget()
-            scroll_layout = QVBoxLayout(scroll_area)
-            
-            # Lista para almacenar los checkboxes
-            checkboxes = []
-            
-            # Crear un checkbox para cada artista
-            for artist in artists_data:
-                checkbox = QCheckBox(f"{artist['nombre']} ({artist['mbid']})")
-                checkbox.setChecked(artist['nombre'] in existing_names)  # Pre-seleccionar si ya existe
-                checkbox.setProperty("artist_data", artist)  # Almacenar datos del artista en el checkbox
-                checkboxes.append(checkbox)
-                scroll_layout.addWidget(checkbox)
-            
-            # Crear área de desplazamiento
-            scroll_widget = QScrollArea()
-            scroll_widget.setWidgetResizable(True)
-            scroll_widget.setWidget(scroll_area)
-            layout.addWidget(scroll_widget)
-            
-            # Botones de selección
-            button_layout = QHBoxLayout()
-            select_all_button = QPushButton("Seleccionar Todos")
-            deselect_all_button = QPushButton("Deseleccionar Todos")
-            button_layout.addWidget(select_all_button)
-            button_layout.addWidget(deselect_all_button)
-            layout.addLayout(button_layout)
-            
-            # Botones de aceptar/cancelar
-            buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
-            layout.addWidget(buttons)
-            
-            buttons.accepted.connect(dialog.accept)
-            buttons.rejected.connect(dialog.reject)
-            
-            # Función de búsqueda para filtrar los artistas
-            def filter_artists():
-                search_text = search_input.text().lower()
-                for checkbox in checkboxes:
-                    artist_data = checkbox.property("artist_data")
-                    visible = search_text in artist_data["nombre"].lower()
-                    checkbox.setVisible(visible)
-            
-            # Conectar señales
-            search_input.textChanged.connect(filter_artists)
-            select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
-            deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
-            buttons.accepted.connect(dialog.accept)
-            buttons.rejected.connect(dialog.reject)
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            if os.path.exists(ui_file_path):
+                try:
+                    # Cargar el archivo UI
+                    uic.loadUi(ui_file_path, dialog)
+                    
+                    # Actualizar la etiqueta con el número de artistas
+                    dialog.info_label.setText(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
+                    
+                    # Limpiar los artistas de ejemplo que vienen en el UI
+                    for i in reversed(range(dialog.scroll_layout.count())):
+                        widget = dialog.scroll_layout.itemAt(i).widget()
+                        if widget is not None:
+                            widget.deleteLater()
+                    
+                    # Crear checkboxes para cada artista
+                    checkboxes = []
+                    for artist in artists_data:
+                        checkbox = QCheckBox(f"{artist['nombre']} ({artist['mbid']})")
+                        checkbox.setChecked(artist['nombre'] in existing_names)  # Pre-seleccionar si ya existe
+                        checkbox.setProperty("artist_data", artist)  # Almacenar datos del artista en el checkbox
+                        checkboxes.append(checkbox)
+                        dialog.scroll_layout.addWidget(checkbox)
+                    
+                    # Conectar señales
+                    dialog.search_input.textChanged.connect(lambda text: self.filter_artists(text, checkboxes))
+                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
+                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
+                    dialog.buttons.accepted.connect(dialog.accept)
+                    dialog.buttons.rejected.connect(dialog.reject)
+                except Exception as e:
+                    self.results_text.append(f"Error cargando UI de selección de artistas: {e}")
+                    return
+            else:
+                self.results_text.append(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
+                self._fallback_artist_selection_dialog(dialog, artists_data, existing_names)
             
             # Mostrar el diálogo
             if dialog.exec() == 1:  # 1 generalmente significa "aceptado"
@@ -353,9 +370,10 @@ class MuspyArtistModule(BaseModule):
             
             # Recopilar artistas seleccionados
             selected_artists = []
-            for checkbox in checkboxes:
-                if checkbox.isChecked():
-                    selected_artists.append(checkbox.property("artist_data"))
+            for i in range(dialog.scroll_layout.count()):
+                widget = dialog.scroll_layout.itemAt(i).widget()
+                if isinstance(widget, QCheckBox) and widget.isChecked():
+                    selected_artists.append(widget.property("artist_data"))
             
             # Guardar artistas seleccionados en JSON
             try:
@@ -373,6 +391,95 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Error: {str(e)}")
             logger.error(f"Error en load_artists_from_file: {e}", exc_info=True)
 
+    def _fallback_artist_selection_dialog(self, dialog, artists_data, existing_names):
+        """
+        Método de respaldo para crear el diálogo de selección de artistas manualmente
+        si el archivo UI no se encuentra.
+        
+        Args:
+            dialog (QDialog): Diálogo a configurar
+            artists_data (list): Lista de datos de artistas
+            existing_names (set): Conjunto de nombres de artistas existentes
+        """
+        dialog.setWindowTitle("Seleccionar Artistas")
+        dialog.setMinimumWidth(600)
+        dialog.setMinimumHeight(600)
+        
+        # Layout principal
+        layout = QVBoxLayout(dialog)
+        
+        # Etiqueta informativa
+        info_label = QLabel(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
+        layout.addWidget(info_label)
+        
+        # Campo de búsqueda
+        search_layout = QHBoxLayout()
+        search_label = QLabel("Buscar:")
+        search_input = QLineEdit()
+        search_layout.addWidget(search_label)
+        search_layout.addWidget(search_input)
+        layout.addLayout(search_layout)
+        
+        # Área de scroll con checkboxes
+        scroll_area = QWidget()
+        scroll_layout = QVBoxLayout(scroll_area)
+        
+        # Lista para almacenar los checkboxes
+        checkboxes = []
+        
+        # Crear un checkbox para cada artista
+        for artist in artists_data:
+            checkbox = QCheckBox(f"{artist['nombre']} ({artist['mbid']})")
+            checkbox.setChecked(artist['nombre'] in existing_names)  # Pre-seleccionar si ya existe
+            checkbox.setProperty("artist_data", artist)  # Almacenar datos del artista en el checkbox
+            checkboxes.append(checkbox)
+            scroll_layout.addWidget(checkbox)
+        
+        # Crear área de desplazamiento
+        scroll_widget = QScrollArea()
+        scroll_widget.setWidgetResizable(True)
+        scroll_widget.setWidget(scroll_area)
+        layout.addWidget(scroll_widget)
+        
+        # Botones de selección
+        button_layout = QHBoxLayout()
+        select_all_button = QPushButton("Seleccionar Todos")
+        deselect_all_button = QPushButton("Deseleccionar Todos")
+        button_layout.addWidget(select_all_button)
+        button_layout.addWidget(deselect_all_button)
+        layout.addLayout(button_layout)
+        
+        # Botones de aceptar/cancelar
+        buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        layout.addWidget(buttons)
+        
+        # Guardamos referencias para acceder a ellos desde otras funciones
+        dialog.scroll_layout = scroll_layout
+        dialog.search_input = search_input
+        dialog.select_all_button = select_all_button
+        dialog.deselect_all_button = deselect_all_button
+        dialog.buttons = buttons
+        
+        # Conectar señales
+        search_input.textChanged.connect(lambda text: self.filter_artists(text, checkboxes))
+        select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
+        deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+
+    def filter_artists(self, search_text, checkboxes):
+        """
+        Filtra los artistas en el diálogo según el texto de búsqueda.
+        
+        Args:
+            search_text (str): Texto de búsqueda
+            checkboxes (list): Lista de checkboxes de artistas
+        """
+        search_text = search_text.lower()
+        for checkbox in checkboxes:
+            artist_data = checkbox.property("artist_data")
+            visible = search_text in artist_data["nombre"].lower()
+            checkbox.setVisible(visible)
 
     def search_and_get_releases(self):
         """Search for artist releases without adding to Muspy"""
@@ -391,11 +498,11 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", f"Could not find MBID for {artist_name}")
             return
         
-        # Get releases for the artist
-        self.get_artist_releases(mbid, artist_name)
-        
         # Store the current artist for possible addition later
         self.current_artist = {"name": artist_name, "mbid": mbid}
+        
+        # Get releases for the artist
+        self.get_artist_releases(mbid, artist_name)
 
     def get_artist_releases(self, mbid, artist_name=None):
         """
@@ -451,8 +558,14 @@ class MuspyArtistModule(BaseModule):
         if hasattr(self, 'current_artist') and self.current_artist:
             success = self.add_artist_to_muspy(self.current_artist["mbid"], self.current_artist["name"])
             if success:
-                self.add_follow_button.setText(f"Following {self.current_artist['name']}")
-                self.add_follow_button.setEnabled(False)
+                # Si estamos usando el widget de tabla desde el archivo UI
+                if hasattr(self, 'table_widget') and hasattr(self.table_widget, 'add_follow_button'):
+                    self.table_widget.add_follow_button.setText(f"Following {self.current_artist['name']}")
+                    self.table_widget.add_follow_button.setEnabled(False)
+                # Si estamos usando el fallback
+                elif hasattr(self, 'add_follow_button'):
+                    self.add_follow_button.setText(f"Following {self.current_artist['name']}")
+                    self.add_follow_button.setEnabled(False)
         else:
             QMessageBox.warning(self, "Error", "No artist currently selected")
 
@@ -507,7 +620,7 @@ class MuspyArtistModule(BaseModule):
                     # Agregar a la lista de todos los lanzamientos
                     all_new_releases.extend(future_releases)
                 else:
-                    print(f"Error consultando lanzamientos para MBID {mbid}: {response.text}")
+                    log.error(f"Error consultando lanzamientos para MBID {mbid}: {response.text}")
             
             # Eliminar duplicados (si el mismo lanzamiento aparece para varios álbumes)
             unique_releases = []
@@ -664,9 +777,9 @@ class MuspyArtistModule(BaseModule):
                 
                 # Print out the actual paths being used
                 self.results_text.append(f"Consultando base de datos para {artist_name}...")
-                logger.info(f"Script Path: {full_script_path}")
-                logger.info(f"DB Path: {full_db_path}")
-                logger.info(f"Artist: {artist_name}")
+                logger.debug(f"Script Path: {full_script_path}")
+                logger.debug(f"DB Path: {full_db_path}")
+                logger.debug(f"Artist: {artist_name}")
 
                 mbid_result = subprocess.run(
                     ['python', full_script_path, "--db", full_db_path, "--artist", artist_name, "--mbid"], 
@@ -947,6 +1060,7 @@ class MuspyArtistModule(BaseModule):
 
 
 
+ 
     def display_releases_table(self, releases):
         """
         Display releases in a QTableWidget for better rendering
@@ -963,6 +1077,68 @@ class MuspyArtistModule(BaseModule):
                     self.layout().removeItem(item)
                     widget.deleteLater()
 
+        # Create the table widget using the UI file
+        table_widget = QWidget()
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "releases_table.ui")
+        
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                uic.loadUi(ui_file_path, table_widget)
+                
+                # Configuraciones iniciales
+                table_widget.count_label.setText(f"Showing {len(releases)} upcoming releases")
+                table = table_widget.table
+                table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+
+                # Limpiar filas de ejemplo que vienen en el UI
+                table.setRowCount(0)
+                
+                # Configurar número de filas para datos reales
+                table.setRowCount(len(releases))
+                
+                # Fill the table
+                self._fill_releases_table(table, releases)
+                
+                # Configurar el botón de seguir artista si estamos viendo un artista específico
+                if hasattr(self, 'current_artist') and self.current_artist:
+                    table_widget.add_follow_button.setText(f"Follow {self.current_artist['name']}")
+                    table_widget.add_follow_button.clicked.connect(self.follow_current_artist)
+                else:
+                    table_widget.add_follow_button.setVisible(False)
+                
+                # Resize rows to content
+                table.resizeRowsToContents()
+                
+                # Make the table sortable
+                table.setSortingEnabled(True)
+                
+                # Hide the text edit and add the table to the layout
+                self.results_text.hide()
+                # Insert the table widget
+                self.layout().insertWidget(self.layout().count() - 1, table_widget)
+                
+                # Store reference to table widget
+                self.table_widget = table_widget
+                return table
+            except Exception as e:
+                self.results_text.append(f"Error cargando UI de la tabla: {e}")
+                logger.error(f"Error cargando UI de la tabla: {e}")
+                # Fall back to the old method
+                return self._fallback_display_releases_table(releases)
+        else:
+            self.results_text.append(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
+            return self._fallback_display_releases_table(releases)
+
+
+
+    def _fallback_display_releases_table(self, releases):
+        """
+        Método de respaldo para mostrar la tabla de lanzamientos si no se encuentra el archivo UI
+        
+        Args:
+            releases (list): Lista de lanzamientos
+        """
         # Create the table
         table = QTableWidget()
         table.setColumnCount(5)
@@ -976,6 +1152,36 @@ class MuspyArtistModule(BaseModule):
         # Configure number of rows
         table.setRowCount(len(releases))
         
+        # Fill the table
+        self._fill_releases_table(table, releases)
+        
+        # If we have a current artist, add a follow button
+        if hasattr(self, 'current_artist') and self.current_artist:
+            self.add_follow_button = QPushButton(f"Follow {self.current_artist['name']}")
+            self.add_follow_button.clicked.connect(self.follow_current_artist)
+            self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
+        
+        # Resize rows to content
+        table.resizeRowsToContents()
+        
+        # Make the table sortable
+        table.setSortingEnabled(True)
+        
+        # Hide the text edit and add the table to the layout
+        self.results_text.hide()
+        # Insert the table just above the bottom buttons
+        self.layout().insertWidget(self.layout().count() - 1, table)
+        return table
+
+
+    def _fill_releases_table(self, table, releases):
+        """
+        Rellena una tabla existente con los datos de lanzamientos
+        
+        Args:
+            table (QTableWidget): Tabla a rellenar
+            releases (list): Lista de lanzamientos
+        """
         # Fill the table
         for row, release in enumerate(releases):
             artist = release.get('artist', {})
@@ -1001,8 +1207,6 @@ class MuspyArtistModule(BaseModule):
             date_item = QTableWidgetItem(date_str)
             
             # Highlight dates that are within the next month  
-            
-            
             try:
                 release_date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
                 today = datetime.date.today()
@@ -1031,22 +1235,8 @@ class MuspyArtistModule(BaseModule):
             if artist.get('disambiguation'):
                 details.append(artist.get('disambiguation'))
 
-
             details_item = QTableWidgetItem("; ".join(details) if details else "")
             table.setItem(row, 4, details_item)
-        
-        # Resize rows to content
-        table.resizeRowsToContents()
-        
-        # Make the table sortable
-        table.setSortingEnabled(True)
-        
-        # Hide the text edit and add the table to the layout
-        self.results_text.hide()
-        # Insert the table just above the bottom buttons
-        self.layout().insertWidget(self.layout().count() - 1, table)
-        return table
-
 
 
 def main():

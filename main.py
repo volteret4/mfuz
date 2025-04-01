@@ -12,6 +12,54 @@ import sys
 import argparse
 import logging
 
+# class PyQtFilter(logging.Filter):
+#     def filter(self, record):
+#         # Filtrar mensajes de PyQt y uic
+#         if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
+#             return False
+#         return True
+
+class ConditionalPyQtFilter(logging.Filter):
+    def __init__(self, show_ui_logs=False):
+        super().__init__()
+        self.show_ui_logs = show_ui_logs
+    
+    def filter(self, record):
+        # Si UI está habilitado, mostrar todos los logs
+        if self.show_ui_logs:
+            return True
+        
+        # Si UI no está habilitado, filtrar logs de PyQt y uic
+        if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
+            return False
+        return True
+
+
+
+
+class ColoredFormatter(logging.Formatter):
+    """Formateador que añade colores a los logs en terminal"""
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.last_module = None
+    
+    def format(self, record):
+        levelname = record.levelname
+        # Obtener el color o usar RESET si no está definido
+        color = COLORS.get(levelname, COLORS['RESET'])
+        # Formatear con color
+        record.levelname = f"{color}{levelname}{COLORS['RESET']}"
+        
+        # Añadir separador si cambiamos de módulo
+        result = super().format(record)
+        current_module = record.name.split('.')[0]
+        
+        if self.last_module and self.last_module != current_module:
+            result = f"\n{result}"
+        
+        self.last_module = current_module
+        return result
 
 
 def exception_hook(exc_type, exc_value, exc_traceback):
@@ -69,6 +117,58 @@ class TabManager(QMainWindow):
         self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
         self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
         
+        try:
+            
+            # Convertir el nivel de string a constante de logging
+            level_map = {
+                'DEBUG': logging.DEBUG,
+                'INFO': logging.INFO,
+                'WARNING': logging.WARNING,
+                'ERROR': logging.ERROR,
+                'CRITICAL': logging.CRITICAL,
+                'UI': 15  # Nivel personalizado
+            }
+            logging_level_str = config.get('logging_level', 'INFO')
+            logging_level = level_map.get(logging_level_str, logging.INFO)
+        except Exception as e:
+            # En caso de error, usar un valor predeterminado
+            logging_level = logging.INFO
+            print(f"Error al leer el nivel de logging desde la configuración: {e}")
+
+
+        # Obtener los tipos de log habilitados
+        log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
+        show_ui_logs = 'UI' in log_types
+
+        # Registrar nivel UI personalizado si no existe
+        if not hasattr(logging, 'UI'):
+            logging.addLevelName(15, 'UI')  # 15 es un valor entre DEBUG (10) e INFO (20)
+            
+            def ui_log(self, message, *args, **kwargs):
+                self.log(15, message, *args, **kwargs)
+            
+            logging.Logger.ui = ui_log
+
+        # Configurar los handlers
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(ColoredFormatter)
+
+        file_handler = logging.FileHandler('multi_module_manager.log')
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+
+        # Configurar root logger
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging_level)
+        root_logger.handlers = []  # Eliminar handlers existentes
+        root_logger.addHandler(console_handler)
+        root_logger.addHandler(file_handler)
+
+        # Aplicar filtro condicional
+        pyqt_filter = ConditionalPyQtFilter(show_ui_logs)
+        root_logger.addFilter(pyqt_filter)
+
+
+
         self.init_ui()
         self.load_modules()
 
@@ -639,30 +739,106 @@ def main():
 
     # Configure logging if logging is enabled
     if log_enabled:
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.StreamHandler(),  # Print to console
-                logging.FileHandler('multi_module_manager.log')  # Log to file
-            ]
-        )
-        
-        class LoggerWriter:
-            def __init__(self, logger, level):
-                self.logger = logger
-                self.level = level
-                self.buffer = []
-
-            def write(self, message):
-                if message.strip():
-                    self.logger.log(self.level, message.rstrip())
-
-            def flush(self):
-                pass
-
-        sys.stdout = LoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
-        sys.stderr = LoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
+        # Importar nuestro formateador personalizado
+        try:
+            from terminal_logger import ColoredFormatter, COLORS
+            
+            # Obtener configuración detallada de logging
+            logging_level_str = config.get('logging_level', 'INFO')
+            log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
+            
+            # Convertir nivel de string a constante de logging
+            level_map = {
+                'DEBUG': logging.DEBUG,
+                'INFO': logging.INFO,
+                'WARNING': logging.WARNING,
+                'ERROR': logging.ERROR,
+                'CRITICAL': logging.CRITICAL,
+                'UI': 15  # Nivel personalizado
+            }
+            logging_level = level_map.get(logging_level_str, logging.INFO)
+            
+            # Registrar nivel UI si no existe
+            if not hasattr(logging, 'UI'):
+                logging.addLevelName(15, 'UI')
+                
+                def ui_log(self, message, *args, **kwargs):
+                    self.log(15, message, *args, **kwargs)
+                
+                logging.Logger.ui = ui_log
+            
+            # Configurar logging básico con formato colorizado
+            ColoredFormatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+            
+            # Handlers
+            console_handler = logging.StreamHandler()
+            console_handler.setFormatter(ColoredFormatter)
+            
+            file_handler = logging.FileHandler('multi_module_manager.log')
+            file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            
+            # Configurar root logger
+            root_logger = logging.getLogger()
+            root_logger.setLevel(logging_level)
+            root_logger.handlers = []  # Eliminar handlers existentes
+            root_logger.addHandler(console_handler)
+            root_logger.addHandler(file_handler)
+            
+            # Clase para redirigir stdout/stderr con colores según el módulo
+            class ColoredLoggerWriter:
+                def __init__(self, logger, level, module_name=None):
+                    self.logger = logger
+                    self.level = level
+                    self.module_name = module_name or 'STDOUT' if level == logging.INFO else 'STDERR'
+                    self.buffer = []
+                
+                def write(self, message):
+                    if message and message.strip():
+                        # Determinar el tipo de log basado en el nivel
+                        level_name = logging.getLevelName(self.level)
+                        color = COLORS.get(level_name, COLORS['RESET'])
+                        
+                        # Log con formato específico para stdout/stderr redirigido
+                        self.logger.log(self.level, f"[{self.module_name}] {message.rstrip()}")
+                
+                def flush(self):
+                    pass
+            
+            # Redirigir stdout y stderr 
+            sys.stdout = ColoredLoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
+            sys.stderr = ColoredLoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
+            
+            logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
+            
+        except Exception as e:
+            # Fallback al logging básico en caso de error
+            logging.basicConfig(
+                level=logging.DEBUG,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                handlers=[
+                    logging.StreamHandler(),  # Print to console
+                    logging.FileHandler('multi_module_manager.log')  # Log to file
+                ]
+            )
+            
+            # Clase simple para redirigir stdout/stderr
+            class LoggerWriter:
+                def __init__(self, logger, level):
+                    self.logger = logger
+                    self.level = level
+                    self.buffer = []
+                
+                def write(self, message):
+                    if message.strip():
+                        self.logger.log(self.level, message.rstrip())
+                
+                def flush(self):
+                    pass
+            
+            sys.stdout = LoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
+            sys.stderr = LoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
+            
+            logging.error(f"Error configurando sistema de logging avanzado: {e}. Usando configuración básica.")
     
     app = QApplication(sys.argv)
     manager = TabManager(args.config_path, font_family=args.font, font_size=args.font_size)

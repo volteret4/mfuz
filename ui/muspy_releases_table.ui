@@ -1,0 +1,79 @@
+<column>
+      <property name="text">
+       <string>Disambiguation</string>
+      </property>
+     </column>
+     <!-- Datos de ejemplo (solo para diseño - se reemplazarán dinámicamente) -->
+     <row>
+      <item>
+       <property name="text">
+        <string>The Beatles</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Abbey Road (50th Anniversary)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Album</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2025-05-15</string>
+       </property>
+       <property name="background">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>31</red>
+          <green>60</green>
+          <blue>28</blue>
+         </color>
+        </brush>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Format: Vinyl; Tracks: 17; Country: UK</string>
+       </property>
+      </item>
+     </row>
+     <row>
+      <item>
+       <property name="text">
+        <string>Radiohead</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>In Rainbows (Remastered)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Album</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>2025-08-20</string>
+       </property>
+       <property name="background">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>60</red>
+          <green>28</green>
+          <blue>31</blue>
+         </color>
+        </brush>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Format: CD, Digital; Tracks: 10; Country: Worldwide</string>
+       </property>
+      </item>
+     </row>
+    </widget>

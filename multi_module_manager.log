@@ -1,0 +1,38 @@
+2025-04-01 20:02:54,773 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:04:24,388 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:04:24,406 - root - INFO - Realizando búsqueda en Bandcamp: https://bandcamp.com/search?q=bicep
+2025-04-01 20:04:25,595 - root - INFO - Realizando búsqueda en SoundCloud: https://soundcloud.com/search?q=bicep
+2025-04-01 20:04:25,910 - root - INFO - SoundCloud: usando selector h2 a[href^="/"], encontrados 10 elementos
+2025-04-01 20:04:25,911 - root - INFO - Encontrado en SoundCloud: BICEP - URL: https://soundcloud.com/feelmybicep
+2025-04-01 20:04:25,912 - root - INFO - Encontrado en SoundCloud: Bicep - Glue vs Sonny Fodera - Angel ft. Clementine Douglas vs Noir & Haze - Around (SF EDIT) - URL: https://soundcloud.com/sonnyfodera/bicep-glue-vs-sonny-fodera-angel-ft-clementine-douglas-vs-noir-haze-around-sonny-fodera-edit
+2025-04-01 20:04:25,913 - root - INFO - Encontrado en SoundCloud: BICEP | GLUE // CLIP - URL: https://soundcloud.com/feelmybicep/bicep-glue-clip
+2025-04-01 20:04:25,914 - root - INFO - Encontrado en SoundCloud: Move Me X Glue (Charli XCX X Bicep) - URL: https://soundcloud.com/jevanextras/move-me-x-glue-charli-xcx-x-bicep
+2025-04-01 20:04:25,914 - root - INFO - Encontrado en SoundCloud: Bicep x Nelly Furtado - Glue x Say It Right (Switch Disco Edit) - URL: https://soundcloud.com/user-978599075/bicep-x-nelly-furtado-glue-x-say-it-right-switch-disco-edit
+2025-04-01 20:05:54,221 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:06:12,108 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:06:12,126 - root - INFO - Realizando búsqueda en Bandcamp: https://bandcamp.com/search?q=bicep
+2025-04-01 20:06:13,805 - root - INFO - Realizando búsqueda en SoundCloud: https://soundcloud.com/search?q=bicep
+2025-04-01 20:06:14,165 - root - INFO - SoundCloud: usando selector h2 a[href^="/"], encontrados 10 elementos
+2025-04-01 20:06:14,166 - root - INFO - Encontrado en SoundCloud: BICEP - URL: https://soundcloud.com/feelmybicep
+2025-04-01 20:06:14,167 - root - INFO - Encontrado en SoundCloud: Bicep - Glue vs Sonny Fodera - Angel ft. Clementine Douglas vs Noir & Haze - Around (SF EDIT) - URL: https://soundcloud.com/sonnyfodera/bicep-glue-vs-sonny-fodera-angel-ft-clementine-douglas-vs-noir-haze-around-sonny-fodera-edit
+2025-04-01 20:06:14,168 - root - INFO - Encontrado en SoundCloud: BICEP | GLUE // CLIP - URL: https://soundcloud.com/feelmybicep/bicep-glue-clip
+2025-04-01 20:06:14,168 - root - INFO - Encontrado en SoundCloud: Move Me X Glue (Charli XCX X Bicep) - URL: https://soundcloud.com/jevanextras/move-me-x-glue-charli-xcx-x-bicep
+2025-04-01 20:06:14,169 - root - INFO - Encontrado en SoundCloud: Bicep x Nelly Furtado - Glue x Say It Right (Switch Disco Edit) - URL: https://soundcloud.com/user-978599075/bicep-x-nelly-furtado-glue-x-say-it-right-switch-disco-edit
+2025-04-01 20:29:46,934 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:31:13,301 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 20:31:19,476 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 21:16:26,482 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 21:23:19,852 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 21:23:49,892 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 21:24:38,534 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 21:24:38,555 - root - INFO - Realizando búsqueda en Bandcamp: https://bandcamp.com/search?q=bicep
+2025-04-01 21:24:39,091 - root - INFO - Realizando búsqueda en SoundCloud: https://soundcloud.com/search?q=bicep
+2025-04-01 21:24:39,829 - root - INFO - SoundCloud: usando selector h2 a[href^="/"], encontrados 10 elementos
+2025-04-01 21:24:39,830 - root - INFO - Encontrado en SoundCloud: BICEP - URL: https://soundcloud.com/feelmybicep
+2025-04-01 21:24:39,832 - root - INFO - Encontrado en SoundCloud: Bicep - Glue vs Sonny Fodera - Angel ft. Clementine Douglas vs Noir & Haze - Around (SF EDIT) - URL: https://soundcloud.com/sonnyfodera/bicep-glue-vs-sonny-fodera-angel-ft-clementine-douglas-vs-noir-haze-around-sonny-fodera-edit
+2025-04-01 21:24:39,834 - root - INFO - Encontrado en SoundCloud: BICEP | GLUE // CLIP - URL: https://soundcloud.com/feelmybicep/bicep-glue-clip
+2025-04-01 21:24:39,835 - root - INFO - Encontrado en SoundCloud: Move Me X Glue (Charli XCX X Bicep) - URL: https://soundcloud.com/jevanextras/move-me-x-glue-charli-xcx-x-bicep
+2025-04-01 21:24:39,836 - root - INFO - Encontrado en SoundCloud: Bicep x Nelly Furtado - Glue x Say It Right (Switch Disco Edit) - URL: https://soundcloud.com/user-978599075/bicep-x-nelly-furtado-glue-x-say-it-right-switch-disco-edit
+2025-04-01 23:41:28,926 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 23:43:25,592 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-01 23:44:18,674 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'

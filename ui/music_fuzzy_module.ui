@@ -11,14 +11,47 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
+    <number>10</number>
+   </property>
    <!-- Contenedor superior -->
    <item>
-    <widget class="QWidget" name="top_container">
+    <widget class="QFrame" name="top_container">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
      <property name="maximumHeight">
       <number>50</number>
      </property>
      <layout class="QVBoxLayout" name="top_layout">
       <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
        <number>5</number>
       </property>
       <item>
@@ -116,121 +149,22 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QWidget" name="time_filters_widget">
-        <property name="visible">
-         <bool>false</bool>
-        </property>
-        <layout class="QHBoxLayout" name="time_filters_layout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QHBoxLayout" name="time_unit_layout">
-           <item>
-            <widget class="QSpinBox" name="time_value">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>999</number>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QComboBox" name="time_unit">
-             <item>
-              <property name="text">
-               <string>Semanas</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Meses</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Años</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="apply_time_filter">
-             <property name="text">
-              <string>Aplicar</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="separator1">
-           <property name="text">
-            <string>|</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="month_year_layout">
-           <item>
-            <widget class="QComboBox" name="month_combo"/>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="year_spin">
-             <property name="minimum">
-              <number>1900</number>
-             </property>
-             <property name="maximum">
-              <number>2100</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="apply_month_year">
-             <property name="text">
-              <string>Filtrar por Mes/Año</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="separator2">
-           <property name="text">
-            <string>|</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="year_layout">
-           <item>
-            <widget class="QSpinBox" name="year_only_spin">
-             <property name="minimum">
-              <number>1900</number>
-             </property>
-             <property name="maximum">
-              <number>2100</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="apply_year">
-             <property name="text">
-              <string>Filtrar por Año</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </item>
      </layout>
+    </widget>
+   </item>
+   
+   <!-- Contenedor para ajustes avanzados (cargado dinámicamente) -->
+   <item>
+    <widget class="QFrame" name="advanced_settings_container">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="visible">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
    
@@ -241,20 +175,56 @@
       <enum>Qt::Horizontal</enum>
      </property>
      
-     <!-- Lista de resultados (panel izquierdo) -->
-     <widget class="QListWidget" name="results_list">
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+     <!-- Frame para el árbol de resultados (panel izquierdo) -->
+     <widget class="QFrame" name="results_tree_container">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <property name="focusPolicy">
-       <enum>Qt::StrongFocus</enum>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
+      <layout class="QVBoxLayout" name="results_tree_layout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <!-- El árbol se cargará dinámicamente aquí -->
+      </layout>
      </widget>
      
      <!-- Panel de detalles (panel derecho) -->
-     <widget class="QWidget" name="details_widget">
+     <widget class="QFrame" name="details_widget">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
       <layout class="QVBoxLayout" name="details_layout">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <property name="spacing">
         <number>0</number>
        </property>
        
@@ -268,7 +238,19 @@
            <string>Detalles</string>
           </attribute>
           <layout class="QVBoxLayout" name="details_tab_layout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <property name="spacing">
             <number>0</number>
            </property>
            
@@ -280,7 +262,13 @@
              </property>
              
              <!-- Contenedor de imágenes -->
-             <widget class="QWidget" name="images_container">
+             <widget class="QFrame" name="images_container">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -307,7 +295,13 @@
                <!-- Imágenes del álbum y artista -->
                <item>
                 <widget class="QLabel" name="cover_label">
-                 <property name="fixedSize">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>200</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
                   <size>
                    <width>200</width>
                    <height>200</height>
@@ -344,7 +338,13 @@
                
                <item>
                 <widget class="QLabel" name="artist_image_label">
-                 <property name="fixedSize">
+                 <property name="minimumSize">
+                  <size>
+                   <width>200</width>
+                   <height>200</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
                   <size>
                    <width>200</width>
                    <height>200</height>
@@ -364,12 +364,24 @@
                
                <!-- Botones de acciones -->
                <item>
-                <widget class="QWidget" name="buttons_container">
+                <widget class="QFrame" name="buttons_container">
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
                  <layout class="QVBoxLayout" name="buttons_layout">
                   <property name="spacing">
                    <number>10</number>
                   </property>
-                  <property name="margin">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
                    <number>0</number>
                   </property>
                   
@@ -404,7 +416,13 @@
              </widget>
              
              <!-- Contenedor de información con scroll -->
-             <widget class="QWidget" name="info_container">
+             <widget class="QFrame" name="info_container">
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -412,6 +430,18 @@
                </sizepolicy>
               </property>
               <layout class="QVBoxLayout" name="info_container_layout">
+               <property name="leftMargin">
+                <number>5</number>
+               </property>
+               <property name="topMargin">
+                <number>5</number>
+               </property>
+               <property name="rightMargin">
+                <number>5</number>
+               </property>
+               <property name="bottomMargin">
+                <number>5</number>
+               </property>
                <item>
                 <widget class="QScrollArea" name="info_scroll">
                  <property name="widgetResizable">
@@ -425,6 +455,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="minimumWidth">
+                  <number>600</number>
                  </property>
                 </widget>
                </item>
@@ -441,7 +474,19 @@
            <string>Playlist</string>
           </attribute>
           <layout class="QVBoxLayout" name="playlist_layout">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>10</number>
+           </property>
+           <property name="topMargin">
+            <number>10</number>
+           </property>
+           <property name="rightMargin">
+            <number>10</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
+           <property name="spacing">
             <number>10</number>
            </property>
            
@@ -482,10 +527,25 @@
            </item>
            
            <item>
-            <widget class="QWidget" name="playlist_buttons_container">
+            <widget class="QFrame" name="playlist_buttons_container">
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
              <layout class="QHBoxLayout" name="playlist_buttons_layout">
               <property name="spacing">
                <number>10</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
               </property>
               <item>
                <widget class="QPushButton" name="clear_playlist_button">

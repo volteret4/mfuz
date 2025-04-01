@@ -72,12 +72,35 @@ THEMES = {
 }
 class BaseModule(QWidget):
     """Clase base para todos los módulos."""
-    def __init__(self, parent=None, theme='Tokyo Night'):
+    def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         super().__init__(parent)
         self.tab_manager = None
         self._module_registry = {}
         self.current_theme = theme
         self.themes = THEMES  # Assuming THEMES is imported or defined
+        
+        # Configuración de logging
+        self.module_name = self.__class__.__name__
+        
+        # Obtener configuración de logging
+        self.log_config = kwargs.get('logging', {})
+        self.log_level = self.log_config.get('log_level', 'INFO')
+        self.enable_logging = self.log_config.get('debug_enabled', False)
+        self.log_types = self.log_config.get('log_types', ['ERROR', 'INFO'])
+        
+        # Configurar logger si está habilitado
+        if self.enable_logging:
+            try:
+                from terminal_logger import setup_module_logger
+                self.logger = setup_module_logger(
+                    module_name=self.module_name,
+                    log_level=self.log_level,
+                    log_types=self.log_types
+                )
+            except ImportError:
+                import logging
+                self.logger = logging.getLogger(self.module_name)
+        
         self.init_ui()
         self.apply_theme()
 

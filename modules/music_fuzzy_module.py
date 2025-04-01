@@ -13,7 +13,7 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                             QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView,
                             QCheckBox)
 from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence, QColor
-from PyQt6.QtCore import Qt, QSize, QDate
+from PyQt6.QtCore import Qt, QDate
 import subprocess
 import importlib.util
 import glob
@@ -243,10 +243,8 @@ class MusicBrowser(BaseModule):
         # Lista de widgets requeridos
         required_widgets = [
             'search_box', 'play_button', 'folder_button', 'advanced_settings_check',
-            'custom_button1', 'custom_button2', 'custom_button3', 'time_filters_widget',
-            'time_value', 'time_unit', 'apply_time_filter', 'month_combo', 'year_spin',
-            'apply_month_year', 'year_only_spin', 'apply_year', 'main_splitter',
-            'results_list', 'right_tabs', 'details_splitter', 'cover_label',
+            'custom_button1', 'custom_button2', 'custom_button3', 'advanced_settings_container',
+            'main_splitter', 'results_list', 'right_tabs', 'details_splitter', 'cover_label',
             'artist_image_label', 'info_scroll', 'playlist_table', 'clear_playlist_button',
             'playlist_button1', 'playlist_button2', 'playlist_button3', 'playlist_button4',
             'spotify_button'
@@ -291,6 +289,9 @@ class MusicBrowser(BaseModule):
         self.setup_shortcuts()
         self.apply_theme()
         self.connect_signals()
+        
+        # Inicializar el estado de los ajustes avanzados
+        self._advanced_settings_loaded = False
 
     def _fallback_init_ui(self):
         """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
@@ -583,7 +584,46 @@ class MusicBrowser(BaseModule):
 
 
     def setup_info_widget(self):
-        """Configura el widget de información dentro del scroll area."""
+        """
+        Configura el widget de información dentro del scroll area.
+        Carga el widget desde un archivo UI separado.
+        """
+        try:
+            # Ruta al archivo UI del panel de información
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
+            
+            if not os.path.exists(ui_file_path):
+                print(f"Archivo UI no encontrado: {ui_file_path}")
+                self._fallback_setup_info_widget()
+                return
+            
+            # Cargar el widget desde el archivo UI
+            from PyQt6 import uic
+            self.info_widget = QWidget()
+            uic.loadUi(ui_file_path, self.info_widget)
+            
+            # Obtener referencias a los labels importantes
+            self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
+            self.metadata_label = self.info_widget.findChild(QLabel, "metadata_label")
+            
+            # Asegurarse de que tenemos las referencias necesarias
+            if not self.lastfm_label or not self.metadata_label:
+                print("No se encontraron los labels necesarios en el UI de info_panel")
+                self._fallback_setup_info_widget()
+                return
+            
+            # Configurar el ScrollArea
+            self.info_scroll.setWidget(self.info_widget)
+            
+        except Exception as e:
+            print(f"Error cargando UI del panel de información: {e}")
+            import traceback
+            traceback.print_exc()
+            self._fallback_setup_info_widget()
+
+
+    def _fallback_setup_info_widget(self):
+        """Método de respaldo para crear el widget de información manualmente."""
         # Crear el widget para el interior del scroll
         self.info_widget = QWidget()
         self.info_layout = QVBoxLayout(self.info_widget)
@@ -594,13 +634,13 @@ class MusicBrowser(BaseModule):
         self.lastfm_label.setWordWrap(True)
         self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
         self.lastfm_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.lastfm_label.setMinimumWidth(1600)
+        self.lastfm_label.setMinimumWidth(600)
         
         self.metadata_label = QLabel()
         self.metadata_label.setWordWrap(True)
         self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
         self.metadata_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.metadata_label.setMinimumWidth(1600)
+        self.metadata_label.setMinimumWidth(600)
         
         # Agregar las etiquetas al layout
         self.info_layout.addWidget(self.lastfm_label)
@@ -609,6 +649,77 @@ class MusicBrowser(BaseModule):
         
         # Configurar el ScrollArea
         self.info_scroll.setWidget(self.info_widget)
+
+
+    def load_advanced_settings_ui(self):
+        """
+        Carga dinámicamente el widget de configuraciones avanzadas desde un archivo UI separado.
+        Se llama cuando el usuario activa el checkbox de ajustes avanzados.
+        """
+        try:
+            # Ruta al archivo UI de ajustes avanzados
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_advanced_settings.ui")
+            
+            if not os.path.exists(ui_file_path):
+                print(f"Archivo UI no encontrado: {ui_file_path}")
+                return False
+                
+            # Limpiar el contenedor por si ya tiene widgets
+            if self.advanced_settings_container.layout():
+                # Eliminar todos los widgets del layout actual
+                while self.advanced_settings_container.layout().count():
+                    item = self.advanced_settings_container.layout().takeAt(0)
+                    if item.widget():
+                        item.widget().deleteLater()
+                # Eliminar el layout actual
+                QWidget().setLayout(self.advanced_settings_container.layout())
+            
+            # Crear un nuevo layout para el contenedor
+            container_layout = QVBoxLayout(self.advanced_settings_container)
+            container_layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Cargar el widget desde el archivo UI
+            from PyQt6 import uic
+            advanced_settings = QWidget()
+            uic.loadUi(ui_file_path, advanced_settings)
+            
+            # Añadir el widget cargado al contenedor
+            container_layout.addWidget(advanced_settings)
+            
+            # Transferir referencias a los widgets importantes del UI cargado
+            self.time_value = advanced_settings.findChild(QSpinBox, "time_value")
+            self.time_unit = advanced_settings.findChild(QComboBox, "time_unit")
+            self.apply_time_filter = advanced_settings.findChild(QPushButton, "apply_time_filter")
+            self.month_combo = advanced_settings.findChild(QComboBox, "month_combo")
+            self.year_spin = advanced_settings.findChild(QSpinBox, "year_spin")
+            self.apply_month_year = advanced_settings.findChild(QPushButton, "apply_month_year")
+            self.year_only_spin = advanced_settings.findChild(QSpinBox, "year_only_spin")
+            self.apply_year = advanced_settings.findChild(QPushButton, "apply_year")
+            
+            # Inicializar campos
+            if self.month_combo.count() == 0:
+                self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
+                
+            # Establecer el año actual si no se ha hecho
+            current_year = QDate.currentDate().year()
+            if self.year_spin.value() == 0:
+                self.year_spin.setValue(current_year)
+            if self.year_only_spin.value() == 0:
+                self.year_only_spin.setValue(current_year)
+            
+            # Conectar señales
+            self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
+            self.apply_month_year.clicked.connect(self.apply_month_year_filter)
+            self.apply_year.clicked.connect(self.apply_year_filter)
+            
+            return True
+        except Exception as e:
+            print(f"Error cargando UI de ajustes avanzados: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
+
 
 
     def connect_signals(self):
@@ -658,20 +769,24 @@ class MusicBrowser(BaseModule):
         QListWidget.keyPressEvent(self.results_list, event)
 
     def toggle_advanced_settings(self, state):
-        """Muestra u oculta los elementos de configuración avanzada según el estado del checkbox"""
-        
+        """
+        Muestra u oculta los elementos de configuración avanzada según el estado del checkbox.
+        Carga el UI la primera vez que se activa.
+        """
         # Verificar el estado del checkbox
         is_visible = (state == 2)  # 2 es Qt.Checked
-        
         
         # Mostrar/ocultar botones avanzados
         for button in self.advanced_buttons:
             button.setVisible(is_visible)
         
+        # Si es la primera vez que se activa, cargar el UI
+        if is_visible:
+            if not hasattr(self, '_advanced_settings_loaded') or not self._advanced_settings_loaded:
+                self._advanced_settings_loaded = self.load_advanced_settings_ui()
         
-        # Mostrar/ocultar el widget de filtros temporales
-        self.time_filters_widget.setVisible(is_visible)
-        
+        # Mostrar/ocultar el contenedor de ajustes avanzados
+        self.advanced_settings_container.setVisible(is_visible)
         
         # Ajustar la altura del contenedor según corresponda
         if is_visible:
