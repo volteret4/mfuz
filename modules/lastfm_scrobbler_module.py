@@ -230,7 +230,7 @@ class LastFMScrobblerModule(BaseModule):
             if not hasattr(self, 'conn') or not self.conn:
                 print("No database connection available")
                 return
-            script = os.path.join(PROJECT_ROOT, 'base_datos', 'scrobbles_lastfm.py')
+            script = os.path.join(PROJECT_ROOT, 'base_datos', 'lastfm_escuchas.py')
             subprocess.run(['python', script, '--db-path', self.database_path, '--user', self.lastfm_user,  '--lastfm-api-key', self.lastfm_api_key ])
             
             # Clear existing data

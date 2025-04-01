@@ -1,3 +1,4 @@
+import sys
 import os
 import sqlite3
 import json
@@ -11,9 +12,10 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTabWidget,
                            QTextEdit, QDateTimeEdit, QSpinBox, QDoubleSpinBox,
                            QCheckBox, QDialog, QFileDialog, QScrollArea, QHeaderView)
 from PyQt6.QtCore import Qt, pyqtSignal, QDateTime, QSettings
-
-from base_module import BaseModule, THEMES
 import logging
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -3,13 +3,17 @@ import requests
 from bs4 import BeautifulSoup
 import urllib3
 import re
+import os
+import sys
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, 
                             QLabel, QScrollArea, QWidget, QComboBox, QProgressBar,
                             QSplitter, QFrame, QSizePolicy)
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QSize
 from PyQt6.QtWebEngineWidgets import QWebEngineView
-from base_module import BaseModule
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)

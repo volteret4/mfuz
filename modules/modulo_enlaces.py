@@ -14,7 +14,7 @@ from datetime import datetime, date
 import logging
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import BaseModule, THEMES
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

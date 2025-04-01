@@ -6,7 +6,6 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6 import uic
-from base_module import BaseModule, THEMES, PROJECT_ROOT
 import json
 from pathlib import Path
 import copy
@@ -14,6 +13,9 @@ import sys
 import os
 import logging
 import traceback
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, THEMES, PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

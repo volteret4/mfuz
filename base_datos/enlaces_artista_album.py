@@ -89,27 +89,42 @@ class MusicLinksManager:
         # [Código existente para otras APIs...]
         
         # Spotify
-        if 'spotify' not in self.disabled_services:
+        if 'spotify' in self.disabled_services:
+            self.spotify = None
+            self.logger.info("Spotify service disabled")
+        else:
             try:
                 spotify_client_id = self.spotify_client_id
                 spotify_client_secret = self.spotify_client_secret
                 
+                # Debug output for credentials
+                self.logger.info(f"Spotify client ID available: {bool(spotify_client_id)}")
+                self.logger.info(f"Spotify client secret available: {bool(spotify_client_secret)}")
+                
                 if spotify_client_id and spotify_client_secret:
-                    client_credentials_manager = SpotifyClientCredentials(
-                        client_id=spotify_client_id, 
-                        client_secret=spotify_client_secret
-                    )
-                    self.spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-                    self.logger.info("Spotify API initialized successfully")
+                    try:
+                        client_credentials_manager = SpotifyClientCredentials(
+                            client_id=spotify_client_id, 
+                            client_secret=spotify_client_secret
+                        )
+                        self.spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+                        
+                        # Test if the connection works
+                        test_result = self.spotify.search(q="test", limit=1)
+                        if test_result and 'tracks' in test_result:
+                            self.logger.info("Spotify API initialized and tested successfully")
+                        else:
+                            self.logger.warning("Spotify API initialized but test query returned unexpected results")
+                        
+                    except Exception as spotify_init_error:
+                        self.logger.error(f"Error during Spotify client initialization: {str(spotify_init_error)}")
+                        self.spotify = None
                 else:
                     self.spotify = None
-                    self.logger.warning("Spotify API credentials not found")
+                    self.logger.warning("Spotify API credentials not found or invalid")
             except Exception as e:
                 self.spotify = None
                 self.logger.error(f"Failed to initialize Spotify API: {str(e)}")
-        else:
-            self.spotify = None
-            self.logger.info("Spotify service disabled")
         
         # MusicBrainz
         if 'musicbrainz' not in self.disabled_services:
@@ -436,7 +451,7 @@ class MusicLinksManager:
         # Resto de la lógica de actualización de enlaces
         conn = sqlite3.connect(self.db_path)
         try:
-            #self.update_artist_links(days_threshold, force_update, recent_only, missing_only)
+            self.update_artist_links(days_threshold, force_update, recent_only, missing_only)
             self.update_album_and_track_links(days_threshold, force_update, recent_only, missing_only)
         finally:
             conn.close()
@@ -705,7 +720,7 @@ class MusicLinksManager:
         
         # Construir consulta base para seleccionar álbumes
         base_query = """
-            SELECT albums.id, albums.name, artists.name 
+            SELECT albums.id, albums.name, artists.name, albums.mbid
             FROM albums JOIN artists ON albums.artist_id = artists.id
         """
         
@@ -731,7 +746,11 @@ class MusicLinksManager:
                     missing_links_conditions.append("(albums.producers IS NULL OR albums.engineers IS NULL OR albums.mastering_engineers IS NULL)")
                 if self.rateyourmusic_enabled:
                     missing_links_conditions.append("albums.rateyourmusic_url IS NULL")
-                
+                if self.lastfm_enabled:
+                    missing_links_conditions.append("albums.lastfm_url IS NULL")
+                if self.bandcamp_enabled:
+                    missing_links_conditions.append("albums.bandcamp_url IS NULL")
+
                 # Si hay condiciones de información faltante, incluirlas
                 if missing_links_conditions:
                     conditions.append(f"({' OR '.join(missing_links_conditions)})")
@@ -755,22 +774,24 @@ class MusicLinksManager:
         albums = c.fetchall()
         total_albums = len(albums)
         self.logger.info(f"Found {total_albums} albums to update links and metadata")
-        
-    
+
         try:
-            for idx, (album_id, album_name, artist_name) in enumerate(albums, 1):
+            for idx, (album_id, album_name, artist_name, album_mbid) in enumerate(albums, 1):
                 self.logger.info(f"Processing album {idx}/{total_albums}: {album_name} by {artist_name}")
                 
                 # Inicializar variables con valores predeterminados
+                spotify_url = None
+                spotify_id = None
+                youtube_url = None
+                musicbrainz_url = None
                 discogs_url = None
+                rateyourmusic_url = None
+                bandcamp_url = None
+                lastfm_url = None
                 producers = None
                 engineers = None
                 mastering_engineers = None
                 credits = None
-                credits_dict = {}
-                results_list = []
-                bandcamp_url = None
-                lastfm_url = None
 
                 try:
                     # Obtener los enlaces y datos actuales para no solicitar API si ya existen
@@ -781,112 +802,278 @@ class MusicLinksManager:
                                 engineers, mastering_engineers, credits, lastfm_url
                             FROM albums WHERE id = ?
                         """, (album_id,))
-                        current_data = dict(zip(
-                            ['spotify_url', 'spotify_id', 'youtube_url', 'musicbrainz_url', 
-                            'discogs_url', 'rateyourmusic_url', 'bandcamp_url', 'producers', 
-                            'engineers', 'mastering_engineers', 'credits', 'lastfm_url'], 
-                            c.fetchone()
-                        ))
+                        result = c.fetchone()
+                        if result:
+                            current_data = dict(zip(
+                                ['spotify_url', 'spotify_id', 'youtube_url', 'musicbrainz_url', 
+                                'discogs_url', 'rateyourmusic_url', 'bandcamp_url', 'producers', 
+                                'engineers', 'mastering_engineers', 'credits', 'lastfm_url'], 
+                                result
+                            ))
+                        else:
+                            current_data = {
+                                'spotify_url': None, 'spotify_id': None, 'youtube_url': None, 
+                                'musicbrainz_url': None, 'discogs_url': None, 'rateyourmusic_url': None,
+                                'bandcamp_url': None, 'producers': None, 'engineers': None,
+                                'mastering_engineers': None, 'credits': None, 'lastfm_url': None
+                            }
                     else:
                         current_data = {
-                            'spotify_url': None, 
-                            'spotify_id': None,
-                            'youtube_url': None, 
-                            'musicbrainz_url': None, 
-                            'discogs_url': None, 
-                            'rateyourmusic_url': None,
-                            'bandcamp_url': None,
-                            'producers': None,
-                            'engineers': None,
-                            'mastering_engineers': None,
-                            'credits': None,
-                            'lastfm_url': None
+                            'spotify_url': None, 'spotify_id': None, 'youtube_url': None, 
+                            'musicbrainz_url': None, 'discogs_url': None, 'rateyourmusic_url': None,
+                            'bandcamp_url': None, 'producers': None, 'engineers': None,
+                            'mastering_engineers': None, 'credits': None, 'lastfm_url': None
                         }
 
-                    # Obtener enlace de Bandcamp
-                    if self.bandcamp_enabled and current_data['bandcamp_url'] is None:
+                    # ===== SPOTIFY =====
+                    if self.spotify and (current_data['spotify_url'] is None or current_data['spotify_id'] is None or force_update):
                         try:
+                            # Check explicitly if spotify is initialized
+                            if not hasattr(self, 'spotify') or self.spotify is None:
+                                self.logger.error("Spotify API not initialized although it should be - check configuration")
+                            else:
+                                # Log that we're about to search
+                                self.logger.info(f"Starting Spotify search for album '{album_name}' by '{artist_name}'")
+                                
+                                # Call the search function with proper error handling
+                                spotify_result = None
+                                try:
+                                    spotify_result = self._get_spotify_album_data(artist_name, album_name)
+                                except Exception as spotify_search_error:
+                                    self.logger.error(f"Exception calling _get_spotify_album_data: {str(spotify_search_error)}")
+                                
+                                # Process the results
+                                if spotify_result:
+                                    spotify_url = spotify_result.get('album_url')
+                                    spotify_id = spotify_result.get('album_id')
+                                    
+                                    # Validate the results
+                                    if spotify_url and spotify_id:
+                                        self.logger.info(f"Successfully found Spotify data: URL={spotify_url}, ID={spotify_id}")
+                                    else:
+                                        self.logger.warning("Spotify search succeeded but returned incomplete data")
+                                else:
+                                    self.logger.warning("Spotify search returned no results")
+                        except Exception as e:
+                            self.logger.error(f"Error in Spotify processing section: {str(e)}")
+                            import traceback
+                            self.logger.error(f"Traceback: {traceback.format_exc()}")
+                    else:
+                        # Use existing data
+                        spotify_url = current_data['spotify_url']
+                        spotify_id = current_data['spotify_id']
+                        if spotify_url or spotify_id:
+                            self.logger.info(f"Using existing Spotify data: URL={spotify_url}, ID={spotify_id}")
+
+                    # ===== BANDCAMP =====
+                    if self.bandcamp_enabled and (current_data['bandcamp_url'] is None or force_update):
+                        try:
+                            # Be explicit about function name to avoid mismatches
                             bandcamp_url = self._get_bandcamp_album_url(artist_name, album_name)
-                            # Si se encuentra un enlace de Bandcamp, usarlo
                             if bandcamp_url:
-                                current_data['bandcamp_url'] = bandcamp_url
-                        except Exception as bandcamp_error:
-                            self.logger.warning(f"Bandcamp album search error for {album_name} by {artist_name}: {bandcamp_error}")
-                    
-                    # Obtener enlace de LastFM (nuevo)
-                    if self.lastfm_enabled and current_data['lastfm_url'] is None:
+                                self.logger.info(f"Found Bandcamp URL for album '{album_name}': {bandcamp_url}")
+                        except Exception as e:
+                            self.logger.error(f"Error getting Bandcamp URL for album '{album_name}': {str(e)}")
+                    else:
+                        bandcamp_url = current_data['bandcamp_url']
+
+                    # ===== LASTFM =====
+                    if self.lastfm_enabled and (current_data['lastfm_url'] is None or force_update):
                         try:
+                            # Be explicit about function name to avoid mismatches
                             lastfm_url = self._get_lastfm_album_url(artist_name, album_name)
                             if lastfm_url:
-                                current_data['lastfm_url'] = lastfm_url
-                        except Exception as lastfm_error:
-                            self.logger.warning(f"LastFM album search error for {album_name} by {artist_name}: {lastfm_error}")
+                                self.logger.info(f"Found LastFM URL for album '{album_name}': {lastfm_url}")
+                        except Exception as e:
+                            self.logger.error(f"Error getting LastFM URL for album '{album_name}': {str(e)}")
+                    else:
+                        lastfm_url = current_data['lastfm_url']
 
+                    # ===== MUSICBRAINZ =====
+                    if 'musicbrainz' not in self.disabled_services and (current_data['musicbrainz_url'] is None or force_update):
+                        try:
+                            # Try to get or use existing MBID
+                            if not album_mbid:
+                                album_mbid = self._get_musicbrainz_album_mbid(artist_name, album_name)
+                                if album_mbid:
+                                    c.execute("UPDATE albums SET mbid = ? WHERE id = ?", (album_mbid, album_id))
+                                    conn.commit()
+                                    self.logger.info(f"Updated MBID for album '{album_name}': {album_mbid}")
+                            
+                            # Create URL from MBID if we have it
+                            if album_mbid:
+                                musicbrainz_url = f"https://musicbrainz.org/release/{album_mbid}"
+                                self.logger.info(f"Created MusicBrainz URL for album '{album_name}': {musicbrainz_url}")
+                            else:
+                                # Try direct function if we have it
+                                musicbrainz_url = self._get_musicbrainz_album_url(artist_name, album_name)
+                        except Exception as e:
+                            self.logger.error(f"Error getting MusicBrainz URL for album '{album_name}': {str(e)}")
+                    else:
+                        musicbrainz_url = current_data['musicbrainz_url']
 
+                    # ===== YOUTUBE =====
+                    if self.youtube and (current_data['youtube_url'] is None or force_update):
+                        try:
+                            youtube_url = self._get_youtube_album_url(artist_name, album_name)
+                            if youtube_url:
+                                self.logger.info(f"Found YouTube URL for album '{album_name}': {youtube_url}")
+                        except Exception as e:
+                            self.logger.error(f"Error getting YouTube URL for album '{album_name}': {str(e)}")
+                    else:
+                        youtube_url = current_data['youtube_url']
 
+                    # ===== RATEYOURMUSIC =====
+                    if self.rateyourmusic_enabled and (current_data['rateyourmusic_url'] is None or force_update):
+                        try:
+                            rateyourmusic_url = self._get_rateyourmusic_album_url(artist_name, album_name)
+                            if rateyourmusic_url:
+                                self.logger.info(f"Found RateYourMusic URL for album '{album_name}': {rateyourmusic_url}")
+                        except Exception as e:
+                            self.logger.error(f"Error getting RateYourMusic URL for album '{album_name}': {str(e)}")
+                    else:
+                        rateyourmusic_url = current_data['rateyourmusic_url']
 
-                    # Obtener los enlaces y datos adicionales del álbum
+                    # ===== DISCOGS =====
                     if self.discogs and (current_data['discogs_url'] is None or 
                                     current_data['producers'] is None or 
                                     current_data['engineers'] is None or 
-                                    current_data['mastering_engineers'] is None):
+                                    current_data['mastering_engineers'] is None or
+                                    force_update):
                         try:
-                            discogs_url, producers, engineers, mastering_engineers, credits = self._get_discogs_album_url(artist_name, album_name)
-                        except Exception as discogs_error:
-                            self.logger.warning(f"Discogs album search error for {album_name} by {artist_name}: {discogs_error}")
-                            discogs_url = current_data['discogs_url']
-                            producers = current_data['producers']
-                            engineers = current_data['engineers']
-                            mastering_engineers = current_data['mastering_engineers']
-                            credits = current_data['credits']
+                            discogs_result = self._get_discogs_album_url(artist_name, album_name)
+                            if discogs_result and len(discogs_result) >= 5:
+                                discogs_url, producers, engineers, mastering_engineers, credits = discogs_result
+                                if discogs_url:
+                                    self.logger.info(f"Found Discogs URL for album '{album_name}': {discogs_url}")
+                        except Exception as e:
+                            self.logger.error(f"Error getting Discogs data for album '{album_name}': {str(e)}")
                     else:
                         discogs_url = current_data['discogs_url']
                         producers = current_data['producers']
                         engineers = current_data['engineers']
                         mastering_engineers = current_data['mastering_engineers']
                         credits = current_data['credits']
-                    
-                    # Manejar conversión de créditos a JSON de manera segura
-                    try:
-                        if credits and isinstance(credits, str):
-                            credits_dict = json.loads(credits) if credits.strip() else {}
-                    except (json.JSONDecodeError, TypeError) as json_error:
-                        self.logger.warning(f"Error al convertir créditos a JSON para {album_name}: {json_error}")
-                        credits_dict = {}
-                    
-                
-                    album_links = {
-                        'spotify_url': current_data['spotify_url'],
-                        'spotify_id': current_data['spotify_id'],
-                        'youtube_url': (self._get_youtube_album_url(artist_name, album_name) if self.youtube and current_data['youtube_url'] is None else current_data['youtube_url']),
-                        'musicbrainz_url': (self._get_musicbrainz_album_url(artist_name, album_name) if 'musicbrainz' not in self.disabled_services and current_data['musicbrainz_url'] is None else current_data['musicbrainz_url']),
-                        'discogs_url': discogs_url,
-                        'bandcamp_url': current_data['bandcamp_url'],  # Usar el enlace de Bandcamp ya sea nuevo o existente
-                        'rateyourmusic_url': (self._get_rateyourmusic_album_url(artist_name, album_name) if self.rateyourmusic_enabled and current_data['rateyourmusic_url'] is None else current_data['rateyourmusic_url']),
-                        'lastfm_url': current_data['lastfm_url'],
-                        'links_updated': datetime.now()
-                    }
-                    
-                    # Actualizar enlace de Bandcamp en la base de datos
-                
+
+                    # Now update the album with all the links we've gathered
                     update_query = """
                         UPDATE albums SET 
                         spotify_url = ?, spotify_id = ?, youtube_url = ?, musicbrainz_url = ?, 
                         discogs_url = ?, rateyourmusic_url = ?, bandcamp_url = ?, producers = ?, 
                         engineers = ?, mastering_engineers = ?, credits = ?, lastfm_url = ?, 
                         links_updated = ?
-                        
                         WHERE id = ?
                     """
+                    
+                    # Use the values that were set earlier, this ensures we don't overwrite existing data
                     c.execute(update_query, (
-                        album_links['spotify_url'], album_links['spotify_id'], album_links['youtube_url'], 
-                        album_links['musicbrainz_url'], album_links['discogs_url'], 
-                        album_links['rateyourmusic_url'], album_links['bandcamp_url'], producers, engineers,
-                        mastering_engineers, credits, album_links['lastfm_url'], album_links['links_updated'],  
+                        spotify_url, 
+                        spotify_id, 
+                        youtube_url, 
+                        musicbrainz_url, 
+                        discogs_url, 
+                        rateyourmusic_url, 
+                        bandcamp_url, 
+                        producers, 
+                        engineers,
+                        mastering_engineers, 
+                        credits, 
+                        lastfm_url, 
+                        datetime.now(),  
                         album_id
                     ))
                     conn.commit()
+                    self.logger.info(f"Updated database record for album '{album_name}'")
                     
+                    # Debug output
+                    self.logger.info(f"Values used for update: spotify_url={spotify_url}, spotify_id={spotify_id}, lastfm_url={lastfm_url}, bandcamp_url={bandcamp_url}")
+                    
+                    # Now update MBIDs for songs in this album if we have the album_mbid
+                    if album_mbid and 'musicbrainz' not in self.disabled_services:
+                        try:
+                            # Get all songs from this album to update their MBIDs
+                            c.execute("""
+                                SELECT s.id, s.title, s.artist, s.mbid 
+                                FROM songs s 
+                                WHERE s.album = ? AND s.artist = ?
+                            """, (album_name, artist_name))
+                            
+                            album_songs = c.fetchall()
+                            num_songs = len(album_songs)
+                            self.logger.info(f"Found {num_songs} songs for album '{album_name}'")
+                            
+                            if num_songs > 0:
+                                # Retrieve the release info from MusicBrainz to get track MBIDs
+                                try:
+                                    # Add debug message for tracking
+                                    self.logger.info(f"Requesting MusicBrainz data for release ID: {album_mbid}")
+                                    
+                                    release_data = musicbrainzngs.get_release_by_id(album_mbid, includes=["recordings"])
+                                    
+                                    if release_data and 'release' in release_data:
+                                        # Track info is in the 'medium-list' in MusicBrainz
+                                        tracks_updated = 0
+                                        if 'medium-list' in release_data['release']:
+                                            for medium in release_data['release']['medium-list']:
+                                                if 'track-list' in medium:
+                                                    # Create a mapping of track titles to their MBIDs
+                                                    track_mbids = {}
+                                                    for track in medium['track-list']:
+                                                        if 'recording' in track and 'title' in track['recording'] and 'id' in track['recording']:
+                                                            track_title = track['recording']['title']
+                                                            track_mbid = track['recording']['id']
+                                                            track_mbids[track_title.lower()] = track_mbid
+                                                    
+                                                    self.logger.info(f"Found {len(track_mbids)} tracks in MusicBrainz data")
+                                                    
+                                                    # Now update the song MBIDs based on matching titles
+                                                    for song_id, song_title, song_artist, song_mbid in album_songs:
+                                                        # Only update if song doesn't already have an MBID
+                                                        if not song_mbid:
+                                                            # Try to find a matching track by title
+                                                            normalized_title = self._normalize_string(song_title).lower()
+                                                            
+                                                            # Direct match first
+                                                            if normalized_title in track_mbids:
+                                                                new_mbid = track_mbids[normalized_title]
+                                                                c.execute("UPDATE songs SET mbid = ? WHERE id = ?", 
+                                                                        (new_mbid, song_id))
+                                                                tracks_updated += 1
+                                                                self.logger.info(f"Updated MBID for song '{song_title}'")
+                                                            else:
+                                                                # Try fuzzy matching if direct match fails
+                                                                best_match = None
+                                                                best_score = 0
+                                                                
+                                                                for mb_title, mb_id in track_mbids.items():
+                                                                    score = self._calculate_similarity(normalized_title, mb_title)
+                                                                    if score > 0.8 and score > best_score:  # High threshold for confidence
+                                                                        best_score = score
+                                                                        best_match = mb_id
+                                                                
+                                                                if best_match:
+                                                                    c.execute("UPDATE songs SET mbid = ? WHERE id = ?", 
+                                                                            (best_match, song_id))
+                                                                    tracks_updated += 1
+                                                                    self.logger.info(f"Updated MBID for song '{song_title}' with fuzzy match (score: {best_score})")
+                                            
+                                            conn.commit()
+                                            self.logger.info(f"Updated MBIDs for {tracks_updated} of {num_songs} songs in album '{album_name}'")
+                                        else:
+                                            self.logger.warning(f"No medium-list found in MusicBrainz data for album '{album_name}'")
+                                    else:
+                                        self.logger.warning(f"Invalid MusicBrainz response for album '{album_name}'")
+                                
+                                except Exception as mb_err:
+                                    self.logger.error(f"Error retrieving MusicBrainz data for album {album_name}: {str(mb_err)}")
+                                    # Still respect rate limiting on errors
+                                    time.sleep(1.1)
+                            
+                        except Exception as album_songs_err:
+                            self.logger.error(f"Error updating song MBIDs for album {album_name}: {str(album_songs_err)}")
+                    
+                    # Add appropriate delays to respect rate limiting
+                    self._rate_limit_pause()
                     
                 except Exception as album_error:
                     self.logger.error(f"Error processing album {album_name} by {artist_name}: {album_error}")
@@ -901,7 +1088,58 @@ class MusicLinksManager:
             raise
         finally:
             conn.close()
+
+    def _normalize_string(self, text):
+        """Normaliza un string para mejorar las coincidencias"""
+        if not text:
+            return ""
+        
+        # Convertir a minúsculas
+        text = text.lower()
+        
+        # Eliminar caracteres especiales y espacios extras
+        import re
+        text = re.sub(r'[^\w\s]', ' ', text)  # Reemplazar caracteres especiales con espacios
+        text = re.sub(r'\s+', ' ', text).strip()  # Normalizar espacios
+        
+        return text.strip()
+
+    def _similarity_score(self, str1, str2):
+        """
+        Calculate similarity between two strings.
+        
+        Args:
+            str1: First string
+            str2: Second string
             
+        Returns:
+            Float between 0 (completely different) and 1 (identical)
+        """
+        # Handle None values
+        if str1 is None or str2 is None:
+            return 0
+            
+        # Normalize strings
+        str1 = str1.lower().strip()
+        str2 = str2.lower().strip()
+        
+        # If either string is empty, no similarity
+        if not str1 or not str2:
+            return 0
+            
+        # Use SequenceMatcher for string comparison
+        from difflib import SequenceMatcher
+        ratio = SequenceMatcher(None, str1, str2).ratio()
+        
+        # Boost score if one string contains the other
+        if str1 in str2 or str2 in str1:
+            ratio += 0.2
+            ratio = min(ratio, 1.0)  # Cap at 1.0
+        
+        return ratio
+
+
+
     def _rate_limit_pause(self):
         """Realiza una pausa según la configuración del rate limiter"""
         time.sleep(self.rate_limit)
@@ -960,59 +1198,6 @@ class MusicLinksManager:
             time.sleep(0.5)
 
 
-    # def _update_track_links(self, conn, album_id, spotify_tracks, missing_only=False):
-    #     """
-    #     Actualiza los enlaces de pistas para un álbum específico
-        
-    #     Args:
-    #         conn: Conexión a la base de datos
-    #         album_id: ID del álbum
-    #         spotify_tracks: Lista de pistas de Spotify
-    #         missing_only: Si es True, actualiza solo pistas con enlaces faltantes
-    #     """
-    #     c = conn.cursor()
-        
-    #     # Obtener todas las pistas del álbum
-    #     if missing_only:
-    #         c.execute("SELECT id, name, number, spotify_url, spotify_id FROM tracks WHERE album_id = ? ORDER BY number", (album_id,))
-    #         db_tracks = c.fetchall()
-    #     else:
-    #         c.execute("SELECT id, name, number FROM tracks WHERE album_id = ? ORDER BY number", (album_id,))
-    #         db_tracks = c.fetchall()
-        
-    #     if not db_tracks:
-    #         return
-        
-    #     # Mapear nombres de pistas de Spotify con la base de datos
-    #     for db_track in db_tracks:
-    #         if missing_only:
-    #             track_id, track_name, track_number, current_spotify_url, current_spotify_id = db_track
-    #             # Si ya tiene enlaces y estamos en modo missing_only, saltamos
-    #             if current_spotify_url is not None and current_spotify_id is not None:
-    #                 continue
-    #         else:
-    #             track_id, track_name, track_number = db_track
-            
-    #         # Intentar encontrar la pista correspondiente en Spotify
-    #         spotify_track = None
-            
-    #         # Primero intentar por número de pista
-    #         if 1 <= track_number <= len(spotify_tracks):
-    #             spotify_track = spotify_tracks[track_number - 1]
-    #         else:
-    #             # Si no coincide por número, intentar por nombre
-    #             for sp_track in spotify_tracks:
-    #                 # Comparación simple de nombres
-    #                 if self._similar_names(track_name, sp_track['name']):
-    #                     spotify_track = sp_track
-    #                     break
-            
-    #         if spotify_track:
-    #             c.execute("""
-    #                 UPDATE tracks 
-    #                 SET spotify_url = ?, spotify_id = ?
-    #                 WHERE id = ?
-    #             """, (spotify_track['url'], spotify_track['id'], track_id))
     
     def _similar_names(self, name1, name2):
         """Compara si dos nombres son similares (ignorando caso, espacios, etc.)"""
@@ -1066,6 +1251,7 @@ class MusicLinksManager:
 
 
 
+    # Update the update_missing_mbids function
     def update_missing_mbids(self):
         """
         Actualiza los MBID faltantes en artistas, álbumes y canciones.
@@ -1080,21 +1266,31 @@ class MusicLinksManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
-
         # Actualizar MBID de artistas
         c.execute("SELECT id, name FROM artists WHERE mbid IS NULL")
         artists_without_mbid = c.fetchall()
         
-        for artist_id, artist_name in artists_without_mbid:
+        self.logger.info(f"Processing {len(artists_without_mbid)} artists without MBID")
+        
+        for i, (artist_id, artist_name) in enumerate(artists_without_mbid):
             try:
+                if i % 10 == 0:
+                    self.logger.info(f"Processing artist {i+1}/{len(artists_without_mbid)}")
+                    
                 mbid = self._get_musicbrainz_artist_mbid(artist_name)
                 if mbid:
                     c.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
                     conn.commit()
                     self.logger.info(f"Found MBID for artist: {artist_name}")
-                    self._rate_limit_pause()
+                else:
+                    self.logger.debug(f"No MBID found for artist: {artist_name}")
+                    
+                # Respetar límites de tasa de MusicBrainz
+                time.sleep(1.1)
             except Exception as e:
                 self.logger.error(f"Error finding MBID for artist {artist_name}: {e}")
+                # Still respect rate limiting on errors
+                time.sleep(1.1)
 
         # Actualizar MBID de álbumes
         c.execute("""
@@ -1105,18 +1301,29 @@ class MusicLinksManager:
         """)
         albums_without_mbid = c.fetchall()
         
-        for album_id, album_name, artist_name in albums_without_mbid:
+        self.logger.info(f"Processing {len(albums_without_mbid)} albums without MBID")
+        
+        for i, (album_id, album_name, artist_name) in enumerate(albums_without_mbid):
             try:
+                if i % 10 == 0:
+                    self.logger.info(f"Processing album {i+1}/{len(albums_without_mbid)}")
+                    
                 mbid = self._get_musicbrainz_album_mbid(artist_name, album_name)
                 if mbid:
                     c.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, album_id))
                     conn.commit()
                     self.logger.info(f"Found MBID for album: {album_name}")
-                    self._rate_limit_pause()
+                else:
+                    self.logger.debug(f"No MBID found for album: {album_name}")
+                    
+                # Respetar límites de tasa de MusicBrainz
+                time.sleep(1.1)
             except Exception as e:
                 self.logger.error(f"Error finding MBID for album {album_name}: {e}")
+                # Still respect rate limiting on errors
+                time.sleep(1.1)
 
-        # Actualizar MBID de canciones (opcional, dependiendo de tu estructura)
+        # Actualizar MBID de canciones
         c.execute("""
             SELECT id, title, artist, album 
             FROM songs 
@@ -1124,18 +1331,30 @@ class MusicLinksManager:
         """)
         songs_without_mbid = c.fetchall()
         
-        for song_id, title, artist, album in songs_without_mbid:
+        self.logger.info(f"Processing {len(songs_without_mbid)} songs without MBID")
+        
+        for i, (song_id, title, artist, album) in enumerate(songs_without_mbid):
             try:
+                if i % 20 == 0:
+                    self.logger.info(f"Processing song {i+1}/{len(songs_without_mbid)}")
+                    
                 mbid = self._get_musicbrainz_recording_mbid(artist, title, album)
                 if mbid:
                     c.execute("UPDATE songs SET mbid = ? WHERE id = ?", (mbid, song_id))
                     conn.commit()
                     self.logger.info(f"Found MBID for song: {title}")
-                    self._rate_limit_pause()
+                else:
+                    self.logger.debug(f"No MBID found for song: {title}")
+                    
+                # Respetar límites de tasa de MusicBrainz
+                time.sleep(1.1)
             except Exception as e:
                 self.logger.error(f"Error finding MBID for song {title}: {e}")
+                # Still respect rate limiting on errors
+                time.sleep(1.1)
 
         conn.close()
+        
         # Contar registros sin MBID después de la actualización
         after_mbids = self.count_missing_mbids()
         self.logger.info("Missing MBIDs after update:")
@@ -1155,60 +1374,229 @@ class MusicLinksManager:
         for table, count in mbids_found.items():
             self.logger.info(f"{table.capitalize()}: {count}")
 
+    # Update the _get_musicbrainz_artist_mbid function
     def _get_musicbrainz_artist_mbid(self, artist_name: str) -> Optional[str]:
         """Obtiene el MBID de un artista desde MusicBrainz"""
         if 'musicbrainz' in self.disabled_services:
             return None
         
         try:
-            result = musicbrainzngs.search_artists(artist=artist_name, limit=1)
+            # Use proper sanitization for the artist name
+            safe_artist_name = artist_name.replace('"', '')
             
-            if result['artist-list'] and len(result['artist-list']) > 0:
-                return result['artist-list'][0]['id']
+            # More specific search query
+            result = musicbrainzngs.search_artists(artist=safe_artist_name, strict=False, limit=5)
+            
+            if result and 'artist-list' in result and len(result['artist-list']) > 0:
+                # Score the results to find best match
+                best_match = None
+                best_score = 0
+                
+                for artist in result['artist-list']:
+                    if 'id' not in artist or 'name' not in artist:
+                        continue
+                        
+                    result_name = artist['name']
+                    # Calculate similarity score
+                    score = self._similar_names_score(artist_name, result_name)
+                    
+                    # If we have a good enough match, use it
+                    if score > best_score:
+                        best_score = score
+                        best_match = artist
+                
+                # If we have a good match, return the ID
+                if best_match and best_score > 0.7:
+                    self.logger.info(f"Found MBID for '{artist_name}': {best_match['id']} (score: {best_score})")
+                    return best_match['id']
+                elif best_match:
+                    self.logger.info(f"Found possible MBID for '{artist_name}': {best_match['id']} (low score: {best_score})")
+                    return best_match['id']
+                    
+            # If no good match found, log this information
+            self.logger.warning(f"No MBID found for artist: {artist_name}")
+            return None
         except Exception as e:
             self.logger.error(f"MusicBrainz artist MBID search error for {artist_name}: {str(e)}")
+            # Add a sleep to respect rate limiting even on errors
+            time.sleep(1.1)
+            return None
+
+# Add a helper function to calculate similarity score
+    def _similar_names_score(self, name1, name2):
+        """Calculates a similarity score between two names"""
+        from difflib import SequenceMatcher
         
-        return None
+        # Normalize names for comparison
+        n1 = self._normalize_name(name1)
+        n2 = self._normalize_name(name2)
+        
+        # Use sequence matcher for string similarity
+        base_score = SequenceMatcher(None, n1, n2).ratio()
+        
+        # Extra points if one is contained in the other
+        if n1 in n2 or n2 in n1:
+            base_score += 0.1
+            
+        # Cap score at 1.0
+        return min(base_score, 1.0)
 
+    def _normalize_name(self, name):
+        """Normalize name for better comparison"""
+        if not name:
+            return ""
+        
+        # Convert to lowercase
+        name = name.lower()
+        
+        # Remove special characters
+        import re
+        name = re.sub(r'[^\w\s]', '', name)
+        
+        # Replace multiple spaces with single space
+        name = re.sub(r'\s+', ' ', name).strip()
+        
+        return name
 
-
+   # Update the _get_musicbrainz_album_mbid function
     def _get_musicbrainz_album_mbid(self, artist_name: str, album_name: str) -> Optional[str]:
         """Obtiene el MBID de un álbum desde MusicBrainz"""
         if 'musicbrainz' in self.disabled_services:
             return None
         
         try:
-            result = musicbrainzngs.search_releases(artist=artist_name, release=album_name, limit=1)
+            # Use proper sanitization
+            safe_artist_name = artist_name.replace('"', '')
+            safe_album_name = album_name.replace('"', '')
             
-            if result['release-list'] and len(result['release-list']) > 0:
-                return result['release-list'][0]['id']
+            # Search for releases with both artist and album name
+            result = musicbrainzngs.search_releases(
+                artist=safe_artist_name, 
+                release=safe_album_name,
+                strict=False,
+                limit=10
+            )
+            
+            if result and 'release-list' in result and len(result['release-list']) > 0:
+                # Score the results to find best match
+                best_match = None
+                best_score = 0
+                
+                for release in result['release-list']:
+                    if 'id' not in release or 'title' not in release or 'artist-credit' not in release:
+                        continue
+                        
+                    release_title = release['title']
+                    
+                    # Extract artist name from artist-credit
+                    release_artist = ""
+                    for credit in release['artist-credit']:
+                        if isinstance(credit, dict) and 'artist' in credit and 'name' in credit['artist']:
+                            release_artist = credit['artist']['name']
+                            break
+                    
+                    if not release_artist:
+                        continue
+                    
+                    # Calculate similarity scores
+                    title_score = self._similar_names_score(album_name, release_title)
+                    artist_score = self._similar_names_score(artist_name, release_artist)
+                    
+                    # Combined score with more weight on artist match
+                    combined_score = (title_score * 0.6) + (artist_score * 0.4)
+                    
+                    if combined_score > best_score:
+                        best_score = combined_score
+                        best_match = release
+                
+                # If we have a good match, return the ID
+                if best_match and best_score > 0.7:
+                    self.logger.info(f"Found MBID for album '{album_name}' by '{artist_name}': {best_match['id']} (score: {best_score})")
+                    return best_match['id']
+                elif best_match:
+                    self.logger.info(f"Found possible MBID for album '{album_name}': {best_match['id']} (low score: {best_score})")
+                    return best_match['id']
+                    
+            self.logger.warning(f"No MBID found for album: {album_name} by {artist_name}")
+            return None
         except Exception as e:
             self.logger.error(f"MusicBrainz album MBID search error for {album_name}: {str(e)}")
-        
-        return None
+            # Add a sleep to respect rate limiting even on errors
+            time.sleep(1.1)
+            return None
 
 
 
+    # Update the _get_musicbrainz_recording_mbid function
     def _get_musicbrainz_recording_mbid(self, artist: str, title: str, album: str) -> Optional[str]:
         """Obtiene el MBID de una grabación desde MusicBrainz"""
         if 'musicbrainz' in self.disabled_services:
             return None
         
         try:
-            result = musicbrainzngs.search_recordings(
-                artist=artist, 
-                recording=title, 
-                release=album, 
-                limit=1
-            )
+            # Sanitize inputs
+            safe_artist = artist.replace('"', '')
+            safe_title = title.replace('"', '')
+            safe_album = album.replace('"', '') if album else None
             
-            if result['recording-list'] and len(result['recording-list']) > 0:
-                return result['recording-list'][0]['id']
+            # Build the search query
+            query_parts = [f'artist:"{safe_artist}"', f'recording:"{safe_title}"']
+            if safe_album:
+                query_parts.append(f'release:"{safe_album}"')
+                
+            query = ' AND '.join(query_parts)
+            
+            # Search with the combined query
+            result = musicbrainzngs.search_recordings(query=query, limit=5)
+            
+            if result and 'recording-list' in result and len(result['recording-list']) > 0:
+                # Score the results to find best match
+                best_match = None
+                best_score = 0
+                
+                for recording in result['recording-list']:
+                    if 'id' not in recording or 'title' not in recording:
+                        continue
+                    
+                    recording_title = recording['title']
+                    
+                    # Extract artist
+                    recording_artist = ""
+                    if 'artist-credit' in recording:
+                        for credit in recording['artist-credit']:
+                            if isinstance(credit, dict) and 'artist' in credit and 'name' in credit['artist']:
+                                recording_artist = credit['artist']['name']
+                                break
+                    
+                    if not recording_artist:
+                        continue
+                    
+                    # Calculate similarity scores
+                    title_score = self._similar_names_score(title, recording_title)
+                    artist_score = self._similar_names_score(artist, recording_artist)
+                    
+                    # Combined score with more weight on title match for recordings
+                    combined_score = (title_score * 0.7) + (artist_score * 0.3)
+                    
+                    if combined_score > best_score:
+                        best_score = combined_score
+                        best_match = recording
+                
+                # If we have a good match, return the ID
+                if best_match and best_score > 0.7:
+                    self.logger.info(f"Found recording MBID for '{title}' by '{artist}': {best_match['id']} (score: {best_score})")
+                    return best_match['id']
+                elif best_match:
+                    self.logger.info(f"Found possible recording MBID for '{title}': {best_match['id']} (low score: {best_score})")
+                    return best_match['id']
+            
+            self.logger.warning(f"No recording MBID found for: {title} by {artist}")
+            return None
         except Exception as e:
             self.logger.error(f"MusicBrainz recording MBID search error for {title}: {str(e)}")
-        
-        return None
-
+            # Add a sleep to respect rate limiting even on errors
+            time.sleep(1.1)
+            return None
 
     def _get_musicbrainz_artist_info(self, artist_name):
         """
@@ -1431,103 +1819,96 @@ class MusicLinksManager:
         
         return None
     
-    def _get_spotify_album_data(self, artist_name: str, album_name: str) -> Optional[Dict]:
-        """Obtiene datos completos del álbum en Spotify, incluyendo pistas"""
-        if not self.spotify:
-            self.logger.debug("Spotify client not initialized")
+    def _get_spotify_album_data(self, artist_name: str, album_name: str) -> Dict:
+        """
+        Busca específicamente datos de un álbum en Spotify, no canciones individuales.
+        
+        Args:
+            artist_name: Nombre del artista
+            album_name: Nombre del álbum
+            
+        Returns:
+            Dictionary con album_url y album_id o None si no se encuentra
+        """
+        # First check if Spotify is properly initialized
+        if not hasattr(self, 'spotify') or self.spotify is None:
+            self.logger.error("Spotify API client not initialized - cannot search for albums")
             return None
         
         try:
-            self.logger.debug(f"Buscando en Spotify álbum: '{album_name}' por '{artist_name}'")
+            self.logger.info(f"Searching Spotify for album: '{album_name}' by '{artist_name}'")
             
-            # Intentar con búsqueda de formato exacto primero
-            query = f'artist:"{artist_name}" album:"{album_name}"'
-            self.logger.debug(f"Consulta inicial: {query}")
+            # Try different search strategies
+            search_strategies = [
+                # Strategy 1: Precise search with filters
+                {"query": f"artist:\"{artist_name}\" album:\"{album_name}\"", "desc": "Precise search with filters"},
+                # Strategy 2: Simple artist and album combination
+                {"query": f"{artist_name} {album_name}", "desc": "Simple artist and album search"},
+                # Strategy 3: Just the album name
+                {"query": f"album:{album_name}", "desc": "Album name only search"}
+            ]
             
-            results = self.spotify.search(q=query, type='album', limit=5)
-            self.logger.debug(f"Resultados iniciales: {len(results['albums']['items']) if results and 'albums' in results else 0} álbumes encontrados")
-            
-            # Si no hay resultados, intentar una búsqueda más flexible
-            if not (results and results['albums']['items']):
-                self.logger.debug("No se encontraron resultados exactos, intentando búsqueda flexible")
-                clean_query = f'{artist_name} {album_name}'
-                self.logger.debug(f"Consulta flexible: {clean_query}")
-                results = self.spotify.search(q=clean_query, type='album', limit=10)
-                self.logger.debug(f"Resultados flexibles: {len(results['albums']['items']) if results and 'albums' in results else 0} álbumes encontrados")
-            
-            if not (results and results['albums']['items']):
-                self.logger.debug(f"No se encontraron álbumes para '{album_name}' por '{artist_name}'")
-                return None
-            
-            # Intenta encontrar la coincidencia más probable
-            album = None
-            for item in results['albums']['items']:
-                # Verifica coincidencia de artista
-                album_artists = [artist['name'].lower() for artist in item['artists']]
-                artist_match = False
+            for strategy in search_strategies:
+                self.logger.info(f"Trying Spotify search strategy: {strategy['desc']}")
+                query = strategy["query"]
                 
-                for a in album_artists:
-                    if (artist_name.lower() in a or a in artist_name.lower()):
-                        artist_match = True
-                        break
-                
-                if artist_match:
-                    # Verifica coincidencia de nombre de álbum
-                    if (album_name.lower() == item['name'].lower() or 
-                        album_name.lower() in item['name'].lower() or 
-                        item['name'].lower() in album_name.lower()):
-                        album = item
-                        self.logger.debug(f"Coincidencia encontrada: {item['name']} por {item['artists'][0]['name']}")
-                        break
+                try:
+                    # Make the API call with error handling
+                    results = self.spotify.search(q=query, type='album', limit=5)
+                    
+                    # Check for valid results
+                    if results and 'albums' in results and results['albums']['items']:
+                        # Log the number of results
+                        num_results = len(results['albums']['items'])
+                        self.logger.info(f"Found {num_results} album results with strategy '{strategy['desc']}'")
+                        
+                        # Process the results
+                        best_match = None
+                        best_score = 0
+                        
+                        for album in results['albums']['items']:
+                            # Extract and log album info
+                            album_title = album['name']
+                            album_artists = [artist['name'] for artist in album['artists']]
+                            album_id = album['id']
+                            album_url = album['external_urls'].get('spotify', '')
+                            
+                            self.logger.info(f"Candidate: '{album_title}' by '{', '.join(album_artists)}' (ID: {album_id})")
+                            
+                            # Calculate match score
+                            artist_score = max([self._similarity_score(artist_name, a) for a in album_artists])
+                            title_score = self._similarity_score(album_name, album_title)
+                            total_score = (artist_score * 0.6) + (title_score * 0.4)
+                            
+                            self.logger.info(f"Match score: {total_score:.2f} (Artist: {artist_score:.2f}, Title: {title_score:.2f})")
+                            
+                            if total_score > best_score:
+                                best_score = total_score
+                                best_match = album
+                        
+                        # If we have a good match, return it
+                        if best_match and best_score > 0.6:
+                            result = {
+                                'album_id': best_match['id'],
+                                'album_url': best_match['external_urls'].get('spotify', '')
+                            }
+                            self.logger.info(f"Selected match: '{best_match['name']}' with score {best_score:.2f}")
+                            self.logger.info(f"Album URL: {result['album_url']}, Album ID: {result['album_id']}")
+                            return result
+                    else:
+                        self.logger.info(f"No results found with strategy '{strategy['desc']}'")
+                    
+                except Exception as search_error:
+                    self.logger.error(f"Error during Spotify search with strategy '{strategy['desc']}': {str(search_error)}")
             
-            # Si no se encuentra una buena coincidencia, tomar el primer resultado como respaldo
-            if not album and results['albums']['items']:
-                album = results['albums']['items'][0]
-                self.logger.debug(f"Usando primer resultado como alternativa: {album['name']} por {album['artists'][0]['name']}")
-            
-            if not album:
-                self.logger.debug(f"No se encontró coincidencia adecuada")
-                return None
-                
-            album_id = album['id']
-            album_url = album['external_urls']['spotify']
-            
-            # Obtener pistas del álbum
-            self.logger.debug(f"Obteniendo pistas para el álbum ID: {album_id}")
-            tracks_result = self.spotify.album_tracks(album_id)
-            tracks = []
-            
-            if not tracks_result or 'items' not in tracks_result:
-                self.logger.debug(f"No se pudieron obtener pistas para el álbum")
-                # Devolver al menos la información del álbum aunque no tengamos pistas
-                return {
-                    'album_id': album_id,
-                    'album_url': album_url,
-                    'tracks': []
-                }
-            
-            for track in tracks_result['items']:
-                tracks.append({
-                    'name': track['name'],
-                    'id': track['id'],
-                    'url': track['external_urls']['spotify'],
-                    'number': track['track_number']
-                })
-            
-            self.logger.debug(f"Se obtuvieron con éxito {len(tracks)} pistas del álbum")
-            
-            return {
-                'album_id': album_id,
-                'album_url': album_url,
-                'tracks': tracks
-            }
+            self.logger.warning(f"No matching album found on Spotify for '{album_name}' by '{artist_name}' after trying all strategies")
+            return None
             
         except Exception as e:
-            self.logger.error(f"Error al obtener datos de Spotify para {album_name} por {artist_name}: {str(e)}")
+            self.logger.error(f"Unexpected error in Spotify album search: {str(e)}")
             import traceback
-            self.logger.debug(f"Traceback: {traceback.format_exc()}")
-        
-        return None
+            self.logger.error(f"Traceback: {traceback.format_exc()}")
+            return None
     
     def _get_youtube_artist_url(self, artist_name: str) -> Optional[str]:
         """Obtiene la URL del canal/tópico del artista en YouTube"""
@@ -1584,37 +1965,61 @@ class MusicLinksManager:
 
 
     
+    # Update the _get_musicbrainz_artist_url function
     def _get_musicbrainz_artist_url(self, artist_name: str) -> Optional[str]:
         """Obtiene la URL del artista en MusicBrainz"""
         if 'musicbrainz' in self.disabled_services:
             return None
             
         try:
-            result = musicbrainzngs.search_artists(artist=artist_name, limit=1)
+            # First try to find the MBID
+            artist_id = self._get_musicbrainz_artist_mbid(artist_name)
             
-            if result['artist-list'] and len(result['artist-list']) > 0:
-                artist_id = result['artist-list'][0]['id']
+            if artist_id:
+                # Construct URL from MBID
                 return f"https://musicbrainz.org/artist/{artist_id}"
+            else:
+                # Try a direct lookup using the search function
+                result = musicbrainzngs.search_artists(artist=artist_name, limit=1)
+                
+                if result['artist-list'] and len(result['artist-list']) > 0:
+                    artist_id = result['artist-list'][0]['id']
+                    return f"https://musicbrainz.org/artist/{artist_id}"
+            
+            return None
         except Exception as e:
             self.logger.error(f"MusicBrainz artist search error for {artist_name}: {str(e)}")
-        
-        return None
+            # Respect rate limiting
+            time.sleep(1.1) 
+            return None
     
+    # Update the _get_musicbrainz_album_url function
     def _get_musicbrainz_album_url(self, artist_name: str, album_name: str) -> Optional[str]:
         """Obtiene la URL del álbum en MusicBrainz"""
         if 'musicbrainz' in self.disabled_services:
             return None
             
         try:
-            result = musicbrainzngs.search_releases(artist=artist_name, release=album_name, limit=1)
+            # First try to find the MBID
+            release_id = self._get_musicbrainz_album_mbid(artist_name, album_name)
             
-            if result['release-list'] and len(result['release-list']) > 0:
-                release_id = result['release-list'][0]['id']
+            if release_id:
+                # Construct URL from MBID
                 return f"https://musicbrainz.org/release/{release_id}"
+            else:
+                # Try a direct lookup
+                result = musicbrainzngs.search_releases(artist=artist_name, release=album_name, limit=1)
+                
+                if result['release-list'] and len(result['release-list']) > 0:
+                    release_id = result['release-list'][0]['id']
+                    return f"https://musicbrainz.org/release/{release_id}"
+            
+            return None
         except Exception as e:
             self.logger.error(f"MusicBrainz album search error for {album_name} by {artist_name}: {str(e)}")
-        
-        return None
+            # Respect rate limiting
+            time.sleep(1.1)
+            return None
     
    
     def _get_musicbrainz_recording_url(self, artist: str, title: str, album: str) -> Optional[str]:
