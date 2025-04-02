@@ -6,14 +6,13 @@ from pathlib import Path
 import sqlite3
 import json
 from PyQt6 import uic
-from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, 
-                            QHBoxLayout, QLineEdit, QPushButton, QListWidget,
-                            QListWidgetItem, QLabel, QScrollArea, QSplitter,
-                            QAbstractItemView, QSpinBox, QComboBox, QSizePolicy,
-                            QTabWidget, QTableWidget, QTableWidgetItem, QHeaderView,
-                            QCheckBox)
-from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence, QColor
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, 
+                           QLabel, QScrollArea, QSplitter, QTextEdit, QTableWidget, 
+                           QHeaderView, QTreeWidget, QTreeWidgetItem, QAbstractItemView,
+                           QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
+                           QTabWidget)
 from PyQt6.QtCore import Qt, QDate
+from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence
 import subprocess
 import importlib.util
 import glob
@@ -35,19 +34,19 @@ logger = logging.getLogger(__name__)
 reproductor = 'deadbeef'
 
 
-class GroupedListItem(QListWidgetItem):
-    def __init__(self, text, is_header=False, paths=None):
-        super().__init__(text)
-        self.is_header = is_header
-        self.paths = paths or []
-        if is_header:
-            font = self.font()
-            font.setBold(True)
-            font.setPointSize(font.pointSize() + 2)
-            self.setFont(font)
-            # self.setBackground(QColor(THEMES['secondary_bg']))
-            # self.setForeground(QColor(THEMES['accent']))
-    pass
+# class GroupedListItem(QListWidgetItem):
+#     def __init__(self, text, is_header=False, paths=None):
+#         super().__init__(text)
+#         self.is_header = is_header
+#         self.paths = paths or []
+#         if is_header:
+#             font = self.font()
+#             font.setBold(True)
+#             font.setPointSize(font.pointSize() + 2)
+#             self.setFont(font)
+#             # self.setBackground(QColor(THEMES['secondary_bg']))
+#             # self.setForeground(QColor(THEMES['accent']))
+#     pass
 
 class SearchParser:
     def __init__(self):
@@ -228,7 +227,15 @@ class MusicBrowser(BaseModule):
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         self.boton_pulsado = 0  # Estado inicial
 
-
+        # Inicializar atributos importantes con valores por defecto
+        self.results_tree = None
+        self.results_tree_container = None
+        self.lastfm_label = None
+        self.metadata_label = None
+        self.info_widget = None
+        self.cover_label = None
+        self.artist_image_label = None
+        self.advanced_buttons = []
 
         # Llamar al constructor de la clase padre con los argumentos restantes
         super().__init__(parent=parent, theme=theme, **kwargs)
@@ -244,7 +251,7 @@ class MusicBrowser(BaseModule):
         required_widgets = [
             'search_box', 'play_button', 'folder_button', 'advanced_settings_check',
             'custom_button1', 'custom_button2', 'custom_button3', 'advanced_settings_container',
-            'main_splitter', 'results_list', 'right_tabs', 'details_splitter', 'cover_label',
+            'results_tree_container', 'main_splitter', 'right_tabs', 'details_splitter', 'cover_label',
             'artist_image_label', 'info_scroll', 'playlist_table', 'clear_playlist_button',
             'playlist_button1', 'playlist_button2', 'playlist_button3', 'playlist_button4',
             'spotify_button'
@@ -252,6 +259,7 @@ class MusicBrowser(BaseModule):
         
         # Intentar cargar la UI desde el archivo
         ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_module.ui")
+        ui_loaded = False
         
         if os.path.exists(ui_file_path):
             try:
@@ -269,23 +277,46 @@ class MusicBrowser(BaseModule):
                             missing_widgets.append(widget_name)
                 
                 if missing_widgets:
-                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
-                
+                    print(f"Advertencia: Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                    # No lanzar error, intentaremos usar fallback para los widgets faltantes
+                else:
+                    ui_loaded = True
+                    print(f"UI MusicBrowser cargada desde {ui_file_path}")
+                    
                 # Configuración adicional después de cargar UI
                 self._setup_widgets()
-                
-                print(f"UI MusicBrowser cargada desde {ui_file_path}")
             except Exception as e:
                 print(f"Error cargando UI MusicBrowser desde archivo: {e}")
                 import traceback
                 traceback.print_exc()
-                self._fallback_init_ui()
+                ui_loaded = False
         else:
-            print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}, usando creación manual")
+            print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}")
+            ui_loaded = False
+        
+        # Si la UI no se cargó correctamente, usar fallback
+        if not ui_loaded:
             self._fallback_init_ui()
         
+        # Cargar el árbol de resultados
+        try:
+            if not hasattr(self, 'results_tree') or not self.results_tree:
+                if not self.load_results_tree_ui():
+                    print("Advertencia: No se pudo cargar el árbol de resultados dinámicamente.")
+                    # Crear un árbol de resultados básico como fallback
+                    self._create_fallback_tree()
+        except Exception as e:
+            print(f"Error al cargar el árbol de resultados: {e}")
+            traceback.print_exc()
+            self._create_fallback_tree()
+        
         # Configuración común (independiente del método de carga)
-        self.setup_info_widget()
+        try:
+            self.setup_info_widget()
+        except Exception as e:
+            print(f"Error al configurar el widget de información: {e}")
+            traceback.print_exc()
+        
         self.setup_shortcuts()
         self.apply_theme()
         self.connect_signals()
@@ -300,8 +331,10 @@ class MusicBrowser(BaseModule):
         layout.setContentsMargins(10, 10, 10, 10)
 
         # Contenedor superior
-        self.top_container = QWidget()
-        self.top_container.setMaximumHeight(50)  # Aumentado para acomodar los nuevos controles
+        self.top_container = QFrame()
+        self.top_container.setFrameShape(QFrame.Shape.StyledPanel)
+        self.top_container.setFrameShadow(QFrame.Shadow.Raised)
+        self.top_container.setMaximumHeight(50)
         top_layout = QVBoxLayout(self.top_container)
         top_layout.setSpacing(5)
         
@@ -339,75 +372,29 @@ class MusicBrowser(BaseModule):
             self.advanced_buttons.append(button)
 
         top_layout.addLayout(search_layout)
-
-        # Nuevo layout para filtros temporales
-        self.time_filters_widget = QWidget()
-        time_filters_layout = QHBoxLayout(self.time_filters_widget)
-        time_filters_layout.setContentsMargins(0, 0, 0, 0)
-        self.time_filters_widget.hide()  # Ocultar inicialmente
-
-        # Filtro de últimas X unidades de tiempo
-        time_unit_layout = QHBoxLayout()
-        self.time_value = QSpinBox()
-        self.time_value.setRange(1, 999)
-        self.time_value.setValue(1)
-        time_unit_layout.addWidget(self.time_value)
-
-        self.time_unit = QComboBox()
-        self.time_unit.addItems(['Semanas', 'Meses', 'Años'])
-        time_unit_layout.addWidget(self.time_unit)
-
-        self.apply_time_filter = QPushButton('Aplicar')
-        time_unit_layout.addWidget(self.apply_time_filter)
-        time_filters_layout.addLayout(time_unit_layout)
-
-        # Separador
-        time_filters_layout.addWidget(QLabel('|'))
-
-        # Filtro de mes/año específico
-        month_year_layout = QHBoxLayout()
-        self.month_combo = QComboBox()
-        self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
-        month_year_layout.addWidget(self.month_combo)
-
-        self.year_spin = QSpinBox()
-        self.year_spin.setRange(1900, 2100)
-        self.year_spin.setValue(QDate.currentDate().year())
-        month_year_layout.addWidget(self.year_spin)
-
-        self.apply_month_year = QPushButton('Filtrar por Mes/Año')
-        month_year_layout.addWidget(self.apply_month_year)
-        time_filters_layout.addLayout(month_year_layout)
-
-        # Separador
-        time_filters_layout.addWidget(QLabel('|'))
-
-        # Filtro de año específico
-        year_layout = QHBoxLayout()
-        self.year_only_spin = QSpinBox()
-        self.year_only_spin.setRange(1900, 2100)
-        self.year_only_spin.setValue(QDate.currentDate().year())
-        year_layout.addWidget(self.year_only_spin)
-
-        self.apply_year = QPushButton('Filtrar por Año')
-        year_layout.addWidget(self.apply_year)
-        time_filters_layout.addLayout(year_layout)
-
-        top_layout.addWidget(self.time_filters_widget)
         layout.addWidget(self.top_container)
 
-        # Splitter principal: lista de resultados y panel de detalles
+        # Contenedor para ajustes avanzados (inicialmente oculto)
+        self.advanced_settings_container = QFrame()
+        self.advanced_settings_container.setFrameShape(QFrame.Shape.StyledPanel)
+        self.advanced_settings_container.setFrameShadow(QFrame.Shadow.Raised)
+        self.advanced_settings_container.hide()
+        layout.addWidget(self.advanced_settings_container)
+
+        # Splitter principal: árbol de resultados y panel de detalles
         self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
         
-        # Panel izquierdo (resultados)
-        self.results_list = QListWidget()
-        self.results_list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.results_list.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.results_list.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.main_splitter.addWidget(self.results_list)
+        # Panel izquierdo (contenedor para el árbol de resultados)
+        self.results_tree_container = QFrame()
+        self.results_tree_container.setFrameShape(QFrame.Shape.StyledPanel)
+        self.results_tree_container.setFrameShadow(QFrame.Shadow.Raised)
+        self.results_tree_container.setMinimumWidth(300)
+        self.main_splitter.addWidget(self.results_tree_container)
 
         # Panel derecho (detalles)
-        details_widget = QWidget()
+        details_widget = QFrame()
+        details_widget.setFrameShape(QFrame.Shape.StyledPanel)
+        details_widget.setFrameShadow(QFrame.Shadow.Raised)
         details_layout = QVBoxLayout(details_widget)
         details_layout.setContentsMargins(0, 0, 0, 0)
         details_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -424,7 +411,9 @@ class MusicBrowser(BaseModule):
         self.details_splitter = QSplitter(Qt.Orientation.Vertical)
         
         # Contenedor superior para las imágenes (colocadas horizontalmente)
-        images_container = QWidget()
+        images_container = QFrame()
+        images_container.setFrameShape(QFrame.Shape.StyledPanel)
+        images_container.setFrameShadow(QFrame.Shadow.Raised)
         images_layout = QHBoxLayout(images_container)
         images_layout.setSpacing(10)
         images_layout.setContentsMargins(45, 5, 45, 5)
@@ -448,7 +437,8 @@ class MusicBrowser(BaseModule):
         images_layout.addWidget(self.artist_image_label)
 
         # Añadir contenedor de botones verticales a la derecha
-        buttons_container = QWidget()
+        buttons_container = QFrame()
+        buttons_container.setFrameShape(QFrame.Shape.NoFrame)
         buttons_layout = QVBoxLayout(buttons_container)
         buttons_layout.setSpacing(10)
         buttons_layout.setContentsMargins(0, 0, 0, 0)
@@ -466,8 +456,10 @@ class MusicBrowser(BaseModule):
         # Añadir el contenedor de imágenes al splitter vertical
         self.details_splitter.addWidget(images_container)
         
-    # Contenedor para el scroll con la información
-        info_container = QWidget()
+        # Contenedor para el scroll con la información
+        info_container = QFrame()
+        info_container.setFrameShape(QFrame.Shape.StyledPanel)
+        info_container.setFrameShadow(QFrame.Shadow.Raised)
         info_container_layout = QVBoxLayout(info_container)
         info_container_layout.setContentsMargins(5, 5, 5, 5)
         info_container.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -478,7 +470,7 @@ class MusicBrowser(BaseModule):
         self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.info_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.info_scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.info_scroll.setMinimumWidth(800)
+        self.info_scroll.setMinimumWidth(600)
         
         info_container_layout.addWidget(self.info_scroll)
         
@@ -507,7 +499,8 @@ class MusicBrowser(BaseModule):
         playlist_layout.addWidget(self.playlist_table)
         
         # Contenedor para los botones de la playlist
-        playlist_buttons_container = QWidget()
+        playlist_buttons_container = QFrame()
+        playlist_buttons_container.setFrameShape(QFrame.Shape.NoFrame)
         playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
         playlist_buttons_layout.setSpacing(10)
         
@@ -539,11 +532,88 @@ class MusicBrowser(BaseModule):
         # Añadir el panel de detalles al splitter principal
         self.main_splitter.addWidget(details_widget)
         
-        # Configurar proporciones iniciales del splitter principal (lista/detalles)
+        # Configurar proporciones iniciales del splitter principal (árbol/detalles)
         self.main_splitter.setSizes([400, 800])
         
         # Añadir el splitter principal al layout de la ventana
         layout.addWidget(self.main_splitter)
+        
+        # El árbol de resultados se cargará posteriormente con load_results_tree_ui
+
+
+
+    def _create_fallback_tree(self):
+        """Crea un árbol de resultados básico como respaldo si falla la carga dinámica."""
+        # Asegurarse de que el contenedor existe
+        if not hasattr(self, 'results_tree_container') or not self.results_tree_container:
+            # Si estamos en fallback, es posible que results_tree_container no exista aún
+            layout = self.layout()
+            if not layout:
+                # Si ni siquiera hay layout, crear uno básico
+                layout = QVBoxLayout(self)
+            
+            # Buscar el splitter principal
+            main_splitter = None
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
+                if item and item.widget() and isinstance(item.widget(), QSplitter):
+                    main_splitter = item.widget()
+                    break
+            
+            # Si no hay splitter, crearlo
+            if not main_splitter:
+                main_splitter = QSplitter(Qt.Orientation.Horizontal)
+                layout.addWidget(main_splitter)
+            
+            # Crear el contenedor para el árbol
+            self.results_tree_container = QFrame()
+            self.results_tree_container.setFrameShape(QFrame.Shape.StyledPanel)
+            self.results_tree_container.setFrameShadow(QFrame.Shadow.Raised)
+            
+            # Añadir el contenedor al splitter
+            if main_splitter.count() == 0:
+                main_splitter.addWidget(self.results_tree_container)
+                # Añadir también un panel de detalles básico
+                details_widget = QFrame()
+                main_splitter.addWidget(details_widget)
+            
+            # Crear un layout para el contenedor
+            container_layout = QVBoxLayout(self.results_tree_container)
+            container_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Ahora podemos estar seguros de que el contenedor existe y tiene un layout
+        container_layout = self.results_tree_container.layout()
+        if not container_layout:
+            container_layout = QVBoxLayout(self.results_tree_container)
+            container_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Crear un QTreeWidget básico
+        self.results_tree = QTreeWidget()
+        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setHeaderHidden(False)
+        self.results_tree.setColumnCount(3)
+        self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
+        
+        # Ajustar el tamaño de las columnas
+        self.results_tree.setColumnWidth(0, 300)
+        self.results_tree.setColumnWidth(1, 60)
+        self.results_tree.setColumnWidth(2, 120)
+        
+        # Configurar la selección
+        self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Añadir al layout existente
+        container_layout.addWidget(self.results_tree)
+        
+        # Conectar señales si existen los métodos correspondientes
+        if hasattr(self, 'handle_tree_item_change'):
+            self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
+        if hasattr(self, 'handle_tree_item_double_click'):
+            self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+
+
+
 
     def _setup_widgets(self):
         """Configuración adicional para los widgets después de cargar la UI."""
@@ -725,25 +795,22 @@ class MusicBrowser(BaseModule):
     def connect_signals(self):
         """Conecta las señales de los widgets con sus manejadores."""
         # Botones de acción
-        self.play_button.clicked.connect(self.play_item)
-        self.folder_button.clicked.connect(self.open_folder)
+        self.play_button.clicked.connect(lambda: self.play_selected_item())
+        self.folder_button.clicked.connect(lambda: self.open_selected_folder())
         self.custom_button1.clicked.connect(self.buscar_musica_en_reproduccion)
         
-        # Filtros temporales
-        self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
-        self.apply_month_year.clicked.connect(self.apply_month_year_filter)
-        self.apply_year.clicked.connect(self.apply_year_filter)
+        # Filtros temporales (cuando estén cargados)
+        # Estas conexiones se hacen en load_advanced_settings_ui
         
         # Búsqueda
         self.search_box.textChanged.connect(self.search)
+        self.search_box.returnPressed.connect(self.search)
         
         # Checkbox de configuración avanzada
         self.advanced_settings_check.stateChanged.connect(self.toggle_advanced_settings)
         
-        # Listas y tablas
-        self.results_list.currentItemChanged.connect(self.handle_item_change)
-        self.results_list.itemClicked.connect(self.handle_item_click)
-        self.results_list.doubleClicked.connect(self.add_to_playlist)
+        # Árbol de resultados (cuando esté cargado)
+        # Estas conexiones se hacen en setup_results_tree
         
         # Botones de playlist
         self.clear_playlist_button.clicked.connect(self.clear_playlist)
@@ -1657,7 +1724,7 @@ class MusicBrowser(BaseModule):
             elapsed_time = time.time() - start_time
             print(f"Consulta completada en {elapsed_time:.3f} segundos. {len(results)} resultados encontrados.")
             
-            self.results_list.clear()
+            self.results_tree.clear()
             current_album = None
             
             for row in results:
@@ -1782,6 +1849,49 @@ class MusicBrowser(BaseModule):
             print(f"Error al obtener la URL de Spotify: {e}")
             return None
 
+    def play_selected_item(self):
+        """Reproduce el ítem seleccionado en el árbol."""
+        if not hasattr(self, 'results_tree') or not self.results_tree:
+            return
+            
+        item = self.results_tree.currentItem()
+        if not item:
+            return
+            
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            return
+            
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'album':
+                self.play_album(item)
+        else:
+            # Es una canción
+            self.play_track(item)
+
+
+    def open_selected_folder(self):
+        """Abre la carpeta del ítem seleccionado en el árbol."""
+        if not hasattr(self, 'results_tree') or not self.results_tree:
+            return
+            
+        item = self.results_tree.currentItem()
+        if not item:
+            return
+            
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            return
+            
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'album':
+                self.open_album_folder(item)
+        else:
+            # Es una canción
+            self.open_track_folder(item_data)
+
 
     def play_item(self):
         """Reproduce el ítem seleccionado con verificaciones de seguridad."""
@@ -1813,39 +1923,33 @@ class MusicBrowser(BaseModule):
         except Exception as e:
             print(f"Error al reproducir el archivo: {e}")
 
-    def play_album(self):
-        """Reproduce todo el álbum del ítem seleccionado."""
-        current_item = self.results_list.currentItem()
-        if not current_item:
+    def play_album(self, album_item):
+        """
+        Reproduce todas las pistas de un álbum.
+        
+        Args:
+            album_item: Elemento del árbol que representa un álbum.
+        """
+        # Verificar que es un álbum
+        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
             return
-            
-        if not getattr(current_item, 'is_header', False):
-            return
-            
-        try:
-            # Recolectar todas las rutas de archivo del álbum
-            album_paths = []
-            index = self.results_list.row(current_item) + 1
-            
-            while index < self.results_list.count():
-                item = self.results_list.item(index)
-                if not item or getattr(item, 'is_header', False):
-                    break
-                    
-                data = item.data(Qt.ItemDataRole.UserRole)
-                if data and len(data) > 1:
-                    file_path = data[1]
-                    if file_path and os.path.exists(file_path):
-                        album_paths.append(file_path)
-                index += 1
-            
-            if album_paths:
-                subprocess.Popen([reproductor] + album_paths)
-            else:
-                print("No se encontraron archivos válidos para reproducir")
-                
-        except Exception as e:
-            print(f"Error al reproducir el álbum: {e}")
+        
+        # Recolectar todas las rutas de archivo del álbum
+        album_paths = []
+        
+        for i in range(album_item.childCount()):
+            track_item = album_item.child(i)
+            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+            if track_data and len(track_data) > 1:
+                file_path = track_data[1]
+                if file_path and os.path.exists(file_path):
+                    album_paths.append(file_path)
+        
+        if album_paths:
+            subprocess.Popen([reproductor] + album_paths)
+        else:
+            print("No se encontraron archivos válidos para reproducir")
 
     def open_folder(self):
         """Abre la carpeta del ítem seleccionado."""
@@ -1887,91 +1991,160 @@ class MusicBrowser(BaseModule):
         except Exception as e:
             print(f"Error al abrir la carpeta: {e}")
 
-    def open_album_folder(self):
-        current_item = self.results_list.currentItem()
-        if current_item and current_item.is_header and hasattr(current_item, 'paths') and current_item.paths:
-            # Abrir la carpeta del primer archivo del álbum
-            folder_path = str(Path(current_item.paths[0]).parent)
-            subprocess.Popen(['thunar', folder_path])
+    def open_album_folder(self, album_item):
+        """
+        Abre la carpeta de un álbum.
+        
+        Args:
+            album_item: Elemento del árbol que representa un álbum.
+        """
+        # Verificar que es un álbum
+        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
+            return
+        
+        # Usar la primera pista del álbum para obtener la ruta
+        if album_item.childCount() > 0:
+            track_item = album_item.child(0)
+            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+            if track_data:
+                self.open_track_folder(track_data)
+
+    def open_track_folder(self, track_data):
+        """
+        Abre la carpeta de una pista.
+        
+        Args:
+            track_data: Datos de la pista (resultado de la consulta).
+        """
+        try:
+            if len(track_data) > 1:
+                file_path = track_data[1]
+                if file_path and os.path.exists(file_path):
+                    folder_path = str(Path(file_path).parent)
+                    subprocess.Popen(['thunar', folder_path])
+                else:
+                    print(f"Ruta no válida: {file_path}")
+        except Exception as e:
+            print(f"Error al abrir la carpeta: {e}")
+
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Tab:
-            # Alternar entre la caja de búsqueda y la lista de resultados
+            # Alternar entre la caja de búsqueda y el árbol de resultados
             if self.search_box.hasFocus():
-                self.results_list.setFocus()
+                # Verificar si results_tree existe antes de usarlo
+                if hasattr(self, 'results_tree') and self.results_tree:
+                    self.results_tree.setFocus()
             else:
                 self.search_box.setFocus()
             event.accept()
             return
         
-        # Solo procesar las flechas si la lista de resultados tiene el foco
-        if self.results_list.hasFocus():
+        # Solo procesar las flechas si el árbol de resultados tiene el foco
+        if hasattr(self, 'results_tree') and self.results_tree and self.results_tree.hasFocus():
             if event.key() in [Qt.Key.Key_Left, Qt.Key.Key_Right]:
-                self.navigate_headers(event.key())
+                self.navigate_tree_headers(event.key())
                 event.accept()
                 return
                 
-        current_item = self.results_list.currentItem()
-        if current_item and current_item.is_header:
-            if event.key() == Qt.Key.Key_Return:
-                self.play_album()
-                event.accept()
-                return
-            elif event.key() == Qt.Key.Key_O and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
-                self.open_album_folder()
-                event.accept()
-                return
-                
+        # Verificar si results_tree existe antes de usarlo
+        if hasattr(self, 'results_tree') and self.results_tree:
+            current_item = self.results_tree.currentItem()
+            if current_item:
+                item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
+                if isinstance(item_data, dict) and item_data.get('type') == 'album':
+                    if event.key() == Qt.Key.Key_Return:
+                        self.play_album(current_item)
+                        event.accept()
+                        return
+                    elif event.key() == Qt.Key.Key_O and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+                        self.open_album_folder(current_item)
+                        event.accept()
+                        return
+                    
         super().keyPressEvent(event)
 
-    def navigate_headers(self, key):
-        """Navega entre los headers de álbumes usando las flechas izquierda/derecha."""
-        current_row = self.results_list.currentRow()
-        if current_row == -1:
+
+    def navigate_tree_headers(self, key):
+        """Navega entre los elementos de nivel superior del árbol (artistas)."""
+        if not hasattr(self, 'results_tree') or not self.results_tree:
             return
             
-        total_items = self.results_list.count()
-        header_positions = []
-        
-        # Encontrar todas las posiciones de los headers
-        for i in range(total_items):
-            item = self.results_list.item(i)
-            if item and getattr(item, 'is_header', False):
-                header_positions.append(i)
-        
-        if not header_positions:
+        current_item = self.results_tree.currentItem()
+        if not current_item:
             return
             
-        # Encontrar el header actual o el más cercano
-        current_header_index = -1
-        for i, pos in enumerate(header_positions):
-            if key == Qt.Key.Key_Right:
-                # Para flecha derecha, buscar el siguiente header
-                if pos > current_row:
-                    current_header_index = i
-                    break
-            else:
-                # Para flecha izquierda, buscar el header anterior
-                if pos >= current_row:
-                    current_header_index = i - 1
-                    break
+        # Encontrar el elemento de nivel superior (artista) actual
+        top_level_item = current_item
+        while top_level_item.parent():
+            top_level_item = top_level_item.parent()
         
-        # Si no encontramos un header siguiente, ir al primero
-        if key == Qt.Key.Key_Right and current_header_index == -1:
-            current_header_index = 0
-        # Si no encontramos un header anterior, ir al último
-        elif key == Qt.Key.Key_Left and current_header_index == -1:
-            current_header_index = len(header_positions) - 1
+        current_index = self.results_tree.indexOfTopLevelItem(top_level_item)
+        if current_index == -1:
+            return
+            
+        # Navegar al siguiente o anterior elemento de nivel superior
+        new_index = current_index
+        if key == Qt.Key.Key_Right:
+            new_index = min(current_index + 1, self.results_tree.topLevelItemCount() - 1)
+        else:  # key == Qt.Key.Key_Left
+            new_index = max(current_index - 1, 0)
         
-        # Asegurarse de que el índice es válido
-        if 0 <= current_header_index < len(header_positions):
-            # Seleccionar el nuevo header
-            new_row = header_positions[current_header_index]
-            self.results_list.setCurrentRow(new_row)
-            self.results_list.scrollToItem(
-                self.results_list.item(new_row),
-                QAbstractItemView.ScrollHint.PositionAtCenter
-            )
+        if new_index != current_index:
+            new_item = self.results_tree.topLevelItem(new_index)
+            self.results_tree.setCurrentItem(new_item)
+            self.results_tree.scrollToItem(new_item, QAbstractItemView.ScrollHint.PositionAtCenter)
+
+
+    # def navigate_headers(self, key):
+    #     """Navega entre los headers de álbumes usando las flechas izquierda/derecha."""
+    #     current_row = self.results_list.currentRow()
+    #     if current_row == -1:
+    #         return
+            
+    #     total_items = self.results_list.count()
+    #     header_positions = []
+        
+    #     # Encontrar todas las posiciones de los headers
+    #     for i in range(total_items):
+    #         item = self.results_list.item(i)
+    #         if item and getattr(item, 'is_header', False):
+    #             header_positions.append(i)
+        
+    #     if not header_positions:
+    #         return
+            
+    #     # Encontrar el header actual o el más cercano
+    #     current_header_index = -1
+    #     for i, pos in enumerate(header_positions):
+    #         if key == Qt.Key.Key_Right:
+    #             # Para flecha derecha, buscar el siguiente header
+    #             if pos > current_row:
+    #                 current_header_index = i
+    #                 break
+    #         else:
+    #             # Para flecha izquierda, buscar el header anterior
+    #             if pos >= current_row:
+    #                 current_header_index = i - 1
+    #                 break
+        
+    #     # Si no encontramos un header siguiente, ir al primero
+    #     if key == Qt.Key.Key_Right and current_header_index == -1:
+    #         current_header_index = 0
+    #     # Si no encontramos un header anterior, ir al último
+    #     elif key == Qt.Key.Key_Left and current_header_index == -1:
+    #         current_header_index = len(header_positions) - 1
+        
+    #     # Asegurarse de que el índice es válido
+    #     if 0 <= current_header_index < len(header_positions):
+    #         # Seleccionar el nuevo header
+    #         new_row = header_positions[current_header_index]
+    #         self.results_list.setCurrentRow(new_row)
+    #         self.results_list.scrollToItem(
+    #             self.results_list.item(new_row),
+    #             QAbstractItemView.ScrollHint.PositionAtCenter
+    #         )
 
 
     def run_custom_script(self, script_num):
@@ -1989,6 +2162,471 @@ class MusicBrowser(BaseModule):
         
         if script_num in scripts and os.path.exists(scripts[script_num]):
             subprocess.Popen([scripts[script_num], data[1]])
+
+
+
+    def load_results_tree_ui(self):
+        """
+        Carga dinámicamente el widget del árbol de resultados desde un archivo UI separado.
+        """
+        try:
+            # Ruta al archivo UI del árbol de resultados
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "results_tree.ui")
+            
+            if not os.path.exists(ui_file_path):
+                print(f"Archivo UI no encontrado: {ui_file_path}")
+                return False
+                
+            # Limpiar el contenedor por si ya tiene widgets
+            if self.results_tree_container.layout():
+                # Eliminar todos los widgets del layout actual
+                while self.results_tree_container.layout().count():
+                    item = self.results_tree_container.layout().takeAt(0)
+                    if item.widget():
+                        item.widget().deleteLater()
+                # Eliminar el layout actual
+                QWidget().setLayout(self.results_tree_container.layout())
+            
+            # Crear un nuevo layout para el contenedor
+            container_layout = QVBoxLayout(self.results_tree_container)
+            container_layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Cargar el widget desde el archivo UI
+            from PyQt6 import uic
+            results_tree_widget = QWidget()
+            uic.loadUi(ui_file_path, results_tree_widget)
+            
+            # Añadir el widget cargado al contenedor
+            container_layout.addWidget(results_tree_widget)
+            
+            # Transferir referencia al árbol
+            self.results_tree = results_tree_widget.findChild(QTreeWidget, "results_tree")
+            
+            # Configurar el árbol
+            self.setup_results_tree()
+            
+            return True
+        except Exception as e:
+            print(f"Error cargando UI del árbol de resultados: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
+    def setup_results_tree(self):
+        """Configura el árbol de resultados con sus propiedades y señales."""
+        if not hasattr(self, 'results_tree') or self.results_tree is None:
+            print("No se encuentra el árbol de resultados")
+            return
+        
+        # Configurar el aspecto del árbol
+        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setHeaderHidden(False)
+        self.results_tree.setColumnCount(3)
+        self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
+        
+        # Ajustar el tamaño de las columnas
+        self.results_tree.setColumnWidth(0, 300)  # Nombre más amplio
+        self.results_tree.setColumnWidth(1, 60)   # Año más estrecho
+        self.results_tree.setColumnWidth(2, 120)  # Género tamaño medio
+        
+        # Configurar la selección
+        self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Configurar eventos
+        self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
+        self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+        self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
+        
+        # Permitir expandir/colapsar con doble clic y teclas
+        self.results_tree.setExpandsOnDoubleClick(True)
+        
+        # Configurar arrastrar y soltar para playlist
+        self.results_tree.setDragEnabled(True)
+        self.results_tree.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
+
+    def update_results_tree(self, results):
+        """
+        Actualiza el árbol de resultados con los resultados de búsqueda.
+        Organiza los resultados en una estructura jerárquica: Artista > Álbum > Canción
+        
+        Args:
+            results: Lista de tuplas con los resultados de la búsqueda.
+        """
+        if not hasattr(self, 'results_tree') or self.results_tree is None:
+            print("No se encuentra el árbol de resultados")
+            return
+        
+        # Limpiar el árbol
+        self.results_tree.clear()
+        
+        # Organizar los resultados por artista > álbum > canción
+        artists = {}
+        
+        for row in results:
+            artist = row[3] if row[3] else "Sin artista"
+            album = row[5] if row[5] else "Sin álbum"
+            title = row[2] if row[2] else "Sin título"
+            date = row[6] if row[6] else ""
+            year = date.split('-')[0] if date and '-' in date else date
+            genre = row[7] if row[7] else ""
+            track_number = row[14] if row[14] else "0"
+            
+            # Crear estructura anidada
+            if artist not in artists:
+                artists[artist] = {}
+            
+            album_key = f"{album}"
+            if album_key not in artists[artist]:
+                artists[artist][album_key] = []
+                
+            # Añadir la canción con su número de pista
+            track_info = {
+                'number': track_number,
+                'title': title,
+                'data': row,
+                'year': year,
+                'genre': genre
+            }
+            artists[artist][album_key].append(track_info)
+        
+        # Añadir elementos al árbol
+        for artist_name, albums in artists.items():
+            # Crear elemento de artista
+            artist_item = QTreeWidgetItem(self.results_tree)
+            artist_item.setText(0, artist_name)
+            artist_item.setIcon(0, self.get_artist_icon())
+            artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
+            
+            # Añadir álbumes como hijos del artista
+            for album_name, tracks in albums.items():
+                # Obtener información del álbum del primer track
+                album_year = tracks[0]['year'] if tracks else ""
+                album_genre = tracks[0]['genre'] if tracks else ""
+                
+                # Crear elemento de álbum
+                album_item = QTreeWidgetItem(artist_item)
+                album_item.setText(0, album_name)
+                album_item.setText(1, album_year)
+                album_item.setText(2, album_genre)
+                album_item.setIcon(0, self.get_album_icon())
+                album_item.setData(0, Qt.ItemDataRole.UserRole, {
+                    'type': 'album', 
+                    'name': album_name,
+                    'artist': artist_name,
+                    'year': album_year,
+                    'genre': album_genre
+                })
+                
+                # Ordenar las pistas por número
+                try:
+                    tracks.sort(key=lambda x: int(x['number']) if x['number'].isdigit() else float('inf'))
+                except (ValueError, AttributeError):
+                    # En caso de error, no ordenar
+                    pass
+                
+                # Añadir canciones como hijos del álbum
+                for track in tracks:
+                    try:
+                        track_num = int(track['number'])
+                        display_text = f"{track_num:02d}. {track['title']}"
+                    except (ValueError, TypeError):
+                        display_text = f"--. {track['title']}"
+                    
+                    # Crear elemento de canción
+                    track_item = QTreeWidgetItem(album_item)
+                    track_item.setText(0, display_text)
+                    track_item.setText(1, track['year'])
+                    track_item.setText(2, track['genre'])
+                    track_item.setIcon(0, self.get_track_icon())
+                    track_item.setData(0, Qt.ItemDataRole.UserRole, track['data'])
+        
+        # Expandir los artistas para mostrar los álbumes
+        for i in range(self.results_tree.topLevelItemCount()):
+            self.results_tree.topLevelItem(i).setExpanded(True)
+        
+        # Mostrar información en la barra de estado si está disponible
+        if hasattr(self, 'statusBar'):
+            self.statusBar().showMessage(f"Encontrados {len(results)} resultados")
+
+    def get_artist_icon(self):
+        """Retorna un icono para representar artistas en el árbol."""
+        return self.style().standardIcon(QStyle.StandardPixmap.SP_CommandLink)
+
+    def get_album_icon(self):
+        """Retorna un icono para representar álbumes en el árbol."""
+        return self.style().standardIcon(QStyle.StandardPixmap.SP_DirIcon)
+
+    def get_track_icon(self):
+        """Retorna un icono para representar canciones en el árbol."""
+        return self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
+
+    def handle_tree_item_change(self, current, previous):
+        """
+        Maneja el cambio de selección en el árbol.
+        Muestra la información del elemento seleccionado.
+        
+        Args:
+            current: Elemento actual seleccionado.
+            previous: Elemento previamente seleccionado.
+        """
+        if not current:
+            self.clear_details()
+            return
+        
+        # Obtener datos del elemento
+        item_data = current.data(0, Qt.ItemDataRole.UserRole)
+        
+        if not item_data:
+            self.clear_details()
+            return
+        
+        # Determinar qué tipo de elemento es
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'artist':
+                self.show_artist_info(current)
+            elif item_data.get('type') == 'album':
+                self.show_album_info(current)
+            else:
+                self.clear_details()
+        else:
+            # Es una canción (los datos son el resultado de la consulta)
+            self.show_details(current, previous)
+
+    def handle_tree_item_double_click(self, item, column):
+        """
+        Maneja el doble clic en un elemento del árbol.
+        Si es una canción, la reproduce.
+        Si es un álbum, añade todas sus pistas a la playlist.
+        Si es un artista, simplemente lo expande.
+        
+        Args:
+            item: Elemento en el que se hizo doble clic.
+            column: Columna en la que se hizo clic.
+        """
+        # Obtener datos del elemento
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if not item_data:
+            return
+        
+        # Determinar qué tipo de elemento es
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'artist':
+                # Expandir/colapsar artista
+                item.setExpanded(not item.isExpanded())
+            elif item_data.get('type') == 'album':
+                # Añadir álbum a playlist
+                self.add_album_to_playlist(item)
+        else:
+            # Es una canción, la reproducimos
+            self.play_track(item)
+
+    def add_album_to_playlist(self, album_item):
+        """
+        Añade todas las pistas de un álbum a la playlist.
+        
+        Args:
+            album_item: Elemento del árbol que representa un álbum.
+        """
+        # Verificar que es un álbum
+        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
+            return
+        
+        # Recorrer todos los hijos (canciones) del álbum
+        for i in range(album_item.childCount()):
+            track_item = album_item.child(i)
+            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+            if track_data:
+                self.add_track_to_playlist(track_data)
+        
+        # Cambiar al tab de playlist automáticamente
+        self.right_tabs.setCurrentIndex(1)
+
+    def play_track(self, track_item):
+        """
+        Reproduce una pista.
+        
+        Args:
+            track_item: Elemento del árbol que representa una canción.
+        """
+        # Obtener datos de la pista
+        track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+        if not track_data:
+            return
+        
+        try:
+            file_path = track_data[1]  # Índice 1 contiene file_path
+            if not file_path or not os.path.exists(file_path):
+                print(f"Ruta de archivo no válida: {file_path}")
+                return
+                
+            subprocess.Popen([reproductor, file_path])
+        except (IndexError, TypeError) as e:
+            print(f"Error al acceder a los datos de la pista: {e}")
+        except Exception as e:
+            print(f"Error al reproducir el archivo: {e}")
+
+    def show_tree_context_menu(self, position):
+        """
+        Muestra un menú contextual para el árbol de resultados.
+        
+        Args:
+            position: Posición donde se hizo clic derecho.
+        """
+        # Obtener el elemento bajo el cursor
+        item = self.results_tree.itemAt(position)
+        if not item:
+            return
+        
+        # Crear menú contextual
+        context_menu = QMenu(self)
+        
+        # Obtener datos del elemento
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'artist':
+                # Opciones para artista
+                context_menu.addAction("Expandir/Colapsar", lambda: item.setExpanded(not item.isExpanded()))
+                context_menu.addAction("Ver detalles del artista", lambda: self.show_artist_info(item))
+                context_menu.addAction("Añadir todos los álbumes a la playlist", lambda: self.add_artist_to_playlist(item))
+            elif item_data.get('type') == 'album':
+                # Opciones para álbum
+                context_menu.addAction("Reproducir álbum", lambda: self.play_album(item))
+                context_menu.addAction("Añadir álbum a playlist", lambda: self.add_album_to_playlist(item))
+                context_menu.addAction("Abrir carpeta del álbum", lambda: self.open_album_folder(item))
+        else:
+            # Es una canción
+            context_menu.addAction("Reproducir", lambda: self.play_track(item))
+            context_menu.addAction("Añadir a playlist", lambda: self.add_track_to_playlist(item_data))
+            context_menu.addAction("Abrir carpeta", lambda: self.open_track_folder(item_data))
+        
+        # Mostrar el menú
+        context_menu.exec(self.results_tree.viewport().mapToGlobal(position))
+
+    def show_artist_info(self, artist_item):
+        """
+        Muestra información detallada de un artista.
+        
+        Args:
+            artist_item: Elemento del árbol que representa un artista.
+        """
+        # Verificar que es un artista
+        item_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'artist':
+            return
+        
+        artist_name = item_data.get('name', 'Desconocido')
+        
+        # Buscar información del artista
+        # (Puedes usar el primer track de cualquier álbum para obtener la información)
+        artist_bio = ""
+        artist_links = {}
+        first_track_data = None
+        
+        # Recorrer álbumes y canciones para encontrar datos del artista
+        for album_idx in range(artist_item.childCount()):
+            album_item = artist_item.child(album_idx)
+            for track_idx in range(album_item.childCount()):
+                track_item = album_item.child(track_idx)
+                track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+                if track_data:
+                    first_track_data = track_data
+                    break
+            if first_track_data:
+                break
+        
+        # Limpiar detalles anteriores
+        self.clear_details()
+        
+        # Mostrar imagen del artista
+        if artist_name:
+            artist_image_path = self.find_artist_image(artist_name)
+            if artist_image_path:
+                artist_pixmap = QPixmap(artist_image_path)
+                artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+                self.artist_image_label.setPixmap(artist_pixmap)
+            else:
+                self.artist_image_label.setText("No imagen de artista")
+        
+        # Mostrar la información en el panel de detalles
+        if first_track_data:
+            # Crear el contenido para el panel de información (LastFM + Wikipedia)
+            info_text = ""
+            
+            # Mostrar info de LastFM si está disponible
+            artist_bio = first_track_data[15] if len(first_track_data) > 15 and first_track_data[15] else "No hay información del artista disponible"
+            info_text += f"<h3>Información del Artista (LastFM):</h3><div style='white-space: pre-wrap;'>{artist_bio}</div><br><br>"
+            
+            # Mostrar info de Wikipedia del artista (índice 27)
+            if len(first_track_data) > 27 and first_track_data[27]:
+                info_text += f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{first_track_data[27]}</div><br><br>"
+            
+            self.lastfm_label.setText(info_text)
+            
+            # Construir la metadata básica del artista
+            metadata = f"<b>Artista:</b> {artist_name}<br>"
+            
+            # Contar álbumes
+            albums_count = artist_item.childCount()
+            metadata += f"<b>Álbumes:</b> {albums_count}<br><br>"
+            
+            # Añadir enlaces externos del artista si existen
+            if len(first_track_data) > 16:
+                metadata += "<b>Enlaces del Artista:</b><br>"
+                
+                artist_links = []
+                if first_track_data[16]:  # artist_spotify
+                    artist_links.append(f"<a href='{first_track_data[16]}'>Spotify</a>")
+                if first_track_data[17]:  # artist_youtube
+                    artist_links.append(f"<a href='{first_track_data[17]}'>YouTube</a>")
+                if first_track_data[18]:  # artist_musicbrainz
+                    artist_links.append(f"<a href='{first_track_data[18]}'>MusicBrainz</a>")
+                if first_track_data[19]:  # artist_discogs
+                    artist_links.append(f"<a href='{first_track_data[19]}'>Discogs</a>")
+                if first_track_data[20]:  # artist_rateyourmusic
+                    artist_links.append(f"<a href='{first_track_data[20]}'>RateYourMusic</a>")
+                if first_track_data[26]:  # artist_wikipedia_url
+                    artist_links.append(f"<a href='{first_track_data[26]}'>Wikipedia</a>")
+                
+                if artist_links:
+                    metadata += " | ".join(artist_links)
+                else:
+                    metadata += "No hay enlaces disponibles."
+            
+            self.metadata_label.setText(metadata)
+            self.metadata_label.setOpenExternalLinks(True)
+        else:
+            self.lastfm_label.setText(f"<h3>Artista: {artist_name}</h3><p>No hay información adicional disponible</p>")
+            self.metadata_label.setText("")
+
+    def add_artist_to_playlist(self, artist_item):
+        """
+        Añade todas las pistas de todos los álbumes de un artista a la playlist.
+        
+        Args:
+            artist_item: Elemento del árbol que representa un artista.
+        """
+        # Verificar que es un artista
+        item_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'artist':
+            return
+        
+        # Recorrer todos los álbumes del artista
+        for album_idx in range(artist_item.childCount()):
+            album_item = artist_item.child(album_idx)
+            self.add_album_to_playlist(album_item)
+        
+        # Cambiar al tab de playlist automáticamente
+        self.right_tabs.setCurrentIndex(1)
+
+
 
 if __name__ == '__main__':
     import argparse

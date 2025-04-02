@@ -36,3 +36,65 @@
 2025-04-01 23:41:28,926 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
 2025-04-01 23:43:25,592 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
 2025-04-01 23:44:18,674 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:03:40,235 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:04:27,364 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:05:16,620 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:05:38,143 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:06:05,812 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:06:26,409 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:06:55,333 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:07:52,934 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:08:27,160 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:08:33,039 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_list.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_list'
+
+2025-04-02 00:08:33,636 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_list.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_list'
+
+2025-04-02 00:08:44,984 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_list.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_list'
+
+2025-04-02 00:15:15,700 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:15:27,596 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_tree.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_tree'
+
+2025-04-02 00:16:23,149 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_tree.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_tree'
+
+2025-04-02 00:16:24,716 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:16:32,151 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_tree.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_tree'
+
+2025-04-02 00:16:33,311 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1945, in keyPressEvent
+    if self.results_tree.hasFocus():
+       ^^^^^^^^^^^^^^^^^
+AttributeError: 'MusicBrowser' object has no attribute 'results_tree'
+
+2025-04-02 00:23:27,577 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 00:26:57,719 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'

@@ -183,6 +183,9 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
+      <property name="minimumWidth">
+       <number>300</number>
+      </property>
       <layout class="QVBoxLayout" name="results_tree_layout">
        <property name="leftMargin">
         <number>0</number>
@@ -282,11 +285,11 @@
                <property name="leftMargin">
                 <number>45</number>
                </property>
-               <property name="rightMargin">
-                <number>45</number>
-               </property>
                <property name="topMargin">
                 <number>5</number>
+               </property>
+               <property name="rightMargin">
+                <number>45</number>
                </property>
                <property name="bottomMargin">
                 <number>5</number>
@@ -449,6 +452,9 @@
                  </property>
                  <property name="horizontalScrollBarPolicy">
                   <enum>Qt::ScrollBarAlwaysOff</enum>
+                 </property>
+                 <property name="verticalScrollBarPolicy">
+                  <enum>Qt::ScrollBarAsNeeded</enum>
                  </property>
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
