@@ -318,8 +318,8 @@ class TabManager(QMainWindow):
             /* Main Window */
             QMainWindow {{
                 background-color: {theme['bg']};
-                border: 1px solid {theme['border']};
             }}
+            
             
             /* Tabs */
             QTabWidget::pane {{
@@ -353,7 +353,7 @@ class TabManager(QMainWindow):
             QLineEdit, QTextEdit, QPlainTextEdit {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border: 0.5 px solid {theme['border']};
+                
                 padding: 5px;
                 border-radius: 3px;
             }}
@@ -364,7 +364,7 @@ class TabManager(QMainWindow):
             QComboBox {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border: 1px solid {theme['border']};
+                border: 0.5px solid {theme['border']};
                 border-radius: 3px;
                 padding: 5px;
                 min-height: 25px;
@@ -398,7 +398,7 @@ class TabManager(QMainWindow):
                 border: 1px solid {theme['border']};
                 padding: 5px 10px;
                 border-radius: 3px;
-                min-height: 25px;
+                min-height: 15px;
             }}
             
             QPushButton:hover {{
@@ -469,7 +469,7 @@ class TabManager(QMainWindow):
             
             QScrollBar::handle:horizontal {{
                 background-color: {theme['border']};
-                min-width: 20px;
+                min-width: 10px;
                 border-radius: 7px;
                 margin: 2px;
             }}

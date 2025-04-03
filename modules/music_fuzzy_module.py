@@ -34,19 +34,24 @@ logger = logging.getLogger(__name__)
 reproductor = 'deadbeef'
 
 
-# class GroupedListItem(QListWidgetItem):
-#     def __init__(self, text, is_header=False, paths=None):
-#         super().__init__(text)
-#         self.is_header = is_header
-#         self.paths = paths or []
-#         if is_header:
-#             font = self.font()
-#             font.setBold(True)
-#             font.setPointSize(font.pointSize() + 2)
-#             self.setFont(font)
-#             # self.setBackground(QColor(THEMES['secondary_bg']))
-#             # self.setForeground(QColor(THEMES['accent']))
-#     pass
+class GroupedListItem(QTreeWidgetItem):
+    def __init__(self, text, is_header=False, paths=None):
+        # QTreeWidgetItem no acepta texto como primer argumento
+        # Usamos una lista de strings para las columnas
+        super().__init__([text])  # Pasar el texto como una lista para la primera columna
+        
+        self.is_header = is_header
+        self.paths = paths or []
+        
+        if is_header:
+            font = self.font(0)  # El font debe especificar la columna (0)
+            font.setBold(True)
+            font.setPointSize(font.pointSize() + 2)
+            self.setFont(0, font)  # Establecer la fuente para la columna 0
+            
+            # Si quieres también establecer colores de fondo y texto:
+            # self.setBackground(0, QColor(theme['secondary_bg']))
+            # self.setForeground(0, QColor(theme['accent']))
 
 class SearchParser:
     def __init__(self):
@@ -229,6 +234,7 @@ class MusicBrowser(BaseModule):
 
         # Inicializar atributos importantes con valores por defecto
         self.results_tree = None
+        self.results_tree_widget = None
         self.results_tree_container = None
         self.lastfm_label = None
         self.metadata_label = None
@@ -263,9 +269,11 @@ class MusicBrowser(BaseModule):
         
         if os.path.exists(ui_file_path):
             try:
-                # Cargar el archivo UI
-                uic.loadUi(ui_file_path, self)
-                
+                # Preparar el objeto para cargar UI
+                if self.layout():
+                    # Eliminar el layout existente antes de cargar uno nuevo
+                    QWidget().setLayout(self.layout())
+                #uic.loadUi(ui_file_path, self)    
                 # Verificar que se han cargado los widgets principales
                 missing_widgets = []
                 for widget_name in required_widgets:
@@ -326,6 +334,14 @@ class MusicBrowser(BaseModule):
 
     def _fallback_init_ui(self):
         """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
+        # Verificar si ya existe un layout
+        if self.layout():
+            # Si ya hay un layout, no creamos uno nuevo
+            # Simplemente limpiamos los widgets existentes
+            while self.layout().count():
+                item = self.layout().takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
         layout = QVBoxLayout(self)
         layout.setSpacing(5)
         layout.setContentsMargins(10, 10, 10, 10)
@@ -540,116 +556,107 @@ class MusicBrowser(BaseModule):
         
         # El árbol de resultados se cargará posteriormente con load_results_tree_ui
 
-
+    def is_tree_valid(self):
+        """Verifica si el árbol está disponible y válido."""
+        return (hasattr(self, 'results_tree') and 
+                self.results_tree is not None and 
+                not self.results_tree.isDestroyed() if hasattr(self.results_tree, 'isDestroyed') else True)
 
     def _create_fallback_tree(self):
         """Crea un árbol de resultados básico como respaldo si falla la carga dinámica."""
         # Asegurarse de que el contenedor existe
         if not hasattr(self, 'results_tree_container') or not self.results_tree_container:
-            # Si estamos en fallback, es posible que results_tree_container no exista aún
-            layout = self.layout()
-            if not layout:
-                # Si ni siquiera hay layout, crear uno básico
-                layout = QVBoxLayout(self)
+            # Código existente para crear el contenedor...
+        
+            # Ahora podemos estar seguros de que el contenedor existe y tiene un layout
+            container_layout = self.results_tree_container.layout()
+            if not container_layout:
+                container_layout = QVBoxLayout(self.results_tree_container)
+                container_layout.setContentsMargins(0, 0, 0, 0)
             
-            # Buscar el splitter principal
-            main_splitter = None
-            for i in range(layout.count()):
-                item = layout.itemAt(i)
-                if item and item.widget() and isinstance(item.widget(), QSplitter):
-                    main_splitter = item.widget()
-                    break
+            # Crear un QTreeWidget básico
+            self.results_tree = QTreeWidget(self.results_tree_container)  # Asignar el parent es importante
+            self.results_tree.setAlternatingRowColors(True)
+            self.results_tree.setHeaderHidden(False)
+            self.results_tree.setColumnCount(3)
+            self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
             
-            # Si no hay splitter, crearlo
-            if not main_splitter:
-                main_splitter = QSplitter(Qt.Orientation.Horizontal)
-                layout.addWidget(main_splitter)
+            # Ajustar el tamaño de las columnas
+            self.results_tree.setColumnWidth(0, 300)
+            self.results_tree.setColumnWidth(1, 60)
+            self.results_tree.setColumnWidth(2, 120)
             
-            # Crear el contenedor para el árbol
-            self.results_tree_container = QFrame()
-            self.results_tree_container.setFrameShape(QFrame.Shape.StyledPanel)
-            self.results_tree_container.setFrameShadow(QFrame.Shadow.Raised)
+            # Configurar la selección
+            self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+            self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
             
-            # Añadir el contenedor al splitter
-            if main_splitter.count() == 0:
-                main_splitter.addWidget(self.results_tree_container)
-                # Añadir también un panel de detalles básico
-                details_widget = QFrame()
-                main_splitter.addWidget(details_widget)
+            # Limpiar antes de añadir
+            while container_layout.count():
+                item = container_layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
             
-            # Crear un layout para el contenedor
-            container_layout = QVBoxLayout(self.results_tree_container)
-            container_layout.setContentsMargins(0, 0, 0, 0)
-        
-        # Ahora podemos estar seguros de que el contenedor existe y tiene un layout
-        container_layout = self.results_tree_container.layout()
-        if not container_layout:
-            container_layout = QVBoxLayout(self.results_tree_container)
-            container_layout.setContentsMargins(0, 0, 0, 0)
-        
-        # Crear un QTreeWidget básico
-        self.results_tree = QTreeWidget()
-        self.results_tree.setAlternatingRowColors(True)
-        self.results_tree.setHeaderHidden(False)
-        self.results_tree.setColumnCount(3)
-        self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
-        
-        # Ajustar el tamaño de las columnas
-        self.results_tree.setColumnWidth(0, 300)
-        self.results_tree.setColumnWidth(1, 60)
-        self.results_tree.setColumnWidth(2, 120)
-        
-        # Configurar la selección
-        self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
-        self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        
-        # Añadir al layout existente
-        container_layout.addWidget(self.results_tree)
-        
-        # Conectar señales si existen los métodos correspondientes
-        if hasattr(self, 'handle_tree_item_change'):
-            self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
-        if hasattr(self, 'handle_tree_item_double_click'):
-            self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+            # Añadir al layout existente
+            container_layout.addWidget(self.results_tree)
+            
+            # Conectar señales si existen los métodos correspondientes
+            if hasattr(self, 'handle_tree_item_change'):
+                self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
+            if hasattr(self, 'handle_tree_item_double_click'):
+                self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
 
 
 
 
     def _setup_widgets(self):
         """Configuración adicional para los widgets después de cargar la UI."""
-        # Establecer los meses para el combo box si no se ha hecho
-        if self.month_combo.count() == 0:
-            self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
+        # Configurar el combo de meses solo si existe
+        if hasattr(self, 'month_combo'):
+            if self.month_combo.count() == 0:
+                self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
         
-        # Establecer el año actual si no se ha hecho
-        current_year = QDate.currentDate().year()
-        if self.year_spin.value() == 0:
-            self.year_spin.setValue(current_year)
-        if self.year_only_spin.value() == 0:
-            self.year_only_spin.setValue(current_year)
+        # Configurar los spinners de año solo si existen
+        if hasattr(self, 'year_spin'):
+            current_year = QDate.currentDate().year()
+            if self.year_spin.value() == 0:
+                self.year_spin.setValue(current_year)
+                
+        if hasattr(self, 'year_only_spin'):
+            current_year = QDate.currentDate().year()
+            if self.year_only_spin.value() == 0:
+                self.year_only_spin.setValue(current_year)
         
         # Configurar el splitter principal si es necesario
-        if self.main_splitter.sizes() == [0, 0]:
-            self.main_splitter.setSizes([400, 800])
+        if hasattr(self, 'main_splitter'):
+            if self.main_splitter.sizes() == [0, 0]:
+                self.main_splitter.setSizes([400, 800])
         
         # Configurar el splitter de detalles si es necesario
-        if self.details_splitter.sizes() == [0, 0]:
-            self.details_splitter.setSizes([200, 800])
+        if hasattr(self, 'details_splitter'):
+            if self.details_splitter.sizes() == [0, 0]:
+                self.details_splitter.setSizes([200, 800])
         
         # Inicializar la lista de botones avanzados si estamos usando la UI
-        self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
+        if all(hasattr(self, btn) for btn in ['custom_button1', 'custom_button2', 'custom_button3']):
+            self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
         
         # Inicializar la lista para almacenar los elementos de la playlist
         self.playlist_items = []
         
-        # Configurar políticas de foco
-        self.results_list.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
-        self.search_box.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        # Configurar políticas de foco si los widgets existen
+        if hasattr(self, 'search_box'):
+            self.search_box.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
         
-        for button in [self.play_button, self.folder_button] + self.advanced_buttons:
-            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        for button_name in ['play_button', 'folder_button']:
+            if hasattr(self, button_name):
+                getattr(self, button_name).setFocusPolicy(Qt.FocusPolicy.NoFocus)
         
-        self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        for button in self.advanced_buttons:
+            if button:
+                button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        
+        if hasattr(self, 'advanced_settings_check'):
+            self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
 
 
@@ -1274,44 +1281,53 @@ class MusicBrowser(BaseModule):
         
         return None
 
-    # Modificar la función show_album_info para mostrar los enlaces del álbum
-    def show_album_info(self, header_item):
+    def show_album_info(self, album_item):
         """Muestra la información del álbum."""
-        # Obtener artista y álbum del texto del header
-        album_info = header_item.text().replace("📀 ", "").split(" - ")
-        if len(album_info) != 2:
+        # Verificar si es un ítem de álbum válido
+        if not album_item:
             return
             
-        artist, album = album_info
+        # Obtener datos del álbum del UserRole
+        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
+            return
         
-        # Contar canciones y obtener información del álbum
-        total_tracks = 0
+        # Obtener información directamente de los datos estructurados
+        artist = item_data.get('artist', 'Desconocido')
+        album = item_data.get('name', 'Desconocido')
+        year = item_data.get('year', '')
+        genre = item_data.get('genre', '')
+        
+        # Contar canciones y obtener información adicional
+        total_tracks = album_item.childCount()
         total_duration = 0
         album_paths = []
         first_track_data = None
         
-        # Recorrer los items después del header hasta el siguiente header
-        index = self.results_list.row(header_item) + 1
-        while index < self.results_list.count():
-            item = self.results_list.item(index)
-            if item.is_header:
-                break
-                
-            data = item.data(Qt.ItemDataRole.UserRole)
-            if data:
-                if not first_track_data:
-                    first_track_data = data
-                total_tracks += 1
-                if len(data) > 15:  # Asegurarse de que existe el campo duration
-                    try:
-                        total_duration += float(data[15])
-                    except (ValueError, TypeError):
-                        pass
-                album_paths.extend(item.paths)
-            index += 1
+        # Recorrer todos los tracks hijos del álbum
+        for i in range(total_tracks):
+            track_item = album_item.child(i)
+            if track_item:
+                track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+                if track_data:
+                    if not first_track_data:
+                        first_track_data = track_data
+                    # Añadir duración si está disponible (índice 15 o similar)
+                    if len(track_data) > 15:
+                        try:
+                            duration_value = track_data[15]
+                            if isinstance(duration_value, (int, float)):
+                                total_duration += duration_value
+                        except (ValueError, TypeError, IndexError):
+                            pass
+                    # Añadir path si está disponible
+                    if hasattr(track_item, 'paths') and track_item.paths:
+                        album_paths.extend(track_item.paths)
+                    elif len(track_data) > 1:  # Si el path está en el track_data
+                        album_paths.append(track_data[1])
         
         # Guardar las rutas en el header para usarlas en play_album y open_album_folder
-        header_item.paths = album_paths
+        album_item.paths = album_paths if hasattr(album_item, 'paths') else []
         
         # Formatear la duración total
         hours = int(total_duration // 3600)
@@ -1331,7 +1347,7 @@ class MusicBrowser(BaseModule):
             else:
                 self.cover_label.setText("No imagen")
                 
-            # Nuevo: Mostrar la imagen del artista
+            # Mostrar la imagen del artista
             artist_image_path = self.find_artist_image(artist)
             if artist_image_path:
                 artist_pixmap = QPixmap(artist_image_path)
@@ -1363,8 +1379,8 @@ class MusicBrowser(BaseModule):
             metadata = f"""
                 <b>Álbum:</b> {album}<br>
                 <b>Artista:</b> {artist}<br>
-                <b>Fecha:</b> {first_track_data[6] or 'N/A'}<br>
-                <b>Género:</b> {first_track_data[7] or 'N/A'}<br>
+                <b>Fecha:</b> {year or first_track_data[6] or 'N/A'}<br>
+                <b>Género:</b> {genre or first_track_data[7] or 'N/A'}<br>
                 <b>Sello:</b> {first_track_data[8] or 'N/A'}<br>
                 <b>Pistas:</b> {total_tracks}<br>
                 <b>Duración total:</b> {hours:02d}:{minutes:02d}:{seconds:02d}<br>
@@ -1470,7 +1486,7 @@ class MusicBrowser(BaseModule):
             self.clear_details()
             return
 
-        data = current.data(Qt.ItemDataRole.UserRole)
+        data = current.data(0, Qt.ItemDataRole.UserRole)
         if not data:
             self.clear_details()
             return
@@ -1580,23 +1596,19 @@ class MusicBrowser(BaseModule):
         
         except Exception as e:
             # manejar la excepción
-            print(f"Error: {e}")
-
+            print(f"Error en show_details: {e}")
+            traceback.print_exc()
     def search(self):
         """
         Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto.
-        
-        Primero se intenta buscar en la tabla FTS (si se han proporcionado términos de texto libre).
-        Si no se encuentran resultados, se vuelve a realizar la búsqueda en la tabla de canciones
-        pero esta vez con condiciones específicas para cada campo.
-        
-        Se utiliza la clase SearchParser para construir las condiciones SQL y parámetros necesarios
-        para la consulta.
-        
-        Se ordenan los resultados por artista, álbum y número de pista.
-        
-        Se limita el número de resultados a 1000 para evitar sobrecargar la interfaz.
         """
+        if not self.is_tree_valid():
+            print("El árbol de resultados no está disponible. Creando uno nuevo...")
+            self._create_fallback_tree()
+            if not self.is_tree_valid():
+                print("No se pudo crear el árbol de resultados. Abortando búsqueda.")
+                return
+
         query = self.search_box.text()
         parsed = self.search_parser.parse_query(query)
         
@@ -1608,10 +1620,10 @@ class MusicBrowser(BaseModule):
         
         c = conn.cursor()
         
-        # Determinar si hay términos de búsqueda de texto libre
-        has_fts_terms = any(term['type'] == 'text' for term in parsed) if isinstance(parsed, list) else False
+        # Obtener condiciones SQL basadas en la consulta parseada
+        conditions, params = self.search_parser.build_sql_conditions(parsed)
         
-        # Preparar SQL base
+        # Construir la consulta SQL
         sql = """
             SELECT DISTINCT 
                 s.id,
@@ -1628,129 +1640,146 @@ class MusicBrowser(BaseModule):
                 s.bit_depth,
                 s.sample_rate,
                 s.last_modified,
-                s.track_number,
-                art.bio,
-                art.spotify_url AS artist_spotify,
-                art.youtube_url AS artist_youtube,
-                art.musicbrainz_url AS artist_musicbrainz,
-                art.discogs_url AS artist_discogs,
-                art.rateyourmusic_url AS artist_rateyourmusic,
-                alb.spotify_url AS album_spotify,
-                alb.youtube_url AS album_youtube,
-                alb.musicbrainz_url AS album_musicbrainz,
-                alb.discogs_url AS album_discogs,
-                alb.rateyourmusic_url AS album_rateyourmusic,
-                art.wikipedia_url AS artist_wikipedia_url,
-                art.wikipedia_content AS artist_wikipedia_content,
-                alb.wikipedia_url AS album_wikipedia_url,
-                alb.wikipedia_content AS album_wikipedia_content,
-                lyr.lyrics,
-                lyr.source AS lyrics_source
+                s.track_number
+                -- Otros campos que necesites
         """
         
-        # Si tenemos términos de búsqueda de texto, usar las tablas FTS
-        if has_fts_terms:
-            # Extraer términos de texto libre
-            text_terms = [term['value'] for term in parsed if term['type'] == 'text']
-            fts_query = ' '.join(text_terms)
-            
-            # Modificar SQL para incluir búsqueda FTS usando JOIN
-            sql += """
-                FROM songs s
-                JOIN song_fts ON song_fts.id = s.id AND song_fts MATCH ?
-                LEFT JOIN artists art ON s.artist = art.name
-                LEFT JOIN albums alb ON s.album = alb.name 
-                LEFT JOIN artists album_artist ON alb.artist_id = album_artist.id AND s.artist = album_artist.name
-                LEFT JOIN lyrics lyr ON s.id = lyr.track_id
-            """
-            params = [fts_query]
-            
-            # Separar términos que no son de texto para condiciones adicionales
-            non_text_terms = [term for term in parsed if term['type'] != 'text']
-            
-            # Añadir condiciones para términos que no son de texto
-            if non_text_terms:
-                # Modificar parsed para solo incluir términos que no son de texto
-                conditions, additional_params = self.search_parser.build_sql_conditions(non_text_terms)
-                if conditions:
-                    sql += " WHERE " + " AND ".join(conditions)
-                    params.extend(additional_params)
-        else:
-            # Usar la consulta tradicional para términos específicos
-            sql += """
-                FROM songs s
-                LEFT JOIN artists art ON s.artist = art.name
-                LEFT JOIN albums alb ON s.album = alb.name 
-                LEFT JOIN artists album_artist ON alb.artist_id = album_artist.id AND s.artist = album_artist.name
-                LEFT JOIN lyrics lyr ON s.id = lyr.track_id
-            """
-            
-            # Usar build_sql_conditions desde SearchParser
-            conditions, params = self.search_parser.build_sql_conditions(parsed)
-            
-            # Añadir cláusula WHERE si hay condiciones
-            if conditions:
-                sql += " WHERE " + " AND ".join(conditions)
+        sql += """
+            FROM songs s
+            LEFT JOIN artists art ON s.artist = art.name
+            LEFT JOIN albums alb ON s.album = alb.name 
+        """
         
-        # Búsqueda en letras si está habilitada
-        if hasattr(self, 'search_lyrics') and self.search_lyrics and has_fts_terms:
-            # Si ya tenemos condiciones WHERE
-            if 'WHERE' in sql:
-                sql = sql.replace('JOIN song_fts ON song_fts.id = s.id AND song_fts MATCH ?',
-                                'JOIN song_fts ON song_fts.id = s.id AND (song_fts MATCH ? OR EXISTS (SELECT 1 FROM lyrics_fts WHERE lyrics_fts.rowid = lyr.id AND lyrics_fts MATCH ?))')
-                # Añadir el parámetro de búsqueda de letras
-                params.insert(1, fts_query)  # Insertamos el mismo parámetro de búsqueda de nuevo
-            else:
-                sql += " WHERE EXISTS (SELECT 1 FROM lyrics_fts WHERE lyrics_fts.rowid = lyr.id AND lyrics_fts MATCH ?)"
-                params.append(fts_query)
+        # Añadir cláusula WHERE si hay condiciones
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
         
         # Ordenamiento
         sql += " ORDER BY s.artist, s.album, CAST(s.track_number AS INTEGER)"
         
-        # Añadir un límite razonable para evitar cargar demasiados resultados
+        # Añadir un límite razonable
         sql += " LIMIT 1000"
         
         try:
-            # Iniciar temporizador
-            start_time = time.time()
-            
-            print(f"Ejecutando SQL: {sql}")
-            print(f"Con parámetros: {params}")
-            
+            # Ejecutar la consulta
             c.execute(sql, params)
             results = c.fetchall()
             
-            # Terminar temporizador
-            elapsed_time = time.time() - start_time
-            print(f"Consulta completada en {elapsed_time:.3f} segundos. {len(results)} resultados encontrados.")
-            
-            self.results_tree.clear()
-            current_album = None
+            # Limpiar el árbol de resultados
+            if self.results_tree:
+                self.results_tree.clear()
+            else:
+                print("Error: results_tree no está inicializado")
+                return
+                
+            # Organizar los resultados por artista > álbum > canción
+            artists = {}
             
             for row in results:
                 artist = row[3] if row[3] else "Sin artista"
                 album = row[5] if row[5] else "Sin álbum"
                 title = row[2] if row[2] else "Sin título"
+                date = row[6] if row[6] else ""
+                year = date.split('-')[0] if date and '-' in date else date
+                genre = row[7] if row[7] else ""
                 track_number = row[14] if row[14] else "0"
                 
-                # Si cambiamos de álbum, añadir header
-                album_key = f"{artist} - {album}"
-                if album_key != current_album:
-                    header_item = GroupedListItem(f"📀 {album_key}", is_header=True)
-                    self.results_list.addItem(header_item)
-                    current_album = album_key
+                # Crear estructura anidada
+                if artist not in artists:
+                    artists[artist] = {}
                 
-                # Añadir la canción con su número de pista
-                try:
-                    track_num = int(track_number)
-                    display_text = f"    {track_num:02d}. {title}"
-                except (ValueError, TypeError):
-                    display_text = f"    --. {title}"
-                
-                item = GroupedListItem(display_text, paths=[row[1]])
-                item.setData(Qt.ItemDataRole.UserRole, row)
-                self.results_list.addItem(item)
+                album_key = f"{album}"
+                if album_key not in artists[artist]:
+                    artists[artist][album_key] = []
                     
+                # Añadir la canción con su número de pista
+                track_info = {
+                    'number': track_number,
+                    'title': title,
+                    'data': row,
+                    'year': year,
+                    'genre': genre,
+                    'paths': [row[1]]  # Añadir path al track info
+                }
+                artists[artist][album_key].append(track_info)
+            
+            # Añadir elementos al árbol
+            for artist_name, albums in artists.items():
+                # Crear elemento de artista
+                artist_item = QTreeWidgetItem(self.results_tree)
+                artist_item.setText(0, artist_name)
+                artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
+                artist_item.is_header = True  # Marcar como header para compatibilidad
+                
+                # Añadir álbumes como hijos del artista
+                for album_name, tracks in albums.items():
+                    # Obtener información del álbum del primer track
+                    album_year = tracks[0]['year'] if tracks else ""
+                    album_genre = tracks[0]['genre'] if tracks else ""
+                    
+                    # Crear elemento de álbum
+                    album_item = QTreeWidgetItem(artist_item)
+                    album_item.setText(0, f"📀 {album_name}")
+                    album_item.setText(1, album_year)
+                    album_item.setText(2, album_genre)
+                    album_item.setData(0, Qt.ItemDataRole.UserRole, {
+                        'type': 'album', 
+                        'name': album_name,
+                        'artist': artist_name,
+                        'year': album_year,
+                        'genre': album_genre
+                    })
+                    album_item.is_header = True  # Marcar como header para compatibilidad
+                    
+                    # Obtener todas las rutas para este álbum
+                    album_paths = []
+                    
+                    # Ordenar las pistas por número
+                    try:
+                        def track_sort_key(track):
+                            number = track['number']
+                            # Manejar diferentes tipos de 'number'
+                            if isinstance(number, str):
+                                if number.isdigit():
+                                    return int(number)
+                                else:
+                                    return float('inf')  # No es un número, ponerlo al final
+                            elif isinstance(number, (int, float)):
+                                return number
+                            else:
+                                return float('inf')  # Otro tipo, ponerlo al final
+                                
+                        tracks.sort(key=track_sort_key)
+                    except Exception as e:
+                        print(f"Error al ordenar pistas: {e}")
+                    
+                    # Añadir canciones como hijos del álbum
+                    for track in tracks:
+                        try:
+                            track_num = int(track['number'])
+                            display_text = f"{track_num:02d}. {track['title']}"
+                        except (ValueError, TypeError):
+                            display_text = f"--. {track['title']}"
+                        
+                        # Crear elemento de canción
+                        track_item = QTreeWidgetItem(album_item)
+                        track_item.setText(0, display_text)
+                        track_item.setText(1, track['year'])
+                        track_item.setText(2, track['genre'])
+                        track_item.setData(0, Qt.ItemDataRole.UserRole, track['data'])
+                        track_item.is_header = False  # Marcar como no header para compatibilidad
+                        track_item.paths = track['paths']  # Guardar rutas
+                        
+                        # Añadir ruta a las rutas del álbum
+                        album_paths.extend(track['paths'])
+                    
+                    # Guardar rutas en el item del álbum
+                    album_item.paths = album_paths
+            
+            # Expandir los artistas para mostrar los álbumes
+            for i in range(self.results_tree.topLevelItemCount()):
+                self.results_tree.topLevelItem(i).setExpanded(True)
+                
         except Exception as e:
             print(f"Error en la búsqueda: {e}")
             import traceback
@@ -2033,16 +2062,16 @@ class MusicBrowser(BaseModule):
         if event.key() == Qt.Key.Key_Tab:
             # Alternar entre la caja de búsqueda y el árbol de resultados
             if self.search_box.hasFocus():
-                # Verificar si results_tree existe antes de usarlo
-                if hasattr(self, 'results_tree') and self.results_tree:
+                # Verificar si results_tree existe y es válido
+                if self.is_tree_valid():
                     self.results_tree.setFocus()
             else:
                 self.search_box.setFocus()
             event.accept()
             return
         
-        # Solo procesar las flechas si el árbol de resultados tiene el foco
-        if hasattr(self, 'results_tree') and self.results_tree and self.results_tree.hasFocus():
+        # Solo procesar las flechas si el árbol de resultados existe, es válido y tiene el foco
+        if self.is_tree_valid() and self.results_tree.hasFocus():
             if event.key() in [Qt.Key.Key_Left, Qt.Key.Key_Right]:
                 self.navigate_tree_headers(event.key())
                 event.accept()
@@ -2171,36 +2200,49 @@ class MusicBrowser(BaseModule):
         """
         try:
             # Ruta al archivo UI del árbol de resultados
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "results_tree.ui")
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_results_tree.ui")
             
             if not os.path.exists(ui_file_path):
                 print(f"Archivo UI no encontrado: {ui_file_path}")
                 return False
                 
-            # Limpiar el contenedor por si ya tiene widgets
-            if self.results_tree_container.layout():
+            # Limpiar el contenedor existente
+            if hasattr(self, 'results_tree_container') and self.results_tree_container:
                 # Eliminar todos los widgets del layout actual
+                if self.results_tree_container.layout():
+                    while self.results_tree_container.layout().count():
+                        item = self.results_tree_container.layout().takeAt(0)
+                        if item.widget():
+                            item.widget().deleteLater()
+            
+            # Crear un nuevo widget para contener el árbol
+            self.results_tree_widget = QWidget()
+            
+            # Cargar el archivo UI en este widget
+            from PyQt6 import uic
+            uic.loadUi(ui_file_path, self.results_tree_widget)
+            
+            # Obtener la referencia al árbol
+            self.results_tree = self.results_tree_widget.findChild(QTreeWidget, "results_tree")
+            if not self.results_tree:
+                print("No se encontró el widget 'results_tree' en el archivo UI")
+                return False
+            
+            # Agregar el widget completo al contenedor (en lugar de solo el árbol)
+            # Esto es crucial para mantener la jerarquía de widgets y evitar problemas de memoria
+            if hasattr(self, 'results_tree_container') and self.results_tree_container:
+                if not self.results_tree_container.layout():
+                    layout = QVBoxLayout(self.results_tree_container)
+                    layout.setContentsMargins(0, 0, 0, 0)
+                
+                # Asegurarnos de que el layout esté vacío
                 while self.results_tree_container.layout().count():
                     item = self.results_tree_container.layout().takeAt(0)
                     if item.widget():
                         item.widget().deleteLater()
-                # Eliminar el layout actual
-                QWidget().setLayout(self.results_tree_container.layout())
-            
-            # Crear un nuevo layout para el contenedor
-            container_layout = QVBoxLayout(self.results_tree_container)
-            container_layout.setContentsMargins(0, 0, 0, 0)
-            
-            # Cargar el widget desde el archivo UI
-            from PyQt6 import uic
-            results_tree_widget = QWidget()
-            uic.loadUi(ui_file_path, results_tree_widget)
-            
-            # Añadir el widget cargado al contenedor
-            container_layout.addWidget(results_tree_widget)
-            
-            # Transferir referencia al árbol
-            self.results_tree = results_tree_widget.findChild(QTreeWidget, "results_tree")
+                
+                # Agregar el widget completo (no solo el árbol)
+                self.results_tree_container.layout().addWidget(self.results_tree_widget)
             
             # Configurar el árbol
             self.setup_results_tree()
@@ -2211,6 +2253,8 @@ class MusicBrowser(BaseModule):
             import traceback
             traceback.print_exc()
             return False
+
+
 
     def setup_results_tree(self):
         """Configura el árbol de resultados con sus propiedades y señales."""

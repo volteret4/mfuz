@@ -23,7 +23,7 @@
    <item>
     <widget class="QLabel" name="info_label">
      <property name="text">
-      <string>Selecciona los artistas que deseas guardar (0 encontrados)</string>
+      <string>Selecciona los artistas que deseas añadir a muspy (0 encontrados)</string>
      </property>
     </widget>
    </item>
@@ -52,11 +52,10 @@
         <x>0</x>
         <y>0</y>
         <width>580</width>
-        <height>481</height>
+        <height>463</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="scroll_layout">
-       <!-- Artista de ejemplo (solo para diseño - se reemplazará dinámicamente) -->
        <item>
         <widget class="QCheckBox" name="example_artist">
          <property name="text">
@@ -72,6 +71,12 @@
        </item>
        <item>
         <widget class="QCheckBox" name="example_artist_2">
+         <property name="font">
+          <font>
+           <italic>true</italic>
+           <strikeout>true</strikeout>
+          </font>
+         </property>
          <property name="text">
           <string>Otro Artista (12345678-9abc-def0-1234-56789abcdef0)</string>
          </property>
@@ -108,7 +113,7 @@
    <item>
     <widget class="QDialogButtonBox" name="buttons">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
    </item>

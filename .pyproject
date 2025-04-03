@@ -6,6 +6,9 @@
 
         "ui/tab_manager.ui",
         "ui/music_fuzzy_module.ui",
+        "ui/music_fuzzy_advanced_settings.ui",
+        "ui/music_fuzzy_info_panel.ui",
+        "ui/music_fuzzy_results_tree.ui",
         "ui/jaangle_module.ui",
         "ui/calendar_module.ui",
         "ui/conciertos_module.ui",

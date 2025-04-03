@@ -26,12 +26,44 @@ class FreshRSSContentFinder():
         self.search_artists = 'artists' in config.get('search_entities', [])
         self.search_albums = 'albums' in config.get('search_entities', [])
         self.search_labels = 'labels' in config.get('search_entities', [])
+        # Nueva opción para permitir/bloquear términos cortos
+        self.search_short_terms = config.get('search_short_terms', False)
+        # Nueva opción para filtrar posts por patrones
+        self.ignore_patterns = config.get('ignore_patterns', [
+            'mix-for-nts', 
+            'my favorite songs',
+            'weekly playlist',
+            'monthly mix',
+            'podcast'
+        ])
+        
+        # Lista para mantener los posts ya rechazados
+        self.rejected_urls = set()
         
         # Cargar cache si existe
         self.cache = self._load_cache()
         
         # Inicializar la base de datos
         self._setup_database()
+
+    def _should_ignore_post(self, post):
+        """Determina si un post debe ser ignorado basado en patrones configurados"""
+        # Si no hay patrones a ignorar, no ignoramos nada
+        if not self.ignore_patterns:
+            return False
+            
+        # Convertir título y contenido a minúsculas para comparación insensible a mayúsculas
+        title_lower = post['title'].lower()
+        content_lower = post['content'].lower()
+        
+        # Verificar si algún patrón está presente en el título o contenido
+        for pattern in self.ignore_patterns:
+            pattern_lower = pattern.lower()
+            if pattern_lower in title_lower or pattern_lower in content_lower:
+                logger.info(f"Ignorando post que coincide con patrón '{pattern}': {post['title']}")
+                return True
+                
+        return False
         
     def _setup_database(self):
         """Configura la tabla feeds en la base de datos si no existe"""
@@ -89,6 +121,10 @@ class FreshRSSContentFinder():
                 
             # Actualizar la marca de tiempo
             self.cache['last_updated'] = datetime.now().isoformat()
+            
+            # Guardar las URLs rechazadas
+            if hasattr(self, 'rejected_urls') and self.rejected_urls:
+                self.cache['rejected_urls'] = list(self.rejected_urls)
             
             os.makedirs(os.path.dirname(self.cache_path), exist_ok=True)
             with open(self.cache_path, 'w') as f:
@@ -429,12 +465,22 @@ class FreshRSSContentFinder():
                     post['feed'] = feed_title
                     post['category'] = category
                     
+                    # Verificar si el post debe ser ignorado
+                    if self._should_ignore_post(post):
+                        continue
+                    
                     content = f"{post['title']} {post['content']}".lower()
                     
                     # Buscar coincidencias de artistas
                     if self.search_artists:
                         for artist in search_terms['artists']:
-                            if artist['name'].lower() in content:
+                            artist_name = artist['name'].lower()
+                            # Saltarse términos cortos a menos que se permita explícitamente
+                            if len(artist_name) <= 4 and not self.search_short_terms:
+                                continue
+                                
+                            # Buscar el nombre completo del artista como una frase
+                            if artist_name in content:
                                 artist_id = artist['id']
                                 if artist_id not in entity_posts['artists']:
                                     entity_posts['artists'][artist_id] = {
@@ -449,7 +495,13 @@ class FreshRSSContentFinder():
                     # Buscar coincidencias de álbumes
                     if self.search_albums:
                         for album in search_terms['albums']:
-                            if album['name'].lower() in content:
+                            album_name = album['name'].lower()
+                            # Saltarse términos cortos a menos que se permita explícitamente
+                            if len(album_name) <= 4 and not self.search_short_terms:
+                                continue
+                                
+                            # Buscar el nombre completo del álbum como una frase
+                            if album_name in content:
                                 album_id = album['id']
                                 if album_id not in entity_posts['albums']:
                                     entity_posts['albums'][album_id] = {
@@ -464,10 +516,13 @@ class FreshRSSContentFinder():
                     # Buscar coincidencias de sellos
                     if self.search_labels:
                         for label in search_terms['labels']:
-                            if label['name'].lower() in content:
-                                pattern = r'\b' + re.escape(label['name'].lower()) + r'\b'
-                                if re.search(pattern, content):
-                                    label_id = label['id']
+                            label_name = label['name'].lower()
+                            # Saltarse términos cortos a menos que se permita explícitamente
+                            if len(label_name) <= 4 and not self.search_short_terms:
+                                continue
+                                
+                            # Buscar el nombre completo del sello como una frase
+                            if label_name in content:
                                 label_id = label['id']
                                 if label_id not in entity_posts['labels']:
                                     entity_posts['labels'][label_id] = {
@@ -485,8 +540,24 @@ class FreshRSSContentFinder():
         # Procesar interactivamente los resultados
         self._interactive_selection(entity_posts)
         
+        # Guardar el cache actualizado
+        self._save_cache()
+        
+        # Procesar interactivamente los resultados
+        self._interactive_selection(entity_posts)
+        
     def _interactive_selection(self, entity_posts: Dict):
         """Permite al usuario seleccionar interactivamente qué posts guardar"""
+        # Definir colores ANSI
+        class Colors:
+            BLUE = '\033[94m'
+            GREEN = '\033[92m'
+            YELLOW = '\033[93m'
+            RED = '\033[91m'
+            BOLD = '\033[1m'
+            UNDERLINE = '\033[4m'
+            END = '\033[0m'
+        
         # Estadísticas
         total_entities = sum(len(entity_posts[entity_type]) for entity_type in entity_posts)
         total_posts = sum(
@@ -494,12 +565,13 @@ class FreshRSSContentFinder():
             for entity_type in entity_posts
         )
         
-        print(f"\n=== Resultados de la búsqueda ===")
-        print(f"Se encontraron {total_posts} artículos en {total_entities} entidades:")
-        print(f"- Artistas: {len(entity_posts['artists'])}")
-        print(f"- Álbumes: {len(entity_posts['albums'])}")
-        print(f"- Sellos: {len(entity_posts['labels'])}")
+        print(f"\n=== {Colors.BOLD}Resultados de la búsqueda{Colors.END} ===")
+        print(f"Se encontraron {Colors.YELLOW}{total_posts}{Colors.END} artículos en {Colors.YELLOW}{total_entities}{Colors.END} entidades:")
+        print(f"- Artistas: {Colors.GREEN}{len(entity_posts['artists'])}{Colors.END}")
+        print(f"- Álbumes: {Colors.GREEN}{len(entity_posts['albums'])}{Colors.END}")
+        print(f"- Sellos: {Colors.GREEN}{len(entity_posts['labels'])}{Colors.END}")
         print("=" * 40)
+        print(f"{Colors.BOLD}Presiona Ctrl+C en cualquier momento para pausar el proceso.{Colors.END}")
         
         # Verificar si hay progreso guardado
         progress = self._get_progress()
@@ -507,14 +579,19 @@ class FreshRSSContentFinder():
         start_from_index = 0
         
         if progress:
-            print(f"\n=== Progreso detectado ===")
-            print(f"Última entidad procesada: {progress.get('entity_type')} (índice {progress.get('entity_index')})")
+            print(f"\n=== {Colors.BOLD}Progreso detectado{Colors.END} ===")
+            print(f"Última entidad procesada: {Colors.YELLOW}{progress.get('entity_type')}{Colors.END} (índice {Colors.YELLOW}{progress.get('entity_index')}{Colors.END})")
             resume = input("¿Desea continuar desde el último punto guardado? (s/n): ").lower()
             
             if resume == 's':
                 start_from_type = progress.get('entity_type')
                 start_from_index = progress.get('entity_index', 0)
-                print(f"Continuando desde {start_from_type}, índice {start_from_index}...")
+                print(f"Continuando desde {Colors.YELLOW}{start_from_type}{Colors.END}, índice {Colors.YELLOW}{start_from_index}{Colors.END}...")
+        
+        # Cargar URLs rechazadas desde el cache si existen
+        if 'rejected_urls' in self.cache:
+            self.rejected_urls = set(self.cache.get('rejected_urls', []))
+            print(f"Cargadas {Colors.YELLOW}{len(self.rejected_urls)}{Colors.END} URLs rechazadas anteriormente.")
         
         # Procesar cada tipo de entidad
         entity_types = ['artists', 'albums', 'labels']
@@ -535,7 +612,7 @@ class FreshRSSContentFinder():
             if not entities:
                 continue
                 
-            print(f"\nProcesando {len(entities)} {type_name}s:")
+            print(f"\n{Colors.BOLD}Procesando {len(entities)} {type_name}s:{Colors.END}")
             
             # Convertir a lista para poder acceder por índice
             entity_items = list(entities.items())
@@ -546,31 +623,101 @@ class FreshRSSContentFinder():
             # Procesar cada entidad
             for idx, (entity_id, entity_data) in enumerate(entity_items[start_idx:], start_idx):
                 entity_name = entity_data['name']
-                entity_posts = entity_data['posts']
+                posts = entity_data['posts']
                 
-                print(f"\n{type_name}: {entity_name} (ID: {entity_id}) - Progreso: {idx+1}/{len(entity_items)}")
-                print(f"Se encontraron {len(entity_posts)} artículos:")
+                # Filtrar posts que ya han sido rechazados anteriormente
+                filtered_posts = [post for post in posts if post['url'] not in self.rejected_urls]
                 
-                # ... (resto del código para mostrar y seleccionar posts) ...
+                # Si todos los posts han sido rechazados, pasar a la siguiente entidad
+                if not filtered_posts:
+                    print(f"\n{Colors.BOLD}{type_name}{Colors.END}: {Colors.GREEN}{entity_name}{Colors.END} ({Colors.YELLOW}ID: {entity_id}{Colors.END}) - Progreso: {Colors.YELLOW}{idx+1}/{len(entity_items)}{Colors.END}")
+                    print(f"Todos los {len(posts)} posts para esta entidad ya han sido rechazados anteriormente. Pasando a la siguiente.")
+                    self._save_progress(entity_type, idx + 1, entity_id)
+                    continue
+                
+                print(f"\n{Colors.BOLD}{type_name}{Colors.END}: {Colors.GREEN}{entity_name}{Colors.END} ({Colors.YELLOW}ID: {entity_id}{Colors.END}) - Progreso: {Colors.YELLOW}{idx+1}/{len(entity_items)}{Colors.END}")
+                
+                if len(posts) > len(filtered_posts):
+                    print(f"Se encontraron {Colors.YELLOW}{len(posts)}{Colors.END} artículos, {Colors.RED}{len(posts) - len(filtered_posts)}{Colors.END} ya rechazados anteriormente.")
+                
+                print(f"Mostrando {Colors.YELLOW}{len(filtered_posts)}{Colors.END} artículos:")
+                
+                # Mostrar todos los posts encontrados de una vez
+                for i, post in enumerate(filtered_posts):
+                    print(f"{Colors.BOLD}{i+1}.{Colors.END} {Colors.YELLOW}{post['title']}{Colors.END} - {post['feed']} ({post['date'].strftime('%Y-%m-%d')})")
+                    print(f"   {Colors.BLUE}{Colors.UNDERLINE}URL:{Colors.END} {Colors.BLUE}{post['url']}{Colors.END}")
+                    print(f"   Extracto: {post['content'][:150]}...")
+                    print()  # Línea en blanco para mejorar legibilidad
+                
+                # Opciones de selección
+                print(f"\n{Colors.BOLD}Opciones de selección:{Colors.END}")
+                print("- Ingrese números separados por espacios (ej: '1 3 5') para seleccionar posts específicos")
+                print("- 'a' o 'all' para seleccionar todos")
+                print("- 'n' o 'none' para no seleccionar ninguno")
+                
+                choice = input(f"{Colors.GREEN}Su selección:{Colors.END} ").lower().strip()
+                
+                selected_posts = []
+                rejected_posts = []
+                
+                if choice in ['a', 'all', 'todos']:
+                    # Seleccionar todos los posts
+                    selected_posts = filtered_posts
+                    print(f"Se seleccionaron {Colors.GREEN}todos{Colors.END} los posts ({Colors.YELLOW}{len(filtered_posts)}{Colors.END}).")
+                elif choice in ['n', 'none', 'ninguno']:
+                    # No seleccionar ningún post
+                    rejected_posts = filtered_posts
+                    print(f"{Colors.RED}No se seleccionó ningún post.{Colors.END}")
+                else:
+                    # Seleccionar posts por números
+                    try:
+                        # Dividir la entrada en números individuales
+                        numbers = [int(num) for num in choice.split()]
+                        
+                        # Validar rango y seleccionar posts
+                        for num in numbers:
+                            if 1 <= num <= len(filtered_posts):
+                                selected_posts.append(filtered_posts[num-1])
+                                print(f"Post {Colors.YELLOW}{num}{Colors.END} seleccionado: {Colors.GREEN}{filtered_posts[num-1]['title']}{Colors.END}")
+                            else:
+                                print(f"Número {Colors.RED}{num}{Colors.END} fuera de rango. Ignorado.")
+                        
+                        # Los posts no seleccionados se consideran rechazados
+                        for i, post in enumerate(filtered_posts, 1):
+                            if i not in numbers:
+                                rejected_posts.append(post)
+                    except ValueError:
+                        print(f"{Colors.RED}Entrada no válida. No se seleccionó ningún post.{Colors.END}")
+                        rejected_posts = filtered_posts
+                
+                # Guardar los posts seleccionados
+                if selected_posts:
+                    posts_added = self._save_selected_posts(entity_type, entity_id, selected_posts)
+                    print(f"Se guardaron {Colors.GREEN}{posts_added}{Colors.END} posts nuevos para {Colors.YELLOW}{entity_name}{Colors.END}.")
+                else:
+                    print(f"{Colors.RED}No se guardó ningún post{Colors.END} para {Colors.YELLOW}{entity_name}{Colors.END}.")
+                
+                # Añadir los posts rechazados a la lista de rechazados
+                for post in rejected_posts:
+                    self.rejected_urls.add(post['url'])
+                
+                # Guardar las URLs rechazadas en el cache
+                self.cache['rejected_urls'] = list(self.rejected_urls)
+                self._save_cache()
                 
                 # Guardar progreso después de procesar cada entidad
                 self._save_progress(entity_type, idx + 1, entity_id)
-                
-                # Verificar si el usuario quiere pausar
-                if idx < len(entity_items) - 1:  # No preguntar en el último elemento
-                    pause = input("¿Desea pausar el proceso y continuar más tarde? (p/Enter para continuar): ")
-                    if pause.lower() == 'p':
-                        print(f"Proceso pausado. Se ha guardado el progreso.")
-                        return
         
         # Reiniciar el progreso cuando se completa todo
         if 'progress' in self.cache:
             del self.cache['progress']
             self._save_cache()
         
-        print("\nProceso completado.")
-
-
+        print(f"\n{Colors.GREEN}{Colors.BOLD}Proceso completado.{Colors.END}")
+        print(f"Total de URLs rechazadas: {Colors.YELLOW}{len(self.rejected_urls)}{Colors.END}")
+    
+    
+    
     def _handle_user_interruption(self, entity_type, current_idx, entity_id):
         """Maneja interrupciones del usuario durante el procesamiento"""
         try:
@@ -581,6 +728,15 @@ class FreshRSSContentFinder():
         finally:
             print("Proceso pausado.")
             sys.exit(0)
+
+    def clear(self):
+        # Para sistemas UNIX (Linux/Mac)
+        if os.name == 'posix':
+            os.system('clear')
+        # Para sistemas Windows
+        elif os.name == 'nt':
+            os.system('cls')
+
 
 def main(config):
     """Función principal del script"""

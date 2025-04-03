@@ -98,3 +98,205 @@ AttributeError: 'MusicBrowser' object has no attribute 'results_tree'
 
 2025-04-02 00:23:27,577 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
 2025-04-02 00:26:57,719 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:21:29,934 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:23:21,041 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:26:45,664 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:27:49,914 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:31:03,810 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:34:03,702 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:34:10,448 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2078, in keyPressEvent
+    if hasattr(self, 'results_tree') and self.results_tree and self.results_tree.hasFocus():
+                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+RuntimeError: wrapped C/C++ object of type QTreeWidget has been deleted
+
+2025-04-02 18:40:54,569 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:41:42,562 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 18:42:09,205 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:12,986 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:13,690 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:14,268 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:15,009 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:15,852 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:16,260 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:17,895 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:18,462 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:18,875 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:19,958 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:23,691 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:30,114 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:31,194 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:31,668 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:32,502 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:33,038 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:42:33,478 - root - CRITICAL - Uncaught exception:
+Traceback (most recent call last):
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 2426, in handle_tree_item_change
+    self.show_album_info(current)
+    ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/huan/gits/pollo/music-fuzzy/modules/music_fuzzy_module.py", line 1288, in show_album_info
+    album_info = header_item.text().replace("📀 ", "").split(" - ")
+                 ~~~~~~~~~~~~~~~~^^
+TypeError: text(self, column: int): not enough arguments
+
+2025-04-02 18:48:58,088 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-02 23:02:35,700 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-03 22:52:17,242 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-03 22:54:32,123 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-03 23:04:24,135 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-03 23:06:10,470 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
+2025-04-03 23:06:58,317 - root - ERROR - Error configurando WebEngine: type object 'WebAttribute' has no attribute 'WebSecurityEnabled'
