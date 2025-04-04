@@ -71,16 +71,14 @@ def exception_hook(exc_type, exc_value, exc_traceback):
     print(error_msg)  # Also print to console
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
-# Ensure log directory exists
-log_dir = os.path.expanduser('~/.config/your_app_name/logs')
-os.makedirs(log_dir, exist_ok=True)
+log_file = PROJECT_ROOT / ".content" / "log" / "multi_module_manager.log"
 
 # Set up logging
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(log_dir, 'application_debug.log'), mode='w'),
+        logging.FileHandler(log_file, mode='w'),
         logging.StreamHandler()
     ]
 )
@@ -152,8 +150,12 @@ class TabManager(QMainWindow):
         # Configurar los handlers
         console_handler = logging.StreamHandler()
         console_handler.setFormatter(ColoredFormatter)
+        
+        # Establecemos path para el log_file
+        log_file = PROJECT_ROOT / ".content" / "log" / "multi_module_manager.log"
 
-        file_handler = logging.FileHandler('multi_module_manager.log')
+
+        file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
 
         # Configurar root logger
@@ -774,7 +776,12 @@ def main():
             console_handler = logging.StreamHandler()
             console_handler.setFormatter(ColoredFormatter)
             
-            file_handler = logging.FileHandler('multi_module_manager.log')
+            
+            log_file = PROJECT_ROOT / ".content" / "log" / "tab_manager.log"
+
+
+
+            file_handler = logging.FileHandler(log_file)
             file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
             
             # Configurar root logger
@@ -811,13 +818,14 @@ def main():
             logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
             
         except Exception as e:
+            log_file = PROJECT_ROOT / ".content" / "log" / "tab_manager.log"
             # Fallback al logging básico en caso de error
             logging.basicConfig(
                 level=logging.DEBUG,
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                 handlers=[
                     logging.StreamHandler(),  # Print to console
-                    logging.FileHandler('multi_module_manager.log')  # Log to file
+                    logging.FileHandler(log_file)  # Log to file
                 ]
             )
             

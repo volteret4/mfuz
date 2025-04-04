@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPush
                            QLabel, QScrollArea, QSplitter, QTextEdit, QTableWidget, 
                            QHeaderView, QTreeWidget, QTreeWidgetItem, QAbstractItemView,
                            QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
-                           QTabWidget)
+                           QTabWidget, QSpinBox)
 from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence
 import subprocess
@@ -24,7 +24,6 @@ import traceback
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT  # Importar la clase base
-
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -207,10 +206,10 @@ class SearchParser:
         
         return result
 
-class MusicBrowser(BaseModule):
 
+
+class MusicBrowser(BaseModule):
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
-        # Extraer los argumentos específicos de MusicBrowser
         """
         Inicializa el módulo de exploración de música.
 
@@ -224,6 +223,7 @@ class MusicBrowser(BaseModule):
             artist_images_dir (str, optional): Directorio para las imágenes de
                 artistas. Defaults to ''.
         """
+        # Extraer los argumentos específicos de MusicBrowser
         self.db_path = kwargs.pop('db_path', '')
         self.font_family = kwargs.pop('font_family', 'Inter')
         self.artist_images_dir = kwargs.pop('artist_images_dir', '')
@@ -242,6 +242,7 @@ class MusicBrowser(BaseModule):
         self.cover_label = None
         self.artist_image_label = None
         self.advanced_buttons = []
+        self.ui_components_loaded = {'main': False, 'tree': False, 'info': False, 'advanced': False}
 
         # Llamar al constructor de la clase padre con los argumentos restantes
         super().__init__(parent=parent, theme=theme, **kwargs)
@@ -250,87 +251,100 @@ class MusicBrowser(BaseModule):
         self.search_parser = SearchParser()
         self.setup_shortcuts()
 
-    # Actualización del método init_ui en la clase MusicBrowser
     def init_ui(self):
         """Inicializa la interfaz del módulo."""
-        # Lista de widgets requeridos
-        required_widgets = [
-            'search_box', 'play_button', 'folder_button', 'advanced_settings_check',
-            'custom_button1', 'custom_button2', 'custom_button3', 'advanced_settings_container',
-            'results_tree_container', 'main_splitter', 'right_tabs', 'details_splitter', 'cover_label',
-            'artist_image_label', 'info_scroll', 'playlist_table', 'clear_playlist_button',
-            'playlist_button1', 'playlist_button2', 'playlist_button3', 'playlist_button4',
-            'spotify_button'
-        ]
+        # Limpiar el layout existente si hay alguno
+        if self.layout():
+            QWidget().setLayout(self.layout())
+
+        # Crear un layout principal para el módulo
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
         
-        # Intentar cargar la UI desde el archivo
+        # Cargar la UI principal
         ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_module.ui")
-        ui_loaded = False
-        
         if os.path.exists(ui_file_path):
             try:
-                # Preparar el objeto para cargar UI
-                if self.layout():
-                    # Eliminar el layout existente antes de cargar uno nuevo
-                    QWidget().setLayout(self.layout())
-                #uic.loadUi(ui_file_path, self)    
-                # Verificar que se han cargado los widgets principales
-                missing_widgets = []
-                for widget_name in required_widgets:
-                    if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
-                        widget = self.findChild(QWidget, widget_name)
-                        if widget:
-                            setattr(self, widget_name, widget)
-                        else:
-                            missing_widgets.append(widget_name)
+                # Cargar el archivo UI principal
+                self.main_ui = QWidget()
+                uic.loadUi(ui_file_path, self.main_ui)
                 
-                if missing_widgets:
-                    print(f"Advertencia: Widgets no encontrados en UI: {', '.join(missing_widgets)}")
-                    # No lanzar error, intentaremos usar fallback para los widgets faltantes
-                else:
-                    ui_loaded = True
-                    print(f"UI MusicBrowser cargada desde {ui_file_path}")
-                    
-                # Configuración adicional después de cargar UI
-                self._setup_widgets()
+                # Añadir el widget principal al layout
+                main_layout.addWidget(self.main_ui)
+                
+                # Transferir referencias importantes
+                self._setup_references()
+                self.ui_components_loaded['main'] = True
+                print(f"UI MusicBrowser cargada desde {ui_file_path}")
             except Exception as e:
-                print(f"Error cargando UI MusicBrowser desde archivo: {e}")
-                import traceback
+                print(f"Error cargando UI MusicBrowser: {e}")
                 traceback.print_exc()
-                ui_loaded = False
+                self._fallback_init_ui()
         else:
             print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}")
-            ui_loaded = False
-        
-        # Si la UI no se cargó correctamente, usar fallback
-        if not ui_loaded:
             self._fallback_init_ui()
         
-        # Cargar el árbol de resultados
-        try:
-            if not hasattr(self, 'results_tree') or not self.results_tree:
-                if not self.load_results_tree_ui():
-                    print("Advertencia: No se pudo cargar el árbol de resultados dinámicamente.")
-                    # Crear un árbol de resultados básico como fallback
-                    self._create_fallback_tree()
-        except Exception as e:
-            print(f"Error al cargar el árbol de resultados: {e}")
-            traceback.print_exc()
-            self._create_fallback_tree()
+        # Cargar otros componentes de la UI
+        self._load_results_tree()
+        self.setup_info_widget()
         
-        # Configuración común (independiente del método de carga)
-        try:
-            self.setup_info_widget()
-        except Exception as e:
-            print(f"Error al configurar el widget de información: {e}")
-            traceback.print_exc()
-        
-        self.setup_shortcuts()
-        self.apply_theme()
+        # Configuración común
         self.connect_signals()
+        self.apply_theme()
         
         # Inicializar el estado de los ajustes avanzados
         self._advanced_settings_loaded = False
+
+    def load_ui_file(self, ui_file_name, required_widgets=None):
+        """
+        Método auxiliar para cargar un archivo UI con manejo de errores
+        
+        Args:
+            ui_file_name (str): Nombre del archivo UI (sin ruta)
+            required_widgets (list, optional): Lista de nombres de widgets requeridos
+            
+        Returns:
+            bool: True si se cargó correctamente, False si hubo error
+        """
+        try:
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", ui_file_name)
+            if not os.path.exists(ui_file_path):
+                print(f"Archivo UI no encontrado: {ui_file_path}")
+                return False
+                
+            from PyQt6 import uic
+            ui_widget = QWidget()
+            uic.loadUi(ui_file_path, ui_widget)
+            
+            # Verificar widgets requeridos si se especifican
+            if required_widgets:
+                missing_widgets = []
+                for widget_name in required_widgets:
+                    widget = ui_widget.findChild(QWidget, widget_name)
+                    if widget:
+                        # Transferir referencias al widget a self
+                        setattr(self, widget_name, widget)
+                    else:
+                        missing_widgets.append(widget_name)
+                
+                if missing_widgets:
+                    print(f"Widgets requeridos no encontrados: {', '.join(missing_widgets)}")
+                    return False
+            
+            # Añadir el widget completo al layout principal si existe
+            if hasattr(self, 'layout') and self.layout():
+                self.layout().addWidget(ui_widget)
+                # Guardar una referencia al widget UI principal
+                self.ui_widget = ui_widget
+            
+            print(f"UI cargada desde {ui_file_path}")
+            return True
+        except Exception as e:
+            print(f"Error cargando UI desde archivo: {e}")
+            traceback.print_exc()
+            return False
+
 
     def _fallback_init_ui(self):
         """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
@@ -558,54 +572,149 @@ class MusicBrowser(BaseModule):
 
     def is_tree_valid(self):
         """Verifica si el árbol está disponible y válido."""
-        return (hasattr(self, 'results_tree') and 
-                self.results_tree is not None and 
-                not self.results_tree.isDestroyed() if hasattr(self.results_tree, 'isDestroyed') else True)
+        if not hasattr(self, 'results_tree') or self.results_tree is None:
+            print("El árbol de resultados no existe o es None")
+            return False
+            
+        # Verificar si no ha sido destruido (si tiene el método)
+        if hasattr(self.results_tree, 'isDestroyed') and self.results_tree.isDestroyed():
+            print("El árbol de resultados ha sido destruido")
+            return False
+            
+        return True
 
+  
     def _create_fallback_tree(self):
         """Crea un árbol de resultados básico como respaldo si falla la carga dinámica."""
-        # Asegurarse de que el contenedor existe
-        if not hasattr(self, 'results_tree_container') or not self.results_tree_container:
-            # Código existente para crear el contenedor...
-        
-            # Ahora podemos estar seguros de que el contenedor existe y tiene un layout
+        # Asegurarse de que el contenedor tiene un layout
+        if not self.results_tree_container.layout():
+            container_layout = QVBoxLayout(self.results_tree_container)
+            container_layout.setContentsMargins(0, 0, 0, 0)
+        else:
             container_layout = self.results_tree_container.layout()
-            if not container_layout:
-                container_layout = QVBoxLayout(self.results_tree_container)
-                container_layout.setContentsMargins(0, 0, 0, 0)
-            
-            # Crear un QTreeWidget básico
-            self.results_tree = QTreeWidget(self.results_tree_container)  # Asignar el parent es importante
-            self.results_tree.setAlternatingRowColors(True)
-            self.results_tree.setHeaderHidden(False)
-            self.results_tree.setColumnCount(3)
-            self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
-            
-            # Ajustar el tamaño de las columnas
-            self.results_tree.setColumnWidth(0, 300)
-            self.results_tree.setColumnWidth(1, 60)
-            self.results_tree.setColumnWidth(2, 120)
-            
-            # Configurar la selección
-            self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
-            self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-            
-            # Limpiar antes de añadir
+            # Limpiar cualquier widget previo
             while container_layout.count():
                 item = container_layout.takeAt(0)
                 if item.widget():
                     item.widget().deleteLater()
-            
-            # Añadir al layout existente
-            container_layout.addWidget(self.results_tree)
-            
-            # Conectar señales si existen los métodos correspondientes
-            if hasattr(self, 'handle_tree_item_change'):
-                self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
-            if hasattr(self, 'handle_tree_item_double_click'):
-                self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+        
+        # Crear un QTreeWidget básico
+        self.results_tree = QTreeWidget()
+        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setHeaderHidden(False)
+        self.results_tree.setColumnCount(3)
+        self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
+        
+        # Configurar la selección
+        self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Añadir al layout existente
+        container_layout.addWidget(self.results_tree)
+        print("Árbol de resultados fallback creado y añadido al layout")
+        
+        # Configurar eventos básicos
+        self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
+        self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+        self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
 
+    def _setup_references(self):
+        """Configura las referencias a los widgets cargados desde la UI principal."""
+        # Botones y controles principales
+        self.search_box = self.main_ui.findChild(QLineEdit, "search_box")
+        self.play_button = self.main_ui.findChild(QPushButton, "play_button")
+        self.folder_button = self.main_ui.findChild(QPushButton, "folder_button")
+        self.spotify_button = self.main_ui.findChild(QPushButton, "spotify_button")
+        self.advanced_settings_check = self.main_ui.findChild(QCheckBox, "advanced_settings_check")
+        
+        # Botones avanzados
+        self.custom_button1 = self.main_ui.findChild(QPushButton, "custom_button1")
+        self.custom_button2 = self.main_ui.findChild(QPushButton, "custom_button2")
+        self.custom_button3 = self.main_ui.findChild(QPushButton, "custom_button3")
+        self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
+        
+        # Contenedores
+        self.top_container = self.main_ui.findChild(QFrame, "top_container")
+        self.advanced_settings_container = self.main_ui.findChild(QFrame, "advanced_settings_container")
+        self.results_tree_container = self.main_ui.findChild(QFrame, "results_tree_container")
+        
+        # Splitters
+        self.main_splitter = self.main_ui.findChild(QSplitter, "main_splitter")
+        self.details_splitter = self.main_ui.findChild(QSplitter, "details_splitter")
+        
+        # Etiquetas de imágenes
+        self.cover_label = self.main_ui.findChild(QLabel, "cover_label")
+        self.artist_image_label = self.main_ui.findChild(QLabel, "artist_image_label")
+        
+        # Scroll de información
+        self.info_scroll = self.main_ui.findChild(QScrollArea, "info_scroll")
+        
+        # Tabs y tabla de playlist
+        self.right_tabs = self.main_ui.findChild(QTabWidget, "right_tabs")
+        self.playlist_table = self.main_ui.findChild(QTableWidget, "playlist_table")
+        
+        # Botones de playlist
+        self.clear_playlist_button = self.main_ui.findChild(QPushButton, "clear_playlist_button")
+        self.playlist_button1 = self.main_ui.findChild(QPushButton, "playlist_button1")
+        self.playlist_button2 = self.main_ui.findChild(QPushButton, "playlist_button2")
+        self.playlist_button3 = self.main_ui.findChild(QPushButton, "playlist_button3")
+        self.playlist_button4 = self.main_ui.findChild(QPushButton, "playlist_button4")
+        
+        # Inicializar la lista para almacenar los elementos de la playlist
+        self.playlist_items = []
 
+    def _load_results_tree(self):
+        """Carga el árbol de resultados desde un archivo UI separado."""
+        # Verificar que el contenedor existe
+        if not hasattr(self, 'results_tree_container') or not self.results_tree_container:
+            print("Error: results_tree_container no existe")
+            return
+        
+        # Si ya existe un layout en el contenedor, eliminarlo
+        if self.results_tree_container.layout():
+            while self.results_tree_container.layout().count():
+                item = self.results_tree_container.layout().takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+            QWidget().setLayout(self.results_tree_container.layout())
+        
+        # Crear un nuevo layout para el contenedor
+        container_layout = QVBoxLayout(self.results_tree_container)
+        container_layout.setContentsMargins(0, 0, 0, 0)
+        container_layout.setSpacing(0)
+        
+        # Cargar el widget del árbol desde un archivo UI separado
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_results_tree.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                self.results_tree_widget = QWidget()
+                uic.loadUi(ui_file_path, self.results_tree_widget)
+                
+                # Obtener la referencia al árbol y añadirlo al layout
+                self.results_tree = self.results_tree_widget.findChild(QTreeWidget, "results_tree")
+                if self.results_tree:
+                    container_layout.addWidget(self.results_tree_widget)
+                    
+                    # Configurar eventos del árbol
+                    self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
+                    self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
+                    self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                    self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
+                    
+                    self.ui_components_loaded['tree'] = True
+                    print("Árbol de resultados cargado desde UI y añadido al layout")
+                else:
+                    print("No se encontró el widget 'results_tree' en el archivo UI")
+                    self._create_fallback_tree()
+            except Exception as e:
+                print(f"Error cargando UI del árbol de resultados: {e}")
+                traceback.print_exc()
+                self._create_fallback_tree()
+        else:
+            print(f"Archivo UI del árbol no encontrado: {ui_file_path}")
+            self._create_fallback_tree()
 
 
     def _setup_widgets(self):
@@ -661,41 +770,38 @@ class MusicBrowser(BaseModule):
 
 
     def setup_info_widget(self):
-        """
-        Configura el widget de información dentro del scroll area.
-        Carga el widget desde un archivo UI separado.
-        """
-        try:
-            # Ruta al archivo UI del panel de información
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
-            
-            if not os.path.exists(ui_file_path):
-                print(f"Archivo UI no encontrado: {ui_file_path}")
+        """Configura el widget de información dentro del ScrollArea."""
+        # Verificar que info_scroll existe
+        if not hasattr(self, 'info_scroll') or not self.info_scroll:
+            print("Error: info_scroll no existe")
+            return
+        
+        # Cargar el widget desde un archivo UI separado
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                self.info_widget = QWidget()
+                uic.loadUi(ui_file_path, self.info_widget)
+                
+                # Obtener referencias a los labels importantes
+                self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
+                self.metadata_label = self.info_widget.findChild(QLabel, "metadata_label")
+                
+                if self.lastfm_label and self.metadata_label:
+                    # Configurar el ScrollArea
+                    self.info_scroll.setWidget(self.info_widget)
+                    self.ui_components_loaded['info'] = True
+                    print("Panel de información cargado desde UI")
+                else:
+                    print("No se encontraron los labels necesarios en el UI de info_panel")
+                    self._fallback_setup_info_widget()
+            except Exception as e:
+                print(f"Error cargando UI del panel de información: {e}")
+                traceback.print_exc()
                 self._fallback_setup_info_widget()
-                return
-            
-            # Cargar el widget desde el archivo UI
-            from PyQt6 import uic
-            self.info_widget = QWidget()
-            uic.loadUi(ui_file_path, self.info_widget)
-            
-            # Obtener referencias a los labels importantes
-            self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
-            self.metadata_label = self.info_widget.findChild(QLabel, "metadata_label")
-            
-            # Asegurarse de que tenemos las referencias necesarias
-            if not self.lastfm_label or not self.metadata_label:
-                print("No se encontraron los labels necesarios en el UI de info_panel")
-                self._fallback_setup_info_widget()
-                return
-            
-            # Configurar el ScrollArea
-            self.info_scroll.setWidget(self.info_widget)
-            
-        except Exception as e:
-            print(f"Error cargando UI del panel de información: {e}")
-            import traceback
-            traceback.print_exc()
+        else:
+            print(f"Archivo UI del panel de información no encontrado: {ui_file_path}")
             self._fallback_setup_info_widget()
 
 
@@ -703,8 +809,8 @@ class MusicBrowser(BaseModule):
         """Método de respaldo para crear el widget de información manualmente."""
         # Crear el widget para el interior del scroll
         self.info_widget = QWidget()
-        self.info_layout = QVBoxLayout(self.info_widget)
-        self.info_layout.setContentsMargins(5, 5, 5, 5)
+        info_layout = QVBoxLayout(self.info_widget)
+        info_layout.setContentsMargins(5, 5, 5, 5)
         
         # Labels para la información
         self.lastfm_label = QLabel()
@@ -720,82 +826,85 @@ class MusicBrowser(BaseModule):
         self.metadata_label.setMinimumWidth(600)
         
         # Agregar las etiquetas al layout
-        self.info_layout.addWidget(self.lastfm_label)
-        self.info_layout.addWidget(self.metadata_label)
-        self.info_layout.addStretch()
+        info_layout.addWidget(self.lastfm_label)
+        info_layout.addWidget(self.metadata_label)
+        info_layout.addStretch()
         
         # Configurar el ScrollArea
         self.info_scroll.setWidget(self.info_widget)
+        print("Panel de información fallback creado y añadido al layout")
 
 
     def load_advanced_settings_ui(self):
-        """
-        Carga dinámicamente el widget de configuraciones avanzadas desde un archivo UI separado.
-        Se llama cuando el usuario activa el checkbox de ajustes avanzados.
-        """
-        try:
-            # Ruta al archivo UI de ajustes avanzados
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_advanced_settings.ui")
-            
-            if not os.path.exists(ui_file_path):
-                print(f"Archivo UI no encontrado: {ui_file_path}")
-                return False
-                
-            # Limpiar el contenedor por si ya tiene widgets
-            if self.advanced_settings_container.layout():
-                # Eliminar todos los widgets del layout actual
-                while self.advanced_settings_container.layout().count():
-                    item = self.advanced_settings_container.layout().takeAt(0)
-                    if item.widget():
-                        item.widget().deleteLater()
-                # Eliminar el layout actual
-                QWidget().setLayout(self.advanced_settings_container.layout())
-            
-            # Crear un nuevo layout para el contenedor
-            container_layout = QVBoxLayout(self.advanced_settings_container)
-            container_layout.setContentsMargins(0, 0, 0, 0)
-            
-            # Cargar el widget desde el archivo UI
-            from PyQt6 import uic
-            advanced_settings = QWidget()
-            uic.loadUi(ui_file_path, advanced_settings)
-            
-            # Añadir el widget cargado al contenedor
-            container_layout.addWidget(advanced_settings)
-            
-            # Transferir referencias a los widgets importantes del UI cargado
-            self.time_value = advanced_settings.findChild(QSpinBox, "time_value")
-            self.time_unit = advanced_settings.findChild(QComboBox, "time_unit")
-            self.apply_time_filter = advanced_settings.findChild(QPushButton, "apply_time_filter")
-            self.month_combo = advanced_settings.findChild(QComboBox, "month_combo")
-            self.year_spin = advanced_settings.findChild(QSpinBox, "year_spin")
-            self.apply_month_year = advanced_settings.findChild(QPushButton, "apply_month_year")
-            self.year_only_spin = advanced_settings.findChild(QSpinBox, "year_only_spin")
-            self.apply_year = advanced_settings.findChild(QPushButton, "apply_year")
-            
-            # Inicializar campos
-            if self.month_combo.count() == 0:
-                self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
-                
-            # Establecer el año actual si no se ha hecho
-            current_year = QDate.currentDate().year()
-            if self.year_spin.value() == 0:
-                self.year_spin.setValue(current_year)
-            if self.year_only_spin.value() == 0:
-                self.year_only_spin.setValue(current_year)
-            
-            # Conectar señales
-            self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
-            self.apply_month_year.clicked.connect(self.apply_month_year_filter)
-            self.apply_year.clicked.connect(self.apply_year_filter)
-            
-            return True
-        except Exception as e:
-            print(f"Error cargando UI de ajustes avanzados: {e}")
-            import traceback
-            traceback.print_exc()
+        """Carga dinámicamente el widget de configuraciones avanzadas desde un archivo UI separado."""
+        # Verificar que advanced_settings_container existe
+        if not hasattr(self, 'advanced_settings_container') or not self.advanced_settings_container:
+            print("Error: advanced_settings_container no existe")
             return False
-
+        
+        # Si ya existe un layout en el contenedor, eliminarlo
+        if self.advanced_settings_container.layout():
+            while self.advanced_settings_container.layout().count():
+                item = self.advanced_settings_container.layout().takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+            QWidget().setLayout(self.advanced_settings_container.layout())
+        
+        # Crear un nuevo layout para el contenedor
+        container_layout = QVBoxLayout(self.advanced_settings_container)
+        container_layout.setContentsMargins(0, 0, 0, 0)
+        container_layout.setSpacing(0)
+        
+        # Cargar el widget desde un archivo UI separado
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_advanced_settings.ui")
+        if os.path.exists(ui_file_path):
+            try:
+                # Cargar el archivo UI
+                advanced_settings = QWidget()
+                uic.loadUi(ui_file_path, advanced_settings)
+                
+                # Añadir el widget cargado al contenedor
+                container_layout.addWidget(advanced_settings)
+                
+                # Transferir referencias a los widgets importantes
+                self.time_value = advanced_settings.findChild(QSpinBox, "time_value")
+                self.time_unit = advanced_settings.findChild(QComboBox, "time_unit")
+                self.apply_time_filter = advanced_settings.findChild(QPushButton, "apply_time_filter")
+                self.month_combo = advanced_settings.findChild(QComboBox, "month_combo")
+                self.year_spin = advanced_settings.findChild(QSpinBox, "year_spin")
+                self.apply_month_year = advanced_settings.findChild(QPushButton, "apply_month_year")
+                self.year_only_spin = advanced_settings.findChild(QSpinBox, "year_only_spin")
+                self.apply_year = advanced_settings.findChild(QPushButton, "apply_year")
+                
+                # Inicializar campos
+                if self.month_combo and self.month_combo.count() == 0:
+                    self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
+                
+                # Establecer el año actual
+                current_year = QDate.currentDate().year()
+                if self.year_spin and self.year_spin.value() == 0:
+                    self.year_spin.setValue(current_year)
+                if self.year_only_spin and self.year_only_spin.value() == 0:
+                    self.year_only_spin.setValue(current_year)
+                
+                # Conectar señales
+                if self.apply_time_filter:
+                    self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
+                if self.apply_month_year:
+                    self.apply_month_year.clicked.connect(self.apply_month_year_filter)
+                if self.apply_year:
+                    self.apply_year.clicked.connect(self.apply_year_filter)
+                
+                self.ui_components_loaded['advanced'] = True
+                print("Configuraciones avanzadas cargadas desde UI")
+                return True
+            except Exception as e:
+                print(f"Error cargando UI de ajustes avanzados: {e}")
+                traceback.print_exc()
+                return False
+        else:
+            print(f"Archivo UI de ajustes avanzados no encontrado: {ui_file_path}")
+            return False
 
 
 
@@ -1599,17 +1708,18 @@ class MusicBrowser(BaseModule):
             print(f"Error en show_details: {e}")
             traceback.print_exc()
     def search(self):
-        """
-        Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto.
-        """
+        """Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto."""
+        print("Método search() llamado")
+        
         if not self.is_tree_valid():
-            print("El árbol de resultados no está disponible. Creando uno nuevo...")
-            self._create_fallback_tree()
+            print("El árbol de resultados no está disponible. Cargando uno nuevo...")
+            self._load_results_tree()
             if not self.is_tree_valid():
                 print("No se pudo crear el árbol de resultados. Abortando búsqueda.")
                 return
 
         query = self.search_box.text()
+        print(f"Realizando búsqueda con texto: '{query}'")
         parsed = self.search_parser.parse_query(query)
         
         # Conectar a la base de datos
@@ -1622,7 +1732,6 @@ class MusicBrowser(BaseModule):
         
         # Obtener condiciones SQL basadas en la consulta parseada
         conditions, params = self.search_parser.build_sql_conditions(parsed)
-        
         # Construir la consulta SQL
         sql = """
             SELECT DISTINCT 
@@ -1675,7 +1784,10 @@ class MusicBrowser(BaseModule):
             # Organizar los resultados por artista > álbum > canción
             artists = {}
             
+
             for row in results:
+                # Usar album_artist (índice 4) en lugar de artist (índice 3)
+                album_artist = row[4] if row[4] else row[3] if row[3] else "Sin artista"
                 artist = row[3] if row[3] else "Sin artista"
                 album = row[5] if row[5] else "Sin álbum"
                 title = row[2] if row[2] else "Sin título"
@@ -1685,12 +1797,12 @@ class MusicBrowser(BaseModule):
                 track_number = row[14] if row[14] else "0"
                 
                 # Crear estructura anidada
-                if artist not in artists:
-                    artists[artist] = {}
+                if album_artist not in artists:
+                    artists[album_artist] = {}
                 
                 album_key = f"{album}"
-                if album_key not in artists[artist]:
-                    artists[artist][album_key] = []
+                if album_key not in artists[album_artist]:
+                    artists[album_artist][album_key] = []
                     
                 # Añadir la canción con su número de pista
                 track_info = {
@@ -1701,7 +1813,7 @@ class MusicBrowser(BaseModule):
                     'genre': genre,
                     'paths': [row[1]]  # Añadir path al track info
                 }
-                artists[artist][album_key].append(track_info)
+                artists[album_artist][album_key].append(track_info)
             
             # Añadir elementos al árbol
             for artist_name, albums in artists.items():
@@ -1787,6 +1899,9 @@ class MusicBrowser(BaseModule):
         finally:
             conn.close()
 
+        if hasattr(self, 'results_tree') and self.results_tree:
+                self.results_tree.setVisible(True)
+                print(f"Árbol actualizado con {self.results_tree.topLevelItemCount()} artistas")
 
 
     def clear_details(self):
@@ -1806,35 +1921,61 @@ class MusicBrowser(BaseModule):
 
     def handle_spotify_button(self):
         """Manejador para el botón de Spotify que decide qué argumento pasar a enviar_spoti"""
-        if not self.results_list.currentItem():
+        if not self.is_tree_valid():
+            print("El árbol de resultados no está disponible")
             return
             
-        data = self.results_list.currentItem().data(Qt.ItemDataRole.UserRole)
-        if not data:
+        current_item = self.results_tree.currentItem()
+        if not current_item:
+            print("No hay elemento seleccionado")
             return
             
-        # Buscar el enlace de Spotify - Índice 16 en los enlaces originales mostrados en show_details
-        spotify_url = None
+        # Obtener datos del ítem seleccionado
+        item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            print("No hay datos asociados al elemento seleccionado")
+            return
         
-        # Primero verificamos si tenemos el ID de la canción para buscar en song_links
-        if len(data) > 0 and data[0]:
-            song_id = data[0]
-            spotify_url = self.get_spotify_url_from_db(song_id)
-        
-        if spotify_url:
-            # Si tenemos una URL de Spotify, la pasamos como argumento
-            self.enviar_spoti(spotify_url)
+        # Verificar si es un artista/álbum o una canción
+        if isinstance(item_data, dict):
+            # Es un artista o álbum
+            if item_data.get('type') == 'artist':
+                artist_name = item_data.get('name', '')
+                if artist_name:
+                    self.enviar_spoti(artist_name)
+                else:
+                    print("No hay suficiente información del artista para buscar")
+            elif item_data.get('type') == 'album':
+                album_name = item_data.get('name', '')
+                artist_name = item_data.get('artist', '')
+                if album_name and artist_name:
+                    self.enviar_spoti(f"{artist_name} - {album_name}")
+                else:
+                    print("No hay suficiente información del álbum para buscar")
         else:
-            # Si no hay URL, creamos un string con "artista - título"
-            artist = data[3] if len(data) > 3 and data[3] else ""
-            title = data[2] if len(data) > 2 and data[2] else ""
+            # Es una canción (los datos son el resultado de la consulta)
+            # Buscar el enlace de Spotify - Índice 16 en los enlaces originales mostrados en show_details
+            spotify_url = None
             
-            if artist and title:
-                query = f"{artist} - {title}"
-                self.enviar_spoti(query)
+            # Primero verificamos si tenemos el ID de la canción para buscar en song_links
+            if len(item_data) > 0 and item_data[0]:
+                song_id = item_data[0]
+                spotify_url = self.get_spotify_url_from_db(song_id)
+            
+            if spotify_url:
+                # Si tenemos una URL de Spotify, la pasamos como argumento
+                self.enviar_spoti(spotify_url)
             else:
-                # Mostrar mensaje si no hay suficiente información
-                print("No hay suficiente información para buscar en Spotify")
+                # Si no hay URL, creamos un string con "artista - título"
+                artist = item_data[3] if len(item_data) > 3 and item_data[3] else ""
+                title = item_data[2] if len(item_data) > 2 and item_data[2] else ""
+                
+                if artist and title:
+                    query = f"{artist} - {title}"
+                    self.enviar_spoti(query)
+                else:
+                    # Mostrar mensaje si no hay suficiente información
+                    print("No hay suficiente información para buscar en Spotify")
 
 
     def enviar_spoti(self, arg):
@@ -2195,72 +2336,26 @@ class MusicBrowser(BaseModule):
 
 
     def load_results_tree_ui(self):
-        """
-        Carga dinámicamente el widget del árbol de resultados desde un archivo UI separado.
-        """
-        try:
-            # Ruta al archivo UI del árbol de resultados
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_results_tree.ui")
-            
-            if not os.path.exists(ui_file_path):
-                print(f"Archivo UI no encontrado: {ui_file_path}")
-                return False
-                
-            # Limpiar el contenedor existente
-            if hasattr(self, 'results_tree_container') and self.results_tree_container:
-                # Eliminar todos los widgets del layout actual
-                if self.results_tree_container.layout():
-                    while self.results_tree_container.layout().count():
-                        item = self.results_tree_container.layout().takeAt(0)
-                        if item.widget():
-                            item.widget().deleteLater()
-            
-            # Crear un nuevo widget para contener el árbol
-            self.results_tree_widget = QWidget()
-            
-            # Cargar el archivo UI en este widget
-            from PyQt6 import uic
-            uic.loadUi(ui_file_path, self.results_tree_widget)
-            
-            # Obtener la referencia al árbol
-            self.results_tree = self.results_tree_widget.findChild(QTreeWidget, "results_tree")
-            if not self.results_tree:
-                print("No se encontró el widget 'results_tree' en el archivo UI")
-                return False
-            
-            # Agregar el widget completo al contenedor (en lugar de solo el árbol)
-            # Esto es crucial para mantener la jerarquía de widgets y evitar problemas de memoria
-            if hasattr(self, 'results_tree_container') and self.results_tree_container:
-                if not self.results_tree_container.layout():
-                    layout = QVBoxLayout(self.results_tree_container)
-                    layout.setContentsMargins(0, 0, 0, 0)
-                
-                # Asegurarnos de que el layout esté vacío
-                while self.results_tree_container.layout().count():
-                    item = self.results_tree_container.layout().takeAt(0)
-                    if item.widget():
-                        item.widget().deleteLater()
-                
-                # Agregar el widget completo (no solo el árbol)
-                self.results_tree_container.layout().addWidget(self.results_tree_widget)
-            
-            # Configurar el árbol
-            self.setup_results_tree()
-            
-            return True
-        except Exception as e:
-            print(f"Error cargando UI del árbol de resultados: {e}")
-            import traceback
-            traceback.print_exc()
-            return False
+        """Este método ya no se usa directamente"""
+        print("ADVERTENCIA: load_results_tree_ui() está obsoleto, usa _load_results_tree()")
+        return False
 
 
 
     def setup_results_tree(self):
         """Configura el árbol de resultados con sus propiedades y señales."""
         if not hasattr(self, 'results_tree') or self.results_tree is None:
-            print("No se encuentra el árbol de resultados")
-            return
+            print("Cargando árbol de resultados por primera vez")
+            try:
+                if not self.load_results_tree_ui():
+                    print("Advertencia: No se pudo cargar el árbol de resultados dinámicamente.")
+                    self._create_fallback_tree()
+            except Exception as e:
+                print(f"Error al cargar el árbol de resultados: {e}")
+                traceback.print_exc()
+                self._create_fallback_tree()
+        else:
+            print("El árbol de resultados ya existe, no es necesario cargarlo nuevamente")
         
         # Configurar el aspecto del árbol
         self.results_tree.setAlternatingRowColors(True)

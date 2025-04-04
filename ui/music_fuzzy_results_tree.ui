@@ -25,6 +25,25 @@
    </property>
    <item>
     <widget class="QTreeWidget" name="results_tree">
+     <property name="styleSheet">
+      <string>QTreeWidget {
+  border: none;
+}
+QTreeWidget::item {
+  padding: 4px;
+  border-bottom: 1px solid rgba(65, 72, 104, 0.2);
+}
+QTreeWidget::item:selected {
+  background-color: rgba(54, 74, 130, 0.7);
+  color: white;
+}
+QHeaderView::section {
+  background-color: transparent;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid rgba(65, 72, 104, 0.5);
+}</string>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
