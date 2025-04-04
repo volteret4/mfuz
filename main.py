@@ -554,7 +554,7 @@ class TabManager(QMainWindow):
             }}
             
             QFrame {{
-                border: 1px solid {theme['border']};
+                border: none
                 border-radius: 3px;
             }}
             
@@ -667,43 +667,95 @@ class TabManager(QMainWindow):
                 json.dump(config, f, indent=4)
 
 
-    def switch_to_tab(self, tab_name, method_to_call=None, *args, **kwargs):
-        """
-        Cambia a la pestaña especificada y opcionalmente llama a un método en ese módulo.
-        
-        Args:
-            tab_name (str): Nombre de la pestaña a la que cambiar
-            method_to_call (str, optional): Nombre del método a llamar en el módulo destino
-            *args, **kwargs: Argumentos a pasar al método
-        
-        Returns:
-            bool: True si se pudo cambiar y llamar al método, False en caso contrario
-        """
-        # Buscar el índice de la pestaña por nombre
-        for i in range(self.tab_widget.count()):
-            if self.tab_widget.tabText(i) == tab_name:
-                # Cambiar a esa pestaña
-                self.tab_widget.setCurrentIndex(i)
+    def setup_info_widget(self):
+        """Configura los widgets de información dentro de los ScrollAreas."""
+        try:
+            # Verificar que info_scroll existe
+            if not hasattr(self, 'info_scroll') or not self.info_scroll:
+                print("Error: info_scroll no existe")
+                self._fallback_setup_info_widget()
+                return
                 
-                # Si hay un método que llamar
-                if method_to_call and tab_name in self.tabs:
-                    tab_module = self.tabs[tab_name]
-                    if hasattr(tab_module, method_to_call):
-                        method = getattr(tab_module, method_to_call)
-                        if callable(method):
-                            method(*args, **kwargs)
-                            return True
-                        else:
-                            print(f"    El atributo '{method_to_call}' no es una función en el módulo '{tab_name}'")
+            # 1. Cargar el panel de información principal (enlaces, wikipedia, lastfm, etc.)
+            info_ui_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
+            if os.path.exists(info_ui_path):
+                try:
+                    self.info_widget = QWidget()
+                    uic.loadUi(info_ui_path, self.info_widget)
+                    
+                    # Obtener referencias a los labels
+                    self.links_label = self.info_widget.findChild(QLabel, "links_label")
+                    self.wikipedia_artist_label = self.info_widget.findChild(QLabel, "wikipedia_artist_label")
+                    self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
+                    self.wikipedia_album_label = self.info_widget.findChild(QLabel, "wikipedia_album_label")
+                    
+                    # Importante: Configurar el ancho mínimo para los labels
+                    # Esto es crucial para que el contenido se expanda horizontalmente
+                    if self.info_scroll and self.info_scroll.width() > 0:
+                        scroll_width = self.info_scroll.width() - 30  # Restar un poco para scrollbar y margen
                     else:
-                        print(f"    El módulo '{tab_name}' no tiene un método llamado '{method_to_call}'")
-                return True
+                        scroll_width = 800  # Un valor razonable por defecto
+                    
+                    # Configurar el ancho mínimo para todos los labels
+                    for label in [self.links_label, self.wikipedia_artist_label, 
+                                self.lastfm_label, self.wikipedia_album_label]:
+                        if label:
+                            label.setMinimumWidth(scroll_width)
+                    
+                    # El ajuste crítico: Configurar el tamaño del widget
+                    # Esto fuerza al QScrollArea a mostrar contenido con el ancho adecuado
+                    self.info_widget.setMinimumWidth(scroll_width)
+                    
+                    # Establecer el widget en el ScrollArea
+                    self.info_scroll.setWidget(self.info_widget)
+                    
+                    # IMPORTANTE: Eliminar cualquier restricción de scroll horizontal
+                    self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+                    
+                    print("Panel de información cargado desde UI")
+                except Exception as e:
+                    print(f"Error al cargar el panel de información: {e}")
+                    traceback.print_exc()
+                    self._fallback_setup_info_widget()
+                    return
+            else:
+                print(f"Archivo UI del panel de información no encontrado: {info_ui_path}")
+                self._fallback_setup_info_widget()
+                return
+                
+            # Resto de tu código actual...
+            
+            # IMPORTANTE: Añadir un evento de redimensionamiento para actualizar anchos
+            # cuando la ventana cambie de tamaño
+            self.info_scroll.resizeEvent = self._on_info_scroll_resize
+            
+            self.ui_components_loaded['info'] = True
+            print("Widgets de información configurados correctamente")
+        except Exception as e:
+            print(f"Error general al configurar los widgets de información: {e}")
+            traceback.print_exc()
+            self._fallback_setup_info_widget()
+
+
+    def _on_info_scroll_resize(self, event):
+        """Actualiza el ancho mínimo de los labels cuando se redimensiona el scroll area"""
+        if hasattr(self, 'info_widget') and self.info_widget:
+            # Calcular el nuevo ancho óptimo
+            scroll_width = event.size().width() - 30  # Restar para scrollbar y margen
+            
+            # Actualizar el ancho mínimo del widget contenedor
+            self.info_widget.setMinimumWidth(scroll_width)
+            
+            # Actualizar el ancho mínimo de todos los labels
+            for label in [self.links_label, self.wikipedia_artist_label, 
+                        self.lastfm_label, self.wikipedia_album_label]:
+                if label:
+                    label.setMinimumWidth(scroll_width)
         
-        print(f"   No se encontró la pestaña '{tab_name}'")
-        return False
-
-
-
+        # Llamar al evento original si está disponible
+        original_resize = getattr(QScrollArea, "resizeEvent", None)
+        if original_resize:
+            original_resize(self.info_scroll, event)
 
 
 def main():

@@ -44,11 +44,17 @@ QHeaderView::section {
   border-bottom: 1px solid rgba(65, 72, 104, 0.5);
 }</string>
      </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
+     </property>
      <property name="alternatingRowColors">
       <bool>true</bool>
      </property>
      <property name="selectionMode">
-      <enum>QAbstractItemView::ExtendedSelection</enum>
+      <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
      </property>
      <property name="indentation">
       <number>20</number>
@@ -57,13 +63,13 @@ QHeaderView::section {
       <bool>true</bool>
      </property>
      <property name="uniformRowHeights">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="itemsExpandable">
       <bool>true</bool>
      </property>
      <property name="sortingEnabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="animated">
       <bool>true</bool>
