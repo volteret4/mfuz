@@ -429,8 +429,6 @@ class MusicBrowser(BaseModule):
         details_layout.setContentsMargins(0, 0, 0, 0)
         details_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
 
-        # Crear un TabWidget para los paneles de la derecha
-        self.right_tabs = QTabWidget()
         
         # Primer tab (panel original de detalles)
         details_tab = QWidget()
@@ -518,15 +516,7 @@ class MusicBrowser(BaseModule):
         playlist_layout = QVBoxLayout(playlist_tab)
         playlist_layout.setContentsMargins(10, 10, 10, 10)
         
-        # Tabla para la playlist
-        self.playlist_table = QTableWidget()
-        self.playlist_table.setColumnCount(5)
-        self.playlist_table.setHorizontalHeaderLabels(["Artista", "Álbum", "Canción", "Sello", "Fecha"])
-        self.playlist_table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
-        self.playlist_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        self.playlist_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        self.playlist_table.verticalHeader().setVisible(False)
-        playlist_layout.addWidget(self.playlist_table)
+
         
         # Contenedor para los botones de la playlist
         playlist_buttons_container = QFrame()
@@ -552,12 +542,7 @@ class MusicBrowser(BaseModule):
         
         playlist_layout.addWidget(playlist_buttons_container)
         
-        # Añadir los tabs al TabWidget
-        self.right_tabs.addTab(details_tab, "Detalles")
-        self.right_tabs.addTab(playlist_tab, "Playlist")
-        
-        # Añadir el TabWidget al layout de detalles
-        details_layout.addWidget(self.right_tabs)
+
         
         # Añadir el panel de detalles al splitter principal
         self.main_splitter.addWidget(details_widget)
@@ -650,19 +635,11 @@ class MusicBrowser(BaseModule):
         # Scroll de información
         self.info_scroll = self.main_ui.findChild(QScrollArea, "info_scroll")
         
-        # Tabs y tabla de playlist
-        self.right_tabs = self.main_ui.findChild(QTabWidget, "right_tabs")
-        self.playlist_table = self.main_ui.findChild(QTableWidget, "playlist_table")
+
+
         
-        # Botones de playlist
-        self.clear_playlist_button = self.main_ui.findChild(QPushButton, "clear_playlist_button")
-        self.playlist_button1 = self.main_ui.findChild(QPushButton, "playlist_button1")
-        self.playlist_button2 = self.main_ui.findChild(QPushButton, "playlist_button2")
-        self.playlist_button3 = self.main_ui.findChild(QPushButton, "playlist_button3")
-        self.playlist_button4 = self.main_ui.findChild(QPushButton, "playlist_button4")
-        
-        # Inicializar la lista para almacenar los elementos de la playlist
-        self.playlist_items = []
+
+
 
     def _load_results_tree(self):
         """Carga el árbol de resultados desde un archivo UI separado."""
@@ -928,12 +905,6 @@ class MusicBrowser(BaseModule):
         # Árbol de resultados (cuando esté cargado)
         # Estas conexiones se hacen en setup_results_tree
         
-        # Botones de playlist
-        self.clear_playlist_button.clicked.connect(self.clear_playlist)
-        self.playlist_button1.clicked.connect(self.playlist_function1)
-        self.playlist_button2.clicked.connect(self.playlist_function2)
-        self.playlist_button3.clicked.connect(self.playlist_function3)
-        self.playlist_button4.clicked.connect(self.playlist_function4)
         
         # Botón de Spotify
         self.spotify_button.clicked.connect(self.handle_spotify_button)
@@ -995,150 +966,7 @@ class MusicBrowser(BaseModule):
 
         
 
-    def add_to_playlist(self):
-        """Añade el elemento seleccionado a la playlist"""
-        current_item = self.results_list.currentItem()
-        if current_item:
-            # Obtener datos del elemento seleccionado
-            item_data = current_item.data(Qt.ItemDataRole.UserRole)
-            
-            # Verificar si es un elemento de encabezado (artista/álbum) o una pista individual
-            if hasattr(item_data, 'type') and item_data.type in ['artist', 'album']:
-                print(f"556:item data type es: {item_data.type}")
-                # Si es un encabezado, obtener todas las pistas asociadas
-                tracks = self.get_tracks_for_header(item_data)
-                print(f"559:tracks: {tracks}")
-                for track in tracks:
-                    self.add_track_to_playlist(track)
-            else:
-                # Si es una pista individual
-                self.add_track_to_playlist(item_data)
-            
-            # Cambiar al tab de playlist automáticamente
-            self.right_tabs.setCurrentIndex(1)
-
-    def add_track_to_playlist(self, track_data):
-        """Añade una pista individual a la playlist"""
-        # Verificar si tenemos datos válidos
-        if not track_data:
-            print("No hay datos de pista para añadir")
-            return
-            
-        # Para depuración
-        #print(f"track_data: {track_data}, tipo: {type(track_data)}")
-        
-        # Extraer información de la pista según el tipo de datos
-        if isinstance(track_data, dict):
-            # Si los datos son un diccionario
-            artist = track_data.get('artist', 'Desconocido')
-            album = track_data.get('album', 'Desconocido')
-            title = track_data.get('title', 'Desconocido')
-            label = track_data.get('label', 'Desconocido')
-            date = track_data.get('date', 'Desconocido')
-        elif isinstance(track_data, tuple):
-            # Si los datos son una tupla, extraer los valores según la estructura observada
-            try:
-                # Basado en el ejemplo que proporcionaste:
-                # track_data: (1743, '/mnt/NFS/moode/moode/A/Arca/(2017) Arca (XL Recordings) (XLCD834)/Disc 1/04 - Urchin.flac', 'Urchin', 'Arca', 'Arca', 'Arca', '2017-04-07', 'Ambient', 'XL Recordings', ...)
-                
-                # Índices (ajustar según sea necesario):
-                # 0: id, 1: path, 2: title, 3: artist, 4: album_artist, 5: album, 6: date, 7: genre, 8: label, ...
-                
-                # ID está en la posición 0
-                title = track_data[2] if len(track_data) > 2 else 'Desconocido'
-                artist = track_data[3] if len(track_data) > 3 else 'Desconocido'
-                album = track_data[5] if len(track_data) > 5 else 'Desconocido'
-                label = track_data[8] if len(track_data) > 8 else 'Desconocido'
-                date = track_data[6] if len(track_data) > 6 else 'Desconocido'
-            except IndexError:
-                # Si hay problemas con los índices, usar valores por defecto
-                print(f"Error al procesar la tupla: {track_data}")
-                title = "Desconocido"
-                artist = "Desconocido"
-                album = "Desconocido"
-                label = "Desconocido"
-                date = "Desconocido"
-        else:
-            # Si los datos están en un objeto personalizado
-            try:
-                artist = getattr(track_data, 'artist', 'Desconocido')
-                album = getattr(track_data, 'album', 'Desconocido')
-                title = getattr(track_data, 'title', 'Desconocido')
-                label = getattr(track_data, 'label', 'Desconocido')
-                date = getattr(track_data, 'date', 'Desconocido')
-            except AttributeError:
-                # Si no podemos acceder a los atributos, usar texto del ítem actual
-                current_item = self.results_list.currentItem()
-                title = current_item.text() if current_item else "Elemento seleccionado"
-                artist = "Artista (No disponible)"
-                album = "Álbum (No disponible)"
-                label = "Sello (No disponible)"
-                date = "Fecha (No disponible)"
-        
-        # Para depuración
-        print(f"Añadiendo pista: {artist} - {album} - {title} - {label} - {date}")
-        
-        # Añadir a la tabla de playlist
-        row_position = self.playlist_table.rowCount()
-        self.playlist_table.insertRow(row_position)
-        self.playlist_table.setItem(row_position, 0, QTableWidgetItem(str(artist)))
-        self.playlist_table.setItem(row_position, 1, QTableWidgetItem(str(album)))
-        self.playlist_table.setItem(row_position, 2, QTableWidgetItem(str(title)))
-        self.playlist_table.setItem(row_position, 3, QTableWidgetItem(str(label)))
-        self.playlist_table.setItem(row_position, 4, QTableWidgetItem(str(date)))
-        
-        # Almacenar el elemento para referencia futura
-        self.playlist_items.append({
-            'artist': artist,
-            'album': album,
-            'title': title,
-            'label': label,
-            'date': date,
-            'original_data': track_data  # Guarda los datos originales si los necesitas después
-        })
-
-    def get_tracks_for_header(self, header_data):
-        """Obtiene todas las pistas asociadas a un encabezado (artista/álbum)"""
-        tracks = []
-        
-        # Depuración
-        print(f"Obteniendo pistas para encabezado: {header_data}")
-        
-        try:
-            if hasattr(header_data, 'type'):
-                header_type = header_data.type
-                if header_type == 'artist':
-                    # Lógica para obtener pistas de artista
-                    artist_name = getattr(header_data, 'name', 'Desconocido')
-                    # Aquí debería ir tu lógica para buscar pistas por artista
-                    print(f"Buscando pistas para artista: {artist_name}")
-                    
-                    # Ejemplo: llamar a una función de la base de datos
-                    # tracks = self.db.get_tracks_by_artist(artist_name)
-                    
-                elif header_type == 'album':
-                    # Lógica para obtener pistas de álbum
-                    album_name = getattr(header_data, 'name', 'Desconocido')
-                    # Aquí debería ir tu lógica para buscar pistas por álbum
-                    print(f"Buscando pistas para álbum: {album_name}")
-                    
-                    # Ejemplo: llamar a una función de la base de datos
-                    # tracks = self.db.get_tracks_by_album(album_name)
-        except Exception as e:
-            print(f"Error al obtener pistas para encabezado: {e}")
-        
-        # Si no se encontraron pistas, imprimir mensaje de depuración
-        if not tracks:
-            print(f"No se encontraron pistas para el encabezado")
-        else:
-            print(f"Se encontraron {len(tracks)} pistas")
-        
-        return tracks
-
-    def clear_playlist(self):
-        """Vacía la playlist"""
-        self.playlist_table.setRowCount(0)
-        self.playlist_items = []
+ 
 
     def get_song_data_from_current_item(self):
         """Extrae los datos de canción del ítem actualmente seleccionado"""
@@ -1230,25 +1058,6 @@ class MusicBrowser(BaseModule):
                 date = match.group(1).strip()
                 
         return date
-    def playlist_function1(self):
-        """Función personalizada 1 para la playlist"""
-        # Implementa tu función aquí
-        pass
-
-    def playlist_function2(self):
-        """Función personalizada 2 para la playlist"""
-        # Implementa tu función aquí
-        pass
-
-    def playlist_function3(self):
-        """Función personalizada 3 para la playlist"""
-        # Implementa tu función aquí
-        pass
-
-    def playlist_function4(self):
-        """Función personalizada 4 para la playlist"""
-        # Implementa tu función aquí
-        pass
 
 
 
@@ -2538,7 +2347,6 @@ class MusicBrowser(BaseModule):
         """
         Maneja el doble clic en un elemento del árbol.
         Si es una canción, la reproduce.
-        Si es un álbum, añade todas sus pistas a la playlist.
         Si es un artista, simplemente lo expande.
         
         Args:
@@ -2558,34 +2366,13 @@ class MusicBrowser(BaseModule):
                 # Expandir/colapsar artista
                 item.setExpanded(not item.isExpanded())
             elif item_data.get('type') == 'album':
-                # Añadir álbum a playlist
-                self.add_album_to_playlist(item)
+                # Reproducir el álbum directamente
+                self.play_album(item)
         else:
             # Es una canción, la reproducimos
             self.play_track(item)
 
-    def add_album_to_playlist(self, album_item):
-        """
-        Añade todas las pistas de un álbum a la playlist.
-        
-        Args:
-            album_item: Elemento del árbol que representa un álbum.
-        """
-        # Verificar que es un álbum
-        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
-            return
-        
-        # Recorrer todos los hijos (canciones) del álbum
-        for i in range(album_item.childCount()):
-            track_item = album_item.child(i)
-            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-            if track_data:
-                self.add_track_to_playlist(track_data)
-        
-        # Cambiar al tab de playlist automáticamente
-        self.right_tabs.setCurrentIndex(1)
-
+ 
     def play_track(self, track_item):
         """
         Reproduce una pista.
@@ -2745,25 +2532,7 @@ class MusicBrowser(BaseModule):
             self.lastfm_label.setText(f"<h3>Artista: {artist_name}</h3><p>No hay información adicional disponible</p>")
             self.metadata_label.setText("")
 
-    def add_artist_to_playlist(self, artist_item):
-        """
-        Añade todas las pistas de todos los álbumes de un artista a la playlist.
-        
-        Args:
-            artist_item: Elemento del árbol que representa un artista.
-        """
-        # Verificar que es un artista
-        item_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'artist':
-            return
-        
-        # Recorrer todos los álbumes del artista
-        for album_idx in range(artist_item.childCount()):
-            album_item = artist_item.child(album_idx)
-            self.add_album_to_playlist(album_item)
-        
-        # Cambiar al tab de playlist automáticamente
-        self.right_tabs.setCurrentIndex(1)
+
 
 
 
