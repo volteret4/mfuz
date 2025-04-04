@@ -10,6 +10,8 @@ from datetime import datetime
 import lyricsgenius
 from dotenv import load_dotenv
 
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import PROJECT_ROOT
 
 # Adaptador personalizado para datetime
 def adapt_datetime(dt):
@@ -42,7 +44,7 @@ class MultiLyricsManager:
             self.logger.warning("GENIUS_ACCESS_TOKEN no encontrado. Genius no estará disponible como fuente de respaldo.")
         
         # Archivo de estado para pausar/continuar
-        self.state_file = "lyrics_update_state.json"
+        self.state_file = PROJECT_ROOT / '.content' / 'logs' / 'db' / 'lyrics_update_state.json'
         
         # Retry y backoff settings
         self.max_retries = 3
@@ -399,7 +401,7 @@ class MultiLyricsManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
-        error_log_path = 'lyrics_update_errors.log'
+        error_log_path = PROJECT_ROOT / '.content' /'logs' / 'db' / 'lyrics_update_errors.log'
         error_logger = logging.getLogger('error_log')
         error_logger.setLevel(logging.ERROR)
         error_handler = logging.FileHandler(error_log_path, encoding='utf-8')

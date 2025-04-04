@@ -953,7 +953,7 @@ class MusicLibraryManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
-        error_log_path = 'db_musica_path_error.log'
+        error_log_path = PROJECT_ROOT / '.content' / 'log' / 'db' / 'db_musica_path_error.log'
         error_logger = logging.getLogger('error_log')
         error_logger.setLevel(logging.ERROR)
         error_handler = logging.FileHandler(error_log_path, encoding='utf-8')

@@ -107,11 +107,14 @@ class SpotifyPlaylistManager(BaseModule):
     def __init__(self, client_id: str, client_secret: str, cache_path: str = None, force_update: str = False, parent=None, theme='Tokyo Night', **kwargs):
         super().__init__(parent, theme)        
         if cache_path is None:
-            cache_path = str(Path.home() / ".cache" / "spotify_token.txt")
+            cache_path = ".cache" / 'spotify_manager' / "spotify_token.txt"
+            self.cache_dir = ".cache"
+        else:
+            self.cache_dir = os.path.dirname(cache_path)
+            
         if not client_id or not client_secret:
             raise ValueError("Client ID y Client Secret son obligatorios")
         # Definir rutas de cache
-        self.cache_dir = Path.home() / ".cache" / "spotify_manager"
         self.playlists_cache = self.cache_dir / "playlists.json"
         self.tracks_cache_dir = self.cache_dir / "tracks"
         

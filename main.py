@@ -3,9 +3,11 @@ from typing import Dict
 import json
 from pathlib import Path
 import importlib.util
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
-                            QVBoxLayout, QTabWidget)
-from PyQt6.QtCore import QThread
+                            QVBoxLayout, QTabWidget, QScrollArea,
+                            QLabel)
+from PyQt6.QtCore import Qt, QThread
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 import traceback
 import sys
@@ -71,7 +73,7 @@ def exception_hook(exc_type, exc_value, exc_traceback):
     print(error_msg)  # Also print to console
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
-log_file = PROJECT_ROOT / ".content" / "log" / "multi_module_manager.log"
+log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
 
 # Set up logging
 logging.basicConfig(
@@ -152,7 +154,7 @@ class TabManager(QMainWindow):
         console_handler.setFormatter(ColoredFormatter)
         
         # Establecemos path para el log_file
-        log_file = PROJECT_ROOT / ".content" / "log" / "multi_module_manager.log"
+        log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
 
 
         file_handler = logging.FileHandler(log_file)
@@ -829,7 +831,7 @@ def main():
             console_handler.setFormatter(ColoredFormatter)
             
             
-            log_file = PROJECT_ROOT / ".content" / "log" / "tab_manager.log"
+            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
 
 
 
@@ -870,7 +872,7 @@ def main():
             logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
             
         except Exception as e:
-            log_file = PROJECT_ROOT / ".content" / "log" / "tab_manager.log"
+            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
             # Fallback al logging básico en caso de error
             logging.basicConfig(
                 level=logging.DEBUG,

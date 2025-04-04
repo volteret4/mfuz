@@ -310,7 +310,7 @@ class MuspyArtistModule(BaseModule):
                 return
             
             # Cargar artistas existentes si el archivo ya existe
-            json_path = PROJECT_ROOT / "artists_selected.json"
+            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
             existing_artists = []
             if json_path.exists():
                 try:

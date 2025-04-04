@@ -400,10 +400,7 @@
             <property name="frameShape">
              <enum>QFrame::Shape::NoFrame</enum>
             </property>
-            <layout class="QVBoxLayout" name="buttons_layout">
-             <property name="spacing">
-              <number>10</number>
-             </property>
+            <layout class="QGridLayout" name="gridLayout">
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -416,51 +413,75 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item>
+             <item row="0" column="0">
               <widget class="QPushButton" name="play_button">
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Reproducir</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/icons/svg/play.svg</normaloff>:/icons/svg/play.svg</iconset>
                </property>
               </widget>
              </item>
-             <item>
+             <item row="3" column="0">
+              <widget class="QPushButton" name="spotify_button">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/services/svg/spotify.svg</normaloff>:/services/svg/spotify.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QPushButton" name="jaangle_button">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/icons/svg/game.svg</normaloff>:/icons/svg/game.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
               <widget class="QPushButton" name="folder_button">
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Abrir Carpeta</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/icons/svg/folder.svg</normaloff>:/icons/svg/folder.svg</iconset>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QPushButton" name="spotify_button">
-               <property name="text">
-                <string>Playlist Spotify</string>
-               </property>
-              </widget>
-             </item>
-             <item>
+             <item row="3" column="1">
               <widget class="QPushButton" name="scrobble_button">
                <property name="text">
-                <string>Scrobblear</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/services/svg/lastfm.svg</normaloff>:/services/svg/lastfm.svg</iconset>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QPushButton" name="jaangle_button">
-               <property name="text">
-                <string>Jaangle similar</string>
-               </property>
-              </widget>
-             </item>
-             <item>
+             <item row="5" column="1">
               <widget class="QPushButton" name="extra_button">
                <property name="text">
-                <string>Extra</string>
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/icons/svg/chicken.svg</normaloff>:/icons/svg/chicken.svg</iconset>
                </property>
               </widget>
              </item>
@@ -528,6 +549,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="images.qrc"/>
+ </resources>
  <connections/>
 </ui>
