@@ -1887,7 +1887,6 @@ class MusicBrowser(BaseModule):
                 font-size: 12px;
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border-radius: 20px;
             }}
             QPushButton:hover {{
                 background-color: {theme['button_hover']};

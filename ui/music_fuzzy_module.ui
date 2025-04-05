@@ -353,7 +353,7 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>50</width>
               <height>0</height>
              </size>
             </property>
@@ -398,16 +398,27 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">            QPushButton {{
-                border-radius: 20px;
-				border: none
-            }}
-</string>
+             <string notr="true">QPushButton {{
+  border-radius: 20px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::Shape::NoFrame</enum>
             </property>
             <layout class="QGridLayout" name="gridLayout">
+             <property name="sizeConstraint">
+              <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+             </property>
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -424,18 +435,39 @@
               <widget class="QPushButton" name="play_button">
                <property name="minimumSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/play</normaloff>:/services/play</iconset>
                </property>
                <property name="iconSize">
@@ -451,11 +483,38 @@
              </item>
              <item row="3" column="0">
               <widget class="QPushButton" name="spotify_button">
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
                </property>
                <property name="iconSize">
@@ -468,11 +527,38 @@
              </item>
              <item row="5" column="0">
               <widget class="QPushButton" name="jaangle_button">
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/game</normaloff>:/services/game</iconset>
                </property>
                <property name="iconSize">
@@ -487,14 +573,14 @@
               <widget class="QPushButton" name="folder_button">
                <property name="minimumSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="focusPolicy">
@@ -502,15 +588,24 @@
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
-  border-radius: 20px;
-  border: none
-}}</string>
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
                </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
                </property>
                <property name="iconSize">
@@ -523,11 +618,38 @@
              </item>
              <item row="3" column="1">
               <widget class="QPushButton" name="scrobble_button">
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
                </property>
                <property name="iconSize">
@@ -542,22 +664,36 @@
               <widget class="QPushButton" name="extra_button">
                <property name="minimumSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>50</width>
+                 <height>50</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>50</height>
                 </size>
                </property>
                <property name="styleSheet">
-                <string notr="true">            QPushButton {{
-                border-radius: 20px;
-				border: none
-            }}
-</string>
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    /* Increase shadow on hover for elevation effect */
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
                </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="images.qrc">
+                <iconset resource="../images.qrc">
                  <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
                </property>
                <property name="iconSize">
@@ -633,7 +769,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="images.qrc"/>
+  <include location="../images.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'music_fuzzy_module.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
-    QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QLayout, QLineEdit,
+    QPushButton, QScrollArea, QSizePolicy, QSpacerItem,
+    QSplitter, QVBoxLayout, QWidget)
 import rc_images
 
 class Ui_MusicBrowser(object):
@@ -168,7 +168,7 @@ class Ui_MusicBrowser(object):
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.metadata_scroll.sizePolicy().hasHeightForWidth())
         self.metadata_scroll.setSizePolicy(sizePolicy1)
-        self.metadata_scroll.setMinimumSize(QSize(0, 0))
+        self.metadata_scroll.setMinimumSize(QSize(50, 0))
         self.metadata_scroll.setMaximumSize(QSize(16777215, 200))
         self.metadata_scroll.setFrameShape(QFrame.Shape.NoFrame)
         self.metadata_scroll.setLineWidth(0)
@@ -183,30 +183,44 @@ class Ui_MusicBrowser(object):
         self.buttons_container.setObjectName(u"buttons_container")
         self.buttons_container.setMinimumSize(QSize(120, 0))
         self.buttons_container.setMaximumSize(QSize(200, 16777215))
-        self.buttons_container.setStyleSheet(u"            QPushButton {{\n"
-"                background-color: {theme['secondary_bg']};\n"
-"                color: {theme['fg']};\n"
-"                border-radius: 20px;\n"
-"				border: none\n"
-"            }}\n"
-"            \n"
-"            QPushButton:hover {{\n"
-"                background-color: {theme['button_hover']};\n"
-"            }}\n"
-"            \n"
-"            QPushButton:pressed {{\n"
-"                background-color: {theme['selection']};\n"
-"            }}")
+        self.buttons_container.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 20px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         self.buttons_container.setFrameShape(QFrame.Shape.NoFrame)
         self.gridLayout = QGridLayout(self.buttons_container)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.play_button = QPushButton(self.buttons_container)
         self.play_button.setObjectName(u"play_button")
-        self.play_button.setMinimumSize(QSize(40, 40))
+        self.play_button.setMinimumSize(QSize(50, 50))
+        self.play_button.setMaximumSize(QSize(50, 50))
         self.play_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.play_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon = QIcon()
-        icon.addFile(u":/icons/svg/play.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/services/play", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.play_button.setIcon(icon)
         self.play_button.setIconSize(QSize(40, 40))
 
@@ -214,42 +228,122 @@ class Ui_MusicBrowser(object):
 
         self.spotify_button = QPushButton(self.buttons_container)
         self.spotify_button.setObjectName(u"spotify_button")
+        self.spotify_button.setMinimumSize(QSize(50, 50))
+        self.spotify_button.setMaximumSize(QSize(50, 50))
+        self.spotify_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon1 = QIcon()
-        icon1.addFile(u":/services/svg/spotify.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon1.addFile(u":/services/spotify", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.spotify_button.setIcon(icon1)
+        self.spotify_button.setIconSize(QSize(40, 40))
 
         self.gridLayout.addWidget(self.spotify_button, 3, 0, 1, 1)
 
         self.jaangle_button = QPushButton(self.buttons_container)
         self.jaangle_button.setObjectName(u"jaangle_button")
+        self.jaangle_button.setMinimumSize(QSize(50, 50))
+        self.jaangle_button.setMaximumSize(QSize(50, 50))
+        self.jaangle_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon2 = QIcon()
-        icon2.addFile(u":/icons/svg/game.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/services/game", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.jaangle_button.setIcon(icon2)
+        self.jaangle_button.setIconSize(QSize(40, 40))
 
         self.gridLayout.addWidget(self.jaangle_button, 5, 0, 1, 1)
 
         self.folder_button = QPushButton(self.buttons_container)
         self.folder_button.setObjectName(u"folder_button")
+        self.folder_button.setMinimumSize(QSize(50, 50))
+        self.folder_button.setMaximumSize(QSize(50, 50))
         self.folder_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.folder_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon3 = QIcon()
-        icon3.addFile(u":/icons/svg/folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u":/services/folder", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.folder_button.setIcon(icon3)
+        self.folder_button.setIconSize(QSize(40, 40))
 
         self.gridLayout.addWidget(self.folder_button, 0, 1, 1, 1)
 
         self.scrobble_button = QPushButton(self.buttons_container)
         self.scrobble_button.setObjectName(u"scrobble_button")
+        self.scrobble_button.setMinimumSize(QSize(50, 50))
+        self.scrobble_button.setMaximumSize(QSize(50, 50))
+        self.scrobble_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon4 = QIcon()
-        icon4.addFile(u":/services/svg/lastfm.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon4.addFile(u":/services/lastfm", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.scrobble_button.setIcon(icon4)
+        self.scrobble_button.setIconSize(QSize(40, 40))
 
         self.gridLayout.addWidget(self.scrobble_button, 3, 1, 1, 1)
 
         self.extra_button = QPushButton(self.buttons_container)
         self.extra_button.setObjectName(u"extra_button")
+        self.extra_button.setMinimumSize(QSize(50, 50))
+        self.extra_button.setMaximumSize(QSize(50, 50))
+        self.extra_button.setStyleSheet(u"QPushButton {{\n"
+"  border-radius: 25px;\n"
+"  border: none;\n"
+"  padding: 8px 16px;\n"
+"  margin: 2px\n"
+"}}\n"
+"QPushButton:hover {\n"
+"    background-color: {theme['button_hover']};\n"
+"    /* Increase shadow on hover for elevation effect */\n"
+"    margin: 1px;\n"
+"    margin-top: 0px;\n"
+"    margin-bottom: 3px;\n"
+"}")
         icon5 = QIcon()
-        icon5.addFile(u":/icons/svg/chicken.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon5.addFile(u":/services/chicken2", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.extra_button.setIcon(icon5)
+        self.extra_button.setIconSize(QSize(40, 40))
 
         self.gridLayout.addWidget(self.extra_button, 5, 1, 1, 1)
 

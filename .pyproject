@@ -1,6 +1,5 @@
 {
     "files": [
-
         "ui/svg/chicken(2).svg",
         "ui/svg/chicken(1).svg",
         "ui/svg/chicken.svg",
@@ -17,7 +16,6 @@
         "ui/svg/game.svg",
         "ui/svg/folder.svg",
         "ui/svg/play.svg",
-
         "ui/svg/add.svg",
         "ui/svg/caffeine.svg",
         "ui/svg/caffeine-off.svg",
@@ -43,6 +41,7 @@
         "config.json",
         "main.py",
         "base_module.py",
+        "images.qrc",
         "ui/tab_manager.ui",
         "ui/music_fuzzy_module.ui",
         "ui/music_fuzzy_advanced_settings.ui",
@@ -83,7 +82,6 @@
         "modules/modulo_enlaces.py",
         "modules/muspy_releases_module.py",
         "modules/scripts_module.py",
-        "modules/widget_player_module.py",
-        "ui/images.qrc"
+        "modules/widget_player_module.py"
     ]
 }
