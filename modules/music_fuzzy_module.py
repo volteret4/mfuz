@@ -483,12 +483,14 @@ class MusicBrowser(BaseModule):
 
         # Añadir contenedor de botones verticales a la derecha
         buttons_container = QFrame()
-        buttons_container.setStyleSheet(f"""
+        buttons_container.setFrameShape(QFrame.Shape.NoFrame)
+        buttons_layout = QVBoxLayout(buttons_container)
+        buttons_layout.setStyleSheet(f"""
             QPushButton {{
-                background-color: {theme['button_hover']};
+                background-color: {theme['bg']};
                 border-radius: 25px;
                 padding: 8px 16px;
-                margin: 2px;
+                border: 2px;
             }}
             
             
@@ -501,12 +503,10 @@ class MusicBrowser(BaseModule):
             
             QPushButton:pressed {{
                 background-color: {theme['selection']};
-                
+                border: none;
             }}
             
         """)
-        buttons_container.setFrameShape(QFrame.Shape.NoFrame)
-        buttons_layout = QVBoxLayout(buttons_container)
         buttons_layout.setSpacing(10)
         buttons_layout.setContentsMargins(0, 0, 0, 0)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
@@ -674,7 +674,7 @@ class MusicBrowser(BaseModule):
 
         # Crear un QTreeWidget básico
         self.results_tree = QTreeWidget()
-        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setAlternatingRowColors(False)
         self.results_tree.setHeaderHidden(False)
         self.results_tree.setColumnCount(3)
         self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
@@ -1879,6 +1879,9 @@ class MusicBrowser(BaseModule):
 
     def apply_theme(self):
         """Aplica el tema específico del módulo."""
+
+        print(f"Aplicando tema con fuente: {self.font_family}")
+
         # Verificar que los labels existen antes de intentar modificarlos
         if not hasattr(self, 'lastfm_label') or self.lastfm_label is None:
             print("lastfm_label no está disponible para aplicar el tema")
@@ -1905,26 +1908,30 @@ class MusicBrowser(BaseModule):
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
             }}
-            QPushButton {{
-                font-size: 12px;
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: none
-            }}
-            QPushButton:hover {{
-                background-color: {theme['button_hover']};
-            }}
+
             QTreeWidget {{
-                font-size: 12px;
                 border: none;
+                background-color: {theme['bg']};
+                alternate-background-color: {theme['bg']};
+                show-decoration-selected: 1;
             }}
             QTreeWidget::item {{
-                padding: 4px;
-                border-bottom: 1px solid rgba(65, 72, 104, 0.2);
+                padding: 6px;
+                border-bottom: 1px solid rgba(65, 72, 104, 0.1);
             }}
             QTreeWidget::item:selected {{
                 background-color: {theme['selection']};
                 color: {theme['fg']};
+            }}
+            QTreeWidget::item:hover {{
+                background-color: rgba(65, 72, 104, 0.1);
+            }}
+            QHeaderView::section {{
+                background-color: {theme['bg']};
+                padding: 6px;
+                border: none;
+                border-bottom: 1px solid {theme['border']};
+                font-weight: bold;
             }}
             QHeaderView::section {{
                 background-color: transparent;
@@ -2348,7 +2355,7 @@ class MusicBrowser(BaseModule):
             for artist_name, albums in artists.items():
                 # Crear elemento de artista
                 artist_item = QTreeWidgetItem(self.results_tree)
-                artist_item.setText(0, artist_name)
+                artist_item.setText(0, f"🗣 {artist_name}")
                 artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
                 artist_item.is_header = True  # Marcar como header para compatibilidad
 
@@ -2360,7 +2367,7 @@ class MusicBrowser(BaseModule):
 
                     # Crear elemento de álbum
                     album_item = QTreeWidgetItem(artist_item)
-                    album_item.setText(0, f"📀 {album_name}")
+                    album_item.setText(0, f"💿 {album_name}")
                     album_item.setText(1, album_year)
                     album_item.setText(2, album_genre)
                     album_item.setData(0, Qt.ItemDataRole.UserRole, {
@@ -2914,15 +2921,15 @@ class MusicBrowser(BaseModule):
             print("El árbol de resultados ya existe, no es necesario cargarlo nuevamente")
 
         # Configurar el aspecto del árbol
-        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setAlternatingRowColors(False)
         self.results_tree.setHeaderHidden(False)
         self.results_tree.setColumnCount(3)
         self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
 
         # Ajustar el tamaño de las columnas
-        self.results_tree.setColumnWidth(0, 300)  # Nombre más amplio
+        self.results_tree.setColumnWidth(0, 250)  # Nombre más amplio
         self.results_tree.setColumnWidth(1, 60)   # Año más estrecho
-        self.results_tree.setColumnWidth(2, 120)  # Género tamaño medio
+        self.results_tree.setColumnWidth(2, 90)  # Género tamaño medio
 
         # Configurar la selección
         self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)

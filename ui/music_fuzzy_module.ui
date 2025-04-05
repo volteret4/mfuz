@@ -399,14 +399,13 @@
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton {{
-  border-radius: 20px;
+  border-radius: 25px;
   border: none;
   padding: 8px 16px;
   margin: 2px
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
@@ -457,7 +456,6 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
@@ -485,8 +483,8 @@ QPushButton:hover {
               <widget class="QPushButton" name="spotify_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>0</width>
+                 <height>0</height>
                 </size>
                </property>
                <property name="maximumSize">
@@ -494,6 +492,9 @@ QPushButton:hover {
                  <width>50</width>
                  <height>50</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;añadir a playlist spotify&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -504,11 +505,15 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
-}</string>
+	border: none;
+}
+QPushButton:pressed {{
+	background-color: {theme['selection']};
+	border: none;
+}}</string>
                </property>
                <property name="text">
                 <string/>
@@ -522,6 +527,9 @@ QPushButton:hover {
                  <width>40</width>
                  <height>40</height>
                 </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -548,7 +556,6 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
@@ -595,7 +602,6 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
@@ -639,7 +645,6 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;
@@ -683,7 +688,6 @@ QPushButton:hover {
 }}
 QPushButton:hover {
     background-color: {theme['button_hover']};
-    /* Increase shadow on hover for elevation effect */
     margin: 1px;
     margin-top: 0px;
     margin-bottom: 3px;

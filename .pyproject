@@ -43,6 +43,7 @@
         "base_module.py",
         "images.qrc",
         "ui/tab_manager.ui",
+        "ui/url_player.ui",
         "ui/music_fuzzy_module.ui",
         "ui/music_fuzzy_advanced_settings.ui",
         "ui/music_fuzzy_info_panel.ui",

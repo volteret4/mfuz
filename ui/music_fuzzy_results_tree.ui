@@ -25,6 +25,11 @@
    </property>
    <item>
     <widget class="QTreeWidget" name="results_tree">
+     <property name="font">
+      <font>
+       <family>Font Awesome 6 Free</family>
+      </font>
+     </property>
      <property name="styleSheet">
       <string>QTreeWidget {
   border: none;

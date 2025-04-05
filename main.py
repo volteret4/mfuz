@@ -325,264 +325,7 @@ class TabManager(QMainWindow):
             }}
             
             
-            /* Tabs */
-            QTabWidget::pane {{
-                border: 1px solid {theme['border']};
-                background-color: {theme['bg']};
-                border-radius: 3px;
-            }}
-            
 
-            QTabBar::tab {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                padding: 5px 10px;
-                margin-right: 2px;
-                border-top-left-radius: 3px;
-                border-top-right-radius: 3px;
-            }}
-            
-            QTabBar::tab:selected {{
-                background-color: {theme['bg']};
-                border-bottom-color: {theme['bg']};
-                color: {theme['fg']};
-            }}
-            
-            QTabBar::tab:hover {{
-                background-color: {theme['button_hover']};
-            }}
-            
-            /* Forms and Inputs */
-            QLineEdit, QTextEdit, QPlainTextEdit {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                
-                padding: 5px;
-                border-radius: 3px;
-            }}
-            QLineEdit:focus {{
-                border: 1px solid {theme['border']};
-            }}
-
-            QComboBox {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 0.5px solid {theme['border']};
-                border-radius: 3px;
-                padding: 5px;
-                min-height: 25px;
-            }}
-            
-            QComboBox::drop-down {{
-                subcontrol-origin: padding;
-                subcontrol-position: top right;
-                width: 15px;
-                border-left: 1px solid {theme['border']};
-            }}
-            
-            QComboBox::down-arrow {{
-                border: none;
-                background-color: {theme['accent']};
-                width: 10px;
-                height: 10px;
-            }}
-            
-            QComboBox QAbstractItemView {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                selection-background-color: {theme['selection']};
-            }}
-            
-            /* Buttons */
-            QPushButton {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-
-            }}
-            
-
-            
-            /* Lists and Tables */
-            QListWidget, QTreeWidget, QTableWidget, QTableView, QTreeView, QListView {{
-                background-color: {theme['secondary_bg']};
-                alternate-background-color: {theme['bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                
-                padding: 5px;
-            }}
-            
-            QListWidget::item, QTreeWidget::item, QTableWidget::item {{
-                padding: 5px;
-            }}
-            
-            QListWidget::item:selected, QTreeWidget::item:selected, QTableWidget::item:selected,
-            QTableView::item:selected, QTreeView::item:selected, QListView::item:selected {{
-                background-color: {theme['selection']};
-                color: {theme['fg']};
-            }}
-            
-            QHeaderView::section {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                padding: 5px;
-                border: 1px solid {theme['border']};
-            }}
-            
-            /* Scroll Bars */
-            QScrollBar:vertical {{
-                background-color: {theme['bg']};
-                width: 10px;
-                margin: 0px;
-            }}
-            
-            QScrollBar::handle:vertical {{
-                background-color: {theme['border']};
-                min-height: 20px;
-                border-radius: 7px;
-                margin: 2px;
-            }}
-            
-            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
-                height: 0px;
-            }}
-            
-            QScrollBar:horizontal {{
-                background-color: {theme['bg']};
-                height: 14px;
-                margin: 0px;
-            }}
-            
-            QScrollBar::handle:horizontal {{
-                background-color: {theme['border']};
-                min-width: 10px;
-                border-radius: 7px;
-                margin: 2px;
-            }}
-            
-            QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
-                width: 0px;
-            }}
-            
-            /* Additional Widgets */
-            QCheckBox, QRadioButton {{
-                color: {theme['fg']};
-                spacing: 5px;
-            }}
-            
-            QCheckBox::indicator, QRadioButton::indicator {{
-                width: 18px;
-                height: 18px;
-                border: 1px solid {theme['border']};
-                background-color: {theme['secondary_bg']};
-            }}
-            
-            QCheckBox::indicator:checked, QRadioButton::indicator:checked {{
-                background-color: {theme['accent']};
-            }}
-            
-            QGroupBox {{
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-                margin-top: 10px;
-                padding-top: 10px;
-                font-weight: bold;
-            }}
-            
-            QGroupBox::title {{
-                subcontrol-origin: margin;
-                subcontrol-position: top left;
-                padding: 0 5px;
-            }}
-            
-            QProgressBar {{
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-                background-color: {theme['secondary_bg']};
-                text-align: center;
-                color: {theme['fg']};
-            }}
-            
-            QProgressBar::chunk {{
-                background-color: {theme['accent']};
-                width: 10px;
-            }}
-            
-            QSpinBox, QDoubleSpinBox, QDateEdit, QTimeEdit, QDateTimeEdit {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-                padding: 5px;
-            }}
-            
-            QSpinBox::up-button, QDoubleSpinBox::up-button, 
-            QDateEdit::up-button, QTimeEdit::up-button, QDateTimeEdit::up-button {{
-                subcontrol-origin: border;
-                subcontrol-position: top right;
-                border-left: 1px solid {theme['border']};
-                width: 16px;
-            }}
-            
-            QSpinBox::down-button, QDoubleSpinBox::down-button,
-            QDateEdit::down-button, QTimeEdit::down-button, QDateTimeEdit::down-button {{
-                subcontrol-origin: border;
-                subcontrol-position: bottom right;
-                border-left: 1px solid {theme['border']};
-                width: 16px;
-            }}
-            
-            /* Dialogs */
-            QDialog {{
-                background-color: {theme['bg']};
-            }}
-            
-            QFrame {{
-                border: none
-                border-radius: 3px;
-            }}
-            
-            QSplitter::handle {{
-                background-color: {theme['border']};
-            }}
-            
-            QToolTip {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-            }}
-            
-            QMenu {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-            }}
-            
-            QMenu::item {{
-                padding: 5px 20px 5px 20px;
-            }}
-            
-            QMenu::item:selected {{
-                background-color: {theme['selection']};
-            }}
-            
-            QMenuBar {{
-                background-color: {theme['bg']};
-                color: {theme['fg']};
-            }}
-            
-            QMenuBar::item {{
-                spacing: 5px;
-                padding: 5px 10px;
-                background: transparent;
-            }}
-            
-            QMenuBar::item:selected {{
-                background-color: {theme['selection']};
-            }}
         """)
 
 
@@ -744,9 +487,46 @@ class TabManager(QMainWindow):
             original_resize(self.info_scroll, event)
 
 
+
+
+
+
+
+    def switch_to_tab(self, tab_name, method_to_call=None, *args, **kwargs):
+        """
+        Cambia a la pestaña especificada y opcionalmente llama a un método en ese módulo.
+        Args:
+            tab_name (str): Nombre de la pestaña a la que cambiar
+            method_to_call (str, optional): Nombre del método a llamar en el módulo destino
+            *args, **kwargs: Argumentos a pasar al método
+        Returns:
+            bool: True si se pudo cambiar y llamar al método, False en caso contrario
+        """
+        # Buscar el índice de la pestaña por nombre
+        for i in range(self.tab_widget.count()):
+            if self.tab_widget.tabText(i) == tab_name:
+                # Cambiar a esa pestaña
+                self.tab_widget.setCurrentIndex(i)
+                
+                # Si hay un método que llamar
+                if method_to_call and tab_name in self.tabs:
+                    tab_module = self.tabs[tab_name]
+                    if hasattr(tab_module, method_to_call):
+                        method = getattr(tab_module, method_to_call)
+                        if callable(method):
+                            method(*args, **kwargs)
+                            return True
+                        else:
+                            print(f"El atributo '{method_to_call}' no es una función en el módulo '{tab_name}'")
+                    else:
+                        print(f"El módulo '{tab_name}' no tiene un método llamado '{method_to_call}'")
+                return True
+        
+        print(f"No se encontró la pestaña '{tab_name}'")
+        return False
+
+
 def main():
-
-
     parser = argparse.ArgumentParser(description='Multi-Module Manager')
     parser.add_argument('config_path', help='Ruta al archivo de configuración JSON')
     parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
