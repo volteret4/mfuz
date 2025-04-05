@@ -15,10 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QHBoxLayout,
-    QLabel, QLineEdit, QPushButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QSplitter, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
+    QVBoxLayout, QWidget)
+import rc_images
 
 class Ui_MusicBrowser(object):
     def setupUi(self, MusicBrowser):
@@ -182,45 +183,75 @@ class Ui_MusicBrowser(object):
         self.buttons_container.setObjectName(u"buttons_container")
         self.buttons_container.setMinimumSize(QSize(120, 0))
         self.buttons_container.setMaximumSize(QSize(200, 16777215))
+        self.buttons_container.setStyleSheet(u"            QPushButton {{\n"
+"                background-color: {theme['secondary_bg']};\n"
+"                color: {theme['fg']};\n"
+"                border-radius: 20px;\n"
+"				border: none\n"
+"            }}\n"
+"            \n"
+"            QPushButton:hover {{\n"
+"                background-color: {theme['button_hover']};\n"
+"            }}\n"
+"            \n"
+"            QPushButton:pressed {{\n"
+"                background-color: {theme['selection']};\n"
+"            }}")
         self.buttons_container.setFrameShape(QFrame.Shape.NoFrame)
-        self.buttons_layout = QVBoxLayout(self.buttons_container)
-        self.buttons_layout.setSpacing(10)
-        self.buttons_layout.setObjectName(u"buttons_layout")
-        self.buttons_layout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout = QGridLayout(self.buttons_container)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.play_button = QPushButton(self.buttons_container)
         self.play_button.setObjectName(u"play_button")
+        self.play_button.setMinimumSize(QSize(40, 40))
         self.play_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        icon = QIcon()
+        icon.addFile(u":/icons/svg/play.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.play_button.setIcon(icon)
+        self.play_button.setIconSize(QSize(40, 40))
 
-        self.buttons_layout.addWidget(self.play_button)
+        self.gridLayout.addWidget(self.play_button, 0, 0, 1, 1)
+
+        self.spotify_button = QPushButton(self.buttons_container)
+        self.spotify_button.setObjectName(u"spotify_button")
+        icon1 = QIcon()
+        icon1.addFile(u":/services/svg/spotify.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.spotify_button.setIcon(icon1)
+
+        self.gridLayout.addWidget(self.spotify_button, 3, 0, 1, 1)
+
+        self.jaangle_button = QPushButton(self.buttons_container)
+        self.jaangle_button.setObjectName(u"jaangle_button")
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/svg/game.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.jaangle_button.setIcon(icon2)
+
+        self.gridLayout.addWidget(self.jaangle_button, 5, 0, 1, 1)
 
         self.folder_button = QPushButton(self.buttons_container)
         self.folder_button.setObjectName(u"folder_button")
         self.folder_button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/svg/folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.folder_button.setIcon(icon3)
 
-        self.buttons_layout.addWidget(self.folder_button)
-
-        self.spotify_button = QPushButton(self.buttons_container)
-        self.spotify_button.setObjectName(u"spotify_button")
-        icon = QIcon()
-        icon.addFile(u"../.content/svg/spotify-color-svgrepo-com.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.spotify_button.setIcon(icon)
-
-        self.buttons_layout.addWidget(self.spotify_button)
+        self.gridLayout.addWidget(self.folder_button, 0, 1, 1, 1)
 
         self.scrobble_button = QPushButton(self.buttons_container)
         self.scrobble_button.setObjectName(u"scrobble_button")
+        icon4 = QIcon()
+        icon4.addFile(u":/services/svg/lastfm.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.scrobble_button.setIcon(icon4)
 
-        self.buttons_layout.addWidget(self.scrobble_button)
-
-        self.jaangle_button = QPushButton(self.buttons_container)
-        self.jaangle_button.setObjectName(u"jaangle_button")
-
-        self.buttons_layout.addWidget(self.jaangle_button)
+        self.gridLayout.addWidget(self.scrobble_button, 3, 1, 1, 1)
 
         self.extra_button = QPushButton(self.buttons_container)
         self.extra_button.setObjectName(u"extra_button")
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/svg/chicken.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.extra_button.setIcon(icon5)
 
-        self.buttons_layout.addWidget(self.extra_button)
+        self.gridLayout.addWidget(self.extra_button, 5, 1, 1, 1)
 
 
         self.images_layout.addWidget(self.buttons_container)
@@ -272,12 +303,15 @@ class Ui_MusicBrowser(object):
         self.custom_button3.setText(QCoreApplication.translate("MusicBrowser", u"Script 3", None))
         self.cover_label.setText(QCoreApplication.translate("MusicBrowser", u"No imagen", None))
         self.artist_image_label.setText(QCoreApplication.translate("MusicBrowser", u"No imagen de artista", None))
-        self.play_button.setText(QCoreApplication.translate("MusicBrowser", u"Reproducir", None))
-        self.folder_button.setText(QCoreApplication.translate("MusicBrowser", u"Abrir Carpeta", None))
+        self.play_button.setText("")
+#if QT_CONFIG(shortcut)
+        self.play_button.setShortcut(QCoreApplication.translate("MusicBrowser", u"Alt+Shift+R", None))
+#endif // QT_CONFIG(shortcut)
         self.spotify_button.setText("")
-        self.scrobble_button.setText(QCoreApplication.translate("MusicBrowser", u"Scrobblear", None))
-        self.jaangle_button.setText(QCoreApplication.translate("MusicBrowser", u"Jaangle similar", None))
-        self.extra_button.setText(QCoreApplication.translate("MusicBrowser", u"Extra", None))
+        self.jaangle_button.setText("")
+        self.folder_button.setText("")
+        self.scrobble_button.setText("")
+        self.extra_button.setText("")
         pass
     # retranslateUi
 

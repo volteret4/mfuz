@@ -397,6 +397,22 @@
               <height>16777215</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">            QPushButton {{
+                background-color: {theme['secondary_bg']};
+                color: {theme['fg']};
+                border-radius: 20px;
+				border: none
+            }}
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+            }}</string>
+            </property>
             <property name="frameShape">
              <enum>QFrame::Shape::NoFrame</enum>
             </property>
@@ -415,6 +431,12 @@
              </property>
              <item row="0" column="0">
               <widget class="QPushButton" name="play_button">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
@@ -424,6 +446,15 @@
                <property name="icon">
                 <iconset resource="images.qrc">
                  <normaloff>:/icons/svg/play.svg</normaloff>:/icons/svg/play.svg</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>40</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="shortcut">
+                <string>Alt+Shift+R</string>
                </property>
               </widget>
              </item>

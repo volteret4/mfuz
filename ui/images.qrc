@@ -1,40 +1,42 @@
 <RCC>
     <qresource prefix="/services">
-        <file>svg/youtube.svg</file>
-        <file>svg/genius.svg</file>
-        <file>svg/lastfm.svg</file>
-        <file>svg/musicbrainz.svg</file>
-        <file>svg/spotify.svg</file>
-        <file>svg/wallabag.svg</file>
-        <file>svg/wikipedia.svg</file>
-    </qresource>
-    <qresource prefix="/icons">
-        <file>svg/ad.svg</file>
-        <file>svg/add-mode.svg</file>
-        <file>svg/add.svg</file>
-        <file>svg/calendar.svg</file>
-        <file>svg/check.svg</file>
-        <file>svg/chicken.svg</file>
-        <file>svg/chicken(1).svg</file>
-        <file>svg/chicken(2).svg</file>
-        <file>svg/clock.svg</file>
-        <file>svg/cloud-download.svg</file>
-        <file>svg/cloud-info.svg</file>
-        <file>svg/cloud.svg</file>
-        <file>svg/data-storage.svg</file>
-        <file>svg/database-search.svg</file>
-        <file>svg/error.svg</file>
-        <file>svg/folder.svg</file>
-        <file>svg/game.svg</file>
-        <file>svg/message-sent.svg</file>
-        <file>svg/message.svg</file>
-        <file>svg/minus-circle.svg</file>
-        <file>svg/play.svg</file>
-        <file>svg/playlist-love.svg</file>
-        <file>svg/playlist.svg</file>
-        <file>svg/success.svg</file>
+        <file alias="yt">svg/youtube.svg</file>
+        <file alias="genius">svg/genius.svg</file>
+        <file alias="lastfm">svg/lastfm.svg</file>
+        <file alias="mb">svg/musicbrainz.svg</file>
+        <file alias="spotify">svg/spotify.svg</file>
+        <file alias="wallabag">svg/wallabag.svg</file>
+        <file alias="wiki">svg/wikipedia.svg</file>
+        <file alias="ads">svg/ad.svg</file>
+        <file alias="addstar">svg/addmode.svg</file>
+        <file alias="add">svg/add.svg</file>
+        <file alias="caffoff">svg/caffoff.svg</file>
+        <file alias="caffon">svg/caffon.svg</file>
+        <file alias="caff">svg/caffeine.svg</file>
+        <file alias="cal">svg/calendar.svg</file>
+        <file alias="check">svg/check.svg</file>
+        <file alias="chicken">svg/chicken.svg</file>
+        <file alias="chicken1">svg/chicken1.svg</file>
+        <file alias="chicken2">svg/chicken2.svg</file>
+        <file alias="clock">svg/clock.svg</file>
+        <file alias="clouddown">svg/clouddownload.svg</file>
+        <file alias="cloudinfo">svg/cloudinfo.svg</file>
+        <file alias="cloud">svg/cloud.svg</file>
+        <file alias="data">svg/datastorage.svg</file>
+        <file alias="dbsearch">svg/databasesearch.svg</file>
+        <file alias="discogs">svg/discogs.svg</file>
+        <file alias="error">svg/error.svg</file>
+        <file alias="folder">svg/folder.svg</file>
+        <file alias="game">svg/game.svg</file>
+        <file alias="msgsent">svg/messagesent.svg</file>
+        <file alias="msg">svg/message.svg</file>
+        <file alias="minus">svg/minuscircle.svg</file>
+        <file alias="play">svg/play.svg</file>
+        <file alias="plslove">svg/playlistlove.svg</file>
+        <file alias="pls">svg/playlist.svg</file>
+        <file alias="succes">svg/success.svg</file>
         <file>svg/topic.svg</file>
-        <file>svg/vinyl-record.svg</file>
+        <file>svg/vinylrecord.svg</file>
         <file>svg/vinyl.svg</file>
     </qresource>
 </RCC>
