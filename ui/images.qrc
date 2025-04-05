@@ -35,8 +35,8 @@
         <file alias="plslove">svg/playlistlove.svg</file>
         <file alias="pls">svg/playlist.svg</file>
         <file alias="succes">svg/success.svg</file>
-        <file>svg/topic.svg</file>
-        <file>svg/vinylrecord.svg</file>
-        <file>svg/vinyl.svg</file>
+        <file alias="topic">svg/topic.svg</file>
+        <file alias="vinyl1">svg/vinylrecord.svg</file>
+        <file alias="vinyl">svg/vinyl.svg</file>
     </qresource>
 </RCC>

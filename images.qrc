@@ -1,0 +1,42 @@
+<RCC>
+    <qresource prefix="/services">
+        <file alias="yt">ui/svg/youtube.svg</file>
+        <file alias="genius">ui/svg/genius.svg</file>
+        <file alias="lastfm">ui/svg/lastfm.svg</file>
+        <file alias="mb">ui/svg/musicbrainz.svg</file>
+        <file alias="spotify">ui/svg/spotify.svg</file>
+        <file alias="wallabag">ui/svg/wallabag.svg</file>
+        <file alias="wiki">ui/svg/wikipedia.svg</file>
+        <file alias="ads">ui/svg/ad.svg</file>
+        <file alias="addstar">ui/svg/addmode.svg</file>
+        <file alias="add">ui/svg/add.svg</file>
+        <file alias="caffoff">ui/svg/caffoff.svg</file>
+        <file alias="caffon">ui/svg/caffon.svg</file>
+        <file alias="caff">ui/svg/caffeine.svg</file>
+        <file alias="cal">ui/svg/calendar.svg</file>
+        <file alias="check">ui/svg/check.svg</file>
+        <file alias="chicken">ui/svg/chicken.svg</file>
+        <file alias="chicken1">ui/svg/chicken1.svg</file>
+        <file alias="chicken2">ui/svg/chicken2.svg</file>
+        <file alias="clock">ui/svg/clock.svg</file>
+        <file alias="clouddown">ui/svg/clouddownload.svg</file>
+        <file alias="cloudinfo">ui/svg/cloudinfo.svg</file>
+        <file alias="cloud">ui/svg/cloud.svg</file>
+        <file alias="data">ui/svg/datastorage.svg</file>
+        <file alias="dbsearch">ui/svg/databasesearch.svg</file>
+        <file alias="discogs">ui/svg/discogs.svg</file>
+        <file alias="error">ui/svg/error.svg</file>
+        <file alias="folder">ui/svg/folder.svg</file>
+        <file alias="game">ui/svg/game.svg</file>
+        <file alias="msgsent">ui/svg/messagesent.svg</file>
+        <file alias="msg">ui/svg/message.svg</file>
+        <file alias="minus">ui/svg/minuscircle.svg</file>
+        <file alias="play">ui/svg/play.svg</file>
+        <file alias="plslove">ui/svg/playlistlove.svg</file>
+        <file alias="pls">ui/svg/playlist.svg</file>
+        <file alias="succes">ui/svg/success.svg</file>
+        <file alias="topic">ui/svg/topic.svg</file>
+        <file alias="vinyl1">ui/svg/vinylrecord.svg</file>
+        <file alias="vinyl">ui/svg/vinyl.svg</file>
+    </qresource>
+</RCC>

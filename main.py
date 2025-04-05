@@ -399,9 +399,7 @@ class TabManager(QMainWindow):
             QPushButton {{
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border: 1px solid {theme['border']};
                 padding: 5px 10px;
-                border-radius: 3px;
                 min-height: 15px;
             }}
             

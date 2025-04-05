@@ -24,6 +24,7 @@ import traceback
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT  # Importar la clase base
+import resources_rc
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -570,6 +571,56 @@ class MusicBrowser(BaseModule):
         layout.addWidget(self.main_splitter)
 
         # El árbol de resultados se cargará posteriormente con load_results_tree_ui
+
+
+    def setup_hotkeys(self, hotkeys_config=None):
+        """
+        Configura atajos de teclado desde la configuración JSON
+        
+        Args:
+            hotkeys_config (dict): Diccionario con configuración de hotkeys
+                formato: {"action_name": "shortcut_key", ...}
+        """
+        # Valores predeterminados si no se proporciona configuración
+        default_hotkeys = {
+            "open_folder": "Ctrl+O",
+            "play_selected": "Return",
+            "spotify": "Ctrl+S",
+            "jaangle": "Ctrl+J",
+            "search_focus": "Ctrl+F",
+            # Añade más según necesites
+        }
+        
+        # Usar configuración proporcionada o predeterminada
+        hotkeys = hotkeys_config or default_hotkeys
+        
+        # Crear y conectar los atajos
+        self.shortcuts = {}
+        
+        # Abrir carpeta (Ctrl+O)
+        self.shortcuts["open_folder"] = QShortcut(QKeySequence(hotkeys["open_folder"]), self)
+        self.shortcuts["open_folder"].activated.connect(self.open_selected_folder)
+        
+        # Reproducir seleccionado (Enter)
+        self.shortcuts["play_selected"] = QShortcut(QKeySequence(hotkeys["play_selected"]), self)
+        self.shortcuts["play_selected"].activated.connect(self.play_selected_item)
+        
+        # Spotify (Ctrl+S)
+        if hasattr(self, "spotify_button") and self.spotify_button:
+            self.shortcuts["spotify"] = QShortcut(QKeySequence(hotkeys["spotify"]), self)
+            self.shortcuts["spotify"].activated.connect(self.handle_spotify_button)
+        
+        # Jaangle (Ctrl+J) - Ejemplo para implementación futura
+        # self.shortcuts["jaangle"] = QShortcut(QKeySequence(hotkeys["jaangle"]), self)
+        # self.shortcuts["jaangle"].activated.connect(self.handle_jaangle_button)
+        
+        # Establecer el foco en el cuadro de búsqueda (Ctrl+F)
+        self.shortcuts["search_focus"] = QShortcut(QKeySequence(hotkeys["search_focus"]), self)
+        self.shortcuts["search_focus"].activated.connect(self.search_box.setFocus)
+        
+        print(f"Hotkeys configurados: {list(self.shortcuts.keys())}")
+
+
 
     def is_tree_valid(self):
         """Verifica si el árbol está disponible y válido."""
@@ -1836,9 +1887,7 @@ class MusicBrowser(BaseModule):
                 font-size: 12px;
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-                padding: 5px 10px;
+                border-radius: 20px;
             }}
             QPushButton:hover {{
                 background-color: {theme['button_hover']};
