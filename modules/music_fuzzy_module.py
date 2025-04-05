@@ -483,6 +483,28 @@ class MusicBrowser(BaseModule):
 
         # Añadir contenedor de botones verticales a la derecha
         buttons_container = QFrame()
+        buttons_container.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {theme['button_hover']};
+                border-radius: 25px;
+                padding: 8px 16px;
+                margin: 2px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                
+            }}
+            
+        """)
         buttons_container.setFrameShape(QFrame.Shape.NoFrame)
         buttons_layout = QVBoxLayout(buttons_container)
         buttons_layout.setSpacing(10)
@@ -1887,6 +1909,7 @@ class MusicBrowser(BaseModule):
                 font-size: 12px;
                 background-color: {theme['secondary_bg']};
                 color: {theme['fg']};
+                border: none
             }}
             QPushButton:hover {{
                 background-color: {theme['button_hover']};

@@ -402,20 +402,7 @@ class TabManager(QMainWindow):
 
             }}
             
-            QPushButton:hover {{
-                background-color: {theme['button_hover']};
-            }}
-            
-            QPushButton:pressed {{
-                background-color: {theme['selection']};
-            }}
-            
-            QPushButton:disabled {{
-                background-color: {theme['secondary_bg']};
-                color: rgba({int(theme['fg'].lstrip('#')[0:2], 16)}, 
-                            {int(theme['fg'].lstrip('#')[2:4], 16)}, 
-                            {int(theme['fg'].lstrip('#')[4:6], 16)}, 0.5);
-            }}
+
             
             /* Lists and Tables */
             QListWidget, QTreeWidget, QTableWidget, QTableView, QTreeView, QListView {{
