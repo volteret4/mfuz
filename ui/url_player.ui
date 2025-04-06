@@ -107,6 +107,9 @@
         <property name="frameShadow">
          <enum>QFrame::Shadow::Raised</enum>
         </property>
+        <property name="lineWidth">
+         <number>0</number>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
           <widget class="QTreeWidget" name="treeWidget">
@@ -204,16 +207,6 @@
               </layout>
              </widget>
             </item>
-            <item>
-             <widget class="QFrame" name="video">
-              <property name="frameShape">
-               <enum>QFrame::Shape::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Shadow::Raised</enum>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
          </item>
@@ -250,6 +243,9 @@
                <number>1</number>
               </property>
               <widget class="QWidget" name="playlists">
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::TabFocus</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">            QFrame {{
                 border: none
@@ -261,7 +257,11 @@
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <item>
-                 <widget class="QListWidget" name="listWidget"/>
+                 <widget class="QListWidget" name="listWidget">
+                  <property name="lineWidth">
+                   <number>0</number>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QFrame" name="frame">
@@ -276,6 +276,9 @@
                   </property>
                   <property name="frameShadow">
                    <enum>QFrame::Shadow::Raised</enum>
+                  </property>
+                  <property name="lineWidth">
+                   <number>0</number>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_3">
                    <item>
@@ -310,6 +313,9 @@
                <layout class="QVBoxLayout" name="verticalLayout_7">
                 <item>
                  <widget class="QScrollArea" name="scrollArea">
+                  <property name="lineWidth">
+                   <number>0</number>
+                  </property>
                   <property name="widgetResizable">
                    <bool>true</bool>
                   </property>
@@ -319,7 +325,7 @@
                      <x>0</x>
                      <y>0</y>
                      <width>523</width>
-                     <height>504</height>
+                     <height>520</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -330,7 +336,11 @@
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_8">
                     <item>
-                     <widget class="QTextEdit" name="textEdit"/>
+                     <widget class="QTextEdit" name="textEdit">
+                      <property name="lineWidth">
+                       <number>0</number>
+                      </property>
+                     </widget>
                     </item>
                    </layout>
                   </widget>

@@ -324,7 +324,10 @@ class TabManager(QMainWindow):
                 background-color: {theme['bg']};
             }}
             
-            
+            QFrame {{
+                border: none
+                border-radius: 3px;
+            }}
 
         """)
 

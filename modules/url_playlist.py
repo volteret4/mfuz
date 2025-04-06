@@ -26,6 +26,7 @@ class UrlPlayer(BaseModule):
         # Si no se proporcionó un directorio, creamos uno temporal
         if not self.mpv_temp_dir:
             try:
+                import tempfile
                 self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
                 print(f"[UrlPlayer] Directorio temporal creado: {self.mpv_temp_dir}")
             except Exception as e:
@@ -42,8 +43,23 @@ class UrlPlayer(BaseModule):
         self.mpv_socket = None
         self.mpv_wid = None
         
+        # Inicializar variables para widgets
+        self.lineEdit = None
+        self.pushButton_6 = None
+        self.treeWidget = None
+        self.pushButton = None
+        self.pushButton_2 = None
+        self.pushButton_3 = None
+        self.tabWidget = None
+        self.listWidget = None
+        self.pushButton_4 = None
+        self.pushButton_5 = None
+        self.textEdit = None
+        self.video = None
+        
         # Ahora llamamos al constructor padre que llamará a init_ui()
         super().__init__(parent, theme, **kwargs)
+
         
     def log(self, message):
         """Registra un mensaje en el TextEdit y en la consola."""
@@ -57,25 +73,16 @@ class UrlPlayer(BaseModule):
         ui_file_loaded = self.load_ui_file("url_player.ui", [
             "lineEdit", "pushButton_6", "treeWidget", "pushButton", 
             "pushButton_2", "pushButton_3", "tabWidget", "listWidget",
-            "pushButton_4", "pushButton_5", "pushButton_6",  "textEdit", "video"
+            "pushButton_4", "pushButton_5", "textEdit", "video"
         ])
         
         if not ui_file_loaded:
             self._fallback_init_ui()
         
-        # Configuraciones básicas de UI...
-        
-        # Configurar el frame de video para recibir el contenido de MPV
-        self.video.setAutoFillBackground(True)
-        self.video.setMinimumHeight(240)  # Altura mínima para asegurar visibilidad
-        
-        # Asegurarse de que el frame de video tenga un fondo oscuro y se vea el contenido
-        palette = self.video.palette()
-        palette.setColor(self.video.backgroundRole(), Qt.GlobalColor.black)
-        self.video.setPalette(palette)
-        
-        # Configurar política de tamaño para que tome todo el espacio disponible
-        self.video.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        # Verificar que tenemos todos los widgets necesarios
+        if not self.check_required_widgets():
+            print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
+            return
         
         # Configurar nombres y tooltips
         self.pushButton_6.setText("Buscar")
@@ -101,30 +108,46 @@ class UrlPlayer(BaseModule):
         self.tabWidget.setTabText(0, "Cola de reproducción")
         self.tabWidget.setTabText(1, "Información")
         
-        # Asegurarse de que el frame de video tenga un ID de ventana válido
-        self.video.setAutoFillBackground(True)
-        
         # Conectar señales
-        self.pushButton_6.clicked.connect(self.search_url)
-        self.pushButton.clicked.connect(self.toggle_play_pause)
-        self.pushButton_2.clicked.connect(self.previous_track)
-        self.pushButton_3.clicked.connect(self.next_track)
-        self.pushButton_5.clicked.connect(self.add_to_queue)
-        self.pushButton_4.clicked.connect(self.remove_from_queue)
-        self.lineEdit.returnPressed.connect(self.search_url)
-        
-        # Conectar eventos de doble clic
-        self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
-        self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
-        
-        # Verificar si el directorio temporal está creado
-        if not self.mpv_temp_dir:
-            try:
-                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                self.log("Directorio temporal creado en init_ui: " + self.mpv_temp_dir)
-            except Exception as e:
-                self.log(f"Error al crear directorio temporal en init_ui: {str(e)}")
-        
+        self.connect_signals()
+
+
+    def connect_signals(self):
+        """Conecta las señales de los widgets a sus respectivos slots."""
+        try:
+            # Conectar señales con verificación previa
+            if self.pushButton_6:
+                self.pushButton_6.clicked.connect(self.search_url)
+            
+            if self.pushButton:
+                self.pushButton.clicked.connect(self.toggle_play_pause)
+            
+            if self.pushButton_2:
+                self.pushButton_2.clicked.connect(self.previous_track)
+            
+            if self.pushButton_3:
+                self.pushButton_3.clicked.connect(self.next_track)
+            
+            if self.pushButton_5:
+                self.pushButton_5.clicked.connect(self.add_to_queue)
+            
+            if self.pushButton_4:
+                self.pushButton_4.clicked.connect(self.remove_from_queue)
+            
+            if self.lineEdit:
+                self.lineEdit.returnPressed.connect(self.search_url)
+            
+            # Conectar eventos de doble clic
+            if self.treeWidget:
+                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
+            
+            if self.listWidget:
+                self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
+            
+            print("[UrlPlayer] Señales conectadas correctamente")
+        except Exception as e:
+            print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
+
     def _fallback_init_ui(self):
         """Crea la UI manualmente en caso de que falle la carga del archivo UI."""
         layout = QVBoxLayout(self)
@@ -212,6 +235,23 @@ class UrlPlayer(BaseModule):
         layout.addWidget(search_frame)
         layout.addWidget(main_frame)
         
+    def check_required_widgets(self):
+        """Verifica que todos los widgets requeridos existan."""
+        required_widgets = [
+            "lineEdit", "pushButton_6", "treeWidget", "pushButton", 
+            "pushButton_2", "pushButton_3", "tabWidget", "listWidget",
+            "pushButton_4", "pushButton_5", "textEdit", "video"
+        ]
+        
+        all_ok = True
+        for widget_name in required_widgets:
+            if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                print(f"[UrlPlayer] Error: Widget {widget_name} no encontrado")
+                all_ok = False
+        
+        return all_ok
+
+
     def on_tree_double_click(self, item, column):
         """Maneja el doble clic en un elemento del árbol."""
         # Si es un nodo raíz con hijos, no hacer nada
@@ -245,81 +285,81 @@ class UrlPlayer(BaseModule):
         # Reproducir la lista comenzando por el elemento seleccionado
         self.play_with_mpv(urls)
 
-def play_from_index(self, index):
-    """Reproduce desde un índice específico de la cola."""
-    if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
-        return
-            
-    # Detener reproducción actual si existe
-    self.stop_playback()
-            
-    # Obtener todas las URLs a partir del índice seleccionado
-    urls = [item['url'] for item in self.current_playlist[index:]]
-    
-    # Reproducir la lista comenzando por el elemento seleccionado
-    self.play_with_mpv(urls)
-
-    def play_with_mpv(self, urls):
-        """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
-        if not urls:
+    def play_from_index(self, index):
+        """Reproduce desde un índice específico de la cola."""
+        if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
             return
+                
+        # Detener reproducción actual si existe
+        self.stop_playback()
+                
+        # Obtener todas las URLs a partir del índice seleccionado
+        urls = [item['url'] for item in self.current_playlist[index:]]
         
-        # Verificar o crear directorio temporal para el socket
-        if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
-            try:
-                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
-            except Exception as e:
-                self.log(f"Error al crear directorio temporal: {str(e)}")
-                self.mpv_temp_dir = "/tmp"
-        
-        # Crear ruta para el socket
-        socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
-        self.mpv_socket = socket_path
-        
-        # Si existe un socket anterior, eliminarlo
-        if os.path.exists(socket_path):
-            try:
-                os.remove(socket_path)
-                self.log(f"Socket antiguo eliminado: {socket_path}")
-            except Exception as e:
-                self.log(f"Error al eliminar socket antiguo: {str(e)}")
-        
-        # Preparar argumentos para mpv (ventana independiente)
-        mpv_args = [
-            "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
-            "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
-            "--ytdl-format=best",        # Mejor calidad disponible
-            "--keep-open=yes",           # Mantener abierto al finalizar
-        ]
-        
-        # Añadir URLs
-        mpv_args.extend(urls)
-        
-        # Registrar comando completo para depuración
-        self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
-        
-        # Iniciar mpv para reproducir
-        self.player_process = QProcess()
-        self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
-        self.player_process.readyReadStandardError.connect(self.handle_player_error)
-        self.player_process.finished.connect(self.handle_player_finished)
-        
-        try:
-            self.player_process.start("mpv", mpv_args)
-            success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+        # Reproducir la lista comenzando por el elemento seleccionado
+        self.play_with_mpv(urls)
+
+        def play_with_mpv(self, urls):
+            """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
+            if not urls:
+                return
             
-            if success:
-                self.is_playing = True
-                self.pushButton.setText("⏸️")
-                self.log("Reproducción iniciada correctamente")
-            else:
-                self.log("Error al iniciar MPV: timeout")
-                error = self.player_process.errorString()
-                self.log(f"Error detallado: {error}")
-                    
-        except Exception as e:
-            self.log(f"Excepción al iniciar MPV: {str(e)}")
+            # Verificar o crear directorio temporal para el socket
+            if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
+                try:
+                    self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
+                    self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
+                except Exception as e:
+                    self.log(f"Error al crear directorio temporal: {str(e)}")
+                    self.mpv_temp_dir = "/tmp"
+            
+            # Crear ruta para el socket
+            socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
+            self.mpv_socket = socket_path
+            
+            # Si existe un socket anterior, eliminarlo
+            if os.path.exists(socket_path):
+                try:
+                    os.remove(socket_path)
+                    self.log(f"Socket antiguo eliminado: {socket_path}")
+                except Exception as e:
+                    self.log(f"Error al eliminar socket antiguo: {str(e)}")
+            
+            # Preparar argumentos para mpv (ventana independiente)
+            mpv_args = [
+                "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
+                "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
+                "--ytdl-format=best",        # Mejor calidad disponible
+                "--keep-open=yes",           # Mantener abierto al finalizar
+            ]
+            
+            # Añadir URLs
+            mpv_args.extend(urls)
+            
+            # Registrar comando completo para depuración
+            self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
+            
+            # Iniciar mpv para reproducir
+            self.player_process = QProcess()
+            self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
+            self.player_process.readyReadStandardError.connect(self.handle_player_error)
+            self.player_process.finished.connect(self.handle_player_finished)
+            
+            try:
+                self.player_process.start("mpv", mpv_args)
+                success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+                
+                if success:
+                    self.is_playing = True
+                    self.pushButton.setText("⏸️")
+                    self.log("Reproducción iniciada correctamente")
+                else:
+                    self.log("Error al iniciar MPV: timeout")
+                    error = self.player_process.errorString()
+                    self.log(f"Error detallado: {error}")
+                        
+            except Exception as e:
+                self.log(f"Excepción al iniciar MPV: {str(e)}")
 
 
 
