@@ -636,10 +636,10 @@ class UrlPlayer(BaseModule):
         
         # Map checkboxes to service keys
         checkbox_mapping = {
-            'youtube_checkBox': 'youtube',
-            'soundcloud_checkBox': 'soundcloud',
-            'bandcamp_checkBox': 'bandcamp',
-            'lastfm_checkBox': 'lastfm'
+            'youtube_check': 'youtube',
+            'soundcloud_check': 'soundcloud',
+            'bandcamp_check': 'bandcamp',
+            'lastfm_check': 'lastfm'
             # Add more as needed
         }
         
@@ -659,10 +659,11 @@ class UrlPlayer(BaseModule):
             
             # Guardar configuración de inclusión de servicios
             checkbox_mapping = {
-                'youtube_checkBox': 'youtube',
-                'soundcloud_checkBox': 'soundcloud',
-                'bandcamp_checkBox': 'bandcamp',
-                'lastfm_checkBox': 'lastfm'
+                'youtube_check': 'youtube',
+                'soundcloud_check': 'soundcloud',
+                'bandcamp_check': 'bandcamp',
+                'lastfm_check': 'lastfm'
+
                     # Añadir más según sea necesario
             }
             

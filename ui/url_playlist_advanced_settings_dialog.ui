@@ -111,7 +111,7 @@ QHeaderView::section {
       <item>
        <widget class="QGroupBox" name="num_servicios">
         <property name="title">
-         <string>GroupBox</string>
+         <string/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -135,9 +135,49 @@ QHeaderView::section {
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="servicios_en_todos">
+       <widget class="QGroupBox" name="groupBox">
         <property name="title">
          <string>GroupBox</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Elemento a buscar</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox">
+           <item>
+            <property name="text">
+             <string>Artista</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Álbum</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Canciones</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Todo</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="servicios_en_todos">
+        <property name="title">
+         <string/>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
@@ -208,7 +248,7 @@ QHeaderView::section {
       <item>
        <widget class="QGroupBox" name="rss">
         <property name="title">
-         <string>GroupBox</string>
+         <string/>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>

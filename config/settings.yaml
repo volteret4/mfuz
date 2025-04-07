@@ -1,6 +1,7 @@
 url_playlist:
   included_services:
     bandcamp: true
+    lastfm: true
     soundcloud: true
     youtube: true
-  pagination_value: 13
+  pagination_value: 11
