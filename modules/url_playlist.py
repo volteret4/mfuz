@@ -15,426 +15,59 @@ from PyQt6.QtWidgets import (
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox,
     QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication
 )
-from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl
+from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool
 from PyQt6.QtGui import QIcon
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+import resources_rc
 from base_module import BaseModule, PROJECT_ROOT
 
 
-class UrlPlayer(BaseModule):
-    """Módulo para reproducir música desde URLs (YouTube, SoundCloud, Bandcamp)."""
+
+class SearchSignals(QObject):
+    """Define las señales disponibles para el SearchWorker."""
+    results = pyqtSignal(list)
+    error = pyqtSignal(str)
+    finished = pyqtSignal()
+
+class SearchWorker(QRunnable):
+    """Worker thread para realizar búsquedas en distintos servicios."""
     
-    def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
-        # Primero extraemos y configuramos los argumentos específicos antes de llamar al constructor padre
-        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', None)
+    def __init__(self, service, query):
+        super().__init__()
+        self.service = service
+        self.query = query
+        self.signals = SearchSignals()
         
-        # Si no se proporcionó un directorio, creamos uno temporal
-        if not self.mpv_temp_dir:
-            try:
-                import tempfile
-                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                print(f"[UrlPlayer] Directorio temporal creado: {self.mpv_temp_dir}")
-            except Exception as e:
-                print(f"[UrlPlayer] Error al crear directorio temporal: {str(e)}")
-                self.mpv_temp_dir = "/tmp"  # Fallback a /tmp si falla la creación
-        
-        # Inicializar otras variables de instancia
-        self.player_process = None
-        self.current_playlist = []
-        self.current_track_index = -1
-        self.media_info_cache = {}
-        self.yt_dlp_process = None
-        self.is_playing = False
-        self.mpv_socket = None
-        self.mpv_wid = None
-        
-        # Inicializar variables para widgets
-        self.lineEdit = None
-        self.searchButton = None
-        self.treeWidget = None
-        self.playButton = None
-        self.rewButton = None
-        self.ffButton_3 = None
-        self.tabWidget = None
-        self.listWidget = None
-        self.delButton = None
-        self.addButton = None
-        self.textEdit = None
-        
-        
-        # Ahora llamamos al constructor padre que llamará a init_ui()
-        super().__init__(parent, theme, **kwargs)
-
-        
-    def log(self, message):
-        """Registra un mensaje en el TextEdit y en la consola."""
-        if hasattr(self, 'textEdit') and self.textEdit:
-            self.textEdit.append(message)
-        print(f"[UrlPlayer] {message}")
-        
-    def init_ui(self):
-        """Inicializa la interfaz de usuario desde el archivo UI."""
-        # Intentar cargar desde archivo UI
-        ui_file_loaded = self.load_ui_file("url_player.ui", [
-            "lineEdit", "searchButton", "treeWidget", "playButton", 
-            "rewButton", "ffButton", "tabWidget", "listWidget",
-            "delButton", "addButton", "textEdit"
-        ])
-        
-        if not ui_file_loaded:
-            self._fallback_init_ui()
-        
-        # Verificar que tenemos todos los widgets necesarios
-        if not self.check_required_widgets():
-            print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
-            return
-        
-        # Configurar nombres y tooltips
-        self.searchButton.setText("Buscar")
-        self.searchButton.setToolTip("Buscar información sobre la URL")
-        self.playButton.setText("▶️")
-        self.playButton.setToolTip("Reproducir/Pausar")
-        self.rewButton.setText("⏮️")
-        self.rewButton.setToolTip("Anterior")
-        self.ffButton.setText("⏭️")
-        self.ffButton.setToolTip("Siguiente")
-        self.delButton.setText("➖")
-        self.delButton.setToolTip("Eliminar de la cola")
-        self.addButton.setText("➕")
-        self.addButton.setToolTip("Añadir a la cola")
-        
-        # Configurar TreeWidget
-        self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
-        self.treeWidget.setColumnWidth(0, 250)
-        self.treeWidget.setColumnWidth(1, 150)
-        self.treeWidget.setColumnWidth(2, 80)
-        
-        # Configurar TabWidget
-        self.tabWidget.setTabText(0, "Cola de reproducción")
-        self.tabWidget.setTabText(1, "Información")
-        
-        # Conectar señales
-        self.connect_signals()
-
-
-    def connect_signals(self):
-        """Conecta las señales de los widgets a sus respectivos slots."""
+    @pyqtSlot()
+    def run(self):
+        """Ejecuta la búsqueda en segundo plano."""
         try:
-            # Conectar señales con verificación previa
-            if self.searchButton:
-                self.searchButton.clicked.connect(self.perform_search)
+            results = []
             
-            if self.playButton:
-                self.playButton.clicked.connect(self.toggle_play_pause)
+            if self.service == "Todos" or self.service == "YouTube":
+                youtube_results = self.search_youtube(self.query)
+                results.extend(youtube_results)
             
-            if self.rewButton:
-                self.rewButton.clicked.connect(self.previous_track)
+            if self.service == "Todos" or self.service == "SoundCloud":
+                soundcloud_results = self.search_soundcloud(self.query)
+                results.extend(soundcloud_results)
             
-            if self.ffButton:
-                self.ffButton.clicked.connect(self.next_track)
+            if self.service == "Todos" or self.service == "Bandcamp":
+                bandcamp_results = self.search_bandcamp(self.query)
+                results.extend(bandcamp_results)
             
-            if self.addButton:
-                self.addButton.clicked.connect(self.add_to_queue)
+            # Aquí añadirías más servicios
             
-            if self.delButton:
-                self.delButton.clicked.connect(self.remove_from_queue)
-            
-            if self.lineEdit:
-                self.lineEdit.returnPressed.connect(self.perform_search)
-            
-            # Conectar eventos de doble clic
-            if self.treeWidget:
-                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
-                self.on_tree_double_click_original = self.on_tree_double_click
-                self.treeWidget.itemDoubleClicked.disconnect(self.on_tree_double_click)
-                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
-
-            if self.listWidget:
-                self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
-            
-            print("[UrlPlayer] Señales conectadas correctamente")
+            self.signals.results.emit(results)
+        
         except Exception as e:
-            print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
-
-    def _fallback_init_ui(self):
-        """Crea la UI manualmente en caso de que falle la carga del archivo UI."""
-        layout = QVBoxLayout(self)
+            self.signals.error.emit(str(e))
         
-        # Panel de búsqueda
-        search_frame = QFrame()
-        search_layout = QHBoxLayout(search_frame)
-        self.lineEdit = QLineEdit()
-        self.searchButton = QPushButton("Buscar")
-        search_layout.addWidget(self.lineEdit)
-        search_layout.addWidget(self.searchButton)
-        
-        # Panel principal
-        main_frame = QFrame()
-        main_layout = QHBoxLayout(main_frame)
-        
-        # Contenedor del árbol
-        tree_frame = QFrame()
-        tree_layout = QVBoxLayout(tree_frame)
-        self.treeWidget = QTreeWidget()
-        self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
-        tree_layout.addWidget(self.treeWidget)
-        
-        # Contenedor del reproductor
-        player_frame = QFrame()
-        player_layout = QVBoxLayout(player_frame)
-        
-        # Panel de botones del reproductor
-        player_buttons_frame = QFrame()
-        player_buttons_layout = QHBoxLayout(player_buttons_frame)
-        self.rewButton = QPushButton("⏮️")
-        self.ffButton = QPushButton("⏭️")
-        self.playButton = QPushButton("▶️")
-        player_buttons_layout.addWidget(self.rewButton)
-        player_buttons_layout.addWidget(self.ffButton)
-        player_buttons_layout.addWidget(self.playButton)
-        
-
-        
-        # Panel de información
-        info_frame = QFrame()
-        info_layout = QVBoxLayout(info_frame)
-        self.tabWidget = QTabWidget()
-        
-        # Tab de playlists
-        playlists_tab = QWidget()
-        playlists_layout = QVBoxLayout(playlists_tab)
-        self.listWidget = QListWidget()
-        
-        playlist_buttons_frame = QFrame()
-        playlist_buttons_layout = QHBoxLayout(playlist_buttons_frame)
-        self.addButton = QPushButton("➕")
-        self.delButton = QPushButton("➖")
-        playlist_buttons_layout.addWidget(self.addButton)
-        playlist_buttons_layout.addWidget(self.delButton)
-        
-        playlists_layout.addWidget(self.listWidget)
-        playlists_layout.addWidget(playlist_buttons_frame)
-        
-        # Tab de información de texto
-        info_tab = QWidget()
-        info_tab_layout = QVBoxLayout(info_tab)
-        self.textEdit = QTextEdit()
-        info_tab_layout.addWidget(self.textEdit)
-        
-        # Añadir tabs
-        self.tabWidget.addTab(playlists_tab, "Cola de reproducción")
-        self.tabWidget.addTab(info_tab, "Información")
-        
-        info_layout.addWidget(self.tabWidget)
-        
-        # Añadir todo al layout del reproductor
-        player_layout.addWidget(player_buttons_frame)
-        player_layout.addWidget(info_frame)
-        
-        # Añadir frames al layout principal
-        main_layout.addWidget(tree_frame)
-        main_layout.addWidget(player_frame)
-        
-        # Añadir todo al layout principal
-        layout.addWidget(search_frame)
-        layout.addWidget(main_frame)
-        
-    def check_required_widgets(self):
-        """Verifica que todos los widgets requeridos existan."""
-        required_widgets = [
-            "lineEdit", "searchButton", "treeWidget", "playButton", 
-            "ffButton", "rewButton", "tabWidget", "listWidget",
-            "addButton", "delButton", "textEdit"
-        ]
-        
-        all_ok = True
-        for widget_name in required_widgets:
-            if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
-                print(f"[UrlPlayer] Error: Widget {widget_name} no encontrado")
-                all_ok = False
-        
-        return all_ok
+        finally:
+            self.signals.finished.emit()
 
 
-    def on_tree_double_click(self, item, column):
-        """Handle double click on tree item to add to queue or play immediately"""
-        # If it's a root item (source) with children, just expand/collapse
-        if item.childCount() > 0:
-            item.setExpanded(not item.isExpanded())
-            return
-            
-        # Get the stored result data
-        result_data = item.data(0, Qt.ItemDataRole.UserRole)
-        
-        # If this is a search result
-        if isinstance(result_data, dict):
-            url = result_data.get('url', '')
-            if url:
-                # Create a display text
-                display_text = f"{result_data['artist']} - {result_data['title']}"
-                
-                # Add to queue
-                self.add_to_queue_from_url(url, display_text, result_data)
-                self.log(f"Added to queue: {display_text}")
-        else:
-            # Handle the existing logic for non-search results
-            self.on_tree_double_click_original(item, column)
-
-    def add_to_queue_from_url(self, url, display_text, metadata=None):
-        """Add an item to the queue based on URL and display text"""
-        # Create a new item for the playlist
-        queue_item = QListWidgetItem(display_text)
-        queue_item.setData(Qt.ItemDataRole.UserRole, url)
-        
-        # Add to the list
-        self.listWidget.addItem(queue_item)
-        
-        # Update the internal playlist
-        self.current_playlist.append({
-            'title': metadata.get('title', display_text),
-            'artist': metadata.get('artist', ''),
-            'url': url,
-            'entry_data': metadata
-        })
-    
-    def on_list_double_click(self, item):
-        """Maneja el doble clic en un elemento de la lista."""
-        row = self.listWidget.row(item)
-        self.current_track_index = row
-        
-        # Iniciar reproducción del elemento seleccionado
-        self.play_from_index(row)
-        self.log(f"Reproduciendo '{item.text()}'")
-
-    def play_from_index(self, index):
-        """Reproduce desde un índice específico de la cola."""
-        if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
-            return
-                
-        # Detener reproducción actual si existe
-        self.stop_playback()
-                
-        # Obtener todas las URLs a partir del índice seleccionado
-        urls = [item['url'] for item in self.current_playlist[index:]]
-        
-        # Reproducir la lista comenzando por el elemento seleccionado
-        self.play_with_mpv(urls)
-
-    def play_from_index(self, index):
-        """Reproduce desde un índice específico de la cola."""
-        if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
-            return
-                
-        # Detener reproducción actual si existe
-        self.stop_playback()
-                
-        # Obtener todas las URLs a partir del índice seleccionado
-        urls = [item['url'] for item in self.current_playlist[index:]]
-        
-        # Reproducir la lista comenzando por el elemento seleccionado
-        self.play_with_mpv(urls)
-
-        def play_with_mpv(self, urls):
-            """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
-            if not urls:
-                return
-            
-            # Verificar o crear directorio temporal para el socket
-            if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
-                try:
-                    self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                    self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
-                except Exception as e:
-                    self.log(f"Error al crear directorio temporal: {str(e)}")
-                    self.mpv_temp_dir = "/tmp"
-            
-            # Crear ruta para el socket
-            socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
-            self.mpv_socket = socket_path
-            
-            # Si existe un socket anterior, eliminarlo
-            if os.path.exists(socket_path):
-                try:
-                    os.remove(socket_path)
-                    self.log(f"Socket antiguo eliminado: {socket_path}")
-                except Exception as e:
-                    self.log(f"Error al eliminar socket antiguo: {str(e)}")
-            
-            # Preparar argumentos para mpv (ventana independiente)
-            mpv_args = [
-                "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
-                "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
-                "--ytdl-format=best",        # Mejor calidad disponible
-                "--keep-open=yes",           # Mantener abierto al finalizar
-            ]
-            
-            # Añadir URLs
-            mpv_args.extend(urls)
-            
-            # Registrar comando completo para depuración
-            self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
-            
-            # Iniciar mpv para reproducir
-            self.player_process = QProcess()
-            self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
-            self.player_process.readyReadStandardError.connect(self.handle_player_error)
-            self.player_process.finished.connect(self.handle_player_finished)
-            
-            try:
-                self.player_process.start("mpv", mpv_args)
-                success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
-                
-                if success:
-                    self.is_playing = True
-                    self.playButton.setText("⏸️")
-                    self.log("Reproducción iniciada correctamente")
-                else:
-                    self.log("Error al iniciar MPV: timeout")
-                    error = self.player_process.errorString()
-                    self.log(f"Error detallado: {error}")
-                        
-            except Exception as e:
-                self.log(f"Excepción al iniciar MPV: {str(e)}")
-
-
-
-    def perform_search(self):
-        """Perform a search based on the selected platform and query"""
-        query = self.lineEdit.text().strip()
-        if not query:
-            return
-        
-        self.log(f"Searching for: {query}")
-        
-        # Clear previous results
-        self.treeWidget.clear()
-        self.textEdit.clear()
-        
-        # Get the selected source
-        source = self.source_combo.currentText()
-        
-        # Show progress
-        self.textEdit.append(f"Searching for '{query}' on {source}...")
-        QApplication.processEvents()
-        
-        results = []
-        
-        # Perform search based on selected source
-        if source == "All" or source == "YouTube":
-            youtube_results = self.search_youtube(query)
-            results.extend(youtube_results)
-        
-        if source == "All" or source == "Bandcamp":
-            bandcamp_results = self.search_bandcamp(query)
-            results.extend(bandcamp_results)
-        
-        if source == "All" or source == "SoundCloud":
-            soundcloud_results = self.search_soundcloud(query)
-            results.extend(soundcloud_results)
-        
-        # Display results
-        self.display_search_results(results)
-        
-        self.log(f"Search complete. Found {len(results)} results.")
 
 
     def search_bandcamp(self, query):
@@ -670,6 +303,483 @@ class UrlPlayer(BaseModule):
             self.log(traceback.format_exc())
             return []
 
+class UrlPlayer(BaseModule):
+    """Módulo para reproducir música desde URLs (YouTube, SoundCloud, Bandcamp)."""
+    
+    def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
+        # Primero extraemos y configuramos los argumentos específicos antes de llamar al constructor padre
+        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', None)
+        
+        # Si no se proporcionó un directorio, creamos uno temporal
+        if not self.mpv_temp_dir:
+            try:
+                import tempfile
+                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
+                print(f"[UrlPlayer] Directorio temporal creado: {self.mpv_temp_dir}")
+            except Exception as e:
+                print(f"[UrlPlayer] Error al crear directorio temporal: {str(e)}")
+                self.mpv_temp_dir = "/tmp"  # Fallback a /tmp si falla la creación
+        
+        # Inicializar otras variables de instancia
+        self.player_process = None
+        self.current_playlist = []
+        self.current_track_index = -1
+        self.media_info_cache = {}
+        self.yt_dlp_process = None
+        self.is_playing = False
+        self.mpv_socket = None
+        self.mpv_wid = None
+        
+        # Inicializar variables para widgets
+        self.lineEdit = None
+        self.searchButton = None
+        self.treeWidget = None
+        self.playButton = None
+        self.rewButton = None
+        self.ffButton_3 = None
+        self.tabWidget = None
+        self.listWidget = None
+        self.delButton = None
+        self.addButton = None
+        self.textEdit = None
+        
+        
+        # Ahora llamamos al constructor padre que llamará a init_ui()
+        super().__init__(parent, theme, **kwargs)
+
+        
+    def log(self, message):
+        """Registra un mensaje en el TextEdit y en la consola."""
+        if hasattr(self, 'textEdit') and self.textEdit:
+            self.textEdit.append(message)
+        print(f"[UrlPlayer] {message}")
+        
+    def init_ui(self):
+        """Inicializa la interfaz de usuario desde el archivo UI."""
+        # Intentar cargar desde archivo UI
+        ui_file_loaded = self.load_ui_file("url_player.ui", [
+            "lineEdit", "searchButton", "treeWidget", "playButton", 
+            "rewButton", "ffButton", "tabWidget", "listWidget",
+            "delButton", "addButton", "textEdit"
+        ])
+        
+        if not ui_file_loaded:
+            self._fallback_init_ui()
+        
+        # Verificar que tenemos todos los widgets necesarios
+        if not self.check_required_widgets():
+            print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
+            return
+        
+        # Configurar nombres y tooltips
+        self.searchButton.setText("Buscar")
+        self.searchButton.setToolTip("Buscar información sobre la URL")
+        #self.playButton.setText("▶️")
+        self.playButton.setIcon(QIcon(":/services/b_play"))
+
+        self.playButton.setToolTip("Reproducir/Pausar")
+        #self.rewButton.setText("⏮️")
+        self.playButton.setIcon(QIcon(":/services/b_prev"))
+
+        self.rewButton.setToolTip("Anterior")
+        #self.ffButton.setText("⏭️")
+        self.playButton.setIcon(QIcon(":/services/b_ff"))
+
+        self.ffButton.setToolTip("Siguiente")
+        #self.delButton.setText("➖")
+        self.playButton.setIcon(QIcon(":/services/b_minus_star"))
+
+        self.delButton.setToolTip("Eliminar de la cola")
+        #self.addButton.setText("➕")
+        self.playButton.setIcon(QIcon(":/services/b_addstar"))
+
+        self.addButton.setToolTip("Añadir a la cola")
+        
+        # Configurar TreeWidget
+        #self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
+        self.treeWidget.setColumnWidth(0, 250)
+        self.treeWidget.setColumnWidth(1, 150)
+        self.treeWidget.setColumnWidth(2, 80)
+        
+        # Configurar TabWidget
+        self.tabWidget.setTabText(0, "Cola de reproducción")
+        self.tabWidget.setTabText(1, "Información")
+        
+        # Conectar señales
+        self.connect_signals()
+
+
+    def connect_signals(self):
+        """Conecta las señales de los widgets a sus respectivos slots."""
+        try:
+            # Conectar señales con verificación previa
+            if self.searchButton:
+                self.searchButton.clicked.connect(self.perform_search)
+            
+            if self.playButton:
+                self.playButton.clicked.connect(self.toggle_play_pause)
+            
+            if self.rewButton:
+                self.rewButton.clicked.connect(self.previous_track)
+            
+            if self.ffButton:
+                self.ffButton.clicked.connect(self.next_track)
+            
+            if self.addButton:
+                self.addButton.clicked.connect(self.add_to_queue)
+            
+            if self.delButton:
+                self.delButton.clicked.connect(self.remove_from_queue)
+            
+            if self.lineEdit:
+                self.lineEdit.returnPressed.connect(self.perform_search)
+            
+            # Conectar eventos de doble clic
+            if self.treeWidget:
+                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
+                self.on_tree_double_click_original = self.on_tree_double_click
+                self.treeWidget.itemDoubleClicked.disconnect(self.on_tree_double_click)
+                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
+
+            if self.listWidget:
+                self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
+            
+            print("[UrlPlayer] Señales conectadas correctamente")
+        except Exception as e:
+            print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
+
+    def _fallback_init_ui(self):
+        """Crea la UI manualmente en caso de que falle la carga del archivo UI."""
+        layout = QVBoxLayout(self)
+        
+        # Panel de búsqueda
+        search_frame = QFrame()
+        search_layout = QHBoxLayout(search_frame)
+        self.lineEdit = QLineEdit()
+        self.searchButton = QPushButton("Buscar")
+        search_layout.addWidget(self.lineEdit)
+        search_layout.addWidget(self.searchButton)
+        
+        # Panel principal
+        main_frame = QFrame()
+        main_layout = QHBoxLayout(main_frame)
+        
+        # Contenedor del árbol
+        tree_frame = QFrame()
+        tree_layout = QVBoxLayout(tree_frame)
+        self.treeWidget = QTreeWidget()
+        self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
+        tree_layout.addWidget(self.treeWidget)
+        
+        # Contenedor del reproductor
+        player_frame = QFrame()
+        player_layout = QVBoxLayout(player_frame)
+        
+        # Panel de botones del reproductor
+        player_buttons_frame = QFrame()
+        player_buttons_layout = QHBoxLayout(player_buttons_frame)
+        self.rewButton = QPushButton("⏮️")
+        self.ffButton = QPushButton("⏭️")
+        self.playButton = QPushButton("▶️")
+        player_buttons_layout.addWidget(self.rewButton)
+        player_buttons_layout.addWidget(self.ffButton)
+        player_buttons_layout.addWidget(self.playButton)
+        
+
+        
+        # Panel de información
+        info_frame = QFrame()
+        info_layout = QVBoxLayout(info_frame)
+        self.tabWidget = QTabWidget()
+        
+        # Tab de playlists
+        playlists_tab = QWidget()
+        playlists_layout = QVBoxLayout(playlists_tab)
+        self.listWidget = QListWidget()
+        
+        playlist_buttons_frame = QFrame()
+        playlist_buttons_layout = QHBoxLayout(playlist_buttons_frame)
+        self.addButton = QPushButton("➕")
+        self.delButton = QPushButton("➖")
+        playlist_buttons_layout.addWidget(self.addButton)
+        playlist_buttons_layout.addWidget(self.delButton)
+        
+        playlists_layout.addWidget(self.listWidget)
+        playlists_layout.addWidget(playlist_buttons_frame)
+        
+        # Tab de información de texto
+        info_tab = QWidget()
+        info_tab_layout = QVBoxLayout(info_tab)
+        self.textEdit = QTextEdit()
+        info_tab_layout.addWidget(self.textEdit)
+        
+        # Añadir tabs
+        self.tabWidget.addTab(playlists_tab, "Cola de reproducción")
+        self.tabWidget.addTab(info_tab, "Información")
+        
+        info_layout.addWidget(self.tabWidget)
+        
+        # Añadir todo al layout del reproductor
+        player_layout.addWidget(player_buttons_frame)
+        player_layout.addWidget(info_frame)
+        
+        # Añadir frames al layout principal
+        main_layout.addWidget(tree_frame)
+        main_layout.addWidget(player_frame)
+        
+        # Añadir todo al layout principal
+        layout.addWidget(search_frame)
+        layout.addWidget(main_frame)
+
+    def check_required_widgets(self):
+        """Verifica que todos los widgets requeridos existan."""
+        required_widgets = [
+            "lineEdit", "searchButton", "treeWidget", "playButton", 
+            "ffButton", "rewButton", "tabWidget", "listWidget",
+            "addButton", "delButton", "textEdit", "servicios"
+        ]
+        
+        all_ok = True
+        for widget_name in required_widgets:
+            if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                print(f"[UrlPlayer] Error: Widget {widget_name} no encontrado")
+                all_ok = False
+        
+        return all_ok
+
+    def setup_services_combo(self):
+        """Configura el combo box de servicios disponibles."""
+        self.servicios.addItem(QIcon(":/services/wiki"), "Todos")
+        self.servicios.addItem(QIcon(":/services/youtube"), "YouTube")
+        self.servicios.addItem(QIcon(":/services/spotify"), "Spotify")
+        self.servicios.addItem(QIcon(":/services/soundcloud"), "SoundCloud")
+        self.servicios.addItem(QIcon(":/services/lastfm"), "Last.fm")
+        self.servicios.addItem(QIcon(":/services/bandcamp"), "Bandcamp")
+        
+        # Conectar la señal de cambio del combo box
+        self.servicios.currentIndexChanged.connect(self.service_changed)
+
+    def service_changed(self, index):
+        """Maneja el cambio de servicio seleccionado."""
+        service = self.servicios.currentText()
+        self.log(f"Servicio seleccionado: {service}")
+        
+        # Limpiar resultados anteriores si hay alguno
+        self.treeWidget.clear()
+        
+        # Modificar placeholder del LineEdit según el servicio
+        placeholders = {
+            "Todos": "Buscar en todos los servicios...",
+            "YouTube": "Buscar en YouTube...",
+            "Spotify": "Buscar en Spotify...",
+            "SoundCloud": "Buscar en SoundCloud...",
+            "Last.fm": "Buscar en Last.fm...",
+            "Bandcamp": "Buscar en Bandcamp..."
+        }
+        
+        self.lineEdit.setPlaceholderText(placeholders.get(service, "Buscar..."))
+        
+        # Si hay un texto en el campo de búsqueda, realizar la búsqueda con el nuevo servicio
+        if self.lineEdit.text().strip():
+            self.perform_search()
+
+
+    def check_required_widgets(self):
+        """Verifica que todos los widgets requeridos existan."""
+        required_widgets = [
+            "lineEdit", "searchButton", "treeWidget", "playButton", 
+            "ffButton", "rewButton", "tabWidget", "listWidget",
+            "addButton", "delButton", "textEdit", "servicios"
+        ]
+        
+        all_ok = True
+        for widget_name in required_widgets:
+            if not hasattr(self, widget_name) or getattr(self, widget_name) is None:
+                print(f"[UrlPlayer] Error: Widget {widget_name} no encontrado")
+                all_ok = False
+        
+        return all_ok
+
+
+
+
+
+    def on_tree_double_click(self, item, column):
+        """Handle double click on tree item to add to queue or play immediately"""
+        # If it's a root item (source) with children, just expand/collapse
+        if item.childCount() > 0:
+            item.setExpanded(not item.isExpanded())
+            return
+            
+        # Get the stored result data
+        result_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # If this is a search result
+        if isinstance(result_data, dict):
+            url = result_data.get('url', '')
+            if url:
+                # Create a display text
+                display_text = f"{result_data['artist']} - {result_data['title']}"
+                
+                # Add to queue
+                self.add_to_queue_from_url(url, display_text, result_data)
+                self.log(f"Added to queue: {display_text}")
+        else:
+            # Handle the existing logic for non-search results
+            self.on_tree_double_click_original(item, column)
+
+    def add_to_queue_from_url(self, url, display_text, metadata=None):
+        """Add an item to the queue based on URL and display text"""
+        # Create a new item for the playlist
+        queue_item = QListWidgetItem(display_text)
+        queue_item.setData(Qt.ItemDataRole.UserRole, url)
+        
+        # Add to the list
+        self.listWidget.addItem(queue_item)
+        
+        # Update the internal playlist
+        self.current_playlist.append({
+            'title': metadata.get('title', display_text),
+            'artist': metadata.get('artist', ''),
+            'url': url,
+            'entry_data': metadata
+        })
+    
+    def on_list_double_click(self, item):
+        """Maneja el doble clic en un elemento de la lista."""
+        row = self.listWidget.row(item)
+        self.current_track_index = row
+        
+        # Iniciar reproducción del elemento seleccionado
+        self.play_from_index(row)
+        self.log(f"Reproduciendo '{item.text()}'")
+
+    def play_from_index(self, index):
+        """Reproduce desde un índice específico de la cola."""
+        if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
+            return
+                
+        # Detener reproducción actual si existe
+        self.stop_playback()
+                
+        # Obtener todas las URLs a partir del índice seleccionado
+        urls = [item['url'] for item in self.current_playlist[index:]]
+        
+        # Reproducir la lista comenzando por el elemento seleccionado
+        self.play_with_mpv(urls)
+
+    def play_from_index(self, index):
+        """Reproduce desde un índice específico de la cola."""
+        if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
+            return
+                
+        # Detener reproducción actual si existe
+        self.stop_playback()
+                
+        # Obtener todas las URLs a partir del índice seleccionado
+        urls = [item['url'] for item in self.current_playlist[index:]]
+        
+        # Reproducir la lista comenzando por el elemento seleccionado
+        self.play_with_mpv(urls)
+
+        def play_with_mpv(self, urls):
+            """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
+            if not urls:
+                return
+            
+            # Verificar o crear directorio temporal para el socket
+            if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
+                try:
+                    self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
+                    self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
+                except Exception as e:
+                    self.log(f"Error al crear directorio temporal: {str(e)}")
+                    self.mpv_temp_dir = "/tmp"
+            
+            # Crear ruta para el socket
+            socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
+            self.mpv_socket = socket_path
+            
+            # Si existe un socket anterior, eliminarlo
+            if os.path.exists(socket_path):
+                try:
+                    os.remove(socket_path)
+                    self.log(f"Socket antiguo eliminado: {socket_path}")
+                except Exception as e:
+                    self.log(f"Error al eliminar socket antiguo: {str(e)}")
+            
+            # Preparar argumentos para mpv (ventana independiente)
+            mpv_args = [
+                "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
+                "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
+                "--ytdl-format=best",        # Mejor calidad disponible
+                "--keep-open=yes",           # Mantener abierto al finalizar
+            ]
+            
+            # Añadir URLs
+            mpv_args.extend(urls)
+            
+            # Registrar comando completo para depuración
+            self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
+            
+            # Iniciar mpv para reproducir
+            self.player_process = QProcess()
+            self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
+            self.player_process.readyReadStandardError.connect(self.handle_player_error)
+            self.player_process.finished.connect(self.handle_player_finished)
+            
+            try:
+                self.player_process.start("mpv", mpv_args)
+                success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+                
+                if success:
+                    self.is_playing = True
+                    #self.playButton.setText("⏸️")
+                    self.playButton.setIcon(QIcon(":/services/b_pause"))
+                    self.log("Reproducción iniciada correctamente")
+                else:
+                    self.log("Error al iniciar MPV: timeout")
+                    error = self.player_process.errorString()
+                    self.log(f"Error detallado: {error}")
+                        
+            except Exception as e:
+                self.log(f"Excepción al iniciar MPV: {str(e)}")
+
+
+
+    def perform_search(self):
+        """Realiza una búsqueda basada en el servicio seleccionado y la consulta."""
+        query = self.lineEdit.text().strip()
+        if not query:
+            return
+        
+        self.log(f"Buscando: {query}")
+        
+        # Limpiar resultados previos
+        self.treeWidget.clear()
+        self.textEdit.clear()
+        
+        # Obtener el servicio seleccionado
+        service = self.servicios.currentText()
+        
+        # Mostrar progreso
+        self.textEdit.append(f"Buscando '{query}' en {service}...")
+        QApplication.processEvents()
+        
+        # Crear y configurar el worker
+        worker = SearchWorker(service, query)
+        
+        # Conectar señales
+        worker.signals.results.connect(self.display_search_results)
+        worker.signals.error.connect(lambda err: self.log(f"Error en la búsqueda: {err}"))
+        worker.signals.finished.connect(lambda: self.log(f"Búsqueda completada."))
+        
+        # Iniciar el worker en el thread pool
+        QThreadPool.globalInstance().start(worker)
+
+
+ 
+
 
 
     def process_media_info(self, exit_code, url):
@@ -700,48 +810,47 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al procesar la información JSON: {str(e)}")
     
     def display_search_results(self, results):
-        """Display search results in the treeWidget"""
+        """Muestra los resultados de la búsqueda en el TreeWidget."""
         self.treeWidget.clear()
         
         if not results:
-            self.textEdit.append("No results found.")
+            self.textEdit.append("No se encontraron resultados.")
             return
         
-        # Group results by source
+        # Agrupar resultados por fuente
         sources = {}
         for result in results:
-            source = result.get('source', 'Unknown')
+            source = result.get('source', 'Desconocido')
             if source not in sources:
                 sources[source] = []
             sources[source].append(result)
         
-        # Add results to tree
+        # Añadir resultados al árbol
         for source, source_results in sources.items():
-            # Create a source header
+            # Crear un encabezado de fuente
             source_item = QTreeWidgetItem(self.treeWidget)
             source_item.setText(0, f"{source.capitalize()} Results")
             source_item.setExpanded(True)
-            source_item.is_header = True
             
-            # Use a custom font for headers
+            # Usar una fuente personalizada para encabezados
             font = source_item.font(0)
             font.setBold(True)
             source_item.setFont(0, font)
             
-            # Add results for this source
+            # Añadir resultados para esta fuente
             for result in source_results:
                 result_item = QTreeWidgetItem(source_item)
                 result_item.setText(0, result['title'])
                 result_item.setText(1, result['artist'])
                 result_item.setText(2, result.get('type', ''))
+                result_item.setText(3, result.get('duration', ''))
                 
-                # Store the full result data for later use
+                # Almacenar los datos completos del resultado para uso posterior
                 result_item.setData(0, Qt.ItemDataRole.UserRole, result)
-                result_item.is_header = False
         
-        self.textEdit.append(f"Found {len(results)} results.")
+        self.textEdit.append(f"Encontrados {len(results)} resultados.")
         
-        # Make sure the tree is visible
+        # Asegurarnos de que el árbol sea visible
         self.treeWidget.setVisible(True)
 
 
@@ -978,8 +1087,10 @@ class UrlPlayer(BaseModule):
         """Alterna entre reproducir y pausar."""
         if not self.is_playing:
             self.play_media()
+            self.playButton.setIcon(QIcon(":/services/b_pause"))
         else:
             self.pause_media()
+            self.playButton.setIcon(QIcon(":/services/b_play"))
     
     def play_media(self):
         """Reproduce la cola actual con mpv en ventana independiente."""
@@ -998,7 +1109,9 @@ class UrlPlayer(BaseModule):
         if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
             self.send_mpv_command({"command": ["cycle", "pause"]})
             self.is_playing = True
-            self.playButton.setText("⏸️")
+            #self.playButton.setText("⏸️")
+            self.playButton.setIcon(QIcon(":/services/b_play"))
+
             return
         
         # Crear lista de URLs para mpv
@@ -1054,7 +1167,7 @@ class UrlPlayer(BaseModule):
             
             if success:
                 self.is_playing = True
-                self.playButton.setText("⏸️")
+                self.playButton.setIcon(QIcon(":/services/b_pause"))
                 self.log("Reproducción iniciada correctamente")
             else:
                 self.log("Error al iniciar MPV: timeout")
@@ -1064,105 +1177,18 @@ class UrlPlayer(BaseModule):
         except Exception as e:
             self.log(f"Excepción al iniciar MPV: {str(e)}")
     
-    # def _start_mpv_playback(self, urls):
-    #     """Inicia la reproducción con MPV."""
-    #     # Detener cualquier reproducción anterior
-    #     self.stop_playback()
-        
-    #     # Registrar información para depuración
-    #     self.log(f"Intentando reproducir {len(urls)} URL(s)")
-    #     self.log(f"Primera URL: {urls[0]}")
-        
-    #     # Obtener el ID de ventana (WID) del frame de video
-    #     try:
-    #         self.mpv_wid = str(int(self.video.winId()))
-    #         self.log(f"WID obtenido: {self.mpv_wid}")
-    #     except Exception as e:
-    #         self.log(f"Error al obtener WID: {str(e)}")
-    #         self.mpv_wid = None
-        
-    #     # Verificar o crear directorio temporal
-    #     if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
-    #         try:
-    #             self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-    #             self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
-    #         except Exception as e:
-    #             self.log(f"Error al crear directorio temporal: {str(e)}")
-    #             # Fallback: usar /tmp directo
-    #             self.mpv_temp_dir = "/tmp"
-        
-    #     # Crear ruta para el socket
-    #     socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
-    #     self.mpv_socket = socket_path
-        
-    #     # Si existe un socket anterior, eliminarlo
-    #     if os.path.exists(socket_path):
-    #         try:
-    #             os.remove(socket_path)
-    #             self.log(f"Socket antiguo eliminado: {socket_path}")
-    #         except Exception as e:
-    #             self.log(f"Error al eliminar socket antiguo: {str(e)}")
-        
-    #     # Preparar argumentos para mpv
-    #     mpv_args = [
-    #         "--no-terminal",             # No mostrar en terminal
-    #         "--msg-level=all=v",         # Nivel detallado para depuración
-    #         "--keep-open=yes",           # Mantener abierto al finalizar
-    #         "--force-window=yes",        # Forzar ventana siempre
-    #         "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
-    #         "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
-    #         "--ytdl-format=best",        # Mejor calidad disponible
-    #     ]
-        
-    #     # Añadir el argumento wid solo si está disponible
-    #     if self.mpv_wid:
-    #         mpv_args.append("--wid=" + self.mpv_wid)
-    #         # Añadir configuraciones específicas para video embebido
-    #         mpv_args.extend([
-    #             "--no-border",                # Sin bordes
-    #             "--video-aspect-override=no", # No cambiar relación de aspecto
-    #             "--no-window-decorations",    # Sin decoraciones de ventana
-    #             "--hwdec=auto",              # Aceleración de hardware
-    #             "--video-sync=display-resample", # Mejor sincronización
-    #             "--reset-on-next-file=all",   # Resetear para cada archivo
-    #         ])
-        
-    #     # Configuración de salida de audio/video
-    #     mpv_args.extend([
-    #         "--no-osc",                  # Sin controles en pantalla
-    #         "--osd-level=0",             # Sin OSD
-    #     ])
-        
-    #     # Añadir URLs
-    #     mpv_args.extend(urls)
-        
-    #     # Registrar comando completo para depuración
-    #     self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
-        
-    #     # Iniciar mpv para reproducir
-    #     self.player_process = QProcess()
-    #     self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
-    #     self.player_process.readyReadStandardError.connect(self.handle_player_error)
-    #     self.player_process.finished.connect(self.handle_player_finished)
-        
-    #     try:
-    #         self.player_process.start("mpv", mpv_args)
-    #         success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+    
+    def pause_media(self):
+        """Pausa la reproducción actual."""
+        if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
+            success = self.send_mpv_command({"command": ["cycle", "pause"]})
             
-    #         if success:
-    #             self.is_playing = True
-    #             self.pushButton.setText("⏸️")
-    #             self.log("Reproducción iniciada correctamente")
-                
-    #             # Asegurarnos de que el video sea visible
-    #             self.video.update()
-    #         else:
-    #             self.log("Error al iniciar MPV: timeout")
-    #             error = self.player_process.errorString()
-    #             self.log(f"Error detallado: {error}")
-                    
-    #     except Exception as e:
-    #         self.log(f"Excepción al iniciar MPV: {str(e)}")
+            if success:
+                self.is_playing = False
+                self.playButton.setIcon(QIcon(":/services/b_play"))
+                self.log("Reproducción pausada")
+            else:
+                self.log("Error al pausar la reproducción")
     
     def stop_playback(self):
         """Detiene cualquier reproducción en curso."""
@@ -1179,8 +1205,9 @@ class UrlPlayer(BaseModule):
                 if not self.player_process.waitForFinished(1000):
                     self.player_process.kill()
             
-            self.is_playing = False
-            self.playButton.setText("▶️")
+                    self.is_playing = False
+                    self.playButton.setIcon(QIcon(":/services/b_play"))
+                    self.log(f"Reproducción finalizada (código {exit_code})")
     
     def pause_media(self):
         """Pausa la reproducción actual."""
@@ -1189,7 +1216,9 @@ class UrlPlayer(BaseModule):
             
             if success:
                 self.is_playing = False
-                self.playButton.setText("▶️")
+                #self.playButton.setText("▶️")
+                self.playButton.setIcon(QIcon(":/services/b_play"))
+
                 self.log("Reproducción pausada")
             else:
                 self.log("Error al pausar la reproducción")
@@ -1211,7 +1240,9 @@ class UrlPlayer(BaseModule):
     def handle_player_finished(self, exit_code, exit_status):
         """Maneja el evento de finalización del reproductor."""
         self.is_playing = False
-        self.playButton.setText("▶️")
+        #self.playButton.setText("▶️")
+        self.playButton.setIcon(QIcon(":/services/b_play"))
+
         self.log(f"Reproducción finalizada (código {exit_code})")
         
         # Cerrar recursos asociados

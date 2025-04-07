@@ -201,7 +201,23 @@ QProgressBar::chunk {
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="servicios"/>
+       <widget class="QComboBox" name="servicios">
+        <item>
+         <property name="text">
+          <string>bandcamp</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>soundcloud</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>youtube</string>
+         </property>
+        </item>
+       </widget>
       </item>
      </layout>
     </widget>
