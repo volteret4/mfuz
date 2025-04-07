@@ -1,0 +1,6 @@
+url_playlist:
+  included_services:
+    bandcamp: true
+    soundcloud: true
+    youtube: true
+  pagination_value: 10

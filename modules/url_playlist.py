@@ -41,6 +41,12 @@ class SearchWorker(QRunnable):
         self.max_results = max_results
         self.signals = SearchSignals()
         
+    def log(self, message):
+        """Envía un mensaje de log a través de la señal de error."""
+        # Usamos la señal de error para mostrar mensajes de log
+        print(f"[SearchWorker] {message}")
+        # No emitimos la señal aquí para evitar confusiones con errores reales
+    
     @pyqtSlot()
     def run(self):
         """Ejecuta la búsqueda en segundo plano."""
@@ -56,18 +62,19 @@ class SearchWorker(QRunnable):
                     service_results = self.search_soundcloud(self.query)
                 elif service == "bandcamp":
                     service_results = self.search_bandcamp(self.query)
-                # Add more services as needed
+                # Añadir más servicios según sea necesario
                 
-                # Apply pagination per service
+                # Aplicar paginación por servicio
                 if service_results:
                     results.extend(service_results[:self.max_results])
             
             self.signals.results.emit(results)
         
         except Exception as e:
-            self.signals.error.connect(f"Error en la búsqueda: {str(e)}")
+            # Corregimos el uso de la señal error
+            self.signals.error.emit(f"Error en la búsqueda: {str(e)}")
             import traceback
-            self.signals.error.connect(traceback.format_exc())
+            print(traceback.format_exc())
         
         finally:
             self.signals.finished.emit()
@@ -258,17 +265,17 @@ class SearchWorker(QRunnable):
             return []
 
     def search_youtube(self, query):
-        """Search for music on YouTube"""
+        """Search for music on YouTube with pagination."""
         try:
-            # Use yt-dlp for searching
+            # Use yt-dlp for searching (modify to respect max_results)
             command = ["yt-dlp", "--flat-playlist", "--dump-json", f"ytsearch{self.max_results}:{query}"]
-            self.log(f"Searching YouTube with: {' '.join(command)}")
+            print(f"[SearchWorker] Searching YouTube with: {' '.join(command)}")
             
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             stdout, stderr = process.communicate()
             
             if process.returncode != 0:
-                self.log(f"Error searching YouTube: {stderr}")
+                print(f"[SearchWorker] Error searching YouTube: {stderr}")
                 return []
             
             results = []
@@ -294,17 +301,17 @@ class SearchWorker(QRunnable):
                         "url": url,
                         "type": "video"
                     })
-                    self.log(f"Found on YouTube: {title} - URL: {url}")
+                    print(f"[SearchWorker] Found on YouTube: {title} - URL: {url}")
                 except json.JSONDecodeError:
-                    self.log(f"Error parsing YouTube result: {line}")
+                    print(f"[SearchWorker] Error parsing YouTube result: {line}")
                 except Exception as e:
-                    self.log(f"Error processing YouTube result: {e}")
+                    print(f"[SearchWorker] Error processing YouTube result: {e}")
             
             return results
         except Exception as e:
-            self.log(f"Error searching on YouTube: {e}")
+            print(f"[SearchWorker] Error searching on YouTube: {e}")
             import traceback
-            self.log(traceback.format_exc())
+            print(traceback.format_exc())
             return []
 
 class UrlPlayer(BaseModule):
@@ -347,7 +354,7 @@ class UrlPlayer(BaseModule):
         self.addButton = None
         self.textEdit = None
         # Initialize settings with default values
-        self.pagination_value = 10  # Default to 10 results per page
+        self.num_servicios_spinBox = 10
         self.included_services = {
             'youtube': True,
             'soundcloud': True,
@@ -583,19 +590,23 @@ class UrlPlayer(BaseModule):
                 uic.loadUi(ui_file, dialog)
                 
                 # Set up current values
-                if hasattr(dialog, 'paginationValue'):
-                    dialog.paginationValue.setValue(self.pagination_value)
+                if hasattr(dialog, 'num_servicios_spinBox'):
+                    dialog.num_servicios_spinBox.setValue(self.num_servicios_spinBox)
                 
                 # Set up checkboxes based on current settings
                 self._setup_service_checkboxes(dialog)
                 
                 # Connect the button box
-                if hasattr(dialog, 'buttonBox'):
-                    dialog.buttonBox.accepted.connect(lambda: self._save_advanced_settings(dialog))
-                    dialog.buttonBox.rejected.connect(dialog.reject)
+                if hasattr(dialog, 'adv_sett_buttonBox'):
+                    # Conecta los botones estándar de QDialogButtonBox
+                    dialog.adv_sett_buttonBox.accepted.connect(lambda: self._save_advanced_settings(dialog))
+                    dialog.adv_sett_buttonBox.rejected.connect(dialog.reject)
                 
                 # Show the dialog
-                dialog.exec()
+                result = dialog.exec()
+                
+                # Si el resultado es QDialog.Accepted, los ajustes ya se habrán guardado
+                # mediante la conexión con _save_advanced_settings
             else:
                 self.log(f"UI file not found: {ui_file}")
                 QMessageBox.warning(self, "Error", f"UI file not found: {ui_file}")
@@ -613,14 +624,16 @@ class UrlPlayer(BaseModule):
                 'youtube': True,
                 'soundcloud': True,
                 'bandcamp': True,
+                'lastfm': False,
                 # Add more services as needed
             }
         
         # Map checkboxes to service keys
         checkbox_mapping = {
-            'youtubeCheck': 'youtube',
-            'soundcloudCheck': 'soundcloud',
-            'bandcampCheck': 'bandcamp',
+            'youtube_checkBox': 'youtube',
+            'soundcloud_checkBox': 'soundcloud',
+            'bandcamp_checkBox': 'bandcamp',
+            'lastfm_checkBox': 'lastfm'
             # Add more as needed
         }
         
@@ -631,19 +644,20 @@ class UrlPlayer(BaseModule):
                 checkbox.setChecked(self.included_services.get(service_key, True))
 
     def _save_advanced_settings(self, dialog):
-        """Save settings from the advanced settings dialog."""
+        """Guarda los ajustes del diálogo en las variables del objeto."""
         try:
-            # Save pagination value
-            if hasattr(dialog, 'paginationValue'):
-                self.pagination_value = dialog.paginationValue.value()
-                self.log(f"Set pagination to {self.pagination_value} results per page")
+            # Guardar valor de paginación
+            if hasattr(dialog, 'num_servicios_spinBox'):
+                self.num_servicios_spinBox = dialog.num_servicios_spinBox.value()
+                self.log(f"Set pagination to {self.num_servicios_spinBox} results per page")
             
-            # Save service inclusion settings
+            # Guardar configuración de inclusión de servicios
             checkbox_mapping = {
-                'youtubeCheck': 'youtube',
-                'soundcloudCheck': 'soundcloud',
-                'bandcampCheck': 'bandcamp',
-                # Add more as needed
+                'youtube_checkBox': 'youtube',
+                'soundcloud_checkBox': 'soundcloud',
+                'bandcamp_checkBox': 'bandcamp',
+                'lastfm_checkBox': 'lastfm'
+                    # Añadir más según sea necesario
             }
             
             for checkbox_name, service_key in checkbox_mapping.items():
@@ -652,13 +666,19 @@ class UrlPlayer(BaseModule):
                     self.included_services[service_key] = checkbox.isChecked()
                     self.log(f"Service {service_key} included: {checkbox.isChecked()}")
             
-            # Close the dialog
-            dialog.accept()
-            
-            # Update UI or state if needed
+            # Actualizar UI o estado si es necesario
             self.update_service_combo()
+            
+            # Guardar en archivo YAML
+            self.save_settings()
+            
+            # Cerrar el diálogo
+            dialog.accept()
         except Exception as e:
             self.log(f"Error saving advanced settings: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
 
 
     def load_settings(self):
@@ -687,6 +707,7 @@ class UrlPlayer(BaseModule):
                             'youtube': True,
                             'soundcloud': True,
                             'bandcamp': True,
+                            'lastfm': False,
                             # Añadir más servicios según sea necesario
                         }
                     
@@ -699,6 +720,7 @@ class UrlPlayer(BaseModule):
                     'youtube': True,
                     'soundcloud': True,
                     'bandcamp': True,
+                    'lastfm': False,
                     # Añadir más servicios según sea necesario
                 }
         except Exception as e:
@@ -712,6 +734,7 @@ class UrlPlayer(BaseModule):
                 'youtube': True,
                 'soundcloud': True,
                 'bandcamp': True,
+                'lastmf': False,
                 # Añadir más servicios según sea necesario
             }
 
@@ -784,7 +807,9 @@ class UrlPlayer(BaseModule):
             service_icons = {
                 'youtube': ":/services/youtube",
                 'soundcloud': ":/services/soundcloud",
-                'bandcamp': ":/services/lastfm",  # Assuming you have this icon
+                'bandcamp': ":/services/bandcamp",  # Assuming you have this icon
+                'lastmf': ":/services/lastfm"
+
                 # Add more as needed
             }
             
@@ -1185,6 +1210,8 @@ class UrlPlayer(BaseModule):
             service_type = "Bandcamp"
         elif "spotify.com" in url:
             service_type = "Spotify"
+        elif "last.fm" in url:
+            service_type = "lastfm"
         
         self.log(f"Detectado servicio: {service_type}")
         
@@ -1383,10 +1410,12 @@ class UrlPlayer(BaseModule):
         
         if 'youtube.com' in url or 'youtu.be' in url:
             return "YouTube"
-        elif 'soundcloud.com' in url:
+        elif 'soundcloud' in url:
             return "SoundCloud"
-        elif 'bandcamp.com' in url:
+        elif 'bandcamp' in url:
             return "Bandcamp"
+        elif 'last.fm' in url:
+            return "Lastfm"
         else:
             return "Desconocido"
     
