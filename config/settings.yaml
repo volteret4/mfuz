@@ -3,4 +3,4 @@ url_playlist:
     bandcamp: true
     soundcloud: true
     youtube: true
-  pagination_value: 10
+  pagination_value: 13

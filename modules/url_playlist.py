@@ -469,6 +469,12 @@ class UrlPlayer(BaseModule):
                 self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
 
             if self.listWidget:
+                # First disconnect to avoid multiple connections
+                try:
+                    self.listWidget.itemDoubleClicked.disconnect()
+                except TypeError:
+                    pass  # If it wasn't connected, that's fine
+                # Connect to the right method
                 self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
             
             if hasattr(self, 'ajustes_avanzados'):
@@ -696,6 +702,7 @@ class UrlPlayer(BaseModule):
                     
                     # Cargar pagination_value
                     self.pagination_value = module_settings.get('pagination_value', 10)
+                    self.num_servicios_spinBox = module_settings.get('pagination_value', 10)  # Sincronizar ambos valores
                     
                     # Cargar included_services
                     included_services = module_settings.get('included_services', {})
@@ -708,7 +715,6 @@ class UrlPlayer(BaseModule):
                             'soundcloud': True,
                             'bandcamp': True,
                             'lastfm': False,
-                            # Añadir más servicios según sea necesario
                         }
                     
                     self.log(f"Configuración cargada: {module_settings}")
@@ -716,12 +722,12 @@ class UrlPlayer(BaseModule):
                 self.log(f"Archivo de configuración no encontrado, usando valores por defecto")
                 # Inicializar con valores por defecto
                 self.pagination_value = 10
+                self.num_servicios_spinBox = 10
                 self.included_services = {
                     'youtube': True,
                     'soundcloud': True,
                     'bandcamp': True,
                     'lastfm': False,
-                    # Añadir más servicios según sea necesario
                 }
         except Exception as e:
             self.log(f"Error al cargar configuración: {str(e)}")
@@ -730,12 +736,12 @@ class UrlPlayer(BaseModule):
             
             # Inicializar con valores por defecto en caso de error
             self.pagination_value = 10
+            self.num_servicios_spinBox = 10
             self.included_services = {
                 'youtube': True,
                 'soundcloud': True,
                 'bandcamp': True,
-                'lastmf': False,
-                # Añadir más servicios según sea necesario
+                'lastfm': False,
             }
 
     def save_settings(self):
@@ -753,6 +759,9 @@ class UrlPlayer(BaseModule):
             if os.path.exists(settings_file):
                 with open(settings_file, 'r', encoding='utf-8') as file:
                     all_settings = yaml.safe_load(file) or {}
+            
+            # Asegurar que pagination_value esté sincronizado con num_servicios_spinBox
+            self.pagination_value = self.num_servicios_spinBox
             
             # Preparar configuración de este módulo
             module_settings = {
@@ -772,6 +781,8 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al guardar configuración: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+
+   
 
     def setup_services_combo(self):
         """Configura el combo box de servicios disponibles."""
@@ -962,6 +973,7 @@ class UrlPlayer(BaseModule):
     def play_from_index(self, index):
         """Reproduce desde un índice específico de la cola."""
         if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
+            self.log("No hay elementos válidos para reproducir")
             return
         
         # Actualizar el índice actual
@@ -974,11 +986,19 @@ class UrlPlayer(BaseModule):
         current_item = self.current_playlist[index]
         url = current_item['url']
         
+        # Verificar que la URL sea válida
+        if not url:
+            self.log("URL inválida para reproducción")
+            return
+        
         # Detener reproducción actual si existe
         self.stop_playback()
         
-        # Reproducir solo la URL actual
+        # Reproducir la URL actual
         self.play_single_url(url)
+        
+        # Resaltar elemento actual
+        self.highlight_current_track()
         
         # Mostrar información en el log
         title = current_item.get('title', 'Desconocido')
@@ -1607,18 +1627,24 @@ class UrlPlayer(BaseModule):
             self.log("Deteniendo reproducción actual...")
             
             # Intentar terminar gracefully primero
-            self.send_mpv_command({"command": ["quit"]})
-            
-            # Esperar un poco y forzar si es necesario
-            if not self.player_process.waitForFinished(1000):
-                self.player_process.terminate()
+            try:
+                self.send_mpv_command({"command": ["quit"]})
                 
+                # Esperar un poco para que mpv se cierre por sí mismo
                 if not self.player_process.waitForFinished(1000):
-                    self.player_process.kill()
+                    self.player_process.terminate()
+                    
+                    if not self.player_process.waitForFinished(1000):
+                        self.player_process.kill()
+                        self.log("Forzando cierre del reproductor")
+            except Exception as e:
+                self.log(f"Error al detener reproducción: {str(e)}")
+                # Forzar terminación en caso de error
+                self.player_process.kill()
             
-                    self.is_playing = False
-                    self.playButton.setIcon(QIcon(":/services/b_play"))
-                    self.log(f"Reproducción finalizada (código {exit_code})")
+            self.is_playing = False
+            self.playButton.setIcon(QIcon(":/services/b_play"))
+            self.log("Reproducción detenida")
     
     def pause_media(self):
         """Pausa la reproducción actual."""
@@ -1653,7 +1679,8 @@ class UrlPlayer(BaseModule):
         self.is_playing = False
         self.playButton.setIcon(QIcon(":/services/b_play"))
         
-        self.log(f"Reproducción finalizada (código {exit_code})")
+        exit_msg = "finalizada normalmente" if exit_code == 0 else f"finalizada con error (código {exit_code})"
+        self.log(f"Reproducción {exit_msg}")
         
         # Cerrar recursos asociados
         if self.mpv_socket and os.path.exists(self.mpv_socket):
@@ -1662,11 +1689,18 @@ class UrlPlayer(BaseModule):
             except:
                 pass
         
-        # Reproducir siguiente pista si la finalización no fue por una acción del usuario
+        # Solo avanzar automáticamente si el reproductor terminó normalmente (exit_code == 0)
+        # y no por una acción del usuario (exit_code != 0 típicamente)
         if exit_code == 0 and self.current_playlist and self.current_track_index >= 0:
-            # Asumimos que el reproductor terminó normalmente, pasamos a la siguiente pista
-            self.next_track()
-    
+            # Verificar si es el último elemento de la lista
+            if self.current_track_index < len(self.current_playlist) - 1:
+                # Si no es el último, pasar a la siguiente pista
+                self.next_track()
+            else:
+                # Si es el último, no continuar reproduciendo
+                self.log("Fin de la lista de reproducción")
+
+
     def send_mpv_command(self, command):
         """Envía un comando a mpv a través del socket IPC."""
         if not self.mpv_socket or not os.path.exists(self.mpv_socket):
@@ -1716,29 +1750,29 @@ class UrlPlayer(BaseModule):
         self.log(f"Cambiando a la siguiente pista (índice {next_index})")
         self.play_from_index(next_index)
     
-def rebuild_playlist_from_listwidget(self):
-    """Reconstruye la lista de reproducción desde el ListWidget."""
-    self.current_playlist = []
-    for i in range(self.listWidget.count()):
-        item = self.listWidget.item(i)
-        title = item.text()
-        url = item.data(Qt.ItemDataRole.UserRole)
-        
-        # Extraer artista si está presente en el formato "Artista - Título"
-        artist = ""
-        if " - " in title:
-            parts = title.split(" - ", 1)
-            artist = parts[0]
-            title = parts[1]
+    def rebuild_playlist_from_listwidget(self):
+        """Reconstruye la lista de reproducción desde el ListWidget."""
+        self.current_playlist = []
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            title = item.text()
+            url = item.data(Qt.ItemDataRole.UserRole)
             
-        self.current_playlist.append({
-            'title': title, 
-            'artist': artist, 
-            'url': url,
-            'entry_data': None  # No tenemos los datos completos en este caso
-        })
-        
-    self.log(f"Lista de reproducción reconstruida con {len(self.current_playlist)} elementos")
+            # Extraer artista si está presente en el formato "Artista - Título"
+            artist = ""
+            if " - " in title:
+                parts = title.split(" - ", 1)
+                artist = parts[0]
+                title = parts[1]
+                
+            self.current_playlist.append({
+                'title': title, 
+                'artist': artist, 
+                'url': url,
+                'entry_data': None  # No tenemos los datos completos en este caso
+            })
+            
+        self.log(f"Lista de reproducción reconstruida con {len(self.current_playlist)} elementos")  
 
 def check_dependencies(self):
     """Verifica que las dependencias necesarias estén instaladas."""
