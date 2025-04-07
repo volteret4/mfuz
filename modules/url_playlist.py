@@ -14,7 +14,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem,
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox,
-    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog
+    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool
 from PyQt6.QtGui import QIcon
@@ -53,6 +53,10 @@ class SearchWorker(QRunnable):
         try:
             results = []
             
+            # Get the search type from the parent widget
+            search_type = getattr(self, 'search_type', 'all')
+            self.log(f"Searching with type: {search_type}")
+            
             for service in self.services:
                 service_results = []
                 
@@ -62,6 +66,10 @@ class SearchWorker(QRunnable):
                     service_results = self.search_soundcloud(self.query)
                 elif service == "bandcamp":
                     service_results = self.search_bandcamp(self.query)
+                elif service == "spotify":
+                    service_results = self.search_spotify(self.query, search_type)
+                elif service == "lastfm":
+                    service_results = self.search_lastfm(self.query, search_type)
                 # Añadir más servicios según sea necesario
                 
                 # Aplicar paginación por servicio
@@ -428,6 +436,18 @@ class UrlPlayer(BaseModule):
         self.tabWidget.setTabText(1, "Información")
         self.setup_services_combo()
         
+        # Find the tipo_combo if it exists
+        if not hasattr(self, 'tipo_combo'):
+            self.tipo_combo = self.findChild(QComboBox, 'tipo_combo')
+            
+        # If tipo_combo exists, set default items if empty
+        if self.tipo_combo and self.tipo_combo.count() == 0:
+            self.tipo_combo.addItem("Todo")
+            self.tipo_combo.addItem("Artista")
+            self.tipo_combo.addItem("Álbum")
+            self.tipo_combo.addItem("Canción")
+
+
         # Actualizar el combo de servicios según la configuración
         self.update_service_combo()
 
@@ -630,7 +650,8 @@ class UrlPlayer(BaseModule):
                 'youtube': True,
                 'soundcloud': True,
                 'bandcamp': True,
-                'lastfm': False,
+                'spotify': True,
+                'lastfm': True,
                 # Add more services as needed
             }
         
@@ -639,6 +660,7 @@ class UrlPlayer(BaseModule):
             'youtube_check': 'youtube',
             'soundcloud_check': 'soundcloud',
             'bandcamp_check': 'bandcamp',
+            'spotify_check': 'spotify',
             'lastfm_check': 'lastfm'
             # Add more as needed
         }
@@ -1177,6 +1199,11 @@ class UrlPlayer(BaseModule):
         # Obtener el servicio seleccionado
         service = self.servicios.currentText()
         
+        # Obtener el tipo de búsqueda seleccionado (artista, álbum, canción, todo)
+        search_type = "all"
+        if hasattr(self, 'tipo_combo') and self.tipo_combo:
+            search_type = self.tipo_combo.currentText().lower()
+        
         # Determinar qué servicios incluir si "Todos" está seleccionado
         if service == "Todos":
             active_services = [s for s, included in self.included_services.items() if included]
@@ -1189,7 +1216,7 @@ class UrlPlayer(BaseModule):
             active_services = [service_id]
         
         # Mostrar progreso
-        self.textEdit.append(f"Buscando '{query}' en {service} (máx. {self.pagination_value} resultados por servicio)...")
+        self.textEdit.append(f"Buscando '{query}' en {service} (tipo: {search_type}, máx. {self.pagination_value} resultados por servicio)...")
         QApplication.processEvents()  # Actualiza la UI
         
         # Desactivar controles durante la búsqueda
@@ -1199,6 +1226,8 @@ class UrlPlayer(BaseModule):
         
         # Crear y configurar el worker
         worker = SearchWorker(active_services, query, max_results=self.pagination_value)
+        worker.parent = self  # Set parent to access call_module_method
+        worker.search_type = search_type  # Pass search type to worker
         
         # Conectar señales
         worker.signals.results.connect(self.display_search_results)
@@ -1208,6 +1237,8 @@ class UrlPlayer(BaseModule):
         # Iniciar el worker en el thread pool
         QThreadPool.globalInstance().start(worker)
 
+
+        
     def search_finished(self):
         """Función llamada cuando termina la búsqueda."""
         self.log(f"Búsqueda completada.")

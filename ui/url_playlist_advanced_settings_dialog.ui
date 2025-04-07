@@ -135,7 +135,7 @@ QHeaderView::section {
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox">
+       <widget class="QGroupBox" name="tipo_group">
         <property name="title">
          <string>GroupBox</string>
         </property>
@@ -148,7 +148,7 @@ QHeaderView::section {
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="tipo_combo">
            <item>
             <property name="text">
              <string>Artista</string>
