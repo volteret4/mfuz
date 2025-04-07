@@ -24,13 +24,23 @@ class ConfigManager:
         Returns:
             dict: Datos de configuración cargados o configuración por defecto.
         """
+        # Intentar obtener PROJECT_ROOT o usar un fallback
+        try:
+            from base_module import PROJECT_ROOT
+        except (ImportError, NameError):
+            # Si no se puede importar, usar el directorio actual o el directorio del script
+            PROJECT_ROOT = Path(__file__).resolve().parent.parent
+        
+        if not os.path.isabs(file_path):
+            file_path = os.path.join(PROJECT_ROOT, file_path)
+        
         if default_config is None:
             default_config = {}
             
         file_path = Path(file_path)
         
         if not file_path.exists():
-            logger.warning(f"Archivo de configuración no encontrado: {file_path}")
+            print(f"Archivo de configuración no encontrado: {file_path}")
             return default_config
             
         try:
@@ -138,6 +148,7 @@ class ConfigManager:
             
         return path
     
+
     @staticmethod
     def process_paths_in_config(config, base_path, process_func=None):
         """
@@ -173,3 +184,28 @@ class ConfigManager:
                 return item
                 
         return _process_item(config)
+
+
+    @staticmethod
+    def resolve_path(path, base_path=None):
+        """
+        Resuelve una ruta, convirtiéndola a absoluta si es relativa.
+        
+        Args:
+            path (str): Ruta a resolver.
+            base_path (str, optional): Ruta base para resolver rutas relativas.
+                Si no se proporciona, se usa PROJECT_ROOT.
+                
+        Returns:
+            str: Ruta absoluta resuelta.
+        """
+        if base_path is None:
+            from base_module import PROJECT_ROOT
+            base_path = PROJECT_ROOT
+            
+        if not path or not isinstance(path, str):
+            return path
+            
+        if not os.path.isabs(path):
+            return os.path.normpath(os.path.join(base_path, path))
+        return path

@@ -319,14 +319,31 @@ class BaseModule(QWidget):
 
         
 
-def find_project_root(marker_files=('requirements.txt', 'base_module.py', 'music_padre.py', 'designer_module.py')):
+def find_project_root(marker_files=('requirements.txt', 'base_module.py', '.installation_path')):
     """Busca la raíz del proyecto basándose en archivos distintivos."""
     path = Path(__file__).resolve().parent  # Directorio donde está el módulo actual
-    while path != path.parent:
-        if any((path / marker).exists() for marker in marker_files):
+    installation_file = path / '.installation_path'
+    
+    # Si existe .installation_path, leer la ruta desde ese archivo
+    if installation_file.exists():
+        try:
+            with open(installation_file, 'r') as f:
+                custom_path = f.read().strip()
+                if os.path.exists(custom_path) and os.path.isdir(custom_path):
+                    return Path(custom_path)
+                # Si el contenido no es un directorio válido, ignorarlo
+        except Exception:
+            pass  # Ignorar errores al leer el archivo
+    
+    # Buscar por marcadores subiendo en el árbol de directorios
+    while path != path.parent:  # Mientras no lleguemos a la raíz del sistema
+        if any((path / marker).exists() for marker in marker_files if marker != '.installation_path'):
             return path
         path = path.parent
-    return Path(__file__).resolve().parent.parent  # Fallback: asumir que estamos en un subdirectorio
+        
+    # Fallback: asumir que estamos en un subdirectorio del proyecto
+    return Path(__file__).resolve().parent
 
-# Definir la raíz del proyecto y el directorio de datos
+# Definir la raíz del proyecto
 PROJECT_ROOT = find_project_root()
+print(f"PROJECT_ROOT determinado como: {PROJECT_ROOT}")

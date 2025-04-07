@@ -2,11 +2,12 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
     QLineEdit, QLabel, QMessageBox, QGroupBox,
     QScrollArea, QFrame, QApplication, QSizePolicy,
-    QComboBox, QCheckBox, QInputDialog
+    QComboBox, QCheckBox, QInputDialog, QFileDialog
 )
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6 import uic
 import json
+import yaml
 from pathlib import Path
 import copy
 import sys
@@ -16,6 +17,7 @@ import traceback
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
+from utils.config_utils import ConfigManager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,9 +29,13 @@ class ConfigEditorModule(BaseModule):
     module_theme_changed = pyqtSignal(str, str)  # Signal to change theme for a specific module
 
     def __init__(self, config_path: str, parent=None, theme='Tokyo Night', **kwargs):
+        # Determinar si la ruta es relativa y convertirla a absoluta si es necesario
+        if not os.path.isabs(config_path):
+            config_path = os.path.join(PROJECT_ROOT, config_path)
+            
         # Initialize config_data with new global configuration options
         self.config_data = {
-            "temas": THEMES,  # Always use THEMES from base_module
+            "temas": list(THEMES.keys()),  # Always use THEMES from base_module
             "tema_seleccionado": theme,
             "logging": ["true", "false"],
             "logging_state": "true",
@@ -39,16 +45,23 @@ class ConfigEditorModule(BaseModule):
                 "enable_individual_themes": True,
                 "shared_db_paths": {
                     # Example of how shared database paths might be configured
-                    "music_database": "/home/huan/gits/musica/m/falla_pls.sqlite"
+                    "music_database": "data/music.sqlite"
                 }
             },
             
             "modules": [],
             "modulos_desactivados": []  # Add list for disabled modules
         }
+        
         self.config_path = config_path
         self.fields = {}
         self.module_checkboxes = {}  # Store module checkboxes
+
+        # Determinar el formato del archivo (YAML o JSON)
+        self.config_format = Path(config_path).suffix.lower()
+        if self.config_format not in ['.yaml', '.yml', '.json']:
+            # Si no tiene extensión reconocible, asumimos YAML como predeterminado
+            self.config_format = '.yaml'
 
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
@@ -60,37 +73,74 @@ class ConfigEditorModule(BaseModule):
         super().apply_theme(theme_name)
 
     def load_config(self):
-        """Load configuration from file"""
+        """Load configuration from file using ConfigManager"""
         try:
-            if Path(self.config_path).exists():
-                with open(self.config_path, 'r') as f:
-                    loaded_config = json.load(f)
-                    
-                    # Overwrite themes with THEMES
-                    loaded_config["temas"] = list(THEMES.keys())
-                    
-                    # Validate selected theme
-                    if loaded_config["tema_seleccionado"] not in THEMES:
-                        loaded_config["tema_seleccionado"] = list(THEMES.keys())[0]
-                    
-                    # Ensure modulos_desactivados exists
-                    if "modulos_desactivados" not in loaded_config:
-                        loaded_config["modulos_desactivados"] = []
-                    
-                    self.config_data = loaded_config
-            else:
-                self.save_all_config()
-                QMessageBox.information(
-                    self,
-                    "Config Created",
-                    f"New config file created at {self.config_path}"
-                )
+            loaded_config = ConfigManager.read_config(self.config_path, self.config_data)
+            
+            # Overwrite themes with THEMES
+            loaded_config["temas"] = list(THEMES.keys())
+            
+            # Validate selected theme
+            if loaded_config["tema_seleccionado"] not in THEMES:
+                loaded_config["tema_seleccionado"] = list(THEMES.keys())[0]
+            
+            # Ensure modulos_desactivados exists
+            if "modulos_desactivados" not in loaded_config:
+                loaded_config["modulos_desactivados"] = []
+            
+            self.config_data = loaded_config
+            
+            # Process all paths to make them relative to PROJECT_ROOT
+            self.config_data = self.make_paths_relative(self.config_data)
+            
         except Exception as e:
             QMessageBox.critical(
                 self,
                 "Error",
                 f"Error loading config from {self.config_path}: {str(e)}\nUsing default configuration."
             )
+            self.save_all_config()
+            QMessageBox.information(
+                self,
+                "Config Created",
+                f"New config file created at {self.config_path}"
+            )
+
+    def make_paths_relative(self, config):
+        """Convert all absolute paths to be relative to PROJECT_ROOT"""
+        
+        def process_path(path):
+            if not isinstance(path, str):
+                return path
+                
+            if os.path.isabs(path):
+                try:
+                    # Intentar convertir a ruta relativa
+                    rel_path = os.path.relpath(path, PROJECT_ROOT)
+                    return rel_path
+                except ValueError:
+                    # Ocurre si las rutas están en diferentes unidades en Windows
+                    return path
+            return path
+        
+        def process_item(item):
+            if isinstance(item, dict):
+                return {k: process_item(v) for k, v in item.items()}
+            elif isinstance(item, list):
+                return [process_item(i) for i in item]
+            elif isinstance(item, str) and (
+                    os.path.isabs(item) or
+                    '/home/' in item or
+                    '\\' in item or
+                    item.endswith('.py') or
+                    item.endswith('.sqlite')
+                ):
+                # Parece una ruta absoluta
+                return process_path(item)
+            else:
+                return item
+        
+        return process_item(config)
 
     def init_ui(self):
         """Initialize the UI using UI file or create it manually"""
@@ -109,6 +159,7 @@ class ConfigEditorModule(BaseModule):
                 self.add_path_button.clicked.connect(self.add_shared_db_path)
                 self.remove_path_button.clicked.connect(self.remove_shared_db_path)
                 self.db_paths_dropdown.currentTextChanged.connect(self.update_db_path_input)
+                self.browse_button.clicked.connect(self.browse_db_path)
                 
                 # Add theme field to global group
                 theme_field = ConfigField("Global Theme", list(THEMES.keys()))
@@ -119,6 +170,12 @@ class ConfigEditorModule(BaseModule):
                 logging_field = ConfigField("Logging", self.config_data["logging"])
                 logging_field.set_value(self.config_data["logging_state"])
                 self.global_layout.insertWidget(1, logging_field)
+                
+                # Add format selection field
+                format_field = ConfigField("Config Format", ["yaml", "json"])
+                format_field.set_value("yaml" if self.config_format in ['.yaml', '.yml'] else "json")
+                self.global_layout.insertWidget(2, format_field)
+                self.format_field = format_field
                 
                 # Set the checkbox state
                 self.enable_individual_themes.setChecked(
@@ -177,12 +234,19 @@ class ConfigEditorModule(BaseModule):
         logging_field.set_value(self.config_data["logging_state"])
         global_layout.addWidget(logging_field)
         
+        # Config format selection
+        format_field = ConfigField("Config Format", ["yaml", "json"])
+        format_field.set_value("yaml" if self.config_format in ['.yaml', '.yml'] else "json")
+        global_layout.addWidget(format_field)
+        self.format_field = format_field
+        
         # New global theme configuration checkbox
         enable_individual_themes = QCheckBox("Enable Individual Module Themes")
         enable_individual_themes.setChecked(
             self.config_data.get("global_theme_config", {}).get("enable_individual_themes", True)
         )
         global_layout.addWidget(enable_individual_themes)
+        self.enable_individual_themes = enable_individual_themes
         
         # Shared database paths configuration
         shared_db_group = QGroupBox("Shared Database Paths")
@@ -202,6 +266,10 @@ class ConfigEditorModule(BaseModule):
         self.db_path_input = QLineEdit()
         self.db_path_input.setPlaceholderText("Enter database path")
         
+        # Browse button
+        browse_button = QPushButton("Browse...")
+        browse_button.clicked.connect(self.browse_db_path)
+        
         # Buttons
         add_path_button = QPushButton("Add Path")
         remove_path_button = QPushButton("Remove Path")
@@ -210,6 +278,7 @@ class ConfigEditorModule(BaseModule):
         db_path_layout.addWidget(db_path_label)
         db_path_layout.addWidget(self.db_paths_dropdown)
         db_path_layout.addWidget(self.db_path_input)
+        db_path_layout.addWidget(browse_button)
         db_path_layout.addWidget(add_path_button)
         db_path_layout.addWidget(remove_path_button)
         
@@ -218,6 +287,9 @@ class ConfigEditorModule(BaseModule):
         # Connect buttons
         add_path_button.clicked.connect(self.add_shared_db_path)
         remove_path_button.clicked.connect(self.remove_shared_db_path)
+        self.browse_button = browse_button
+        self.add_path_button = add_path_button
+        self.remove_path_button = remove_path_button
         
         # If there are existing paths, populate the input with the first one
         if shared_db_paths:
@@ -236,12 +308,14 @@ class ConfigEditorModule(BaseModule):
         active_modules_group.setStyleSheet("QGroupBox { font-weight: bold; color: #4CAF50; }")
         active_modules_layout = QVBoxLayout()
         active_modules_group.setLayout(active_modules_layout)
+        self.active_modules_layout = active_modules_layout
         
         # Create "Disabled Modules" group
         disabled_modules_group = QGroupBox("Disabled Modules")
         disabled_modules_group.setStyleSheet("QGroupBox { font-weight: bold; color: #F44336; }")
         disabled_modules_layout = QVBoxLayout()
         disabled_modules_group.setLayout(disabled_modules_layout)
+        self.disabled_modules_layout = disabled_modules_layout
         
         # Flag to check if we need to show any modules section
         has_active_modules = False
@@ -287,15 +361,51 @@ class ConfigEditorModule(BaseModule):
             enable_individual_themes.isChecked()
         ))
         container_layout.addWidget(save_all_button)
+        self.save_all_button = save_all_button
         
         # Button to reload configuration from file
         reload_button = QPushButton("Reload Configuration")
         reload_button.setStyleSheet("background-color: #2196F3; color: white; padding: 8px;")
         reload_button.clicked.connect(self.reload_config)
         container_layout.addWidget(reload_button)
+        self.reload_button = reload_button
         
         # Add flexible space at the end to align everything at the top
         container_layout.addStretch()
+    
+    def browse_db_path(self):
+        """Open file dialog to select database file"""
+        # Construir la ruta inicial basada en el valor actual
+        current_path = self.db_path_input.text()
+        if not current_path:
+            # Si no hay ruta actual, usar PROJECT_ROOT como inicio
+            initial_dir = str(PROJECT_ROOT)
+        elif not os.path.isabs(current_path):
+            # Si es una ruta relativa, convertirla a absoluta
+            initial_dir = os.path.join(PROJECT_ROOT, os.path.dirname(current_path))
+        else:
+            # Si ya es absoluta, usar su directorio
+            initial_dir = os.path.dirname(current_path)
+        
+        # Asegurar que el directorio inicial existe
+        if not os.path.exists(initial_dir):
+            initial_dir = str(PROJECT_ROOT)
+        
+        file_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Select Database File",
+            initial_dir,
+            "Database Files (*.sqlite *.db);;All Files (*)"
+        )
+        
+        if file_path:
+            # Convertir a ruta relativa si está dentro del PROJECT_ROOT
+            try:
+                rel_path = os.path.relpath(file_path, PROJECT_ROOT)
+                self.db_path_input.setText(rel_path)
+            except ValueError:
+                # Si no se puede convertir a relativa (p.ej., en diferentes unidades en Windows)
+                self.db_path_input.setText(file_path)
     
     def load_database_paths(self):
         """Load database paths from config and populate dropdown"""
@@ -507,8 +617,8 @@ class ConfigEditorModule(BaseModule):
         
         # Save the configuration to file
         try:
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            format_choice = self.format_field.get_value() if hasattr(self, 'format_field') else "yaml"
+            ConfigManager.write_config(self.config_path, self.config_data, format_choice)
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Could not save configuration: {str(e)}")
             return
@@ -528,7 +638,7 @@ class ConfigEditorModule(BaseModule):
         
         # Show success message
         QMessageBox.information(self, "Success", f"Database path '{key}' added successfully.")
-
+    
     def remove_shared_db_path(self):
         """Remove selected shared database path"""
         current_key = self.db_paths_dropdown.currentText()
@@ -555,8 +665,8 @@ class ConfigEditorModule(BaseModule):
                         del db_paths[current_key]
                     
                     # Save updated configuration to file
-                    with open(self.config_path, 'w') as f:
-                        json.dump(self.config_data, f, indent=2)
+                    format_choice = self.format_field.get_value() if hasattr(self, 'format_field') else "yaml"
+                    ConfigManager.write_config(self.config_path, self.config_data, format_choice)
                     
                     # Update dropdown
                     self.db_paths_dropdown.removeItem(self.db_paths_dropdown.currentIndex())
@@ -618,8 +728,8 @@ class ConfigEditorModule(BaseModule):
         
         # Save the changes
         try:
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            format_choice = self.format_field.get_value() if hasattr(self, 'format_field') else "yaml"
+            ConfigManager.write_config(self.config_path, self.config_data, format_choice)
             
             # Notify user and emit signal
             QMessageBox.information(
@@ -658,6 +768,9 @@ class ConfigEditorModule(BaseModule):
                         child.set_value(self.config_data["tema_seleccionado"])
                     elif child.label.text() == "Logging":
                         child.set_value(self.config_data["logging_state"])
+                    elif child.label.text() == "Config Format":
+                        format_value = "yaml" if self.config_format in ['.yaml', '.yml'] else "json"
+                        child.set_value(format_value)
             else:
                 # For manually created UI, recreate everything
                 for i in reversed(range(self.layout().count())): 
@@ -676,8 +789,7 @@ class ConfigEditorModule(BaseModule):
         """Reset a module's configuration to the saved values"""
         try:
             # Reload the configuration from file
-            with open(self.config_path, 'r') as f:
-                loaded_config = json.load(f)
+            loaded_config = ConfigManager.read_config(self.config_path, {})
             
             # Find the module
             module_found = False
@@ -781,9 +893,14 @@ class ConfigEditorModule(BaseModule):
             dest_list = self.config_data["modules"] if is_active else self.config_data["modulos_desactivados"]
             dest_list.append(module)
             
-            # Save to file
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            # Get format choice
+            format_choice = self.format_field.get_value() if hasattr(self, 'format_field') else "yaml"
+            
+            # Convert any absolute paths to relative
+            module = self.make_paths_relative(module)
+            
+            # Save to file using ConfigManager
+            ConfigManager.write_config(self.config_path, self.config_data, format_choice)
             
             # Show success message based on what changed
             if source_list != dest_list:
@@ -802,6 +919,8 @@ class ConfigEditorModule(BaseModule):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
+            logging.error(f"Error saving module config: {str(e)}")
+            logging.error(traceback.format_exc())
     
     def save_all_config(self, enable_individual_themes=True):
         """Save all configuration changes"""
@@ -836,6 +955,19 @@ class ConfigEditorModule(BaseModule):
             logging_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Logging"]
             if logging_fields:
                 updated_config["logging_state"] = logging_fields[0].get_value()
+            
+            # Update config format choice
+            format_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Config Format"]
+            format_choice = "yaml"  # Default to YAML
+            if format_fields:
+                format_choice = format_fields[0].get_value()
+                # Actualizar la extensión del archivo de configuración si es necesario
+                if format_choice == "yaml" and not self.config_path.endswith(('.yaml', '.yml')):
+                    new_path = Path(self.config_path).with_suffix('.yaml')
+                    self.config_path = str(new_path)
+                elif format_choice == "json" and not self.config_path.endswith('.json'):
+                    new_path = Path(self.config_path).with_suffix('.json')
+                    self.config_path = str(new_path)
             
             # Initialize lists for modules
             updated_config["modules"] = []
@@ -889,123 +1021,28 @@ class ConfigEditorModule(BaseModule):
                 else:
                     updated_config["modulos_desactivados"].append(module)
             
-            # Save file with updated configuration
-            with open(self.config_path, 'w') as f:
-                json.dump(updated_config, f, indent=2)
+            # Process absolute paths to make them relative if possible
+            updated_config = self.make_paths_relative(updated_config)
             
-            # Update our local config data
-            self.config_data = updated_config
-            
-            # Emit theme change signals
-            for module_name, new_theme in theme_changes:
-                self.module_theme_changed.emit(module_name, new_theme)
-            
-            QMessageBox.information(self, "Success", "All configurations saved successfully")
-            self.config_updated.emit()
-            
-            return True  # Indicate successful save
+            # Save file with updated configuration using ConfigManager
+            if ConfigManager.write_config(self.config_path, updated_config, format_choice):
+                # Update our local config data
+                self.config_data = updated_config
+                
+                # Emit theme change signals
+                for module_name, new_theme in theme_changes:
+                    self.module_theme_changed.emit(module_name, new_theme)
+                
+                QMessageBox.information(self, "Success", f"All configurations saved successfully to {self.config_path}")
+                self.config_updated.emit()
+                
+                return True  # Indicate successful save
+            else:
+                QMessageBox.critical(self, "Error", f"Failed to save configuration to {self.config_path}")
+                return False
         
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
-            return False  # Indicate save failure
-
-
-class ConfigField(QWidget):
-    """Widget para un campo individual de configuración"""
-    def __init__(self, label: str, value):
-        super().__init__()
-        self.layout = QHBoxLayout(self)
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        
-        self.label = QLabel(label)
-        self.label.setMinimumWidth(150)
-        
-        # Si el valor es una lista, crear un QComboBox
-        if isinstance(value, list):
-            self.input = QComboBox()
-            self.input.addItems(map(str, value))
-            # Intentar preseleccionar un valor por defecto o el primer elemento
-            self.original_value = value[0] if value else None
-            self.input.setCurrentText(str(self.original_value))
-        else:
-            # Convertir el valor a string para el QLineEdit
-            str_value = str(value) if not isinstance(value, (dict, list)) else json.dumps(value)
-            self.input = QLineEdit(str_value)
-            self.original_value = value
-        
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.input)
-        
-    def apply_theme(self, theme_name=None):
-        """
-        Optional method to apply theme if needed.
-        Remove the super() call since QWidget doesn't have this method.
-        """
-        pass 
-
-    def get_value(self):
-        # Para listas (QComboBox), devolver el elemento seleccionado
-        if isinstance(self.input, QComboBox):
-            return self.input.currentText()
-        
-        # Lógica existente para otros tipos de entrada
-        text = self.input.text()
-        
-        # Si el valor original era un número, convertir de vuelta
-        if isinstance(self.original_value, int):
-            try:
-                return int(text)
-            except ValueError:
-                return text
-        elif isinstance(self.original_value, float):
-            try:
-                return float(text)
-            except ValueError:
-                return text
-        elif isinstance(self.original_value, bool):
-            lower_text = text.lower()
-            if lower_text in ('true', 't', 'yes', 'y', '1'):
-                return True
-            elif lower_text in ('false', 'f', 'no', 'n', '0'):
-                return False
-            else:
-                return text
-        
-        return text
-
-
-    def set_value(self, value):
-        """Método para establecer el valor del campo"""
-        if isinstance(self.input, QComboBox):
-            self.input.setCurrentText(str(value))
-        else:
-            self.input.setText(str(value))
-
-
-class NestedConfigGroup(QGroupBox):
-    """Widget para visualizar y editar configuración anidada"""
-    def __init__(self, title: str, config_data: dict, parent=None):
-        super().__init__(title, parent)
-        self.config_data = config_data
-        self.fields = {}
-        
-        layout = QVBoxLayout()
-        self.setLayout(layout)
-        
-        for key, value in config_data.items():
-            if isinstance(value, dict):
-                # Crear un grupo anidado para el diccionario
-                nested_group = NestedConfigGroup(key, value)
-                layout.addWidget(nested_group)
-                self.fields[key] = nested_group
-            else:
-                # Crear un campo simple para valores no anidados
-                field = ConfigField(key, value)
-                layout.addWidget(field)
-                self.fields[key] = field
-                
-    def get_value(self):
-        result = {}
-        for key, field in self.fields.items():
-            result[key] = field.get_value()
-        return result
+            logging.error(f"Error saving configuration: {str(e)}")
+            logging.error(traceback.format_exc())
+            return False

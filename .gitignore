@@ -21,3 +21,4 @@ lyrics_update_state_normal.json
 moode_def.sqlite-shm
 moode_def.sqlite-wal
 test
+config/config.yml

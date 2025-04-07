@@ -1,6 +1,7 @@
 import os
 from typing import Dict
 import json
+import yaml
 from pathlib import Path
 import importlib.util
 from PyQt6 import uic
@@ -13,13 +14,55 @@ import traceback
 import sys
 import argparse
 import logging
+from config.config_utils import ConfigManager
 
-# class PyQtFilter(logging.Filter):
-#     def filter(self, record):
-#         # Filtrar mensajes de PyQt y uic
-#         if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
-#             return False
-#         return True
+# Configurar logging básico inicial antes de cualquier otra cosa
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Solo consola inicialmente
+    ]
+)
+
+# Importar desde base_module
+try:
+    from base_module import BaseModule, THEMES, PROJECT_ROOT
+    logging.info(f"PROJECT_ROOT importado como: {PROJECT_ROOT}")
+except Exception as e:
+    logging.error(f"Error importando base_module: {e}")
+    # Definición alternativa de PROJECT_ROOT como fallback
+    PROJECT_ROOT = Path(__file__).resolve().parent
+    logging.info(f"PROJECT_ROOT alternativo definido como: {PROJECT_ROOT}")
+
+# Ahora importa ConfigManager
+try:
+    from config.config_utils import ConfigManager
+except ImportError as e:
+    logging.error(f"Error importando ConfigManager: {e}")
+    
+    # Implementación básica de ConfigManager si falla la importación
+    class ConfigManager:
+        @staticmethod
+        def read_config(file_path, default_config=None):
+            if default_config is None:
+                default_config = {}
+            
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    if file_path.endswith('.yaml') or file_path.endswith('.yml'):
+                        import yaml
+                        return yaml.safe_load(f)
+                    else:
+                        import json
+                        return json.load(f)
+            except Exception as e:
+                logging.error(f"Error leyendo config: {e}")
+                return default_config
+        
+        @staticmethod
+        def process_paths_in_config(config, base_path, process_func=None):
+            return config  # Implementación mínima
 
 class ConditionalPyQtFilter(logging.Filter):
     def __init__(self, show_ui_logs=False):
@@ -35,9 +78,6 @@ class ConditionalPyQtFilter(logging.Filter):
         if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
             return False
         return True
-
-
-
 
 class ColoredFormatter(logging.Formatter):
     """Formateador que añade colores a los logs en terminal"""
@@ -63,7 +103,6 @@ class ColoredFormatter(logging.Formatter):
         self.last_module = current_module
         return result
 
-
 def exception_hook(exc_type, exc_value, exc_traceback):
     """Global exception handler to log unhandled exceptions"""
     error_msg = "Uncaught exception:\n" + "".join(
@@ -72,21 +111,6 @@ def exception_hook(exc_type, exc_value, exc_traceback):
     logging.critical(error_msg)
     print(error_msg)  # Also print to console
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
-
-log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
-
-# Set up logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file, mode='w'),
-        logging.StreamHandler()
-    ]
-)
-
-# Set the global exception hook
-sys.excepthook = exception_hook
 
 # Set the global exception hook
 sys.excepthook = exception_hook
@@ -110,14 +134,58 @@ class TabManager(QMainWindow):
         self.config_path = config_path
         self.tabs: Dict[str, QWidget] = {}
         
-        # Load initial theme from config
-        with open(config_path, 'r') as f:
-            config = json.load(f)
+        # Determinar la extensión y cargar configuración
+        config_file = Path(config_path)
+        self.config_format = config_file.suffix.lower()
         
-        self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
+        # Si el archivo no existe o no tiene extensión, determinar el formato basado en el argumento
+        if not config_file.exists() or not self.config_format:
+            # Usar la extensión especificada o .yaml por defecto
+            if '.yaml' in config_path or '.yml' in config_path:
+                self.config_format = '.yaml'
+            else:
+                self.config_format = '.json'  # Default for backward compatibility
+        
+        # Load configuration using ConfigManager
+        config = ConfigManager.read_config(config_path, {})
+        
+        self.available_themes = config.get('temas', list(THEMES.keys()))
         self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
         
         try:
+            # Define ColoredFormatter aquí dentro de TabManager.__init__
+            class ColoredFormatter(logging.Formatter):
+                """Formateador que añade colores a los logs en terminal"""
+                
+                def __init__(self, *args, **kwargs):
+                    super().__init__(*args, **kwargs)
+                    self.last_module = None
+                
+                def format(self, record):
+                    levelname = record.levelname
+                    # Definimos colores básicos como fallback
+                    COLORS = {
+                        'DEBUG': '\033[94m',     # Azul
+                        'INFO': '\033[92m',      # Verde
+                        'WARNING': '\033[93m',   # Amarillo
+                        'ERROR': '\033[91m',     # Rojo
+                        'CRITICAL': '\033[91m\033[1m',  # Rojo brillante
+                        'RESET': '\033[0m'       # Reset
+                    }
+                    # Obtener el color o usar RESET si no está definido
+                    color = COLORS.get(levelname, COLORS['RESET'])
+                    # Formatear con color
+                    record.levelname = f"{color}{levelname}{COLORS['RESET']}"
+                    
+                    # Añadir separador si cambiamos de módulo
+                    result = super().format(record)
+                    current_module = record.name.split('.')[0]
+                    
+                    if self.last_module and self.last_module != current_module:
+                        result = f"\n{result}"
+                    
+                    self.last_module = current_module
+                    return result
             
             # Convertir el nivel de string a constante de logging
             level_map = {
@@ -126,15 +194,100 @@ class TabManager(QMainWindow):
                 'WARNING': logging.WARNING,
                 'ERROR': logging.ERROR,
                 'CRITICAL': logging.CRITICAL,
-                'UI': 15  # Nivel personalizado
+                'UI': 15              # Nivel personalizado
             }
+            
+            # Registrar nivel UI si no existe
+            if not hasattr(logging, 'UI'):
+                logging.addLevelName(15, 'UI')
+                
+                def ui_log(self, message, *args, **kwargs):
+                    self.log(15, message, *args, **kwargs)
+                
+                logging.Logger.ui = ui_log
+            
+            # Crear formateador
+            colored_formatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+            console_handler.setFormatter(colored_formatter)
+            
+            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
+            os.makedirs(log_file.parent, exist_ok=True)  # Crear directorio si no existe
+
+            file_handler = logging.FileHandler(log_file)
+            file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+            
+            # Configurar root logger
+            root_logger = logging.getLogger()
+            root_logger.setLevel(logging_level)
+            root_logger.handlers = []  # Eliminar handlers existentes
+            root_logger.addHandler(console_handler)
+            root_logger.addHandler(file_handler)
+            
+            # Clase para redirigir stdout/stderr con colores según el módulo
+            class ColoredLoggerWriter:
+                def __init__(self, logger, level, module_name=None):
+                    self.logger = logger
+                    self.level = level
+                    self.module_name = module_name or 'STDOUT' if level == logging.INFO else 'STDERR'
+                    self.buffer = []
+                
+                def write(self, message):
+                    if message and message.strip():
+                        # Determinar el tipo de log basado en el nivel
+                        level_name = logging.getLevelName(self.level)
+                        color = COLORS.get(level_name, COLORS['RESET'])
+                        
+                        # Log con formato específico para stdout/stderr redirigido
+                        self.logger.log(self.level, f"[{self.module_name}] {message.rstrip()}")
+                
+                def flush(self):
+                    pass
+            
+            # Redirigir stdout y stderr 
+            sys.stdout = ColoredLoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
+            sys.stderr = ColoredLoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
+            
+            logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
+            
+        except Exception as e:
+            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
+            os.makedirs(log_file.parent, exist_ok=True)  # Crear directorio si no existe
+            
+            # Fallback al logging básico en caso de error
+            logging.basicConfig(
+                level=logging.DEBUG,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                handlers=[
+                    logging.StreamHandler(),  # Print to console
+                    logging.FileHandler(log_file)  # Log to file
+                ]
+            )
+            
+            # Clase simple para redirigir stdout/stderr
+            class LoggerWriter:
+                def __init__(self, logger, level):
+                    self.logger = logger
+                    self.level = level
+                    self.buffer = []
+                
+                def write(self, message):
+                    if message.strip():
+                        self.logger.log(self.level, message.rstrip())
+                
+                def flush(self):
+                    pass
+            
+            sys.stdout = LoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
+            sys.stderr = LoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
+            
+            logging.error(f"Error configurando sistema de logging avanzado: {e}. Usando configuración básica.")
+            
             logging_level_str = config.get('logging_level', 'INFO')
             logging_level = level_map.get(logging_level_str, logging.INFO)
         except Exception as e:
             # En caso de error, usar un valor predeterminado
             logging_level = logging.INFO
             print(f"Error al leer el nivel de logging desde la configuración: {e}")
-
 
         # Obtener los tipos de log habilitados
         log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
@@ -151,11 +304,12 @@ class TabManager(QMainWindow):
 
         # Configurar los handlers
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(ColoredFormatter)
+        colored_formatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+        console_handler.setFormatter(colored_formatter)        
         
         # Establecemos path para el log_file
         log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
-
+        os.makedirs(log_file.parent, exist_ok=True)  # Crear directorio si no existe
 
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
@@ -170,8 +324,6 @@ class TabManager(QMainWindow):
         # Aplicar filtro condicional
         pyqt_filter = ConditionalPyQtFilter(show_ui_logs)
         root_logger.addFilter(pyqt_filter)
-
-
 
         self.init_ui()
         self.load_modules()
@@ -222,19 +374,26 @@ class TabManager(QMainWindow):
         self.tab_widget = QTabWidget()
         layout.addWidget(self.tab_widget)
 
-
     def load_modules(self):
         """Loads modules from configuration."""
         try:
-            with open(self.config_path, 'r') as f:
-                config = json.load(f)
+            config = ConfigManager.read_config(self.config_path, {})
                 
             for module_config in config['modules']:
-                parent_dir = Path(__file__).parent
-                relative_path = Path(module_config['path'])
-                module_path = str(parent_dir / relative_path)
+                module_path = module_config['path']
+                
+                # Convertir ruta relativa a absoluta si es necesario
+                if not os.path.isabs(module_path):
+                    module_path = os.path.join(PROJECT_ROOT, module_path)
+                
                 module_name = module_config.get('name', Path(module_path).stem)
                 module_args = module_config.get('args', {})
+                
+                # Convertir rutas relativas en argumentos si es necesario
+                for key, value in module_args.items():
+                    if isinstance(value, str) and not os.path.isabs(value) and ('/' in value or '\\' in value):
+                        # Parece una ruta relativa, conviértela a absoluta
+                        module_args[key] = os.path.normpath(os.path.join(PROJECT_ROOT, value))
                 
                 try:
                     # Dynamically load the module
@@ -303,7 +462,6 @@ class TabManager(QMainWindow):
         elif module_name in self.tabs:
             # Change theme for specific module
             self.tabs[module_name].apply_theme(new_theme)
-
 
     def apply_theme(self, font_size="14px"):
         """Applies theme to the entire application."""
@@ -411,7 +569,6 @@ class TabManager(QMainWindow):
 
         """)
 
-
     def reload_application(self):
         """Recarga todos los módulos después de un cambio en la configuración"""
         # Guardar el índice de la pestaña actual
@@ -431,7 +588,6 @@ class TabManager(QMainWindow):
         if current_index < self.tab_widget.count():
             self.tab_widget.setCurrentIndex(current_index)
 
-
     def cleanup_threads():
         """Ensure all threads are properly stopped before application exit"""
         for thread in QThread.allThreads():
@@ -445,7 +601,6 @@ class TabManager(QMainWindow):
                 except Exception as e:
                     print(f"Error cleaning up thread: {e}")
 
-
     def change_theme(self, new_theme):
         """Cambia el tema de toda la aplicación."""
         if new_theme in self.available_themes:
@@ -455,8 +610,7 @@ class TabManager(QMainWindow):
             self.apply_theme()
             
             # Check global theme configuration
-            with open(self.config_path, 'r') as f:
-                config = json.load(f)
+            config = ConfigManager.read_config(self.config_path, {})
             
             # Determine if individual themes are enabled
             enable_individual_themes = config.get('global_theme_config', {}).get('enable_individual_themes', True)
@@ -475,105 +629,12 @@ class TabManager(QMainWindow):
             # Update config file
             config['tema_seleccionado'] = new_theme
             
-            with open(self.config_path, 'w') as f:
-                json.dump(config, f, indent=4)
-
-
-    def setup_info_widget(self):
-        """Configura los widgets de información dentro de los ScrollAreas."""
-        try:
-            # Verificar que info_scroll existe
-            if not hasattr(self, 'info_scroll') or not self.info_scroll:
-                print("Error: info_scroll no existe")
-                self._fallback_setup_info_widget()
-                return
-                
-            # 1. Cargar el panel de información principal (enlaces, wikipedia, lastfm, etc.)
-            info_ui_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
-            if os.path.exists(info_ui_path):
-                try:
-                    self.info_widget = QWidget()
-                    uic.loadUi(info_ui_path, self.info_widget)
-                    
-                    # Obtener referencias a los labels
-                    self.links_label = self.info_widget.findChild(QLabel, "links_label")
-                    self.wikipedia_artist_label = self.info_widget.findChild(QLabel, "wikipedia_artist_label")
-                    self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
-                    self.wikipedia_album_label = self.info_widget.findChild(QLabel, "wikipedia_album_label")
-                    
-                    # Importante: Configurar el ancho mínimo para los labels
-                    # Esto es crucial para que el contenido se expanda horizontalmente
-                    if self.info_scroll and self.info_scroll.width() > 0:
-                        scroll_width = self.info_scroll.width() - 30  # Restar un poco para scrollbar y margen
-                    else:
-                        scroll_width = 800  # Un valor razonable por defecto
-                    
-                    # Configurar el ancho mínimo para todos los labels
-                    for label in [self.links_label, self.wikipedia_artist_label, 
-                                self.lastfm_label, self.wikipedia_album_label]:
-                        if label:
-                            label.setMinimumWidth(scroll_width)
-                    
-                    # El ajuste crítico: Configurar el tamaño del widget
-                    # Esto fuerza al QScrollArea a mostrar contenido con el ancho adecuado
-                    self.info_widget.setMinimumWidth(scroll_width)
-                    
-                    # Establecer el widget en el ScrollArea
-                    self.info_scroll.setWidget(self.info_widget)
-                    
-                    # IMPORTANTE: Eliminar cualquier restricción de scroll horizontal
-                    self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-                    
-                    print("Panel de información cargado desde UI")
-                except Exception as e:
-                    print(f"Error al cargar el panel de información: {e}")
-                    traceback.print_exc()
-                    self._fallback_setup_info_widget()
-                    return
-            else:
-                print(f"Archivo UI del panel de información no encontrado: {info_ui_path}")
-                self._fallback_setup_info_widget()
-                return
-                
-            # Resto de tu código actual...
-            
-            # IMPORTANTE: Añadir un evento de redimensionamiento para actualizar anchos
-            # cuando la ventana cambie de tamaño
-            self.info_scroll.resizeEvent = self._on_info_scroll_resize
-            
-            self.ui_components_loaded['info'] = True
-            print("Widgets de información configurados correctamente")
-        except Exception as e:
-            print(f"Error general al configurar los widgets de información: {e}")
-            traceback.print_exc()
-            self._fallback_setup_info_widget()
-
-
-    def _on_info_scroll_resize(self, event):
-        """Actualiza el ancho mínimo de los labels cuando se redimensiona el scroll area"""
-        if hasattr(self, 'info_widget') and self.info_widget:
-            # Calcular el nuevo ancho óptimo
-            scroll_width = event.size().width() - 30  # Restar para scrollbar y margen
-            
-            # Actualizar el ancho mínimo del widget contenedor
-            self.info_widget.setMinimumWidth(scroll_width)
-            
-            # Actualizar el ancho mínimo de todos los labels
-            for label in [self.links_label, self.wikipedia_artist_label, 
-                        self.lastfm_label, self.wikipedia_album_label]:
-                if label:
-                    label.setMinimumWidth(scroll_width)
-        
-        # Llamar al evento original si está disponible
-        original_resize = getattr(QScrollArea, "resizeEvent", None)
-        if original_resize:
-            original_resize(self.info_scroll, event)
-
-
-
-
-
-
+            # Save using ConfigManager
+            ConfigManager.write_config(
+                self.config_path, 
+                config, 
+                'yaml' if self.config_format in ['.yaml', '.yml'] else 'json'
+            )
 
     def switch_to_tab(self, tab_name, method_to_call=None, *args, **kwargs):
         """
@@ -608,23 +669,56 @@ class TabManager(QMainWindow):
         print(f"No se encontró la pestaña '{tab_name}'")
         return False
 
-
 def main():
     parser = argparse.ArgumentParser(description='Multi-Module Manager')
-    parser.add_argument('config_path', help='Ruta al archivo de configuración JSON')
+    parser.add_argument('config_path', help='Ruta al archivo de configuración (YAML o JSON)')
     parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
     parser.add_argument('--font_size', default='12px', help='Tamaño de la Fuente a usar en la interfaz')
     parser.add_argument('--log', type=str,
                         choices=['true', 'false'],
                         default=None,
                         help='Habilitar logging detallado (true/false)')
+    parser.add_argument('--convert', action='store_true',
+                        help='Convertir configuración de JSON a YAML')
     
     args = parser.parse_args()
-
+    
+    config_path = args.config_path
+    
+    # Determinar formato actual y formato deseado
+    current_format = Path(config_path).suffix.lower()
+    
+    # Si se solicita conversión y es un archivo JSON, convertir a YAML
+    if args.convert and current_format == '.json':
+        yaml_path = Path(config_path).with_suffix('.yaml')
+        if ConfigManager.convert_json_to_yaml(config_path, yaml_path):
+            print(f"Configuración convertida a YAML: {yaml_path}")
+            # Usar el archivo YAML para esta ejecución
+            config_path = str(yaml_path)
+    
     # Load configuration to potentially override logging setting
     try:
-        with open(args.config_path, 'r') as f:
-            config = json.load(f)
+        config = ConfigManager.read_config(config_path, {})
+        
+        # Determinar rutas relativas y absolutas
+        config = ConfigManager.process_paths_in_config(
+            config, 
+            PROJECT_ROOT, 
+            lambda p, b: os.path.normpath(os.path.join(b, p)) if not os.path.isabs(p) else p
+        )
+        
+        # Obtener ruta de log desde configuración
+        logging_options = config.get('logging_options', {})
+        log_filename = logging_options.get('log_filename', '.content/logs/multi_module_manager.log')
+        
+        # Si la ruta no es absoluta, asumimos que es relativa a PROJECT_ROOT
+        if not os.path.isabs(log_filename):
+            log_file = os.path.join(PROJECT_ROOT, log_filename)
+        else:
+            log_file = log_filename
+        
+        # Asegurar que el directorio del log exista
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
         
         # Determine logging state with multiple configuration options
         if args.log is not None:
@@ -632,13 +726,15 @@ def main():
             log_enabled = args.log.lower() == 'true'
         else:
             # Check for different logging configuration formats
-            logging_options = config.get('logging_options', ['true', 'false'])
             logging_state = config.get('logging_state', 'false')
             log_enabled = logging_state.lower() == 'true'
 
     except Exception as e:
         print(f"Error reading config: {e}")
         log_enabled = False
+        # Fallback para log_file si falla la configuración
+        log_file = os.path.join(PROJECT_ROOT, ".content", "logs", "fallback_log.log")
+        os.makedirs(os.path.dirname(log_file), exist_ok=True)
 
     # Configure logging if logging is enabled
     if log_enabled:
@@ -647,8 +743,8 @@ def main():
             from terminal_logger import ColoredFormatter, COLORS
             
             # Obtener configuración detallada de logging
-            logging_level_str = config.get('logging_level', 'INFO')
-            log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
+            logging_level_str = config.get('logging_options', {}).get('logging_level', 'INFO')
+            log_types = config.get('logging_options', {}).get('log_types', ['ERROR', 'INFO', 'WARNING'])
             
             # Convertir nivel de string a constante de logging
             level_map = {
@@ -670,17 +766,15 @@ def main():
                 
                 logging.Logger.ui = ui_log
             
-            # Configurar logging básico con formato colorizado
-            ColoredFormatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
+            # Crear formateador con color
+            colored_formatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
             
             # Handlers
             console_handler = logging.StreamHandler()
-            console_handler.setFormatter(ColoredFormatter)
+            console_handler.setFormatter(colored_formatter)
             
-            
-            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
-
-
+            # Crear directorio de logs si no existe (verificación adicional)
+            os.makedirs(os.path.dirname(log_file), exist_ok=True)
 
             file_handler = logging.FileHandler(log_file)
             file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
@@ -719,7 +813,9 @@ def main():
             logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
             
         except Exception as e:
-            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
+            # Crear directorio de logs si no existe (verificación adicional)
+            os.makedirs(os.path.dirname(log_file), exist_ok=True)
+            
             # Fallback al logging básico en caso de error
             logging.basicConfig(
                 level=logging.DEBUG,
@@ -749,10 +845,12 @@ def main():
             
             logging.error(f"Error configurando sistema de logging avanzado: {e}. Usando configuración básica.")
     
+    # Ahora inicializar la aplicación
     app = QApplication(sys.argv)
-    manager = TabManager(args.config_path, font_family=args.font, font_size=args.font_size)
+    manager = TabManager(config_path, font_family=args.font, font_size=args.font_size)
     manager.show()
     sys.exit(app.exec())
+
 
 
 if __name__ == '__main__':
