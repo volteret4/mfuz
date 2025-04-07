@@ -186,7 +186,17 @@ QProgressBar::chunk {
       <item>
        <widget class="QPushButton" name="searchButton">
         <property name="text">
-         <string>PushButton</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/blue_tape</normaloff>:/services/blue_tape</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -252,12 +262,30 @@ QProgressBar::chunk {
            <property name="horizontalScrollBarPolicy">
             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
            </property>
+           <property name="columnCount">
+            <number>4</number>
+           </property>
            <attribute name="headerVisible">
-            <bool>false</bool>
+            <bool>true</bool>
            </attribute>
            <column>
             <property name="text">
-             <string notr="true">1</string>
+             <string notr="true">Titulo</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Artista</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Tipo</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>Duración</string>
             </property>
            </column>
           </widget>
@@ -461,6 +489,18 @@ QProgressBar::chunk {
                    </item>
                    <item>
                     <widget class="QPushButton" name="delButton">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>36</width>
+                       <height>36</height>
+                      </size>
+                     </property>
                      <property name="font">
                       <font>
                        <family>Segoe UI</family>
@@ -470,6 +510,16 @@ QProgressBar::chunk {
                      </property>
                      <property name="text">
                       <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/b_minus_star</normaloff>:/services/b_minus_star</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
                      </property>
                     </widget>
                    </item>
@@ -490,6 +540,12 @@ QProgressBar::chunk {
                     <widget class="QPushButton" name="rewButton">
                      <property name="minimumSize">
                       <size>
+                       <width>0</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
                        <width>36</width>
                        <height>36</height>
                       </size>
@@ -506,7 +562,7 @@ QProgressBar::chunk {
                      </property>
                      <property name="icon">
                       <iconset resource="../images.qrc">
-                       <normaloff>:/services/rew</normaloff>:/services/rew</iconset>
+                       <normaloff>:/services/b_prev</normaloff>:/services/b_prev</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -520,14 +576,14 @@ QProgressBar::chunk {
                     <widget class="QPushButton" name="playButton">
                      <property name="minimumSize">
                       <size>
-                       <width>36</width>
-                       <height>36</height>
+                       <width>0</width>
+                       <height>0</height>
                       </size>
                      </property>
                      <property name="maximumSize">
                       <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
+                       <width>36</width>
+                       <height>36</height>
                       </size>
                      </property>
                      <property name="font">
@@ -542,7 +598,7 @@ QProgressBar::chunk {
                      </property>
                      <property name="icon">
                       <iconset resource="../images.qrc">
-                       <normaloff>:/services/play</normaloff>:/services/play</iconset>
+                       <normaloff>:/services/b_play</normaloff>:/services/b_play</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -592,7 +648,7 @@ QProgressBar::chunk {
                      </property>
                      <property name="icon">
                       <iconset resource="../images.qrc">
-                       <normaloff>:/services/ff</normaloff>:/services/ff</iconset>
+                       <normaloff>:/services/b_ff</normaloff>:/services/b_ff</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
