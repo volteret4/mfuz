@@ -1,6 +1,7 @@
 {
     "files": [
         "ui/svg/chicken(2).svg",
+        "ui/url_playlist_avdanced_settings_dialog.ui",
         "ui/jaangle_module.ui",
         "ui/jaangle_folder_filter_dialog.ui",
         "ui/jaangle_session_filter_dialog.ui",

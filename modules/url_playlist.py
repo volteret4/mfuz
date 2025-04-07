@@ -10,10 +10,11 @@ import tempfile
 import logging
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
+from PyQt6 import uic
 from PyQt6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem,
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox,
-    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication
+    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool
 from PyQt6.QtGui import QIcon
@@ -33,51 +34,43 @@ class SearchSignals(QObject):
 class SearchWorker(QRunnable):
     """Worker thread para realizar búsquedas en distintos servicios."""
     
-    def __init__(self, service, query):
+    def __init__(self, services, query, max_results=10):
         super().__init__()
-        self.service = service
+        self.services = services if isinstance(services, list) else [services]
         self.query = query
+        self.max_results = max_results
         self.signals = SearchSignals()
-    
-    def log(self, message):
-        """Método de logging simple para el worker"""
-        print(f"[SearchWorker] {message}")
-        # No podemos usar directamente el log del módulo principal aquí
-        # así que solo imprimimos en consola
-    
+        
     @pyqtSlot()
     def run(self):
         """Ejecuta la búsqueda en segundo plano."""
         try:
             results = []
             
-            if self.service == "Todos" or self.service == "YouTube":
-                self.log(f"Buscando en YouTube: {self.query}")
-                youtube_results = self.search_youtube(self.query)
-                results.extend(youtube_results)
+            for service in self.services:
+                service_results = []
+                
+                if service == "youtube":
+                    service_results = self.search_youtube(self.query)
+                elif service == "soundcloud":
+                    service_results = self.search_soundcloud(self.query)
+                elif service == "bandcamp":
+                    service_results = self.search_bandcamp(self.query)
+                # Add more services as needed
+                
+                # Apply pagination per service
+                if service_results:
+                    results.extend(service_results[:self.max_results])
             
-            if self.service == "Todos" or self.service == "SoundCloud":
-                self.log(f"Buscando en SoundCloud: {self.query}")
-                soundcloud_results = self.search_soundcloud(self.query)
-                results.extend(soundcloud_results)
-            
-            if self.service == "Todos" or self.service == "Bandcamp":
-                self.log(f"Buscando en Bandcamp: {self.query}")
-                bandcamp_results = self.search_bandcamp(self.query)
-                results.extend(bandcamp_results)
-            
-            self.log(f"Búsqueda completada, encontrados {len(results)} resultados")
             self.signals.results.emit(results)
         
         except Exception as e:
-            self.log(f"Error en la búsqueda: {str(e)}")
+            self.signals.error.connect(f"Error en la búsqueda: {str(e)}")
             import traceback
-            self.log(traceback.format_exc())
-            self.signals.error.emit(str(e))
+            self.signals.error.connect(traceback.format_exc())
         
         finally:
             self.signals.finished.emit()
-
 
 
 
@@ -268,7 +261,7 @@ class SearchWorker(QRunnable):
         """Search for music on YouTube"""
         try:
             # Use yt-dlp for searching
-            command = ["yt-dlp", "--flat-playlist", "--dump-json", f"ytsearch5:{query}"]
+            command = ["yt-dlp", "--flat-playlist", "--dump-json", f"ytsearch{self.max_results}:{query}"]
             self.log(f"Searching YouTube with: {' '.join(command)}")
             
             process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -353,7 +346,14 @@ class UrlPlayer(BaseModule):
         self.delButton = None
         self.addButton = None
         self.textEdit = None
-        
+        # Initialize settings with default values
+        self.pagination_value = 10  # Default to 10 results per page
+        self.included_services = {
+            'youtube': True,
+            'soundcloud': True,
+            'bandcamp': True,
+            # Add more services as needed
+        }
         
         # Ahora llamamos al constructor padre que llamará a init_ui()
         super().__init__(parent, theme, **kwargs)
@@ -371,7 +371,7 @@ class UrlPlayer(BaseModule):
         ui_file_loaded = self.load_ui_file("url_player.ui", [
             "lineEdit", "searchButton", "treeWidget", "playButton", 
             "rewButton", "ffButton", "tabWidget", "listWidget",
-            "delButton", "addButton", "textEdit"
+            "delButton", "addButton", "textEdit", "servicios", "ajustes_avanzados"
         ])
         
         if not ui_file_loaded:
@@ -382,6 +382,10 @@ class UrlPlayer(BaseModule):
             print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
             return
         
+        
+        # Cargar configuración
+        self.load_settings()
+
         # Configurar nombres y tooltips
         self.searchButton.setText("Buscar")
         self.searchButton.setToolTip("Buscar información sobre la URL")
@@ -416,6 +420,10 @@ class UrlPlayer(BaseModule):
         self.tabWidget.setTabText(0, "Cola de reproducción")
         self.tabWidget.setTabText(1, "Información")
         self.setup_services_combo()
+        
+        # Actualizar el combo de servicios según la configuración
+        self.update_service_combo()
+
         # Conectar señales
         self.connect_signals()
 
@@ -456,6 +464,9 @@ class UrlPlayer(BaseModule):
             if self.listWidget:
                 self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
             
+            if hasattr(self, 'ajustes_avanzados'):
+                self.ajustes_avanzados.clicked.connect(self.show_advanced_settings)
+
             print("[UrlPlayer] Señales conectadas correctamente")
         except Exception as e:
             print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
@@ -548,7 +559,7 @@ class UrlPlayer(BaseModule):
         required_widgets = [
             "lineEdit", "searchButton", "treeWidget", "playButton", 
             "ffButton", "rewButton", "tabWidget", "listWidget",
-            "addButton", "delButton", "textEdit", "servicios"
+            "addButton", "delButton", "textEdit", "servicios", "ajustes_avanzados"
         ]
         
         all_ok = True
@@ -558,6 +569,186 @@ class UrlPlayer(BaseModule):
                 all_ok = False
         
         return all_ok
+
+
+
+    def show_advanced_settings(self):
+        """Show the advanced settings dialog."""
+        try:
+            # Create the dialog from UI file
+            dialog = QDialog(self)
+            ui_file = os.path.join(PROJECT_ROOT, "ui", "url_playlist_advanced_settings_dialog.ui")
+            
+            if os.path.exists(ui_file):
+                uic.loadUi(ui_file, dialog)
+                
+                # Set up current values
+                if hasattr(dialog, 'paginationValue'):
+                    dialog.paginationValue.setValue(self.pagination_value)
+                
+                # Set up checkboxes based on current settings
+                self._setup_service_checkboxes(dialog)
+                
+                # Connect the button box
+                if hasattr(dialog, 'buttonBox'):
+                    dialog.buttonBox.accepted.connect(lambda: self._save_advanced_settings(dialog))
+                    dialog.buttonBox.rejected.connect(dialog.reject)
+                
+                # Show the dialog
+                dialog.exec()
+            else:
+                self.log(f"UI file not found: {ui_file}")
+                QMessageBox.warning(self, "Error", f"UI file not found: {ui_file}")
+        except Exception as e:
+            self.log(f"Error showing advanced settings: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+
+    def _setup_service_checkboxes(self, dialog):
+        """Set up service checkboxes based on current settings."""
+        # Initialize the services dict if it doesn't exist
+        if not hasattr(self, 'included_services'):
+            self.included_services = {
+                'youtube': True,
+                'soundcloud': True,
+                'bandcamp': True,
+                # Add more services as needed
+            }
+        
+        # Map checkboxes to service keys
+        checkbox_mapping = {
+            'youtubeCheck': 'youtube',
+            'soundcloudCheck': 'soundcloud',
+            'bandcampCheck': 'bandcamp',
+            # Add more as needed
+        }
+        
+        # Set checkbox states based on current settings
+        for checkbox_name, service_key in checkbox_mapping.items():
+            if hasattr(dialog, checkbox_name):
+                checkbox = getattr(dialog, checkbox_name)
+                checkbox.setChecked(self.included_services.get(service_key, True))
+
+    def _save_advanced_settings(self, dialog):
+        """Save settings from the advanced settings dialog."""
+        try:
+            # Save pagination value
+            if hasattr(dialog, 'paginationValue'):
+                self.pagination_value = dialog.paginationValue.value()
+                self.log(f"Set pagination to {self.pagination_value} results per page")
+            
+            # Save service inclusion settings
+            checkbox_mapping = {
+                'youtubeCheck': 'youtube',
+                'soundcloudCheck': 'soundcloud',
+                'bandcampCheck': 'bandcamp',
+                # Add more as needed
+            }
+            
+            for checkbox_name, service_key in checkbox_mapping.items():
+                if hasattr(dialog, checkbox_name):
+                    checkbox = getattr(dialog, checkbox_name)
+                    self.included_services[service_key] = checkbox.isChecked()
+                    self.log(f"Service {service_key} included: {checkbox.isChecked()}")
+            
+            # Close the dialog
+            dialog.accept()
+            
+            # Update UI or state if needed
+            self.update_service_combo()
+        except Exception as e:
+            self.log(f"Error saving advanced settings: {str(e)}")
+
+
+    def load_settings(self):
+        """Carga la configuración del módulo desde un archivo YAML."""
+        try:
+            import yaml
+            settings_file = os.path.join(PROJECT_ROOT, "config", "settings.yaml")
+            
+            if os.path.exists(settings_file):
+                with open(settings_file, 'r', encoding='utf-8') as file:
+                    all_settings = yaml.safe_load(file) or {}
+                    
+                    # Obtener configuración específica para este módulo
+                    module_settings = all_settings.get('url_playlist', {})
+                    
+                    # Cargar pagination_value
+                    self.pagination_value = module_settings.get('pagination_value', 10)
+                    
+                    # Cargar included_services
+                    included_services = module_settings.get('included_services', {})
+                    if included_services:
+                        self.included_services = included_services
+                    else:
+                        # Valores por defecto si no hay configuración
+                        self.included_services = {
+                            'youtube': True,
+                            'soundcloud': True,
+                            'bandcamp': True,
+                            # Añadir más servicios según sea necesario
+                        }
+                    
+                    self.log(f"Configuración cargada: {module_settings}")
+            else:
+                self.log(f"Archivo de configuración no encontrado, usando valores por defecto")
+                # Inicializar con valores por defecto
+                self.pagination_value = 10
+                self.included_services = {
+                    'youtube': True,
+                    'soundcloud': True,
+                    'bandcamp': True,
+                    # Añadir más servicios según sea necesario
+                }
+        except Exception as e:
+            self.log(f"Error al cargar configuración: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            # Inicializar con valores por defecto en caso de error
+            self.pagination_value = 10
+            self.included_services = {
+                'youtube': True,
+                'soundcloud': True,
+                'bandcamp': True,
+                # Añadir más servicios según sea necesario
+            }
+
+    def save_settings(self):
+        """Guarda la configuración del módulo en un archivo YAML."""
+        try:
+            import yaml
+            config_dir = os.path.join(PROJECT_ROOT, "config")
+            settings_file = os.path.join(config_dir, "settings.yaml")
+            
+            # Crear directorio de configuración si no existe
+            os.makedirs(config_dir, exist_ok=True)
+            
+            # Cargar configuración existente o crear nueva
+            all_settings = {}
+            if os.path.exists(settings_file):
+                with open(settings_file, 'r', encoding='utf-8') as file:
+                    all_settings = yaml.safe_load(file) or {}
+            
+            # Preparar configuración de este módulo
+            module_settings = {
+                'pagination_value': self.pagination_value,
+                'included_services': self.included_services
+            }
+            
+            # Actualizar configuración
+            all_settings['url_playlist'] = module_settings
+            
+            # Guardar configuración
+            with open(settings_file, 'w', encoding='utf-8') as file:
+                yaml.dump(all_settings, file, default_flow_style=False)
+                
+            self.log(f"Configuración guardada en {settings_file}")
+        except Exception as e:
+            self.log(f"Error al guardar configuración: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
 
     def setup_services_combo(self):
         """Configura el combo box de servicios disponibles."""
@@ -570,6 +761,46 @@ class UrlPlayer(BaseModule):
         
         # Conectar la señal de cambio del combo box
         self.servicios.currentIndexChanged.connect(self.service_changed)
+
+    def update_service_combo(self):
+        """Update the service combo to reflect current settings."""
+        # Keep current selection
+        current_selection = self.servicios.currentText() if hasattr(self, 'servicios') else "Todos"
+        
+        # Disconnect signals temporarily to avoid triggering events
+        if hasattr(self, 'servicios'):
+            try:
+                self.servicios.currentIndexChanged.disconnect(self.service_changed)
+            except:
+                pass
+                
+            # Clear the combo box
+            self.servicios.clear()
+            
+            # Add "Todos" option
+            self.servicios.addItem(QIcon(":/services/wiki"), "Todos")
+            
+            # Add individual services
+            service_icons = {
+                'youtube': ":/services/youtube",
+                'soundcloud': ":/services/soundcloud",
+                'bandcamp': ":/services/lastfm",  # Assuming you have this icon
+                # Add more as needed
+            }
+            
+            for service, icon_path in service_icons.items():
+                # Only add if service is available (you might want to check this)
+                service_name = service.capitalize()
+                self.servicios.addItem(QIcon(icon_path), service_name)
+            
+            # Restore previous selection if possible
+            index = self.servicios.findText(current_selection)
+            if index >= 0:
+                self.servicios.setCurrentIndex(index)
+            
+            # Reconnect signal
+            self.servicios.currentIndexChanged.connect(self.service_changed)
+
 
     def service_changed(self, index):
         """Maneja el cambio de servicio seleccionado."""
@@ -888,39 +1119,56 @@ class UrlPlayer(BaseModule):
         """Realiza una búsqueda basada en el servicio seleccionado y la consulta."""
         query = self.lineEdit.text().strip()
         if not query:
-            self.log("Query vacío, cancelando búsqueda")
             return
         
-        self.log(f"Iniciando búsqueda: '{query}'")
+        self.log(f"Buscando: {query}")
         
         # Limpiar resultados previos
         self.treeWidget.clear()
         self.textEdit.clear()
+        QApplication.processEvents()  # Actualiza la UI
         
         # Obtener el servicio seleccionado
         service = self.servicios.currentText()
         
-        # Mostrar progreso
-        self.textEdit.append(f"Buscando '{query}' en {service}...")
-        QApplication.processEvents()
+        # Determinar qué servicios incluir si "Todos" está seleccionado
+        if service == "Todos":
+            active_services = [s for s, included in self.included_services.items() if included]
+            if not active_services:
+                self.log("No hay servicios seleccionados para la búsqueda. Por favor, actívalos en Configuración Avanzada.")
+                return
+        else:
+            # Convert from display name to service id
+            service_id = service.lower()
+            active_services = [service_id]
         
-        # Si se ingresó una URL directa, manejarla inmediatamente
-        if query.startswith(("http://", "https://")):
-            self.log(f"URL detectada: {query}")
-            self.handle_direct_url(query)
-            return
+        # Mostrar progreso
+        self.textEdit.append(f"Buscando '{query}' en {service} (máx. {self.pagination_value} resultados por servicio)...")
+        QApplication.processEvents()  # Actualiza la UI
+        
+        # Desactivar controles durante la búsqueda
+        self.searchButton.setEnabled(False)
+        self.lineEdit.setEnabled(False)
+        QApplication.processEvents()  # Actualiza la UI
         
         # Crear y configurar el worker
-        worker = SearchWorker(service, query)
+        worker = SearchWorker(active_services, query, max_results=self.pagination_value)
         
         # Conectar señales
         worker.signals.results.connect(self.display_search_results)
         worker.signals.error.connect(lambda err: self.log(f"Error en la búsqueda: {err}"))
-        worker.signals.finished.connect(lambda: self.log(f"Búsqueda completada."))
+        worker.signals.finished.connect(self.search_finished)
         
         # Iniciar el worker en el thread pool
         QThreadPool.globalInstance().start(worker)
-        self.log("Worker iniciado en thread pool")
+
+    def search_finished(self):
+        """Función llamada cuando termina la búsqueda."""
+        self.log(f"Búsqueda completada.")
+        # Reactivar controles
+        self.searchButton.setEnabled(True)
+        self.lineEdit.setEnabled(True)
+        QApplication.processEvents()  # Actualiza la UI
 
  
     def handle_direct_url(self, url):
@@ -996,9 +1244,11 @@ class UrlPlayer(BaseModule):
     def display_search_results(self, results):
         """Muestra los resultados de la búsqueda en el TreeWidget."""
         self.treeWidget.clear()
+        QApplication.processEvents()  # Actualiza la UI
         
         if not results:
             self.textEdit.append("No se encontraron resultados.")
+            QApplication.processEvents()  # Actualiza la UI
             return
         
         # Agrupar resultados por fuente
@@ -1010,6 +1260,7 @@ class UrlPlayer(BaseModule):
             sources[source].append(result)
         
         # Añadir resultados al árbol
+        items_added = 0
         for source, source_results in sources.items():
             # Crear un encabezado de fuente
             source_item = QTreeWidgetItem(self.treeWidget)
@@ -1031,8 +1282,13 @@ class UrlPlayer(BaseModule):
                 
                 # Almacenar los datos completos del resultado para uso posterior
                 result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+                
+                items_added += 1
+                if items_added % 10 == 0:  # Actualizar la UI cada 10 ítems
+                    QApplication.processEvents()
         
         self.textEdit.append(f"Encontrados {len(results)} resultados.")
+        QApplication.processEvents()  # Actualiza la UI final
         
         # Asegurarnos de que el árbol sea visible
         self.treeWidget.setVisible(True)
@@ -1494,22 +1750,48 @@ def closeEvent(self, event):
     """Limpia recursos al cerrar."""
     self.log("Cerrando módulo y liberando recursos...")
     
+    # Cancelar búsquedas en curso
+    QThreadPool.globalInstance().clear()  # Limpia cualquier trabajo pendiente
+    
     # Detener reproducción si está activa
     self.stop_playback()
     
     # Matar procesos pendientes
-    if self.yt_dlp_process and self.yt_dlp_process.state() == QProcess.ProcessState.Running:
+    if hasattr(self, 'yt_dlp_process') and self.yt_dlp_process and self.yt_dlp_process.state() == QProcess.ProcessState.Running:
         self.yt_dlp_process.terminate()
-        self.yt_dlp_process.waitForFinished(1000)
+        if not self.yt_dlp_process.waitForFinished(1000):
+            self.yt_dlp_process.kill()
+    
+    if hasattr(self, 'player_process') and self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
+        # Intentar terminar gracefully primero
+        self.send_mpv_command({"command": ["quit"]})
+        
+        # Esperar un poco y forzar si es necesario
+        if not self.player_process.waitForFinished(1000):
+            self.player_process.terminate()
+            
+            if not self.player_process.waitForFinished(1000):
+                self.player_process.kill()
+    
+    # Eliminar sockets
+    if hasattr(self, 'mpv_socket') and self.mpv_socket and os.path.exists(self.mpv_socket):
+        try:
+            os.remove(self.mpv_socket)
+            self.log(f"Socket eliminado: {self.mpv_socket}")
+        except Exception as e:
+            self.log(f"Error al eliminar socket: {str(e)}")
     
     # Eliminar directorio temporal
-    if self.mpv_temp_dir and os.path.exists(self.mpv_temp_dir) and self.mpv_temp_dir != "/tmp":
+    if hasattr(self, 'mpv_temp_dir') and self.mpv_temp_dir and os.path.exists(self.mpv_temp_dir) and self.mpv_temp_dir != "/tmp":
         try:
             import shutil
             shutil.rmtree(self.mpv_temp_dir)
             self.log(f"Directorio temporal eliminado: {self.mpv_temp_dir}")
         except Exception as e:
             self.log(f"Error al eliminar directorio temporal: {str(e)}")
+    
+    # Guardar configuración antes de cerrar
+    self.save_settings()
     
     # Proceder con el cierre
     super().closeEvent(event)
