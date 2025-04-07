@@ -71,5 +71,27 @@
         <file alias="rss">ui/svg/blogger-feed-foomla-svgrepo-com.svg</file>
         <file alias="youtube">ui/svg/youtube-circle-logo-svgrepo-com.svg</file>
         <file alias="twitter">ui/svg/connect-media-networking-svgrepo-com.svg</file>
+        <file alias="blue_tape">ui/svg/tape-svgrepo-com.svg</file>
+        <file alias="b_save">ui/svg/save-one-svgrepo-com.svg</file>
+        <file alias="b_ff">ui/svg/right-c-svgrepo-com.svg</file>
+        <file alias="b_minus">ui/svg/reduce-one-svgrepo-com.svg</file>
+        <file alias="b_play">ui/svg/play-svgrepo-com.svg</file>
+        <file alias="b_pause">ui/svg/pause-one-svgrepo-com.svg</file>
+        <file alias="b_prev">ui/svg/left-c-svgrepo-com.svg</file>
+        <file alias="b_headphones">ui/svg/headphone-sound-svgrepo-com.svg</file>
+        <file alias="b_smile">ui/svg/grinning-face-svgrepo-com.svg</file>
+        <file alias="b_happy">ui/svg/grinning-face-with-squinting-eyes-svgrepo-com.svg</file>
+        <file alias="b_ghost">ui/svg/ghost-svgrepo-com.svg</file>
+        <file alias="b_sad">ui/svg/emotion-unhappy-svgrepo-com.svg</file>
+        <file alias="b_smiley">ui/svg/emotion-happy-svgrepo-com.svg</file>
+        <file alias="b_download">ui/svg/download-three-svgrepo-com.svg</file>
+        <file alias="b_minus_star">ui/svg/delete-mode-svgrepo-com.svg</file>
+        <file alias="b_angry">ui/svg/distraught-face-svgrepo-com.svg</file>
+        <file alias="b_dissapointed">ui/svg/disappointed-face-svgrepo-com.svg</file>
+        <file alias="b_delete">ui/svg/delete-key-svgrepo-com.svg</file>
+        <file alias="b_link">ui/svg/copy-link-svgrepo-com.svg</file>
+        <file alias="b_close">ui/svg/close-one-svgrepo-com.svg</file>
+        <file alias="b_alert">ui/svg/caution-svgrepo-com.svg</file>
+        <file alias="b_plus_cross">ui/svg/plus-cross-svgrepo-com.svg</file>
     </qresource>
 </RCC>

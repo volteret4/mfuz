@@ -1,4 +1,8 @@
 import os
+import re
+import requests
+from bs4 import BeautifulSoup
+import urllib3
 import sys
 import json
 import subprocess
@@ -9,7 +13,7 @@ from pathlib import Path
 from PyQt6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem,
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox,
-    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy
+    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl
 from PyQt6.QtGui import QIcon
@@ -117,7 +121,8 @@ class UrlPlayer(BaseModule):
         try:
             # Conectar señales con verificación previa
             if self.searchButton:
-                self.searchButton.clicked.connect(self.search_url)
+                self.searchButton.clicked.connect(self.perform_search)
+                self.lineEdit.returnPressed.connect(self.perform_search)
             
             if self.playButton:
                 self.playButton.clicked.connect(self.toggle_play_pause)
@@ -140,7 +145,10 @@ class UrlPlayer(BaseModule):
             # Conectar eventos de doble clic
             if self.treeWidget:
                 self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
-            
+                self.on_tree_double_click_original = self.on_tree_double_click
+                self.treeWidget.itemDoubleClicked.disconnect(self.on_tree_double_click)
+                self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
+
             if self.listWidget:
                 self.listWidget.itemDoubleClicked.connect(self.on_list_double_click)
             
@@ -183,7 +191,7 @@ class UrlPlayer(BaseModule):
         self.playButton = QPushButton("▶️")
         player_buttons_layout.addWidget(self.rewButton)
         player_buttons_layout.addWidget(self.ffButton)
-        player_buttons_layout.addWidget(self.pushButton)
+        player_buttons_layout.addWidget(self.playButton)
         
 
         
@@ -249,14 +257,45 @@ class UrlPlayer(BaseModule):
 
 
     def on_tree_double_click(self, item, column):
-        """Maneja el doble clic en un elemento del árbol."""
-        # Si es un nodo raíz con hijos, no hacer nada
+        """Handle double click on tree item to add to queue or play immediately"""
+        # If it's a root item (source) with children, just expand/collapse
         if item.childCount() > 0:
+            item.setExpanded(not item.isExpanded())
             return
             
-        # Añadir el elemento a la cola
-        self.add_item_to_queue(item)
-        self.log(f"Elemento '{item.text(0)}' añadido a la cola")
+        # Get the stored result data
+        result_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # If this is a search result
+        if isinstance(result_data, dict):
+            url = result_data.get('url', '')
+            if url:
+                # Create a display text
+                display_text = f"{result_data['artist']} - {result_data['title']}"
+                
+                # Add to queue
+                self.add_to_queue_from_url(url, display_text, result_data)
+                self.log(f"Added to queue: {display_text}")
+        else:
+            # Handle the existing logic for non-search results
+            self.on_tree_double_click_original(item, column)
+
+    def add_to_queue_from_url(self, url, display_text, metadata=None):
+        """Add an item to the queue based on URL and display text"""
+        # Create a new item for the playlist
+        queue_item = QListWidgetItem(display_text)
+        queue_item.setData(Qt.ItemDataRole.UserRole, url)
+        
+        # Add to the list
+        self.listWidget.addItem(queue_item)
+        
+        # Update the internal playlist
+        self.current_playlist.append({
+            'title': metadata.get('title', display_text),
+            'artist': metadata.get('artist', ''),
+            'url': url,
+            'entry_data': metadata
+        })
     
     def on_list_double_click(self, item):
         """Maneja el doble clic en un elemento de la lista."""
@@ -359,30 +398,281 @@ class UrlPlayer(BaseModule):
 
 
 
-    def search_url(self):
-        """Busca información sobre la URL introducida."""
-        url = self.lineEdit.text().strip()
-        if not url:
+    def perform_search(self):
+        """Perform a search based on the selected platform and query"""
+        query = self.lineEdit.text().strip()
+        if not query:
             return
         
-        self.textEdit.setText(f"Buscando información para: {url}...")
+        self.log(f"Searching for: {query}")
+        
+        # Clear previous results
         self.treeWidget.clear()
+        self.textEdit.clear()
         
-        # Comprobar si ya tenemos la información en caché
-        if url in self.media_info_cache:
-            self.display_media_info(self.media_info_cache[url], url)
-            return
+        # Get the selected source
+        source = self.source_combo.currentText()
         
-        # Ejecutar yt-dlp para obtener información
-        self.yt_dlp_process = QProcess()
-        self.yt_dlp_process.finished.connect(lambda code, status: self.process_media_info(code, url))
+        # Show progress
+        self.textEdit.append(f"Searching for '{query}' on {source}...")
+        QApplication.processEvents()
         
-        # Usar yt-dlp para extraer información en formato JSON
-        self.yt_dlp_process.start(
-            "yt-dlp", 
-            ["--dump-json", "--flat-playlist", url]
-        )
-    
+        results = []
+        
+        # Perform search based on selected source
+        if source == "All" or source == "YouTube":
+            youtube_results = self.search_youtube(query)
+            results.extend(youtube_results)
+        
+        if source == "All" or source == "Bandcamp":
+            bandcamp_results = self.search_bandcamp(query)
+            results.extend(bandcamp_results)
+        
+        if source == "All" or source == "SoundCloud":
+            soundcloud_results = self.search_soundcloud(query)
+            results.extend(soundcloud_results)
+        
+        # Display results
+        self.display_search_results(results)
+        
+        self.log(f"Search complete. Found {len(results)} results.")
+
+
+    def search_bandcamp(self, query):
+        """Search for music on Bandcamp and get information for embed"""
+        try:
+            # Format search URL
+            search_url = f"https://bandcamp.com/search?q={query.replace(' ', '+')}"
+            
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Referer": "https://bandcamp.com/",
+                "Connection": "keep-alive",
+            }
+            
+            self.log(f"Searching on Bandcamp: {search_url}")
+            response = requests.get(search_url, headers=headers, timeout=15)
+            
+            if response.status_code != 200:
+                self.log(f"Error searching Bandcamp: Status code {response.status_code}")
+                return []
+            
+            # Parse HTML
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Search for album and track results
+            result_selectors = [
+                'div.result-info a.item-title',
+                'div.result-info a.search-result-title'
+            ]
+            
+            bandcamp_results = []
+            for selector in result_selectors:
+                track_elements = soup.select(selector)
+                if track_elements:
+                    for element in track_elements[:5]:  # Limit to 5 results
+                        try:
+                            track_url = element.get('href', '')
+                            track_name = element.get_text().strip()
+                            
+                            # Try to get artist information
+                            artist_element = element.find_parent('div', class_='result-info').find('div', class_='result-info-inner').find('a', class_='search-result-artist')
+                            artist_name = artist_element.get_text().strip() if artist_element else "Unknown Artist"
+                            
+                            bandcamp_results.append({
+                                "source": "bandcamp",
+                                "title": track_name,
+                                "artist": artist_name,
+                                "url": track_url,
+                                "type": "track" if "/track/" in track_url else "album"
+                            })
+                            
+                            self.log(f"Found on Bandcamp: {track_name} - URL: {track_url}")
+                        except Exception as e:
+                            self.log(f"Error processing Bandcamp result: {e}")
+                    
+                    break  # Exit after finding results
+            
+            return bandcamp_results
+        
+        except Exception as e:
+            self.log(f"Error searching on Bandcamp: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+    def search_soundcloud(self, query):
+        """Search for music on SoundCloud"""
+        try:
+            # Format search URL
+            search_url = f"https://soundcloud.com/search?q={query.replace(' ', '%20')}"
+            
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Referer": "https://soundcloud.com/",
+                "Connection": "keep-alive",
+            }
+            
+            self.log(f"Searching on SoundCloud: {search_url}")
+            response = requests.get(search_url, headers=headers, timeout=15, verify=False)
+            
+            if response.status_code != 200:
+                self.log(f"Error searching SoundCloud: Status code {response.status_code}")
+                return []
+            
+            # Parse HTML response
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            soundcloud_results = []
+            
+            # Try different selectors to adapt to structure changes
+            selectors = [
+                'h2 a[href^="/"]',
+                'a.soundTitle__title',
+                'a[itemprop="url"]',
+                '.sound__content a'
+            ]
+            
+            track_elements = []
+            for selector in selectors:
+                elements = soup.select(selector)
+                if elements:
+                    track_elements = elements
+                    self.log(f"SoundCloud: using selector {selector}, found {len(elements)} elements")
+                    break
+            
+            # If no results found, try extracting from JSON scripts
+            if not track_elements:
+                self.log("Attempting to extract data from SoundCloud scripts")
+                try:
+                    # Look for data in JSON scripts
+                    scripts = soup.find_all('script')
+                    for script in scripts:
+                        if script.string and '"url":' in script.string and '"title":' in script.string:
+                            # Extract URLs and titles with regex
+                            urls = re.findall(r'"url":"(https://soundcloud.com/[^"]+)"', script.string)
+                            titles = re.findall(r'"title":"([^"]+)"', script.string)
+                            artists = re.findall(r'"username":"([^"]+)"', script.string)
+                            
+                            # Create results from found data
+                            for i in range(min(len(urls), len(titles), 5)):
+                                full_url = urls[i].replace('\\u0026', '&')
+                                title = titles[i]
+                                artist = artists[i] if i < len(artists) else "Unknown Artist"
+                                
+                                soundcloud_results.append({
+                                    "source": "soundcloud",
+                                    "title": title,
+                                    "artist": artist,
+                                    "url": full_url,
+                                    "type": "track"
+                                })
+                                self.log(f"Found on SoundCloud (JSON): {title} - URL: {full_url}")                        
+                except Exception as e:
+                    self.log(f"Error extracting JSON from SoundCloud: {e}")
+            
+            # Process track elements found by selectors
+            for i, track_element in enumerate(track_elements[:5]):
+                try:
+                    url_path = track_element.get('href', '')
+                    if not url_path or not url_path.startswith('/'):
+                        continue
+                        
+                    # Get full URL
+                    full_url = f"https://soundcloud.com{url_path}"
+                    
+                    # Get title from link text
+                    title = track_element.get_text().strip()
+                    
+                    # Try to find the artist
+                    artist = "Unknown Artist"
+                    artist_selectors = [
+                        lambda el: el.find_previous('a', attrs={'class': 'soundTitle__username'}),
+                        lambda el: el.find_previous('span', attrs={'class': 'soundTitle__username'}),
+                        lambda el: el.parent.find_next('a', attrs={'class': 'soundTitle__username'}),
+                        lambda el: el.find_parent('div').find_previous('a', attrs={'itemprop': 'author'})
+                    ]
+                    
+                    for selector_func in artist_selectors:
+                        artist_element = selector_func(track_element)
+                        if artist_element:
+                            artist = artist_element.get_text().strip()
+                            break
+                    
+                    soundcloud_results.append({
+                        "source": "soundcloud",
+                        "title": title,
+                        "artist": artist,
+                        "url": full_url,
+                        "type": "track" if "/tracks/" in full_url else "playlist" if "/sets/" in full_url else "profile"
+                    })
+                    self.log(f"Found on SoundCloud: {title} - URL: {full_url}")
+                except Exception as e:
+                    self.log(f"Error parsing SoundCloud result: {e}")
+            
+            return soundcloud_results
+        except Exception as e:
+            self.log(f"Error searching on SoundCloud: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+    def search_youtube(self, query):
+        """Search for music on YouTube"""
+        try:
+            # Use yt-dlp for searching
+            command = ["yt-dlp", "--flat-playlist", "--dump-json", f"ytsearch5:{query}"]
+            self.log(f"Searching YouTube with: {' '.join(command)}")
+            
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            stdout, stderr = process.communicate()
+            
+            if process.returncode != 0:
+                self.log(f"Error searching YouTube: {stderr}")
+                return []
+            
+            results = []
+            for line in stdout.strip().split('\n'):
+                if not line:
+                    continue
+                
+                try:
+                    data = json.loads(line)
+                    
+                    # Extract relevant info
+                    title = data.get('title', 'Unknown Title')
+                    url = data.get('webpage_url', '')
+                    # Try to extract artist from title
+                    artist = "Unknown Artist"
+                    if " - " in title:
+                        artist, title = title.split(" - ", 1)
+                    
+                    results.append({
+                        "source": "youtube",
+                        "title": title,
+                        "artist": artist,
+                        "url": url,
+                        "type": "video"
+                    })
+                    self.log(f"Found on YouTube: {title} - URL: {url}")
+                except json.JSONDecodeError:
+                    self.log(f"Error parsing YouTube result: {line}")
+                except Exception as e:
+                    self.log(f"Error processing YouTube result: {e}")
+            
+            return results
+        except Exception as e:
+            self.log(f"Error searching on YouTube: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+
+
     def process_media_info(self, exit_code, url):
         """Procesa la información obtenida de yt-dlp."""
         if exit_code != 0:
@@ -410,6 +700,53 @@ class UrlPlayer(BaseModule):
         except json.JSONDecodeError as e:
             self.log(f"Error al procesar la información JSON: {str(e)}")
     
+    def display_search_results(self, results):
+        """Display search results in the treeWidget"""
+        self.treeWidget.clear()
+        
+        if not results:
+            self.textEdit.append("No results found.")
+            return
+        
+        # Group results by source
+        sources = {}
+        for result in results:
+            source = result.get('source', 'Unknown')
+            if source not in sources:
+                sources[source] = []
+            sources[source].append(result)
+        
+        # Add results to tree
+        for source, source_results in sources.items():
+            # Create a source header
+            source_item = QTreeWidgetItem(self.treeWidget)
+            source_item.setText(0, f"{source.capitalize()} Results")
+            source_item.setExpanded(True)
+            source_item.is_header = True
+            
+            # Use a custom font for headers
+            font = source_item.font(0)
+            font.setBold(True)
+            source_item.setFont(0, font)
+            
+            # Add results for this source
+            for result in source_results:
+                result_item = QTreeWidgetItem(source_item)
+                result_item.setText(0, result['title'])
+                result_item.setText(1, result['artist'])
+                result_item.setText(2, result.get('type', ''))
+                
+                # Store the full result data for later use
+                result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+                result_item.is_header = False
+        
+        self.textEdit.append(f"Found {len(results)} results.")
+        
+        # Make sure the tree is visible
+        self.treeWidget.setVisible(True)
+
+
+
     def display_media_info(self, entries, url):
         """Muestra la información obtenida en el TreeWidget."""
         if not entries:
