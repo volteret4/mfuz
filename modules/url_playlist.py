@@ -122,7 +122,6 @@ class UrlPlayer(BaseModule):
             # Conectar señales con verificación previa
             if self.searchButton:
                 self.searchButton.clicked.connect(self.perform_search)
-                self.lineEdit.returnPressed.connect(self.perform_search)
             
             if self.playButton:
                 self.playButton.clicked.connect(self.toggle_play_pause)
@@ -140,7 +139,7 @@ class UrlPlayer(BaseModule):
                 self.delButton.clicked.connect(self.remove_from_queue)
             
             if self.lineEdit:
-                self.lineEdit.returnPressed.connect(self.search_url)
+                self.lineEdit.returnPressed.connect(self.perform_search)
             
             # Conectar eventos de doble clic
             if self.treeWidget:

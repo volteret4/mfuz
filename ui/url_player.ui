@@ -190,6 +190,9 @@ QProgressBar::chunk {
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QComboBox" name="servicios"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -466,7 +469,7 @@ QProgressBar::chunk {
                       </font>
                      </property>
                      <property name="text">
-                      <string>➖</string>
+                      <string/>
                      </property>
                     </widget>
                    </item>
