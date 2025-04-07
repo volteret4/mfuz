@@ -38,7 +38,13 @@ class SearchWorker(QRunnable):
         self.service = service
         self.query = query
         self.signals = SearchSignals()
-        
+    
+    def log(self, message):
+        """Método de logging simple para el worker"""
+        print(f"[SearchWorker] {message}")
+        # No podemos usar directamente el log del módulo principal aquí
+        # así que solo imprimimos en consola
+    
     @pyqtSlot()
     def run(self):
         """Ejecuta la búsqueda en segundo plano."""
@@ -46,22 +52,27 @@ class SearchWorker(QRunnable):
             results = []
             
             if self.service == "Todos" or self.service == "YouTube":
+                self.log(f"Buscando en YouTube: {self.query}")
                 youtube_results = self.search_youtube(self.query)
                 results.extend(youtube_results)
             
             if self.service == "Todos" or self.service == "SoundCloud":
+                self.log(f"Buscando en SoundCloud: {self.query}")
                 soundcloud_results = self.search_soundcloud(self.query)
                 results.extend(soundcloud_results)
             
             if self.service == "Todos" or self.service == "Bandcamp":
+                self.log(f"Buscando en Bandcamp: {self.query}")
                 bandcamp_results = self.search_bandcamp(self.query)
                 results.extend(bandcamp_results)
             
-            # Aquí añadirías más servicios
-            
+            self.log(f"Búsqueda completada, encontrados {len(results)} resultados")
             self.signals.results.emit(results)
         
         except Exception as e:
+            self.log(f"Error en la búsqueda: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
             self.signals.error.emit(str(e))
         
         finally:
@@ -404,7 +415,7 @@ class UrlPlayer(BaseModule):
         # Configurar TabWidget
         self.tabWidget.setTabText(0, "Cola de reproducción")
         self.tabWidget.setTabText(1, "Información")
-        
+        self.setup_services_combo()
         # Conectar señales
         self.connect_signals()
 
@@ -415,7 +426,7 @@ class UrlPlayer(BaseModule):
             # Conectar señales con verificación previa
             if self.searchButton:
                 self.searchButton.clicked.connect(self.perform_search)
-            
+                print("Botón de búsqueda conectado")
             if self.playButton:
                 self.playButton.clicked.connect(self.toggle_play_pause)
             
@@ -433,7 +444,8 @@ class UrlPlayer(BaseModule):
             
             if self.lineEdit:
                 self.lineEdit.returnPressed.connect(self.perform_search)
-            
+                print("LineEdit conectado para búsqueda con Enter")
+
             # Conectar eventos de doble clic
             if self.treeWidget:
                 self.treeWidget.itemDoubleClicked.connect(self.on_tree_double_click)
@@ -549,7 +561,7 @@ class UrlPlayer(BaseModule):
 
     def setup_services_combo(self):
         """Configura el combo box de servicios disponibles."""
-        self.servicios.addItem(QIcon(":/services/wiki"), "Todos")
+        self.servicios.addItem(QIcon(":/services/add"), "Todos")
         self.servicios.addItem(QIcon(":/services/youtube"), "YouTube")
         self.servicios.addItem(QIcon(":/services/spotify"), "Spotify")
         self.servicios.addItem(QIcon(":/services/soundcloud"), "SoundCloud")
@@ -606,45 +618,82 @@ class UrlPlayer(BaseModule):
 
     def on_tree_double_click(self, item, column):
         """Handle double click on tree item to add to queue or play immediately"""
-        # If it's a root item (source) with children, just expand/collapse
+        # Si es un item raíz (fuente) con hijos, solo expandir/colapsar
         if item.childCount() > 0:
             item.setExpanded(not item.isExpanded())
             return
-            
-        # Get the stored result data
+                
+        # Obtener los datos del resultado almacenados
         result_data = item.data(0, Qt.ItemDataRole.UserRole)
         
-        # If this is a search result
+        # Si es un resultado de búsqueda
         if isinstance(result_data, dict):
             url = result_data.get('url', '')
             if url:
-                # Create a display text
-                display_text = f"{result_data['artist']} - {result_data['title']}"
+                # Crear un texto para mostrar
+                display_text = f"{result_data['artist']} - {result_data['title']}" if result_data['artist'] else result_data['title']
                 
-                # Add to queue
+                # Añadir a la cola
                 self.add_to_queue_from_url(url, display_text, result_data)
-                self.log(f"Added to queue: {display_text}")
+                self.log(f"Añadido a la cola: {display_text}")
+                
+                # Opcional: Reproducir inmediatamente si no hay nada reproduciéndose
+                if not self.is_playing and self.current_track_index == -1:
+                    self.current_track_index = len(self.current_playlist) - 1
+                    self.play_media()
         else:
-            # Handle the existing logic for non-search results
-            self.on_tree_double_click_original(item, column)
+            # Manejar la lógica existente para resultados no de búsqueda
+            if hasattr(self, 'on_tree_double_click_original'):
+                self.on_tree_double_click_original(item, column)
 
     def add_to_queue_from_url(self, url, display_text, metadata=None):
-        """Add an item to the queue based on URL and display text"""
-        # Create a new item for the playlist
+        """Añade un elemento a la cola basado en URL y texto a mostrar."""
+        # Crear un nuevo item para la playlist
         queue_item = QListWidgetItem(display_text)
         queue_item.setData(Qt.ItemDataRole.UserRole, url)
         
-        # Add to the list
+        # Añadir a la lista
         self.listWidget.addItem(queue_item)
         
-        # Update the internal playlist
+        # Actualizar la lista interna
         self.current_playlist.append({
             'title': metadata.get('title', display_text),
             'artist': metadata.get('artist', ''),
             'url': url,
             'entry_data': metadata
         })
+        
+        self.log(f"Elemento añadido a la cola: {display_text}")
+        
+        # Si no hay nada reproduciéndose actualmente, seleccionar este elemento
+        if not self.is_playing and self.current_track_index == -1:
+            self.current_track_index = len(self.current_playlist) - 1
+            self.listWidget.setCurrentRow(self.current_track_index)
     
+    def highlight_current_track(self):
+        """Resalta visualmente la pista que se está reproduciendo actualmente."""
+        # Primero, eliminar formato especial de todos los elementos
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            font = item.font()
+            font.setBold(False)
+            item.setFont(font)
+            # Usar QBrush y QColor para el color
+            from PyQt6.QtGui import QBrush, QColor
+            item.setForeground(QBrush(QColor("#a9b1d6")))  # Color normal
+        
+        # Resaltar elemento actual si hay alguno
+        if self.current_track_index >= 0 and self.current_track_index < self.listWidget.count():
+            current_item = self.listWidget.item(self.current_track_index)
+            font = current_item.font()
+            font.setBold(True)
+            current_item.setFont(font)
+            current_item.setForeground(QBrush(QColor("#7aa2f7")))  # Color de resaltado
+            
+            # Asegurar que el elemento es visible
+            self.listWidget.scrollToItem(current_item)
+
+
     def on_list_double_click(self, item):
         """Maneja el doble clic en un elemento de la lista."""
         row = self.listWidget.row(item)
@@ -658,15 +707,96 @@ class UrlPlayer(BaseModule):
         """Reproduce desde un índice específico de la cola."""
         if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
             return
-                
+        
+        # Actualizar el índice actual
+        self.current_track_index = index
+        
+        # Seleccionar visualmente el elemento en la lista
+        self.listWidget.setCurrentRow(index)
+        
+        # Obtener la URL del elemento a reproducir
+        current_item = self.current_playlist[index]
+        url = current_item['url']
+        
         # Detener reproducción actual si existe
         self.stop_playback()
-                
-        # Obtener todas las URLs a partir del índice seleccionado
-        urls = [item['url'] for item in self.current_playlist[index:]]
         
-        # Reproducir la lista comenzando por el elemento seleccionado
-        self.play_with_mpv(urls)
+        # Reproducir solo la URL actual
+        self.play_single_url(url)
+        
+        # Mostrar información en el log
+        title = current_item.get('title', 'Desconocido')
+        artist = current_item.get('artist', '')
+        display = f"{artist} - {title}" if artist else title
+        self.log(f"Reproduciendo: {display}")
+
+    def play_single_url(self, url):
+        """Reproduce una única URL con MPV."""
+        if not url:
+            self.log("Error: URL vacía")
+            return
+        
+        # Asegurarse de que la URL es un string
+        if isinstance(url, dict):
+            url = url.get('url', str(url))
+        url = str(url)
+        
+        # Verificar o crear directorio temporal para el socket
+        if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
+            try:
+                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
+                self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
+            except Exception as e:
+                self.log(f"Error al crear directorio temporal: {str(e)}")
+                self.mpv_temp_dir = "/tmp"
+        
+        # Crear ruta para el socket
+        socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
+        self.mpv_socket = socket_path
+        
+        # Si existe un socket anterior, eliminarlo
+        if os.path.exists(socket_path):
+            try:
+                os.remove(socket_path)
+                self.log(f"Socket antiguo eliminado: {socket_path}")
+            except Exception as e:
+                self.log(f"Error al eliminar socket antiguo: {str(e)}")
+        
+        # Preparar argumentos para mpv (ventana independiente)
+        mpv_args = [
+            "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
+            "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
+            "--ytdl-format=best",        # Mejor calidad disponible
+            "--keep-open=yes",           # Mantener abierto al finalizar
+            url                          # La URL a reproducir
+        ]
+        
+        # Registrar comando completo para depuración
+        self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
+        
+        # Iniciar mpv para reproducir
+        self.player_process = QProcess()
+        self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
+        self.player_process.readyReadStandardError.connect(self.handle_player_error)
+        self.player_process.finished.connect(self.handle_player_finished)
+        
+        try:
+            self.player_process.start("mpv", mpv_args)
+            success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+            
+            if success:
+                self.is_playing = True
+                self.playButton.setIcon(QIcon(":/services/b_pause"))
+                self.log("Reproducción iniciada correctamente")
+            else:
+                self.log("Error al iniciar MPV: timeout")
+                error = self.player_process.errorString()
+                self.log(f"Error detallado: {error}")
+                    
+        except Exception as e:
+            self.log(f"Excepción al iniciar MPV: {str(e)}")
+
+
 
     def play_from_index(self, index):
         """Reproduce desde un índice específico de la cola."""
@@ -682,78 +812,86 @@ class UrlPlayer(BaseModule):
         # Reproducir la lista comenzando por el elemento seleccionado
         self.play_with_mpv(urls)
 
-        def play_with_mpv(self, urls):
-            """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
-            if not urls:
-                return
-            
-            # Verificar o crear directorio temporal para el socket
-            if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
-                try:
-                    self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                    self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
-                except Exception as e:
-                    self.log(f"Error al crear directorio temporal: {str(e)}")
-                    self.mpv_temp_dir = "/tmp"
-            
-            # Crear ruta para el socket
-            socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
-            self.mpv_socket = socket_path
-            
-            # Si existe un socket anterior, eliminarlo
-            if os.path.exists(socket_path):
-                try:
-                    os.remove(socket_path)
-                    self.log(f"Socket antiguo eliminado: {socket_path}")
-                except Exception as e:
-                    self.log(f"Error al eliminar socket antiguo: {str(e)}")
-            
-            # Preparar argumentos para mpv (ventana independiente)
-            mpv_args = [
-                "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
-                "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
-                "--ytdl-format=best",        # Mejor calidad disponible
-                "--keep-open=yes",           # Mantener abierto al finalizar
-            ]
-            
-            # Añadir URLs
-            mpv_args.extend(urls)
-            
-            # Registrar comando completo para depuración
-            self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
-            
-            # Iniciar mpv para reproducir
-            self.player_process = QProcess()
-            self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
-            self.player_process.readyReadStandardError.connect(self.handle_player_error)
-            self.player_process.finished.connect(self.handle_player_finished)
-            
+    def play_with_mpv(self, urls):
+        """Reproduce las URLs proporcionadas con MPV en ventana independiente."""
+        if not urls:
+            return
+        
+        # Verificar o crear directorio temporal para el socket
+        if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
             try:
-                self.player_process.start("mpv", mpv_args)
-                success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
-                
-                if success:
-                    self.is_playing = True
-                    #self.playButton.setText("⏸️")
-                    self.playButton.setIcon(QIcon(":/services/b_pause"))
-                    self.log("Reproducción iniciada correctamente")
-                else:
-                    self.log("Error al iniciar MPV: timeout")
-                    error = self.player_process.errorString()
-                    self.log(f"Error detallado: {error}")
-                        
+                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
+                self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
             except Exception as e:
-                self.log(f"Excepción al iniciar MPV: {str(e)}")
-
-
+                self.log(f"Error al crear directorio temporal: {str(e)}")
+                self.mpv_temp_dir = "/tmp"
+        
+        # Crear ruta para el socket
+        socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
+        self.mpv_socket = socket_path
+        
+        # Si existe un socket anterior, eliminarlo
+        if os.path.exists(socket_path):
+            try:
+                os.remove(socket_path)
+                self.log(f"Socket antiguo eliminado: {socket_path}")
+            except Exception as e:
+                self.log(f"Error al eliminar socket antiguo: {str(e)}")
+        
+        # Preparar argumentos para mpv (ventana independiente)
+        mpv_args = [
+            "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
+            "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
+            "--ytdl-format=best",        # Mejor calidad disponible
+            "--keep-open=yes",           # Mantener abierto al finalizar
+        ]
+        
+        # Convertir todas las URLs a strings si no lo son
+        url_args = []
+        for url in urls:
+            if isinstance(url, dict):
+                # Si es un diccionario, intentar extraer la URL
+                url_str = url.get('url', str(url))
+                url_args.append(url_str)
+            else:
+                url_args.append(str(url))
+        
+        # Añadir URLs
+        mpv_args.extend(url_args)
+        
+        # Registrar comando completo para depuración
+        self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
+        
+        # Iniciar mpv para reproducir
+        self.player_process = QProcess()
+        self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
+        self.player_process.readyReadStandardError.connect(self.handle_player_error)
+        self.player_process.finished.connect(self.handle_player_finished)
+        
+        try:
+            self.player_process.start("mpv", mpv_args)
+            success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
+            
+            if success:
+                self.is_playing = True
+                self.playButton.setIcon(QIcon(":/services/b_pause"))
+                self.log("Reproducción iniciada correctamente")
+            else:
+                self.log("Error al iniciar MPV: timeout")
+                error = self.player_process.errorString()
+                self.log(f"Error detallado: {error}")
+                    
+        except Exception as e:
+            self.log(f"Excepción al iniciar MPV: {str(e)}")
 
     def perform_search(self):
         """Realiza una búsqueda basada en el servicio seleccionado y la consulta."""
         query = self.lineEdit.text().strip()
         if not query:
+            self.log("Query vacío, cancelando búsqueda")
             return
         
-        self.log(f"Buscando: {query}")
+        self.log(f"Iniciando búsqueda: '{query}'")
         
         # Limpiar resultados previos
         self.treeWidget.clear()
@@ -766,6 +904,12 @@ class UrlPlayer(BaseModule):
         self.textEdit.append(f"Buscando '{query}' en {service}...")
         QApplication.processEvents()
         
+        # Si se ingresó una URL directa, manejarla inmediatamente
+        if query.startswith(("http://", "https://")):
+            self.log(f"URL detectada: {query}")
+            self.handle_direct_url(query)
+            return
+        
         # Crear y configurar el worker
         worker = SearchWorker(service, query)
         
@@ -776,10 +920,50 @@ class UrlPlayer(BaseModule):
         
         # Iniciar el worker en el thread pool
         QThreadPool.globalInstance().start(worker)
-
+        self.log("Worker iniciado en thread pool")
 
  
-
+    def handle_direct_url(self, url):
+        """Maneja la entrada de una URL directa."""
+        self.log(f"Procesando URL directa: {url}")
+        
+        # Determinar tipo de servicio basado en la URL
+        service_type = "desconocido"
+        if "youtube.com" in url or "youtu.be" in url:
+            service_type = "YouTube"
+        elif "soundcloud.com" in url:
+            service_type = "SoundCloud"
+        elif "bandcamp.com" in url:
+            service_type = "Bandcamp"
+        elif "spotify.com" in url:
+            service_type = "Spotify"
+        
+        self.log(f"Detectado servicio: {service_type}")
+        
+        # Crear un item simple para mostrar en el árbol
+        self.treeWidget.clear()
+        root_item = QTreeWidgetItem(self.treeWidget)
+        root_item.setText(0, "URL directa")
+        root_item.setText(1, service_type)
+        
+        url_item = QTreeWidgetItem(root_item)
+        url_item.setText(0, url)
+        url_item.setText(1, "")
+        url_item.setText(2, service_type)
+        
+        # Guardar la URL para uso posterior
+        url_item.setData(0, Qt.ItemDataRole.UserRole, {
+            "source": service_type.lower(),
+            "title": url,
+            "artist": "",
+            "url": url,
+            "type": "url"
+        })
+        
+        root_item.setExpanded(True)
+        
+        # Opcionalmente, obtener más información sobre la URL
+        self.get_media_info(url)
 
 
     def process_media_info(self, exit_code, url):
@@ -1093,7 +1277,7 @@ class UrlPlayer(BaseModule):
             self.playButton.setIcon(QIcon(":/services/b_play"))
     
     def play_media(self):
-        """Reproduce la cola actual con mpv en ventana independiente."""
+        """Reproduce la cola actual."""
         if not self.current_playlist:
             if self.listWidget.count() == 0:
                 # Si no hay nada en la cola, intentar reproducir lo seleccionado en el árbol
@@ -1109,73 +1293,15 @@ class UrlPlayer(BaseModule):
         if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
             self.send_mpv_command({"command": ["cycle", "pause"]})
             self.is_playing = True
-            #self.playButton.setText("⏸️")
-            self.playButton.setIcon(QIcon(":/services/b_play"))
-
+            self.playButton.setIcon(QIcon(":/services/b_pause"))
             return
         
-        # Crear lista de URLs para mpv
-        urls = [item['url'] for item in self.current_playlist]
-        
-        if not urls:
-            return
-        
-        # Verificar o crear directorio temporal para el socket
-        if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
-            try:
-                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                self.log(f"Directorio temporal creado o recreado: {self.mpv_temp_dir}")
-            except Exception as e:
-                self.log(f"Error al crear directorio temporal: {str(e)}")
-                self.mpv_temp_dir = "/tmp"
-        
-        # Crear ruta para el socket
-        socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
-        self.mpv_socket = socket_path
-        
-        # Si existe un socket anterior, eliminarlo
-        if os.path.exists(socket_path):
-            try:
-                os.remove(socket_path)
-                self.log(f"Socket antiguo eliminado: {socket_path}")
-            except Exception as e:
-                self.log(f"Error al eliminar socket antiguo: {str(e)}")
-        
-        # Preparar argumentos para mpv (sin incrustar)
-        mpv_args = [
-            "--input-ipc-server=" + socket_path,  # Socket para controlar mpv
-            "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
-            "--ytdl-format=best",        # Mejor calidad disponible
-            "--keep-open=yes",           # Mantener abierto al finalizar
-        ]
-        
-        # Añadir URLs
-        mpv_args.extend(urls)
-        
-        # Registrar comando completo para depuración
-        self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
-        
-        # Iniciar mpv para reproducir
-        self.player_process = QProcess()
-        self.player_process.readyReadStandardOutput.connect(self.handle_player_output)
-        self.player_process.readyReadStandardError.connect(self.handle_player_error)
-        self.player_process.finished.connect(self.handle_player_finished)
-        
-        try:
-            self.player_process.start("mpv", mpv_args)
-            success = self.player_process.waitForStarted(3000)  # Esperar 3 segundos máximo
-            
-            if success:
-                self.is_playing = True
-                self.playButton.setIcon(QIcon(":/services/b_pause"))
-                self.log("Reproducción iniciada correctamente")
-            else:
-                self.log("Error al iniciar MPV: timeout")
-                error = self.player_process.errorString()
-                self.log(f"Error detallado: {error}")
-                    
-        except Exception as e:
-            self.log(f"Excepción al iniciar MPV: {str(e)}")
+        # Si tenemos un índice actual válido, reproducir desde él
+        if self.current_track_index >= 0 and self.current_track_index < len(self.current_playlist):
+            self.play_from_index(self.current_track_index)
+        else:
+            # Si no, comenzar desde el principio
+            self.play_from_index(0)
     
     
     def pause_media(self):
@@ -1240,9 +1366,8 @@ class UrlPlayer(BaseModule):
     def handle_player_finished(self, exit_code, exit_status):
         """Maneja el evento de finalización del reproductor."""
         self.is_playing = False
-        #self.playButton.setText("▶️")
         self.playButton.setIcon(QIcon(":/services/b_play"))
-
+        
         self.log(f"Reproducción finalizada (código {exit_code})")
         
         # Cerrar recursos asociados
@@ -1251,6 +1376,11 @@ class UrlPlayer(BaseModule):
                 os.remove(self.mpv_socket)
             except:
                 pass
+        
+        # Reproducir siguiente pista si la finalización no fue por una acción del usuario
+        if exit_code == 0 and self.current_playlist and self.current_track_index >= 0:
+            # Asumimos que el reproductor terminó normalmente, pasamos a la siguiente pista
+            self.next_track()
     
     def send_mpv_command(self, command):
         """Envía un comando a mpv a través del socket IPC."""
@@ -1278,17 +1408,28 @@ class UrlPlayer(BaseModule):
     
     def previous_track(self):
         """Reproduce la pista anterior."""
-        if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
-            success = self.send_mpv_command({"command": ["playlist-prev"]})
-            if success:
-                self.log("Pista anterior")
-    
+        if not self.current_playlist:
+            return
+        
+        prev_index = self.current_track_index - 1
+        if prev_index < 0:
+            prev_index = len(self.current_playlist) - 1  # Ir al final si estamos al principio
+        
+        self.log(f"Cambiando a la pista anterior (índice {prev_index})")
+        self.play_from_index(prev_index)
+
+
     def next_track(self):
         """Reproduce la siguiente pista."""
-        if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
-            success = self.send_mpv_command({"command": ["playlist-next"]})
-            if success:
-                self.log("Siguiente pista")
+        if not self.current_playlist:
+            return
+        
+        next_index = self.current_track_index + 1
+        if next_index >= len(self.current_playlist):
+            next_index = 0  # Volver al principio si estamos al final
+        
+        self.log(f"Cambiando a la siguiente pista (índice {next_index})")
+        self.play_from_index(next_index)
     
 def rebuild_playlist_from_listwidget(self):
     """Reconstruye la lista de reproducción desde el ListWidget."""

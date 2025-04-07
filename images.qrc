@@ -93,5 +93,6 @@
         <file alias="b_close">ui/svg/close-one-svgrepo-com.svg</file>
         <file alias="b_alert">ui/svg/caution-svgrepo-com.svg</file>
         <file alias="b_plus_cross">ui/svg/plus-cross-svgrepo-com.svg</file>
+        <file alias="bandcamp">ui/svg/bandcamp-svgrepo-com.svg</file>
     </qresource>
 </RCC>

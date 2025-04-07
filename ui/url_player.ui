@@ -184,6 +184,16 @@ QProgressBar::chunk {
        </spacer>
       </item>
       <item>
+       <widget class="QComboBox" name="servicios">
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="searchButton">
         <property name="text">
          <string/>
@@ -198,25 +208,6 @@ QProgressBar::chunk {
           <height>30</height>
          </size>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="servicios">
-        <item>
-         <property name="text">
-          <string>bandcamp</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>soundcloud</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>youtube</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>
