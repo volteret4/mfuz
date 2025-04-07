@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GenreFilterDialog</class>
+ <widget class="QDialog" name="GenreFilterDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Filtrar Géneros</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background-color: #FFFFFF;
+}
+
+QLabel {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	font-size: 10pt;
+}
+
+QLineEdit {
+	border: 1px solid #E0E0E0;
+	border-radius: 4px;
+	padding: 5px;
+	background-color: #F5F5F5;
+}
+
+QLineEdit:focus {
+	border: 1px solid #78909C;
+	background-color: #FFFFFF;
+}
+
+QPushButton {
+	background-color: #607D8B;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 6px 12px;
+	font-weight: bold;
+}
+
+QPushButton:hover {
+	background-color: #78909C;
+}
+
+QPushButton:pressed {
+	background-color: #546E7A;
+}
+
+QTableWidget {
+	border: 1px solid #E0E0E0;
+	background-color: #FFFFFF;
+	alternate-background-color: #F5F5F5;
+	selection-background-color: #CFD8DC;
+}
+
+QTableWidget::item {
+	padding: 4px;
+	border-bottom: 1px solid #E0E0E0;
+}
+
+QHeaderView::section {
+	background-color: #ECEFF1;
+	color: #37474F;
+	padding: 5px;
+	border: none;
+	border-right: 1px solid #E0E0E0;
+	border-bottom: 1px solid #E0E0E0;
+	font-weight: bold;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>16</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="searchLayout">
+     <item>
+      <widget class="QLabel" name="searchLabel">
+       <property name="text">
+        <string>Buscar:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="search_edit">
+       <property name="placeholderText">
+        <string>Escribe para filtrar...</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="genres_table">
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::SingleSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>Género</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Artistas</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Sellos</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="buttonLayout">
+     <item>
+      <widget class="QPushButton" name="select_all_btn">
+       <property name="text">
+        <string>Seleccionar Todos</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/select_all.svg</normaloff>icons/select_all.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deselect_all_btn">
+       <property name="text">
+        <string>Deseleccionar Todos</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/deselect_all.svg</normaloff>icons/deselect_all.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save_btn">
+       <property name="text">
+        <string>Guardar</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/save.svg</normaloff>icons/save.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_btn">
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/cancel.svg</normaloff>icons/cancel.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

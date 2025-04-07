@@ -45,17 +45,17 @@ class UrlPlayer(BaseModule):
         
         # Inicializar variables para widgets
         self.lineEdit = None
-        self.pushButton_6 = None
+        self.searchButton = None
         self.treeWidget = None
-        self.pushButton = None
-        self.pushButton_2 = None
-        self.pushButton_3 = None
+        self.playButton = None
+        self.rewButton = None
+        self.ffButton_3 = None
         self.tabWidget = None
         self.listWidget = None
-        self.pushButton_4 = None
-        self.pushButton_5 = None
+        self.delButton = None
+        self.addButton = None
         self.textEdit = None
-        self.video = None
+        
         
         # Ahora llamamos al constructor padre que llamará a init_ui()
         super().__init__(parent, theme, **kwargs)
@@ -71,9 +71,9 @@ class UrlPlayer(BaseModule):
         """Inicializa la interfaz de usuario desde el archivo UI."""
         # Intentar cargar desde archivo UI
         ui_file_loaded = self.load_ui_file("url_player.ui", [
-            "lineEdit", "pushButton_6", "treeWidget", "pushButton", 
-            "pushButton_2", "pushButton_3", "tabWidget", "listWidget",
-            "pushButton_4", "pushButton_5", "textEdit", "video"
+            "lineEdit", "searchButton", "treeWidget", "playButton", 
+            "rewButton", "ffButton", "tabWidget", "listWidget",
+            "delButton", "addButton", "textEdit"
         ])
         
         if not ui_file_loaded:
@@ -85,18 +85,18 @@ class UrlPlayer(BaseModule):
             return
         
         # Configurar nombres y tooltips
-        self.pushButton_6.setText("Buscar")
-        self.pushButton_6.setToolTip("Buscar información sobre la URL")
-        self.pushButton.setText("▶️")
-        self.pushButton.setToolTip("Reproducir/Pausar")
-        self.pushButton_2.setText("⏮️")
-        self.pushButton_2.setToolTip("Anterior")
-        self.pushButton_3.setText("⏭️")
-        self.pushButton_3.setToolTip("Siguiente")
-        self.pushButton_4.setText("➖")
-        self.pushButton_4.setToolTip("Eliminar de la cola")
-        self.pushButton_5.setText("➕")
-        self.pushButton_5.setToolTip("Añadir a la cola")
+        self.searchButton.setText("Buscar")
+        self.searchButton.setToolTip("Buscar información sobre la URL")
+        self.playButton.setText("▶️")
+        self.playButton.setToolTip("Reproducir/Pausar")
+        self.rewButton.setText("⏮️")
+        self.rewButton.setToolTip("Anterior")
+        self.ffButton.setText("⏭️")
+        self.ffButton.setToolTip("Siguiente")
+        self.delButton.setText("➖")
+        self.delButton.setToolTip("Eliminar de la cola")
+        self.addButton.setText("➕")
+        self.addButton.setToolTip("Añadir a la cola")
         
         # Configurar TreeWidget
         self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
@@ -116,23 +116,23 @@ class UrlPlayer(BaseModule):
         """Conecta las señales de los widgets a sus respectivos slots."""
         try:
             # Conectar señales con verificación previa
-            if self.pushButton_6:
-                self.pushButton_6.clicked.connect(self.search_url)
+            if self.searchButton:
+                self.searchButton.clicked.connect(self.search_url)
             
-            if self.pushButton:
-                self.pushButton.clicked.connect(self.toggle_play_pause)
+            if self.playButton:
+                self.playButton.clicked.connect(self.toggle_play_pause)
             
-            if self.pushButton_2:
-                self.pushButton_2.clicked.connect(self.previous_track)
+            if self.rewButton:
+                self.rewButton.clicked.connect(self.previous_track)
             
-            if self.pushButton_3:
-                self.pushButton_3.clicked.connect(self.next_track)
+            if self.ffButton:
+                self.ffButton.clicked.connect(self.next_track)
             
-            if self.pushButton_5:
-                self.pushButton_5.clicked.connect(self.add_to_queue)
+            if self.addButton:
+                self.addButton.clicked.connect(self.add_to_queue)
             
-            if self.pushButton_4:
-                self.pushButton_4.clicked.connect(self.remove_from_queue)
+            if self.delButton:
+                self.delButton.clicked.connect(self.remove_from_queue)
             
             if self.lineEdit:
                 self.lineEdit.returnPressed.connect(self.search_url)
@@ -156,9 +156,9 @@ class UrlPlayer(BaseModule):
         search_frame = QFrame()
         search_layout = QHBoxLayout(search_frame)
         self.lineEdit = QLineEdit()
-        self.pushButton_6 = QPushButton("Buscar")
+        self.searchButton = QPushButton("Buscar")
         search_layout.addWidget(self.lineEdit)
-        search_layout.addWidget(self.pushButton_6)
+        search_layout.addWidget(self.searchButton)
         
         # Panel principal
         main_frame = QFrame()
@@ -178,17 +178,14 @@ class UrlPlayer(BaseModule):
         # Panel de botones del reproductor
         player_buttons_frame = QFrame()
         player_buttons_layout = QHBoxLayout(player_buttons_frame)
-        self.pushButton_2 = QPushButton("⏮️")
-        self.pushButton_3 = QPushButton("⏭️")
-        self.pushButton = QPushButton("▶️")
-        player_buttons_layout.addWidget(self.pushButton_2)
-        player_buttons_layout.addWidget(self.pushButton_3)
+        self.rewButton = QPushButton("⏮️")
+        self.ffButton = QPushButton("⏭️")
+        self.playButton = QPushButton("▶️")
+        player_buttons_layout.addWidget(self.rewButton)
+        player_buttons_layout.addWidget(self.ffButton)
         player_buttons_layout.addWidget(self.pushButton)
         
-        # Panel de video
-        self.video = QFrame()
-        self.video.setAutoFillBackground(True)
-        self.video.setMinimumHeight(240)
+
         
         # Panel de información
         info_frame = QFrame()
@@ -202,10 +199,10 @@ class UrlPlayer(BaseModule):
         
         playlist_buttons_frame = QFrame()
         playlist_buttons_layout = QHBoxLayout(playlist_buttons_frame)
-        self.pushButton_5 = QPushButton("➕")
-        self.pushButton_4 = QPushButton("➖")
-        playlist_buttons_layout.addWidget(self.pushButton_5)
-        playlist_buttons_layout.addWidget(self.pushButton_4)
+        self.addButton = QPushButton("➕")
+        self.delButton = QPushButton("➖")
+        playlist_buttons_layout.addWidget(self.addButton)
+        playlist_buttons_layout.addWidget(self.delButton)
         
         playlists_layout.addWidget(self.listWidget)
         playlists_layout.addWidget(playlist_buttons_frame)
@@ -224,7 +221,6 @@ class UrlPlayer(BaseModule):
         
         # Añadir todo al layout del reproductor
         player_layout.addWidget(player_buttons_frame)
-        player_layout.addWidget(self.video)
         player_layout.addWidget(info_frame)
         
         # Añadir frames al layout principal
@@ -238,9 +234,9 @@ class UrlPlayer(BaseModule):
     def check_required_widgets(self):
         """Verifica que todos los widgets requeridos existan."""
         required_widgets = [
-            "lineEdit", "pushButton_6", "treeWidget", "pushButton", 
-            "pushButton_2", "pushButton_3", "tabWidget", "listWidget",
-            "pushButton_4", "pushButton_5", "textEdit", "video"
+            "lineEdit", "searchButton", "treeWidget", "playButton", 
+            "ffButton", "rewButton", "tabWidget", "listWidget",
+            "addButton", "delButton", "textEdit"
         ]
         
         all_ok = True
@@ -351,7 +347,7 @@ class UrlPlayer(BaseModule):
                 
                 if success:
                     self.is_playing = True
-                    self.pushButton.setText("⏸️")
+                    self.playButton.setText("⏸️")
                     self.log("Reproducción iniciada correctamente")
                 else:
                     self.log("Error al iniciar MPV: timeout")
@@ -527,20 +523,20 @@ class UrlPlayer(BaseModule):
         except (ValueError, TypeError):
             return "Desconocido"
     
-    def showEvent(self, event):
-        """Cuando el widget se muestra, ajustar el tamaño del frame de video."""
-        super().showEvent(event)
+    # def showEvent(self, event):
+    #     """Cuando el widget se muestra, ajustar el tamaño del frame de video."""
+    #     super().showEvent(event)
         
-        # Asegurarnos de que el frame de video tenga suficiente espacio
-        if hasattr(self, 'video'):
-            # Calcular un buen tamaño para el video
-            available_width = self.width() // 2  # La mitad del ancho del widget
-            self.video.setMinimumWidth(available_width)
+    #     # Asegurarnos de que el frame de video tenga suficiente espacio
+    #     if hasattr(self, 'video'):
+    #         # Calcular un buen tamaño para el video
+    #         available_width = self.width() // 2  # La mitad del ancho del widget
+    #         self.video.setMinimumWidth(available_width)
             
-            # Altura proporcional (formato 16:9 aproximado)
-            aspect_ratio = 9/16
-            suggested_height = int(available_width * aspect_ratio)
-            self.video.setMinimumHeight(suggested_height)
+    #         # Altura proporcional (formato 16:9 aproximado)
+    #         aspect_ratio = 9/16
+    #         suggested_height = int(available_width * aspect_ratio)
+    #         self.video.setMinimumHeight(suggested_height)
 
 
     def show_detailed_info(self, entry):
@@ -666,7 +662,7 @@ class UrlPlayer(BaseModule):
         if self.player_process and self.player_process.state() == QProcess.ProcessState.Running:
             self.send_mpv_command({"command": ["cycle", "pause"]})
             self.is_playing = True
-            self.pushButton.setText("⏸️")
+            self.playButton.setText("⏸️")
             return
         
         # Crear lista de URLs para mpv
@@ -722,7 +718,7 @@ class UrlPlayer(BaseModule):
             
             if success:
                 self.is_playing = True
-                self.pushButton.setText("⏸️")
+                self.playButton.setText("⏸️")
                 self.log("Reproducción iniciada correctamente")
             else:
                 self.log("Error al iniciar MPV: timeout")
@@ -848,7 +844,7 @@ class UrlPlayer(BaseModule):
                     self.player_process.kill()
             
             self.is_playing = False
-            self.pushButton.setText("▶️")
+            self.playButton.setText("▶️")
     
     def pause_media(self):
         """Pausa la reproducción actual."""
@@ -857,7 +853,7 @@ class UrlPlayer(BaseModule):
             
             if success:
                 self.is_playing = False
-                self.pushButton.setText("▶️")
+                self.playButton.setText("▶️")
                 self.log("Reproducción pausada")
             else:
                 self.log("Error al pausar la reproducción")
@@ -879,7 +875,7 @@ class UrlPlayer(BaseModule):
     def handle_player_finished(self, exit_code, exit_status):
         """Maneja el evento de finalización del reproductor."""
         self.is_playing = False
-        self.pushButton.setText("▶️")
+        self.playButton.setText("▶️")
         self.log(f"Reproducción finalizada (código {exit_code})")
         
         # Cerrar recursos asociados

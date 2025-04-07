@@ -314,19 +314,99 @@ class TabManager(QMainWindow):
             QWidget {{
                 background-color: {theme['bg']};
                 color: {theme['fg']};
-                font-family: {self.font_family};
-                font-size: {self.font_size};
-                border: none
+                font-family: "Segoe UI", "Noto Fonts Emoji", sans-serif;
+                font-size: 10pt;
             }}
-            
-            /* Main Window */
-            QMainWindow {{
+
+            /* Remove borders from all frames */
+            QFrame, QGroupBox {{
+                border: none;
+                border-radius: 4px;
+            }}
+
+            /* Text input fields */
+            QLineEdit, QTextEdit {{
+                border: 1px solid;
+                border-radius: 4px;
+                padding: 8px;
                 background-color: {theme['bg']};
             }}
-            
-            QFrame {{
-                border: none
-                border-radius: 3px;
+
+            /* Buttons */
+            QPushButton {{
+                background-color: {theme['bg']};
+                color: {theme['fg']};
+                border: none;
+                border-radius: 4px;
+                padding: 8px 16px;
+                font-weight: bold;
+            }}
+
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+            }}
+
+            QPushButton:pressed {{
+                background-color: {theme['secondary_bg']};
+                color: {theme['fg']};
+            }}
+
+            /* Lists and Trees */
+            QTreeWidget, QListWidget {{
+                background-color: {theme['bg']};
+                border: none;
+                border-radius: 4px;
+            }}
+
+            QTreeWidget::item, QListWidget::item {{
+                padding: 4px;
+            }}
+
+            QTreeWidget::item:selected, QListWidget::item:selected {{
+                background-color: {theme['accent']};
+            }}
+
+            /* Tab Widget */
+            QTabWidget::pane {{
+                border: none;
+                background-color: {theme['secondary_bg']};
+                border-radius: 4px;
+            }}
+
+            QTabBar::tab {{
+                background-color: {theme['secondary_bg']};
+                color: {theme['fg']};
+                border: none;
+                padding: 8px 16px;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+            }}
+
+            QTabBar::tab:selected {{
+                background-color: {theme['button_hover']};
+                color: {theme['fg']};
+            }}
+
+            QTabBar::tab:hover:!selected {{
+                background-color: {theme['secondary_bg']};
+            }}
+
+            /* Scroll Areas */
+            QScrollArea {{
+                border: none;
+            }}
+
+            /* Progress Bar */
+            QProgressBar {{
+                border: none;
+                background-color: {theme['secondary_bg']};
+                border-radius: 4px;
+                text-align: center;
+            }}
+
+            QProgressBar::chunk {{
+                background-color: {theme['accent']};
+                border-radius: 4px;
             }}
 
         """)

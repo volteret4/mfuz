@@ -13,6 +13,143 @@
   <property name="windowTitle">
    <string>Music Quiz</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo general */
+QWidget {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 10pt;
+}
+
+/* Botones */
+QPushButton {
+    background-color: #607D8B;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #78909C;
+}
+
+QPushButton:pressed {
+    background-color: #546E7A;
+}
+
+/* Botones de acción (Iniciar/Detener) */
+#toggle_button {
+    background-color: #4CAF50;
+    padding: 8px 16px;
+    font-size: 11pt;
+}
+
+#toggle_button:hover {
+    background-color: #66BB6A;
+}
+
+#toggle_button:pressed {
+    background-color: #43A047;
+}
+
+/* Botón de configuración */
+#config_button {
+    background-color: #607D8B;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+/* GroupBox */
+QGroupBox {
+    border: 1px solid #E0E0E0;
+    border-radius: 6px;
+    margin-top: 12px;
+    background-color: rgba(236, 239, 241, 0.5);
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    background-color: transparent;
+    padding: 0 5px;
+    color: #37474F;
+}
+
+/* ProgressBar */
+QProgressBar {
+    border: none;
+    border-radius: 3px;
+    text-align: center;
+    background-color: #E0E0E0;
+}
+
+QProgressBar::chunk {
+    background-color: #4CAF50;
+    border-radius: 3px;
+}
+
+/* ComboBox */
+QComboBox {
+    border: 1px solid #E0E0E0;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #F5F5F5;
+}
+
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #78909C;
+    background-color: #FFFFFF;
+}
+
+QComboBox::drop-down {
+    border: none;
+    border-left: 1px solid #E0E0E0;
+    width: 20px;
+}
+
+QComboBox::down-arrow {
+    width: 12px;
+    height: 12px;
+}
+
+/* Labels */
+QLabel {
+    color: #455A64;
+}
+
+#countdown_label {
+    color: #607D8B;
+    font-weight: bold;
+    font-size: 18pt;
+}
+
+/* Scroll Area */
+QScrollArea {
+    border: none;
+    background-color: transparent;
+}
+
+/* Botones de Filtro */
+QPushButton[filter_button=true] {
+    background-color: transparent;
+    color: #607D8B;
+    border: 1px solid #B0BEC5;
+    border-radius: 4px;
+    padding: 6px;
+    font-weight: normal;
+}
+
+QPushButton[filter_button=true]:hover {
+    background-color: rgba(96, 125, 139, 0.1);
+    border-color: #607D8B;
+}
+
+/* Contenedor de opciones */
+#options_container {
+    background-color: transparent;
+}</string>
+  </property>
   <layout class="QVBoxLayout" name="main_layout">
    <property name="spacing">
     <number>20</number>
@@ -31,24 +168,32 @@
    </property>
    <item>
     <widget class="QScrollArea" name="scroll_area">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
      <widget class="QWidget" name="scroll_content">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>760</width>
+        <height>560</height>
+       </rect>
+      </property>
       <layout class="QVBoxLayout" name="scroll_layout">
        <property name="spacing">
         <number>20</number>
        </property>
        <item>
         <widget class="QGroupBox" name="config_group">
-         <property name="title">
-          <string>Configuración</string>
-         </property>
          <property name="visible">
           <bool>false</bool>
+         </property>
+         <property name="title">
+          <string>Configuración</string>
          </property>
          <layout class="QGridLayout" name="config_layout">
           <item row="0" column="0">
@@ -193,21 +338,19 @@
             </item>
            </widget>
           </item>
-          <item row="3" column="0" colspan="2">
+          <item row="4" column="0" colspan="2">
            <layout class="QGridLayout" name="filter_layout">
             <item row="0" column="0">
              <widget class="QPushButton" name="filter_artists_btn">
               <property name="text">
                <string>Filtrar Artistas</string>
               </property>
-              <property name="styleSheet">
-               <string>QPushButton {
-    border: none;
-    padding: 5px;
-}
-QPushButton:hover {
-    background-color: rgba(255, 0, 0, 0.2);
-}</string>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/artist.svg</normaloff>icons/artist.svg</iconset>
               </property>
              </widget>
             </item>
@@ -216,14 +359,12 @@ QPushButton:hover {
               <property name="text">
                <string>Filtrar Álbumes</string>
               </property>
-              <property name="styleSheet">
-               <string>QPushButton {
-    border: none;
-    padding: 5px;
-}
-QPushButton:hover {
-    background-color: rgba(255, 0, 0, 0.2);
-}</string>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/album.svg</normaloff>icons/album.svg</iconset>
               </property>
              </widget>
             </item>
@@ -232,14 +373,12 @@ QPushButton:hover {
               <property name="text">
                <string>Filtrar Carpetas</string>
               </property>
-              <property name="styleSheet">
-               <string>QPushButton {
-    border: none;
-    padding: 5px;
-}
-QPushButton:hover {
-    background-color: rgba(255, 0, 0, 0.2);
-}</string>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/folder.svg</normaloff>icons/folder.svg</iconset>
               </property>
              </widget>
             </item>
@@ -248,14 +387,12 @@ QPushButton:hover {
               <property name="text">
                <string>Filtrar Géneros</string>
               </property>
-              <property name="styleSheet">
-               <string>QPushButton {
-    border: none;
-    padding: 5px;
-}
-QPushButton:hover {
-    background-color: rgba(255, 0, 0, 0.2);
-}</string>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/genre.svg</normaloff>icons/genre.svg</iconset>
               </property>
              </widget>
             </item>
@@ -264,6 +401,13 @@ QPushButton:hover {
               <property name="text">
                <string>Filtros de Sesión ⭐</string>
               </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/session.svg</normaloff>icons/session.svg</iconset>
+              </property>
              </widget>
             </item>
             <item row="2" column="1">
@@ -271,12 +415,26 @@ QPushButton:hover {
               <property name="text">
                <string>Limpiar Filtros Sesión</string>
               </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/clear.svg</normaloff>icons/clear.svg</iconset>
+              </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QPushButton" name="filter_sellos_btn">
               <property name="text">
                <string>Filtrar Sellos</string>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>icons/label.svg</normaloff>icons/label.svg</iconset>
               </property>
              </widget>
             </item>
@@ -309,9 +467,6 @@ QPushButton:hover {
            <property name="value">
             <number>100</number>
            </property>
-           <property name="styleSheet">
-            <string>QProgressBar { border: none; background-color: transparent; }</string>
-           </property>
           </widget>
          </item>
          <item>
@@ -326,7 +481,7 @@ QPushButton:hover {
            <property name="text">
             <string>⚙️</string>
            </property>
-           <property name="fixedWidth">
+           <property name="fixedWidth" stdset="0">
             <number>40</number>
            </property>
           </widget>
@@ -335,7 +490,20 @@ QPushButton:hover {
        </item>
        <item>
         <widget class="QWidget" name="options_container">
-         <layout class="QGridLayout" name="options_grid"/>
+         <layout class="QGridLayout" name="options_grid">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+         </layout>
         </widget>
        </item>
        <item>
@@ -345,7 +513,7 @@ QPushButton:hover {
            <property name="text">
             <string>Aciertos: 0</string>
            </property>
-           <property name="fixedHeight">
+           <property name="fixedHeight" stdset="0">
             <number>20</number>
            </property>
           </widget>
@@ -355,7 +523,7 @@ QPushButton:hover {
            <property name="text">
             <string>Total: 0</string>
            </property>
-           <property name="fixedHeight">
+           <property name="fixedHeight" stdset="0">
             <number>20</number>
            </property>
           </widget>
@@ -365,7 +533,7 @@ QPushButton:hover {
            <property name="text">
             <string>Precisión: 0%</string>
            </property>
-           <property name="fixedHeight">
+           <property name="fixedHeight" stdset="0">
             <number>20</number>
            </property>
           </widget>

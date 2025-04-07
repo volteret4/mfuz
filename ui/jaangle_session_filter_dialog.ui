@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SessionFilterDialog</class>
+ <widget class="QDialog" name="SessionFilterDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>550</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Filtros de Sesión</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background-color: #FFFFFF;
+}
+
+QLabel {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	font-size: 10pt;
+}
+
+QLineEdit, QComboBox {
+	border: 1px solid #E0E0E0;
+	border-radius: 4px;
+	padding: 5px;
+	background-color: #F5F5F5;
+}
+
+QLineEdit:focus, QComboBox:focus {
+	border: 1px solid #78909C;
+	background-color: #FFFFFF;
+}
+
+QComboBox::drop-down {
+	border: none;
+	border-left: 1px solid #E0E0E0;
+	width: 20px;
+}
+
+QComboBox::down-arrow {
+	image: url(icons/down_arrow.png);
+	width: 12px;
+	height: 12px;
+}
+
+QPushButton {
+	background-color: #607D8B;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	padding: 6px 12px;
+	font-weight: bold;
+}
+
+QPushButton:hover {
+	background-color: #78909C;
+}
+
+QPushButton:pressed {
+	background-color: #546E7A;
+}
+
+QCheckBox {
+	spacing: 8px;
+}
+
+QCheckBox::indicator {
+	width: 18px;
+	height: 18px;
+}
+
+QCheckBox::indicator:unchecked {
+	border: 2px solid #B0BEC5;
+	background-color: #FFFFFF;
+	border-radius: 3px;
+}
+
+QCheckBox::indicator:checked {
+	border: 2px solid #607D8B;
+	background-color: #607D8B;
+	border-radius: 3px;
+}
+
+QScrollArea {
+	border: 1px solid #E0E0E0;
+	background-color: #FFFFFF;
+}
+
+QWidget#scrollAreaContent {
+	background-color: #FFFFFF;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>16</number>
+   </property>
+   <property name="leftMargin">
+    <number>16</number>
+   </property>
+   <property name="topMargin">
+    <number>16</number>
+   </property>
+   <property name="rightMargin">
+    <number>16</number>
+   </property>
+   <property name="bottomMargin">
+    <number>16</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="filterTypeLayout">
+     <item>
+      <widget class="QLabel" name="filterTypeLabel">
+       <property name="text">
+        <string>Tipo de filtro:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="filter_type_combo">
+       <item>
+        <property name="text">
+         <string>Artistas</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Álbumes</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Géneros</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Carpetas</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="searchLayout">
+     <item>
+      <widget class="QLabel" name="searchLabel">
+       <property name="text">
+        <string>Buscar:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="search_edit">
+       <property name="placeholderText">
+        <string>Escribe para filtrar...</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="itemScrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaContent">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>466</width>
+        <height>392</height>
+       </rect>
+      </property>
+      <property name="objectName">
+       <string>scrollAreaContent</string>
+      </property>
+      <layout class="QVBoxLayout" name="checkboxLayout">
+       <property name="spacing">
+        <number>8</number>
+       </property>
+       <property name="leftMargin">
+        <number>12</number>
+       </property>
+       <property name="topMargin">
+        <number>12</number>
+       </property>
+       <property name="rightMargin">
+        <number>12</number>
+       </property>
+       <property name="bottomMargin">
+        <number>12</number>
+       </property>
+       <!-- Los checkboxes se añadirán dinámicamente aquí -->
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="sessionLayout">
+     <item>
+      <widget class="QLabel" name="sessionLabel">
+       <property name="text">
+        <string>Nombre de la sesión:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="session_edit">
+       <property name="placeholderText">
+        <string>Mi sesión personalizada</string>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="sessionOpsLayout">
+     <item>
+      <widget class="QPushButton" name="save_session_btn">
+       <property name="text">
+        <string>Guardar Sesión</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/save_session.svg</normaloff>icons/save_session.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="load_session_btn">
+       <property name="text">
+        <string>Cargar Sesión</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/load_session.svg</normaloff>icons/load_session.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="buttonLayout">
+     <item>
+      <widget class="QPushButton" name="select_all_btn">
+       <property name="text">
+        <string>Seleccionar Todos</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/select_all.svg</normaloff>icons/select_all.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deselect_all_btn">
+       <property name="text">
+        <string>Deseleccionar Todos</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/deselect_all.svg</normaloff>icons/deselect_all.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="apply_btn">
+       <property name="text">
+        <string>Aplicar</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/apply.svg</normaloff>icons/apply.svg</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_btn">
+       <property name="text">
+        <string>Cancelar</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>icons/cancel.svg</normaloff>icons/cancel.svg</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

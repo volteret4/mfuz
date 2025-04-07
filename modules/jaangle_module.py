@@ -164,195 +164,50 @@ class MusicQuiz(BaseModule):
         # Deshabilitar opciones al inicio
         self.enable_options(False)
 
-    def _fallback_init_ui(self):
-        """Método de respaldo para crear la UI manualmente si el archivo UI falla"""
-        print("Usando método fallback para crear UI del Music Quiz")
-        main_layout = QVBoxLayout()
-        main_layout.setSpacing(20)
-        main_layout.setContentsMargins(20, 20, 20, 20)
+    def _fallback_init_option(self, i, row, col, options_layout):
+        """Método de respaldo para crear una opción si falla la carga de la UI"""
+        option_group = QGroupBox(f"Opción {i+1}")
+        option_layout = QHBoxLayout()
         
-        # Contenedor principal con scroll
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)  # Ocultar bordes
-        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)  # Ocultar scrollbar horizontal
-        scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)  # Mostrar scrollbar vertical solo cuando sea necesario
+        # Imagen del álbum
+        album_image = QLabel()
+        album_image.setFixedSize(80, 80)
+        album_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        album_image.setText("Portada")
+        album_image.setStyleSheet("border: 1px solid gray; background-color: lightgray;")
+        option_layout.addWidget(album_image)
         
-        # Widget contenedor para el contenido
-        scroll_content = QWidget()
-        scroll_layout = QVBoxLayout(scroll_content)
-        scroll_layout.setSpacing(20)
+        # Información de la canción
+        song_info = QVBoxLayout()
+        song_label = ScalableLabel("Título:")
+        artist_label = ScalableLabel("Artista:")
+        album_label = ScalableLabel("Álbum:")
         
-        # Configuración del juego (inicialmente oculta)
-        self.config_group = QGroupBox("Configuración")
-        self.config_group.setVisible(False)  # Oculta por defecto
-        config_layout = QGridLayout()
+        song_info.addWidget(song_label)
+        song_info.addWidget(artist_label)
+        song_info.addWidget(album_label)
         
-        # Duración total del quiz (ComboBox en lugar de SpinBox)
-        self.quiz_duration_combo = QComboBox()
-        self.quiz_duration_combo.addItems(["1 min", "3 min", "5 min", "10 min"])
-        self.quiz_duration_combo.setCurrentIndex(2)  # Default: 5 min
-        config_layout.addWidget(QLabel("Duración del quiz:"), 0, 0)
-        config_layout.addWidget(self.quiz_duration_combo, 0, 1)
+        # Contenedor para la información de la canción
+        info_container = QWidget()
+        info_container.setLayout(song_info)
+        option_layout.addWidget(info_container, 1)
         
-        # Duración de cada canción (ComboBox en lugar de SpinBox)
-        self.song_duration_combo = QComboBox()
-        self.song_duration_combo.addItems(["5 seg", "10 seg", "20 seg", "30 seg", "60 seg"])
-        self.song_duration_combo.setCurrentIndex(3)  # Default: 30 seg
-        config_layout.addWidget(QLabel("Tiempo por canción:"), 1, 0)
-        config_layout.addWidget(self.song_duration_combo, 1, 1)
+        # Botón de selección
+        select_button = QPushButton("Seleccionar")
+        select_button.setProperty("option_id", i)
+        select_button.clicked.connect(self.on_option_selected)
         
-        # Pausa entre canciones (ComboBox en lugar de SpinBox)
-        self.pause_duration_combo = QComboBox()
-        self.pause_duration_combo.addItems(["0 seg", "1 seg", "2 seg", "3 seg", "5 seg", "10 seg"])
-        self.pause_duration_combo.setCurrentIndex(4)  # Default: 5 seg
-        config_layout.addWidget(QLabel("Pausa entre canciones:"), 2, 0)
-        config_layout.addWidget(self.pause_duration_combo, 2, 1)
+        # Guardar referencias para actualizar después
+        select_button.song_label = song_label
+        select_button.artist_label = artist_label
+        select_button.album_label = album_label
+        select_button.album_image = album_image
         
-        # Número de opciones (nuevo)
-        self.options_count_combo = QComboBox()
-        self.options_count_combo.addItems(["2", "4", "6", "8"])
+        option_layout.addWidget(select_button)
+        option_group.setLayout(option_layout)
         
-        # Seleccionar el valor por defecto según la configuración
-        default_index = 1  # 4 opciones por defecto (índice 1)
-        if self.options_count == 2:
-            default_index = 0
-        elif self.options_count == 6:
-            default_index = 2
-        elif self.options_count == 8:
-            default_index = 3
-        
-        self.options_count_combo.setCurrentIndex(default_index)
-        config_layout.addWidget(QLabel("Número de opciones:"), 3, 0)
-        config_layout.addWidget(self.options_count_combo, 3, 1)
-        
-        # Botones para filtros en la configuración
-        filter_layout = QGridLayout()
-        self.filter_artists_btn = QPushButton("Filtrar Artistas")
-        self.filter_artists_btn.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 0, 0, 0.2);
-            }
-        """)
-        self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
-        filter_layout.addWidget(self.filter_artists_btn, 0, 0)
-        
-        self.filter_albums_btn = QPushButton("Filtrar Álbumes")
-        self.filter_albums_btn.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 0, 0, 0.2);
-            }
-        """)
-        self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
-        filter_layout.addWidget(self.filter_albums_btn, 0, 1)
-        
-        self.filter_folders_btn = QPushButton("Filtrar Carpetas")
-        self.filter_folders_btn.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 0, 0, 0.2);
-            }
-        """)
-        self.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
-        filter_layout.addWidget(self.filter_folders_btn, 1, 0)
-        
-        self.filter_genres_btn = QPushButton("Filtrar Géneros")
-        self.filter_genres_btn.setStyleSheet("""
-            QPushButton {
-                border: none;
-                padding: 5px;
-            }
-            QPushButton:hover {
-                background-color: rgba(255, 0, 0, 0.2);
-            }
-        """)
-        self.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
-        filter_layout.addWidget(self.filter_genres_btn, 1, 1)
-        
-        self.filter_sellos_btn = QPushButton("Filtrar Sellos")
-        self.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
-        filter_layout.addWidget(self.filter_sellos_btn, 2, 0)
-
-        # Nuevo botón para filtros de sesión
-        self.session_filters_btn = QPushButton("Filtros de Sesión ⭐")
-        self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
-        filter_layout.addWidget(self.session_filters_btn, 3, 0)
-        
-        # Botón para limpiar filtros de sesión
-        self.clear_session_btn = QPushButton("Limpiar Filtros Sesión")
-        self.clear_session_btn.clicked.connect(self.clear_session_filters)
-        filter_layout.addWidget(self.clear_session_btn, 3, 1)
-        
-        config_layout.addLayout(filter_layout, 4, 0, 1, 2)  # Añadir layout de filtros a la configuración
-        
-        self.config_group.setLayout(config_layout)
-        scroll_layout.addWidget(self.config_group)
-        
-        # Timer y progreso en un layout horizontal más compacto con botón de inicio/detención
-        timer_layout = QHBoxLayout()
-        
-        self.countdown_label = QLabel("30")
-        self.countdown_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.countdown_label.setFont(QFont("Arial", 18, QFont.Weight.Bold))
-        timer_layout.addWidget(self.countdown_label)
-        
-        self.progress_bar = QProgressBar()
-        self.progress_bar.setRange(0, 100)
-        self.progress_bar.setValue(100)
-        self.progress_bar.setMaximumHeight(self.countdown_label.sizeHint().height())
-        self.progress_bar.setStyleSheet("QProgressBar { border: none; background-color: transparent; }")
-        timer_layout.addWidget(self.progress_bar)
-        
-        # Botón toggle para iniciar/detener
-        self.toggle_button = QPushButton("Iniciar Quiz")
-        self.toggle_button.clicked.connect(self.toggle_quiz)
-        timer_layout.addWidget(self.toggle_button)
-        
-        # Botón de configuración
-        self.config_button = QPushButton("⚙️")
-        self.config_button.setFixedWidth(40)
-        self.config_button.clicked.connect(self.toggle_config)
-        timer_layout.addWidget(self.config_button)
-        
-        scroll_layout.addLayout(timer_layout)
-        
-        # Contenedor para las opciones de juego
-        options_container = QWidget()
-        options_grid = QGridLayout(options_container)
-        self.options_grid = options_grid  # Guardar referencia al grid para init_options_grid
-        scroll_layout.addWidget(options_container)
-        
-        # Estadísticas
-        stats_layout = QHBoxLayout()
-        self.score_label = QLabel("Aciertos: 0")
-        self.score_label.setFixedHeight(20)
-        self.total_label = QLabel("Total: 0")
-        self.total_label.setFixedHeight(20)
-        self.accuracy_label = QLabel("Precisión: 0%")
-        self.accuracy_label.setFixedHeight(20)
-        
-        stats_layout.addWidget(self.score_label)
-        stats_layout.addWidget(self.total_label)
-        stats_layout.addWidget(self.accuracy_label)
-        
-        scroll_layout.addLayout(stats_layout)
-        
-        # Finalizar configuración del scroll area
-        scroll_area.setWidget(scroll_content)
-        main_layout.addWidget(scroll_area)
-        
-        self.setLayout(main_layout)
+        options_layout.addWidget(option_group, row, col)
+        self.option_buttons.append(select_button)
 
   
     def init_options_grid(self):
@@ -361,12 +216,8 @@ class MusicQuiz(BaseModule):
         if hasattr(self, 'options_count_combo'):
             self.options_count = int(self.options_count_combo.currentText())
         
-        # Comprobar si estamos usando la interfaz cargada desde el archivo UI o la interfaz fallback
-        if hasattr(self, 'options_grid'):
-            options_layout = self.options_grid
-        else:
-            # Si estamos usando el archivo UI, obtener el layout para las opciones
-            options_layout = self.options_container.layout()
+        # Obtener el layout para las opciones
+        options_layout = self.options_grid
         
         # Limpiar el layout si ya tiene widgets
         self.clear_layout(options_layout)
@@ -379,51 +230,44 @@ class MusicQuiz(BaseModule):
         else:
             cols = 3
         
+        # Ruta al archivo UI de la opción
+        option_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_option_item.ui")
+        
         for i in range(self.options_count):
             row, col = divmod(i, cols)
-            option_group = QGroupBox(f"Opción {i+1}")
-            option_layout = QHBoxLayout()
             
-            # Imagen del álbum
-            album_image = QLabel()
-            album_image.setFixedSize(120, 120)
-            album_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            album_image.setText("Portada")
-            album_image.setStyleSheet("border: 1px solid gray; background-color: lightgray;")
-            option_layout.addWidget(album_image)
-            
-            # Información de la canción
-            song_info = QVBoxLayout()
-            song_label = ScalableLabel("Título:")
-            artist_label = ScalableLabel("Artista:")
-            album_label = ScalableLabel("Álbum:")
-            
-            song_info.addWidget(song_label)
-            song_info.addWidget(artist_label)
-            song_info.addWidget(album_label)
-            
-            # Contenedor para la información de la canción
-            info_container = QWidget()
-            info_container.setLayout(song_info)
-            option_layout.addWidget(info_container, 1)  # Dar más espacio a la info
-            
-            # Botón de selección
-            select_button = QPushButton("Seleccionar")
-            select_button.setProperty("option_id", i)
-            select_button.clicked.connect(self.on_option_selected)
-            
-            # Guardar referencias para actualizar después
-            select_button.song_label = song_label
-            select_button.artist_label = artist_label
-            select_button.album_label = album_label
-            select_button.album_image = album_image
-            
-            option_layout.addWidget(select_button)
-            option_group.setLayout(option_layout)
-            option_group.setStyleSheet("QGroupBox { border: none; }")  # Hacer cajas invisibles
-            
-            options_layout.addWidget(option_group, row, col)
-            self.option_buttons.append(select_button)
+            try:
+                # Cargar la UI de la opción
+                option_widget = QWidget()
+                from PyQt6 import uic
+                uic.loadUi(option_ui_path, option_widget)
+                
+                # Obtener referencias a los elementos
+                select_button = option_widget.findChild(QPushButton, "select_button")
+                song_label = option_widget.findChild(QLabel, "song_label")
+                artist_label = option_widget.findChild(QLabel, "artist_label")
+                album_label = option_widget.findChild(QLabel, "album_label")
+                album_image = option_widget.findChild(QLabel, "album_image")
+                
+                # Configurar el botón
+                select_button.setText(f"Opción {i+1}")
+                select_button.setProperty("option_id", i)
+                select_button.clicked.connect(self.on_option_selected)
+                
+                # Guardar referencias para actualizar después
+                select_button.song_label = song_label
+                select_button.artist_label = artist_label
+                select_button.album_label = album_label
+                select_button.album_image = album_image
+                
+                options_layout.addWidget(option_widget, row, col)
+                self.option_buttons.append(select_button)
+                
+            except Exception as e:
+                print(f"Error al cargar la UI de la opción: {e}")
+                # Si falla la carga de la UI, usar el método anterior
+                self._fallback_init_option(i, row, col, options_layout)
+
 
     # Método auxiliar para limpiar un layout
     def clear_layout(self, layout):
@@ -924,156 +768,135 @@ class MusicQuiz(BaseModule):
         """Muestra un diálogo para filtrar artistas con información de álbumes y sellos."""
         try:
             dialog = QDialog(self)
-            dialog.setWindowTitle("Filtrar Artistas")
-            dialog.setMinimumWidth(600)  # Ampliado para acomodar más columnas
-            dialog.setMinimumHeight(500)
             
-            layout = QVBoxLayout()
+            # Cargar la UI del diálogo
+            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
             
-            # Añadir un buscador
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_edit = QLineEdit()
-            search_edit.setPlaceholderText("Escribe para filtrar...")
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_edit)
-            layout.addLayout(search_layout)
-            
-            # Crear un widget de tabla para mostrar artistas, álbumes y sellos
-            table = QTableWidget()
-            table.setColumnCount(3)
-            table.setHorizontalHeaderLabels(["Artista", "Álbumes", "Sellos"])
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView)
-            table.horizontalHeader().firstSectionMovable(True)
-            # table.horizontalHeader().setSectionResizeMode(1, QHeaderView)
-            # table.horizontalHeader().setSectionResizeMode(2, QHeaderView)
-            
-            # Obtener la lista de artistas
-            self.cursor.execute("SELECT id, name FROM artists ORDER BY name")
-            artists = self.cursor.fetchall()
-            
-            # Obtener artistas excluidos
-            excluded_artists = self.get_excluded_items("excluded_artists")
-            
-            # Configurar el número de filas de la tabla
-            table.setRowCount(len(artists))
-            
-            # Diccionario para mantener referencia a los checkboxes
-            checkboxes = {}
-            
-            # Llenar la tabla con datos
-            for row, (artist_id, artist_name) in enumerate(artists):
-                # Crear widget para checkbox del artista
-                checkbox_widget = QWidget()
-                checkbox_layout = QHBoxLayout(checkbox_widget)
-                checkbox_layout.setContentsMargins(5, 0, 0, 0)
-                checkbox = QCheckBox(artist_name)
-                checkbox.setChecked(artist_name in excluded_artists)
-                checkbox_layout.addWidget(checkbox)
-                checkbox_layout.addStretch()
+            if os.path.exists(dialog_ui_path):
+                from PyQt6 import uic
+                uic.loadUi(dialog_ui_path, dialog)
                 
-                # Guardar referencia al checkbox
-                checkboxes[artist_name] = checkbox
+                # Obtener referencias a los widgets
+                table = dialog.findChild(QTableWidget, "artists_table")
+                search_edit = dialog.findChild(QLineEdit, "search_edit")
+                select_all_btn = dialog.findChild(QPushButton, "select_all_btn")
+                deselect_all_btn = dialog.findChild(QPushButton, "deselect_all_btn")
+                save_btn = dialog.findChild(QPushButton, "save_btn")
+                cancel_btn = dialog.findChild(QPushButton, "cancel_btn")
+            
+                # Obtener la lista de artistas
+                self.cursor.execute("SELECT id, name FROM artists ORDER BY name")
+                artists = self.cursor.fetchall()
                 
-                # Añadir el widget con checkbox a la tabla
-                table.setCellWidget(row, 0, checkbox_widget)
+                # Obtener artistas excluidos
+                excluded_artists = self.get_excluded_items("excluded_artists")
                 
-                # Obtener álbumes del artista
-                self.cursor.execute("""
-                    SELECT name FROM albums 
-                    WHERE artist_id = ? 
-                    ORDER BY year DESC, name
-                """, (artist_id,))
-                albums = self.cursor.fetchall()
-                albums_text = ", ".join([album[0] for album in albums])
+                # Configurar el número de filas de la tabla
+                table.setRowCount(len(artists))
                 
-                # Añadir álbumes a la segunda columna
-                albums_item = QTableWidgetItem(albums_text)
-                albums_item.setFlags(albums_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 1, albums_item)
+                # Diccionario para mantener referencia a los checkboxes
+                checkboxes = {}
                 
-                # Obtener sellos discográficos del artista
-                self.cursor.execute("""
-                    SELECT DISTINCT label FROM albums 
-                    WHERE artist_id = ? AND label IS NOT NULL AND label != ''
-                    ORDER BY label
-                """, (artist_id,))
-                labels = self.cursor.fetchall()
-                labels_text = ", ".join([label[0] for label in labels])
+                # Llenar la tabla con datos
+                for row, (artist_id, artist_name) in enumerate(artists):
+                    # Crear widget para checkbox del artista
+                    checkbox_widget = QWidget()
+                    checkbox_layout = QHBoxLayout(checkbox_widget)
+                    checkbox_layout.setContentsMargins(5, 0, 0, 0)
+                    checkbox = QCheckBox(artist_name)
+                    checkbox.setChecked(artist_name in excluded_artists)
+                    checkbox_layout.addWidget(checkbox)
+                    checkbox_layout.addStretch()
+                    
+                    # Guardar referencia al checkbox
+                    checkboxes[artist_name] = checkbox
+                    
+                    # Añadir el widget con checkbox a la tabla
+                    table.setCellWidget(row, 0, checkbox_widget)
+                    
+                    # Obtener álbumes del artista
+                    self.cursor.execute("""
+                        SELECT name FROM albums 
+                        WHERE artist_id = ? 
+                        ORDER BY year DESC, name
+                    """, (artist_id,))
+                    albums = self.cursor.fetchall()
+                    albums_text = ", ".join([album[0] for album in albums])
+                    
+                    # Añadir álbumes a la segunda columna
+                    albums_item = QTableWidgetItem(albums_text)
+                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 1, albums_item)
+                    
+                    # Obtener sellos discográficos del artista
+                    self.cursor.execute("""
+                        SELECT DISTINCT label FROM albums 
+                        WHERE artist_id = ? AND label IS NOT NULL AND label != ''
+                        ORDER BY label
+                    """, (artist_id,))
+                    labels = self.cursor.fetchall()
+                    labels_text = ", ".join([label[0] for label in labels])
+                    
+                    # Añadir sellos a la tercera columna
+                    labels_item = QTableWidgetItem(labels_text)
+                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 2, labels_item)
                 
-                # Añadir sellos a la tercera columna
-                labels_item = QTableWidgetItem(labels_text)
-                labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 2, labels_item)
+                # Función para filtrar la tabla según el texto de búsqueda
+                def filter_table(text):
+                    text = text.lower()
+                    for row in range(table.rowCount()):
+                        artist_widget = table.cellWidget(row, 0)
+                        if artist_widget:
+                            checkbox = artist_widget.layout().itemAt(0).widget()
+                            artist_name = checkbox.text()
+                            
+                            # También buscar en álbumes y sellos
+                            albums_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
+                            labels_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
+                            
+                            visible = (text in artist_name.lower() or 
+                                    text in albums_text or 
+                                    text in labels_text)
+                            
+                            table.setRowHidden(row, not visible)
+                
+                # Conectar señales
+                search_edit.textChanged.connect(filter_table)
+                
+                def select_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(True)
+                
+                def deselect_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(False)
+                
+                def save_changes():
+                    excluded = []
+                    for artist_name, checkbox in checkboxes.items():
+                        if checkbox.isChecked():
+                            excluded.append(artist_name)
+                    self.save_excluded_items("excluded_artists", excluded)
+                    dialog.accept()
+                  
+                # Conectar botones
+                select_all_btn.clicked.connect(select_all)
+                deselect_all_btn.clicked.connect(deselect_all)
+                save_btn.clicked.connect(save_changes)
+                cancel_btn.clicked.connect(dialog.reject)
             
-            layout.addWidget(table)
-            
-            # Función para filtrar la tabla según el texto de búsqueda
-            def filter_table(text):
-                text = text.lower()
-                for row in range(table.rowCount()):
-                    artist_widget = table.cellWidget(row, 0)
-                    if artist_widget:
-                        checkbox = artist_widget.layout().itemAt(0).widget()
-                        artist_name = checkbox.text()
-                        
-                        # También buscar en álbumes y sellos
-                        albums_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
-                        labels_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
-                        
-                        visible = (text in artist_name.lower() or 
-                                text in albums_text or 
-                                text in labels_text)
-                        
-                        table.setRowHidden(row, not visible)
-            
-            search_edit.textChanged.connect(filter_table)
-            
-            # Botones
-            buttons_layout = QHBoxLayout()
-            select_all_btn = QPushButton("Seleccionar Todos")
-            deselect_all_btn = QPushButton("Deseleccionar Todos")
-            save_btn = QPushButton("Guardar")
-            cancel_btn = QPushButton("Cancelar")
-            
-            buttons_layout.addWidget(select_all_btn)
-            buttons_layout.addWidget(deselect_all_btn)
-            buttons_layout.addWidget(save_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Conectar señales
-            def select_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(True)
-            
-            def deselect_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(False)
-            
-            def save_changes():
-                excluded = []
-                for artist_name, checkbox in checkboxes.items():
-                    if checkbox.isChecked():
-                        excluded.append(artist_name)
-                self.save_excluded_items("excluded_artists", excluded)
-                dialog.accept()
-            
-            select_all_btn.clicked.connect(select_all)
-            deselect_all_btn.clicked.connect(deselect_all)
-            save_btn.clicked.connect(save_changes)
-            cancel_btn.clicked.connect(dialog.reject)
-            
+            else:
+                raise FileNotFoundError(f"No se encontró el archivo UI: {dialog_ui_path}")
+
             dialog.exec()
         except Exception as e:
             print(f"Error al mostrar el diálogo de filtrar artistas: {e}")
@@ -1083,149 +906,167 @@ class MusicQuiz(BaseModule):
         """Muestra un diálogo para filtrar álbumes con información de artista, sello y año."""
         try:
             dialog = QDialog(self)
-            dialog.setWindowTitle("Filtrar Álbumes")
-            dialog.setMinimumWidth(700)
-            dialog.setMinimumHeight(500)
             
-            layout = QVBoxLayout()
+            # Cargar la UI del diálogo
+            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_album_filter_dialog.ui")
             
-            # Añadir un buscador
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_edit = QLineEdit()
-            search_edit.setPlaceholderText("Escribe para filtrar...")
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_edit)
-            layout.addLayout(search_layout)
-            
-            # Crear un widget de tabla para mostrar álbumes, artistas, sellos y años
-            table = QTableWidget()
-            table.setColumnCount(4)
-            table.setHorizontalHeaderLabels(["Álbum", "Artista", "Sello", "Año"])
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
-            
-            # Obtener la lista de álbumes con información adicional
-            self.cursor.execute("""
-                SELECT a.id, a.name, ar.name, a.label, a.year
-                FROM albums a
-                JOIN artists ar ON a.artist_id = ar.id
-                ORDER BY a.name
-            """)
-            albums = self.cursor.fetchall()
-            
-            # Obtener álbumes excluidos
-            excluded_albums = self.get_excluded_items("excluded_albums")
-            
-            # Configurar el número de filas de la tabla
-            table.setRowCount(len(albums))
-            
-            # Diccionario para mantener referencia a los checkboxes
-            checkboxes = {}
-            
-            # Llenar la tabla con datos
-            for row, (album_id, album_name, artist_name, label, year) in enumerate(albums):
-                # Crear widget para checkbox del álbum
-                checkbox_widget = QWidget()
-                checkbox_layout = QHBoxLayout(checkbox_widget)
-                checkbox_layout.setContentsMargins(5, 0, 0, 0)
-                checkbox = QCheckBox(album_name)
-                checkbox.setChecked(album_name in excluded_albums)
-                checkbox_layout.addWidget(checkbox)
-                checkbox_layout.addStretch()
+            if os.path.exists(dialog_ui_path):
+                from PyQt6 import uic
+                uic.loadUi(dialog_ui_path, dialog)
                 
-                # Guardar referencia al checkbox
-                checkboxes[album_name] = checkbox
+                # Obtener referencias a los widgets
+                table = dialog.findChild(QTableWidget, "artists_table")
+                search_edit = dialog.findChild(QLineEdit, "search_edit")
+                select_all_btn = dialog.findChild(QPushButton, "select_all_btn")
+                deselect_all_btn = dialog.findChild(QPushButton, "deselect_all_btn")
+                save_btn = dialog.findChild(QPushButton, "save_btn")
+                cancel_btn = dialog.findChild(QPushButton, "cancel_btn")
+                dialog.setWindowTitle("Filtrar Álbumes")
+                dialog.setMinimumWidth(700)
+                dialog.setMinimumHeight(500)
                 
-                # Añadir el widget con checkbox a la tabla
-                table.setCellWidget(row, 0, checkbox_widget)
+                layout = QVBoxLayout()
                 
-                # Añadir información del artista
-                artist_item = QTableWidgetItem(artist_name or "")
-                artist_item.setFlags(artist_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 1, artist_item)
+                # Añadir un buscador
+                search_layout = QHBoxLayout()
+                search_label = QLabel("Buscar:")
+                search_edit = QLineEdit()
+                search_edit.setPlaceholderText("Escribe para filtrar...")
+                search_layout.addWidget(search_label)
+                search_layout.addWidget(search_edit)
+                layout.addLayout(search_layout)
                 
-                # Añadir información del sello
-                label_item = QTableWidgetItem(label or "")
-                label_item.setFlags(label_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 2, label_item)
+                # Crear un widget de tabla para mostrar álbumes, artistas, sellos y años
+                table = QTableWidget()
+                table.setColumnCount(4)
+                table.setHorizontalHeaderLabels(["Álbum", "Artista", "Sello", "Año"])
+                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
                 
-                # Añadir información del año
-                year_item = QTableWidgetItem(year or "")
-                year_item.setFlags(year_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 3, year_item)
+                # Obtener la lista de álbumes con información adicional
+                self.cursor.execute("""
+                    SELECT a.id, a.name, ar.name, a.label, a.year
+                    FROM albums a
+                    JOIN artists ar ON a.artist_id = ar.id
+                    ORDER BY a.name
+                """)
+                albums = self.cursor.fetchall()
+                
+                # Obtener álbumes excluidos
+                excluded_albums = self.get_excluded_items("excluded_albums")
+                
+                # Configurar el número de filas de la tabla
+                table.setRowCount(len(albums))
+                
+                # Diccionario para mantener referencia a los checkboxes
+                checkboxes = {}
+                
+                # Llenar la tabla con datos
+                for row, (album_id, album_name, artist_name, label, year) in enumerate(albums):
+                    # Crear widget para checkbox del álbum
+                    checkbox_widget = QWidget()
+                    checkbox_layout = QHBoxLayout(checkbox_widget)
+                    checkbox_layout.setContentsMargins(5, 0, 0, 0)
+                    checkbox = QCheckBox(album_name)
+                    checkbox.setChecked(album_name in excluded_albums)
+                    checkbox_layout.addWidget(checkbox)
+                    checkbox_layout.addStretch()
+                    
+                    # Guardar referencia al checkbox
+                    checkboxes[album_name] = checkbox
+                    
+                    # Añadir el widget con checkbox a la tabla
+                    table.setCellWidget(row, 0, checkbox_widget)
+                    
+                    # Añadir información del artista
+                    artist_item = QTableWidgetItem(artist_name or "")
+                    artist_item.setFlags(artist_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 1, artist_item)
+                    
+                    # Añadir información del sello
+                    label_item = QTableWidgetItem(label or "")
+                    label_item.setFlags(label_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 2, label_item)
+                    
+                    # Añadir información del año
+                    year_item = QTableWidgetItem(year or "")
+                    year_item.setFlags(year_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 3, year_item)
+                
+                layout.addWidget(table)
+                
+                # Función para filtrar la tabla según el texto de búsqueda
+                def filter_table(text):
+                    text = text.lower()
+                    for row in range(table.rowCount()):
+                        album_widget = table.cellWidget(row, 0)
+                        if album_widget:
+                            checkbox = album_widget.layout().itemAt(0).widget()
+                            album_name = checkbox.text().lower()
+                            
+                            artist_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
+                            label_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
+                            year_text = table.item(row, 3).text().lower() if table.item(row, 3) else ""
+                            
+                            visible = (text in album_name or 
+                                    text in artist_text or 
+                                    text in label_text or 
+                                    text in year_text)
+                            
+                            table.setRowHidden(row, not visible)
+                
+                search_edit.textChanged.connect(filter_table)
+                
+                # Botones
+                buttons_layout = QHBoxLayout()
+                select_all_btn = QPushButton("Seleccionar Todos")
+                deselect_all_btn = QPushButton("Deseleccionar Todos")
+                save_btn = QPushButton("Guardar")
+                cancel_btn = QPushButton("Cancelar")
+                
+                buttons_layout.addWidget(select_all_btn)
+                buttons_layout.addWidget(deselect_all_btn)
+                buttons_layout.addWidget(save_btn)
+                buttons_layout.addWidget(cancel_btn)
+                
+                layout.addLayout(buttons_layout)
+                dialog.setLayout(layout)
+                
+                # Conectar señales
+                def select_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(True)
+                
+                def deselect_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(False)
+                
+                def save_changes():
+                    excluded = []
+                    for album_name, checkbox in checkboxes.items():
+                        if checkbox.isChecked():
+                            excluded.append(album_name)
+                    self.save_excluded_items("excluded_albums", excluded)
+                    dialog.accept()
+                
+                select_all_btn.clicked.connect(select_all)
+                deselect_all_btn.clicked.connect(deselect_all)
+                save_btn.clicked.connect(save_changes)
+                cancel_btn.clicked.connect(dialog.reject)
             
-            layout.addWidget(table)
-            
-            # Función para filtrar la tabla según el texto de búsqueda
-            def filter_table(text):
-                text = text.lower()
-                for row in range(table.rowCount()):
-                    album_widget = table.cellWidget(row, 0)
-                    if album_widget:
-                        checkbox = album_widget.layout().itemAt(0).widget()
-                        album_name = checkbox.text().lower()
-                        
-                        artist_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
-                        label_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
-                        year_text = table.item(row, 3).text().lower() if table.item(row, 3) else ""
-                        
-                        visible = (text in album_name or 
-                                text in artist_text or 
-                                text in label_text or 
-                                text in year_text)
-                        
-                        table.setRowHidden(row, not visible)
-            
-            search_edit.textChanged.connect(filter_table)
-            
-            # Botones
-            buttons_layout = QHBoxLayout()
-            select_all_btn = QPushButton("Seleccionar Todos")
-            deselect_all_btn = QPushButton("Deseleccionar Todos")
-            save_btn = QPushButton("Guardar")
-            cancel_btn = QPushButton("Cancelar")
-            
-            buttons_layout.addWidget(select_all_btn)
-            buttons_layout.addWidget(deselect_all_btn)
-            buttons_layout.addWidget(save_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Conectar señales
-            def select_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(True)
-            
-            def deselect_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(False)
-            
-            def save_changes():
-                excluded = []
-                for album_name, checkbox in checkboxes.items():
-                    if checkbox.isChecked():
-                        excluded.append(album_name)
-                self.save_excluded_items("excluded_albums", excluded)
-                dialog.accept()
-            
-            select_all_btn.clicked.connect(select_all)
-            deselect_all_btn.clicked.connect(deselect_all)
-            save_btn.clicked.connect(save_changes)
-            cancel_btn.clicked.connect(dialog.reject)
-            
+            else:
+                raise FileNotFoundError(f"No se encontró el archivo UI: {dialog_ui_path}")
+
             dialog.exec()
         except Exception as e:
             print(f"Error al mostrar el diálogo de filtrar álbumes: {e}")
@@ -1239,160 +1080,179 @@ class MusicQuiz(BaseModule):
         """Muestra un diálogo para filtrar géneros con información de artistas y sellos."""
         try:
             dialog = QDialog(self)
-            dialog.setWindowTitle("Filtrar Géneros")
-            dialog.setMinimumWidth(700)
-            dialog.setMinimumHeight(500)
             
-            layout = QVBoxLayout()
+            # Cargar la UI del diálogo
+            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_genre_filter_dialog.ui")
             
-            # Añadir un buscador
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_edit = QLineEdit()
-            search_edit.setPlaceholderText("Escribe para filtrar...")
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_edit)
-            layout.addLayout(search_layout)
-            
-            # Crear un widget de tabla para mostrar géneros, artistas y sellos
-            table = QTableWidget()
-            table.setColumnCount(3)
-            table.setHorizontalHeaderLabels(["Género", "Artistas", "Sellos"])
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-            
-            # Obtener la lista de géneros
-            self.cursor.execute("SELECT DISTINCT genre FROM songs WHERE genre IS NOT NULL AND genre != '' ORDER BY genre")
-            genres = self.cursor.fetchall()
-            
-            # Obtener géneros excluidos
-            excluded_genres = self.get_excluded_items("excluded_genres")
-            
-            # Configurar el número de filas de la tabla
-            table.setRowCount(len(genres))
-            
-            # Diccionario para mantener referencia a los checkboxes
-            checkboxes = {}
-            
-            # Llenar la tabla con datos
-            for row, (genre,) in enumerate(genres):
-                # Crear widget para checkbox del género
-                checkbox_widget = QWidget()
-                checkbox_layout = QHBoxLayout(checkbox_widget)
-                checkbox_layout.setContentsMargins(5, 0, 0, 0)
-                checkbox = QCheckBox(genre)
-                checkbox.setChecked(genre in excluded_genres)
-                checkbox_layout.addWidget(checkbox)
-                checkbox_layout.addStretch()
+            if os.path.exists(dialog_ui_path):
+                from PyQt6 import uic
+                uic.loadUi(dialog_ui_path, dialog)
                 
-                # Guardar referencia al checkbox
-                checkboxes[genre] = checkbox
+                # Obtener referencias a los widgets
+                table = dialog.findChild(QTableWidget, "artists_table")
+                search_edit = dialog.findChild(QLineEdit, "search_edit")
+                select_all_btn = dialog.findChild(QPushButton, "select_all_btn")
+                deselect_all_btn = dialog.findChild(QPushButton, "deselect_all_btn")
+                save_btn = dialog.findChild(QPushButton, "save_btn")
+                cancel_btn = dialog.findChild(QPushButton, "cancel_btn")
+            
+                dialog.setWindowTitle("Filtrar Géneros")
+                dialog.setMinimumWidth(700)
+                dialog.setMinimumHeight(500)
                 
-                # Añadir el widget con checkbox a la tabla
-                table.setCellWidget(row, 0, checkbox_widget)
+                layout = QVBoxLayout()
                 
-                # Obtener artistas de este género
-                self.cursor.execute("""
-                    SELECT DISTINCT artist 
-                    FROM songs 
-                    WHERE genre = ? 
-                    ORDER BY artist
-                """, (genre,))
-                artists = self.cursor.fetchall()
-                artists_text = ", ".join([artist[0] for artist in artists[:10]])
-                if len(artists) > 10:
-                    artists_text += f"... (+{len(artists) - 10} más)"
+                # Añadir un buscador
+                search_layout = QHBoxLayout()
+                search_label = QLabel("Buscar:")
+                search_edit = QLineEdit()
+                search_edit.setPlaceholderText("Escribe para filtrar...")
+                search_layout.addWidget(search_label)
+                search_layout.addWidget(search_edit)
+                layout.addLayout(search_layout)
                 
-                # Añadir artistas a la segunda columna
-                artists_item = QTableWidgetItem(artists_text)
-                artists_item.setFlags(artists_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 1, artists_item)
+                # Crear un widget de tabla para mostrar géneros, artistas y sellos
+                table = QTableWidget()
+                table.setColumnCount(3)
+                table.setHorizontalHeaderLabels(["Género", "Artistas", "Sellos"])
+                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
                 
-                # Obtener sellos de este género
-                self.cursor.execute("""
-                    SELECT DISTINCT label 
-                    FROM songs 
-                    WHERE genre = ? AND label IS NOT NULL AND label != '' 
-                    ORDER BY label
-                """, (genre,))
-                labels = self.cursor.fetchall()
-                labels_text = ", ".join([label[0] for label in labels[:10]])
-                if len(labels) > 10:
-                    labels_text += f"... (+{len(labels) - 10} más)"
+                # Obtener la lista de géneros
+                self.cursor.execute("SELECT DISTINCT genre FROM songs WHERE genre IS NOT NULL AND genre != '' ORDER BY genre")
+                genres = self.cursor.fetchall()
                 
-                # Añadir sellos a la tercera columna
-                labels_item = QTableWidgetItem(labels_text)
-                labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
-                table.setItem(row, 2, labels_item)
-            
-            layout.addWidget(table)
-            
-            # Función para filtrar la tabla según el texto de búsqueda
-            def filter_table(text):
-                text = text.lower()
-                for row in range(table.rowCount()):
-                    genre_widget = table.cellWidget(row, 0)
-                    if genre_widget:
-                        checkbox = genre_widget.layout().itemAt(0).widget()
-                        genre_name = checkbox.text().lower()
-                        
-                        artists_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
-                        labels_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
-                        
-                        visible = (text in genre_name or 
-                                text in artists_text or 
-                                text in labels_text)
-                        
-                        table.setRowHidden(row, not visible)
-            
-            search_edit.textChanged.connect(filter_table)
-            
-            # Botones
-            buttons_layout = QHBoxLayout()
-            select_all_btn = QPushButton("Seleccionar Todos")
-            deselect_all_btn = QPushButton("Deseleccionar Todos")
-            save_btn = QPushButton("Guardar")
-            cancel_btn = QPushButton("Cancelar")
-            
-            buttons_layout.addWidget(select_all_btn)
-            buttons_layout.addWidget(deselect_all_btn)
-            buttons_layout.addWidget(save_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Conectar señales
-            def select_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(True)
-            
-            def deselect_all():
-                for row in range(table.rowCount()):
-                    if not table.isRowHidden(row):
-                        widget = table.cellWidget(row, 0)
-                        if widget:
-                            checkbox = widget.layout().itemAt(0).widget()
-                            checkbox.setChecked(False)
-            
-            def save_changes():
-                excluded = []
-                for genre_name, checkbox in checkboxes.items():
-                    if checkbox.isChecked():
-                        excluded.append(genre_name)
-                self.save_excluded_items("excluded_genres", excluded)
-                dialog.accept()
-            
-            select_all_btn.clicked.connect(select_all)
-            deselect_all_btn.clicked.connect(deselect_all)
-            save_btn.clicked.connect(save_changes)
-            cancel_btn.clicked.connect(dialog.reject)
-            
+                # Obtener géneros excluidos
+                excluded_genres = self.get_excluded_items("excluded_genres")
+                
+                # Configurar el número de filas de la tabla
+                table.setRowCount(len(genres))
+                
+                # Diccionario para mantener referencia a los checkboxes
+                checkboxes = {}
+                
+                # Llenar la tabla con datos
+                for row, (genre,) in enumerate(genres):
+                    # Crear widget para checkbox del género
+                    checkbox_widget = QWidget()
+                    checkbox_layout = QHBoxLayout(checkbox_widget)
+                    checkbox_layout.setContentsMargins(5, 0, 0, 0)
+                    checkbox = QCheckBox(genre)
+                    checkbox.setChecked(genre in excluded_genres)
+                    checkbox_layout.addWidget(checkbox)
+                    checkbox_layout.addStretch()
+                    
+                    # Guardar referencia al checkbox
+                    checkboxes[genre] = checkbox
+                    
+                    # Añadir el widget con checkbox a la tabla
+                    table.setCellWidget(row, 0, checkbox_widget)
+                    
+                    # Obtener artistas de este género
+                    self.cursor.execute("""
+                        SELECT DISTINCT artist 
+                        FROM songs 
+                        WHERE genre = ? 
+                        ORDER BY artist
+                    """, (genre,))
+                    artists = self.cursor.fetchall()
+                    artists_text = ", ".join([artist[0] for artist in artists[:10]])
+                    if len(artists) > 10:
+                        artists_text += f"... (+{len(artists) - 10} más)"
+                    
+                    # Añadir artistas a la segunda columna
+                    artists_item = QTableWidgetItem(artists_text)
+                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 1, artists_item)
+                    
+                    # Obtener sellos de este género
+                    self.cursor.execute("""
+                        SELECT DISTINCT label 
+                        FROM songs 
+                        WHERE genre = ? AND label IS NOT NULL AND label != '' 
+                        ORDER BY label
+                    """, (genre,))
+                    labels = self.cursor.fetchall()
+                    labels_text = ", ".join([label[0] for label in labels[:10]])
+                    if len(labels) > 10:
+                        labels_text += f"... (+{len(labels) - 10} más)"
+                    
+                    # Añadir sellos a la tercera columna
+                    labels_item = QTableWidgetItem(labels_text)
+                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
+                    table.setItem(row, 2, labels_item)
+                
+                layout.addWidget(table)
+                
+                # Función para filtrar la tabla según el texto de búsqueda
+                def filter_table(text):
+                    text = text.lower()
+                    for row in range(table.rowCount()):
+                        genre_widget = table.cellWidget(row, 0)
+                        if genre_widget:
+                            checkbox = genre_widget.layout().itemAt(0).widget()
+                            genre_name = checkbox.text().lower()
+                            
+                            artists_text = table.item(row, 1).text().lower() if table.item(row, 1) else ""
+                            labels_text = table.item(row, 2).text().lower() if table.item(row, 2) else ""
+                            
+                            visible = (text in genre_name or 
+                                    text in artists_text or 
+                                    text in labels_text)
+                            
+                            table.setRowHidden(row, not visible)
+                
+                search_edit.textChanged.connect(filter_table)
+                
+                # Botones
+                buttons_layout = QHBoxLayout()
+                select_all_btn = QPushButton("Seleccionar Todos")
+                deselect_all_btn = QPushButton("Deseleccionar Todos")
+                save_btn = QPushButton("Guardar")
+                cancel_btn = QPushButton("Cancelar")
+                
+                buttons_layout.addWidget(select_all_btn)
+                buttons_layout.addWidget(deselect_all_btn)
+                buttons_layout.addWidget(save_btn)
+                buttons_layout.addWidget(cancel_btn)
+                
+                layout.addLayout(buttons_layout)
+                dialog.setLayout(layout)
+                
+                # Conectar señales
+                def select_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(True)
+                
+                def deselect_all():
+                    for row in range(table.rowCount()):
+                        if not table.isRowHidden(row):
+                            widget = table.cellWidget(row, 0)
+                            if widget:
+                                checkbox = widget.layout().itemAt(0).widget()
+                                checkbox.setChecked(False)
+                
+                def save_changes():
+                    excluded = []
+                    for genre_name, checkbox in checkboxes.items():
+                        if checkbox.isChecked():
+                            excluded.append(genre_name)
+                    self.save_excluded_items("excluded_genres", excluded)
+                    dialog.accept()
+                
+                select_all_btn.clicked.connect(select_all)
+                deselect_all_btn.clicked.connect(deselect_all)
+                save_btn.clicked.connect(save_changes)
+                cancel_btn.clicked.connect(dialog.reject)
+
+            else:
+                raise FileNotFoundError(f"No se encontró el archivo UI: {dialog_ui_path}")
+
             dialog.exec()
         except Exception as e:
             print(f"Error al mostrar el diálogo de filtrar géneros: {e}")
@@ -1982,228 +1842,247 @@ class MusicQuiz(BaseModule):
         """Muestra un diálogo para configurar filtros de sesión temporales."""
         try:
             dialog = QDialog(self)
-            dialog.setWindowTitle("Filtros de Sesión")
-            dialog.setMinimumWidth(450)
-            dialog.setMinimumHeight(550)
+
+            # Cargar la UI del diálogo
+            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_session_filter_dialog.ui")
             
-            layout = QVBoxLayout()
-            
-            # Selector de tipo de filtro
-            filter_type_layout = QHBoxLayout()
-            filter_type_label = QLabel("Tipo de filtro:")
-            filter_type_combo = QComboBox()
-            filter_type_combo.addItems(["Artistas", "Álbumes", "Géneros", "Carpetas"])
-            filter_type_layout.addWidget(filter_type_label)
-            filter_type_layout.addWidget(filter_type_combo)
-            layout.addLayout(filter_type_layout)
-            
-            # Añadir un buscador
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_edit = QLineEdit()
-            search_edit.setPlaceholderText("Escribe para filtrar...")
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_edit)
-            layout.addLayout(search_layout)
-            
-            # Crear una lista con checkboxes
-            scroll = QScrollArea()
-            scroll.setWidgetResizable(True)
-            scroll_content = QWidget()
-            checkbox_layout = QVBoxLayout(scroll_content)
-            
-            # Variables para almacenar los checkboxes por categoría
-            all_checkboxes = {
-                "Artistas": {},
-                "Álbumes": {},
-                "Géneros": {},
-                "Carpetas": {}
-            }
-            
-            # Obtener elementos para cada categoría
-            # Artistas
-            self.cursor.execute("SELECT name FROM artists ORDER BY name")
-            artists = self.cursor.fetchall()
-            for artist in artists:
-                artist_name = artist[0]
-                checkbox = QCheckBox(artist_name)
-                checkbox.setVisible(False)  # Inicialmente oculto
-                checkbox_layout.addWidget(checkbox)
-                all_checkboxes["Artistas"][artist_name] = checkbox
+            if os.path.exists(dialog_ui_path):
+                from PyQt6 import uic
+                uic.loadUi(dialog_ui_path, dialog)
                 
-            # Álbumes
-            self.cursor.execute("SELECT name FROM albums ORDER BY name")
-            albums = self.cursor.fetchall()
-            for album in albums:
-                album_name = album[0]
-                checkbox = QCheckBox(album_name)
-                checkbox.setVisible(False)  # Inicialmente oculto
-                checkbox_layout.addWidget(checkbox)
-                all_checkboxes["Álbumes"][album_name] = checkbox
+                # Obtener referencias a los widgets
+                table = dialog.findChild(QTableWidget, "artists_table")
+                search_edit = dialog.findChild(QLineEdit, "search_edit")
+                select_all_btn = dialog.findChild(QPushButton, "select_all_btn")
+                deselect_all_btn = dialog.findChild(QPushButton, "deselect_all_btn")
+                save_btn = dialog.findChild(QPushButton, "save_btn")
+                cancel_btn = dialog.findChild(QPushButton, "cancel_btn")
+
+                dialog.setWindowTitle("Filtros de Sesión")
+                dialog.setMinimumWidth(450)
+                dialog.setMinimumHeight(550)
                 
-            # Géneros
-            self.cursor.execute("SELECT name FROM genres ORDER BY name")
-            genres = self.cursor.fetchall()
-            if not genres:
-                self.cursor.execute("SELECT DISTINCT genre FROM songs WHERE genre IS NOT NULL ORDER BY genre")
-                genres = self.cursor.fetchall()
-            for genre in genres:
-                genre_name = genre[0]
-                if genre_name:
-                    checkbox = QCheckBox(genre_name)
+                layout = QVBoxLayout()
+                
+                # Selector de tipo de filtro
+                filter_type_layout = QHBoxLayout()
+                filter_type_label = QLabel("Tipo de filtro:")
+                filter_type_combo = QComboBox()
+                filter_type_combo.addItems(["Artistas", "Álbumes", "Géneros", "Carpetas"])
+                filter_type_layout.addWidget(filter_type_label)
+                filter_type_layout.addWidget(filter_type_combo)
+                layout.addLayout(filter_type_layout)
+                
+                # Añadir un buscador
+                search_layout = QHBoxLayout()
+                search_label = QLabel("Buscar:")
+                search_edit = QLineEdit()
+                search_edit.setPlaceholderText("Escribe para filtrar...")
+                search_layout.addWidget(search_label)
+                search_layout.addWidget(search_edit)
+                layout.addLayout(search_layout)
+                
+                # Crear una lista con checkboxes
+                scroll = QScrollArea()
+                scroll.setWidgetResizable(True)
+                scroll_content = QWidget()
+                checkbox_layout = QVBoxLayout(scroll_content)
+                
+                # Variables para almacenar los checkboxes por categoría
+                all_checkboxes = {
+                    "Artistas": {},
+                    "Álbumes": {},
+                    "Géneros": {},
+                    "Carpetas": {}
+                }
+                
+                # Obtener elementos para cada categoría
+                # Artistas
+                self.cursor.execute("SELECT name FROM artists ORDER BY name")
+                artists = self.cursor.fetchall()
+                for artist in artists:
+                    artist_name = artist[0]
+                    checkbox = QCheckBox(artist_name)
                     checkbox.setVisible(False)  # Inicialmente oculto
                     checkbox_layout.addWidget(checkbox)
-                    all_checkboxes["Géneros"][genre_name] = checkbox
+                    all_checkboxes["Artistas"][artist_name] = checkbox
                     
-            # Carpetas
-            self.cursor.execute("""
-                SELECT DISTINCT folder_path FROM albums 
-                WHERE folder_path IS NOT NULL 
-                ORDER BY folder_path
-            """)
-            folders = self.cursor.fetchall()
-            for folder in folders:
-                folder_path = folder[0]
-                if folder_path:
-                    checkbox = QCheckBox(folder_path)
+                # Álbumes
+                self.cursor.execute("SELECT name FROM albums ORDER BY name")
+                albums = self.cursor.fetchall()
+                for album in albums:
+                    album_name = album[0]
+                    checkbox = QCheckBox(album_name)
                     checkbox.setVisible(False)  # Inicialmente oculto
                     checkbox_layout.addWidget(checkbox)
-                    all_checkboxes["Carpetas"][folder_path] = checkbox
-            
-            scroll_content.setLayout(checkbox_layout)
-            scroll.setWidget(scroll_content)
-            layout.addWidget(scroll)
-            
-            # Función para mostrar los checkboxes correspondientes al tipo seleccionado
-            def update_visible_checkboxes():
-                selected_type = filter_type_combo.currentText()
-                search_text = search_edit.text().lower()
+                    all_checkboxes["Álbumes"][album_name] = checkbox
+                    
+                # Géneros
+                self.cursor.execute("SELECT name FROM genres ORDER BY name")
+                genres = self.cursor.fetchall()
+                if not genres:
+                    self.cursor.execute("SELECT DISTINCT genre FROM songs WHERE genre IS NOT NULL ORDER BY genre")
+                    genres = self.cursor.fetchall()
+                for genre in genres:
+                    genre_name = genre[0]
+                    if genre_name:
+                        checkbox = QCheckBox(genre_name)
+                        checkbox.setVisible(False)  # Inicialmente oculto
+                        checkbox_layout.addWidget(checkbox)
+                        all_checkboxes["Géneros"][genre_name] = checkbox
+                        
+                # Carpetas
+                self.cursor.execute("""
+                    SELECT DISTINCT folder_path FROM albums 
+                    WHERE folder_path IS NOT NULL 
+                    ORDER BY folder_path
+                """)
+                folders = self.cursor.fetchall()
+                for folder in folders:
+                    folder_path = folder[0]
+                    if folder_path:
+                        checkbox = QCheckBox(folder_path)
+                        checkbox.setVisible(False)  # Inicialmente oculto
+                        checkbox_layout.addWidget(checkbox)
+                        all_checkboxes["Carpetas"][folder_path] = checkbox
                 
-                # Ocultar todos los checkboxes
-                for category in all_checkboxes.values():
-                    for checkbox in category.values():
-                        checkbox.setVisible(False)
+                scroll_content.setLayout(checkbox_layout)
+                scroll.setWidget(scroll_content)
+                layout.addWidget(scroll)
                 
-                # Mostrar solo los del tipo seleccionado que coincidan con la búsqueda
-                for item_name, checkbox in all_checkboxes[selected_type].items():
-                    checkbox.setVisible(search_text in item_name.lower())
-            
-            filter_type_combo.currentTextChanged.connect(update_visible_checkboxes)
-            search_edit.textChanged.connect(update_visible_checkboxes)
-            
-            # Mostrar los checkboxes iniciales (artistas por defecto)
-            update_visible_checkboxes()
-            
-            # Área para nombre de sesión
-            session_layout = QHBoxLayout()
-            session_label = QLabel("Nombre de la sesión:")
-            session_edit = QLineEdit()
-            session_edit.setPlaceholderText("Mi sesión personalizada")
-            session_layout.addWidget(session_label)
-            session_layout.addWidget(session_edit)
-            layout.addLayout(session_layout)
-            
-            # Botones de operaciones de sesión
-            session_ops_layout = QHBoxLayout()
-            save_session_btn = QPushButton("Guardar Sesión")
-            load_session_btn = QPushButton("Cargar Sesión")
-            session_ops_layout.addWidget(save_session_btn)
-            session_ops_layout.addWidget(load_session_btn)
-            layout.addLayout(session_ops_layout)
-            
-            # Botones de acciones
-            buttons_layout = QHBoxLayout()
-            select_all_btn = QPushButton("Seleccionar Todos")
-            deselect_all_btn = QPushButton("Deseleccionar Todos")
-            apply_btn = QPushButton("Aplicar")
-            cancel_btn = QPushButton("Cancelar")
-            
-            buttons_layout.addWidget(select_all_btn)
-            buttons_layout.addWidget(deselect_all_btn)
-            buttons_layout.addWidget(apply_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Conectar señales
-            def select_all():
-                selected_type = filter_type_combo.currentText()
-                for checkbox in all_checkboxes[selected_type].values():
-                    if checkbox.isVisible():
-                        checkbox.setChecked(True)
-            
-            def deselect_all():
-                selected_type = filter_type_combo.currentText()
-                for checkbox in all_checkboxes[selected_type].values():
-                    if checkbox.isVisible():
-                        checkbox.setChecked(False)
-            
-            def apply_filters():
-                # Guardar los filtros de sesión
-                session_filters = {
-                    "name": session_edit.text() or "Sesión temporal",
-                    "filters": {}
-                }
+                # Función para mostrar los checkboxes correspondientes al tipo seleccionado
+                def update_visible_checkboxes():
+                    selected_type = filter_type_combo.currentText()
+                    search_text = search_edit.text().lower()
+                    
+                    # Ocultar todos los checkboxes
+                    for category in all_checkboxes.values():
+                        for checkbox in category.values():
+                            checkbox.setVisible(False)
+                    
+                    # Mostrar solo los del tipo seleccionado que coincidan con la búsqueda
+                    for item_name, checkbox in all_checkboxes[selected_type].items():
+                        checkbox.setVisible(search_text in item_name.lower())
                 
-                for filter_type, checkboxes in all_checkboxes.items():
-                    session_filters["filters"][filter_type] = [
-                        item for item, checkbox in checkboxes.items() 
-                        if checkbox.isChecked()
-                    ]
+                filter_type_combo.currentTextChanged.connect(update_visible_checkboxes)
+                search_edit.textChanged.connect(update_visible_checkboxes)
                 
-                # Almacenar en el objeto
-                self.session_filters = session_filters
-                # Aplicar los filtros inmediatamente
-                self.apply_session_filters()
-                dialog.accept()
-            
-            def save_session():
-                # Primero recopilar los filtros seleccionados
-                session_name = session_edit.text() or "Sesión temporal"
-                session_data = {
-                    "name": session_name,
-                    "filters": {}
-                }
+                # Mostrar los checkboxes iniciales (artistas por defecto)
+                update_visible_checkboxes()
                 
-                for filter_type, checkboxes in all_checkboxes.items():
-                    session_data["filters"][filter_type] = [
-                        item for item, checkbox in checkboxes.items() 
-                        if checkbox.isChecked()
-                    ]
+                # Área para nombre de sesión
+                session_layout = QHBoxLayout()
+                session_label = QLabel("Nombre de la sesión:")
+                session_edit = QLineEdit()
+                session_edit.setPlaceholderText("Mi sesión personalizada")
+                session_layout.addWidget(session_label)
+                session_layout.addWidget(session_edit)
+                layout.addLayout(session_layout)
                 
-                # Guardar en un archivo JSON
-                self.save_session_to_file(session_data)
-            
-            def load_session():
-                # Cargar desde un archivo JSON
-                session_data = self.load_session_from_file()
-                if not session_data:
-                    return
+                # Botones de operaciones de sesión
+                session_ops_layout = QHBoxLayout()
+                save_session_btn = QPushButton("Guardar Sesión")
+                load_session_btn = QPushButton("Cargar Sesión")
+                session_ops_layout.addWidget(save_session_btn)
+                session_ops_layout.addWidget(load_session_btn)
+                layout.addLayout(session_ops_layout)
                 
-                # Actualizar la UI con los filtros cargados
-                session_edit.setText(session_data.get("name", "Sesión cargada"))
+                # Botones de acciones
+                buttons_layout = QHBoxLayout()
+                select_all_btn = QPushButton("Seleccionar Todos")
+                deselect_all_btn = QPushButton("Deseleccionar Todos")
+                apply_btn = QPushButton("Aplicar")
+                cancel_btn = QPushButton("Cancelar")
                 
-                # Limpiar todas las selecciones actuales
-                for category in all_checkboxes.values():
-                    for checkbox in category.values():
-                        checkbox.setChecked(False)
+                buttons_layout.addWidget(select_all_btn)
+                buttons_layout.addWidget(deselect_all_btn)
+                buttons_layout.addWidget(apply_btn)
+                buttons_layout.addWidget(cancel_btn)
                 
-                # Marcar las selecciones según los datos cargados
-                loaded_filters = session_data.get("filters", {})
-                for filter_type, items in loaded_filters.items():
-                    if filter_type in all_checkboxes:
-                        for item in items:
-                            if item in all_checkboxes[filter_type]:
-                                all_checkboxes[filter_type][item].setChecked(True)
-            
-            select_all_btn.clicked.connect(select_all)
-            deselect_all_btn.clicked.connect(deselect_all)
-            apply_btn.clicked.connect(apply_filters)
-            save_session_btn.clicked.connect(save_session)
-            load_session_btn.clicked.connect(load_session)
-            cancel_btn.clicked.connect(dialog.reject)
-            
+                layout.addLayout(buttons_layout)
+                dialog.setLayout(layout)
+                
+                # Conectar señales
+                def select_all():
+                    selected_type = filter_type_combo.currentText()
+                    for checkbox in all_checkboxes[selected_type].values():
+                        if checkbox.isVisible():
+                            checkbox.setChecked(True)
+                
+                def deselect_all():
+                    selected_type = filter_type_combo.currentText()
+                    for checkbox in all_checkboxes[selected_type].values():
+                        if checkbox.isVisible():
+                            checkbox.setChecked(False)
+                
+                def apply_filters():
+                    # Guardar los filtros de sesión
+                    session_filters = {
+                        "name": session_edit.text() or "Sesión temporal",
+                        "filters": {}
+                    }
+                    
+                    for filter_type, checkboxes in all_checkboxes.items():
+                        session_filters["filters"][filter_type] = [
+                            item for item, checkbox in checkboxes.items() 
+                            if checkbox.isChecked()
+                        ]
+                    
+                    # Almacenar en el objeto
+                    self.session_filters = session_filters
+                    # Aplicar los filtros inmediatamente
+                    self.apply_session_filters()
+                    dialog.accept()
+                
+                def save_session():
+                    # Primero recopilar los filtros seleccionados
+                    session_name = session_edit.text() or "Sesión temporal"
+                    session_data = {
+                        "name": session_name,
+                        "filters": {}
+                    }
+                    
+                    for filter_type, checkboxes in all_checkboxes.items():
+                        session_data["filters"][filter_type] = [
+                            item for item, checkbox in checkboxes.items() 
+                            if checkbox.isChecked()
+                        ]
+                    
+                    # Guardar en un archivo JSON
+                    self.save_session_to_file(session_data)
+                
+                def load_session():
+                    # Cargar desde un archivo JSON
+                    session_data = self.load_session_from_file()
+                    if not session_data:
+                        return
+                    
+                    # Actualizar la UI con los filtros cargados
+                    session_edit.setText(session_data.get("name", "Sesión cargada"))
+                    
+                    # Limpiar todas las selecciones actuales
+                    for category in all_checkboxes.values():
+                        for checkbox in category.values():
+                            checkbox.setChecked(False)
+                    
+                    # Marcar las selecciones según los datos cargados
+                    loaded_filters = session_data.get("filters", {})
+                    for filter_type, items in loaded_filters.items():
+                        if filter_type in all_checkboxes:
+                            for item in items:
+                                if item in all_checkboxes[filter_type]:
+                                    all_checkboxes[filter_type][item].setChecked(True)
+                
+                select_all_btn.clicked.connect(select_all)
+                deselect_all_btn.clicked.connect(deselect_all)
+                apply_btn.clicked.connect(apply_filters)
+                save_session_btn.clicked.connect(save_session)
+                load_session_btn.clicked.connect(load_session)
+                cancel_btn.clicked.connect(dialog.reject)
+
+            else:
+                raise FileNotFoundError(f"No se encontró el archivo UI: {dialog_ui_path}")
+
             dialog.exec()
         except Exception as e:
             print(f"Error al mostrar el diálogo de filtros de sesión: {e}")
@@ -2311,94 +2190,115 @@ class MusicQuiz(BaseModule):
         """Muestra un diálogo para filtrar carpetas de álbumes."""
         try:
             dialog = QDialog(self)
-            dialog.setWindowTitle("Filtrar Carpetas")
-            dialog.setMinimumWidth(400)
-            dialog.setMinimumHeight(500)
+
+            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
             
-            layout = QVBoxLayout()
-            
-            # Añadir un buscador
-            search_layout = QHBoxLayout()
-            search_label = QLabel("Buscar:")
-            search_edit = QLineEdit()
-            search_edit.setPlaceholderText("Escribe para filtrar...")
-            search_layout.addWidget(search_label)
-            search_layout.addWidget(search_edit)
-            layout.addLayout(search_layout)
-            
-            # Crear una lista con checkboxes
-            scroll = QScrollArea()
-            scroll.setWidgetResizable(True)
-            scroll_content = QWidget()
-            checkbox_layout = QVBoxLayout(scroll_content)
-            
-            # Obtener la lista de carpetas únicas
-            self.cursor.execute("""
-                SELECT DISTINCT folder_path FROM albums 
-                WHERE folder_path IS NOT NULL 
-                ORDER BY folder_path
-            """)
-            folders = self.cursor.fetchall()
-            
-            # Obtener carpetas excluidas
-            excluded_folders = self.get_excluded_items("excluded_folders")
-            
-            checkboxes = {}
-            for folder in folders:
-                folder_path = folder[0]
-                if folder_path:  # Asegurarse de que no es None
-                    checkbox = QCheckBox(folder_path)
-                    checkbox.setChecked(folder_path in excluded_folders)
-                    checkbox_layout.addWidget(checkbox)
-                    checkboxes[folder_path] = checkbox
-            
-            scroll_content.setLayout(checkbox_layout)
-            scroll.setWidget(scroll_content)
-            layout.addWidget(scroll)
-            
-            # Conectar el buscador para filtrar los checkboxes
-            def filter_folders(text):
-                text = text.lower()
-                for folder_path, checkbox in checkboxes.items():
-                    checkbox.setVisible(text in folder_path.lower())
-            
-            search_edit.textChanged.connect(filter_folders)
-            
-            # Botones
-            buttons_layout = QHBoxLayout()
-            select_all_btn = QPushButton("Seleccionar Todos")
-            deselect_all_btn = QPushButton("Deseleccionar Todos")
-            save_btn = QPushButton("Guardar")
-            cancel_btn = QPushButton("Cancelar")
-            
-            buttons_layout.addWidget(select_all_btn)
-            buttons_layout.addWidget(deselect_all_btn)
-            buttons_layout.addWidget(save_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Conectar señales
-            def select_all():
-                for checkbox in checkboxes.values():
-                    if checkbox.isVisible():
-                        checkbox.setChecked(True)
-            
-            def deselect_all():
-                for checkbox in checkboxes.values():
-                    if checkbox.isVisible():
-                        checkbox.setChecked(False)
-            
-            def save_changes():
-                excluded = [folder for folder, checkbox in checkboxes.items() if checkbox.isChecked()]
-                self.save_excluded_items("excluded_folders", excluded)
-                dialog.accept()
-            
-            select_all_btn.clicked.connect(select_all)
-            deselect_all_btn.clicked.connect(deselect_all)
-            save_btn.clicked.connect(save_changes)
-            cancel_btn.clicked.connect(dialog.reject)
+            if os.path.exists(dialog_ui_path):
+                from PyQt6 import uic
+                uic.loadUi(dialog_ui_path, dialog)
+                
+                # Obtener referencias a los widgets
+                table = dialog.findChild(QTableWidget, "artists_table")
+                search_edit = dialog.findChild(QLineEdit, "search_edit")
+                select_all_btn = dialog.findChild(QPushButton, "select_all_btn")
+                deselect_all_btn = dialog.findChild(QPushButton, "deselect_all_btn")
+                save_btn = dialog.findChild(QPushButton, "save_btn")
+                cancel_btn = dialog.findChild(QPushButton, "cancel_btn")
+
+                dialog.setWindowTitle("Filtrar Carpetas")
+                dialog.setMinimumWidth(400)
+                dialog.setMinimumHeight(500)
+                
+                layout = QVBoxLayout()
+                
+                # Añadir un buscador
+                search_layout = QHBoxLayout()
+                search_label = QLabel("Buscar:")
+                search_edit = QLineEdit()
+                search_edit.setPlaceholderText("Escribe para filtrar...")
+                search_layout.addWidget(search_label)
+                search_layout.addWidget(search_edit)
+                layout.addLayout(search_layout)
+                
+                # Crear una lista con checkboxes
+                scroll = QScrollArea()
+                scroll.setWidgetResizable(True)
+                scroll_content = QWidget()
+                checkbox_layout = QVBoxLayout(scroll_content)
+                
+                # Obtener la lista de carpetas únicas
+                self.cursor.execute("""
+                    SELECT DISTINCT folder_path FROM albums 
+                    WHERE folder_path IS NOT NULL 
+                    ORDER BY folder_path
+                """)
+                folders = self.cursor.fetchall()
+                
+                # Obtener carpetas excluidas
+                excluded_folders = self.get_excluded_items("excluded_folders")
+                
+                checkboxes = {}
+                for folder in folders:
+                    folder_path = folder[0]
+                    if folder_path:  # Asegurarse de que no es None
+                        checkbox = QCheckBox(folder_path)
+                        checkbox.setChecked(folder_path in excluded_folders)
+                        checkbox_layout.addWidget(checkbox)
+                        checkboxes[folder_path] = checkbox
+                
+                scroll_content.setLayout(checkbox_layout)
+                scroll.setWidget(scroll_content)
+                layout.addWidget(scroll)
+                
+                # Conectar el buscador para filtrar los checkboxes
+                def filter_folders(text):
+                    text = text.lower()
+                    for folder_path, checkbox in checkboxes.items():
+                        checkbox.setVisible(text in folder_path.lower())
+                
+                search_edit.textChanged.connect(filter_folders)
+                
+                # Botones
+                buttons_layout = QHBoxLayout()
+                select_all_btn = QPushButton("Seleccionar Todos")
+                deselect_all_btn = QPushButton("Deseleccionar Todos")
+                save_btn = QPushButton("Guardar")
+                cancel_btn = QPushButton("Cancelar")
+                
+                buttons_layout.addWidget(select_all_btn)
+                buttons_layout.addWidget(deselect_all_btn)
+                buttons_layout.addWidget(save_btn)
+                buttons_layout.addWidget(cancel_btn)
+                
+                layout.addLayout(buttons_layout)
+                dialog.setLayout(layout)
+                
+                # Conectar señales
+                def select_all():
+                    for checkbox in checkboxes.values():
+                        if checkbox.isVisible():
+                            checkbox.setChecked(True)
+                
+                def deselect_all():
+                    for checkbox in checkboxes.values():
+                        if checkbox.isVisible():
+                            checkbox.setChecked(False)
+                
+                def save_changes():
+                    excluded = [folder for folder, checkbox in checkboxes.items() if checkbox.isChecked()]
+                    self.save_excluded_items("excluded_folders", excluded)
+                    dialog.accept()
+                
+                select_all_btn.clicked.connect(select_all)
+                deselect_all_btn.clicked.connect(deselect_all)
+                save_btn.clicked.connect(save_changes)
+                cancel_btn.clicked.connect(dialog.reject)
+        
+        
+            else:
+                raise FileNotFoundError(f"No se encontró el archivo UI: {dialog_ui_path}")
+        
+        
             
             dialog.exec()
         except Exception as e:
