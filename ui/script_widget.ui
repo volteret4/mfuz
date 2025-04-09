@@ -29,6 +29,9 @@
    <item>
     <widget class="QWidget" name="title_container" native="true">
      <layout class="QHBoxLayout" name="title_layout">
+      <property name="spacing">
+       <number>10</number>
+      </property>
       <property name="leftMargin">
        <number>10</number>
       </property>
@@ -40,9 +43,6 @@
       </property>
       <property name="bottomMargin">
        <number>5</number>
-      </property>
-      <property name="spacing">
-       <number>10</number>
       </property>
       <item>
        <widget class="QLabel" name="title">
@@ -56,8 +56,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="save_button">
-        <property name="text">
-         <string>Save</string>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Guardar</string>
         </property>
         <property name="styleSheet">
          <string>QPushButton {
@@ -65,7 +71,20 @@
   border-radius: 3px;
 }</string>
         </property>
-        <property name="fixedSize">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/b_save</normaloff>:/services/b_save</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+        <property name="fixedSize" stdset="0">
          <size>
           <width>60</width>
           <height>25</height>
@@ -75,8 +94,14 @@
       </item>
       <item>
        <widget class="QPushButton" name="run_button">
-        <property name="text">
-         <string>Run</string>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Correr script</string>
         </property>
         <property name="styleSheet">
          <string>QPushButton {
@@ -84,7 +109,20 @@
   border-radius: 3px;
 }</string>
         </property>
-        <property name="fixedSize">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/b_play</normaloff>:/services/b_play</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+        <property name="fixedSize" stdset="0">
          <size>
           <width>60</width>
           <height>25</height>
@@ -98,6 +136,9 @@
    <item>
     <widget class="QWidget" name="args_container" native="true">
      <layout class="QVBoxLayout" name="args_layout">
+      <property name="spacing">
+       <number>5</number>
+      </property>
       <property name="leftMargin">
        <number>10</number>
       </property>
@@ -110,15 +151,11 @@
       <property name="bottomMargin">
        <number>5</number>
       </property>
-      <property name="spacing">
-       <number>5</number>
-      </property>
       <item>
        <layout class="QGridLayout" name="args_grid">
         <property name="spacing">
          <number>10</number>
         </property>
-        <!-- Arguments will be added dynamically in the code -->
        </layout>
       </item>
      </layout>
@@ -145,6 +182,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../images.qrc"/>
+ </resources>
  <connections/>
 </ui>

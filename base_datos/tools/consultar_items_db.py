@@ -758,7 +758,7 @@ class MusicDatabaseQuery:
         else:
             return None
 
-    def get_album_links(self, album_id):
+    def get_album_links_by_id(self, album_id):
         """Obtener todos los enlaces asociados a un álbum."""
         self.cursor.execute("""
             SELECT id, album_id, service_name, url, last_updated 

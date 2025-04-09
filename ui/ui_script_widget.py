@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'script_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -17,6 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QHBoxLayout, QLabel,
     QPushButton, QSizePolicy, QVBoxLayout, QWidget)
+import rc_images
 
 class Ui_ScriptWidget(object):
     def setupUi(self, ScriptWidget):
@@ -40,13 +41,23 @@ class Ui_ScriptWidget(object):
 
         self.save_button = QPushButton(self.title_container)
         self.save_button.setObjectName(u"save_button")
-        self.save_button.setFixedSize(QSize(60, 25))
+        self.save_button.setMaximumSize(QSize(40, 40))
+        icon = QIcon()
+        icon.addFile(u":/services/b_save", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.save_button.setIcon(icon)
+        self.save_button.setIconSize(QSize(36, 36))
+        self.save_button.setProperty(u"fixedSize", QSize(60, 25))
 
         self.title_layout.addWidget(self.save_button)
 
         self.run_button = QPushButton(self.title_container)
         self.run_button.setObjectName(u"run_button")
-        self.run_button.setFixedSize(QSize(60, 25))
+        self.run_button.setMaximumSize(QSize(40, 40))
+        icon1 = QIcon()
+        icon1.addFile(u":/services/b_play", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.run_button.setIcon(icon1)
+        self.run_button.setIconSize(QSize(36, 36))
+        self.run_button.setProperty(u"fixedSize", QSize(60, 25))
 
         self.title_layout.addWidget(self.run_button)
 
@@ -84,16 +95,22 @@ class Ui_ScriptWidget(object):
     def retranslateUi(self, ScriptWidget):
         self.title.setStyleSheet(QCoreApplication.translate("ScriptWidget", u"font-weight: bold; cursor: pointer;", None))
         self.title.setText(QCoreApplication.translate("ScriptWidget", u"Script Name", None))
-        self.save_button.setText(QCoreApplication.translate("ScriptWidget", u"Save", None))
+#if QT_CONFIG(tooltip)
+        self.save_button.setToolTip(QCoreApplication.translate("ScriptWidget", u"Guardar", None))
+#endif // QT_CONFIG(tooltip)
         self.save_button.setStyleSheet(QCoreApplication.translate("ScriptWidget", u"QPushButton {\n"
 "  border: 1px solid;\n"
 "  border-radius: 3px;\n"
 "}", None))
-        self.run_button.setText(QCoreApplication.translate("ScriptWidget", u"Run", None))
+        self.save_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.run_button.setToolTip(QCoreApplication.translate("ScriptWidget", u"Correr script", None))
+#endif // QT_CONFIG(tooltip)
         self.run_button.setStyleSheet(QCoreApplication.translate("ScriptWidget", u"QPushButton {\n"
 "  border: 1px solid;\n"
 "  border-radius: 3px;\n"
 "}", None))
+        self.run_button.setText("")
         self.line.setStyleSheet(QCoreApplication.translate("ScriptWidget", u"background-color: rgba(128, 128, 128, 0.3);", None))
         pass
     # retranslateUi

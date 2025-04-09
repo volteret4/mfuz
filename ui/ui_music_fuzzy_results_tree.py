@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'music_fuzzy_results_tree.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -29,6 +29,9 @@ class Ui_ResultsTree(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.results_tree = QTreeWidget(ResultsTree)
         self.results_tree.setObjectName(u"results_tree")
+        font = QFont()
+        font.setFamilies([u"Font Awesome 6 Free"])
+        self.results_tree.setFont(font)
         self.results_tree.setLineWidth(0)
         self.results_tree.setSizeAdjustPolicy(QAbstractScrollArea.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         self.results_tree.setAlternatingRowColors(True)

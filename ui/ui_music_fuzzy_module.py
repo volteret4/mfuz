@@ -184,14 +184,13 @@ class Ui_MusicBrowser(object):
         self.buttons_container.setMinimumSize(QSize(120, 0))
         self.buttons_container.setMaximumSize(QSize(200, 16777215))
         self.buttons_container.setStyleSheet(u"QPushButton {{\n"
-"  border-radius: 20px;\n"
+"  border-radius: 25px;\n"
 "  border: none;\n"
 "  padding: 8px 16px;\n"
 "  margin: 2px\n"
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -214,7 +213,6 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -228,7 +226,7 @@ class Ui_MusicBrowser(object):
 
         self.spotify_button = QPushButton(self.buttons_container)
         self.spotify_button.setObjectName(u"spotify_button")
-        self.spotify_button.setMinimumSize(QSize(50, 50))
+        self.spotify_button.setMinimumSize(QSize(0, 0))
         self.spotify_button.setMaximumSize(QSize(50, 50))
         self.spotify_button.setStyleSheet(u"QPushButton {{\n"
 "  border-radius: 25px;\n"
@@ -238,15 +236,20 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
-"}")
+"	border: none;\n"
+"}\n"
+"QPushButton:pressed {{\n"
+"	background-color: {theme['selection']};\n"
+"	border: none;\n"
+"}}")
         icon1 = QIcon()
         icon1.addFile(u":/services/spotify", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.spotify_button.setIcon(icon1)
         self.spotify_button.setIconSize(QSize(40, 40))
+        self.spotify_button.setFlat(True)
 
         self.gridLayout.addWidget(self.spotify_button, 3, 0, 1, 1)
 
@@ -262,7 +265,6 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -287,7 +289,6 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -311,7 +312,6 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -335,7 +335,6 @@ class Ui_MusicBrowser(object):
 "}}\n"
 "QPushButton:hover {\n"
 "    background-color: {theme['button_hover']};\n"
-"    /* Increase shadow on hover for elevation effect */\n"
 "    margin: 1px;\n"
 "    margin-top: 0px;\n"
 "    margin-bottom: 3px;\n"
@@ -401,6 +400,9 @@ class Ui_MusicBrowser(object):
 #if QT_CONFIG(shortcut)
         self.play_button.setShortcut(QCoreApplication.translate("MusicBrowser", u"Alt+Shift+R", None))
 #endif // QT_CONFIG(shortcut)
+#if QT_CONFIG(tooltip)
+        self.spotify_button.setToolTip(QCoreApplication.translate("MusicBrowser", u"<html><head/><body><p>a\u00f1adir a playlist spotify</p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
         self.spotify_button.setText("")
         self.jaangle_button.setText("")
         self.folder_button.setText("")

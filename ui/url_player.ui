@@ -433,7 +433,10 @@ QProgressBar::chunk {
             }}</string>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
+              </property>
+              <property name="movable">
+               <bool>false</bool>
               </property>
               <property name="tabBarAutoHide">
                <bool>false</bool>
@@ -740,6 +743,42 @@ QProgressBar::chunk {
                       </property>
                       <property name="lineWidth">
                        <number>0</number>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="info_wiki">
+               <attribute name="title">
+                <string>Info Wiki</string>
+               </attribute>
+               <layout class="QVBoxLayout" name="verticalLayout_3">
+                <item>
+                 <widget class="QScrollArea" name="info_wiki_scroll">
+                  <property name="widgetResizable">
+                   <bool>true</bool>
+                  </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>552</width>
+                     <height>660</height>
+                    </rect>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_9">
+                    <item>
+                     <widget class="QTextEdit" name="info_wiki_textedit">
+                      <property name="readOnly">
+                       <bool>true</bool>
+                      </property>
+                      <property name="textInteractionFlags">
+                       <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
                       </property>
                      </widget>
                     </item>

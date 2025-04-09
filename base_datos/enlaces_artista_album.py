@@ -19,7 +19,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from dotenv import load_dotenv
+
 import argparse
 import requests
 import urllib.parse
@@ -44,39 +44,75 @@ sqlite3.register_adapter(datetime, adapt_datetime)
 
 class MusicLinksManager:
     def __init__(self, config):
+        """
+        Inicializa el gestor de enlaces con configuración flexible.
+        
+        Args:
+            config: Diccionario de configuración o ruta a archivo YAML/JSON
+        """
+        # Inicializar configuración vacía
+        self.config = {}
+        
+        # Caso 1: Si config es un diccionario, usarlo directamente
+        if isinstance(config, dict):
+            self.config = config
+        
+        # Caso 2: Si config es un string, podría ser una ruta a un archivo
+        elif isinstance(config, str):
+            # Verificar si es una ruta a un archivo YAML
+            if os.path.exists(config) and config.endswith(('.yml', '.yaml')):
+                try:
+                    import yaml
+                    with open(config, 'r') as f:
+                        yaml_config = yaml.safe_load(f)
+                        # Buscar configuración específica para enlaces_artista_album
+                        if 'enlaces_artista_album' in yaml_config:
+                            self.config = yaml_config['enlaces_artista_album']
+                        else:
+                            # Si no hay sección específica, usar todo el archivo
+                            self.config = yaml_config
+                except Exception as e:
+                    logging.error(f"Error cargando YAML: {e}")
+                    
+            # Verificar si es una ruta a un archivo JSON
+            elif os.path.exists(config) and config.endswith('.json'):
+                try:
+                    import json
+                    with open(config, 'r') as f:
+                        json_config = json.load(f)
+                        # Buscar configuración específica para enlaces_artista_album
+                        if 'enlaces_artista_album' in json_config:
+                            self.config = json_config['enlaces_artista_album']
+                        else:
+                            # Si no hay sección específica, usar todo el archivo
+                            self.config = json_config
+                except Exception as e:
+                    logging.error(f"Error cargando JSON: {e}")
+        
         # Asegurar que db_path sea un string o Path
-        db_path = config.get('db_path')
+        db_path = self.config.get('db_path')
         if not db_path:
             raise ValueError("No se proporcionó una ruta de base de datos válida")
         
         # Convertir a Path y resolver
         self.db_path = Path(str(db_path)).resolve()
         
-        # Servicios deshabilitados
-        self.disabled_services = config.get('disable_services', [])
-        
-        # Límite de tasa
-        self.rate_limit = config.get('rate_limit', 0.5)
-        
-        # Configuración de APIs
-        self.lastfm_api_key = config.get('lastfm_api_key')
-        self.lastfm_user = config.get('lastfm_user')
-        self.youtube_api_key = config.get('youtube_api_key')
-        self.spotify_client_id = config.get('spotify_client_id')
-        self.spotify_client_secret = config.get('spotify_client_secret')
-        self.discogs_token = config.get('discogs_token')
+        # Cargar el resto de la configuración
+        self._load_config_from_dict(self.config)
         
         # Configuración de logging
-        logging.basicConfig(
-            level=logging.INFO,
-            format='%(asctime)s - %(levelname)s - %(message)s'
-        )
-        self.logger = logging.getLogger(__name__)
+        log_level = self.config.get('log_level', 'INFO')
+        logging_level = getattr(logging, log_level, logging.INFO)
         
-        # Depuración de configuración
-        print("Configuración recibida:")
-        for key, value in config.items():
-            print(f"{key}: {value}")
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging_level)
+        
+        # Asegurarse de que el logger tiene al menos un handler
+        if not self.logger.handlers:
+            console_handler = logging.StreamHandler()
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            console_handler.setFormatter(formatter)
+            self.logger.addHandler(console_handler)
         
         # Inicialización de APIs
         self._init_apis()
@@ -84,6 +120,66 @@ class MusicLinksManager:
         # Inicialización de base de datos
         self._update_database_schema()
     
+
+    def _check_required_config(self):
+        """Verifica si las configuraciones requeridas están presentes"""
+        required = ['db_path']
+        return all(key in self.config for key in required)
+    
+    def _load_from_env(self):
+        """Carga configuración desde variables de entorno"""
+        # Cargar variables de entorno críticas
+        if 'db_path' not in self.config:
+            self.config['db_path'] = os.getenv('DB_PATH')
+        
+        # Cargar credenciales
+        if 'spotify_client_id' not in self.config:
+            self.config['spotify_client_id'] = os.getenv('SPOTIFY_CLIENT_ID')
+        
+        if 'spotify_client_secret' not in self.config:
+            self.config['spotify_client_secret'] = os.getenv('SPOTIFY_CLIENT_SECRET')
+        
+        if 'lastfm_api_key' not in self.config:
+            self.config['lastfm_api_key'] = os.getenv('LASTFM_API_KEY')
+        
+        if 'lastfm_user' not in self.config:
+            self.config['lastfm_user'] = os.getenv('LASTFM_USER')
+        
+        if 'google_api_key' not in self.config:
+            self.config['google_api_key'] = os.getenv('GOOGLE_API_KEY')
+        
+        if 'discogs_token' not in self.config:
+            self.config['discogs_token'] = os.getenv('DISCOGS_TOKEN')
+        
+    def _load_config_from_dict(self, config_dict):
+        """Carga configuración desde un diccionario"""
+        # Servicios deshabilitados (puede ser lista o string separado por comas)
+        disable_services = config_dict.get('disable_services', [])
+        if isinstance(disable_services, str):
+            self.disabled_services = [s.strip() for s in disable_services.split(',')]
+        else:
+            self.disabled_services = disable_services
+        
+        # Límite de tasa
+        self.rate_limit = float(config_dict.get('rate_limit', 0.5))
+        
+        # Configuración de APIs
+        self.lastfm_api_key = config_dict.get('lastfm_api_key')
+        self.lastfm_user = config_dict.get('lastfm_user')
+        self.youtube_api_key = config_dict.get('youtube_api_key')
+        self.spotify_client_id = config_dict.get('spotify_client_id')
+        self.spotify_client_secret = config_dict.get('spotify_client_secret')
+        self.discogs_token = config_dict.get('discogs_token')
+        
+        # Depuración de configuración
+        print("Configuración recibida:")
+        for key, value in config_dict.items():
+            # No mostrar valores de claves sensibles
+            if key in ['spotify_client_secret', 'discogs_token']:
+                print(f"{key}: {'*' * 8}")
+            else:
+                print(f"{key}: {value}")
+
     def _init_apis(self):
         """Inicializa las conexiones a las APIs externas"""
         # [Código existente para otras APIs...]

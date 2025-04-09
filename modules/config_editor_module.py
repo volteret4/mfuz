@@ -21,76 +21,85 @@ from base_module import BaseModule, THEMES, PROJECT_ROOT
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def load_config_file(file_path):
+    """Carga un archivo de configuración en formato JSON o YAML."""
+    file_extension = Path(file_path).suffix.lower()
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            if file_extension == '.json':
+                import json
+                return json.loads(content)
+            elif file_extension in ['.yml', '.yaml']:
+                import yaml
+                return yaml.safe_load(content)
+            else:
+                # Intentar determinar formato basado en contenido
+                try:
+                    import json
+                    return json.loads(content)
+                except json.JSONDecodeError:
+                    try:
+                        import yaml
+                        return yaml.safe_load(content)
+                    except yaml.YAMLError:
+                        raise ValueError(f"No se pudo determinar el formato del archivo: {file_path}")
+    except Exception as e:
+        raise Exception(f"Error loading config: {str(e)}")
+
+def save_config_file(file_path, data):
+    """Guarda un archivo de configuración en formato JSON o YAML."""
+    file_extension = Path(file_path).suffix.lower()
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            if file_extension == '.json':
+                import json
+                json.dump(data, f, indent=2)
+            elif file_extension in ['.yml', '.yaml']:
+                import yaml
+                yaml.dump(data, f, sort_keys=False, default_flow_style=False, indent=2, allow_unicode=True)
+            else:
+                # Por defecto usar JSON
+                import json
+                json.dump(data, f, indent=2)
+    except Exception as e:
+        raise Exception(f"Error saving config: {str(e)}")
+
 
 class ConfigEditorModule(BaseModule):
     config_updated = pyqtSignal()
     module_theme_changed = pyqtSignal(str, str)  # Signal to change theme for a specific module
 
     def __init__(self, config_path: str, parent=None, theme='Tokyo Night', **kwargs):
-        # Initialize config_data with new global configuration options
+        # Inicializa self.config_data con valores mínimos COMPLETOS antes de llamar a super().__init__
         self.config_data = {
-            "temas": THEMES,  # Always use THEMES from base_module
-            "tema_seleccionado": theme,
+            "tema_seleccionado": theme, 
+            "temas": list(THEMES.keys()),
             "logging": ["true", "false"],
-            "logging_state": "true",
-            
-            # New global configuration options
-            "global_theme_config": {
-                "enable_individual_themes": True,
-                "shared_db_paths": {
-                    # Example of how shared database paths might be configured
-                    "music_database": "/home/huan/gits/musica/m/falla_pls.sqlite"
-                }
-            },
-            
-            "modules": [],
-            "modulos_desactivados": []  # Add list for disabled modules
+            "logging_state": "false",
+            "modules": [], 
+            "modulos_desactivados": []
         }
+        
         self.config_path = config_path
         self.fields = {}
-        self.module_checkboxes = {}  # Store module checkboxes
+        self.module_checkboxes = {}
 
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
         
+        # Inicialización
         super().__init__(parent, theme, **kwargs)
+        
+        # Carga después de inicializar la UI
         self.load_config()
         
     def apply_theme(self, theme_name=None):
         super().apply_theme(theme_name)
 
-    def load_config(self):
-        """Load configuration from file"""
-        try:
-            if Path(self.config_path).exists():
-                with open(self.config_path, 'r') as f:
-                    loaded_config = json.load(f)
-                    
-                    # Overwrite themes with THEMES
-                    loaded_config["temas"] = list(THEMES.keys())
-                    
-                    # Validate selected theme
-                    if loaded_config["tema_seleccionado"] not in THEMES:
-                        loaded_config["tema_seleccionado"] = list(THEMES.keys())[0]
-                    
-                    # Ensure modulos_desactivados exists
-                    if "modulos_desactivados" not in loaded_config:
-                        loaded_config["modulos_desactivados"] = []
-                    
-                    self.config_data = loaded_config
-            else:
-                self.save_all_config()
-                QMessageBox.information(
-                    self,
-                    "Config Created",
-                    f"New config file created at {self.config_path}"
-                )
-        except Exception as e:
-            QMessageBox.critical(
-                self,
-                "Error",
-                f"Error loading config from {self.config_path}: {str(e)}\nUsing default configuration."
-            )
+
+
+  
 
     def init_ui(self):
         """Initialize the UI using UI file or create it manually"""
@@ -296,7 +305,174 @@ class ConfigEditorModule(BaseModule):
         
         # Add flexible space at the end to align everything at the top
         container_layout.addStretch()
-    
+
+    def load_config(self):
+        """Load configuration from file - NEVER create if it doesn't exist"""
+        try:
+            if not Path(self.config_path).exists():
+                QMessageBox.critical(
+                    self,
+                    "Error",
+                    f"ERROR: Archivo de configuración no encontrado: {self.config_path}"
+                )
+                return
+                    
+            loaded_config = load_config_file(self.config_path)
+            
+            # Asegúrate de tener todos los campos necesarios
+            if "modules" not in loaded_config:
+                loaded_config["modules"] = []
+                
+            if "modulos_desactivados" not in loaded_config:
+                loaded_config["modulos_desactivados"] = []
+                
+            if "logging" not in loaded_config:
+                loaded_config["logging"] = ["true", "false"]
+                
+            if "logging_state" not in loaded_config:
+                loaded_config["logging_state"] = "false"
+                
+            # Asegúrate de que temas sea una lista de strings
+            if "temas" in loaded_config and not isinstance(loaded_config["temas"], list):
+                loaded_config["temas"] = list(THEMES.keys())
+                
+            # Garantiza que el tema seleccionado exista en THEMES
+            if "tema_seleccionado" in loaded_config and loaded_config["tema_seleccionado"] not in THEMES:
+                loaded_config["tema_seleccionado"] = list(THEMES.keys())[0]
+                
+            self.config_data = loaded_config
+            
+            # Para depuración
+            print(f"Config cargada correctamente. Módulos activos: {len(self.config_data['modules'])}, Módulos desactivados: {len(self.config_data['modulos_desactivados'])}")
+            
+            # Actualiza la UI con los nuevos datos
+            self.create_module_groups()
+                
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Error",
+                f"Error loading config from {self.config_path}: {str(e)}"
+            )
+            # Log detallado del error
+            print(f"Error completo: {str(e)}")
+            print(traceback.format_exc())
+
+    # Modificar el método save_all_config
+    def save_all_config(self, enable_individual_themes=True):
+        """Save all configuration changes"""
+        # Verifica que el archivo exista antes de intentar guardarlo
+        if not Path(self.config_path).exists():
+            QMessageBox.critical(
+                self,
+                "Error",
+                f"ERROR: El archivo de configuración no existe: {self.config_path}"
+            )
+            return False
+        
+        try:
+            # Create a deep copy of the config to modify
+            updated_config = copy.deepcopy(self.config_data)
+            
+            # Ensure global_theme_config exists
+            if "global_theme_config" not in updated_config:
+                updated_config["global_theme_config"] = {}
+            
+            # Update enable individual themes setting
+            updated_config["global_theme_config"]["enable_individual_themes"] = enable_individual_themes
+            
+            # Ensure shared_db_paths exists
+            if "shared_db_paths" not in updated_config["global_theme_config"]:
+                updated_config["global_theme_config"]["shared_db_paths"] = {}
+            
+            # Add current path if not empty
+            current_key = self.db_paths_dropdown.currentText()
+            current_path = self.db_path_input.text().strip()
+            if current_key and current_path:
+                updated_config["global_theme_config"]["shared_db_paths"][current_key] = current_path
+            
+            # Update global theme
+            theme_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Global Theme"]
+            if theme_fields:
+                new_global_theme = theme_fields[0].get_value()
+                updated_config["tema_seleccionado"] = new_global_theme
+            
+            # Update logging state
+            logging_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Logging"]
+            if logging_fields:
+                updated_config["logging_state"] = logging_fields[0].get_value()
+            
+            # Initialize lists for modules
+            updated_config["modules"] = []
+            updated_config["modulos_desactivados"] = []
+            
+            # Track theme changes for active modules
+            theme_changes = []
+            
+            # Process all module checkboxes to organize modules
+            for module_name, checkbox in self.module_checkboxes.items():
+                is_active = checkbox.isChecked()
+                
+                # Find the module in either list
+                module = None
+                for mod in self.config_data["modules"] + self.config_data.get("modulos_desactivados", []):
+                    if mod["name"] == module_name:
+                        # Create a deep copy to avoid modifying the original
+                        module = copy.deepcopy(mod)
+                        break
+                
+                if not module:
+                    continue
+                    
+                # Update module settings if we have fields for it
+                if module_name in self.fields:
+                    module_fields = self.fields[module_name]
+                    
+                    # Check for theme change
+                    old_theme = None
+                    new_theme = None
+                    
+                    if "theme_dropdown" in module_fields and "args" in module:
+                        old_theme = module["args"].get("tema_seleccionado")
+                        new_theme = module_fields["theme_dropdown"].get_value()
+                        
+                        # Update theme
+                        module["args"]["tema_seleccionado"] = new_theme
+                        
+                        # Track theme change for active modules
+                        if is_active and old_theme != new_theme:
+                            theme_changes.append((module_name, new_theme))
+                    
+                    # Update other fields
+                    for key, field in module_fields.items():
+                        if key != "theme_dropdown" and "args" in module:
+                            module["args"][key] = field.get_value()
+                
+                # Add to the appropriate list
+                if is_active:
+                    updated_config["modules"].append(module)
+                else:
+                    updated_config["modulos_desactivados"].append(module)
+            
+            # Save file with updated configuration
+            save_config_file(self.config_path, updated_config)
+            
+            # Update our local config data
+            self.config_data = updated_config
+            
+            # Emit theme change signals
+            for module_name, new_theme in theme_changes:
+                self.module_theme_changed.emit(module_name, new_theme)
+            
+            QMessageBox.information(self, "Success", "All configurations saved successfully")
+            self.config_updated.emit()
+            
+            return True  # Indicate successful save
+        
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
+            return False  # Indicate save failure
+
     def load_database_paths(self):
         """Load database paths from config and populate dropdown"""
         global_theme_config = self.config_data.get("global_theme_config", {})
@@ -313,34 +489,43 @@ class ConfigEditorModule(BaseModule):
     
     def create_module_groups(self):
         """Create the module groups and add them to their respective layouts"""
-        # Clear existing modules
+        # Limpia primero los layouts existentes
         for i in reversed(range(self.active_modules_layout.count())):
-            if self.active_modules_layout.itemAt(i).widget():
-                self.active_modules_layout.itemAt(i).widget().deleteLater()
+            item = self.active_modules_layout.itemAt(i)
+            if item.widget():
+                item.widget().deleteLater()
         
         for i in reversed(range(self.disabled_modules_layout.count())):
-            if self.disabled_modules_layout.itemAt(i).widget():
-                self.disabled_modules_layout.itemAt(i).widget().deleteLater()
+            item = self.disabled_modules_layout.itemAt(i)
+            if item.widget():
+                item.widget().deleteLater()
         
-        # Flag to check if any modules exist
+        # Debug - muestra cuántos módulos hay
+        print(f"Creando grupos de módulos. Activos: {len(self.config_data['modules'])}, Desactivados: {len(self.config_data['modulos_desactivados'])}")
+        
+        # Flag para verificar si hay módulos
         has_active_modules = False
         has_disabled_modules = False
         
-        # Add active modules
-        if self.config_data["modules"]:
+        # Agrega los módulos activos
+        if 'modules' in self.config_data and self.config_data['modules']:
             has_active_modules = True
-            for module in self.config_data["modules"]:
+            for module in self.config_data['modules']:
+                # Debug - mostrar cada módulo
+                print(f"Agregando módulo activo: {module.get('name', 'Sin nombre')}")
                 module_group = self.create_module_group(module, True)
                 self.active_modules_layout.addWidget(module_group)
         
-        # Add disabled modules
-        if self.config_data.get("modulos_desactivados", []):
+        # Agrega los módulos desactivados
+        if 'modulos_desactivados' in self.config_data and self.config_data['modulos_desactivados']:
             has_disabled_modules = True
-            for module in self.config_data["modulos_desactivados"]:
+            for module in self.config_data['modulos_desactivados']:
+                # Debug - mostrar cada módulo
+                print(f"Agregando módulo desactivado: {module.get('name', 'Sin nombre')}")
                 module_group = self.create_module_group(module, False)
                 self.disabled_modules_layout.addWidget(module_group)
         
-        # If no modules, add placeholder labels
+        # Si no hay módulos, agrega etiquetas de marcador de posición
         if not has_active_modules:
             label = QLabel("No active modules configured.")
             self.active_modules_layout.addWidget(label)
@@ -507,8 +692,7 @@ class ConfigEditorModule(BaseModule):
         
         # Save the configuration to file
         try:
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            save_config_file(self.config_path, self.config_data)
         except Exception as e:
             QMessageBox.critical(self, "Save Error", f"Could not save configuration: {str(e)}")
             return
@@ -528,6 +712,7 @@ class ConfigEditorModule(BaseModule):
         
         # Show success message
         QMessageBox.information(self, "Success", f"Database path '{key}' added successfully.")
+
 
     def remove_shared_db_path(self):
         """Remove selected shared database path"""
@@ -555,8 +740,7 @@ class ConfigEditorModule(BaseModule):
                         del db_paths[current_key]
                     
                     # Save updated configuration to file
-                    with open(self.config_path, 'w') as f:
-                        json.dump(self.config_data, f, indent=2)
+                    save_config_file(self.config_path, self.config_data)
                     
                     # Update dropdown
                     self.db_paths_dropdown.removeItem(self.db_paths_dropdown.currentIndex())
@@ -574,6 +758,7 @@ class ConfigEditorModule(BaseModule):
             
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Could not remove database path: {str(e)}")
+
     
     def move_module(self, module_name, direction):
         """Move a module up or down in its list"""
@@ -618,8 +803,7 @@ class ConfigEditorModule(BaseModule):
         
         # Save the changes
         try:
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            save_config_file(self.config_path, self.config_data)
             
             # Notify user and emit signal
             QMessageBox.information(
@@ -676,8 +860,7 @@ class ConfigEditorModule(BaseModule):
         """Reset a module's configuration to the saved values"""
         try:
             # Reload the configuration from file
-            with open(self.config_path, 'r') as f:
-                loaded_config = json.load(f)
+            loaded_config = load_config_file(self.config_path)
             
             # Find the module
             module_found = False
@@ -713,6 +896,7 @@ class ConfigEditorModule(BaseModule):
             
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error resetting module configuration: {str(e)}")
+
     
     def save_module_config(self, module_name: str):
         """Save configuration for a specific module"""
@@ -782,8 +966,7 @@ class ConfigEditorModule(BaseModule):
             dest_list.append(module)
             
             # Save to file
-            with open(self.config_path, 'w') as f:
-                json.dump(self.config_data, f, indent=2)
+            save_config_file(self.config_path, self.config_data)
             
             # Show success message based on what changed
             if source_list != dest_list:
@@ -803,112 +986,7 @@ class ConfigEditorModule(BaseModule):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
     
-    def save_all_config(self, enable_individual_themes=True):
-        """Save all configuration changes"""
-        try:
-            # Create a deep copy of the config to modify
-            updated_config = copy.deepcopy(self.config_data)
-            
-            # Ensure global_theme_config exists
-            if "global_theme_config" not in updated_config:
-                updated_config["global_theme_config"] = {}
-            
-            # Update enable individual themes setting
-            updated_config["global_theme_config"]["enable_individual_themes"] = enable_individual_themes
-            
-            # Ensure shared_db_paths exists
-            if "shared_db_paths" not in updated_config["global_theme_config"]:
-                updated_config["global_theme_config"]["shared_db_paths"] = {}
-            
-            # Add current path if not empty
-            current_key = self.db_paths_dropdown.currentText()
-            current_path = self.db_path_input.text().strip()
-            if current_key and current_path:
-                updated_config["global_theme_config"]["shared_db_paths"][current_key] = current_path
-            
-            # Update global theme
-            theme_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Global Theme"]
-            if theme_fields:
-                new_global_theme = theme_fields[0].get_value()
-                updated_config["tema_seleccionado"] = new_global_theme
-            
-            # Update logging state
-            logging_fields = [f for f in self.findChildren(ConfigField) if f.label.text() == "Logging"]
-            if logging_fields:
-                updated_config["logging_state"] = logging_fields[0].get_value()
-            
-            # Initialize lists for modules
-            updated_config["modules"] = []
-            updated_config["modulos_desactivados"] = []
-            
-            # Track theme changes for active modules
-            theme_changes = []
-            
-            # Process all module checkboxes to organize modules
-            for module_name, checkbox in self.module_checkboxes.items():
-                is_active = checkbox.isChecked()
-                
-                # Find the module in either list
-                module = None
-                for mod in self.config_data["modules"] + self.config_data.get("modulos_desactivados", []):
-                    if mod["name"] == module_name:
-                        # Create a deep copy to avoid modifying the original
-                        module = copy.deepcopy(mod)
-                        break
-                
-                if not module:
-                    continue
-                    
-                # Update module settings if we have fields for it
-                if module_name in self.fields:
-                    module_fields = self.fields[module_name]
-                    
-                    # Check for theme change
-                    old_theme = None
-                    new_theme = None
-                    
-                    if "theme_dropdown" in module_fields and "args" in module:
-                        old_theme = module["args"].get("tema_seleccionado")
-                        new_theme = module_fields["theme_dropdown"].get_value()
-                        
-                        # Update theme
-                        module["args"]["tema_seleccionado"] = new_theme
-                        
-                        # Track theme change for active modules
-                        if is_active and old_theme != new_theme:
-                            theme_changes.append((module_name, new_theme))
-                    
-                    # Update other fields
-                    for key, field in module_fields.items():
-                        if key != "theme_dropdown" and "args" in module:
-                            module["args"][key] = field.get_value()
-                
-                # Add to the appropriate list
-                if is_active:
-                    updated_config["modules"].append(module)
-                else:
-                    updated_config["modulos_desactivados"].append(module)
-            
-            # Save file with updated configuration
-            with open(self.config_path, 'w') as f:
-                json.dump(updated_config, f, indent=2)
-            
-            # Update our local config data
-            self.config_data = updated_config
-            
-            # Emit theme change signals
-            for module_name, new_theme in theme_changes:
-                self.module_theme_changed.emit(module_name, new_theme)
-            
-            QMessageBox.information(self, "Success", "All configurations saved successfully")
-            self.config_updated.emit()
-            
-            return True  # Indicate successful save
-        
-        except Exception as e:
-            QMessageBox.critical(self, "Error", f"Error saving config: {str(e)}")
-            return False  # Indicate save failure
-
+  
 
 class ConfigField(QWidget):
     """Widget para un campo individual de configuración"""

@@ -45,19 +45,16 @@
      </property>
      <item>
       <widget class="QLabel" name="title_label">
-       <property name="text">
-        <string>Script Runner</string>
-       </property>
        <property name="styleSheet">
         <string>font-weight: bold; font-size: 14px;</string>
+       </property>
+       <property name="text">
+        <string>Script Runner</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="toggle_args_btn">
-       <property name="text">
-        <string>Advanced Settings</string>
-       </property>
        <property name="styleSheet">
         <string>QPushButton {
   border: 1px solid;
@@ -65,7 +62,10 @@
   padding: 5px;
 }</string>
        </property>
-       <property name="fixedWidth">
+       <property name="text">
+        <string>Advanced Settings</string>
+       </property>
+       <property name="fixedWidth" stdset="0">
         <number>140</number>
        </property>
       </widget>
@@ -74,15 +74,6 @@
    </item>
    <item>
     <widget class="QScrollArea" name="scripts_scroll">
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
      <property name="styleSheet">
       <string>QScrollArea {
   border: none;
@@ -100,7 +91,30 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
   height: 0px;
 }</string>
      </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
      <widget class="QWidget" name="scripts_container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>780</width>
+        <height>386</height>
+       </rect>
+      </property>
       <layout class="QVBoxLayout" name="scripts_layout">
        <property name="spacing">
         <number>5</number>
@@ -117,27 +131,27 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignTop</set>
-       </property>
       </layout>
      </widget>
     </widget>
    </item>
    <item>
     <widget class="QTextEdit" name="log_text">
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-     <property name="maximumHeight">
-      <number>150</number>
-     </property>
      <property name="styleSheet">
       <string>QTextEdit {
   border: 1px solid;
   border-radius: 3px;
   padding: 5px;
 }</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::NoFrame</enum>
+     </property>
+     <property name="lineWidth">
+      <number>0</number>
+     </property>
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

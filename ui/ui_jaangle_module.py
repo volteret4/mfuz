@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'jaangle_module.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -25,16 +25,154 @@ class Ui_MusicQuiz(object):
         if not MusicQuiz.objectName():
             MusicQuiz.setObjectName(u"MusicQuiz")
         MusicQuiz.resize(800, 600)
+        MusicQuiz.setStyleSheet(u"/* Estilo general */\n"
+"QWidget {\n"
+"    font-family: 'Segoe UI', Arial, sans-serif;\n"
+"    font-size: 10pt;\n"
+"}\n"
+"\n"
+"/* Botones */\n"
+"QPushButton {\n"
+"    background-color: #607D8B;\n"
+"    color: white;\n"
+"    border: none;\n"
+"    border-radius: 4px;\n"
+"    padding: 6px 12px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #78909C;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #546E7A;\n"
+"}\n"
+"\n"
+"/* Botones de acci\u00f3n (Iniciar/Detener) */\n"
+"#toggle_button {\n"
+"    background-color: #4CAF50;\n"
+"    padding: 8px 16px;\n"
+"    font-size: 11pt;\n"
+"}\n"
+"\n"
+"#toggle_button:hover {\n"
+"    background-color: #66BB6A;\n"
+"}\n"
+"\n"
+"#toggle_button:pressed {\n"
+"    background-color: #43A047;\n"
+"}\n"
+"\n"
+"/* Bot\u00f3n de configuraci\u00f3n */\n"
+"#config_button {\n"
+"    background-color: #607D8B;\n"
+"    border-radius: 20px;\n"
+"    font-size: 16px;\n"
+"}\n"
+"\n"
+"/* GroupBox */\n"
+"QGroupBox {\n"
+"    border: 1px solid #E0E0E0;\n"
+""
+                        "    border-radius: 6px;\n"
+"    margin-top: 12px;\n"
+"    background-color: rgba(236, 239, 241, 0.5);\n"
+"}\n"
+"\n"
+"QGroupBox::title {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top left;\n"
+"    background-color: transparent;\n"
+"    padding: 0 5px;\n"
+"    color: #37474F;\n"
+"}\n"
+"\n"
+"/* ProgressBar */\n"
+"QProgressBar {\n"
+"    border: none;\n"
+"    border-radius: 3px;\n"
+"    text-align: center;\n"
+"    background-color: #E0E0E0;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #4CAF50;\n"
+"    border-radius: 3px;\n"
+"}\n"
+"\n"
+"/* ComboBox */\n"
+"QComboBox {\n"
+"    border: 1px solid #E0E0E0;\n"
+"    border-radius: 4px;\n"
+"    padding: 5px;\n"
+"    background-color: #F5F5F5;\n"
+"}\n"
+"\n"
+"QComboBox:hover, QComboBox:focus {\n"
+"    border: 1px solid #78909C;\n"
+"    background-color: #FFFFFF;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down {\n"
+"    border: none;\n"
+"    border-left: 1px solid #E0E0E0;\n"
+"    width: 20px;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow {\n"
+"    width: 12"
+                        "px;\n"
+"    height: 12px;\n"
+"}\n"
+"\n"
+"/* Labels */\n"
+"QLabel {\n"
+"    color: #455A64;\n"
+"}\n"
+"\n"
+"#countdown_label {\n"
+"    color: #607D8B;\n"
+"    font-weight: bold;\n"
+"    font-size: 18pt;\n"
+"}\n"
+"\n"
+"/* Scroll Area */\n"
+"QScrollArea {\n"
+"    border: none;\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"/* Botones de Filtro */\n"
+"QPushButton[filter_button=true] {\n"
+"    background-color: transparent;\n"
+"    color: #607D8B;\n"
+"    border: 1px solid #B0BEC5;\n"
+"    border-radius: 4px;\n"
+"    padding: 6px;\n"
+"    font-weight: normal;\n"
+"}\n"
+"\n"
+"QPushButton[filter_button=true]:hover {\n"
+"    background-color: rgba(96, 125, 139, 0.1);\n"
+"    border-color: #607D8B;\n"
+"}\n"
+"\n"
+"/* Contenedor de opciones */\n"
+"#options_container {\n"
+"    background-color: transparent;\n"
+"}")
         self.main_layout = QVBoxLayout(MusicQuiz)
         self.main_layout.setSpacing(20)
         self.main_layout.setObjectName(u"main_layout")
         self.main_layout.setContentsMargins(20, 20, 20, 20)
         self.scroll_area = QScrollArea(MusicQuiz)
         self.scroll_area.setObjectName(u"scroll_area")
-        self.scroll_area.setWidgetResizable(True)
         self.scroll_area.setFrameShape(QFrame.NoFrame)
+        self.scroll_area.setWidgetResizable(True)
         self.scroll_content = QWidget()
         self.scroll_content.setObjectName(u"scroll_content")
+        self.scroll_content.setGeometry(QRect(0, 0, 760, 560))
         self.scroll_layout = QVBoxLayout(self.scroll_content)
         self.scroll_layout.setSpacing(20)
         self.scroll_layout.setObjectName(u"scroll_layout")
@@ -106,41 +244,69 @@ class Ui_MusicQuiz(object):
         self.filter_layout.setObjectName(u"filter_layout")
         self.filter_artists_btn = QPushButton(self.config_group)
         self.filter_artists_btn.setObjectName(u"filter_artists_btn")
+        self.filter_artists_btn.setProperty(u"filter_button", True)
+        icon = QIcon()
+        icon.addFile(u"icons/artist.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.filter_artists_btn.setIcon(icon)
 
         self.filter_layout.addWidget(self.filter_artists_btn, 0, 0, 1, 1)
 
         self.filter_albums_btn = QPushButton(self.config_group)
         self.filter_albums_btn.setObjectName(u"filter_albums_btn")
+        self.filter_albums_btn.setProperty(u"filter_button", True)
+        icon1 = QIcon()
+        icon1.addFile(u"icons/album.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.filter_albums_btn.setIcon(icon1)
 
         self.filter_layout.addWidget(self.filter_albums_btn, 0, 1, 1, 1)
 
         self.filter_folders_btn = QPushButton(self.config_group)
         self.filter_folders_btn.setObjectName(u"filter_folders_btn")
+        self.filter_folders_btn.setProperty(u"filter_button", True)
+        icon2 = QIcon()
+        icon2.addFile(u"icons/folder.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.filter_folders_btn.setIcon(icon2)
 
         self.filter_layout.addWidget(self.filter_folders_btn, 1, 0, 1, 1)
 
         self.filter_genres_btn = QPushButton(self.config_group)
         self.filter_genres_btn.setObjectName(u"filter_genres_btn")
+        self.filter_genres_btn.setProperty(u"filter_button", True)
+        icon3 = QIcon()
+        icon3.addFile(u"icons/genre.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.filter_genres_btn.setIcon(icon3)
 
         self.filter_layout.addWidget(self.filter_genres_btn, 1, 1, 1, 1)
 
         self.session_filters_btn = QPushButton(self.config_group)
         self.session_filters_btn.setObjectName(u"session_filters_btn")
+        self.session_filters_btn.setProperty(u"filter_button", True)
+        icon4 = QIcon()
+        icon4.addFile(u"icons/session.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.session_filters_btn.setIcon(icon4)
 
         self.filter_layout.addWidget(self.session_filters_btn, 2, 0, 1, 1)
 
         self.clear_session_btn = QPushButton(self.config_group)
         self.clear_session_btn.setObjectName(u"clear_session_btn")
+        self.clear_session_btn.setProperty(u"filter_button", True)
+        icon5 = QIcon()
+        icon5.addFile(u"icons/clear.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.clear_session_btn.setIcon(icon5)
 
         self.filter_layout.addWidget(self.clear_session_btn, 2, 1, 1, 1)
 
         self.filter_sellos_btn = QPushButton(self.config_group)
         self.filter_sellos_btn.setObjectName(u"filter_sellos_btn")
+        self.filter_sellos_btn.setProperty(u"filter_button", True)
+        icon6 = QIcon()
+        icon6.addFile(u"icons/label.svg", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.filter_sellos_btn.setIcon(icon6)
 
         self.filter_layout.addWidget(self.filter_sellos_btn, 3, 0, 1, 1)
 
 
-        self.config_layout.addLayout(self.filter_layout, 3, 0, 1, 2)
+        self.config_layout.addLayout(self.filter_layout, 4, 0, 1, 2)
 
 
         self.scroll_layout.addWidget(self.config_group)
@@ -171,7 +337,7 @@ class Ui_MusicQuiz(object):
 
         self.config_button = QPushButton(self.scroll_content)
         self.config_button.setObjectName(u"config_button")
-        self.config_button.setFixedWidth(40)
+        self.config_button.setProperty(u"fixedWidth", 40)
 
         self.timer_layout.addWidget(self.config_button)
 
@@ -190,19 +356,19 @@ class Ui_MusicQuiz(object):
         self.stats_layout.setObjectName(u"stats_layout")
         self.score_label = QLabel(self.scroll_content)
         self.score_label.setObjectName(u"score_label")
-        self.score_label.setFixedHeight(20)
+        self.score_label.setProperty(u"fixedHeight", 20)
 
         self.stats_layout.addWidget(self.score_label)
 
         self.total_label = QLabel(self.scroll_content)
         self.total_label.setObjectName(u"total_label")
-        self.total_label.setFixedHeight(20)
+        self.total_label.setProperty(u"fixedHeight", 20)
 
         self.stats_layout.addWidget(self.total_label)
 
         self.accuracy_label = QLabel(self.scroll_content)
         self.accuracy_label.setObjectName(u"accuracy_label")
-        self.accuracy_label.setFixedHeight(20)
+        self.accuracy_label.setProperty(u"fixedHeight", 20)
 
         self.stats_layout.addWidget(self.accuracy_label)
 
@@ -253,42 +419,13 @@ class Ui_MusicQuiz(object):
         self.options_count_combo.setItemText(3, QCoreApplication.translate("MusicQuiz", u"8", None))
 
         self.filter_artists_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar Artistas", None))
-        self.filter_artists_btn.setStyleSheet(QCoreApplication.translate("MusicQuiz", u"QPushButton {\n"
-"    border: none;\n"
-"    padding: 5px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(255, 0, 0, 0.2);\n"
-"}", None))
         self.filter_albums_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar \u00c1lbumes", None))
-        self.filter_albums_btn.setStyleSheet(QCoreApplication.translate("MusicQuiz", u"QPushButton {\n"
-"    border: none;\n"
-"    padding: 5px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(255, 0, 0, 0.2);\n"
-"}", None))
         self.filter_folders_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar Carpetas", None))
-        self.filter_folders_btn.setStyleSheet(QCoreApplication.translate("MusicQuiz", u"QPushButton {\n"
-"    border: none;\n"
-"    padding: 5px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(255, 0, 0, 0.2);\n"
-"}", None))
         self.filter_genres_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar G\u00e9neros", None))
-        self.filter_genres_btn.setStyleSheet(QCoreApplication.translate("MusicQuiz", u"QPushButton {\n"
-"    border: none;\n"
-"    padding: 5px;\n"
-"}\n"
-"QPushButton:hover {\n"
-"    background-color: rgba(255, 0, 0, 0.2);\n"
-"}", None))
         self.session_filters_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtros de Sesi\u00f3n \u2b50", None))
         self.clear_session_btn.setText(QCoreApplication.translate("MusicQuiz", u"Limpiar Filtros Sesi\u00f3n", None))
         self.filter_sellos_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar Sellos", None))
         self.countdown_label.setText(QCoreApplication.translate("MusicQuiz", u"30", None))
-        self.progress_bar.setStyleSheet(QCoreApplication.translate("MusicQuiz", u"QProgressBar { border: none; background-color: transparent; }", None))
         self.toggle_button.setText(QCoreApplication.translate("MusicQuiz", u"Iniciar Quiz", None))
         self.config_button.setText(QCoreApplication.translate("MusicQuiz", u"\u2699\ufe0f", None))
         self.score_label.setText(QCoreApplication.translate("MusicQuiz", u"Aciertos: 0", None))

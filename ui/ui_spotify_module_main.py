@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'spotify_module_main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,43 +19,53 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGroupBox,
     QHBoxLayout, QLineEdit, QListWidget, QListWidgetItem,
     QPushButton, QSizePolicy, QSplitter, QVBoxLayout,
     QWidget)
+import rc_images
 
 class Ui_SpotifyPlaylistManager(object):
     def setupUi(self, SpotifyPlaylistManager):
         if not SpotifyPlaylistManager.objectName():
             SpotifyPlaylistManager.setObjectName(u"SpotifyPlaylistManager")
-        SpotifyPlaylistManager.resize(800, 600)
+        SpotifyPlaylistManager.resize(800, 606)
         self.verticalLayout = QVBoxLayout(SpotifyPlaylistManager)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.playlist_list = QListWidget(SpotifyPlaylistManager)
-        self.playlist_list.setObjectName(u"playlist_list")
-        self.playlist_list.setMinimumSize(QSize(0, 200))
-
-        self.verticalLayout.addWidget(self.playlist_list)
-
-        self.search_container = QFrame(SpotifyPlaylistManager)
-        self.search_container.setObjectName(u"search_container")
-        self.search_container.setFrameShape(QFrame.NoFrame)
-        self.search_container.setFrameShadow(QFrame.Raised)
-        self.horizontalLayout = QHBoxLayout(self.search_container)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.search_input = QLineEdit(self.search_container)
+        self.frame = QFrame(SpotifyPlaylistManager)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.Shape.NoFrame)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.frame.setLineWidth(0)
+        self.horizontalLayout_5 = QHBoxLayout(self.frame)
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
+        self.horizontalLayout_5.setContentsMargins(0, 5, 0, 5)
+        self.search_input = QLineEdit(self.frame)
         self.search_input.setObjectName(u"search_input")
 
-        self.horizontalLayout.addWidget(self.search_input)
+        self.horizontalLayout_5.addWidget(self.search_input)
 
-        self.search_button = QPushButton(self.search_container)
+        self.search_button = QPushButton(self.frame)
         self.search_button.setObjectName(u"search_button")
 
-        self.horizontalLayout.addWidget(self.search_button)
+        self.horizontalLayout_5.addWidget(self.search_button)
+
+        self.playlist_selector = QComboBox(self.frame)
+        icon = QIcon()
+        icon.addFile(u":/services/spotify", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.playlist_selector.addItem(icon, "")
+        self.playlist_selector.addItem(icon, "")
+        self.playlist_selector.setObjectName(u"playlist_selector")
+
+        self.horizontalLayout_5.addWidget(self.playlist_selector)
 
 
-        self.verticalLayout.addWidget(self.search_container)
+        self.verticalLayout.addWidget(self.frame)
 
         self.results_splitter = QSplitter(SpotifyPlaylistManager)
         self.results_splitter.setObjectName(u"results_splitter")
-        self.results_splitter.setOrientation(Qt.Horizontal)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.results_splitter.sizePolicy().hasHeightForWidth())
+        self.results_splitter.setSizePolicy(sizePolicy)
+        self.results_splitter.setOrientation(Qt.Orientation.Horizontal)
         self.search_results_group = QGroupBox(self.results_splitter)
         self.search_results_group.setObjectName(u"search_results_group")
         self.search_results_layout = QVBoxLayout(self.search_results_group)
@@ -79,17 +89,46 @@ class Ui_SpotifyPlaylistManager(object):
 
         self.playlist_buttons_container = QFrame(self.playlist_creator_group)
         self.playlist_buttons_container.setObjectName(u"playlist_buttons_container")
-        self.playlist_buttons_container.setFrameShape(QFrame.NoFrame)
-        self.playlist_buttons_container.setFrameShadow(QFrame.Raised)
+        self.playlist_buttons_container.setFrameShape(QFrame.Shape.NoFrame)
+        self.playlist_buttons_container.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_3 = QHBoxLayout(self.playlist_buttons_container)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
+        self.save_loacal_playlist_button = QPushButton(self.playlist_buttons_container)
+        self.save_loacal_playlist_button.setObjectName(u"save_loacal_playlist_button")
+        self.save_loacal_playlist_button.setMaximumSize(QSize(40, 40))
+        icon1 = QIcon()
+        icon1.addFile(u":/services/data", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.save_loacal_playlist_button.setIcon(icon1)
+        self.save_loacal_playlist_button.setIconSize(QSize(36, 36))
+
+        self.horizontalLayout_3.addWidget(self.save_loacal_playlist_button)
+
+        self.youtube_playlist_button = QPushButton(self.playlist_buttons_container)
+        self.youtube_playlist_button.setObjectName(u"youtube_playlist_button")
+        self.youtube_playlist_button.setMaximumSize(QSize(40, 40))
+        icon2 = QIcon()
+        icon2.addFile(u":/services/youtube", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.youtube_playlist_button.setIcon(icon2)
+        self.youtube_playlist_button.setIconSize(QSize(36, 36))
+
+        self.horizontalLayout_3.addWidget(self.youtube_playlist_button)
+
         self.save_playlist_button = QPushButton(self.playlist_buttons_container)
         self.save_playlist_button.setObjectName(u"save_playlist_button")
+        self.save_playlist_button.setMaximumSize(QSize(40, 40))
+        self.save_playlist_button.setIcon(icon)
+        self.save_playlist_button.setIconSize(QSize(36, 36))
 
         self.horizontalLayout_3.addWidget(self.save_playlist_button)
 
         self.clear_playlist_button = QPushButton(self.playlist_buttons_container)
         self.clear_playlist_button.setObjectName(u"clear_playlist_button")
+        self.clear_playlist_button.setMaximumSize(QSize(40, 40))
+        icon3 = QIcon()
+        icon3.addFile(u":/services/cancel", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.clear_playlist_button.setIcon(icon3)
+        self.clear_playlist_button.setIconSize(QSize(36, 36))
 
         self.horizontalLayout_3.addWidget(self.clear_playlist_button)
 
@@ -102,8 +141,8 @@ class Ui_SpotifyPlaylistManager(object):
 
         self.playlist_container = QFrame(SpotifyPlaylistManager)
         self.playlist_container.setObjectName(u"playlist_container")
-        self.playlist_container.setFrameShape(QFrame.NoFrame)
-        self.playlist_container.setFrameShadow(QFrame.Raised)
+        self.playlist_container.setFrameShape(QFrame.Shape.NoFrame)
+        self.playlist_container.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_2 = QHBoxLayout(self.playlist_container)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -122,21 +161,11 @@ class Ui_SpotifyPlaylistManager(object):
 
         self.selector_container = QFrame(SpotifyPlaylistManager)
         self.selector_container.setObjectName(u"selector_container")
-        self.selector_container.setFrameShape(QFrame.NoFrame)
-        self.selector_container.setFrameShadow(QFrame.Raised)
+        self.selector_container.setFrameShape(QFrame.Shape.NoFrame)
+        self.selector_container.setFrameShadow(QFrame.Shadow.Raised)
         self.horizontalLayout_4 = QHBoxLayout(self.selector_container)
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
-        self.playlist_selector = QComboBox(self.selector_container)
-        self.playlist_selector.setObjectName(u"playlist_selector")
-
-        self.horizontalLayout_4.addWidget(self.playlist_selector)
-
-        self.add_song_button = QPushButton(self.selector_container)
-        self.add_song_button.setObjectName(u"add_song_button")
-
-        self.horizontalLayout_4.addWidget(self.add_song_button)
-
 
         self.verticalLayout.addWidget(self.selector_container)
 
@@ -150,12 +179,22 @@ class Ui_SpotifyPlaylistManager(object):
         SpotifyPlaylistManager.setWindowTitle(QCoreApplication.translate("SpotifyPlaylistManager", u"Spotify Playlist Manager", None))
         self.search_input.setPlaceholderText(QCoreApplication.translate("SpotifyPlaylistManager", u"Buscar canci\u00f3n o artista...", None))
         self.search_button.setText(QCoreApplication.translate("SpotifyPlaylistManager", u"Buscar", None))
+        self.playlist_selector.setItemText(0, QCoreApplication.translate("SpotifyPlaylistManager", u"Playlist_spotify_1", None))
+        self.playlist_selector.setItemText(1, QCoreApplication.translate("SpotifyPlaylistManager", u"Nueva Playlist...", None))
+
         self.search_results_group.setTitle(QCoreApplication.translate("SpotifyPlaylistManager", u"Resultados de b\u00fasqueda", None))
         self.playlist_creator_group.setTitle(QCoreApplication.translate("SpotifyPlaylistManager", u"Creador de playlists", None))
-        self.save_playlist_button.setText(QCoreApplication.translate("SpotifyPlaylistManager", u"Guardar playlist", None))
-        self.clear_playlist_button.setText(QCoreApplication.translate("SpotifyPlaylistManager", u"Limpiar", None))
+        self.save_loacal_playlist_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.youtube_playlist_button.setToolTip(QCoreApplication.translate("SpotifyPlaylistManager", u"Crear en youtube", None))
+#endif // QT_CONFIG(tooltip)
+        self.youtube_playlist_button.setText("")
+#if QT_CONFIG(tooltip)
+        self.save_playlist_button.setToolTip(QCoreApplication.translate("SpotifyPlaylistManager", u"Guardar playlist", None))
+#endif // QT_CONFIG(tooltip)
+        self.save_playlist_button.setText("")
+        self.clear_playlist_button.setText("")
         self.new_playlist_input.setPlaceholderText(QCoreApplication.translate("SpotifyPlaylistManager", u"Nueva playlist...", None))
         self.new_playlist_button.setText(QCoreApplication.translate("SpotifyPlaylistManager", u"Crear Playlist", None))
-        self.add_song_button.setText(QCoreApplication.translate("SpotifyPlaylistManager", u"A\u00f1adir canci\u00f3n seleccionada a Playlist", None))
     # retranslateUi
 

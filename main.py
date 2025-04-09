@@ -1,6 +1,7 @@
 import os
 from typing import Dict
 import json
+import yaml
 from pathlib import Path
 import importlib.util
 from PyQt6 import uic
@@ -21,6 +22,57 @@ import logging
 #             return False
 #         return True
 
+def load_config_file(file_path):
+    """Carga un archivo de configuración en formato JSON o YAML."""
+    file_path = Path(file_path)
+    
+    if not file_path.exists():
+        raise FileNotFoundError(f"ERROR: Archivo de configuración no encontrado: {file_path}")
+        
+    file_extension = file_path.suffix.lower()
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+            if file_extension == '.json':
+                import json
+                return json.loads(content)
+            elif file_extension in ['.yml', '.yaml']:
+                import yaml
+                return yaml.safe_load(content)
+            else:
+                # Intentar determinar formato basado en contenido
+                try:
+                    import json
+                    return json.loads(content)
+                except json.JSONDecodeError:
+                    try:
+                        import yaml
+                        return yaml.safe_load(content)
+                    except yaml.YAMLError:
+                        raise ValueError(f"No se pudo determinar el formato del archivo: {file_path}")
+    except Exception as e:
+        raise Exception(f"Error loading config: {str(e)}")
+
+
+def save_config_file(file_path, data):
+    """Guarda un archivo de configuración en formato JSON o YAML."""
+    file_extension = Path(file_path).suffix.lower()
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            if file_extension == '.json':
+                import json
+                json.dump(data, f, indent=2)
+            elif file_extension in ['.yml', '.yaml']:
+                import yaml
+                yaml.dump(data, f, sort_keys=False, default_flow_style=False, indent=2, allow_unicode=True)
+            else:
+                # Por defecto usar JSON
+                import json
+                json.dump(data, f, indent=2)
+    except Exception as e:
+        raise Exception(f"Error saving config: {str(e)}")
+
+
 class ConditionalPyQtFilter(logging.Filter):
     def __init__(self, show_ui_logs=False):
         super().__init__()
@@ -36,7 +88,15 @@ class ConditionalPyQtFilter(logging.Filter):
             return False
         return True
 
-
+# Add this to main.py, before the ColoredFormatter class
+COLORS = {
+    'DEBUG': '\033[94m',  # Blue
+    'INFO': '\033[92m',   # Green
+    'WARNING': '\033[93m', # Yellow
+    'ERROR': '\033[91m',   # Red
+    'CRITICAL': '\033[91m\033[1m', # Red Bold
+    'RESET': '\033[0m'     # Reset to default
+}
 
 
 class ColoredFormatter(logging.Formatter):
@@ -88,8 +148,7 @@ logging.basicConfig(
 # Set the global exception hook
 sys.excepthook = exception_hook
 
-# Set the global exception hook
-sys.excepthook = exception_hook
+
 
 # Tema Tokyo Night (puedes personalizarlo o cargar desde config)
 THEME = {
@@ -110,14 +169,23 @@ class TabManager(QMainWindow):
         self.config_path = config_path
         self.tabs: Dict[str, QWidget] = {}
         
-        # Load initial theme from config
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-        
-        self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
-        self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
-        
+        # Cargar la configuración, NUNCA crear si no existe
         try:
+            self.config = load_config_file(config_path)
+        except FileNotFoundError as e:
+            print(f"ERROR: {e}")
+            raise  # Re-lanzar para que main() pueda manejarlo
+        except Exception as e:
+            print(f"ERROR al cargar la configuración: {e}")
+            raise  # Re-lanzar para que main() pueda manejarlo
+
+
+        # Load initial theme from config
+        try:
+            config = load_config_file(config_path)
+        
+            self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
+            self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
             
             # Convertir el nivel de string a constante de logging
             level_map = {
@@ -132,14 +200,16 @@ class TabManager(QMainWindow):
             logging_level = level_map.get(logging_level_str, logging.INFO)
         except Exception as e:
             # En caso de error, usar un valor predeterminado
+            self.available_themes = ['Tokyo Night', 'Solarized Dark', 'Monokai']
+            self.current_theme = 'Tokyo Night'
             logging_level = logging.INFO
-            print(f"Error al leer el nivel de logging desde la configuración: {e}")
-
-
+            config = {}
+            print(f"Error al cargar la configuración: {e}")
+        
         # Obtener los tipos de log habilitados
         log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
         show_ui_logs = 'UI' in log_types
-
+        
         # Registrar nivel UI personalizado si no existe
         if not hasattr(logging, 'UI'):
             logging.addLevelName(15, 'UI')  # 15 es un valor entre DEBUG (10) e INFO (20)
@@ -148,33 +218,30 @@ class TabManager(QMainWindow):
                 self.log(15, message, *args, **kwargs)
             
             logging.Logger.ui = ui_log
-
+        
         # Configurar los handlers
         console_handler = logging.StreamHandler()
-        console_handler.setFormatter(ColoredFormatter)
+        console_handler.setFormatter(ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s'))        
         
         # Establecemos path para el log_file
         log_file = PROJECT_ROOT / ".content" / "logs" / "multi_module_manager.log"
-
-
+        
         file_handler = logging.FileHandler(log_file)
         file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-
+        
         # Configurar root logger
         root_logger = logging.getLogger()
         root_logger.setLevel(logging_level)
         root_logger.handlers = []  # Eliminar handlers existentes
         root_logger.addHandler(console_handler)
         root_logger.addHandler(file_handler)
-
+        
         # Aplicar filtro condicional
         pyqt_filter = ConditionalPyQtFilter(show_ui_logs)
         root_logger.addFilter(pyqt_filter)
-
-
-
+        
         self.init_ui()
-        self.load_modules()
+        self.load_modules()     
 
     def init_ui(self):
         """Inicializa la interfaz principal."""
@@ -207,6 +274,10 @@ class TabManager(QMainWindow):
         # Aplicar el tema
         self.apply_theme(self.font_size)
 
+
+
+
+
     def _fallback_init_ui(self):
         """Método de respaldo para crear la UI manualmente si el archivo UI falla"""
         print("Usando método fallback para crear UI principal")
@@ -226,8 +297,7 @@ class TabManager(QMainWindow):
     def load_modules(self):
         """Loads modules from configuration."""
         try:
-            with open(self.config_path, 'r') as f:
-                config = json.load(f)
+            config = load_config_file(self.config_path)
                 
             for module_config in config['modules']:
                 parent_dir = Path(__file__).parent
@@ -235,6 +305,10 @@ class TabManager(QMainWindow):
                 module_path = str(parent_dir / relative_path)
                 module_name = module_config.get('name', Path(module_path).stem)
                 module_args = module_config.get('args', {})
+                
+                # Añadir config_path a los argumentos cuando se trata del ConfigEditorModule
+                if module_name == "Config Editor":
+                    module_args['config_path'] = self.config_path
                 
                 try:
                     # Dynamically load the module
@@ -287,6 +361,7 @@ class TabManager(QMainWindow):
         except Exception as e:
             print(f"Error cargando configuración: {e}")
             traceback.print_exc()
+
 
     def change_module_theme(self, module_name, new_theme):
         """
@@ -455,28 +530,32 @@ class TabManager(QMainWindow):
             self.apply_theme()
             
             # Check global theme configuration
-            with open(self.config_path, 'r') as f:
-                config = json.load(f)
+            try:
+                config = load_config_file(self.config_path)
             
-            # Determine if individual themes are enabled
-            enable_individual_themes = config.get('global_theme_config', {}).get('enable_individual_themes', True)
-            
-            # Reapply theme to modules
-            for module_name, module in self.tabs.items():
-                # If individual themes are disabled, or the module doesn't have a specific theme set
-                module_config = next((m for m in config['modules'] if m['name'] == module_name), None)
+                # Determine if individual themes are enabled
+                enable_individual_themes = config.get('global_theme_config', {}).get('enable_individual_themes', True)
                 
-                if not enable_individual_themes or (module_config and 'tema_seleccionado' not in module_config.get('args', {})):
-                    module.apply_theme(new_theme)
-                else:
-                    # If individual themes are enabled and a specific theme is set, keep that theme
-                    module.apply_theme(module_config['args'].get('tema_seleccionado', new_theme))
-            
-            # Update config file
-            config['tema_seleccionado'] = new_theme
-            
-            with open(self.config_path, 'w') as f:
-                json.dump(config, f, indent=4)
+                # Reapply theme to modules
+                for module_name, module in self.tabs.items():
+                    # If individual themes are disabled, or the module doesn't have a specific theme set
+                    module_config = next((m for m in config['modules'] if m['name'] == module_name), None)
+                    
+                    if not enable_individual_themes or (module_config and 'tema_seleccionado' not in module_config.get('args', {})):
+                        module.apply_theme(new_theme)
+                    else:
+                        # If individual themes are enabled and a specific theme is set, keep that theme
+                        module.apply_theme(module_config['args'].get('tema_seleccionado', new_theme))
+                
+                # Update config file
+                config['tema_seleccionado'] = new_theme
+                
+                # Save configuration
+                save_config_file(self.config_path, config)
+                
+            except Exception as e:
+                print(f"Error al aplicar cambio de tema: {e}")
+                traceback.print_exc()
 
 
     def setup_info_widget(self):
@@ -608,10 +687,9 @@ class TabManager(QMainWindow):
         print(f"No se encontró la pestaña '{tab_name}'")
         return False
 
-
 def main():
     parser = argparse.ArgumentParser(description='Multi-Module Manager')
-    parser.add_argument('config_path', help='Ruta al archivo de configuración JSON')
+    parser.add_argument('config_path', help='Ruta al archivo de configuración (JSON o YAML)')
     parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
     parser.add_argument('--font_size', default='12px', help='Tamaño de la Fuente a usar en la interfaz')
     parser.add_argument('--log', type=str,
@@ -621,10 +699,28 @@ def main():
     
     args = parser.parse_args()
 
+    # Verificar explícitamente que el archivo de configuración existe
+    config_path = Path(args.config_path)
+    if not config_path.exists():
+        print(f"ERROR: El archivo de configuración no existe: {config_path}")
+        sys.exit(1)
+
+    app = QApplication(sys.argv)
+    
+    try:
+        manager = TabManager(args.config_path, font_family=args.font, font_size=args.font_size)
+        manager.show()
+        sys.exit(app.exec())
+    except FileNotFoundError as e:
+        print(f"ERROR: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"ERROR FATAL: {e}")
+        traceback.print_exc()
+        sys.exit(1)
     # Load configuration to potentially override logging setting
     try:
-        with open(args.config_path, 'r') as f:
-            config = json.load(f)
+        config = load_config_file(args.config_path)
         
         # Determine logging state with multiple configuration options
         if args.log is not None:
@@ -675,12 +771,9 @@ def main():
             
             # Handlers
             console_handler = logging.StreamHandler()
-            console_handler.setFormatter(ColoredFormatter)
-            
-            
+            console_handler.setFormatter(ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s'))            
+
             log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
-
-
 
             file_handler = logging.FileHandler(log_file)
             file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
