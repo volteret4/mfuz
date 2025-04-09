@@ -179,67 +179,154 @@ QHeaderView::section {
         <property name="title">
          <string/>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QLabel" name="serv_todos_label">
-           <property name="text">
-            <string>Señala qué servicios deseas incluir cuando buscas en &quot;Todos&quot;</string>
+          <widget class="QFrame" name="frame_3">
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="serv_todos_label">
+              <property name="text">
+               <string>Señala qué servicios deseas incluir cuando buscas en &quot;Todos&quot;</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="bandcamp_check">
-           <property name="text">
-            <string>bancamp</string>
+          <widget class="QFrame" name="frame">
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
-           <property name="icon">
-            <iconset resource="../images.qrc">
-             <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="lastfm_check">
-           <property name="text">
-            <string>lastfm</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../images.qrc">
-             <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="soundcloud_check">
-           <property name="text">
-            <string>souncloud</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../images.qrc">
-             <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="spotify_check">
-           <property name="text">
-            <string>spotify</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../images.qrc">
-             <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="youtube_check">
-           <property name="text">
-            <string>youtube</string>
-           </property>
-           <property name="icon">
-            <iconset resource="../images.qrc">
-             <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
-           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QGroupBox" name="servicios_musica">
+              <property name="title">
+               <string>Música</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QCheckBox" name="lastfm_check">
+                 <property name="text">
+                  <string>lastfm</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="bandcamp_check">
+                 <property name="text">
+                  <string>bancamp</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="soundcloud_check">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>souncloud</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="youtube_check">
+                 <property name="text">
+                  <string>youtube</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="spotify_check">
+                 <property name="text">
+                  <string>spotify</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="servicios_info">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="title">
+               <string>Información</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QCheckBox" name="wikipedia_check">
+                 <property name="text">
+                  <string>Wikipedia</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="discogs_check">
+                 <property name="text">
+                  <string>Discogs</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="checkBox">
+                 <property name="text">
+                  <string>MusicBrainz</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
