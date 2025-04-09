@@ -26,9 +26,101 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import resources_rc
 from base_module import BaseModule, PROJECT_ROOT
 
-
-
-
+class InfoLoadWorker(QRunnable):
+    """Worker thread for loading detailed information asynchronously."""
+    
+    class Signals(QObject):
+        """Signal class for the worker."""
+        finished = pyqtSignal(dict, dict)  # Pass both result and basic_data
+        error = pyqtSignal(str)
+    
+    def __init__(self, item_type, title, artist, album=None, db_path=None, basic_data=None):
+        super().__init__()
+        self.item_type = item_type
+        self.title = title
+        self.artist = artist
+        self.album = album
+        self.db_path = db_path
+        self.basic_data = basic_data  # Store the basic data
+        self.signals = self.Signals()
+    
+    @pyqtSlot()
+    def run(self):
+        """Execute the database queries in the background."""
+        try:
+            # Import the database query class
+            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            
+            if not os.path.exists(self.db_path):
+                self.signals.error.emit(f"Base de datos no encontrada en: {self.db_path}")
+                return
+            
+            # Using the improved get_detailed_info function
+            db = MusicDatabaseQuery(self.db_path)
+            result = {}
+            
+            # Based on item type, get appropriate information
+            if self.item_type == 'artist':
+                # Artist info
+                artist_info = db.get_artist_info(self.artist)
+                result['artist_info'] = artist_info
+                
+                # Artist wiki content
+                wiki_content = db.get_artist_wiki_content(self.artist)
+                result['wiki_content'] = wiki_content
+                
+                # Artist genres
+                genres = db.get_artist_genres(self.artist)
+                result['genres'] = genres
+                
+                # Artist links
+                artist_links = db.get_artist_links(self.artist)
+                result['artist_links'] = artist_links
+                
+                # Albums by this artist
+                albums = db.get_artist_albums(self.artist)
+                result['albums'] = albums
+                
+            elif self.item_type == 'album':
+                # Album info
+                album_info = db.get_album_info(self.title, self.artist)
+                result['album_info'] = album_info
+                
+                # Album wiki content
+                wiki_content = db.get_album_wiki(self.artist, self.title)
+                result['wiki_content'] = wiki_content
+                
+                # Album links
+                links = db.get_album_links(self.artist, self.title)
+                result['album_links'] = links
+                
+            elif self.item_type in ['track', 'song']:
+                # Song info
+                song_info = db.get_song_info(self.title, self.artist, self.album)
+                result['song_info'] = song_info
+                
+                # Track links
+                if self.album:
+                    track_links = db.get_track_links(self.album, self.title)
+                    result['track_links'] = track_links
+                
+                # If we have album info, get album details too
+                if self.album:
+                    album_info = db.get_album_info(self.album, self.artist)
+                    result['album_info'] = album_info
+                
+                    # Album links
+                    album_links = db.get_album_links(self.artist, self.album)
+                    result['album_links'] = album_links
+            
+            db.close()
+            # Pass both the result and basic_data to the finished signal
+            self.signals.finished.emit(result, self.basic_data)
+            
+        except Exception as e:
+            import traceback
+            error_msg = f"Error loading info: {str(e)}\n{traceback.format_exc()}"
+            self.signals.error.emit(error_msg)
 
 class SearchSignals(QObject):
     """Define las señales disponibles para el SearchWorker."""
@@ -710,11 +802,28 @@ class UrlPlayer(BaseModule):
 
         self.addButton.setToolTip("Añadir a la cola")
         
-        # Configurar TreeWidget
-        #self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Duración"])
-        self.treeWidget.setColumnWidth(0, 250)
-        self.treeWidget.setColumnWidth(1, 150)
-        self.treeWidget.setColumnWidth(2, 80)
+         # Configure TreeWidget for better display of hierarchical data
+        if hasattr(self, 'treeWidget') and self.treeWidget:
+            # Set column headers
+            self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Track/Año", "Duración"])
+            
+            # Set column widths
+            self.treeWidget.setColumnWidth(0, 250)  # Título
+            self.treeWidget.setColumnWidth(1, 150)  # Artista
+            self.treeWidget.setColumnWidth(2, 80)   # Tipo
+            self.treeWidget.setColumnWidth(3, 70)   # Track/Año
+            self.treeWidget.setColumnWidth(4, 70)   # Duración
+            
+            # Set indent for better hierarchy visualization
+            self.treeWidget.setIndentation(20)
+            
+            # Enable sorting
+            self.treeWidget.setSortingEnabled(True)
+            self.treeWidget.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+            
+            # Enable item expanding/collapsing on single click
+            self.treeWidget.setExpandsOnDoubleClick(False)
+            self.treeWidget.itemClicked.connect(self.on_tree_item_clicked)
         
         # Configurar TabWidget
         self.tabWidget.setTabText(0, "Cola de reproducción")
@@ -739,6 +848,16 @@ class UrlPlayer(BaseModule):
         # Conectar señales
         self.connect_signals()
 
+    def on_tree_item_clicked(self, item, column):
+        """Handle click on tree items to expand/collapse and display info."""
+        # If item has children, toggle expanded state
+        if item.childCount() > 0:
+            item.setExpanded(not item.isExpanded())
+        
+        # Get item data and display info
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if isinstance(item_data, dict):
+            self.display_wiki_info(item_data)
 
     def connect_signals(self):
         """Conecta las señales de los widgets a sus respectivos slots."""
@@ -1843,152 +1962,113 @@ class UrlPlayer(BaseModule):
             QApplication.processEvents()  # Actualiza la UI
             return
         
-        # Primero, agrupar resultados por tipo (artist, album, track) y luego por fuente
-        grouped_results = {}
-        db_results = []
-        api_results = []
+        # Group results by artist and then by album
+        artists_dict = {}
         
-        # Separar resultados de DB vs API
         for result in results:
-            if 'from_database' in result and result['from_database']:
-                db_results.append(result)
-            else:
-                api_results.append(result)
+            artist_name = result.get('artist', '')
+            if not artist_name:
+                continue
+                
+            # Add to artists dictionary
+            if artist_name not in artists_dict:
+                artists_dict[artist_name] = {
+                    'info': result if result.get('type', '') == 'artist' else None,
+                    'albums': {}
+                }
+            elif not artists_dict[artist_name]['info'] and result.get('type', '') == 'artist':
+                artists_dict[artist_name]['info'] = result
+                
+            # Add album if present
+            album_name = result.get('album', '')
+            if album_name and result.get('type', '') != 'artist':
+                if album_name not in artists_dict[artist_name]['albums']:
+                    artists_dict[artist_name]['albums'][album_name] = {
+                        'info': result if result.get('type', '') == 'album' else None,
+                        'songs': []
+                    }
+                elif not artists_dict[artist_name]['albums'][album_name]['info'] and result.get('type', '') == 'album':
+                    artists_dict[artist_name]['albums'][album_name]['info'] = result
+                    
+                # Add song if it's a track
+                if result.get('type', '') in ['track', 'song']:
+                    artists_dict[artist_name]['albums'][album_name]['songs'].append(result)
         
-        # Procesar resultados de la base de datos primero
-        if db_results:
-            db_group = QTreeWidgetItem(self.treeWidget)
-            db_group.setText(0, "Resultados de Base de Datos")
-            db_group.setExpanded(True)
+        # Create tree items for artists, albums, and songs
+        for artist_name, artist_data in artists_dict.items():
+            # Create artist item
+            artist_item = QTreeWidgetItem(self.treeWidget)
+            artist_item.setText(0, artist_name)  # Columna 0 = artista
+            artist_item.setText(1, artist_name)  # Columna 1 = artista
+            artist_item.setText(2, "Artista")    # Columna 2 = tipo
             
-            # Usar una fuente personalizada para encabezados
-            font = db_group.font(0)
+            # Apply special format
+            font = artist_item.font(0)
             font.setBold(True)
-            db_group.setFont(0, font)
+            artist_item.setFont(0, font)
+            artist_item.setFont(1, font)
             
-            # Agrupar por tipo (artist, album, track)
-            db_by_type = {}
-            for result in db_results:
-                result_type = result.get('type', 'unknown')
-                if result_type not in db_by_type:
-                    db_by_type[result_type] = []
-                db_by_type[result_type].append(result)
+            # Store data
+            artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data['info'] or {
+                'title': artist_name,
+                'artist': artist_name,
+                'type': 'artist'
+            })
             
-            # Crear subgrupos por tipo
-            for result_type, type_results in db_by_type.items():
-                type_item = QTreeWidgetItem(db_group)
-                type_label = {
-                    'artist': 'Artistas',
-                    'album': 'Álbumes',
-                    'track': 'Canciones',
-                }.get(result_type, result_type.capitalize())
+            # Add albums for this artist
+            for album_name, album_data in artist_data['albums'].items():
+                album_item = QTreeWidgetItem(artist_item)
+                album_item.setText(0, album_name)  # Columna 0 = album
+                album_item.setText(1, artist_name) # Columna 1 = artista
+                album_item.setText(2, "Álbum")     # Columna 2 = tipo
                 
-                type_item.setText(0, f"{type_label} ({len(type_results)})")
-                type_item.setExpanded(True)
+                # Get year from album info if available
+                album_info = album_data['info']
+                if album_info and album_info.get('year'):
+                    album_item.setText(3, str(album_info['year']))  # Columna 3 = año
                 
-                # Font para el tipo
-                type_font = type_item.font(0)
-                type_font.setItalic(True)
-                type_item.setFont(0, type_font)
+                # Store data
+                album_item.setData(0, Qt.ItemDataRole.UserRole, album_info or {
+                    'title': album_name,
+                    'artist': artist_name,
+                    'type': 'album'
+                })
                 
-                # Añadir cada resultado dentro de su tipo
-                for result in type_results:
-                    result_item = QTreeWidgetItem(type_item)
-                    result_item.setText(0, result['title'])
-                    result_item.setText(1, result['artist'])
-                    result_item.setText(2, result_type)
+                # Add songs for this album
+                for song in album_data['songs']:
+                    song_item = QTreeWidgetItem(album_item)
+                    song_item.setText(0, song.get('title', ''))  # Columna 0 = título
+                    song_item.setText(1, artist_name)           # Columna 1 = artista
+                    song_item.setText(2, "Canción")             # Columna 2 = tipo
                     
-                    # Añadir URL como tooltip
-                    if 'url' in result:
-                        result_item.setToolTip(0, f"URL: {result['url']}")
-                        # Guardar URL para copia al portapapeles
-                        result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+                    # Add track number if available
+                    if song.get('track_number'):
+                        song_item.setText(3, str(song['track_number']))  # Columna 3 = track
                     
-                    # Si hay múltiples enlaces, crear elementos hijo para cada servicio
-                    services = ['spotify', 'bandcamp', 'lastfm', 'youtube', 'musicbrainz', 'discogs']
-                    has_links = False
+                    # Add duration if available
+                    if song.get('duration'):
+                        if isinstance(song['duration'], (int, float)):
+                            minutes = int(song['duration'] // 60)
+                            seconds = int(song['duration'] % 60)
+                            song_item.setText(4, f"{minutes}:{seconds:02d}")  # Columna 4 = duración
+                        else:
+                            song_item.setText(4, str(song['duration']))
                     
-                    for service in services:
-                        service_key = f"{service}_url"
-                        if service_key in result and result[service_key]:
-                            has_links = True
-                            service_item = QTreeWidgetItem(result_item)
-                            service_name = service.capitalize()
-                            service_item.setText(0, service_name)
-                            service_item.setText(1, "")
-                            service_item.setText(2, "enlace")
-                            
-                            # Guardar la URL específica del servicio
-                            service_url = result[service_key]
-                            service_item.setToolTip(0, service_url)
-                            service_data = {'url': service_url, 'source': service, 'title': result['title'], 'artist': result['artist']}
-                            service_item.setData(0, Qt.ItemDataRole.UserRole, service_data)
-                    
-                    if has_links:
-                        result_item.setExpanded(True)
+                    # Store data
+                    song_item.setData(0, Qt.ItemDataRole.UserRole, song)
         
-        # Ahora procesar resultados de APIs
-        if api_results:
-            # Agrupar por fuente
-            sources = {}
-            for result in api_results:
-                source = result.get('source', 'Desconocido')
-                if source not in sources:
-                    sources[source] = []
-                sources[source].append(result)
-            
-            # Añadir resultados al árbol
-            for source, source_results in sources.items():
-                # Crear un encabezado de fuente
-                source_item = QTreeWidgetItem(self.treeWidget)
-                source_item.setText(0, f"{source.capitalize()} ({len(source_results)})")
-                source_item.setExpanded(True)
-                
-                # Usar una fuente personalizada para encabezados
-                font = source_item.font(0)
-                font.setBold(True)
-                source_item.setFont(0, font)
-                
-                # Añadir resultados para esta fuente
-                for result in source_results:
-                    result_item = QTreeWidgetItem(source_item)
-                    result_item.setText(0, result['title'])
-                    result_item.setText(1, result['artist'])
-                    result_item.setText(2, result.get('type', ''))
-                    
-                    # Añadir URL como tooltip
-                    if 'url' in result:
-                        result_item.setToolTip(0, f"URL: {result['url']}")
-                    
-                    # Almacenar los datos completos del resultado para uso posterior
-                    result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+        # Expand artists by default
+        for i in range(self.treeWidget.topLevelItemCount()):
+            self.treeWidget.topLevelItem(i).setExpanded(True)
         
+        # Display the first result in the info panel
         if results:
-                first_result = None
-                # Find first actual result item (not a header)
-                if 'from_database' in results[0] and results[0]['from_database']:
-                    first_result = results[0]
-                else:
-                    for result in results:
-                        if 'url' in result:
-                            first_result = result
-                            break
-                
-                if first_result:
-                    self.display_wiki_info(first_result)
-
-        # Actualizar contador de resultados
-        total_results = len(db_results) + len(api_results)
-        self.textEdit.append(f"Encontrados {total_results} resultados.")
-        if db_results:
-            self.textEdit.append(f"- {len(db_results)} desde la base de datos")
-        if api_results:
-            self.textEdit.append(f"- {len(api_results)} desde servicios en línea")
-        
-        QApplication.processEvents()  # Actualiza la UI final
-        
-        # Asegurarnos de que el árbol sea visible
-        self.treeWidget.setVisible(True)
+            first_result = results[0]
+            self.display_wiki_info(first_result)
+            
+        # Update result count
+        self.textEdit.append(f"Encontrados {len(results)} resultados.")
+        QApplication.processEvents()  # Final UI update
 
 
 
@@ -2542,7 +2622,7 @@ class UrlPlayer(BaseModule):
 
 
 
-    def get_detailed_info(self, item_type, title, artist):
+    def get_detailed_info(self, item_type, title, artist, album=None):
         """Obtiene información detallada desde la base de datos"""
         try:
             # Importar la clase de consulta si es necesario
@@ -2556,24 +2636,70 @@ class UrlPlayer(BaseModule):
                 return None
             
             db = MusicDatabaseQuery(db_path)
+            result = {}
             
             if item_type == 'artist':
                 # Obtener información completa del artista
-                return db.get_artist_info(artist)
+                artist_info = db.get_artist_info(artist)
+                if artist_info:
+                    result['artist_info'] = artist_info
+                
+                # Obtener enlaces de artista
+                artist_links = db.get_artist_links(artist)
+                if artist_links:
+                    result['artist_links'] = artist_links
+                
+                # Obtener géneros del artista
+                genres = db.get_artist_genres(artist)
+                if genres:
+                    result['genres'] = genres
+                
+                # Obtener contenido wiki
+                wiki_content = db.get_artist_wiki_content(artist)
+                if wiki_content:
+                    result['wiki_content'] = wiki_content
+                
             elif item_type == 'album':
                 # Obtener información completa del álbum
-                return db.get_album_info(title, artist)
+                album_info = db.get_album_info(title, artist)
+                if album_info:
+                    result['album_info'] = album_info
+                
+                # Obtener enlaces del álbum
+                album_links = db.get_album_links(artist, title)
+                if album_links:
+                    result['album_links'] = album_links
+                
+                # Obtener contenido wiki del álbum
+                wiki_content = db.get_album_wiki(artist, title)
+                if wiki_content:
+                    result['wiki_content'] = wiki_content
+                
             elif item_type in ['track', 'song']:
                 # Obtener información completa de la canción
-                return db.get_song_info(title, artist)
+                song_info = db.get_song_info(title, artist, album)
+                if song_info:
+                    result['song_info'] = song_info
+                
+                # Obtener enlaces de la canción
+                if album:  # Only if we have album information
+                    track_links = db.get_track_links(album, title)
+                    if track_links:
+                        result['track_links'] = track_links
+                
+                # Obtener información del álbum relacionado
+                if album:
+                    album_info = db.get_album_info(album, artist)
+                    if album_info:
+                        result['album_info'] = album_info
             
             db.close()
-            return None
+            return result
         except Exception as e:
             self.log(f"Error al obtener información detallada: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
-            return None
+            return {}  # Return empty dict instead of None to avoid attribute errors
 
     def format_artist_info(self, artist_info):
         """Formatea la información del artista en HTML"""
@@ -2582,7 +2708,7 @@ class UrlPlayer(BaseModule):
         # Biografía
         if artist_info.get('bio'):
             html += "<h3>Biografía</h3>"
-            html += f"<p>{artist_info['bio']}</p>"
+            html += f"<p>{self.format_large_text(artist_info['bio'])}</p>"
         
         # Origen y año de formación
         if artist_info.get('origin') or artist_info.get('formed_year'):
@@ -2608,15 +2734,6 @@ class UrlPlayer(BaseModule):
             html += "<ul>"
             for artist in similar:
                 html += f"<li>{artist}</li>"
-            html += "</ul>"
-        
-        # Álbumes
-        if artist_info.get('albums'):
-            html += f"<h3>Álbumes ({len(artist_info['albums'])})</h3>"
-            html += "<ul>"
-            for album in artist_info['albums']:
-                year = f" ({album.get('year', '')})" if album.get('year') else ""
-                html += f"<li><b>{album.get('name', '')}</b>{year}</li>"
             html += "</ul>"
         
         return html
@@ -2661,12 +2778,6 @@ class UrlPlayer(BaseModule):
                 html += f"<li>{song.get('title', '')}{duration}</li>"
             html += "</ol>"
         
-        # Wikipedia
-        if album_info.get('wikipedia_content'):
-            html += "<h3>Wikipedia</h3>"
-            wiki_preview = album_info['wikipedia_content'][:500] + "..." if len(album_info['wikipedia_content']) > 500 else album_info['wikipedia_content']
-            html += f"<p>{wiki_preview}</p>"
-        
         return html
 
     def format_song_info(self, song_info):
@@ -2686,25 +2797,44 @@ class UrlPlayer(BaseModule):
                 minutes = int(duration_seconds // 60)
                 seconds = int(duration_seconds % 60)
                 html += f"<p><b>Duración:</b> {minutes}:{seconds:02d}</p>"
+            else:
+                html += f"<p><b>Duración:</b> {duration_seconds}</p>"
         
         # Letra
         if song_info.get('lyrics'):
             html += "<h3>Letra</h3>"
             # Formatear la letra reemplazando saltos de línea por <br>
             lyrics = song_info['lyrics'].replace('\n', '<br>')
-            html += f"<p>{lyrics}</p>"
+            html += f"<p>{self.format_large_text(lyrics)}</p>"
         
-        # Información del álbum correspondiente (extracto)
-        if song_info.get('album_links') or song_info.get('album_info'):
-            html += "<h3>Información del Álbum</h3>"
-            if song_info.get('album_links'):
-                html += "<p>Enlaces disponibles para el álbum.</p>"
-            
         return html
 
-    def format_available_links(self, result_data):
+    def format_available_links(self, result_data, additional_links=None):
         """Formatea los enlaces disponibles en HTML"""
         html = "<h3>Enlaces</h3>"
+        
+        # Enlaces adicionales (de la base de datos)
+        if additional_links:
+            # Artist links
+            if additional_links.get('artist_links'):
+                html += "<h4>Enlaces del Artista</h4>"
+                for service, url in additional_links['artist_links'].items():
+                    if url:
+                        html += f"<p><b>{service.capitalize()}:</b> <a href='{url}'>{url}</a></p>"
+            
+            # Album links
+            if additional_links.get('album_links'):
+                html += "<h4>Enlaces del Álbum</h4>"
+                for service, url in additional_links['album_links'].items():
+                    if url:
+                        html += f"<p><b>{service.capitalize()}:</b> <a href='{url}'>{url}</a></p>"
+            
+            # Track links
+            if additional_links.get('track_links'):
+                html += "<h4>Enlaces de la Canción</h4>"
+                for service, url in additional_links['track_links'].items():
+                    if url:
+                        html += f"<p><b>{service.capitalize()}:</b> <a href='{url}'>{url}</a></p>"
         
         # Enlaces directos en result_data
         if result_data.get('url'):
@@ -2721,72 +2851,62 @@ class UrlPlayer(BaseModule):
         
         return html
 
+
+    def format_large_text(self, text, max_length=2000):
+        """Format large text with a 'Show more' button for readability."""
+        if not text or len(text) <= max_length:
+            return text
+        
+        # Truncate text and add a "Show more" button
+        short_text = text[:max_length].strip() + "..."
+        
+        # Create HTML with a button
+        html = f"""
+        <div id="short-text">{short_text}</div>
+        <div id="full-text" style="display:none;">{text}</div>
+        <a href="#" onclick="
+            document.getElementById('short-text').style.display='none';
+            document.getElementById('full-text').style.display='block';
+            this.style.display='none';
+            return false;
+        " style="color: blue; text-decoration: underline;">
+            Mostrar texto completo
+        </a>
+        """
+        return html
+
+
     def display_wiki_info(self, result_data):
-        """Muestra información detallada del elemento en el panel info_wiki"""
+        """Muestra información detallada del elemento en el panel info_wiki de forma asíncrona"""
         try:
             # Verificar que el textEdit existe
             if not hasattr(self, 'info_wiki_textedit') or not self.info_wiki_textedit:
                 self.log("Error: No se encontró el widget info_wiki_textedit")
                 return
             
-            # Limpiar contenido anterior
-            self.info_wiki_textedit.clear()
-            
-            # Tipo de elemento (artista, álbum, canción)
-            item_type = result_data.get('type', '').lower()
-            title = result_data.get('title', '')
-            artist = result_data.get('artist', '')
-            
-            if not title and not artist:
-                self.info_wiki_textedit.setText("No hay suficiente información para mostrar detalles")
-                return
-            
-            # Encabezado con información básica
-            html_content = f"<h2>{title}</h2>"
-            if artist:
-                html_content += f"<h3>por {artist}</h3>"
-            
-            html_content += f"<p><b>Tipo:</b> {item_type.capitalize()}</p>"
-            html_content += "<hr>"
-            
-            # Intentar obtener información adicional desde la base de datos
-            additional_info = self.get_detailed_info(item_type, title, artist)
-            
-            if additional_info:
-                # Agregar información dependiendo del tipo
-                if item_type == 'artist':
-                    html_content += self.format_artist_info(additional_info)
-                elif item_type == 'album':
-                    html_content += self.format_album_info(additional_info)
-                elif item_type in ['track', 'song']:
-                    html_content += self.format_song_info(additional_info)
-                else:
-                    html_content += f"<p>Información disponible para: {', '.join(additional_info.keys())}</p>"
-                    
-                    # Mostrar cualquier dato disponible
-                    for key, value in additional_info.items():
-                        if key not in ['links', 'album_links', 'artist_links']:
-                            html_content += f"<h4>{key.replace('_', ' ').title()}</h4>"
-                            if isinstance(value, str):
-                                html_content += f"<p>{value}</p>"
-                            elif isinstance(value, dict):
-                                html_content += "<ul>"
-                                for k, v in value.items():
-                                    html_content += f"<li><b>{k}:</b> {v}</li>"
-                                html_content += "</ul>"
-                            elif isinstance(value, list):
-                                html_content += "<ul>"
-                                for item in value:
-                                    html_content += f"<li>{item}</li>"
-                                html_content += "</ul>"
-            else:
-                html_content += "<p>No se encontró información adicional en la base de datos.</p>"
-            
-            # Enlaces disponibles
-            html_content += self.format_available_links(result_data)
-            
-            # Establecer el contenido HTML
-            self.info_wiki_textedit.setHtml(html_content)
+            # Mostrar un mensaje de carga
+            loading_html = """
+            <div style="text-align: center; margin-top: 50px;">
+                <h2>Cargando información...</h2>
+                <div class="loader" style="
+                    border: 16px solid #f3f3f3;
+                    border-radius: 50%;
+                    border-top: 16px solid #3498db;
+                    width: 120px;
+                    height: 120px;
+                    animation: spin 2s linear infinite;
+                    margin: 20px auto;
+                "></div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+                <p>Obteniendo información detallada...</p>
+            </div>
+            """
+            self.info_wiki_textedit.setHtml(loading_html)
             
             # Cambiar al tab de info_wiki para mostrar la información
             if hasattr(self, 'tabWidget') and self.tabWidget:
@@ -2796,8 +2916,336 @@ class UrlPlayer(BaseModule):
                         self.tabWidget.setCurrentIndex(i)
                         break
             
+            # Extraer datos básicos del elemento
+            item_type = result_data.get('type', '').lower()
+            title = result_data.get('title', '')
+            artist = result_data.get('artist', '')
+            album = result_data.get('album', '')
+            
+            if not (title or artist):
+                self.info_wiki_textedit.setHtml("<h2>Información no disponible</h2><p>No hay suficientes datos para mostrar información detallada.</p>")
+                return
+            
+            # Crear y configurar el worker para carga asíncrona
+            worker = InfoLoadWorker(
+                item_type=item_type, 
+                title=title, 
+                artist=artist, 
+                album=album,  # Pass album parameter
+                db_path=self.db_path, 
+                basic_data=result_data  # Pass the basic data to the worker
+            )
+            
+            # Conectar señales
+            worker.signals.finished.connect(self.on_info_load_finished)
+            worker.signals.error.connect(self.on_info_load_error)
+            
+            # Iniciar worker en el thread pool
+            QThreadPool.globalInstance().start(worker)
+            
         except Exception as e:
-            self.log(f"Error al mostrar información detallada: {str(e)}")
+            self.log(f"Error al preparar carga de información: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>Se produjo un error al cargar la información: {str(e)}</p>")
+
+    def on_info_load_finished(self, result, basic_data):
+        """Callback cuando la carga de información se completa exitosamente."""
+        try:
+            # Now basic_data comes directly from the signal
+            item_type = basic_data.get('type', '').lower()
+            title = basic_data.get('title', '')
+            artist = basic_data.get('artist', '')
+            album = basic_data.get('album', '')
+            
+            # Generar HTML para mostrar la información
+            html_content = f"<h2>{title}</h2>"
+            if artist:
+                html_content += f"<h3>por {artist}</h3>"
+            
+            html_content += f"<p><b>Tipo:</b> {item_type.capitalize()}</p>"
+            html_content += "<hr>"
+            
+            # Crear un diccionario para almacenar todos los enlaces encontrados
+            all_links = {}
+            
+            # Formatear información según el tipo
+            if item_type == 'artist':
+                # Datos del artista
+                if 'artist_info' in result:
+                    html_content += self.format_artist_info(result['artist_info'])
+                
+                # Contenido de Wikipedia
+                if result.get('wiki_content'):
+                    html_content += "<h3>Wikipedia</h3>"
+                    html_content += f"<p>{self.format_large_text(result['wiki_content'])}</p>"
+                    
+                # Géneros
+                if result.get('genres'):
+                    html_content += "<h3>Géneros</h3>"
+                    html_content += "<ul>"
+                    for genre in result['genres']:
+                        html_content += f"<li>{genre}</li>"
+                    html_content += "</ul>"
+                
+                # Almacenar enlaces para mostrarlos más tarde
+                if result.get('artist_links'):
+                    all_links['artist_links'] = result['artist_links']
+                    
+                # Actualizar el árbol con los álbumes si están disponibles
+                if result.get('albums'):
+                    self.add_artist_albums_to_tree(artist, result['albums'])
+                
+            elif item_type == 'album':
+                # Datos del álbum
+                if 'album_info' in result:
+                    html_content += self.format_album_info(result['album_info'])
+                
+                # Contenido de Wikipedia
+                if result.get('wiki_content'):
+                    html_content += "<h3>Wikipedia</h3>"
+                    html_content += f"<p>{self.format_large_text(result['wiki_content'])}</p>"
+                
+                # Almacenar enlaces para mostrarlos más tarde
+                if result.get('album_links'):
+                    all_links['album_links'] = result['album_links']
+                    
+                # Actualizar árbol con canciones si están disponibles
+                if result.get('album_info') and result['album_info'].get('songs'):
+                    self.add_album_songs_to_tree(artist, title, result['album_info']['songs'])
+                
+            elif item_type in ['track', 'song']:
+                # Datos de la canción
+                if 'song_info' in result:
+                    html_content += self.format_song_info(result['song_info'])
+                
+                # Datos del álbum relacionado
+                if 'album_info' in result:
+                    html_content += "<h3>Información del Álbum</h3>"
+                    html_content += self.format_album_info(result['album_info'])
+                
+                # Almacenar enlaces para mostrarlos más tarde
+                if result.get('track_links'):
+                    all_links['track_links'] = result['track_links']
+                if result.get('album_links'):
+                    all_links['album_links'] = result['album_links']
+            
+            # Enlaces disponibles
+            html_content += self.format_available_links(basic_data, all_links)
+            
+            # Establecer contenido HTML
+            self.info_wiki_textedit.setHtml(html_content)
+            
+        except Exception as e:
+            self.log(f"Error al procesar información cargada: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>Se produjo un error al procesar la información: {str(e)}</p>")
+
+    def on_info_load_error(self, error_msg):
+        """Callback cuando ocurre un error al cargar la información."""
+        self.log(f"Error al cargar información: {error_msg}")
+        self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>Se produjo un error al cargar la información:</p><pre>{error_msg}</pre>")
+
+
+
+    def add_artist_albums_to_tree(self, artist_name, albums):
+        """Añade los álbumes de un artista al árbol de forma jerárquica."""
+        try:
+            # Verificar que el TreeWidget existe
+            if not hasattr(self, 'treeWidget') or not self.treeWidget:
+                return
+                
+            # Buscar si el artista ya está en el árbol
+            artist_items = self.treeWidget.findItems(artist_name, Qt.MatchFlag.MatchExactly, 1)  # Columna 1 = artista
+            
+            artist_item = None
+            
+            # Si el artista no existe, crearlo
+            if not artist_items:
+                # Crear un item raíz para el artista
+                artist_item = QTreeWidgetItem(self.treeWidget)
+                artist_item.setText(0, "Artista")  # Columna 0 = tipo
+                artist_item.setText(1, artist_name)  # Columna 1 = nombre
+                artist_item.setText(2, "Artista")  # Columna 2 = tipo
+                
+                # Configurar como expandido
+                artist_item.setExpanded(True)
+                
+                # Aplicar un formato especial
+                font = artist_item.font(0)
+                font.setBold(True)
+                artist_item.setFont(0, font)
+                artist_item.setFont(1, font)
+                
+                # Almacenar datos completos
+                artist_data = {
+                    'title': artist_name,
+                    'artist': artist_name,
+                    'type': 'artist'
+                }
+                artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
+            else:
+                # Usar el primer item encontrado
+                artist_item = artist_items[0]
+                
+                # Limpiar álbumes antiguos si existieran
+                while artist_item.childCount() > 0:
+                    artist_item.removeChild(artist_item.child(0))
+            
+            # Añadir álbumes como hijos
+            for album in albums:
+                # Extraer datos del álbum según el formato
+                if isinstance(album, dict):
+                    album_name = album.get('name', '')
+                    album_year = album.get('year', '')
+                else:
+                    # Si es una tupla (resultado de get_artist_albums)
+                    album_name = album[0] if len(album) > 0 else ''
+                    album_year = album[1] if len(album) > 1 else ''
+                
+                # Crear item para el álbum
+                album_item = QTreeWidgetItem(artist_item)
+                album_item.setText(0, album_name)  # Columna 0 = nombre del álbum
+                album_item.setText(1, artist_name)  # Columna 1 = artista
+                album_item.setText(2, "Álbum")  # Columna 2 = tipo
+                
+                # Añadir año si existe
+                if album_year:
+                    album_item.setText(3, str(album_year))  # Columna 3 = año
+                
+                # Almacenar datos completos
+                album_data = {
+                    'title': album_name,
+                    'artist': artist_name,
+                    'year': album_year,
+                    'type': 'album'
+                }
+                album_item.setData(0, Qt.ItemDataRole.UserRole, album_data)
+                
+            self.log(f"Agregados {len(albums)} álbumes al árbol para el artista {artist_name}")
+            
+        except Exception as e:
+            self.log(f"Error al añadir álbumes al árbol: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def add_album_songs_to_tree(self, artist_name, album_name, songs):
+        """Añade las canciones de un álbum al árbol de forma jerárquica."""
+        try:
+            # Verificar que el TreeWidget existe
+            if not hasattr(self, 'treeWidget') or not self.treeWidget:
+                return
+                
+            # Buscar si el álbum ya está en el árbol
+            album_found = False
+            album_item = None
+            
+            # Primero, buscar si existe el artista
+            artist_items = self.treeWidget.findItems(artist_name, Qt.MatchFlag.MatchExactly, 1)  # Columna 1 = artista
+            
+            if artist_items:
+                # Buscar el álbum entre los hijos del artista
+                for i in range(artist_items[0].childCount()):
+                    child = artist_items[0].child(i)
+                    if child.text(0) == album_name:
+                        album_item = child
+                        album_found = True
+                        break
+            
+            # Si no se encontró, crear la estructura artista -> álbum
+            if not album_found:
+                # Crear artista si no existe
+                if not artist_items:
+                    artist_item = QTreeWidgetItem(self.treeWidget)
+                    artist_item.setText(0, "Artista")
+                    artist_item.setText(1, artist_name)
+                    artist_item.setText(2, "Artista")
+                    
+                    # Configurar formato
+                    font = artist_item.font(0)
+                    font.setBold(True)
+                    artist_item.setFont(0, font)
+                    artist_item.setFont(1, font)
+                    
+                    # Almacenar datos
+                    artist_data = {
+                        'title': artist_name,
+                        'artist': artist_name,
+                        'type': 'artist'
+                    }
+                    artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
+                else:
+                    artist_item = artist_items[0]
+                
+                # Crear álbum como hijo del artista
+                album_item = QTreeWidgetItem(artist_item)
+                album_item.setText(0, album_name)
+                album_item.setText(1, artist_name)
+                album_item.setText(2, "Álbum")
+                
+                # Almacenar datos
+                album_data = {
+                    'title': album_name,
+                    'artist': artist_name,
+                    'type': 'album'
+                }
+                album_item.setData(0, Qt.ItemDataRole.UserRole, album_data)
+            else:
+                # Limpiar canciones antiguas si existieran
+                while album_item.childCount() > 0:
+                    album_item.removeChild(album_item.child(0))
+            
+            # Expandir artista y álbum
+            album_item.parent().setExpanded(True)
+            
+            # Añadir canciones como hijos del álbum
+            for song in songs:
+                # Extraer datos de la canción
+                if isinstance(song, dict):
+                    song_title = song.get('title', '')
+                    track_number = song.get('track_number', '')
+                    duration = song.get('duration', '')
+                else:
+                    # Si es tupla o lista
+                    song_title = song[0] if len(song) > 0 else ''
+                    track_number = song[1] if len(song) > 1 else ''
+                    duration = song[2] if len(song) > 2 else ''
+                
+                # Crear item para la canción
+                song_item = QTreeWidgetItem(album_item)
+                song_item.setText(0, song_title)
+                song_item.setText(1, artist_name)
+                song_item.setText(2, "Canción")
+                
+                # Añadir número de pista y duración si existen
+                if track_number:
+                    song_item.setText(3, str(track_number))
+                
+                if duration:
+                    # Formatear duración si está en segundos
+                    if isinstance(duration, (int, float)):
+                        minutes = int(duration // 60)
+                        seconds = int(duration % 60)
+                        song_item.setText(4, f"{minutes}:{seconds:02d}")
+                    else:
+                        song_item.setText(4, str(duration))
+                
+                # Almacenar datos completos
+                song_data = {
+                    'title': song_title,
+                    'artist': artist_name,
+                    'album': album_name,
+                    'track_number': track_number,
+                    'duration': duration,
+                    'type': 'track'
+                }
+                song_item.setData(0, Qt.ItemDataRole.UserRole, song_data)
+            
+            self.log(f"Agregadas {len(songs)} canciones al árbol para el álbum {album_name}")
+            
+        except Exception as e:
+            self.log(f"Error al añadir canciones al árbol: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
 
