@@ -364,10 +364,11 @@ class SearchWorker(QRunnable):
                             
                             # Extract artist from URL if needed
                             artist_name = artist or self.extract_bandcamp_artist_from_url(album_url) or "Unknown Artist"
+                            album_name = title or self.extract_bandcamp_album_from_url(album_url)
                             
                             album_result = {
                                 "source": "bandcamp",
-                                "title": title,
+                                "title": album_name,
                                 "artist": artist_name,
                                 "url": album_url,
                                 "type": "album"
@@ -387,7 +388,7 @@ class SearchWorker(QRunnable):
                         self.log(f"Error getting Bandcamp album URL: {str(e)}")
             
             return bandcamp_results
-            
+                
         except Exception as e:
             self.log(f"Error in Bandcamp search: {str(e)}")
             import traceback
@@ -570,7 +571,11 @@ class SearchWorker(QRunnable):
             return []
         
         try:
-            # Usar yt-dlp para obtener información de la página del artista
+            # Extraer nombre del artista de la URL
+            artist_name = self.extract_bandcamp_artist_from_url(artist_url)
+            self.log(f"Obteniendo álbumes para: {artist_name}")
+            
+            # Usar yt-dlp para obtener información
             command = [
                 "yt-dlp", 
                 "--flat-playlist",
@@ -582,7 +587,7 @@ class SearchWorker(QRunnable):
             stdout, stderr = process.communicate()
             
             if stderr and not stdout:
-                self.log(f"Error al obtener álbumes de Bandcamp: {stderr}")
+                self.log(f"Error al obtener álbumes: {stderr}")
                 return []
             
             albums = []
@@ -593,24 +598,34 @@ class SearchWorker(QRunnable):
                 try:
                     data = json.loads(line)
                     
-                    # Filtrar entradas que sean álbumes
-                    if 'album' in data.get('webpage_url', '').lower() or '/album/' in data.get('webpage_url', ''):
+                    # Filtrar solo entradas que sean álbumes
+                    webpage_url = data.get('webpage_url', '')
+                    if '/album/' in webpage_url:
+                        # Extraer nombre del álbum de la URL
+                        album_name = self.extract_bandcamp_album_from_url(webpage_url)
+                        
                         album = {
                             "source": "bandcamp",
-                            "title": data.get('title', 'Álbum sin título'),
-                            "artist": data.get('artist', data.get('uploader', 'Artista desconocido')),
-                            "url": data.get('webpage_url', ''),
-                            "type": "album",
-                            "year": self._extract_bandcamp_album_year(data.get('description', ''))
+                            "title": album_name,
+                            "artist": artist_name,
+                            "url": webpage_url,
+                            "type": "album"
                         }
+                        
+                        # Añadir el año si está disponible
+                        if data.get('upload_date') and len(data.get('upload_date', '')) >= 4:
+                            album["year"] = data.get('upload_date')[:4]
+                        
+                        self.log(f"Álbum encontrado: {album_name}")
                         albums.append(album)
                 except json.JSONDecodeError:
                     continue
             
+            self.log(f"Total de álbumes encontrados: {len(albums)}")
             return albums
-            
+                
         except Exception as e:
-            self.log(f"Error al obtener álbumes del artista de Bandcamp: {str(e)}")
+            self.log(f"Error en get_bandcamp_artist_albums: {e}")
             import traceback
             self.log(traceback.format_exc())
             return []
@@ -796,33 +811,24 @@ class SearchWorker(QRunnable):
 
 
     def get_bandcamp_album_tracks(self, album_url):
-        """Gets tracks for a Bandcamp album using yt-dlp with robust error handling."""
+        """Obtiene las pistas de un álbum de Bandcamp."""
         if not album_url:
             return []
         
-        self.log(f"Getting tracks for Bandcamp album: {album_url}")
+        self.log(f"Obteniendo pistas para álbum: {album_url}")
         
         try:
-            # Check if yt-dlp is available
-            try:
-                subprocess.run(["yt-dlp", "--version"], capture_output=True, check=True)
-            except (subprocess.SubprocessError, FileNotFoundError):
-                self.log("Error: yt-dlp is not installed or not in PATH")
-                return []
+            # Extraer información básica del álbum y artista
+            artist_name = self.extract_bandcamp_artist_from_url(album_url)
+            album_name = self.extract_bandcamp_album_from_url(album_url)
             
-            # Create temporary directory for output if needed
-            import tempfile
-            temp_dir = tempfile.gettempdir()
-            
-            # Use yt-dlp to get album info
+            # Usar yt-dlp para obtener información
             command = [
                 "yt-dlp",
-                "--flat-playlist",  # Don't download, just get info
-                "--dump-json",      # Output as JSON
+                "--flat-playlist",
+                "--dump-single-json",  # Obtener toda la información en un solo JSON
                 album_url
             ]
-            
-            self.log(f"Running command: {' '.join(command)}")
             
             process = subprocess.Popen(
                 command, 
@@ -834,93 +840,58 @@ class SearchWorker(QRunnable):
             stdout, stderr = process.communicate()
             
             if process.returncode != 0:
-                self.log(f"yt-dlp error (code {process.returncode}): {stderr}")
+                self.log(f"Error de yt-dlp: {stderr}")
                 return []
             
             if not stdout:
-                self.log("No output from yt-dlp")
+                self.log("Sin respuesta de yt-dlp")
                 return []
             
-            # Parse JSON output
-            tracks = []
-            lines = stdout.strip().split('\n')
-            
-            # Log number of lines for debugging
-            self.log(f"Got {len(lines)} lines of output from yt-dlp")
-            
-            for line in lines:
-                if not line.strip():
-                    continue
+            # Procesar JSON
+            try:
+                data = json.loads(stdout)
+                tracks = []
                 
-                try:
-                    data = json.loads(line)
+                # Procesar las entradas que son pistas
+                if 'entries' in data:
+                    self.log(f"Encontradas {len(data['entries'])} entradas en el álbum")
+                    for entry in data['entries']:
+                        # Saltear la entrada principal del álbum
+                        if entry.get('webpage_url') == album_url:
+                            continue
+                        
+                        # Crear objeto de pista
+                        track = {
+                            "source": "bandcamp",
+                            "title": entry.get('title', 'Unknown Track'),
+                            "artist": artist_name,
+                            "album": album_name,  # Importante: incluir el álbum
+                            "url": entry.get('webpage_url', ''),
+                            "type": "track"
+                        }
+                        
+                        # Añadir número de pista si existe
+                        if 'track_number' in entry:
+                            track['track_number'] = entry['track_number']
+                        
+                        # Añadir duración si existe
+                        if 'duration' in entry:
+                            track['duration'] = entry['duration']
+                        
+                        tracks.append(track)
                     
-                    # Skip the album entry itself (usually the first one)
-                    # Album entries usually don't have track numbers
-                    if 'track_number' not in data and 'track' not in data:
-                        continue
+                    self.log(f"Procesadas {len(tracks)} pistas para el álbum {album_name}")
+                    return tracks
+                else:
+                    self.log("No se encontraron pistas en la respuesta")
+                    return []
                     
-                    # Create track entry
-                    track = {
-                        "source": "bandcamp",
-                        "title": data.get('title', 'Unknown Track'),
-                        "artist": data.get('artist', data.get('uploader', 'Unknown Artist')),
-                        "url": data.get('webpage_url', album_url),
-                        "type": "track",
-                        "track_number": data.get('track_number', ''),
-                        "duration": data.get('duration'),
-                        "album": data.get('album', '')
-                    }
-                    
-                    tracks.append(track)
-                    
-                except json.JSONDecodeError:
-                    self.log(f"Error parsing JSON: {line[:100]}...")
-                    continue
-            
-            if not tracks:
-                # Retry with simpler command that might work better in some cases
-                self.log("No tracks found, retrying with simpler command")
-                command = [
-                    "yt-dlp",
-                    "--flat-playlist",
-                    "--dump-single-json",  # Get all info in a single JSON
-                    album_url
-                ]
+            except json.JSONDecodeError as e:
+                self.log(f"Error parseando JSON: {e}")
+                return []
                 
-                process = subprocess.Popen(
-                    command, 
-                    stdout=subprocess.PIPE, 
-                    stderr=subprocess.PIPE, 
-                    text=True
-                )
-                
-                stdout, stderr = process.communicate()
-                
-                if process.returncode == 0 and stdout:
-                    try:
-                        data = json.loads(stdout)
-                        if 'entries' in data:
-                            for entry in data['entries']:
-                                track = {
-                                    "source": "bandcamp",
-                                    "title": entry.get('title', 'Unknown Track'),
-                                    "artist": entry.get('artist', entry.get('uploader', 'Unknown Artist')),
-                                    "url": entry.get('webpage_url', album_url),
-                                    "type": "track",
-                                    "track_number": entry.get('track_number', ''),
-                                    "duration": entry.get('duration'),
-                                    "album": data.get('title', '')  # Use album title from main entry
-                                }
-                                tracks.append(track)
-                    except json.JSONDecodeError:
-                        self.log("Error parsing single JSON output")
-            
-            self.log(f"Found {len(tracks)} tracks for album")
-            return tracks
-            
         except Exception as e:
-            self.log(f"Error getting tracks from Bandcamp album: {str(e)}")
+            self.log(f"Error en get_bandcamp_album_tracks: {e}")
             import traceback
             self.log(traceback.format_exc())
             return []
@@ -973,56 +944,45 @@ class SearchWorker(QRunnable):
             self.log(f"Error in external Bandcamp search: {str(e)}")
             return None
 
-
-  
-
     def extract_bandcamp_artist_from_url(self, url):
-        """Extracts artist name from a Bandcamp URL."""
+        """Extrae el nombre del artista de una URL de Bandcamp."""
         try:
-            # Pattern for standard artist URLs: https://artistname.bandcamp.com/
+            # Patrón estándar: https://artista.bandcamp.com/...
             match = re.search(r'https?://([^.]+)\.bandcamp\.com', url)
             if match:
                 artist_slug = match.group(1)
-                # Convert slug to readable name
+                # Simplemente reemplazar guiones por espacios y capitalizar
                 artist_name = artist_slug.replace('-', ' ').title()
+                self.log(f"Artista extraído de URL: {artist_name}")
                 return artist_name
-            
-            # Pattern for artist pages on bandcamp.com: https://bandcamp.com/artist/artistname
-            match = re.search(r'bandcamp\.com/artist/([^/]+)', url)
-            if match:
-                artist_slug = match.group(1)
-                artist_name = artist_slug.replace('-', ' ').title()
-                return artist_name
-            
-            # Try to extract from album URL: https://artist.bandcamp.com/album/albumname
-            match = re.search(r'https?://([^.]+)\.bandcamp\.com/album/', url)
-            if match:
-                artist_slug = match.group(1)
-                artist_name = artist_slug.replace('-', ' ').title()
-                return artist_name
-            
-            # If all else fails, try to get artist name from the page
-            try:
-                response = requests.get(url, timeout=10)
-                if response.status_code == 200:
-                    soup = BeautifulSoup(response.text, 'html.parser')
-                    # Try to find artist name in meta tags
-                    meta_artist = soup.find('meta', property='og:site_name')
-                    if meta_artist and meta_artist.get('content'):
-                        return meta_artist.get('content')
-                    
-                    # Try other common elements where artist name might be
-                    artist_elem = soup.find('span', class_='artist')
-                    if artist_elem:
-                        return artist_elem.text.strip()
-            except Exception as e:
-                self.log(f"Error fetching webpage: {str(e)}")
             
             return "Unknown Artist"
         except Exception as e:
-            self.log(f"Error extracting artist from URL: {str(e)}")
+            self.log(f"Error al extraer artista de URL: {str(e)}")
             return "Unknown Artist"
 
+    def extract_bandcamp_album_from_url(self, url):
+        """Extrae el nombre del álbum de una URL de Bandcamp."""
+        try:
+            # Patrón para álbumes: /album/nombre-album
+            match = re.search(r'/album/([^/?&#]+)', url)
+            if match:
+                album_slug = match.group(1)
+                
+                # Quitar sufijos comunes si existen
+                if '-luxus' in album_slug:
+                    album_slug = album_slug.split('-luxus')[0]
+                    
+                # Reemplazar guiones por espacios y capitalizar cada palabra
+                album_name = ' '.join(word.capitalize() for word in album_slug.replace('-', ' ').split())
+                
+                self.log(f"Álbum extraído de URL: {album_name}")
+                return album_name
+            
+            return "Unknown Album"
+        except Exception as e:
+            self.log(f"Error al extraer álbum de URL: {str(e)}")
+            return "Unknown Album"
 
 
 
@@ -3918,8 +3878,46 @@ class UrlPlayer(BaseModule):
         # Store complete data
         result_item.setData(0, Qt.ItemDataRole.UserRole, result)
         
-        # IMPROVED: Add tracks for albums correctly
-        if item_type == 'album' and 'tracks' in result and result['tracks']:
+        # CRITICAL: Add albums for artists correctly
+        if item_type == 'artist' and 'albums' in result and result['albums']:
+            self.log(f"Añadiendo {len(result['albums'])} álbumes al artista {title}")
+            
+            # Add each album as a child
+            for album in result['albums']:
+                album_item = QTreeWidgetItem(result_item)
+                album_item.setText(0, album.get('title', 'Álbum sin título'))
+                album_item.setText(1, title)  # Artist name
+                album_item.setText(2, f"Álbum{db_indicator}")
+                
+                # Add year if available
+                if album.get('year'):
+                    album_item.setText(3, str(album.get('year')))
+                
+                # Store album data
+                album_item.setData(0, Qt.ItemDataRole.UserRole, album)
+                
+                # Add tracks if available
+                if 'tracks' in album and album['tracks']:
+                    for track in album['tracks']:
+                        track_item = QTreeWidgetItem(album_item)
+                        track_item.setText(0, track.get('title', 'Unknown Track'))
+                        track_item.setText(1, title)  # Artist name
+                        track_item.setText(2, f"Canción{db_indicator}")
+                        
+                        # Add track number if available
+                        if track.get('track_number'):
+                            track_item.setText(3, str(track.get('track_number')))
+                        
+                        # Add duration if available
+                        if track.get('duration'):
+                            duration_str = self.format_duration(track.get('duration'))
+                            track_item.setText(4, duration_str)
+                        
+                        # Store track data
+                        track_item.setData(0, Qt.ItemDataRole.UserRole, track)
+        
+        # Add tracks for albums correctly
+        elif item_type == 'album' and 'tracks' in result and result['tracks']:
             # Sort tracks by track number if available
             sorted_tracks = sorted(
                 result['tracks'], 
@@ -3927,6 +3925,9 @@ class UrlPlayer(BaseModule):
                     if t.get('track_number') and str(t.get('track_number')).isdigit() 
                     else 9999)
             )
+            
+            # Agregar mensaje de log para depuración
+            self.log(f"Añadiendo {len(sorted_tracks)} pistas al álbum {result.get('title')}")
             
             for track in sorted_tracks:
                 # Create track item
