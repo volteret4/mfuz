@@ -59,7 +59,9 @@ class MusicDatabaseQuery:
             albums.youtube_url, 
             albums.musicbrainz_url, 
             albums.discogs_url, 
-            albums.wikipedia_url
+            albums.wikipedia_url,
+            albums.bandcamp_url,
+            albums.lastfm_url
         FROM albums 
         JOIN artists ON albums.artist_id = artists.id
         WHERE LOWER(albums.name) = LOWER(?) AND LOWER(artists.name) = LOWER(?)
@@ -73,7 +75,10 @@ class MusicDatabaseQuery:
                 'youtube': result[1],
                 'musicbrainz': result[2],
                 'discogs': result[3],
-                'wikipedia': result[4]
+                'wikipedia': result[4],
+                'bandcamp': result[5],
+                'lastfm': result[6]
+
             }
             return {k: v for k, v in links.items() if v}
         return None

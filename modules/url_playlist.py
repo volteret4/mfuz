@@ -187,35 +187,83 @@ class SearchWorker(QRunnable):
             search_type = getattr(self, 'search_type', 'all')
             self.log(f"Searching with type: {search_type}")
             
-            # First, search in the database
-            if hasattr(self, 'parent'):
-                db_results = self.parent.search_in_database(self.query, search_type)
+            # Get the database links if available
+            db_links = getattr(self, 'db_links', {})
+            
+            # Track which services we've already found in the database
+            db_services_found = set()
+            db_results = []
+            
+            # Check if we already have service-specific links in the database
+            if db_links:
+                # Process each entity type for links
+                for entity_type in ['artists', 'albums', 'tracks']:
+                    for item_key, item_data in db_links.get(entity_type, {}).items():
+                        # Get all links from this item
+                        links = item_data.get('links', {})
+                        
+                        for service, url in links.items():
+                            service_lower = service.lower()
+                            if service_lower in self.services and url:
+                                # Add to services found
+                                db_services_found.add(service_lower)
+                                
+                                # Create a result item for this database link
+                                result_item = {
+                                    "source": service_lower,
+                                    "title": item_data.get('title', ''),
+                                    "artist": item_data.get('artist', ''),
+                                    "url": url,
+                                    "type": item_data.get('type', entity_type[:-1]),  # Remove 's' from entity_type
+                                    "from_database": True
+                                }
+                                
+                                # Add additional data
+                                if entity_type == 'albums' and 'year' in item_data:
+                                    result_item['year'] = item_data['year']
+                                elif entity_type == 'tracks':
+                                    if 'album' in item_data:
+                                        result_item['album'] = item_data['album']
+                                    if 'track_number' in item_data:
+                                        result_item['track_number'] = item_data['track_number']
+                                    if 'duration' in item_data:
+                                        result_item['duration'] = item_data['duration']
+                                
+                                db_results.append(result_item)
+                
+                # Add all db results to the final results list
                 if db_results:
-                    results.extend(db_results)
                     self.log(f"Found {len(db_results)} results in database")
+                    results.extend(db_results)
             
-            # Continue with service searches only if not enough results or force update
-            if len(results) < self.max_results:
-                for service in self.services:
-                    service_results = []
-                    
-                    if service == "youtube":
-                        service_results = self.search_youtube(self.query)
-                    elif service == "soundcloud":
-                        service_results = self.search_soundcloud(self.query)
-                    elif service == "bandcamp":
-                        service_results = self.search_bandcamp(self.query, search_type)
-                    elif service == "spotify":
-                        service_results = self.search_spotify(self.query, search_type)
-                    elif service == "lastfm":
-                        service_results = self.search_lastfm(self.query, search_type)
-                    
-                    # Apply pagination per service
-                    if service_results:
-                        results.extend(service_results[:self.max_results])
-                        self.log(f"Found {len(service_results[:self.max_results])} results in {service}")
+            # Log database findings
+            self.log(f"Already have links in database for: {db_services_found}")
             
-            # Emit results with an empty dictionary for the second argument to match signal
+            # Filter services that don't have links in the database
+            services_to_search = [s for s in self.services if s not in db_services_found]
+            self.log(f"Will search additional services: {services_to_search}")
+            
+            # Continue with service searches for those not found in database
+            for service in services_to_search:
+                service_results = []
+                
+                if service == "youtube":
+                    service_results = self.search_youtube(self.query)
+                elif service == "soundcloud":
+                    service_results = self.search_soundcloud(self.query)
+                elif service == "bandcamp":
+                    service_results = self.search_bandcamp(self.query, search_type)
+                elif service == "spotify":
+                    service_results = self.search_spotify(self.query, search_type)
+                elif service == "lastfm":
+                    service_results = self.search_lastfm(self.query, search_type)
+                
+                # Apply pagination per service
+                if service_results:
+                    results.extend(service_results[:self.max_results])
+                    self.log(f"Found {len(service_results[:self.max_results])} results in {service}")
+            
+            # Emit results
             self.signals.results.emit(results)
             self.signals.finished.emit({}, {})
         
@@ -227,149 +275,302 @@ class SearchWorker(QRunnable):
             self.signals.finished.emit({"error": str(e)}, {})
 
     def search_bandcamp(self, query, search_type):
-        """Searches on Bandcamp with enhanced album and track support"""
+        """Searches on Bandcamp with enhanced album and track support."""
         try:
-            # Import the existing module
+            # Check database links
+            db_links = getattr(self, 'db_links', {})
+            bandcamp_results = []
+            
+            # Log progress
+            self.log(f"Buscando en Bandcamp: {query} (tipo: {search_type})")
+            
+            # Extract artist and title components
+            parts = query.split(" - ", 1)
+            artist = parts[0].strip() if len(parts) > 1 else ""
+            title = parts[1].strip() if len(parts) > 1 else query.strip()
+            
+            # Import module for external search if needed
             from base_datos.enlaces_artista_album import MusicLinksManager
             
-            # Create configuration based on module parameters
             config = {
-                'db_path': getattr(self, self.db_path, os.path.join(PROJECT_ROOT, "base_datos", "musica1.db")),
+                'db_path': self.db_path,
                 'rate_limit': 1.0,
-                'disable_services': ['musicbrainz', 'discogs', 'youtube', 'spotify', 'rateyourmusic'],
+                'disable_services': ['musicbrainz', 'discogs', 'youtube', 'rateyourmusic'],
                 'log_level': 'WARNING'
             }
             
-            # Create instance with configuration
-            manager = MusicLinksManager(config)
-            bandcamp_results = []
+            # Try to create the manager object
+            try:
+                manager = MusicLinksManager(config)
+                self.log("MusicLinksManager initialized successfully")
+            except Exception as e:
+                self.log(f"Error initializing MusicLinksManager: {str(e)}")
+                manager = None
             
-            # Determine if it's artist, album or song based on search type
-            if search_type.lower() in ['artist', 'artista']:
-                # First get artist URL
-                artist_url = manager._get_bandcamp_artist_url(query)
-                if artist_url:
-                    # Create artist result
-                    artist_result = {
-                        "source": "bandcamp",
-                        "title": query,
-                        "artist": query,
-                        "url": artist_url,
-                        "type": "artist"
-                    }
-                    bandcamp_results.append(artist_result)
-                    self.log(f"Found artist on Bandcamp: {query}")
-                    
-                    # Now, get albums for this artist
-                    albums = self.get_bandcamp_artist_albums(artist_url)
-                    if albums:
-                        artist_result['albums'] = albums
-                        self.log(f"Found {len(albums)} albums for artist {query}")
+            # Search in database first
+            db_result = self._search_bandcamp_in_db(artist, title, db_links, search_type)
+            if db_result:
+                self.log(f"Found Bandcamp result in database: {db_result['title']}")
+                bandcamp_results.append(db_result)
             
-            elif search_type.lower() in ['album', 'álbum']:
-                # If format is "artist - album"
-                parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    artist, album = parts
-                    album_url = manager._get_bandcamp_album_url(artist, album)
-                    if album_url:
-                        album_result = {
-                            "source": "bandcamp",
-                            "title": album,
-                            "artist": artist,
-                            "url": album_url,
-                            "type": "album"
-                        }
-                        
-                        # Get tracks for this album
-                        tracks = self.get_bandcamp_album_tracks(album_url)
-                        if tracks:
-                            album_result['tracks'] = tracks
+            # If nothing found in database and we have a manager, try external search
+            if not bandcamp_results and manager:
+                self.log("No database results found, attempting external search...")
+                if search_type.lower() in ['artist', 'artista', 'all']:
+                    # Try to get artist URL
+                    artist_name = artist or title
+                    try:
+                        artist_url = manager._get_bandcamp_artist_url(artist_name)
+                        if artist_url:
+                            self.log(f"Found Bandcamp artist URL: {artist_url}")
+                            artist_result = {
+                                "source": "bandcamp",
+                                "title": artist_name,
+                                "artist": artist_name,
+                                "url": artist_url,
+                                "type": "artist"
+                            }
                             
-                        bandcamp_results.append(album_result)
-                        self.log(f"Found album on Bandcamp: {album} by {artist} with {len(tracks) if tracks else 0} tracks")
-                else:
-                    # Search only with album name
-                    album_url = manager._get_bandcamp_album_url("", query)
-                    if album_url:
-                        # Try to extract artist name from URL
-                        artist_name = self.extract_bandcamp_artist_from_url(album_url) or "Unknown Artist"
-                        
-                        album_result = {
-                            "source": "bandcamp",
-                            "title": query,
-                            "artist": artist_name,
-                            "url": album_url,
-                            "type": "album"
-                        }
-                        
-                        # Get tracks for this album
-                        tracks = self.get_bandcamp_album_tracks(album_url)
-                        if tracks:
-                            album_result['tracks'] = tracks
+                            # Get albums
+                            try:
+                                albums = self.get_bandcamp_artist_albums(artist_url)
+                                if albums:
+                                    self.log(f"Found {len(albums)} albums for artist")
+                                    # For each album, get tracks
+                                    for album in albums:
+                                        album_url = album.get('url')
+                                        if album_url:
+                                            try:
+                                                tracks = self.get_bandcamp_album_tracks(album_url)
+                                                if tracks:
+                                                    album['tracks'] = tracks
+                                                    self.log(f"Added {len(tracks)} tracks to album {album['title']}")
+                                            except Exception as e:
+                                                self.log(f"Error getting tracks for album {album['title']}: {str(e)}")
+                                    
+                                    artist_result['albums'] = albums
+                            except Exception as e:
+                                self.log(f"Error getting albums for artist: {str(e)}")
                             
-                        bandcamp_results.append(album_result)
-                        self.log(f"Found album on Bandcamp: {query} with {len(tracks) if tracks else 0} tracks")
-            
-            else:
-                # General search
-                # Try as artist
-                artist_url = manager._get_bandcamp_artist_url(query)
-                if artist_url:
-                    artist_result = {
-                        "source": "bandcamp",
-                        "title": query,
-                        "artist": query,
-                        "url": artist_url,
-                        "type": "artist"
-                    }
-                    
-                    # Get albums for this artist
-                    albums = self.get_bandcamp_artist_albums(artist_url)
-                    if albums:
-                        artist_result['albums'] = albums
-                        
-                    bandcamp_results.append(artist_result)
-                    self.log(f"Found artist on Bandcamp: {query} with {len(albums) if albums else 0} albums")
+                            bandcamp_results.append(artist_result)
+                    except Exception as e:
+                        self.log(f"Error getting Bandcamp artist URL: {str(e)}")
                 
-                # If format is "artist - title"
-                parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    artist, title = parts
-                    # Try as album
-                    album_url = manager._get_bandcamp_album_url(artist, title)
-                    if album_url:
-                        album_result = {
-                            "source": "bandcamp",
-                            "title": title,
-                            "artist": artist,
-                            "url": album_url,
-                            "type": "album"
-                        }
-                        
-                        # Get tracks for this album
-                        tracks = self.get_bandcamp_album_tracks(album_url)
-                        if tracks:
-                            album_result['tracks'] = tracks
+                elif search_type.lower() in ['album', 'álbum', 'all']:
+                    try:
+                        album_url = manager._get_bandcamp_album_url(artist, title)
+                        if album_url:
+                            self.log(f"Found Bandcamp album URL: {album_url}")
                             
-                        bandcamp_results.append(album_result)
-                        self.log(f"Found album on Bandcamp: {title} by {artist} with {len(tracks) if tracks else 0} tracks")
+                            # Extract artist from URL if needed
+                            artist_name = artist or self.extract_bandcamp_artist_from_url(album_url) or "Unknown Artist"
+                            
+                            album_result = {
+                                "source": "bandcamp",
+                                "title": title,
+                                "artist": artist_name,
+                                "url": album_url,
+                                "type": "album"
+                            }
+                            
+                            # Get tracks
+                            try:
+                                tracks = self.get_bandcamp_album_tracks(album_url)
+                                if tracks:
+                                    album_result['tracks'] = tracks
+                                    self.log(f"Added {len(tracks)} tracks to album")
+                            except Exception as e:
+                                self.log(f"Error getting tracks for album: {str(e)}")
+                            
+                            bandcamp_results.append(album_result)
+                    except Exception as e:
+                        self.log(f"Error getting Bandcamp album URL: {str(e)}")
             
             return bandcamp_results
-                
+            
         except Exception as e:
-            self.log(f"Error searching on Bandcamp: {str(e)}")
+            self.log(f"Error in Bandcamp search: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []
 
-    def get_bandcamp_artist_albums(self, artist_url):
-        """Gets albums for a specific Bandcamp artist"""
+    def _search_bandcamp_in_db(self, artist, title, db_links, search_type):
+        """Helper method to search Bandcamp info in database."""
         try:
-            if not artist_url:
-                return []
+            # Search based on type
+            if search_type.lower() in ['artist', 'artista', 'all']:
+                # If we have an artist name, search for it
+                artist_name = artist or title
                 
-            # Use yt-dlp to get artist page info
+                for db_artist_name, artist_data in db_links.get('artists', {}).items():
+                    if db_artist_name.lower() == artist_name.lower() or artist_name.lower() in db_artist_name.lower():
+                        # Check for Bandcamp link
+                        bandcamp_url = None
+                        if 'links' in artist_data and 'bandcamp' in artist_data['links']:
+                            bandcamp_url = artist_data['links']['bandcamp']
+                        elif 'bandcamp_url' in artist_data:
+                            bandcamp_url = artist_data['bandcamp_url']
+                        
+                        if bandcamp_url:
+                            # Create artist result
+                            result = {
+                                "source": "bandcamp",
+                                "title": db_artist_name,
+                                "artist": db_artist_name,
+                                "url": bandcamp_url,
+                                "type": "artist",
+                                "from_database": True
+                            }
+                            
+                            # Add albums if available
+                            if 'albums' in artist_data and artist_data['albums']:
+                                albums = []
+                                for album in artist_data['albums']:
+                                    album_name = album.get('title', album.get('name', ''))
+                                    album_bandcamp_url = None
+                                    
+                                    if 'links' in album and 'bandcamp' in album['links']:
+                                        album_bandcamp_url = album['links']['bandcamp']
+                                    elif 'bandcamp_url' in album:
+                                        album_bandcamp_url = album['bandcamp_url']
+                                    
+                                    if album_bandcamp_url:
+                                        # Create album entry
+                                        album_entry = {
+                                            "source": "bandcamp",
+                                            "title": album_name,
+                                            "artist": db_artist_name,
+                                            "url": album_bandcamp_url,
+                                            "type": "album",
+                                            "year": album.get('year'),
+                                            "from_database": True
+                                        }
+                                        
+                                        # Get tracks if available
+                                        if 'tracks' in album and album['tracks']:
+                                            tracks = []
+                                            for track in album['tracks']:
+                                                track_entry = {
+                                                    "source": "bandcamp",
+                                                    "title": track.get('title', ''),
+                                                    "artist": db_artist_name,
+                                                    "album": album_name,
+                                                    "type": "track",
+                                                    "track_number": track.get('track_number'),
+                                                    "duration": track.get('duration'),
+                                                    "from_database": True
+                                                }
+                                                
+                                                # Add track URL if available
+                                                track_bandcamp_url = None
+                                                if 'links' in track and 'bandcamp' in track['links']:
+                                                    track_bandcamp_url = track['links']['bandcamp']
+                                                elif 'bandcamp_url' in track:
+                                                    track_bandcamp_url = track['bandcamp_url']
+                                                
+                                                if track_bandcamp_url:
+                                                    track_entry['url'] = track_bandcamp_url
+                                                
+                                                tracks.append(track_entry)
+                                            
+                                            album_entry['tracks'] = tracks
+                                        else:
+                                            # Try to get tracks from Bandcamp directly
+                                            try:
+                                                tracks = self.get_bandcamp_album_tracks(album_bandcamp_url)
+                                                if tracks:
+                                                    album_entry['tracks'] = tracks
+                                            except Exception as e:
+                                                self.log(f"Error getting tracks for album: {str(e)}")
+                                        
+                                        albums.append(album_entry)
+                                
+                                if albums:
+                                    result['albums'] = albums
+                            
+                            return result
+            
+            elif search_type.lower() in ['album', 'álbum', 'all']:
+                # If we have artist and title, search for album
+                if artist:
+                    album_key = f"{artist} - {title}"
+                    if album_key in db_links.get('albums', {}):
+                        album_data = db_links['albums'][album_key]
+                        
+                        # Check for Bandcamp link
+                        bandcamp_url = None
+                        if 'links' in album_data and 'bandcamp' in album_data['links']:
+                            bandcamp_url = album_data['links']['bandcamp']
+                        elif 'bandcamp_url' in album_data:
+                            bandcamp_url = album_data['bandcamp_url']
+                        
+                        if bandcamp_url:
+                            # Create album result
+                            result = {
+                                "source": "bandcamp",
+                                "title": title,
+                                "artist": artist,
+                                "url": bandcamp_url,
+                                "type": "album",
+                                "year": album_data.get('year'),
+                                "from_database": True
+                            }
+                            
+                            # Get tracks
+                            if 'tracks' in album_data and album_data['tracks']:
+                                tracks = []
+                                for track in album_data['tracks']:
+                                    track_entry = {
+                                        "source": "bandcamp",
+                                        "title": track.get('title', ''),
+                                        "artist": artist,
+                                        "album": title,
+                                        "type": "track",
+                                        "track_number": track.get('track_number'),
+                                        "duration": track.get('duration'),
+                                        "from_database": True
+                                    }
+                                    
+                                    # Add track URL if available
+                                    track_bandcamp_url = None
+                                    if 'links' in track and 'bandcamp' in track['links']:
+                                        track_bandcamp_url = track['links']['bandcamp']
+                                    elif 'bandcamp_url' in track:
+                                        track_bandcamp_url = track['bandcamp_url']
+                                    
+                                    if track_bandcamp_url:
+                                        track_entry['url'] = track_bandcamp_url
+                                    
+                                    tracks.append(track_entry)
+                                
+                                result['tracks'] = tracks
+                            else:
+                                # Try to get tracks from Bandcamp directly
+                                try:
+                                    tracks = self.get_bandcamp_album_tracks(bandcamp_url)
+                                    if tracks:
+                                        result['tracks'] = tracks
+                                except Exception as e:
+                                    self.log(f"Error getting tracks for album: {str(e)}")
+                            
+                            return result
+            
+            # If we reach here, nothing was found
+            return None
+            
+        except Exception as e:
+            self.log(f"Error searching Bandcamp in database: {str(e)}")
+            return None
+
+
+
+    def get_bandcamp_artist_albums(self, artist_url):
+        """Obtiene los álbumes de un artista de Bandcamp."""
+        if not artist_url:
+            return []
+        
+        try:
+            # Usar yt-dlp para obtener información de la página del artista
             command = [
                 "yt-dlp", 
                 "--flat-playlist",
@@ -381,42 +582,44 @@ class SearchWorker(QRunnable):
             stdout, stderr = process.communicate()
             
             if stderr and not stdout:
-                self.log(f"Error fetching Bandcamp artist albums: {stderr}")
+                self.log(f"Error al obtener álbumes de Bandcamp: {stderr}")
                 return []
-                
+            
             albums = []
             for line in stdout.strip().split('\n'):
                 if not line:
                     continue
-                    
+                
                 try:
                     data = json.loads(line)
-                    # Filter out non-album entries (like tracks)
+                    
+                    # Filtrar entradas que sean álbumes
                     if 'album' in data.get('webpage_url', '').lower() or '/album/' in data.get('webpage_url', ''):
                         album = {
                             "source": "bandcamp",
-                            "title": data.get('title', 'Unknown Album'),
-                            "artist": data.get('artist', data.get('uploader', 'Unknown Artist')),
+                            "title": data.get('title', 'Álbum sin título'),
+                            "artist": data.get('artist', data.get('uploader', 'Artista desconocido')),
                             "url": data.get('webpage_url', ''),
                             "type": "album",
-                            "year": self._extract_bandcamp_album_year(data.get('description', '')),
+                            "year": self._extract_bandcamp_album_year(data.get('description', ''))
                         }
                         albums.append(album)
                 except json.JSONDecodeError:
                     continue
-                    
+            
             return albums
-                    
+            
         except Exception as e:
-            self.log(f"Error getting Bandcamp artist albums: {str(e)}")
+            self.log(f"Error al obtener álbumes del artista de Bandcamp: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []
 
+
     def _extract_bandcamp_album_year(self, description):
-        """Extracts release year from Bandcamp album description"""
+        """Extrae el año de lanzamiento de la descripción de un álbum de Bandcamp."""
         try:
-            # Common patterns in Bandcamp descriptions
+            # Patrones comunes en las descripciones de Bandcamp
             patterns = [
                 r'released (\w+ \d{1,2}, (\d{4}))',
                 r'released: (\w+ \d{1,2}, (\d{4}))',
@@ -427,7 +630,7 @@ class SearchWorker(QRunnable):
             
             for pattern in patterns:
                 match = re.search(pattern, description, re.IGNORECASE)
-                if match and match.group(2):
+                if match and len(match.groups()) >= 2 and match.group(2):
                     return match.group(2)
                 elif match and match.group(1) and match.group(1).isdigit():
                     return match.group(1)
@@ -436,242 +639,840 @@ class SearchWorker(QRunnable):
         except Exception:
             return None
 
-    def get_bandcamp_album_tracks(self, album_url):
-        """Gets tracks for a specific Bandcamp album"""
-        try:
-            if not album_url:
-                return []
+
+    def _parse_query(self, query):
+        """Parse a query into artist and title components."""
+        parts = query.split(" - ", 1)
+        if len(parts) > 1:
+            return parts[0].strip(), parts[1].strip()
+        return None, query.strip()
+
+    def _get_bandcamp_artist_from_db(self, artist_name, db_links):
+        """Extract Bandcamp artist data from database."""
+        if not artist_name or 'artists' not in db_links:
+            return None
+            
+        # Look for exact match first, then partial match
+        for db_artist_name, artist_data in db_links.get('artists', {}).items():
+            if (artist_name.lower() == db_artist_name.lower() or 
+                artist_name.lower() in db_artist_name.lower()):
                 
-            # Use yt-dlp to get album tracks
+                # Check if Bandcamp URL exists
+                bandcamp_url = self._extract_service_url(artist_data, 'bandcamp')
+                if not bandcamp_url:
+                    continue
+                    
+                # Create artist result
+                result = {
+                    "source": "bandcamp",
+                    "title": db_artist_name,
+                    "artist": db_artist_name,
+                    "url": bandcamp_url,
+                    "type": "artist",
+                    "from_database": True
+                }
+                
+                # Add albums if available
+                if 'albums' in artist_data and artist_data['albums']:
+                    result['albums'] = self._extract_artist_albums(artist_data['albums'], db_artist_name)
+                    
+                return result
+        
+        return None
+
+    def _get_bandcamp_album_from_db(self, artist_name, album_name, db_links):
+        """Extract Bandcamp album data from database."""
+        if not album_name or 'albums' not in db_links:
+            return None
+        
+        # Try with artist+album key first if artist is provided
+        if artist_name:
+            album_key = f"{artist_name} - {album_name}"
+            if album_key in db_links.get('albums', {}):
+                album_data = db_links['albums'][album_key]
+                bandcamp_url = self._extract_service_url(album_data, 'bandcamp')
+                
+                if bandcamp_url:
+                    return self._create_album_result(album_data, bandcamp_url)
+        
+        # Otherwise search all albums for a match on album title
+        for album_key, album_data in db_links.get('albums', {}).items():
+            if album_data['title'].lower() == album_name.lower():
+                bandcamp_url = self._extract_service_url(album_data, 'bandcamp')
+                
+                if bandcamp_url:
+                    return self._create_album_result(album_data, bandcamp_url)
+        
+        return None
+
+    def _extract_service_url(self, data, service):
+        """Extract service URL from data with various possible structures."""
+        if 'links' in data and service in data['links']:
+            return data['links'][service]
+        elif f'{service}_url' in data:
+            return data[f'{service}_url']
+        return None
+
+    def _create_album_result(self, album_data, bandcamp_url):
+        """Create a structured album result from album data."""
+        result = {
+            "source": "bandcamp",
+            "title": album_data['title'],
+            "artist": album_data['artist'],
+            "url": bandcamp_url,
+            "type": "album",
+            "year": album_data.get('year'),
+            "from_database": True
+        }
+        
+        # Add tracks if available
+        if 'tracks' in album_data and album_data['tracks']:
+            result['tracks'] = []
+            for track in album_data['tracks']:
+                track_result = {
+                    "source": "bandcamp",
+                    "title": track['title'],
+                    "artist": album_data['artist'],
+                    "album": album_data['title'],
+                    "type": "track",
+                    "track_number": track.get('track_number'),
+                    "duration": track.get('duration'),
+                    "from_database": True
+                }
+                
+                # Add track URL if available
+                track_url = self._extract_service_url(track, 'bandcamp')
+                if track_url:
+                    track_result['url'] = track_url
+                
+                result['tracks'].append(track_result)
+        
+        return result
+
+    def _get_bandcamp_track_from_db(self, artist_name, track_name, db_links):
+        """Extract Bandcamp track data from database."""
+        if not track_name or 'tracks' not in db_links:
+            return None
+        
+        # Try with artist+track key first if artist is provided
+        if artist_name:
+            track_key = f"{artist_name} - {track_name}"
+            if track_key in db_links.get('tracks', {}):
+                track_data = db_links['tracks'][track_key]
+                bandcamp_url = self._extract_service_url(track_data, 'bandcamp')
+                
+                if bandcamp_url:
+                    return {
+                        "source": "bandcamp",
+                        "title": track_data['title'],
+                        "artist": track_data['artist'],
+                        "album": track_data.get('album', ''),
+                        "url": bandcamp_url,
+                        "type": "track",
+                        "track_number": track_data.get('track_number'),
+                        "duration": track_data.get('duration'),
+                        "from_database": True
+                    }
+        
+        # Search all tracks for a match on track title
+        for track_key, track_data in db_links.get('tracks', {}).items():
+            if track_data['title'].lower() == track_name.lower():
+                bandcamp_url = self._extract_service_url(track_data, 'bandcamp')
+                
+                if bandcamp_url:
+                    return {
+                        "source": "bandcamp",
+                        "title": track_data['title'],
+                        "artist": track_data['artist'],
+                        "album": track_data.get('album', ''),
+                        "url": bandcamp_url,
+                        "type": "track",
+                        "track_number": track_data.get('track_number'),
+                        "duration": track_data.get('duration'),
+                        "from_database": True
+                    }
+        
+        return None
+
+
+    def get_bandcamp_album_tracks(self, album_url):
+        """Gets tracks for a Bandcamp album using yt-dlp with robust error handling."""
+        if not album_url:
+            return []
+        
+        self.log(f"Getting tracks for Bandcamp album: {album_url}")
+        
+        try:
+            # Check if yt-dlp is available
+            try:
+                subprocess.run(["yt-dlp", "--version"], capture_output=True, check=True)
+            except (subprocess.SubprocessError, FileNotFoundError):
+                self.log("Error: yt-dlp is not installed or not in PATH")
+                return []
+            
+            # Create temporary directory for output if needed
+            import tempfile
+            temp_dir = tempfile.gettempdir()
+            
+            # Use yt-dlp to get album info
             command = [
-                "yt-dlp", 
-                "--flat-playlist",
-                "--dump-json",
+                "yt-dlp",
+                "--flat-playlist",  # Don't download, just get info
+                "--dump-json",      # Output as JSON
                 album_url
             ]
             
-            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            self.log(f"Running command: {' '.join(command)}")
+            
+            process = subprocess.Popen(
+                command, 
+                stdout=subprocess.PIPE, 
+                stderr=subprocess.PIPE, 
+                text=True
+            )
+            
             stdout, stderr = process.communicate()
             
-            if stderr and not stdout:
-                self.log(f"Error fetching Bandcamp album tracks: {stderr}")
+            if process.returncode != 0:
+                self.log(f"yt-dlp error (code {process.returncode}): {stderr}")
                 return []
-                
+            
+            if not stdout:
+                self.log("No output from yt-dlp")
+                return []
+            
+            # Parse JSON output
             tracks = []
-            for line in stdout.strip().split('\n'):
-                if not line:
+            lines = stdout.strip().split('\n')
+            
+            # Log number of lines for debugging
+            self.log(f"Got {len(lines)} lines of output from yt-dlp")
+            
+            for line in lines:
+                if not line.strip():
                     continue
-                    
+                
                 try:
                     data = json.loads(line)
-                    # Check if this is a track entry
-                    if 'track' in data:
-                        track = {
-                            "source": "bandcamp",
-                            "title": data.get('title', 'Unknown Track'),
-                            "artist": data.get('artist', data.get('uploader', 'Unknown Artist')),
-                            "url": data.get('webpage_url', ''),
-                            "type": "track",
-                            "track_number": data.get('track_number', ''),
-                            "duration": data.get('duration'),
-                            "album": data.get('album', '')
-                        }
-                        tracks.append(track)
+                    
+                    # Skip the album entry itself (usually the first one)
+                    # Album entries usually don't have track numbers
+                    if 'track_number' not in data and 'track' not in data:
+                        continue
+                    
+                    # Create track entry
+                    track = {
+                        "source": "bandcamp",
+                        "title": data.get('title', 'Unknown Track'),
+                        "artist": data.get('artist', data.get('uploader', 'Unknown Artist')),
+                        "url": data.get('webpage_url', album_url),
+                        "type": "track",
+                        "track_number": data.get('track_number', ''),
+                        "duration": data.get('duration'),
+                        "album": data.get('album', '')
+                    }
+                    
+                    tracks.append(track)
+                    
                 except json.JSONDecodeError:
+                    self.log(f"Error parsing JSON: {line[:100]}...")
                     continue
-                    
+            
+            if not tracks:
+                # Retry with simpler command that might work better in some cases
+                self.log("No tracks found, retrying with simpler command")
+                command = [
+                    "yt-dlp",
+                    "--flat-playlist",
+                    "--dump-single-json",  # Get all info in a single JSON
+                    album_url
+                ]
+                
+                process = subprocess.Popen(
+                    command, 
+                    stdout=subprocess.PIPE, 
+                    stderr=subprocess.PIPE, 
+                    text=True
+                )
+                
+                stdout, stderr = process.communicate()
+                
+                if process.returncode == 0 and stdout:
+                    try:
+                        data = json.loads(stdout)
+                        if 'entries' in data:
+                            for entry in data['entries']:
+                                track = {
+                                    "source": "bandcamp",
+                                    "title": entry.get('title', 'Unknown Track'),
+                                    "artist": entry.get('artist', entry.get('uploader', 'Unknown Artist')),
+                                    "url": entry.get('webpage_url', album_url),
+                                    "type": "track",
+                                    "track_number": entry.get('track_number', ''),
+                                    "duration": entry.get('duration'),
+                                    "album": data.get('title', '')  # Use album title from main entry
+                                }
+                                tracks.append(track)
+                    except json.JSONDecodeError:
+                        self.log("Error parsing single JSON output")
+            
+            self.log(f"Found {len(tracks)} tracks for album")
             return tracks
-                    
+            
         except Exception as e:
-            self.log(f"Error getting Bandcamp album tracks: {str(e)}")
+            self.log(f"Error getting tracks from Bandcamp album: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []
 
-    def extract_bandcamp_artist_from_url(self, url):
-        """Extracts artist name from Bandcamp URL"""
+    def _search_bandcamp_external(self, artist_name, query, search_type):
+        """Fallback method to search Bandcamp via external API."""
+        # This would be a simplified version of your existing external search
+        # Only used when database search fails
         try:
-            # Pattern like: https://artistname.bandcamp.com/
+            # Create configuration for external search
+            from base_datos.enlaces_artista_album import MusicLinksManager
+            
+            config = {
+                'db_path': self.db_path,
+                'rate_limit': 1.0,
+                'disable_services': ['musicbrainz', 'discogs', 'youtube', 'rateyourmusic']
+            }
+            
+            manager = MusicLinksManager(config)
+            result = None
+            
+            # Perform search based on type
+            if search_type.lower() in ['artist', 'artista']:
+                artist_url = manager._get_bandcamp_artist_url(artist_name or query)
+                if artist_url:
+                    result = {
+                        "source": "bandcamp",
+                        "title": artist_name or query,
+                        "artist": artist_name or query,
+                        "url": artist_url,
+                        "type": "artist"
+                    }
+                    # You could add fetching albums here if needed
+                    
+            elif search_type.lower() in ['album', 'álbum']:
+                album_url = manager._get_bandcamp_album_url(artist_name or "", query)
+                if album_url:
+                    result = {
+                        "source": "bandcamp",
+                        "title": query,
+                        "artist": artist_name or self.extract_bandcamp_artist_from_url(album_url) or "Unknown Artist",
+                        "url": album_url,
+                        "type": "album"
+                    }
+                    # You could add fetching tracks here if needed
+                    
+            return result
+            
+        except Exception as e:
+            self.log(f"Error in external Bandcamp search: {str(e)}")
+            return None
+
+
+  
+
+    def extract_bandcamp_artist_from_url(self, url):
+        """Extracts artist name from a Bandcamp URL."""
+        try:
+            # Pattern for standard artist URLs: https://artistname.bandcamp.com/
             match = re.search(r'https?://([^.]+)\.bandcamp\.com', url)
             if match:
                 artist_slug = match.group(1)
                 # Convert slug to readable name
                 artist_name = artist_slug.replace('-', ' ').title()
                 return artist_name
-                
-            # For pages like https://bandcamp.com/artist/artistname
+            
+            # Pattern for artist pages on bandcamp.com: https://bandcamp.com/artist/artistname
             match = re.search(r'bandcamp\.com/artist/([^/]+)', url)
             if match:
                 artist_slug = match.group(1)
                 artist_name = artist_slug.replace('-', ' ').title()
                 return artist_name
-                
-            return None
-        except Exception:
-            return None
+            
+            # Try to extract from album URL: https://artist.bandcamp.com/album/albumname
+            match = re.search(r'https?://([^.]+)\.bandcamp\.com/album/', url)
+            if match:
+                artist_slug = match.group(1)
+                artist_name = artist_slug.replace('-', ' ').title()
+                return artist_name
+            
+            # If all else fails, try to get artist name from the page
+            try:
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    # Try to find artist name in meta tags
+                    meta_artist = soup.find('meta', property='og:site_name')
+                    if meta_artist and meta_artist.get('content'):
+                        return meta_artist.get('content')
+                    
+                    # Try other common elements where artist name might be
+                    artist_elem = soup.find('span', class_='artist')
+                    if artist_elem:
+                        return artist_elem.text.strip()
+            except Exception as e:
+                self.log(f"Error fetching webpage: {str(e)}")
+            
+            return "Unknown Artist"
+        except Exception as e:
+            self.log(f"Error extracting artist from URL: {str(e)}")
+            return "Unknown Artist"
+
+
 
 
 
 
     def search_spotify(self, query, search_type):
-        """Busca en Spotify usando el módulo existente"""
+        """Searches on Spotify using existing module and database links if available."""
         try:
-            # Importar los módulos necesarios
-            from base_datos.enlaces_canciones_spot_lastfm import MusicLinkUpdater
-            
-            # Usar configuración del padre si está disponible
-            db_path = self.db_path or os.path.join(PROJECT_ROOT, "base_datos", "musica.db")
-            spotify_client_id = self.spotify_client_id or os.environ.get("SPOTIFY_CLIENT_ID")
-            spotify_client_secret = self.spotify_client_secret or os.environ.get("SPOTIFY_CLIENT_SECRET")            
-            
-            # Configurar
-            temp_config = {
-                'db_path': db_path,
-                'checkpoint_path': ":memory:",
-                'services': ['spotify'],
-                'spotify_client_id': spotify_client_id,
-                'spotify_client_secret': spotify_client_secret,
-                'limit': self.max_results
-            }
-            
-            updater = MusicLinkUpdater(**temp_config)
+            # Check if we have database links for this query
+            db_links = getattr(self, 'db_links', {})
             results = []
             
-            # Preparar la consulta según el tipo de búsqueda
+            # Import the necessary modules
+            from base_datos.enlaces_canciones_spot_lastfm import MusicLinkUpdater
+            from base_datos.enlaces_artista_album import MusicLinksManager
+                
+            # Use configuration from parent if available
+            db_path = self.db_path
+            spotify_client_id = self.spotify_client_id
+            spotify_client_secret = self.spotify_client_secret
+            
+            # Prepare search based on search type
             if search_type.lower() in ['artist', 'artista']:
-                # Para este caso usaremos enlaces_artista_album.py
-                from base_datos.enlaces_artista_album import MusicLinksManager
+                # Check if we already have this artist in database with Spotify links
+                artist_found = False
+                for artist_name, artist_data in db_links.get('artists', {}).items():
+                    # Check if artist name matches query
+                    if artist_name.lower() == query.lower() or query.lower() in artist_name.lower():
+                        # Look for spotify URL in links or direct field
+                        spotify_url = None
+                        if 'links' in artist_data and 'spotify' in artist_data['links']:
+                            spotify_url = artist_data['links']['spotify']
+                        elif 'spotify_url' in artist_data:
+                            spotify_url = artist_data['spotify_url']
+                        
+                        if spotify_url:
+                            results.append({
+                                "source": "spotify",
+                                "title": artist_name,
+                                "artist": artist_name,
+                                "url": spotify_url,
+                                "type": "artist",
+                                "from_database": True
+                            })
+                            artist_found = True
+                            self.log(f"Found artist on Spotify from database: {artist_name}")
+                            break
                 
-                config = {
-                    'db_path': self.db_path or os.path.join(project_root, "base_datos", "musica1.sqlite"),
-                    'spotify_client_id': self.spotify_client_id or os.environ.get("SPOTIFY_CLIENT_ID"),
-                    'spotify_client_secret': self.spotify_client_secret or os.environ.get("SPOTIFY_CLIENT_SECRET")
-                }
-                
-                manager = MusicLinksManager(config)
-                artist_url = manager._get_spotify_artist_url(query)
-                
-                if artist_url:
-                    results.append({
-                        "source": "spotify",
-                        "title": query,
-                        "artist": query,
-                        "url": artist_url,
-                        "type": "artist"
-                    })
-                    self.log(f"Encontrado artista en Spotify: {query}")
+                # If not found in database, search via API
+                if not artist_found and spotify_client_id and spotify_client_secret:
+                    # Create MusicLinksManager for artist search
+                    config = {
+                        'db_path': db_path,
+                        'spotify_client_id': spotify_client_id,
+                        'spotify_client_secret': spotify_client_secret
+                    }
+                    
+                    manager = MusicLinksManager(config)
+                    artist_url = manager._get_spotify_artist_url(query)
+                    
+                    if artist_url:
+                        results.append({
+                            "source": "spotify",
+                            "title": query,
+                            "artist": query,
+                            "url": artist_url,
+                            "type": "artist"
+                        })
+                        self.log(f"Found artist on Spotify: {query}")
             
             elif search_type.lower() in ['album', 'álbum']:
-                # Para álbumes también usamos enlaces_artista_album.py
-                from base_datos.enlaces_artista_album import MusicLinksManager
-                
-                config = {
-                    'db_path': self.db_path or os.path.join(project_root, "base_datos", "musica.db"),
-                    'spotify_client_id': self.spotify_client_id or os.environ.get("SPOTIFY_CLIENT_ID"),
-                    'spotify_client_secret': self.spotify_client_secret or os.environ.get("SPOTIFY_CLIENT_SECRET")
-                }
-                
-                manager = MusicLinksManager(config)
-                
-                # Determinar artista y álbum
+                # Determine artist and album
                 parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    artist, album = parts
-                    album_data = manager._get_spotify_album_data(artist, album)
-                else:
-                    album_data = manager._get_spotify_album_data("", query)
+                artist = parts[0] if len(parts) > 1 else ""
+                album = parts[1] if len(parts) > 1 else query
                 
-                if album_data and 'album_url' in album_data:
-                    artist_name = parts[0] if len(parts) > 1 else ""
-                    album_name = parts[1] if len(parts) > 1 else query
+                # Check if we have this album in database
+                album_found = False
+                
+                # Try with artist - album format first
+                if artist:
+                    album_key = f"{artist} - {album}"
+                    if album_key in db_links.get('albums', {}):
+                        album_data = db_links['albums'][album_key]
+                        
+                        # Look for spotify URL in links or direct field
+                        spotify_url = None
+                        spotify_id = None
+                        
+                        if 'links' in album_data and 'spotify' in album_data['links']:
+                            spotify_url = album_data['links']['spotify']
+                        elif 'spotify_url' in album_data:
+                            spotify_url = album_data['spotify_url']
+                        
+                        if 'spotify_id' in album_data:
+                            spotify_id = album_data['spotify_id']
+                        
+                        if spotify_url:
+                            results.append({
+                                "source": "spotify",
+                                "title": album,
+                                "artist": artist,
+                                "url": spotify_url,
+                                "type": "album",
+                                "spotify_id": spotify_id,
+                                "from_database": True
+                            })
+                            album_found = True
+                            self.log(f"Found album on Spotify from database: {album} by {artist}")
+                
+                # If not found with artist-album, check all albums
+                if not album_found:
+                    for album_key, album_data in db_links.get('albums', {}).items():
+                        # Check if album title matches
+                        if album_data['title'].lower() == album.lower():
+                            # Look for spotify URL in links or direct field
+                            spotify_url = None
+                            spotify_id = None
+                            
+                            if 'links' in album_data and 'spotify' in album_data['links']:
+                                spotify_url = album_data['links']['spotify']
+                            elif 'spotify_url' in album_data:
+                                spotify_url = album_data['spotify_url']
+                            
+                            if 'spotify_id' in album_data:
+                                spotify_id = album_data['spotify_id']
+                            
+                            if spotify_url:
+                                results.append({
+                                    "source": "spotify",
+                                    "title": album_data['title'],
+                                    "artist": album_data['artist'],
+                                    "url": spotify_url,
+                                    "type": "album",
+                                    "spotify_id": spotify_id,
+                                    "from_database": True
+                                })
+                                album_found = True
+                                self.log(f"Found album on Spotify from database: {album_data['title']} by {album_data['artist']}")
+                                break
+                
+                # If not found in database, search via API
+                if not album_found and spotify_client_id and spotify_client_secret:
+                    # Create MusicLinksManager for album search
+                    config = {
+                        'db_path': db_path,
+                        'spotify_client_id': spotify_client_id,
+                        'spotify_client_secret': spotify_client_secret
+                    }
                     
-                    results.append({
-                        "source": "spotify",
-                        "title": album_name,
-                        "artist": artist_name,
-                        "url": album_data['album_url'],
-                        "type": "album",
-                        "spotify_id": album_data.get('album_id', '')
-                    })
-                    self.log(f"Encontrado álbum en Spotify: {album_name}")
+                    manager = MusicLinksManager(config)
+                    
+                    # Search for album
+                    if artist:
+                        album_data = manager._get_spotify_album_data(artist, album)
+                    else:
+                        album_data = manager._get_spotify_album_data("", album)
+                    
+                    if album_data and 'album_url' in album_data:
+                        artist_name = artist or ""
+                        album_name = album
+                        
+                        results.append({
+                            "source": "spotify",
+                            "title": album_name,
+                            "artist": artist_name,
+                            "url": album_data['album_url'],
+                            "type": "album",
+                            "spotify_id": album_data.get('album_id', '')
+                        })
+                        self.log(f"Found album on Spotify: {album_name}")
             
             else:
-                # Búsqueda de canciones o general
-                # Preparar el objeto de canción para la búsqueda
-                song = {'title': query, 'artist': '', 'album': ''}
-                
-                # Si el formato es "artista - título"
+                # For tracks or general search
+                # First check if query is in "artist - title" format
                 parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    song['artist'] = parts[0].strip()
-                    song['title'] = parts[1].strip()
+                artist = parts[0] if len(parts) > 1 else ""
+                title = parts[1] if len(parts) > 1 else query
                 
-                # Buscar la canción
-                spotify_url, spotify_id = updater.search_spotify(song, 
-                                                             spotify_client_id,
-                                                             spotify_client_secret)
+                # Check if we have this track in database
+                track_found = False
                 
-                if spotify_url:
-                    results.append({
-                        "source": "spotify",
-                        "title": song['title'],
-                        "artist": song['artist'],
-                        "url": spotify_url,
-                        "type": "track",
-                        "spotify_id": spotify_id
-                    })
-                    self.log(f"Encontrada canción en Spotify: {song['title']}")
+                # Try with artist - title format first
+                if artist:
+                    track_key = f"{artist} - {title}"
+                    if track_key in db_links.get('tracks', {}):
+                        track_data = db_links['tracks'][track_key]
+                        
+                        # Look for spotify URL in links or direct field
+                        spotify_url = None
+                        spotify_id = None
+                        
+                        if 'links' in track_data and 'spotify' in track_data['links']:
+                            spotify_url = track_data['links']['spotify']
+                        elif 'spotify_url' in track_data:
+                            spotify_url = track_data['spotify_url']
+                        
+                        if 'spotify_id' in track_data:
+                            spotify_id = track_data['spotify_id']
+                        
+                        if spotify_url:
+                            results.append({
+                                "source": "spotify",
+                                "title": title,
+                                "artist": artist,
+                                "album": track_data.get('album', ''),
+                                "url": spotify_url,
+                                "type": "track",
+                                "spotify_id": spotify_id,
+                                "from_database": True
+                            })
+                            track_found = True
+                            self.log(f"Found track on Spotify from database: {title} by {artist}")
+                
+                # If not found with artist-title, check all tracks
+                if not track_found:
+                    for track_key, track_data in db_links.get('tracks', {}).items():
+                        # Check if track title matches
+                        if track_data['title'].lower() == title.lower():
+                            # Look for spotify URL in links or direct field
+                            spotify_url = None
+                            spotify_id = None
+                            
+                            if 'links' in track_data and 'spotify' in track_data['links']:
+                                spotify_url = track_data['links']['spotify']
+                            elif 'spotify_url' in track_data:
+                                spotify_url = track_data['spotify_url']
+                            
+                            if 'spotify_id' in track_data:
+                                spotify_id = track_data['spotify_id']
+                            
+                            if spotify_url:
+                                results.append({
+                                    "source": "spotify",
+                                    "title": track_data['title'],
+                                    "artist": track_data['artist'],
+                                    "album": track_data.get('album', ''),
+                                    "url": spotify_url,
+                                    "type": "track",
+                                    "spotify_id": spotify_id,
+                                    "from_database": True
+                                })
+                                track_found = True
+                                self.log(f"Found track on Spotify from database: {track_data['title']} by {track_data['artist']}")
+                                break
+                
+                # If not found in database, search via API
+                if not track_found and spotify_client_id and spotify_client_secret:
+                    # Set up configuration
+                    temp_config = {
+                        'db_path': db_path,
+                        'checkpoint_path': ":memory:",
+                        'services': ['spotify'],
+                        'spotify_client_id': spotify_client_id,
+                        'spotify_client_secret': spotify_client_secret,
+                        'limit': self.max_results
+                    }
+                    
+                    updater = MusicLinkUpdater(**temp_config)
+                    
+                    # Prepare the song object
+                    song = {'title': title, 'artist': artist, 'album': ''}
+                    
+                    # Search for the track
+                    spotify_url, spotify_id = updater.search_spotify(song, 
+                                                                spotify_client_id,
+                                                                spotify_client_secret)
+                    
+                    if spotify_url:
+                        results.append({
+                            "source": "spotify",
+                            "title": song['title'],
+                            "artist": song['artist'],
+                            "url": spotify_url,
+                            "type": "track",
+                            "spotify_id": spotify_id
+                        })
+                        self.log(f"Found track on Spotify: {song['title']}")
             
             return results
             
         except Exception as e:
-            self.log(f"Error al buscar en Spotify: {str(e)}")
+            self.log(f"Error searching on Spotify: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []
 
     def search_lastfm(self, query, search_type):
-        """Busca en Last.fm usando el módulo existente"""
+        """Searches on Last.fm using existing module and database links if available."""
         try:
-            # Importar el módulo existente
+            # Check if we have database links for this query
+            db_links = getattr(self, 'db_links', {})
+            results = []
+            
+            # Import the existing module
             from base_datos.enlaces_artista_album import MusicLinksManager
             
-            # Usar configuración del padre si está disponible
-            db_path = self.db_path or os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite")
-            lastfm_api_key = self.lastfm_api_key or os.environ.get("LASTFM_API_KEY")
-            lastfm_user = self.lastfm_user or  os.environ.get("LASTFM_USER", "")
+            # Get API credentials
+            lastfm_api_key = self.lastfm_api_key
+            lastfm_user = self.lastfm_user
             
+            if not lastfm_api_key:
+                self.log("Last.fm API key not available")
+                return []
+            
+            # Set up configuration
             config = {
-                'db_path': db_path,
+                'db_path': self.db_path,
                 'lastfm_api_key': lastfm_api_key,
                 'lastfm_user': lastfm_user,
                 'disable_services': ['musicbrainz', 'discogs', 'youtube', 'spotify', 'bandcamp', 'rateyourmusic']
             }
             
-            manager = MusicLinksManager(config)
-            results = []
-            
-            # Buscar según el tipo
+            # Check based on search type
             if search_type.lower() in ['artist', 'artista']:
-                # Obtener información del artista
-                lastfm_result = manager._get_lastfm_artist_bio(query)
-                if lastfm_result and lastfm_result[0]:  # [0] es la URL
-                    artist_url = lastfm_result[0]
-                    results.append({
-                        "source": "lastfm",
-                        "title": query,
-                        "artist": query,
-                        "url": artist_url,
-                        "type": "artist"
-                    })
-                    self.log(f"Encontrado artista en Last.fm: {query}")
+                # Check if we have this artist in database
+                artist_found = False
+                
+                for artist_name, artist_data in db_links.get('artists', {}).items():
+                    # Check if artist name matches
+                    if artist_name.lower() == query.lower() or query.lower() in artist_name.lower():
+                        # Look for lastfm URL in links or direct field
+                        lastfm_url = None
+                        
+                        if 'links' in artist_data and 'lastfm' in artist_data['links']:
+                            lastfm_url = artist_data['links']['lastfm']
+                        elif 'lastfm_url' in artist_data:
+                            lastfm_url = artist_data['lastfm_url']
+                        
+                        if lastfm_url:
+                            results.append({
+                                "source": "lastfm",
+                                "title": artist_name,
+                                "artist": artist_name,
+                                "url": lastfm_url,
+                                "type": "artist",
+                                "from_database": True
+                            })
+                            
+                            # Add bio and tags if available
+                            if 'bio' in artist_data:
+                                results[-1]['bio'] = artist_data['bio']
+                            
+                            if 'tags' in artist_data:
+                                results[-1]['tags'] = artist_data['tags']
+                            
+                            artist_found = True
+                            self.log(f"Found artist on Last.fm from database: {artist_name}")
+                            break
+                
+                # If not found in database, search via API
+                if not artist_found:
+                    manager = MusicLinksManager(config)
+                    
+                    # Get artist information
+                    lastfm_result = manager._get_lastfm_artist_bio(query)
+                    
+                    if lastfm_result and lastfm_result[0]:  # [0] is the URL
+                        artist_url = lastfm_result[0]
+                        
+                        result = {
+                            "source": "lastfm",
+                            "title": query,
+                            "artist": query,
+                            "url": artist_url,
+                            "type": "artist"
+                        }
+                        
+                        # Add bio, similar artists, and tags if available
+                        if len(lastfm_result) > 1 and lastfm_result[1]:
+                            result['bio'] = lastfm_result[1]
+                        
+                        if len(lastfm_result) > 2 and lastfm_result[2]:
+                            result['similar_artists'] = lastfm_result[2]
+                        
+                        if len(lastfm_result) > 3 and lastfm_result[3]:
+                            result['tags'] = lastfm_result[3]
+                        
+                        results.append(result)
+                        self.log(f"Found artist on Last.fm: {query}")
             
             elif search_type.lower() in ['album', 'álbum']:
-                # Para álbumes
+                # Check if format is "artist - album"
                 parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    artist, album = parts
+                artist = parts[0] if len(parts) > 1 else ""
+                album = parts[1] if len(parts) > 1 else query
+                
+                # Check if we have this album in database
+                album_found = False
+                
+                # Try with artist - album format first
+                if artist:
+                    album_key = f"{artist} - {album}"
+                    
+                    if album_key in db_links.get('albums', {}):
+                        album_data = db_links['albums'][album_key]
+                        
+                        # Look for lastfm URL in links or direct field
+                        lastfm_url = None
+                        
+                        if 'links' in album_data and 'lastfm' in album_data['links']:
+                            lastfm_url = album_data['links']['lastfm']
+                        elif 'lastfm_url' in album_data:
+                            lastfm_url = album_data['lastfm_url']
+                        
+                        if lastfm_url:
+                            results.append({
+                                "source": "lastfm",
+                                "title": album,
+                                "artist": artist,
+                                "url": lastfm_url,
+                                "type": "album",
+                                "from_database": True
+                            })
+                            album_found = True
+                            self.log(f"Found album on Last.fm from database: {album} by {artist}")
+                
+                # If not found with artist-album, check all albums
+                if not album_found:
+                    for album_key, album_data in db_links.get('albums', {}).items():
+                        # Check if album title matches
+                        if album_data['title'].lower() == album.lower():
+                            # Look for lastfm URL in links or direct field
+                            lastfm_url = None
+                            
+                            if 'links' in album_data and 'lastfm' in album_data['links']:
+                                lastfm_url = album_data['links']['lastfm']
+                            elif 'lastfm_url' in album_data:
+                                lastfm_url = album_data['lastfm_url']
+                            
+                            if lastfm_url:
+                                results.append({
+                                    "source": "lastfm",
+                                    "title": album_data['title'],
+                                    "artist": album_data['artist'],
+                                    "url": lastfm_url,
+                                    "type": "album",
+                                    "from_database": True
+                                })
+                                album_found = True
+                                self.log(f"Found album on Last.fm from database: {album_data['title']} by {album_data['artist']}")
+                                break
+                
+                # If not found in database, search via API
+                if not album_found and artist:
+                    manager = MusicLinksManager(config)
+                    
+                    # Get album URL
                     album_url = manager._get_lastfm_album_url(artist, album)
+                    
                     if album_url:
                         results.append({
                             "source": "lastfm",
@@ -680,43 +1481,103 @@ class SearchWorker(QRunnable):
                             "url": album_url,
                             "type": "album"
                         })
-                        self.log(f"Encontrado álbum en Last.fm: {album} por {artist}")
+                        self.log(f"Found album on Last.fm: {album} by {artist}")
             
             else:
-                # Búsqueda general
-                # Probar como artista
-                lastfm_result = manager._get_lastfm_artist_bio(query)
-                if lastfm_result and lastfm_result[0]:
-                    artist_url = lastfm_result[0]
-                    results.append({
-                        "source": "lastfm",
-                        "title": query,
-                        "artist": query,
-                        "url": artist_url,
-                        "type": "artist"
-                    })
-                    self.log(f"Encontrado artista en Last.fm: {query}")
-                
-                # Si el formato es "artista - título/álbum"
+                # General search or track search
+                # First check if query is in "artist - title" format
                 parts = query.split(" - ", 1)
-                if len(parts) > 1:
-                    artist, title = parts
-                    # Probar como álbum
-                    album_url = manager._get_lastfm_album_url(artist, title)
-                    if album_url:
+                artist = parts[0] if len(parts) > 1 else ""
+                title = parts[1] if len(parts) > 1 else query
+                
+                # Try artist first (if query is just an artist name)
+                if not ' - ' in query:
+                    # Check all artists
+                    for artist_name, artist_data in db_links.get('artists', {}).items():
+                        # Check if artist name matches
+                        if artist_name.lower() == query.lower() or query.lower() in artist_name.lower():
+                            # Look for lastfm URL in links or direct field
+                            lastfm_url = None
+                            
+                            if 'links' in artist_data and 'lastfm' in artist_data['links']:
+                                lastfm_url = artist_data['links']['lastfm']
+                            elif 'lastfm_url' in artist_data:
+                                lastfm_url = artist_data['lastfm_url']
+                            
+                            if lastfm_url:
+                                results.append({
+                                    "source": "lastfm",
+                                    "title": artist_name,
+                                    "artist": artist_name,
+                                    "url": lastfm_url,
+                                    "type": "artist",
+                                    "from_database": True
+                                })
+                                self.log(f"Found artist on Last.fm from database: {artist_name}")
+                                break
+                
+                # If there's an artist and title, try as album
+                if artist and title:
+                    album_key = f"{artist} - {title}"
+                    
+                    # Check if this might be an album
+                    if album_key in db_links.get('albums', {}):
+                        album_data = db_links['albums'][album_key]
+                        
+                        # Look for lastfm URL in links or direct field
+                        lastfm_url = None
+                        
+                        if 'links' in album_data and 'lastfm' in album_data['links']:
+                            lastfm_url = album_data['links']['lastfm']
+                        elif 'lastfm_url' in album_data:
+                            lastfm_url = album_data['lastfm_url']
+                        
+                        if lastfm_url:
+                            results.append({
+                                "source": "lastfm",
+                                "title": title,
+                                "artist": artist,
+                                "url": lastfm_url,
+                                "type": "album",
+                                "from_database": True
+                            })
+                            self.log(f"Found album on Last.fm from database: {title} by {artist}")
+                
+                # If no results yet, try lastfm API
+                if not results:
+                    manager = MusicLinksManager(config)
+                    
+                    # Try as artist
+                    lastfm_result = manager._get_lastfm_artist_bio(query)
+                    if lastfm_result and lastfm_result[0]:
+                        artist_url = lastfm_result[0]
+                        
                         results.append({
                             "source": "lastfm",
-                            "title": title,
-                            "artist": artist,
-                            "url": album_url,
-                            "type": "album"
+                            "title": query,
+                            "artist": query,
+                            "url": artist_url,
+                            "type": "artist"
                         })
-                        self.log(f"Encontrado álbum en Last.fm: {title} por {artist}")
+                        self.log(f"Found artist on Last.fm: {query}")
+                    
+                    # If format is "artist - title", try as album
+                    if artist and title:
+                        album_url = manager._get_lastfm_album_url(artist, title)
+                        if album_url:
+                            results.append({
+                                "source": "lastfm",
+                                "title": title,
+                                "artist": artist,
+                                "url": album_url,
+                                "type": "album"
+                            })
+                            self.log(f"Found album on Last.fm: {title} by {artist}")
             
             return results
             
         except Exception as e:
-            self.log(f"Error al buscar en Last.fm: {str(e)}")
+            self.log(f"Error searching on Last.fm: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []
@@ -935,97 +1796,24 @@ class UrlPlayer(BaseModule):
     """Módulo para reproducir música desde URLs (YouTube, SoundCloud, Bandcamp)."""
     
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
-        # Extract specific configurations from kwargs
-        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', None)
+        # Extract specific configurations from kwargs with improved defaults
+        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', os.path.join(os.path.expanduser("~"), ".config", "mpv", "_mpv_socket"))
         
-        # Extract database configuration with more robust handling
+        # Extract database configuration with better handling
         self.db_path = kwargs.get('db_path')
-        if not self.db_path:
-            # Check if db_path can be derived from config_path
-            config_path = kwargs.get('config_path')
-            if config_path and os.path.exists(config_path):
-                try:
-                    # Try to import the function directly
-                    try:
-                        from main import load_config_file
-                        config_data = load_config_file(config_path)
-                    except ImportError:
-                        # Fallback method
-                        extension = os.path.splitext(config_path)[1].lower()
-                        if extension in ['.yml', '.yaml']:
-                            import yaml
-                            with open(config_path, 'r', encoding='utf-8') as f:
-                                config_data = yaml.safe_load(f)
-                        else:  # Assume JSON
-                            with open(config_path, 'r', encoding='utf-8') as f:
-                                config_data = json.load(f)
-                    
-                    # Check if db_path is in the loaded config
-                    if 'db_path' in config_data:
-                        db_path = config_data['db_path']
-                        # Handle relative paths
-                        if not os.path.isabs(db_path):
-                            if os.path.isabs(config_path):
-                                config_dir = os.path.dirname(config_path)
-                                db_path = os.path.join(config_dir, db_path)
-                            else:
-                                db_path = os.path.join(PROJECT_ROOT, db_path)
-                        
-                        # Verify the database exists
-                        if os.path.exists(db_path):
-                            self.db_path = db_path
-                            print(f"[UrlPlayer] Loaded db_path from config: {self.db_path}")
-                        else:
-                            print(f"[UrlPlayer] Warning: Database path from config ({db_path}) does not exist")
-                except Exception as e:
-                    print(f"[UrlPlayer] Error loading db_path from config file: {str(e)}")
-            
-            # Fallback to default if still not found
-            if not self.db_path:
-                # Try common locations for the database
-                common_db_paths = [
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
-                    os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
-                ]
-                
-                for path in common_db_paths:
-                    if os.path.exists(path):
-                        self.db_path = path
-                        print(f"[UrlPlayer] Found database at: {self.db_path}")
-                        break
-                        
-                if not self.db_path:
-                    # Ultimate fallback
-                    self.db_path = os.path.join(PROJECT_ROOT, "base_datos", "musica.sqlite")
-                    print(f"[UrlPlayer] Using default db_path: {self.db_path}")
+        if self.db_path and not os.path.isabs(self.db_path):
+            self.db_path = os.path.join(PROJECT_ROOT, self.db_path)
         
-        # Extract API credentials from kwargs with fallbacks
+        # Extract API credentials from kwargs with explicit handling
         self.spotify_client_id = kwargs.get('spotify_client_id')
         self.spotify_client_secret = kwargs.get('spotify_client_secret')
         self.lastfm_api_key = kwargs.get('lastfm_api_key')
         self.lastfm_user = kwargs.get('lastfm_user')
         
-        # Check if any of these are None and try to get them from environment
-        if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
-            print(f"[UrlPlayer] Some API credentials not found in kwargs, checking environment variables")
-            self._load_api_credentials_from_env()
+        # Log the received configuration
+        print(f"[UrlPlayer] Received configs - DB: {self.db_path}, Spotify credentials: {bool(self.spotify_client_id)}, Last.fm credentials: {bool(self.lastfm_api_key)}")
         
-        # Ensure these are available in environment variables for imported modules
-        self._set_api_credentials_as_env()
-
-        # Si no se proporcionó un directorio, creamos uno temporal
-        if not self.mpv_temp_dir:
-            try:
-                import tempfile
-                self.mpv_temp_dir = tempfile.mkdtemp(prefix="mpv_socket_")
-                print(f"[UrlPlayer] Directorio temporal creado: {self.mpv_temp_dir}")
-            except Exception as e:
-                print(f"[UrlPlayer] Error al crear directorio temporal: {str(e)}")
-                self.mpv_temp_dir = "/tmp"  # Fallback a /tmp si falla la creación
-        
-        # Inicializar otras variables de instancia
+        # Initialize other instance variables
         self.player_process = None
         self.current_playlist = []
         self.current_track_index = -1
@@ -1035,62 +1823,71 @@ class UrlPlayer(BaseModule):
         self.mpv_socket = None
         self.mpv_wid = None
         
-        # Comprobar si los servicios están habilitados según las credenciales
-        self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
-        self.lastfm_enabled = bool(self.lastfm_api_key)
-        
-        # Definir los servicios por defecto
+        # Define default services
         default_services = {
             'youtube': True,
             'soundcloud': True,
             'bandcamp': True,
-            'spotify': self.spotify_enabled,
-            'lastfm': self.lastfm_enabled
+            'spotify': False,  # Will be updated after loading credentials
+            'lastfm': False    # Will be updated after loading credentials
         }
         
-        # Obtener la configuración de servicios incluidos de los kwargs
+        # Get service configuration from kwargs
         included_services = kwargs.pop('included_services', {})
         
-        # Inicializar el diccionario de servicios
+        # Initialize services dictionary
         self.included_services = {}
         
-        # Asegurar que todos los servicios predeterminados estén incluidos con valores booleanos
+        # Ensure all default services are included with boolean values
         for service, default_state in default_services.items():
             if service not in included_services:
                 self.included_services[service] = default_state
             else:
-                # Convertir representación de cadena a booleano si es necesario
+                # Convert string representation to boolean if needed
                 value = included_services[service]
                 if isinstance(value, str):
                     self.included_services[service] = value.lower() == 'true'
                 else:
                     self.included_services[service] = bool(value)
         
-        # Si un servicio no tiene credenciales, asegurarse de que esté desactivado
-        if not self.spotify_enabled:
-            self.included_services['spotify'] = False
-        if not self.lastfm_enabled:
-            self.included_services['lastfm'] = False
-        
-        # Inicializar variables para widgets
+        # Initialize attributes for widgets
         self.lineEdit = None
         self.searchButton = None
         self.treeWidget = None
         self.playButton = None
         self.rewButton = None
-        self.ffButton = None  # Corregido de ffButton_3
+        self.ffButton = None
         self.tabWidget = None
         self.listWidget = None
         self.delButton = None
         self.addButton = None
         self.textEdit = None
-        self.info_wiki_textedit = None  # Añadido para evitar errores posteriores
+        self.info_wiki_textedit = None
         
-        # Obtener configuración de paginación
+        # Get pagination configuration
         self.num_servicios_spinBox = kwargs.pop('pagination_value', 10)
         
-        # Ahora llamamos al constructor padre que llamará a init_ui()
+        # Now call the parent constructor which will call init_ui()
         super().__init__(parent, theme, **kwargs)
+        
+        # After parent initialization is complete, now we can safely load API credentials
+        # and set environment variables
+        if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
+            self._load_api_credentials_from_env()
+        
+        # Ensure these are available in environment variables for imported modules
+        self._set_api_credentials_as_env()
+        
+        # Update service enabled flags based on credentials
+        self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
+        self.lastfm_enabled = bool(self.lastfm_api_key)
+        
+        # Update included_services based on credentials
+        self.included_services['spotify'] = self.spotify_enabled
+        self.included_services['lastfm'] = self.lastfm_enabled
+        
+        # Log the final configuration
+        print(f"[UrlPlayer] Final config - DB: {self.db_path}, Spotify enabled: {self.spotify_enabled}, Last.fm enabled: {self.lastfm_enabled}")
         
     def log(self, message):
         """Registra un mensaje en el TextEdit y en la consola."""
@@ -1480,12 +2277,11 @@ class UrlPlayer(BaseModule):
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
 
     def load_settings(self):
-        """Loads module configuration from the general configuration file with more robust path handling."""
+        """Loads module configuration from general configuration file with better nested config handling."""
         try:
             # Try multiple config file locations
             config_paths = [
                 os.path.join(PROJECT_ROOT, "config", "config.yml"),
-                #os.path.join(PROJECT_ROOT, "config", "config.yaml"),
                 os.path.join(PROJECT_ROOT, ".content", "config", "config.yml"),
                 os.path.join(os.path.expanduser("~"), ".config", "music_app", "config.yml")
             ]
@@ -1512,101 +2308,134 @@ class UrlPlayer(BaseModule):
                         
                         config_loaded = True
                         self.log(f"Successfully loaded configuration from {config_path}")
+                        
+                        # Extract global credentials that might be at the root level
+                        self._extract_global_credentials(config_data)
+                        
+                        # Extract credentials from module-specific configuration
+                        self._extract_module_config(config_data)
+                        
                         break
                     except Exception as e:
                         self.log(f"Error loading configuration from {config_path}: {str(e)}")
                         continue
             
-            if not config_loaded:
-                self.log("No configuration file found, using default values")
-                config_data = {}
+            # Final fallback - try to find database
+            if not self.db_path:
+                self._find_database_fallback()
+                
+            # Update environment variables with all extracted credentials
+            self._set_api_credentials_as_env()
+                
+        except Exception as e:
+            self.log(f"Error loading configuration: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
             
-            # First try to load db_path from config_data root if available
-            if 'db_path' in config_data and not self.db_path:
-                db_path = config_data['db_path']
+            # Initialize fallback values
+            self._initialize_fallback_values()
+
+    def _extract_global_credentials(self, config_data):
+        """Extract credentials from global configuration section."""
+        # Check for global_theme_config section
+        if 'global_theme_config' in config_data:
+            global_config = config_data['global_theme_config']
+            
+            # Extract database path
+            if 'db_path' in global_config and not self.db_path:
+                db_path = global_config['db_path']
                 # Handle both relative and absolute paths
                 if not os.path.isabs(db_path):
                     db_path = os.path.join(PROJECT_ROOT, db_path)
                 
-                # Verify the path exists and is readable
                 if os.path.exists(db_path):
                     self.db_path = db_path
-                    self.log(f"Loaded db_path from config root: {self.db_path}")
-                else:
-                    self.log(f"Warning: Database path from config ({db_path}) does not exist")
-                    
-                    # Try common alternative locations for the database
-                    alt_db_paths = [
-                        os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
-                        os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                        os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
-                        os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
-                    ]
-                    
-                    for alt_path in alt_db_paths:
-                        if os.path.exists(alt_path):
-                            self.db_path = alt_path
-                            self.log(f"Using alternative database path: {self.db_path}")
-                            break
+                    self.log(f"Loaded db_path from global config: {self.db_path}")
             
-            # Find module configuration within the loaded config
-            # Search for this module's specific configuration
-            # First in active modules
-            module_config = None
-            for module in config_data.get('modules', []):
-                if module.get('name') in ['Url Playlists', 'URL Playlist', 'URL Player']:
+            # Extract Spotify credentials
+            if 'spotify_client_id' in global_config and not self.spotify_client_id:
+                self.spotify_client_id = global_config['spotify_client_id']
+                self.log("Loaded spotify_client_id from global config")
+                
+            if 'spotify_client_secret' in global_config and not self.spotify_client_secret:
+                self.spotify_client_secret = global_config['spotify_client_secret']
+                self.log("Loaded spotify_client_secret from global config")
+                
+            # Extract Last.fm credentials
+            if 'lastfm_api_key' in global_config and not self.lastfm_api_key:
+                self.lastfm_api_key = global_config['lastfm_api_key']
+                self.log("Loaded lastfm_api_key from global config")
+                
+            if 'lastfm_user' in global_config and not self.lastfm_user:
+                self.lastfm_user = global_config['lastfm_user']
+                self.log("Loaded lastfm_user from global config")
+        
+        # Also check for credentials at the root level
+        if 'db_path' in config_data and not self.db_path:
+            db_path = config_data['db_path']
+            if not os.path.isabs(db_path):
+                db_path = os.path.join(PROJECT_ROOT, db_path)
+            
+            if os.path.exists(db_path):
+                self.db_path = db_path
+                self.log(f"Loaded db_path from config root: {self.db_path}")
+
+    def _extract_module_config(self, config_data):
+        """Extract configuration specific to this module."""
+        module_config = None
+        module_names = ['Url Playlists', 'URL Playlist', 'URL Player']
+        
+        # Search in active modules
+        for module in config_data.get('modules', []):
+            if module.get('name') in module_names:
+                module_config = module.get('args', {})
+                self.log(f"Found module configuration for '{module.get('name')}'")
+                break
+        
+        # If not found, check disabled modules
+        if module_config is None:
+            for module in config_data.get('modulos_desactivados', []):
+                if module.get('name') in module_names:
                     module_config = module.get('args', {})
-                    self.log(f"Found module configuration for '{module.get('name')}'")
+                    self.log(f"Found module configuration in disabled modules for '{module.get('name')}'")
                     break
+        
+        if module_config:
+            # Load db_path from module config if not already set
+            if 'db_path' in module_config and not self.db_path:
+                db_path = module_config.get('db_path')
+                # Handle both relative and absolute paths
+                if not os.path.isabs(db_path):
+                    db_path = os.path.join(PROJECT_ROOT, db_path)
+                
+                if os.path.exists(db_path):
+                    self.db_path = db_path
+                    self.log(f"Loaded db_path from module config: {self.db_path}")
             
-            # If not found in active modules, check disabled modules
-            if module_config is None:
-                for module in config_data.get('modulos_desactivados', []):
-                    if module.get('name') in ['Url Playlists', 'URL Playlist', 'URL Player']:
-                        module_config = module.get('args', {})
-                        self.log(f"Found module configuration in disabled modules for '{module.get('name')}'")
-                        break
+            # Load API credentials if not already set
+            if 'spotify_client_id' in module_config and not self.spotify_client_id:
+                self.spotify_client_id = module_config.get('spotify_client_id')
+                self.log("Loaded spotify_client_id from module config")
+                
+            if 'spotify_client_secret' in module_config and not self.spotify_client_secret:
+                self.spotify_client_secret = module_config.get('spotify_client_secret')
+                self.log("Loaded spotify_client_secret from module config")
+                
+            if 'lastfm_api_key' in module_config and not self.lastfm_api_key:
+                self.lastfm_api_key = module_config.get('lastfm_api_key')
+                self.log("Loaded lastfm_api_key from module config")
+                
+            if 'lastfm_user' in module_config and not self.lastfm_user:
+                self.lastfm_user = module_config.get('lastfm_user')
+                self.log("Loaded lastfm_user from module config")
             
-            if module_config:
-                # Load db_path from module config if not already set
-                if 'db_path' in module_config and not self.db_path:
-                    db_path = module_config.get('db_path')
-                    # Handle both relative and absolute paths
-                    if not os.path.isabs(db_path):
-                        db_path = os.path.join(PROJECT_ROOT, db_path)
-                    
-                    # Verify the path exists
-                    if os.path.exists(db_path):
-                        self.db_path = db_path
-                        self.log(f"Loaded db_path from module config: {self.db_path}")
-                    else:
-                        self.log(f"Warning: Database path from module config ({db_path}) does not exist")
-                
-                # Load API credentials if not already set
-                if 'spotify_client_id' in module_config and not self.spotify_client_id:
-                    self.spotify_client_id = module_config.get('spotify_client_id')
-                    self.log("Loaded spotify_client_id from module config")
-                    
-                if 'spotify_client_secret' in module_config and not self.spotify_client_secret:
-                    self.spotify_client_secret = module_config.get('spotify_client_secret')
-                    self.log("Loaded spotify_client_secret from module config")
-                    
-                if 'lastfm_api_key' in module_config and not self.lastfm_api_key:
-                    self.lastfm_api_key = module_config.get('lastfm_api_key')
-                    self.log("Loaded lastfm_api_key from module config")
-                    
-                if 'lastfm_user' in module_config and not self.lastfm_user:
-                    self.lastfm_user = module_config.get('lastfm_user')
-                    self.log("Loaded lastfm_user from module config")
-                
-                # Update environment variables with new credentials
-                self._set_api_credentials_as_env()
-                
-                # Load pagination_value
+            # Load pagination_value
+            if 'pagination_value' in module_config:
                 self.pagination_value = module_config.get('pagination_value', 10)
                 self.num_servicios_spinBox = self.pagination_value  # Sync both values
-                
-                # Load included_services
+            
+            # Load included_services
+            if 'included_services' in module_config:
                 included_services = module_config.get('included_services', {})
                 
                 # Ensure included_services values are booleans, not strings
@@ -1616,74 +2445,25 @@ class UrlPlayer(BaseModule):
                         self.included_services[key] = value.lower() == 'true'
                     else:
                         self.included_services[key] = bool(value)
-                
-                self.log(f"Loaded configuration from config file")
-            else:
-                self.log("No specific module configuration found, using default values")
-                # Initialize with default values
-                self.pagination_value = 10
-                self.num_servicios_spinBox = 10
-                self.included_services = {
-                    'youtube': True,
-                    'soundcloud': True,
-                    'bandcamp': True,
-                    'spotify': self.spotify_enabled,
-                    'lastfm': self.lastfm_enabled,
-                }
+
+    def _find_database_fallback(self):
+        """Try to find database file as a fallback."""
+        if not self.db_path:
+            # Try common locations for the database
+            common_db_paths = [
+                os.path.join(PROJECT_ROOT, "base_datos", "musica.sqlite"),
+                os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
+                os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
+                os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
+                os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
+            ]
             
-            # If we still don't have a db_path, try to find the database file
-            if not self.db_path:
-                # Try common locations for the database
-                common_db_paths = [
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
-                    os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
-                ]
-                
-                for path in common_db_paths:
-                    if os.path.exists(path):
-                        self.db_path = path
-                        self.log(f"Found database at common location: {self.db_path}")
-                        break
-                
-                if not self.db_path:
-                    self.log("Warning: Could not find a database file. Search functionality may be limited.")
-            
-            # If still no API credentials, try loading from environment/other sources
-            if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
-                self._load_api_credentials_from_env()
-                
-        except Exception as e:
-            self.log(f"Error loading configuration: {str(e)}")
-            import traceback
-            self.log(traceback.format_exc())
-            
-            # Initialize with default values in case of error
-            self.pagination_value = 10
-            self.num_servicios_spinBox = 10
-            self.included_services = {
-                'youtube': True,
-                'soundcloud': True,
-                'bandcamp': True,
-                'spotify': self.spotify_enabled,
-                'lastfm': self.lastfm_enabled,
-            }
-            
-            # Try to find the database as a last resort
-            if not self.db_path:
-                common_db_paths = [
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                    os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
-                    os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
-                ]
-                
-                for path in common_db_paths:
-                    if os.path.exists(path):
-                        self.db_path = path
-                        self.log(f"Found database at common location: {self.db_path}")
-                        break
+            for path in common_db_paths:
+                if os.path.exists(path):
+                    self.db_path = path
+                    self.log(f"Found database at common location: {self.db_path}")
+                    break
+
 
     def save_settings(self):
         """Guarda la configuración del módulo en el archivo de configuración general."""
@@ -1856,25 +2636,25 @@ class UrlPlayer(BaseModule):
                         if 'spotify' in api_config:
                             if not self.spotify_client_id:
                                 self.spotify_client_id = api_config['spotify'].get('client_id')
-                                self.log(f"Loaded Spotify client ID from {config_path}")
+                                print(f"[UrlPlayer] Loaded Spotify client ID from {config_path}")
                             if not self.spotify_client_secret:
                                 self.spotify_client_secret = api_config['spotify'].get('client_secret')
-                                self.log(f"Loaded Spotify client secret from {config_path}")
+                                print(f"[UrlPlayer] Loaded Spotify client secret from {config_path}")
                         
                         if 'lastfm' in api_config:
                             if not self.lastfm_api_key:
                                 self.lastfm_api_key = api_config['lastfm'].get('api_key')
-                                self.log(f"Loaded Last.fm API key from {config_path}")
+                                print(f"[UrlPlayer] Loaded Last.fm API key from {config_path}")
                             if not self.lastfm_user:
                                 self.lastfm_user = api_config['lastfm'].get('user')
-                                self.log(f"Loaded Last.fm user from {config_path}")
+                                print(f"[UrlPlayer] Loaded Last.fm user from {config_path}")
                         
                     # If we found and loaded the config, break the loop
                     if all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
-                        self.log(f"Successfully loaded all API credentials from {config_path}")
+                        print(f"[UrlPlayer] Successfully loaded all API credentials from {config_path}")
                         break
                 except Exception as e:
-                    self.log(f"Error loading API credentials from {config_path}: {str(e)}")
+                    print(f"[UrlPlayer] Error loading API credentials from {config_path}: {str(e)}")
 
         # Try dotenv as a last resort
         try:
@@ -1892,7 +2672,7 @@ class UrlPlayer(BaseModule):
             if not self.lastfm_user:
                 self.lastfm_user = os.environ.get("LASTFM_USER")
                 
-            self.log("Attempted to load credentials from .env files")
+            print("[UrlPlayer] Attempted to load credentials from .env files")
         except ImportError:
             # dotenv is not installed, that's fine
             pass
@@ -1901,19 +2681,19 @@ class UrlPlayer(BaseModule):
         """Set API credentials as environment variables for imported modules with better validation"""
         if self.spotify_client_id and isinstance(self.spotify_client_id, str) and self.spotify_client_id.strip():
             os.environ["SPOTIFY_CLIENT_ID"] = self.spotify_client_id.strip()
-            self.log(f"Set SPOTIFY_CLIENT_ID in environment")
+            print(f"[UrlPlayer] Set SPOTIFY_CLIENT_ID in environment")
         
         if self.spotify_client_secret and isinstance(self.spotify_client_secret, str) and self.spotify_client_secret.strip():
             os.environ["SPOTIFY_CLIENT_SECRET"] = self.spotify_client_secret.strip()
-            self.log(f"Set SPOTIFY_CLIENT_SECRET in environment")
+            print(f"[UrlPlayer] Set SPOTIFY_CLIENT_SECRET in environment")
         
         if self.lastfm_api_key and isinstance(self.lastfm_api_key, str) and self.lastfm_api_key.strip():
             os.environ["LASTFM_API_KEY"] = self.lastfm_api_key.strip()
-            self.log(f"Set LASTFM_API_KEY in environment")
+            print(f"[UrlPlayer] Set LASTFM_API_KEY in environment")
         
         if self.lastfm_user and isinstance(self.lastfm_user, str) and self.lastfm_user.strip():
             os.environ["LASTFM_USER"] = self.lastfm_user.strip()
-            self.log(f"Set LASTFM_USER in environment")
+            print(f"[UrlPlayer] Set LASTFM_USER in environment")
             
         # Update enabled flags based on credentials
         self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
@@ -1922,11 +2702,11 @@ class UrlPlayer(BaseModule):
         # Update included_services based on what's available
         if not self.spotify_enabled and 'spotify' in self.included_services:
             self.included_services['spotify'] = False
-            self.log("Disabled Spotify service due to missing credentials")
+            print("[UrlPlayer] Disabled Spotify service due to missing credentials")
             
         if not self.lastfm_enabled and 'lastfm' in self.included_services:
             self.included_services['lastfm'] = False
-            self.log("Disabled Last.fm service due to missing credentials")
+            print("[UrlPlayer] Disabled Last.fm service due to missing credentials")
 
 
     def setup_services_combo(self):
@@ -2422,27 +3202,49 @@ class UrlPlayer(BaseModule):
   
   
     def perform_search(self):
-        """Realiza una búsqueda basada en el servicio seleccionado y la consulta."""
+        """Performs a search based on the selected service and query."""
         query = self.lineEdit.text().strip()
         if not query:
             return
         
-        self.log(f"Buscando: {query}")
+        self.log(f"Searching: {query}")
         
-        # Limpiar resultados previos
+        # Clear previous results
         self.treeWidget.clear()
         self.textEdit.clear()
-        QApplication.processEvents()  # Actualiza la UI
+        QApplication.processEvents()  # Update UI
         
-        # Obtener el servicio seleccionado
+        # Get the selected service
         service = self.servicios.currentText()
         
-        # Obtener el tipo de búsqueda seleccionado (artista, álbum, canción, todo)
+        # Get the search type
         search_type = "all"
         if hasattr(self, 'tipo_combo') and self.tipo_combo:
             search_type = self.tipo_combo.currentText().lower()
         
-        # Determinar qué servicios incluir
+        # Show progress
+        self.textEdit.append(f"Buscando '{query}' en {service} (tipo: {search_type}, máx {self.pagination_value} resultados por servicio)...")
+        QApplication.processEvents()  # Update UI
+        
+        # Create a structure to track added items
+        self.added_items = {
+            'artists': set(),      # Set of artist names
+            'albums': set(),       # Set of "artist - album" keys
+            'tracks': set()        # Set of "artist - title" keys
+        }
+        
+        # First check database for existing links and structure
+        self.log("Consultando la base de datos local primero...")
+        db_links = self.search_database_links(query, search_type)
+        
+        # Process database results immediately
+        if db_links:
+            db_results = self._process_database_results(db_links)
+            if db_results:
+                self.display_search_results(db_results)
+                self.log(f"Encontrados {len(db_results)} resultados en la base de datos local")
+        
+        # Determine which services to include
         active_services = []
         if service == "Todos":
             # Check each service in the included_services dictionary
@@ -2459,22 +3261,21 @@ class UrlPlayer(BaseModule):
             active_services = [service_id]
         
         if not active_services:
-            self.log("No hay servicios seleccionados para la búsqueda. Por favor, actívalos en Configuración Avanzada.")
+            self.log("No hay servicios seleccionados para la búsqueda. Actívalos en Ajustes Avanzados.")
             return
         
-        # Mostrar progreso
-        self.textEdit.append(f"Buscando '{query}' en {service} (tipo: {search_type}, máx. {self.pagination_value} resultados por servicio)...")
-        QApplication.processEvents()  # Actualiza la UI
-        
-        # Desactivar controles durante la búsqueda
+        # Disable controls during search
         self.searchButton.setEnabled(False)
         self.lineEdit.setEnabled(False)
-        QApplication.processEvents()  # Actualiza la UI
+        QApplication.processEvents()  # Update UI
         
-        # Crear y configurar el worker con los atributos necesarios
+        # Create and configure the worker with the necessary attributes
         worker = SearchWorker(active_services, query, max_results=self.pagination_value)
         worker.parent = self  # Set parent to access search_in_database
         worker.search_type = search_type  # Pass search type to worker
+        
+        # Pass database links to worker
+        worker.db_links = db_links
         
         # Pass necessary attributes from parent
         worker.db_path = self.db_path
@@ -2483,23 +3284,322 @@ class UrlPlayer(BaseModule):
         worker.lastfm_api_key = self.lastfm_api_key
         worker.lastfm_user = self.lastfm_user
         
-        # Conectar señales
-        worker.signals.results.connect(self.display_search_results)
-        worker.signals.error.connect(lambda err: self.log(f"Search error: {err}"))
+        # Pass the tracking structure to avoid duplicates
+        worker.added_items = self.added_items
+        
+        # Connect signals
+        worker.signals.results.connect(self.display_external_results)  # Changed to a new method
+        worker.signals.error.connect(lambda err: self.log(f"Error en búsqueda: {err}"))
         worker.signals.finished.connect(self.search_finished)
         
-        # Iniciar el worker en el thread pool
+        # Start the worker in the thread pool
         QThreadPool.globalInstance().start(worker)
         
-    def search_finished(self):
+
+    def display_external_results(self, results):
+        """Display external search results, keeping database results already shown."""
+        if not results:
+            self.log("No se encontraron resultados externos.")
+            return
+        
+        # Filter out results from database to avoid duplicates
+        external_results = [r for r in results if not r.get('from_database', False)]
+        
+        if external_results:
+            self.display_search_results(external_results)
+            self.log(f"Se añadieron {len(external_results)} resultados de servicios externos")
+
+
+    def search_finished(self, result=None, basic_data=None):
         """Función llamada cuando termina la búsqueda."""
         self.log(f"Búsqueda completada.")
         # Reactivar controles
         self.searchButton.setEnabled(True)
         self.lineEdit.setEnabled(True)
+        
+        # Make sure tree items are visible
+        for i in range(self.treeWidget.topLevelItemCount()):
+            self.treeWidget.topLevelItem(i).setExpanded(True)
+        
+        # Select the first item if available
+        if self.treeWidget.topLevelItemCount() > 0:
+            first_item = self.treeWidget.topLevelItem(0)
+            self.treeWidget.setCurrentItem(first_item)
+            if first_item.childCount() > 0:
+                child = first_item.child(0)
+                self.display_wiki_info(child.data(0, Qt.ItemDataRole.UserRole))
+        
         QApplication.processEvents()  # Actualiza la UI
 
  
+    def search_database_links(self, query, search_type="all"):
+        """
+        Search for existing links and structure in the database before making API calls.
+        Returns a hierarchical structure of artists/albums/tracks with their links.
+        """
+        try:
+            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            
+            if not self.db_path or not os.path.exists(self.db_path):
+                self.log(f"Database not found at: {self.db_path}")
+                return {}
+            
+            self.log(f"Searching for existing links in database at: {self.db_path}")
+            db = MusicDatabaseQuery(self.db_path)
+            
+            # Dictionary to store all found links by type
+            results = {
+                'artists': {},  # Keyed by artist name
+                'albums': {},   # Keyed by "artist - album"
+                'tracks': {}    # Keyed by "artist - title"
+            }
+            
+            # Parse query to determine what to search for
+            artist_name = None
+            album_name = None
+            track_name = None
+            
+            # If the format is "artist - title", split it
+            parts = query.split(" - ", 1)
+            if len(parts) > 1:
+                artist_name = parts[0].strip()
+                if search_type.lower() in ['album', 'álbum']:
+                    album_name = parts[1].strip()
+                else:
+                    track_name = parts[1].strip()
+            else:
+                # Single term could be artist, album, or track
+                artist_name = query.strip()
+                if search_type.lower() in ['album', 'álbum']:
+                    album_name = query.strip()
+                elif search_type.lower() in ['track', 'song', 'canción']:
+                    track_name = query.strip()
+            
+            # 1. Search for artist links
+            if search_type.lower() in ['artist', 'artista', 'all']:
+                self.log(f"Checking database for artist: {artist_name}")
+                
+                # Get basic artist info
+                artist_info = db.get_artist_info(artist_name)
+                
+                if artist_info:
+                    # Initialize artist entry
+                    artist_entry = {
+                        'name': artist_name,
+                        'links': {},
+                        'type': 'artist',
+                        'albums': [],
+                        'from_database': True
+                    }
+                    
+                    # Get artist links
+                    artist_links = db.get_artist_links(artist_name)
+                    if artist_links:
+                        artist_entry['links'] = artist_links
+                        
+                        # Add specific fields for direct access
+                        for service, url in artist_links.items():
+                            if url:
+                                artist_entry[f'{service.lower()}_url'] = url
+                    
+                    # Get artist bio
+                    if 'bio' in artist_info:
+                        artist_entry['bio'] = artist_info['bio']
+                    
+                    # Get additional artist metadata
+                    for field in ['origin', 'formed_year', 'tags', 'similar_artists']:
+                        if field in artist_info and artist_info[field]:
+                            artist_entry[field] = artist_info[field]
+                    
+                    # Get artist albums
+                    artist_albums = db.get_artist_albums(artist_name)
+                    if artist_albums:
+                        for album_tuple in artist_albums:
+                            album_name = album_tuple[0]
+                            year = album_tuple[1] if len(album_tuple) > 1 else None
+                            
+                            # Get album info
+                            album_info = db.get_album_info(album_name, artist_name)
+                            
+                            # Create album entry
+                            album_entry = {
+                                'title': album_name,
+                                'artist': artist_name,
+                                'year': year,
+                                'type': 'album',
+                                'tracks': [],
+                                'from_database': True
+                            }
+                            
+                            # Get album links
+                            album_links = db.get_album_links(artist_name, album_name)
+                            if album_links:
+                                album_entry['links'] = album_links
+                                
+                                # Add specific fields for direct access
+                                for service, url in album_links.items():
+                                    if url:
+                                        album_entry[f'{service.lower()}_url'] = url
+                            
+                            # Add tracks if available in album_info
+                            if album_info and 'songs' in album_info:
+                                for song in album_info['songs']:
+                                    track_title = song.get('title', '')
+                                    
+                                    # Create track entry
+                                    track_entry = {
+                                        'title': track_title,
+                                        'artist': artist_name,
+                                        'album': album_name,
+                                        'type': 'track',
+                                        'track_number': song.get('track_number'),
+                                        'duration': song.get('duration'),
+                                        'from_database': True
+                                    }
+                                    
+                                    # Get track links
+                                    track_links = db.get_track_links(album_name, track_title)
+                                    if track_links:
+                                        track_entry['links'] = track_links
+                                        
+                                        # Add specific fields for direct access
+                                        for service, url in track_links.items():
+                                            if url:
+                                                track_entry[f'{service.lower()}_url'] = url
+                                    
+                                    # Add to album tracks
+                                    album_entry['tracks'].append(track_entry)
+                                    
+                                    # Store in tracks dictionary
+                                    track_key = f"{artist_name} - {track_title}"
+                                    results['tracks'][track_key] = track_entry
+                            
+                            # Add to artist albums
+                            artist_entry['albums'].append(album_entry)
+                            
+                            # Store in albums dictionary
+                            album_key = f"{artist_name} - {album_name}"
+                            results['albums'][album_key] = album_entry
+                    
+                    # Store in artists dictionary
+                    results['artists'][artist_name] = artist_entry
+            
+            # 2. Search for album links (if not already found via artist)
+            if search_type.lower() in ['album', 'álbum', 'all'] and album_name:
+                # If we already have the album (from artist search), skip
+                album_key = f"{artist_name} - {album_name}"
+                if album_key not in results['albums']:
+                    self.log(f"Checking database for album: {album_name} by {artist_name}")
+                    
+                    # Get album info
+                    album_info = db.get_album_info(album_name, artist_name)
+                    
+                    if album_info:
+                        # Create album entry
+                        album_entry = {
+                            'title': album_name,
+                            'artist': artist_name,
+                            'year': album_info.get('year'),
+                            'type': 'album',
+                            'tracks': [],
+                            'from_database': True
+                        }
+                        
+                        # Get album links
+                        album_links = db.get_album_links(artist_name, album_name)
+                        if album_links:
+                            album_entry['links'] = album_links
+                            
+                            # Add specific fields for direct access
+                            for service, url in album_links.items():
+                                if url:
+                                    album_entry[f'{service.lower()}_url'] = url
+                        
+                        # Add tracks if available
+                        if 'songs' in album_info:
+                            for song in album_info['songs']:
+                                track_title = song.get('title', '')
+                                
+                                # Create track entry
+                                track_entry = {
+                                    'title': track_title,
+                                    'artist': artist_name,
+                                    'album': album_name,
+                                    'type': 'track',
+                                    'track_number': song.get('track_number'),
+                                    'duration': song.get('duration'),
+                                    'from_database': True
+                                }
+                                
+                                # Get track links
+                                track_links = db.get_track_links(album_name, track_title)
+                                if track_links:
+                                    track_entry['links'] = track_links
+                                    
+                                    # Add specific fields for direct access
+                                    for service, url in track_links.items():
+                                        if url:
+                                            track_entry[f'{service.lower()}_url'] = url
+                                
+                                # Add to album tracks
+                                album_entry['tracks'].append(track_entry)
+                                
+                                # Store in tracks dictionary
+                                track_key = f"{artist_name} - {track_title}"
+                                results['tracks'][track_key] = track_entry
+                        
+                        # Store in albums dictionary
+                        results['albums'][album_key] = album_entry
+            
+            # 3. Search for track links (if not already found)
+            if search_type.lower() in ['track', 'song', 'canción', 'all'] and track_name:
+                track_key = f"{artist_name} - {track_name}"
+                if track_key not in results['tracks']:
+                    self.log(f"Checking database for track: {track_name} by {artist_name}")
+                    
+                    # Get song info
+                    song_info = db.get_song_info(track_name, artist_name)
+                    
+                    if song_info:
+                        # Get album name from song info
+                        album_name = song_info.get('album', '')
+                        
+                        # Create track entry
+                        track_entry = {
+                            'title': track_name,
+                            'artist': artist_name,
+                            'album': album_name,
+                            'type': 'track',
+                            'track_number': song_info.get('track_number'),
+                            'duration': song_info.get('duration'),
+                            'lyrics': song_info.get('lyrics'),
+                            'from_database': True
+                        }
+                        
+                        # Get track links
+                        if album_name:
+                            track_links = db.get_track_links(album_name, track_name)
+                            if track_links:
+                                track_entry['links'] = track_links
+                                
+                                # Add specific fields for direct access
+                                for service, url in track_links.items():
+                                    if url:
+                                        track_entry[f'{service.lower()}_url'] = url
+                        
+                        # Store in tracks dictionary
+                        results['tracks'][track_key] = track_entry
+            
+            db.close()
+            return results
+            
+        except Exception as e:
+            self.log(f"Error searching database links: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return {}
+
+
     def handle_direct_url(self, url):
         """Maneja la entrada de una URL directa."""
         self.log(f"Procesando URL directa: {url}")
@@ -2573,49 +3673,513 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al procesar la información JSON: {str(e)}")
     
     def display_search_results(self, results):
-        """
-        Muestra los resultados de la búsqueda en el TreeWidget de forma jerárquica,
-        priorizando resultados de la base de datos y luego añadiendo resultados de servicios.
-        """
-        # Limpiar resultados previos
-        self.treeWidget.clear()
-        QApplication.processEvents()  # Actualiza la UI
-        
+        """Shows search results in the TreeWidget with proper nesting."""
         if not results:
             self.textEdit.append("No se encontraron resultados.")
-            QApplication.processEvents()  # Actualiza la UI
+            QApplication.processEvents()
             return
         
-        # Separar resultados de base de datos y servicios
-        db_results = [r for r in results if r.get('source', '').lower() == 'database']
-        service_results = [r for r in results if r.get('source', '').lower() != 'database']
+        # Count items before adding new ones
+        initial_count = self.treeWidget.topLevelItemCount()
         
-        # Primero procesar resultados de base de datos
+        # Separate results by source and type
+        db_results = [r for r in results if r.get('from_database', False) or r.get('source', '').lower() == 'local']
+        external_results = [r for r in results if not r.get('from_database', False) and r.get('source', '').lower() != 'local']
+        
+        # First, add database results under "Música Local" node
         if db_results:
-            self._add_database_results(db_results)
+            local_music_item = QTreeWidgetItem(self.treeWidget)
+            local_music_item.setText(0, "Música Local")
+            local_music_item.setText(2, "Fuente")
+            
+            # Format as bold
+            font = local_music_item.font(0)
+            font.setBold(True)
+            local_music_item.setFont(0, font)
+            
+            # Group by artist first
+            by_artist = {}
+            standalone_albums = []
+            standalone_tracks = []
+            
+            # First pass - sort items by type
+            for result in db_results:
+                item_type = result.get('type', '').lower()
+                
+                if item_type == 'artist':
+                    artist_name = result.get('title', '')
+                    by_artist[artist_name] = result
+                elif item_type == 'album':
+                    artist_name = result.get('artist', '')
+                    if artist_name:
+                        if artist_name not in by_artist:
+                            by_artist[artist_name] = {
+                                'title': artist_name,
+                                'artist': artist_name,
+                                'type': 'artist',
+                                'albums': []
+                            }
+                        if 'albums' not in by_artist[artist_name]:
+                            by_artist[artist_name]['albums'] = []
+                        by_artist[artist_name]['albums'].append(result)
+                    else:
+                        standalone_albums.append(result)
+                elif item_type in ['track', 'song']:
+                    standalone_tracks.append(result)
+            
+            # Add artists with their albums and tracks
+            for artist_name, artist_data in by_artist.items():
+                artist_item = QTreeWidgetItem(local_music_item)
+                artist_item.setText(0, artist_name)
+                artist_item.setText(1, artist_name)
+                artist_item.setText(2, "Artista")
+                
+                # Format as bold
+                font = artist_item.font(0)
+                font.setBold(True)
+                artist_item.setFont(0, font)
+                
+                # Store complete data
+                artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
+                
+                # Add albums
+                if 'albums' in artist_data and artist_data['albums']:
+                    for album in artist_data['albums']:
+                        album_item = QTreeWidgetItem(artist_item)
+                        album_item.setText(0, album.get('title', ''))
+                        album_item.setText(1, artist_name)
+                        album_item.setText(2, "Álbum")
+                        if album.get('year'):
+                            album_item.setText(3, str(album.get('year')))
+                        
+                        # Store complete data
+                        album_item.setData(0, Qt.ItemDataRole.UserRole, album)
+                        
+                        # Add tracks
+                        if 'tracks' in album and album['tracks']:
+                            for track in album['tracks']:
+                                self._add_result_to_tree(track, album_item)
+                
+                # Expand artist item
+                artist_item.setExpanded(True)
+            
+            # Add standalone albums
+            for album in standalone_albums:
+                album_item = QTreeWidgetItem(local_music_item)
+                album_item.setText(0, album.get('title', ''))
+                album_item.setText(1, album.get('artist', ''))
+                album_item.setText(2, "Álbum")
+                if album.get('year'):
+                    album_item.setText(3, str(album.get('year')))
+                
+                # Store complete data
+                album_item.setData(0, Qt.ItemDataRole.UserRole, album)
+                
+                # Add tracks
+                if 'tracks' in album and album['tracks']:
+                    for track in album['tracks']:
+                        self._add_result_to_tree(track, album_item)
+                
+                # Expand album item
+                album_item.setExpanded(True)
+            
+            # Add standalone tracks
+            for track in standalone_tracks:
+                self._add_result_to_tree(track, local_music_item)
+            
+            # Expand local music item
+            local_music_item.setExpanded(True)
         
-        # Luego añadir resultados de servicios externos
-        if service_results:
-            self._add_service_results(service_results)
+        # Add external results by service
+        if external_results:
+            by_service = {}
+            
+            # Group by service
+            for result in external_results:
+                service = result.get('source', 'unknown').capitalize()
+                if service not in by_service:
+                    by_service[service] = []
+                by_service[service].append(result)
+            
+            # Add each service
+            for service, service_results in by_service.items():
+                service_item = QTreeWidgetItem(self.treeWidget)
+                service_item.setText(0, service)
+                service_item.setText(2, "Servicio")
+                
+                # Format as bold
+                font = service_item.font(0)
+                font.setBold(True)
+                service_item.setFont(0, font)
+                
+                # Group by artist
+                by_artist = {}
+                standalone_items = []
+                
+                for result in service_results:
+                    artist_name = result.get('artist', '')
+                    item_type = result.get('type', '').lower()
+                    
+                    if item_type == 'artist':
+                        by_artist[artist_name] = result
+                    elif item_type == 'album' and artist_name:
+                        if artist_name not in by_artist:
+                            by_artist[artist_name] = {
+                                'title': artist_name,
+                                'artist': artist_name,
+                                'type': 'artist',
+                                'albums': []
+                            }
+                        if 'albums' not in by_artist[artist_name]:
+                            by_artist[artist_name]['albums'] = []
+                        by_artist[artist_name]['albums'].append(result)
+                    else:
+                        standalone_items.append(result)
+                
+                # Add artists with their content
+                for artist_name, artist_data in by_artist.items():
+                    artist_item = QTreeWidgetItem(service_item)
+                    artist_item.setText(0, artist_name)
+                    artist_item.setText(1, artist_name)
+                    artist_item.setText(2, "Artista")
+                    
+                    # Format as bold
+                    font = artist_item.font(0)
+                    font.setBold(True)
+                    artist_item.setFont(0, font)
+                    
+                    # Store complete data
+                    artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
+                    
+                    # Add albums
+                    if 'albums' in artist_data and artist_data['albums']:
+                        for album in artist_data['albums']:
+                            album_item = self._add_result_to_tree(album, artist_item)
+                    
+                    # Expand artist item
+                    artist_item.setExpanded(True)
+                
+                # Add standalone items
+                for item in standalone_items:
+                    self._add_result_to_tree(item, service_item)
+                
+                # Expand service item
+                service_item.setExpanded(True)
         
-        # Expandir todos los nodos por defecto
-        for i in range(self.treeWidget.topLevelItemCount()):
-            self.treeWidget.topLevelItem(i).setExpanded(True)
+        # Update count of results
+        new_count = self.treeWidget.topLevelItemCount() - initial_count
+        self.textEdit.append(f"Se encontraron {len(results)} resultados")
+        QApplication.processEvents()
         
-        # Mostrar información del primer resultado si existe
-        if results:
-            self.display_wiki_info(results[0])
+        # Select the first item if exists
+        if self.treeWidget.topLevelItemCount() > 0:
+            first_root = self.treeWidget.topLevelItem(0)
+            
+            if first_root.childCount() > 0:
+                first_child = first_root.child(0)
+                self.treeWidget.setCurrentItem(first_child)
+                
+                # Try to display info for this item
+                item_data = first_child.data(0, Qt.ItemDataRole.UserRole)
+                if item_data:
+                    self.display_wiki_info(item_data)
+
+    def _add_result_to_tree(self, result, parent_item):
+        """Add a single result to the tree with proper nesting for album tracks."""
+        item_type = result.get('type', '').lower()
+        title = result.get('title', 'Unknown')
+        artist = result.get('artist', '')
+        from_db = result.get('from_database', False)
         
-        # Actualizar conteo de resultados
-        self.textEdit.append(f"Encontrados {len(results)} resultados.")
-        QApplication.processEvents()  # Actualización final de UI
+        # Create item for result
+        result_item = QTreeWidgetItem(parent_item)
+        result_item.setText(0, title)
+        result_item.setText(1, artist)
+        
+        # Set type with database indicator
+        db_indicator = " (DB)" if from_db else ""
+        
+        if item_type == 'artist':
+            result_item.setText(2, f"Artista{db_indicator}")
+        elif item_type == 'album':
+            result_item.setText(2, f"Álbum{db_indicator}")
+            if result.get('year'):
+                result_item.setText(3, str(result.get('year')))
+        elif item_type in ['track', 'song']:
+            result_item.setText(2, f"Canción{db_indicator}")
+            if result.get('track_number'):
+                result_item.setText(3, str(result.get('track_number')))
+            if result.get('duration'):
+                duration_str = self.format_duration(result.get('duration'))
+                result_item.setText(4, duration_str)
+        else:
+            result_item.setText(2, f"{item_type.capitalize()}{db_indicator}")
+        
+        # Store complete data
+        result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+        
+        # IMPROVED: Add tracks for albums correctly
+        if item_type == 'album' and 'tracks' in result and result['tracks']:
+            # Sort tracks by track number if available
+            sorted_tracks = sorted(
+                result['tracks'], 
+                key=lambda t: (int(t.get('track_number', 9999)) 
+                    if t.get('track_number') and str(t.get('track_number')).isdigit() 
+                    else 9999)
+            )
+            
+            for track in sorted_tracks:
+                # Create track item
+                track_item = QTreeWidgetItem(result_item)
+                track_item.setText(0, track.get('title', 'Unknown Track'))
+                track_item.setText(1, track.get('artist', artist))
+                track_item.setText(2, f"Canción{db_indicator}")
+                
+                # Add track number
+                if track.get('track_number'):
+                    try:
+                        # Handle track numbers like "1/10"
+                        track_num = str(track.get('track_number')).split('/')[0]
+                        track_item.setText(3, track_num)
+                    except:
+                        track_item.setText(3, str(track.get('track_number')))
+                
+                # Add duration
+                if track.get('duration'):
+                    duration_str = self.format_duration(track.get('duration'))
+                    track_item.setText(4, duration_str)
+                
+                # Ensure track has complete information
+                track_data = track.copy()  # Make a copy to avoid modifying the original
+                
+                # Add missing information
+                if 'album' not in track_data:
+                    track_data['album'] = result.get('title')
+                if 'artist' not in track_data and artist:
+                    track_data['artist'] = artist
+                if 'from_database' not in track_data:
+                    track_data['from_database'] = from_db
+                
+                # Store the enhanced track data
+                track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+        
+        return result_item
+
+    def _process_database_results(self, db_links):
+        """Process database links into results with proper hierarchy."""
+        results = []
+        
+        # Process artists with their albums and tracks
+        for artist_name, artist_data in db_links.get('artists', {}).items():
+            artist_result = {
+                "source": "local",
+                "title": artist_name,
+                "artist": artist_name,
+                "type": "artist",
+                "from_database": True
+            }
+            
+            # Add links if available
+            if 'links' in artist_data:
+                artist_result['links'] = artist_data['links']
+            
+            # Process albums
+            if 'albums' in artist_data and artist_data['albums']:
+                artist_albums = []
+                
+                for album in artist_data['albums']:
+                    album_title = album.get('title', album.get('name', ''))
+                    
+                    album_result = {
+                        "source": "local",
+                        "title": album_title,
+                        "artist": artist_name,
+                        "type": "album",
+                        "year": album.get('year'),
+                        "from_database": True
+                    }
+                    
+                    # Add links if available
+                    if 'links' in album:
+                        album_result['links'] = album['links']
+                    
+                    # Process tracks
+                    if 'tracks' in album and album['tracks']:
+                        album_tracks = []
+                        
+                        for track in album['tracks']:
+                            track_result = {
+                                "source": "local",
+                                "title": track.get('title', ''),
+                                "artist": artist_name,
+                                "album": album_title,
+                                "type": "track",
+                                "track_number": track.get('track_number'),
+                                "duration": track.get('duration'),
+                                "from_database": True
+                            }
+                            
+                            # Add links if available
+                            if 'links' in track:
+                                track_result['links'] = track['links']
+                            
+                            album_tracks.append(track_result)
+                        
+                        # Add tracks to album result
+                        album_result['tracks'] = album_tracks
+                    
+                    artist_albums.append(album_result)
+                
+                # Add albums to artist result
+                artist_result['albums'] = artist_albums
+            
+            results.append(artist_result)
+        
+        # Process standalone albums (not associated with artists)
+        for album_key, album_data in db_links.get('albums', {}).items():
+            # Skip albums already processed through artists
+            artist_name = album_data.get('artist', '')
+            album_title = album_data.get('title', '')
+            
+            # Check if this album was already added through an artist
+            already_added = False
+            for result in results:
+                if result.get('type') == 'artist' and result.get('title') == artist_name:
+                    for album in result.get('albums', []):
+                        if album.get('title') == album_title:
+                            already_added = True
+                            break
+                    if already_added:
+                        break
+            
+            if already_added:
+                continue
+            
+            album_result = {
+                "source": "local",
+                "title": album_title,
+                "artist": artist_name,
+                "type": "album",
+                "year": album_data.get('year'),
+                "from_database": True
+            }
+            
+            # Add links if available
+            if 'links' in album_data:
+                album_result['links'] = album_data['links']
+            
+            # Process tracks
+            if 'tracks' in album_data and album_data['tracks']:
+                album_tracks = []
+                
+                for track in album_data['tracks']:
+                    track_result = {
+                        "source": "local",
+                        "title": track.get('title', ''),
+                        "artist": artist_name,
+                        "album": album_title,
+                        "type": "track",
+                        "track_number": track.get('track_number'),
+                        "duration": track.get('duration'),
+                        "from_database": True
+                    }
+                    
+                    # Add links if available
+                    if 'links' in track:
+                        track_result['links'] = track['links']
+                    
+                    album_tracks.append(track_result)
+                
+                # Add tracks to album result
+                album_result['tracks'] = album_tracks
+            
+            results.append(album_result)
+        
+        # Process standalone tracks
+        for track_key, track_data in db_links.get('tracks', {}).items():
+            # Skip tracks already processed through albums
+            album_title = track_data.get('album', '')
+            artist_name = track_data.get('artist', '')
+            track_title = track_data.get('title', '')
+            
+            # Check if this track was already added through an album
+            already_added = False
+            for result in results:
+                if result.get('type') == 'artist' and result.get('title') == artist_name:
+                    for album in result.get('albums', []):
+                        if album.get('title') == album_title:
+                            for track in album.get('tracks', []):
+                                if track.get('title') == track_title:
+                                    already_added = True
+                                    break
+                            if already_added:
+                                break
+                    if already_added:
+                        break
+                elif result.get('type') == 'album' and result.get('title') == album_title:
+                    for track in result.get('tracks', []):
+                        if track.get('title') == track_title:
+                            already_added = True
+                            break
+                    if already_added:
+                        break
+            
+            if already_added:
+                continue
+            
+            track_result = {
+                "source": "local",
+                "title": track_title,
+                "artist": artist_name,
+                "album": album_title,
+                "type": "track",
+                "track_number": track_data.get('track_number'),
+                "duration": track_data.get('duration'),
+                "from_database": True
+            }
+            
+            # Add links if available
+            if 'links' in track_data:
+                track_result['links'] = track_data['links']
+            
+            results.append(track_result)
+        
+        return results
+
+
+    def _is_duplicate_result(self, result):
+        """
+        Checks if a result is a duplicate of something already in the tree.
+        
+        Args:
+            result: The result dictionary to check
+            
+        Returns:
+            bool: True if it's a duplicate, False otherwise
+        """
+        item_type = result.get('type', '').lower()
+        artist_name = result.get('artist', '').lower()
+        title = result.get('title', '').lower()
+        
+        if item_type == 'artist':
+            return artist_name in self.added_items['artists']
+        elif item_type == 'album':
+            album_key = f"{artist_name} - {title}"
+            return album_key in self.added_items['albums']
+        elif item_type in ['track', 'song']:
+            track_key = f"{artist_name} - {title}"
+            return track_key in self.added_items['tracks']
+        
+        return False
+
 
     def _add_database_results(self, db_results):
         """
-        Añade resultados de la base de datos al árbol de manera jerárquica.
+        Adds database results to the tree in a hierarchical manner.
+        Ensures proper tracking of added items.
         """
         for result in db_results:
-            if result.get('type', '').lower() == 'artist' and result.get('albums'):
+            if result.get('type', '').lower() == 'artist' and result.get('artist'):
                 artist_name = result.get('artist', 'Unknown Artist')
                 
                 # Crear item raíz para el artista
@@ -2633,6 +4197,9 @@ class UrlPlayer(BaseModule):
                 # Almacenar datos del artista
                 artist_item.setData(0, Qt.ItemDataRole.UserRole, result)
                 
+                # Track this artist
+                self.added_items['artists'].add(artist_name.lower())
+                
                 # Añadir álbumes
                 for album in result.get('albums', []):
                     album_name = album.get('title', 'Unknown Album')
@@ -2643,174 +4210,107 @@ class UrlPlayer(BaseModule):
                     album_item.setText(1, artist_name)
                     album_item.setText(2, "Álbum")
                     
+                    # Add year information if available
+                    if album.get('year'):
+                        album_item.setText(3, str(album.get('year')))
+                    
                     # Almacenar datos del álbum
                     album_item.setData(0, Qt.ItemDataRole.UserRole, album)
                     
+                    # Track this album
+                    album_key = f"{artist_name.lower()} - {album_name.lower()}"
+                    self.added_items['albums'].add(album_key)
+                    
                     # Añadir canciones del álbum
                     for track in album.get('tracks', []):
+                        track_name = track.get('title', 'Canción sin título')
+                        
                         track_item = QTreeWidgetItem(album_item)
-                        track_item.setText(0, track.get('title', 'Canción sin título'))
+                        track_item.setText(0, track_name)
                         track_item.setText(1, artist_name)
                         track_item.setText(2, "Canción")
                         
-                        # Almacenar datos de la canción
-                        track_item.setData(0, Qt.ItemDataRole.UserRole, track)
-
-    def _add_service_results(self, service_results):
-        """
-        Adds external service results to the tree in a hierarchical structure.
-        Enhanced to better handle Bandcamp albums and tracks, and flatten YouTube results.
-        """
-        # Group results by service and artist
-        services_map = {}
-        
-        # Initialize special structure for YouTube
-        services_map['Youtube'] = {'results': []}
-        
-        for result in service_results:
-            service = result.get('source', 'Otros').capitalize()
-            
-            # Special handling for YouTube results
-            if service.lower() == 'youtube':
-                # Add directly to the flat YouTube results list
-                services_map['Youtube']['results'].append(result)
-                continue
-            
-            # For other services, use hierarchical structure
-            artist_name = result.get('artist', 'Unknown Artist')
-            
-            if service not in services_map:
-                services_map[service] = {}
-            
-            if artist_name not in services_map[service]:
-                services_map[service][artist_name] = {
-                    'info': None,
-                    'albums': {},
-                    'tracks': []
-                }
-            
-            result_type = result.get('type', '').lower()
-            
-            if result_type == 'artist':
-                services_map[service][artist_name]['info'] = result
-                
-                # If this artist result has albums, add them to the albums dict
-                if 'albums' in result and isinstance(result['albums'], list):
-                    for album in result['albums']:
-                        album_name = album.get('title', 'Unknown Album')
-                        services_map[service][artist_name]['albums'][album_name] = album
-            elif result_type == 'album':
-                album_name = result.get('title', 'Unknown Album')
-                services_map[service][artist_name]['albums'][album_name] = result
-                
-                # If this album has tracks, don't add to the generic tracks list
-                if 'tracks' in result and isinstance(result['tracks'], list):
-                    pass
-            elif result_type in ['track', 'song']:
-                # Add to general tracks list only if not part of an album
-                album_name = result.get('album', '')
-                if not album_name:
-                    services_map[service][artist_name]['tracks'].append(result)
-        
-        # Add service results to the tree
-        for service, data in services_map.items():
-            # Skip empty services
-            if service == 'Youtube' and not data['results']:
-                continue
-            elif service != 'Youtube' and not data:
-                continue
-                
-            service_item = QTreeWidgetItem(self.treeWidget)
-            service_item.setText(0, service)
-            service_item.setText(2, "Servicio Externo")
-            
-            # Format service in italic
-            font = service_item.font(0)
-            font.setItalic(True)
-            service_item.setFont(0, font)
-            
-            # Special case for YouTube - flat list
-            if service == 'Youtube':
-                # Add results directly under service item
-                for result in data['results']:
-                    track_item = QTreeWidgetItem(service_item)
-                    track_item.setText(0, result.get('title', 'Unknown Track'))
-                    track_item.setText(1, result.get('artist', 'Unknown Artist'))
-                    track_item.setText(2, "Video")
-                    
-                    # Add duration if available
-                    if result.get('duration'):
-                        duration_str = self.format_duration(result.get('duration'))
-                        track_item.setText(4, duration_str)
-                        
-                    # Store track information
-                    track_item.setData(0, Qt.ItemDataRole.UserRole, result)
-                
-                # Continue to next service
-                continue
-            
-            # Normal hierarchical structure for other services
-            for artist_name, artist_data in data.items():
-                artist_item = QTreeWidgetItem(service_item)
-                artist_item.setText(0, artist_name)
-                artist_item.setText(1, artist_name)
-                artist_item.setText(2, f"Artista ({service})")
-                
-                # Store artist information
-                if artist_data.get('info'):
-                    artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data['info'])
-                
-                # Add albums
-                for album_name, album_info in artist_data.get('albums', {}).items():
-                    album_item = QTreeWidgetItem(artist_item)
-                    album_item.setText(0, album_name)
-                    album_item.setText(1, artist_name)
-                    album_item.setText(2, f"Álbum ({service})")
-                    
-                    # Add year information if available
-                    if album_info.get('year'):
-                        album_item.setText(3, str(album_info.get('year')))
-                    
-                    # Store album information
-                    album_item.setData(0, Qt.ItemDataRole.UserRole, album_info)
-                    
-                    # Add tracks if available in the album
-                    if 'tracks' in album_info and isinstance(album_info['tracks'], list):
-                        for track_idx, track in enumerate(album_info['tracks']):
-                            track_item = QTreeWidgetItem(album_item)
-                            track_item.setText(0, track.get('title', f'Track {track_idx+1}'))
-                            track_item.setText(1, artist_name)
-                            track_item.setText(2, f"Canción ({service})")
-                            
-                            # Add track number and duration if available
-                            if track.get('track_number'):
-                                track_item.setText(3, str(track.get('track_number')))
-                            elif track_idx is not None:
-                                track_item.setText(3, str(track_idx+1))
-                                
-                            if track.get('duration'):
-                                duration_str = self.format_duration(track.get('duration'))
-                                track_item.setText(4, duration_str)
-                                
-                            # Store track information
-                            track_item.setData(0, Qt.ItemDataRole.UserRole, track)
-                
-                # Add standalone tracks
-                if artist_data.get('tracks'):
-                    for track in artist_data.get('tracks', []):
-                        track_item = QTreeWidgetItem(artist_item)
-                        track_item.setText(0, track.get('title', 'Unknown Track'))
-                        track_item.setText(1, artist_name)
-                        track_item.setText(2, f"Canción ({service})")
+                        # Add track number if available
+                        if track.get('track_number'):
+                            track_item.setText(3, str(track.get('track_number')))
                         
                         # Add duration if available
                         if track.get('duration'):
                             duration_str = self.format_duration(track.get('duration'))
                             track_item.setText(4, duration_str)
-                            
-                        # Store track information
+                        
+                        # Almacenar datos de la canción
                         track_item.setData(0, Qt.ItemDataRole.UserRole, track)
+                        
+                        # Track this track
+                        track_key = f"{artist_name.lower()} - {track_name.lower()}"
+                        self.added_items['tracks'].add(track_key)
 
+    def _add_service_results(self, service_results):
+        """
+        Adds external service results to the tree, skipping duplicates.
+        """
+        # Group results by service
+        for result in service_results:
+            service = result.get('source', 'Otros').capitalize()
+            
+            # Create a root item for the service if it doesn't exist yet
+            service_items = self.treeWidget.findItems(service, Qt.MatchFlag.MatchExactly, 0)
+            service_item = None
+            
+            if not service_items:
+                service_item = QTreeWidgetItem(self.treeWidget)
+                service_item.setText(0, service)
+                service_item.setText(2, "Servicio")
+                
+                # Format as bold
+                font = service_item.font(0)
+                font.setBold(True)
+                service_item.setFont(0, font)
+            else:
+                service_item = service_items[0]
+            
+            # Add result as child of service
+            item_type = result.get('type', '').lower()
+            title = result.get('title', 'Unknown')
+            artist = result.get('artist', '')
+            
+            # Create item for result
+            result_item = QTreeWidgetItem(service_item)
+            result_item.setText(0, title)
+            result_item.setText(1, artist)
+            
+            # Set type
+            if item_type == 'artist':
+                result_item.setText(2, "Artista")
+            elif item_type == 'album':
+                result_item.setText(2, "Álbum")
+                if result.get('year'):
+                    result_item.setText(3, str(result.get('year')))
+            elif item_type in ['track', 'song']:
+                result_item.setText(2, "Canción")
+                if result.get('track_number'):
+                    result_item.setText(3, str(result.get('track_number')))
+                if result.get('duration'):
+                    duration_str = self.format_duration(result.get('duration'))
+                    result_item.setText(4, duration_str)
+            else:
+                result_item.setText(2, item_type.capitalize())
+            
+            # Store complete data
+            result_item.setData(0, Qt.ItemDataRole.UserRole, result)
+            
+            # Track this item to avoid future duplicates
+            if item_type == 'artist':
+                self.added_items['artists'].add(artist.lower())
+            elif item_type == 'album':
+                album_key = f"{artist.lower()} - {title.lower()}"
+                self.added_items['albums'].add(album_key)
+            elif item_type in ['track', 'song']:
+                track_key = f"{artist.lower()} - {title.lower()}"
+                self.added_items['tracks'].add(track_key)
+            
+        self.log(f"Added {len(service_results)} service results to tree")
                         
     def display_media_info(self, entries, url):
         """Muestra la información obtenida en el TreeWidget."""

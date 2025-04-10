@@ -23,3 +23,5 @@ moode_def.sqlite-wal
 test
 base_datos/musica.sqlite
 config/config.yml
+base_datos/musica.sqlite-shm
+base_datos/musica.sqlite-wal
