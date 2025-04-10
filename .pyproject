@@ -1,5 +1,26 @@
 {
     "files": [
+        "ui/svg/trash-2-svgrepo-com.svg",
+        "ui/svg/sound-2-svgrepo-com.svg",
+        "ui/svg/sound-1-svgrepo-com.svg",
+        "ui/svg/share-1-svgrepo-com.svg",
+        "ui/svg/rewind-svgrepo-com.svg",
+        "ui/svg/save-svgrepo-com.svg",
+        "ui/svg/power-svgrepo-com.svg",
+        "ui/svg/refresh-circle-svgrepo-com.svg",
+        "ui/svg/music-svgrepo-com.svg",
+        "ui/svg/previous-svgrepo-com.svg",
+        "ui/svg/next-svgrepo-com.svg",
+        "ui/svg/forward-svgrepo-com.svg",
+        "ui/svg/delete-svgrepo-com.svg",
+        "ui/svg/music-ear-svgrepo-com.svg",
+        "ui/svg/play-button-svgrepo-com.svg",
+        "ui/svg/spotify-alt-1-svgrepo-com.svg",
+        "ui/svg/soundcloud-svgrepo-com.svg",
+        "ui/svg/lastfm-svgrepo-com.svg",
+        "ui/svg/youtube-svgrepo-com.svg",
+        "ui/svg/database-svgrepo-com.svg",
+        "ui/svg/search-magnifier-outline-svgrepo-com.svg",
         "ui/svg/chicken(2).svg",
         "ui/url_playlist_advanced_settings_dialog.ui",
         "ui/jaangle_module.ui",
@@ -126,6 +147,7 @@
         "modules/modulo_enlaces.py",
         "modules/muspy_releases_module.py",
         "modules/scripts_module.py",
-        "modules/widget_player_module.py"
+        "modules/widget_player_module.py",
+        "modules/url_playlist.py"
     ]
 }

@@ -410,26 +410,34 @@ class TabManager(QMainWindow):
             /* Buttons */
             QPushButton {{
                 background-color: {theme['bg']};
-                color: {theme['fg']};
-                border: none;
-                border-radius: 4px;
+                border-radius: 25px;
                 padding: 8px 16px;
-                font-weight: bold;
+                border: 2px;
             }}
-
+            
+            
             QPushButton:hover {{
                 background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
             }}
-
+            
             QPushButton:pressed {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
+                background-color: {theme['selection']};
+                border: none;
             }}
 
             /* Lists and Trees */
             QTreeWidget, QListWidget {{
                 background-color: {theme['bg']};
                 border: none;
+                border-radius: 4px;
+            }}
+
+            QTreeWidget::treeWidget {{
+                background-color: {theme['bg']};
+                border: 1px;
                 border-radius: 4px;
             }}
 

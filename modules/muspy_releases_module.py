@@ -1079,7 +1079,7 @@ class MuspyArtistModule(BaseModule):
 
         # Create the table widget using the UI file
         table_widget = QWidget()
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "releases_table.ui")
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_releases_table.ui")
         
         if os.path.exists(ui_file_path):
             try:

@@ -2,6 +2,7 @@
 
 
 import os
+import spotipy
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -11,20 +12,31 @@ import json
 import subprocess
 import tempfile
 import logging
+import traceback
+import base64
+import time
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import (
-    QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem,
-    QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox,
+    QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem, QInputDialog,
+    QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu,
     QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox
 )
-from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool
-from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize
+from PyQt6.QtGui import QIcon, QMovie
+
+
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import resources_rc
 from base_module import BaseModule, PROJECT_ROOT
+
+
+
+
+
+
 
 class InfoLoadWorker(QRunnable):
     """Worker thread for loading detailed information asynchronously."""
@@ -1319,6 +1331,9 @@ class SearchWorker(QRunnable):
             self.log(traceback.format_exc())
             return []
 
+
+
+
     def search_lastfm(self, query, search_type):
         """Searches on Last.fm using existing module and database links if available."""
         try:
@@ -1814,11 +1829,17 @@ class UrlPlayer(BaseModule):
             self.db_path = os.path.join(PROJECT_ROOT, self.db_path)
         
         # Extract API credentials from kwargs with explicit handling
+        self.spotify_authenticated = False
+        self.spotify_playlists = {}
+        self.spotify_user_id = None
         self.spotify_client_id = kwargs.get('spotify_client_id')
         self.spotify_client_secret = kwargs.get('spotify_client_secret')
         self.lastfm_api_key = kwargs.get('lastfm_api_key')
         self.lastfm_user = kwargs.get('lastfm_user')
         
+
+ 
+
         # Log the received configuration
         print(f"[UrlPlayer] Received configs - DB: {self.db_path}, Spotify credentials: {bool(self.spotify_client_id)}, Last.fm credentials: {bool(self.lastfm_api_key)}")
         
@@ -1884,6 +1905,17 @@ class UrlPlayer(BaseModule):
         if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
             self._load_api_credentials_from_env()
         
+        # Primero cargar las credenciales con tu método existente
+        self._load_api_credentials_from_env()  # Tu método existente
+
+        # Luego configurar Spotify solo si tenemos credenciales
+        if self.spotify_client_id and self.spotify_client_secret:
+            self.setup_spotify()
+            
+            # Una vez configurado, cargar las playlists
+            if hasattr(self, 'playlist_spotify_comboBox') and self.spotify_authenticated:
+                self.load_spotify_playlists()
+
         # Ensure these are available in environment variables for imported modules
         self._set_api_credentials_as_env()
         
@@ -1898,11 +1930,18 @@ class UrlPlayer(BaseModule):
         # Log the final configuration
         print(f"[UrlPlayer] Final config - DB: {self.db_path}, Spotify enabled: {self.spotify_enabled}, Last.fm enabled: {self.lastfm_enabled}")
         
+
+    def get_app_path(self, file_path):
+        """Create standardized paths relative to PROJECT_ROOT"""
+        return os.path.join(PROJECT_ROOT, file_path)
+
+
     def log(self, message):
         """Registra un mensaje en el TextEdit y en la consola."""
         if hasattr(self, 'textEdit') and self.textEdit:
             self.textEdit.append(message)
         print(f"[UrlPlayer] {message}")
+
         
     def init_ui(self):
         """Inicializa la interfaz de usuario desde el archivo UI."""
@@ -1955,8 +1994,15 @@ class UrlPlayer(BaseModule):
             self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Track/Año", "Duración"])
             
             # Set column widths
+            self.tree_container.setStyleSheet(f"""
+                QFrame {{
+                    
+                    border: 1px;
+                    border-radius: 4px;
+                }}
+                """)
             self.treeWidget.setColumnWidth(0, 250)  # Título
-            self.treeWidget.setColumnWidth(1, 150)  # Artista
+            self.treeWidget.setColumnWidth(1, 100)  # Artista
             self.treeWidget.setColumnWidth(2, 80)   # Tipo
             self.treeWidget.setColumnWidth(3, 70)   # Track/Año
             self.treeWidget.setColumnWidth(4, 70)   # Duración
@@ -1988,6 +2034,11 @@ class UrlPlayer(BaseModule):
             self.tipo_combo.addItem("Álbum")
             self.tipo_combo.addItem("Canción")
 
+        # Setup service icons
+        self.setup_service_icons()
+
+        # Configurar indicador de carga
+        self.setup_loading_indicator()
 
         # Actualizar el combo de servicios según la configuración
         self.update_service_combo()
@@ -2073,8 +2124,100 @@ class UrlPlayer(BaseModule):
                 self.treeWidget.itemSelectionChanged.connect(self.on_tree_selection_changed)
                 print("[UrlPlayer] Señales conectadas correctamente")
 
+
+             # Add new playlist-related connections
+            if hasattr(self, 'playlist_spotify_comboBox'):
+                self.playlist_spotify_comboBox.currentIndexChanged.connect(self.on_spotify_playlist_changed)
+            
+            if hasattr(self, 'playlist_rss_comboBox'):
+                #self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_playlist_rss_changed)
+                self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_rss_playlist_selected)
+            if hasattr(self, 'playlist_local_comboBox'):
+                #self.playlist_local_comboBox.currentIndexChanged.connect(self.on_playlist_local_changed)
+                self.playlist_local_comboBox.currentIndexChanged.connect(self.on_local_playlist_selected)
+
+            if hasattr(self, 'GuardarPlaylist'):
+                self.GuardarPlaylist.clicked.connect(self.on_guardar_playlist_clicked)
+                self.GuardarPlaylist.clicked.connect(self.save_current_playlist)
+
+            if hasattr(self, 'VaciarPlaylist'):
+                self.VaciarPlaylist.clicked.connect(self.clear_temp_playlist)
+                self.VaciarPlaylist.clicked.connect(self.clear_playlist)
+            
+            # Setup context menus
+            self.setup_context_menus()
+
         except Exception as e:
             print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
+
+    def load_selected_playlist(self, playlist):
+        """Load a selected playlist into the player"""
+        if not playlist or 'items' not in playlist:
+            return
+        
+        # Ask for confirmation if current playlist is not empty
+        if self.listWidget.count() > 0:
+            reply = QMessageBox.question(
+                self, "Load Playlist", 
+                f"Load playlist '{playlist.get('name')}'? Current playlist will be replaced.",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No
+            )
+            
+            if reply == QMessageBox.No:
+                return
+        
+        # Clear current playlist
+        self.listWidget.clear()
+        self.current_playlist = []
+        
+        # Add items from selected playlist
+        for item in playlist.get('items', []):
+            title = item.get('title', '')
+            artist = item.get('artist', '')
+            url = item.get('url', '')
+            
+            if not url:
+                continue
+            
+            # Create display text
+            display_text = title
+            if artist:
+                display_text = f"{artist} - {title}"
+            
+            # Add to list widget
+            list_item = QListWidgetItem(display_text)
+            list_item.setData(Qt.ItemDataRole.UserRole, url)
+            self.listWidget.addItem(list_item)
+            
+            # Add to internal playlist
+            self.current_playlist.append({
+                'title': title,
+                'artist': artist,
+                'url': url
+            })
+        
+        # Reset current track index
+        self.current_track_index = -1
+        
+        # Update UI
+        self.log(f"Loaded playlist '{playlist.get('name')}' with {len(playlist.get('items', []))} items")
+
+    def clear_temp_playlist(self):
+        """Clear the current queue/playlist"""
+        # Clear the list widget
+        self.listWidget.clear()
+        
+        # Clear the internal playlist
+        self.current_playlist = []
+        
+        # Reset current track index
+        self.current_track_index = -1
+        
+        # Stop any current playback
+        self.stop_playback()
+        
+        self.log("Cola de reproducción limpiada")
 
     def _fallback_init_ui(self):
         """Crea la UI manualmente en caso de que falle la carga del archivo UI."""
@@ -2247,6 +2390,43 @@ class UrlPlayer(BaseModule):
                     value = value.lower() == 'true'
                 checkbox.setChecked(value)
 
+    def _initialize_default_values(self):
+        """Initialize default values for settings when configuration can't be loaded"""
+        self.log("Initializing default values for settings")
+        
+        # Default paths
+        self.db_path = get_app_path("base_datos/musica.sqlite")
+        self.spotify_token_path = get_app_path(".content/cache/spotify_token.txt")
+        self.spotify_playlist_path = get_app_path(".content/cache/spotify_playlist.json")
+        
+        # Default service configuration
+        self.included_services = {
+            'youtube': True,
+            'soundcloud': True,
+            'bandcamp': True,
+            'spotify': False,  # Will be enabled if credentials are found
+            'lastfm': False    # Will be enabled if credentials are found
+        }
+        
+        # Default pagination
+        self.num_servicios_spinBox = 10
+        self.pagination_value = 10
+        
+        # Default API credentials (empty)
+        self.spotify_client_id = None
+        self.spotify_client_secret = None
+        self.lastfm_api_key = None
+        self.lastfm_user = None
+        
+        # Default flags
+        self.spotify_enabled = False
+        self.lastfm_enabled = False
+        
+        # Create necessary directories
+        os.makedirs(os.path.dirname(self.spotify_token_path), exist_ok=True)
+        os.makedirs(os.path.dirname(self.spotify_playlist_path), exist_ok=True)
+
+
     def _save_advanced_settings(self, dialog):
         """Guarda los ajustes del diálogo en las variables del objeto."""
         try:
@@ -2285,64 +2465,224 @@ class UrlPlayer(BaseModule):
             self.log(traceback.format_exc())
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
 
+
+
+
+
+
     def load_settings(self):
-        """Loads module configuration from general configuration file with better nested config handling."""
+        """Loads module configuration with standard paths"""
         try:
-            # Try multiple config file locations
-            config_paths = [
-                os.path.join(PROJECT_ROOT, "config", "config.yml"),
-                os.path.join(PROJECT_ROOT, ".content", "config", "config.yml"),
-                os.path.join(os.path.expanduser("~"), ".config", "music_app", "config.yml")
-            ]
+            # Standard config path
+            config_path = self.get_app_path("config/config.yml")
             
-            config_loaded = False
-            for config_path in config_paths:
-                if os.path.exists(config_path):
-                    self.log(f"Found configuration file at: {config_path}")
-                    try:
-                        # Use the global configuration loading functions if available
-                        try:
-                            from main import load_config_file
-                            config_data = load_config_file(config_path)
-                        except ImportError:
-                            # Fallback if main module is not importable
-                            extension = os.path.splitext(config_path)[1].lower()
-                            if extension in ['.yml', '.yaml']:
-                                import yaml
-                                with open(config_path, 'r', encoding='utf-8') as f:
-                                    config_data = yaml.safe_load(f)
-                            else:  # Assume JSON
-                                with open(config_path, 'r', encoding='utf-8') as f:
-                                    config_data = json.load(f)
+            if not os.path.exists(config_path):
+                self.log(f"Config file not found at: {config_path}")
+                self._initialize_default_values()
+                return
+                
+            # Load configuration file    
+            try:
+                import yaml
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config_data = yaml.safe_load(f)
+                    
+                # Get global credentials first
+                if 'global_theme_config' in config_data:
+                    global_config = config_data['global_theme_config']
+                    
+                    # Get database path
+                    if 'db_path' in global_config and not self.db_path:
+                        self.db_path = self.get_app_path(global_config['db_path'])
+                    
+                    # Get API credentials
+                    if 'spotify_client_id' in global_config:
+                        self.spotify_client_id = global_config['spotify_client_id']
+                    if 'spotify_client_secret' in global_config:
+                        self.spotify_client_secret = global_config['spotify_client_secret']
+                    if 'lastfm_api_key' in global_config:
+                        self.lastfm_api_key = global_config['lastfm_api_key']
+                
+                # Find module-specific settings
+                for module in config_data.get('modules', []):
+                    if module.get('name') in ['Url Playlists', 'URL Playlist', 'URL Player']:
+                        module_args = module.get('args', {})
                         
-                        config_loaded = True
-                        self.log(f"Successfully loaded configuration from {config_path}")
+                        # Load paths with standardization
+                        if 'db_path' in module_args:
+                            self.db_path = self.get_app_path(module_args['db_path'])
                         
-                        # Extract global credentials that might be at the root level
-                        self._extract_global_credentials(config_data)
+                        if 'spotify_token' in module_args:
+                            self.spotify_token_path = self.get_app_path(module_args['spotify_token'])
+                        else:
+                            self.spotify_token_path = self.get_app_path(".content/cache/spotify_token.txt")
                         
-                        # Extract credentials from module-specific configuration
-                        self._extract_module_config(config_data)
-                        
+                        # Load other settings
+                        self._load_module_settings(module_args)
                         break
-                    except Exception as e:
-                        self.log(f"Error loading configuration from {config_path}: {str(e)}")
-                        continue
-            
-            # Final fallback - try to find database
-            if not self.db_path:
-                self._find_database_fallback()
-                
-            # Update environment variables with all extracted credentials
-            self._set_api_credentials_as_env()
-                
+            except Exception as e:
+                self.log(f"Error loading YAML config: {e}")
+                self._initialize_default_values()
         except Exception as e:
-            self.log(f"Error loading configuration: {str(e)}")
-            import traceback
-            self.log(traceback.format_exc())
+            self.log(f"Overall error in load_settings: {e}")
+            self._initialize_default_values()
+
+
+
+    def _load_module_settings(self, module_args):
+        """Load module-specific settings from args dictionary"""
+        try:
+            # Load API credentials
+            if 'spotify_client_id' in module_args:
+                self.spotify_client_id = module_args['spotify_client_id']
+            if 'spotify_client_secret' in module_args:
+                self.spotify_client_secret = module_args['spotify_client_secret']
+            if 'lastfm_api_key' in module_args:
+                self.lastfm_api_key = module_args['lastfm_api_key']
+            if 'lastfm_user' in module_args:
+                self.lastfm_user = module_args['lastfm_user']
             
-            # Initialize fallback values
-            self._initialize_fallback_values()
+            # Load pagination value
+            if 'pagination_value' in module_args:
+                self.pagination_value = module_args.get('pagination_value', 10)
+                self.num_servicios_spinBox = self.pagination_value
+            
+            # Load included services
+            if 'included_services' in module_args:
+                included_services = module_args.get('included_services', {})
+                
+                # Ensure values are boolean
+                self.included_services = {}
+                for key, value in included_services.items():
+                    if isinstance(value, str):
+                        self.included_services[key] = value.lower() == 'true'
+                    else:
+                        self.included_services[key] = bool(value)
+            
+            # Load MPV temp directory
+            if 'mpv_temp_dir' in module_args:
+                mpv_temp_dir = module_args['mpv_temp_dir']
+                # Handle relative path
+                if not os.path.isabs(mpv_temp_dir):
+                    mpv_temp_dir = os.path.join(os.path.expanduser("~"), mpv_temp_dir)
+                self.mpv_temp_dir = mpv_temp_dir
+                
+            self.log("Module settings loaded successfully")
+        except Exception as e:
+            self.log(f"Error loading module settings: {e}")
+
+    def update_playlist_comboboxes(self):
+        """Update all playlist combobox contents from saved playlists"""
+        if not hasattr(self, 'playlists'):
+            self.playlists = self.load_playlists()
+        
+        # Update Spotify playlists combo
+        if hasattr(self, 'playlist_spotify_comboBox'):
+            self.playlist_spotify_comboBox.clear()
+            self.playlist_spotify_comboBox.addItem(QIcon(":/services/b_plus_cross"), "Nueva Playlist Spotify")
+            
+            for playlist in self.playlists.get('spotify', []):
+                self.playlist_spotify_comboBox.addItem(
+                    QIcon(":/services/spotify"), 
+                    playlist.get('name', 'Unnamed Playlist')
+                )
+        
+        # Update local playlists combo
+        if hasattr(self, 'playlist_local_comboBox'):
+            self.playlist_local_comboBox.clear()
+            
+            for playlist in self.playlists.get('local', []):
+                self.playlist_local_comboBox.addItem(
+                    QIcon(":/services/plslove"), 
+                    playlist.get('name', 'Unnamed Playlist')
+                )
+        
+        # Update RSS playlists combo
+        if hasattr(self, 'playlist_rss_comboBox'):
+            self.playlist_rss_comboBox.clear()
+            
+            for playlist in self.playlists.get('rss', []):
+                self.playlist_rss_comboBox.addItem(
+                    QIcon(":/services/rss"), 
+                    playlist.get('name', 'Unnamed Blog')
+                )
+
+    def save_current_playlist(self):
+        """Save the current playlist in the selected format"""
+        # Get the selected playlist type
+        if not hasattr(self, 'playlist_local_comboBox_2'):
+            return
+            
+        playlist_type = self.playlist_local_comboBox_2.currentText().lower()
+        
+        # Verify we have items to save
+        if self.listWidget.count() == 0:
+            QMessageBox.warning(self, "Warning", "No items to save in playlist")
+            return
+        
+        # Ask for playlist name
+        name, ok = QInputDialog.getText(self, "Playlist Name", "Enter a name for the playlist:")
+        if not ok or not name:
+            return
+        
+        # Collect items from the list
+        items = []
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            url = item.data(Qt.ItemDataRole.UserRole)
+            title = item.text()
+            
+            # Extract artist and title if possible
+            artist = ""
+            if " - " in title:
+                parts = title.split(" - ", 1)
+                artist = parts[0]
+                title = parts[1]
+            
+            items.append({
+                "url": url,
+                "title": title,
+                "artist": artist
+            })
+        
+        # Create playlist object
+        playlist = {
+            "name": name,
+            "items": items,
+            "created": int(time.time()),
+            "modified": int(time.time())
+        }
+        
+        # Add to appropriate playlist collection
+        if playlist_type in ["spotify", "youtube", "local"]:
+            if playlist_type not in self.playlists:
+                self.playlists[playlist_type] = []
+            
+            # Check if playlist with same name exists
+            for i, existing in enumerate(self.playlists[playlist_type]):
+                if existing.get('name') == name:
+                    # Ask for confirmation to replace
+                    reply = QMessageBox.question(
+                        self, "Replace Playlist", 
+                        f"A playlist named '{name}' already exists. Replace it?",
+                        QMessageBox.Yes | QMessageBox.No,
+                        QMessageBox.No
+                    )
+                    
+                    if reply == QMessageBox.Yes:
+                        self.playlists[playlist_type][i] = playlist
+                        self.save_playlists()
+                        self.update_playlist_comboboxes()
+                        QMessageBox.information(self, "Success", f"Playlist '{name}' updated successfully")
+                        return
+                    else:
+                        return
+            
+            # Add new playlist
+            self.playlists[playlist_type].append(playlist)
+            self.save_playlists()
+            self.update_playlist_comboboxes()
+            QMessageBox.information(self, "Success", f"Playlist '{name}' saved successfully")
 
     def _extract_global_credentials(self, config_data):
         """Extract credentials from global configuration section."""
@@ -2854,7 +3194,7 @@ class UrlPlayer(BaseModule):
                 return []
             
             if not os.path.exists(self.db_path):
-                self.log(f"Base de datos no encontrada en: {db_path}")
+                self.log(f"Base de datos no encontrada en: {self.db_path}")
                 return []
                     
             self.log(f"Searching database at: {self.db_path}")
@@ -3279,6 +3619,9 @@ class UrlPlayer(BaseModule):
         self.textEdit.clear()
         QApplication.processEvents()  # Update UI
         
+        # Show loading indicator
+        self.show_loading_indicator(True)
+        
         # Get the selected service
         service = self.servicios.currentText()
         
@@ -3378,6 +3721,10 @@ class UrlPlayer(BaseModule):
     def search_finished(self, result=None, basic_data=None):
         """Función llamada cuando termina la búsqueda."""
         self.log(f"Búsqueda completada.")
+        
+        # Hide loading indicator
+        self.show_loading_indicator(False)
+        
         # Reactivar controles
         self.searchButton.setEnabled(True)
         self.lineEdit.setEnabled(True)
@@ -3757,6 +4104,9 @@ class UrlPlayer(BaseModule):
             local_music_item.setText(0, "Música Local")
             local_music_item.setText(2, "Fuente")
             
+            # Add icon for local music
+            local_music_item.setIcon(0, self.service_icons.get('local', QIcon()))
+            
             # Format as bold
             font = local_music_item.font(0)
             font.setBold(True)
@@ -3854,6 +4204,11 @@ class UrlPlayer(BaseModule):
             
             # Expand local music item
             local_music_item.setExpanded(True)
+            
+            # Add result count badge
+            local_count = len(db_results)
+            if local_count > 0:
+                local_music_item.setText(0, f"Música Local ({local_count})")
         
         # Add external results by service
         if external_results:
@@ -3861,7 +4216,7 @@ class UrlPlayer(BaseModule):
             
             # Group by service
             for result in external_results:
-                service = result.get('source', 'unknown').capitalize()
+                service = result.get('source', 'unknown').lower()
                 if service not in by_service:
                     by_service[service] = []
                 by_service[service].append(result)
@@ -3869,8 +4224,11 @@ class UrlPlayer(BaseModule):
             # Add each service
             for service, service_results in by_service.items():
                 service_item = QTreeWidgetItem(self.treeWidget)
-                service_item.setText(0, service)
+                service_item.setText(0, service.capitalize())
                 service_item.setText(2, "Servicio")
+                
+                # Add service icon
+                service_item.setIcon(0, self.service_icons.get(service, self.service_icons.get('unknown')))
                 
                 # Format as bold
                 font = service_item.font(0)
@@ -3930,6 +4288,11 @@ class UrlPlayer(BaseModule):
                 
                 # Expand service item
                 service_item.setExpanded(True)
+                
+                # Add result count badge to service
+                service_count = len(service_results)
+                if service_count > 0:
+                    service_item.setText(0, f"{service.capitalize()} ({service_count})")
         
         # Update count of results
         new_count = self.treeWidget.topLevelItemCount() - initial_count
@@ -4928,43 +5291,42 @@ class UrlPlayer(BaseModule):
 
 
     def load_api_credentials(self):
-        """Carga credenciales de API desde la configuración o variables de entorno"""
-        # Intentar cargar desde variables de entorno
-        spotify_client_id = self.spotify_client_id or os.environ.get("SPOTIFY_CLIENT_ID")
-        spotify_client_secret = self.spotify_client_secret or os.environ.get("SPOTIFY_CLIENT_SECRET")
-        lastfm_api_key = self.lastfm_api_key or os.environ.get("LASTFM_API_KEY")
+        """Load API credentials with consistent path handling"""
+        # Define standard paths
+        token_path = self.get_app_path(".content/cache/spotify_token.txt")
+        playlist_path = self.get_app_path(".content/cache/spotify_playlist.json")
         
-        # Si no están disponibles, intentar cargar desde la configuración
-        if not spotify_client_id or not spotify_client_secret or not lastfm_api_key:
-            try:
-                config_path = os.path.join(PROJECT_ROOT, "config", "api_keys.json")
-                if os.path.exists(config_path):
-                    with open(config_path, 'r') as f:
-                        config = json.load(f)
-                        
-                        # Establecer credenciales como variables de entorno
-                        if 'spotify' in config:
-                            os.environ["SPOTIFY_CLIENT_ID"] = config['spotify'].get('client_id', '')
-                            os.environ["SPOTIFY_CLIENT_SECRET"] = config['spotify'].get('client_secret', '')
-                        
-                        if 'lastfm' in config:
-                            os.environ["LASTFM_API_KEY"] = config['lastfm'].get('api_key', '')
-                            os.environ["LASTFM_USER"] = config['lastfm'].get('user', '')
-            except Exception as e:
-                self.log(f"Error al cargar credenciales de API: {str(e)}")
+        # First check config values
+        spotify_client_id = self.spotify_client_id
+        spotify_client_secret = self.spotify_client_secret
+        lastfm_api_key = self.lastfm_api_key
         
-        # Verificar si se cargaron las credenciales
-        self.spotify_enabled = bool(os.environ.get("SPOTIFY_CLIENT_ID") and os.environ.get("SPOTIFY_CLIENT_SECRET"))
-        self.lastfm_enabled = bool(os.environ.get("LASTFM_API_KEY"))
+        # If not available, try environment variables
+        if not spotify_client_id:
+            spotify_client_id = os.environ.get("SPOTIFY_CLIENT_ID")
+        if not spotify_client_secret:
+            spotify_client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
+        if not lastfm_api_key:
+            lastfm_api_key = os.environ.get("LASTFM_API_KEY")
         
-        # Actualizar la configuración de servicios
-        if not self.spotify_enabled and 'spotify' in self.included_services:
-            self.included_services['spotify'] = False
-            self.log("Spotify deshabilitado por falta de credenciales de API")
+        # Create cache directory if it doesn't exist
+        os.makedirs(os.path.dirname(token_path), exist_ok=True)
         
-        if not self.lastfm_enabled and 'lastfm' in self.included_services:
-            self.included_services['lastfm'] = False
-            self.log("Last.fm deshabilitado por falta de credenciales de API")
+        # Store the standard paths
+        self.spotify_token_path = token_path
+        self.spotify_playlist_path = playlist_path
+        
+        # Set environment variables for imported modules
+        if spotify_client_id:
+            os.environ["SPOTIFY_CLIENT_ID"] = spotify_client_id
+        if spotify_client_secret:
+            os.environ["SPOTIFY_CLIENT_SECRET"] = spotify_client_secret
+        if lastfm_api_key:
+            os.environ["LASTFM_API_KEY"] = lastfm_api_key
+        
+        # Update service flags
+        self.spotify_enabled = bool(spotify_client_id and spotify_client_secret)
+        self.lastfm_enabled = bool(lastfm_api_key)
 
 
     def keyPressEvent(self, event):
@@ -5544,6 +5906,117 @@ class UrlPlayer(BaseModule):
             self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>An error occurred while processing the information: {str(e)}</p>")
 
 
+    def setup_service_icons(self):
+        """Configura iconos para cada servicio."""
+        self.service_icons = {
+            'local': QIcon(":/services/database"),
+            'database': QIcon(":/services/database"),
+            'bandcamp': QIcon(":/services/bandcamp"),
+            'spotify': QIcon(":/services/spotify"),
+            'lastfm': QIcon(":/services/lastfm"),
+            'youtube': QIcon(":/services/youtube"),
+            'soundcloud': QIcon(":/services/soundcloud"),
+            'unknown': QIcon(":/services/wiki"),
+            'loading': QIcon(":services/loading")
+        }
+
+        # Guardar el icono original del botón de búsqueda para restaurarlo después
+        if hasattr(self, 'searchButton'):
+            self.original_search_icon = self.searchButton.icon()
+
+    def setup_loading_indicator(self):
+        """Configura un indicador de carga simple que no interfiere con la UI."""
+        try:
+            from PyQt6.QtWidgets import QLabel
+            from PyQt6.QtGui import QMovie
+            from PyQt6.QtCore import QSize
+            
+            # Crear un simple label para el indicador
+            self.loading_label = QLabel(self)
+            self.loading_label.setFixedSize(QSize(24, 24))
+            
+            # Cargar el gif animado
+            self.loading_movie = QMovie(":/services/loading")
+            if self.loading_movie.isValid():
+                self.loading_movie.setScaledSize(QSize(24, 24))
+                self.loading_label.setMovie(self.loading_movie)
+            
+            # Posicionar junto al botón de búsqueda pero sin alterar layouts
+            button_pos = self.searchButton.pos()
+            self.loading_label.move(button_pos.x() - 1, button_pos.y() + 1)
+            
+            # Inicialmente oculto
+            self.loading_label.hide()
+            
+        except Exception as e:
+            self.log(f"Error setting up loading indicator: {str(e)}")
+
+    def _update_button_icon(self):
+        """Actualiza el icono del botón con el frame actual del GIF."""
+        if hasattr(self, 'loading_movie') and self.loading_movie.isValid():
+            # Crear un QIcon a partir del frame actual del QMovie
+            from PyQt6.QtGui import QIcon, QPixmap
+            pixmap = self.loading_movie.currentPixmap()
+            icon = QIcon(pixmap)
+            
+            # Aplicar al botón
+            self.searchButton.setIcon(icon)
+
+
+    def show_loading_indicator(self, visible=True):
+        """Cambia el icono del botón de búsqueda entre el icono normal y el GIF de carga."""
+        try:
+            if visible:
+                # Crear un QMovie con el GIF
+                from PyQt6.QtGui import QMovie
+                from PyQt6.QtCore import QSize
+                
+                # Si no tenemos ya el movie creado
+                if not hasattr(self, 'loading_movie'):
+                    self.loading_movie = QMovie(":/services/loading")
+                    
+                    if self.loading_movie.isValid():
+                        # Configurar el tamaño adecuado para que coincida con el icono original
+                        icon_size = self.searchButton.iconSize()
+                        self.loading_movie.setScaledSize(icon_size)
+                        
+                        # Conectar una señal para actualizar el icono del botón con cada frame
+                        self.loading_movie.frameChanged.connect(lambda: self._update_button_icon())
+                    else:
+                        self.log("Error: GIF de carga no válido")
+                        return
+                
+                # Iniciar la animación
+                self.loading_movie.start()
+                
+                # Aplicar el primer frame al botón
+                self._update_button_icon()
+                
+                # Mantener el botón habilitado para que el usuario pueda cancelar si lo desea
+                self.searchButton.setEnabled(True)
+            else:
+                # Detener la animación si existe
+                if hasattr(self, 'loading_movie'):
+                    self.loading_movie.stop()
+                
+                # Restaurar el icono original
+                if hasattr(self, 'original_search_icon'):
+                    self.searchButton.setIcon(self.original_search_icon)
+                
+                # Asegurarse de que el botón esté habilitado
+                self.searchButton.setEnabled(True)
+            
+            # Procesar eventos para actualizar la UI
+            QApplication.processEvents()
+            
+        except Exception as e:
+            self.log(f"Error al cambiar icono de carga: {str(e)}")
+            # Restaurar el estado original en caso de error
+            if hasattr(self, 'original_search_icon'):
+                self.searchButton.setIcon(self.original_search_icon)
+            self.searchButton.setEnabled(True)
+
+
     def add_artist_albums_to_tree(self, artist_name, albums):
         """Añade los álbumes de un artista al árbol de forma jerárquica."""
         try:
@@ -5743,6 +6216,1138 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al añadir canciones al árbol: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+
+    def get_spotify_token(self):
+        """Get or refresh Spotify API token"""
+        if not self.spotify_enabled:
+            return None
+        
+        token = None
+        token_expired = True
+        
+        # Try to read existing token
+        if os.path.exists(self.spotify_token_path):
+            try:
+                with open(self.spotify_token_path, 'r') as f:
+                    token_data = json.load(f)
+                    token = token_data.get('access_token')
+                    expires_at = token_data.get('expires_at', 0)
+                    
+                    # Check if token is still valid (with 60 second margin)
+                    if expires_at > time.time() + 60:
+                        token_expired = False
+            except Exception as e:
+                self.log(f"Error reading Spotify token: {e}")
+        
+        # Refresh token if needed
+        if token_expired:
+            token = self._refresh_spotify_token()
+        
+        return token
+
+    def _refresh_spotify_token(self):
+        """Refresh Spotify API token and save it to disk"""
+        if not self.spotify_client_id or not self.spotify_client_secret:
+            return None
+            
+        try:
+            # Use requests to get a new token
+            auth_url = 'https://accounts.spotify.com/api/token'
+            auth_header = base64.b64encode(f"{self.spotify_client_id}:{self.spotify_client_secret}".encode()).decode()
+            
+            headers = {
+                'Authorization': f'Basic {auth_header}',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            
+            data = {'grant_type': 'client_credentials'}
+            
+            response = requests.post(auth_url, headers=headers, data=data)
+            
+            if response.status_code == 200:
+                token_data = response.json()
+                
+                # Add expires_at timestamp
+                token_data['expires_at'] = time.time() + token_data['expires_in']
+                
+                # Save token to file
+                with open(self.spotify_token_path, 'w') as f:
+                    json.dump(token_data, f)
+                    
+                self.log("Spotify token refreshed successfully")
+                return token_data['access_token']
+            else:
+                self.log(f"Error refreshing Spotify token: {response.status_code} {response.text}")
+                return None
+                
+        except Exception as e:
+            self.log(f"Exception refreshing Spotify token: {e}")
+            return None
+
+    def load_playlists(self):
+        """Load playlists from the standard location"""
+        if not os.path.exists(self.spotify_playlist_path):
+            # Create empty playlist structure
+            playlists = {
+                'spotify': [],
+                'local': [],
+                'rss': []
+            }
+            self.save_playlists(playlists)
+            return playlists
+        
+        try:
+            with open(self.spotify_playlist_path, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            self.log(f"Error loading playlists: {e}")
+            return {'spotify': [], 'local': [], 'rss': []}
+
+    def save_playlists(self, playlists=None):
+        """Save playlists to the standard location"""
+        if playlists is None:
+            playlists = self.playlists
+        
+        try:
+            with open(self.spotify_playlist_path, 'w') as f:
+                json.dump(playlists, f, indent=2)
+            self.log("Playlists saved successfully")
+        except Exception as e:
+            self.log(f"Error saving playlists: {e}")
+
+    def setup_spotify(self, client_id=None, client_secret=None, cache_path=None):
+        """Configure Spotify client with improved token management"""
+        try:
+            # Si ya tienes los valores de tus credenciales, úsalos
+            if not client_id:
+                client_id = self.spotify_client_id
+            
+            if not client_secret:
+                client_secret = self.spotify_client_secret
+                
+            if not client_id or not client_secret:
+                self.log("Spotify client ID and secret are required for Spotify functionality")
+                return False
+                
+            print("Setting up Spotify client...")
+            
+            # Ensure cache directory exists - usa la ruta que prefieras
+            if not cache_path:
+                cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "music_app", "spotify")
+                os.makedirs(cache_dir, exist_ok=True)
+                cache_path = os.path.join(cache_dir, "spotify_token.txt")
+                
+            print(f"Using token cache path: {cache_path}")
+            
+            # Define scope for Spotify permissions
+            scope = "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative"
+            
+            # Create a new OAuth instance
+            try:
+                import spotipy
+                from spotipy.oauth2 import SpotifyOAuth
+                
+                self.sp_oauth = SpotifyOAuth(
+                    client_id=client_id,
+                    client_secret=client_secret,
+                    redirect_uri='http://localhost:8998',
+                    scope=scope,
+                    open_browser=False,
+                    cache_path=cache_path
+                )
+                
+                # Intenta obtener el token usando tu método existente primero
+                token_info = None
+                if hasattr(self, '_load_api_credentials_from_env'):
+                    self._load_api_credentials_from_env()  # Tu método existente
+                    
+                    # Si después de cargar las credenciales tenemos un token, úsalo
+                    if hasattr(self, 'spotify_token') and self.spotify_token:
+                        token_info = {'access_token': self.spotify_token}
+                
+                # Si no tenemos token, usar el nuevo método
+                if not token_info:
+                    token_info = self.get_token_or_authenticate()
+                
+                # Create Spotify client with the token
+                print("Creating Spotify client with token")
+                self.sp = spotipy.Spotify(auth=token_info['access_token'])
+                
+                print("Getting current user info")
+                user_info = self.sp.current_user()
+                self.spotify_user_id = user_info['id']
+                print(f"Authenticated as user: {self.spotify_user_id}")
+                
+                # Flag that Spotify is authenticated
+                self.spotify_authenticated = True
+                return True
+                
+            except ImportError:
+                self.log("spotipy module not found. Please install it with 'pip install spotipy'")
+                return False
+            except Exception as e:
+                print(f"Spotify setup error: {str(e)}")
+                import traceback
+                traceback.print_exc()
+                self.log(f"Error de autenticación con Spotify: {str(e)}")
+                return False
+                
+        except Exception as e:
+            self.log(f"Error setting up Spotify: {str(e)}")
+            return False
+
+
+    def get_token_or_authenticate(self):
+        """Get valid token or initiate authentication"""
+        try:
+            # Si ya tienes un token desde tu método existente, úsalo
+            if hasattr(self, 'spotify_token') and self.spotify_token:
+                return {'access_token': self.spotify_token}
+                
+            # Check if we have a valid cached token
+            token_info = None
+            try:
+                cached_token = self.sp_oauth.get_cached_token()
+                if cached_token and not self.sp_oauth.is_token_expired(cached_token):
+                    print("Using valid cached token")
+                    return cached_token
+                elif cached_token:
+                    print("Cached token is expired, trying to refresh")
+                    try:
+                        new_token = self.sp_oauth.refresh_access_token(cached_token['refresh_token'])
+                        print("Token refreshed successfully")
+                        return new_token
+                    except Exception as e:
+                        print(f"Token refresh failed: {str(e)}")
+                        # If refresh fails, we'll continue to new authentication
+                else:
+                    print("No valid cached token found")
+            except Exception as e:
+                print(f"Error checking cached token: {str(e)}")
+                # Continue to new authentication
+            
+            # If we get here, we need to authenticate from scratch
+            print("Starting new authentication flow")
+            return self.perform_new_authentication()
+        except Exception as e:
+            print(f"Error in get_token_or_authenticate: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            raise
+
+    def perform_new_authentication(self):
+        """Perform new authentication from scratch"""
+        # Get the authorization URL
+        auth_url = self.sp_oauth.get_authorize_url()
+        
+        # Show instructions dialog with the URL
+        from PyQt6.QtWidgets import QMessageBox, QInputDialog, QLineEdit
+        
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("Autorización de Spotify")
+        msg_box.setText(
+            "Para usar las funciones de Spotify, necesita autorizar esta aplicación.\n\n"
+            "1. Copie el siguiente enlace y ábralo manualmente en su navegador:\n\n"
+            f"{auth_url}\n\n"
+            "2. Inicie sesión en Spotify si se le solicita.\n"
+            "3. Haga clic en 'Agree' para autorizar la aplicación.\n"
+            "4. Será redirigido a una página. Copie la URL completa de esa página."
+        )
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+        msg_box.button(QMessageBox.StandardButton.Ok).setText("Continuar")
+        
+        if msg_box.exec() == QMessageBox.StandardButton.Cancel:
+            raise Exception("Autorización cancelada por el usuario")
+        
+        # Use QInputDialog for the redirect URL
+        redirect_url, ok = QInputDialog.getText(
+            self,
+            "Ingrese URL de redirección",
+            "Después de autorizar en Spotify, copie la URL completa de la página a la que fue redirigido:",
+            QLineEdit.EchoMode.Normal,
+            ""
+        )
+        
+        if not ok or not redirect_url:
+            raise Exception("Autorización cancelada por el usuario")
+        
+        # Process the URL to get the authorization code
+        try:
+            import urllib.parse
+            
+            # Handle URL-encoded URLs
+            if '%3A' in redirect_url or '%2F' in redirect_url:
+                redirect_url = urllib.parse.unquote(redirect_url)
+            
+            print(f"Processing redirect URL: {redirect_url[:30]}...")
+            
+            # Extract the code from the URL
+            code = None
+            if redirect_url.startswith('http'):
+                code = self.sp_oauth.parse_response_code(redirect_url)
+            elif 'code=' in redirect_url:
+                code = redirect_url.split('code=')[1].split('&')[0]
+            else:
+                code = redirect_url
+            
+            if not code or code == redirect_url:
+                raise Exception("No se pudo extraer el código de autorización")
+            
+            print(f"Extracted code: {code[:5]}...")
+            
+            # Get token with the code
+            token_info = self.sp_oauth.get_access_token(code)
+            
+            if not token_info or 'access_token' not in token_info:
+                raise Exception("No se pudo obtener el token de acceso")
+            
+            print("Authentication successful")
+            return token_info
+            
+        except Exception as e:
+            print(f"Error processing authentication: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            
+            # Show error and offer retry
+            from PyQt6.QtWidgets import QMessageBox
+            
+            retry = QMessageBox.question(
+                self,
+                "Error de autenticación",
+                f"Ocurrió un error: {str(e)}\n\n¿Desea intentar nuevamente?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if retry == QMessageBox.StandardButton.Yes:
+                return self.perform_new_authentication()
+            else:
+                raise Exception("Autenticación fallida")
+
+
+
+    def refresh_token(self):
+        """Refresh token if necessary"""
+        try:
+            token_info = self.sp_oauth.get_cached_token()
+            if token_info and self.sp_oauth.is_token_expired(token_info):
+                print("Refreshing expired token")
+                token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
+                self.sp = spotipy.Spotify(auth=token_info['access_token'])
+                return True
+            return False
+        except Exception as e:
+            print(f"Error refreshing token: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            
+            # If refresh fails, try getting a new token
+            try:
+                print("Attempting new authentication after refresh failure")
+                token_info = self.perform_new_authentication()
+                self.sp = spotipy.Spotify(auth=token_info['access_token'])
+                return True
+            except Exception as e2:
+                print(f"New authentication also failed: {str(e2)}")
+                self.log(f"Error renovando token: {str(e)}")
+                return False
+
+    def api_call_with_retry(self, func, *args, **kwargs):
+        """Execute API call with retry if token expires"""
+        max_retries = 2
+        for attempt in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                print(f"API call failed (attempt {attempt+1}/{max_retries}): {str(e)}")
+                
+                if attempt < max_retries - 1:
+                    if "token" in str(e).lower():
+                        print("Token error detected, refreshing...")
+                        if self.refresh_token():
+                            print("Token refreshed, retrying...")
+                            continue
+                        else:
+                            print("Token refresh failed")
+                    else:
+                        print("Non-token error")
+                
+                # Last attempt failed or it's not a token error
+                raise
+
+
+
+    def load_spotify_playlists(self, force_update=False):
+        """Load user Spotify playlists from cache or Spotify"""
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return False
+            
+        try:
+            cache_path = os.path.join(os.path.expanduser("~"), ".cache", "music_app", "spotify", "playlists.json")
+            
+            if not force_update and os.path.exists(cache_path):
+                with open(cache_path, 'r', encoding='utf-8') as f:
+                    cached_data = json.load(f)
+                    self.update_spotify_playlists_ui(cached_data['items'])
+                    self.log("Spotify playlists loaded from cache")
+                    return True
+
+            results = self.api_call_with_retry(self.sp.current_user_playlists)
+            
+            # Save to cache
+            os.makedirs(os.path.dirname(cache_path), exist_ok=True)
+            with open(cache_path, 'w', encoding='utf-8') as f:
+                json.dump(results, f, ensure_ascii=False, indent=2)
+            
+            self.update_spotify_playlists_ui(results['items'])
+            return True
+            
+        except Exception as e:
+            self.log(f"Error loading Spotify playlists: {str(e)}")
+            print(f"Traceback: {traceback.format_exc()}")
+            return False
+
+    def update_spotify_playlists_ui(self, playlists_data):
+        """Update UI with Spotify playlist data"""
+        # First clear the combo box keeping only the first "New Playlist" item
+        combo = self.playlist_spotify_comboBox
+        while combo.count() > 1:
+            combo.removeItem(1)
+        
+        # Store playlists for later use
+        self.spotify_playlists = {}
+        
+        for playlist in playlists_data:
+            playlist_name = playlist['name']
+            playlist_id = playlist['id']
+            
+            # Store the playlist
+            self.spotify_playlists[playlist_name] = playlist
+            
+            # Add to combo box
+            from PyQt6.QtGui import QIcon
+            combo.addItem(QIcon(":/services/spotify"), playlist_name)
+        
+        # Connect signal if not already connected
+        try:
+            combo.currentIndexChanged.disconnect(self.on_spotify_playlist_changed)
+        except:
+            pass
+        combo.currentIndexChanged.connect(self.on_spotify_playlist_changed)
+        
+        self.log(f"Loaded {len(playlists_data)} Spotify playlists")
+
+
+    def on_spotify_playlist_changed(self, index):
+        """Handle selection change in the Spotify playlist comboBox"""
+        combo = self.playlist_spotify_comboBox
+        selected_text = combo.currentText()
+        
+        if index == 0:  # "New Playlist" option
+            self.show_create_spotify_playlist_dialog()
+        else:
+            # Show the selected playlist content
+            if hasattr(self, 'spotify_playlists') and selected_text in self.spotify_playlists:
+                playlist = self.spotify_playlists[selected_text]
+                self.show_spotify_playlist_content(playlist['id'], playlist['name'])
+        
+    def show_create_spotify_playlist_dialog(self):
+        """Show dialog to create a new Spotify playlist"""
+        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QDialogButtonBox
+        
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Crear Nueva Playlist de Spotify")
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Name input
+        layout.addWidget(QLabel("Nombre de la playlist:"))
+        name_input = QLineEdit()
+        layout.addWidget(name_input)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            playlist_name = name_input.text().strip()
+            if playlist_name:
+                self.create_spotify_playlist(playlist_name)
+                
+    def create_spotify_playlist(self, name):
+        """Create a new Spotify playlist"""
+        if not name:
+            return
+            
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return
+            
+        try:
+            self.sp.user_playlist_create(
+                user=self.spotify_user_id,
+                name=name,
+                public=False,
+                description="Created from Music App"
+            )
+            
+            self.log(f"Playlist created: {name}")
+            
+            # Reload playlists to update UI
+            self.load_spotify_playlists(force_update=True)
+            
+            # Select the newly created playlist in the comboBox
+            combo = self.playlist_spotify_comboBox
+            index = combo.findText(name)
+            if index > 0:
+                combo.setCurrentIndex(index)
+                
+        except Exception as e:
+            self.log(f"Error creating playlist: {str(e)}")
+
+    def show_spotify_playlist_content(self, playlist_id, playlist_name):
+        """Show Spotify playlist tracks in the tree widget"""
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return
+            
+        try:
+            # Clear the tree widget
+            self.treeWidget.clear()
+            
+            # Create a root item for the playlist
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtCore import Qt
+            
+            root_item = QTreeWidgetItem(self.treeWidget)
+            root_item.setText(0, playlist_name)
+            root_item.setText(1, "Spotify")
+            root_item.setText(2, "Playlist")
+            
+            # Make the root item bold
+            font = root_item.font(0)
+            font.setBold(True)
+            root_item.setFont(0, font)
+            root_item.setFont(1, font)
+            
+            # Fetch tracks from Spotify
+            results = self.api_call_with_retry(self.sp.playlist_items, playlist_id)
+            
+            # Add tracks as children of the root item
+            for item in results['items']:
+                if item['track']:
+                    track = item['track']
+                    
+                    track_item = QTreeWidgetItem(root_item)
+                    track_item.setText(0, track['name'])
+                    
+                    # Join artist names
+                    artists = [artist['name'] for artist in track['artists']]
+                    artist_str = ", ".join(artists)
+                    track_item.setText(1, artist_str)
+                    
+                    track_item.setText(2, "Canción")
+                    
+                    # Add duration if available
+                    if 'duration_ms' in track:
+                        duration_ms = track['duration_ms']
+                        minutes = int(duration_ms / 60000)
+                        seconds = int((duration_ms % 60000) / 1000)
+                        track_item.setText(4, f"{minutes}:{seconds:02d}")
+                    
+                    # Store track data for use with context menus, etc.
+                    track_data = {
+                        'source': 'spotify',
+                        'title': track['name'],
+                        'artist': artist_str,
+                        'url': track['external_urls']['spotify'],
+                        'type': 'track',
+                        'spotify_id': track['id']
+                    }
+                    
+                    # Store the data
+                    track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+            
+            # Expand the root item
+            root_item.setExpanded(True)
+            
+            self.log(f"Loaded {len(results['items'])} tracks from playlist '{playlist_name}'")
+            
+        except Exception as e:
+            self.log(f"Error loading playlist content: {str(e)}")
+            print(traceback.format_exc())
+
+
+    def add_to_spotify_playlist(self, track_data=None):
+        """Add selected tracks to a Spotify playlist"""
+        # If no track_data provided, get from selected items in tree
+        if not track_data:
+            selected_items = self.treeWidget.selectedItems()
+            if not selected_items:
+                self.log("No tracks selected")
+                return
+                
+            # Get the data from the first selected item
+            track_data = selected_items[0].data(0, Qt.ItemDataRole.UserRole)
+        
+        if not track_data:
+            self.log("No valid track data found")
+            return
+            
+        # Check if we have a Spotify client
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return
+            
+        # Get a list of user's playlists to choose from
+        if not hasattr(self, 'spotify_playlists') or not self.spotify_playlists:
+            self.load_spotify_playlists()
+            
+        # Create a dialog to select a playlist
+        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QComboBox, QDialogButtonBox
+        
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Añadir a Playlist de Spotify")
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Add a label with track info
+        if isinstance(track_data, dict):
+            track_name = track_data.get('title', 'Unknown Track')
+            artist_name = track_data.get('artist', 'Unknown Artist')
+            layout.addWidget(QLabel(f"Añadir '{track_name}' por {artist_name} a:"))
+        else:
+            layout.addWidget(QLabel("Seleccionar playlist:"))
+        
+        # Playlist selector
+        playlist_combo = QComboBox()
+        for name in self.spotify_playlists.keys():
+            playlist_combo.addItem(name)
+        layout.addWidget(playlist_combo)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            selected_playlist = playlist_combo.currentText()
+            if selected_playlist in self.spotify_playlists:
+                playlist_id = self.spotify_playlists[selected_playlist]['id']
+                
+                # Get the track Spotify URI
+                track_uri = None
+                
+                # If this is already a Spotify track, get its ID
+                if isinstance(track_data, dict) and track_data.get('source') == 'spotify' and track_data.get('spotify_id'):
+                    track_uri = f"spotify:track:{track_data['spotify_id']}"
+                else:
+                    # Try to search for the track on Spotify
+                    track_uri = self.search_spotify_track_uri(track_data)
+                    
+                if track_uri:
+                    try:
+                        # Add the track to the playlist
+                        self.sp.playlist_add_items(playlist_id, [track_uri])
+                        self.log(f"Track added to playlist '{selected_playlist}'")
+                    except Exception as e:
+                        self.log(f"Error adding track to playlist: {str(e)}")
+                else:
+                    self.log("Could not find track on Spotify")
+
+    def search_spotify_track_uri(self, track_data):
+        """Search for a track on Spotify and return its URI"""
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return None
+            
+        try:
+            # Extract search terms
+            if isinstance(track_data, dict):
+                title = track_data.get('title', '')
+                artist = track_data.get('artist', '')
+                query = f"{title} artist:{artist}" if artist else title
+            else:
+                # If just a string was passed, use it as the query
+                query = str(track_data)
+            
+            # Search Spotify
+            results = self.api_call_with_retry(self.sp.search, q=query, type='track', limit=1)
+            
+            # Check if we got any results
+            if results and 'tracks' in results and 'items' in results['tracks'] and results['tracks']['items']:
+                track = results['tracks']['items'][0]
+                return f"spotify:track:{track['id']}"
+                
+            return None
+            
+        except Exception as e:
+            self.log(f"Error searching Spotify: {str(e)}")
+            return None
+
+    def setup_context_menus(self):
+        """Set up context menus for tree and list widgets"""
+        # Set custom context menu for treeWidget
+        self.treeWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.treeWidget.customContextMenuRequested.connect(self.show_tree_context_menu)
+        
+        # Set custom context menu for listWidget
+        self.listWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.listWidget.customContextMenuRequested.connect(self.show_list_context_menu)
+
+
+    def show_tree_context_menu(self, position):
+        """Show context menu for tree widget items"""
+        from PyQt6.QtWidgets import QMenu
+        from PyQt6.QtGui import QAction
+        
+        # Get the item at this position
+        item = self.treeWidget.itemAt(position)
+        if not item:
+            return
+            
+        # Get the item data
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            return
+        
+        # Create the menu
+        menu = QMenu(self)
+        
+        # Add standard actions
+        play_action = menu.addAction("Reproducir")
+        add_to_queue_action = menu.addAction("Añadir a cola")
+        copy_url_action = menu.addAction("Copiar URL")
+        
+        # Add Spotify-specific actions if Spotify is authenticated
+        if hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+            menu.addSeparator()
+            add_to_spotify_action = menu.addAction("Añadir a playlist de Spotify")
+        
+        # Show the menu and handle the selected action
+        action = menu.exec(self.treeWidget.mapToGlobal(position))
+        
+        if action == play_action:
+            self.play_item(item)
+        elif action == add_to_queue_action:
+            self.add_item_to_queue(item)
+        elif action == copy_url_action:
+            self.copy_url_to_clipboard()
+        elif hasattr(self, 'spotify_authenticated') and self.spotify_authenticated and action == add_to_spotify_action:
+            self.add_to_spotify_playlist(item_data)
+
+
+    def play_item(self, item):
+        """Play a tree item directly"""
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            return
+            
+        url = None
+        if isinstance(item_data, dict):
+            url = item_data.get('url')
+        else:
+            url = str(item_data)
+            
+        if url:
+            # Add to queue and play immediately
+            title = item.text(0)
+            artist = item.text(1)
+            display_text = f"{artist} - {title}" if artist else title
+            
+            # Add to queue first
+            self.add_to_queue_from_url(url, display_text, item_data)
+            
+            # Get the index of the newly added item
+            index = len(self.current_playlist) - 1
+            
+            # Play it
+            self.current_track_index = index
+            self.play_from_index(index)
+
+    def on_guardar_playlist_clicked(self):
+        """Handle save playlist button click"""
+        combo = self.guardar_playlist_comboBox
+        selected = combo.currentText()
+        
+        if selected == "Spotify":
+            self.save_to_spotify_playlist()
+        elif selected == "Playlist local":
+            self.save_current_playlist()  # Tu función existente
+        elif selected == "Youtube":
+            self.log("Guardado en Youtube no implementado aún")
+
+    def save_to_spotify_playlist(self):
+        """Save current queue to an existing Spotify playlist"""
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Cliente de Spotify no inicializado")
+            QMessageBox.warning(self, "Error", "No se ha podido conectar con Spotify")
+            return
+                
+        # Check if we have items in the queue
+        if not self.current_playlist or self.listWidget.count() == 0:
+            self.log("No hay canciones en la cola para guardar")
+            QMessageBox.warning(self, "Error", "No hay canciones en la cola para guardar")
+            return
+        
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Guardar en Playlist de Spotify")
+        dialog.setMinimumWidth(400)
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Add explanation text
+        layout.addWidget(QLabel(f"Selecciona una playlist de Spotify para añadir {self.listWidget.count()} canciones:"))
+        
+        # Add playlist selector combo box similar to playlist_spotify_comboBox
+        playlist_combo = QComboBox()
+        
+        # Add items from spotify_playlists
+        if hasattr(self, 'spotify_playlists') and self.spotify_playlists:
+            for name in self.spotify_playlists.keys():
+                playlist_combo.addItem(QIcon(":/services/spotify"), name)
+        else:
+            # If playlists haven't been loaded yet, load them
+            self.load_spotify_playlists()
+            if hasattr(self, 'spotify_playlists') and self.spotify_playlists:
+                for name in self.spotify_playlists.keys():
+                    playlist_combo.addItem(QIcon(":/services/spotify"), name)
+        
+        # Default to currently selected playlist in playlist_spotify_comboBox if any
+        if hasattr(self, 'playlist_spotify_comboBox') and self.playlist_spotify_comboBox.currentIndex() > 0:
+            current_playlist = self.playlist_spotify_comboBox.currentText()
+            index = playlist_combo.findText(current_playlist)
+            if index >= 0:
+                playlist_combo.setCurrentIndex(index)
+        
+        layout.addWidget(playlist_combo)
+        
+        # Add option to create new playlist
+        create_new_checkbox = QCheckBox("Crear nueva playlist")
+        layout.addWidget(create_new_checkbox)
+        
+        # New playlist name (initially hidden)
+        new_playlist_label = QLabel("Nombre de la nueva playlist:")
+        new_playlist_input = QLineEdit()
+        new_playlist_label.setVisible(False)
+        new_playlist_input.setVisible(False)
+        layout.addWidget(new_playlist_label)
+        layout.addWidget(new_playlist_input)
+        
+        # Connect checkbox to show/hide new playlist inputs
+        create_new_checkbox.stateChanged.connect(
+            lambda state: [new_playlist_label.setVisible(state == Qt.CheckState.Checked),
+                        new_playlist_input.setVisible(state == Qt.CheckState.Checked),
+                        playlist_combo.setEnabled(state != Qt.CheckState.Checked)]
+        )
+        
+        # Button box
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            if create_new_checkbox.isChecked():
+                playlist_name = new_playlist_input.text().strip()
+                if not playlist_name:
+                    self.log("Nombre de playlist vacío")
+                    QMessageBox.warning(self, "Error", "Por favor, introduce un nombre para la playlist")
+                    return
+                
+                # Create new playlist and add songs
+                self.create_spotify_playlist_with_tracks(playlist_name)
+            else:
+                # Add to existing playlist
+                selected_playlist = playlist_combo.currentText()
+                if not selected_playlist or selected_playlist not in self.spotify_playlists:
+                    self.log("No se ha seleccionado ninguna playlist válida")
+                    return
+                
+                playlist_id = self.spotify_playlists[selected_playlist]['id']
+                self.add_tracks_to_spotify_playlist(playlist_id, selected_playlist)
+
+
+    def create_spotify_playlist_with_tracks(self, playlist_name):
+        """Create a new Spotify playlist and add tracks from the current queue"""
+        try:
+            # First create the playlist
+            result = self.api_call_with_retry(
+                self.sp.user_playlist_create,
+                user=self.spotify_user_id,
+                name=playlist_name,
+                public=False,
+                description="Created from Music App Queue"
+            )
+            
+            playlist_id = result['id']
+            self.log(f"Playlist '{playlist_name}' creada correctamente")
+            
+            # Add tracks to the playlist
+            self.add_tracks_to_spotify_playlist(playlist_id, playlist_name)
+            
+            # Reload playlists to update UI
+            self.load_spotify_playlists(force_update=True)
+            
+        except Exception as e:
+            self.log(f"Error creando playlist: {str(e)}")
+            QMessageBox.warning(self, "Error", f"Error creando playlist: {str(e)}")
+
+    def add_tracks_to_spotify_playlist(self, playlist_id, playlist_name):
+        """Add tracks from the current queue to a Spotify playlist"""
+        try:
+            # Show a progress dialog
+            progress_dialog = QProgressDialog("Añadiendo canciones a Spotify...", "Cancelar", 0, self.listWidget.count(), self)
+            progress_dialog.setWindowTitle("Guardando Playlist")
+            progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+            
+            # Get Spotify URIs for all tracks in the queue
+            track_uris = []
+            not_found = []
+            skipped = 0
+            
+            for i in range(self.listWidget.count()):
+                # Update progress
+                progress_dialog.setValue(i)
+                if progress_dialog.wasCanceled():
+                    self.log("Operación cancelada por el usuario")
+                    return
+                
+                # Get item data
+                item = self.listWidget.item(i)
+                if not item:
+                    continue
+                    
+                # Get track data
+                track_data = {}
+                if i < len(self.current_playlist):
+                    track_data = self.current_playlist[i]
+                else:
+                    # Extract from item text
+                    text = item.text()
+                    title = text
+                    artist = ""
+                    if " - " in text:
+                        parts = text.split(" - ", 1)
+                        artist = parts[0]
+                        title = parts[1]
+                    track_data = {'title': title, 'artist': artist, 'url': item.data(Qt.ItemDataRole.UserRole)}
+                
+                track_uri = None
+                
+                # Check if this is already a Spotify track with ID
+                entry_data = track_data.get('entry_data', {})
+                if isinstance(entry_data, dict) and entry_data.get('source') == 'spotify' and entry_data.get('spotify_id'):
+                    track_uri = f"spotify:track:{entry_data['spotify_id']}"
+                # Check if URL is a Spotify URL with track ID
+                elif 'url' in track_data and 'spotify.com/track/' in track_data['url']:
+                    track_id = track_data['url'].split('spotify.com/track/')[1].split('?')[0]
+                    track_uri = f"spotify:track:{track_id}"
+                else:
+                    # Try to search for the track on Spotify
+                    search_query = f"{track_data.get('title', '')} artist:{track_data.get('artist', '')}" 
+                    track_uri = self.search_spotify_track_uri(search_query)
+                
+                if track_uri:
+                    track_uris.append(track_uri)
+                else:
+                    not_found.append(track_data.get('title', f"Track {i+1}"))
+                    skipped += 1
+            
+            progress_dialog.setValue(self.listWidget.count())
+            
+            # Add tracks to the playlist (in batches of 100 if needed)
+            if track_uris:
+                batch_size = 100
+                for i in range(0, len(track_uris), batch_size):
+                    batch = track_uris[i:i+batch_size]
+                    self.api_call_with_retry(self.sp.playlist_add_items, playlist_id, batch)
+            
+            # Show results
+            if skipped > 0:
+                QMessageBox.information(
+                    self, 
+                    "Playlist guardada", 
+                    f"Playlist '{playlist_name}' actualizada con {len(track_uris)} canciones.\n"
+                    f"No se encontraron {skipped} canciones en Spotify."
+                )
+            else:
+                QMessageBox.information(
+                    self, 
+                    "Playlist guardada", 
+                    f"Playlist '{playlist_name}' actualizada con {len(track_uris)} canciones."
+                )
+            
+            self.log(f"Playlist '{playlist_name}' actualizada con {len(track_uris)} canciones")
+            if skipped > 0:
+                self.log(f"No se encontraron {skipped} canciones en Spotify: {', '.join(not_found[:5])}" + 
+                    ("..." if len(not_found) > 5 else ""))
+            
+        except Exception as e:
+            self.log(f"Error añadiendo canciones a la playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            QMessageBox.warning(self, "Error", f"Error añadiendo canciones a la playlist: {str(e)}")
+
+
+    def save_queue_to_spotify_playlist(self):
+        """Save current queue as a Spotify playlist"""
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify client not initialized")
+            return
+            
+        # Check if we have items in the queue
+        if not self.current_playlist:
+            self.log("No hay canciones en la cola para guardar")
+            return
+            
+        # Show dialog to get playlist name
+        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QDialogButtonBox
+        
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Guardar Cola como Playlist de Spotify")
+        
+        layout = QVBoxLayout(dialog)
+        
+        # Add a label
+        layout.addWidget(QLabel(f"Guardar {len(self.current_playlist)} canciones como nueva playlist:"))
+        
+        # Name input
+        layout.addWidget(QLabel("Nombre de la playlist:"))
+        name_input = QLineEdit()
+        layout.addWidget(name_input)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            playlist_name = name_input.text().strip()
+            if playlist_name:
+                try:
+                    # First create the playlist
+                    result = self.sp.user_playlist_create(
+                        user=self.spotify_user_id,
+                        name=playlist_name,
+                        public=False,
+                        description="Created from Music App Queue"
+                    )
+                    
+                    playlist_id = result['id']
+                    
+                    # Now get Spotify URIs for all tracks in the queue
+                    track_uris = []
+                    not_found = []
+                    
+                    for i, item in enumerate(self.current_playlist):
+                        # Update progress
+                        if i % 5 == 0:
+                            self.log(f"Procesando canción {i+1}/{len(self.current_playlist)}...")
+                        
+                        track_uri = None
+                        
+                        # If this is already a Spotify track, get its ID
+                        entry_data = item.get('entry_data', {})
+                        if isinstance(entry_data, dict) and entry_data.get('source') == 'spotify' and entry_data.get('spotify_id'):
+                            track_uri = f"spotify:track:{entry_data['spotify_id']}"
+                        else:
+                            # Try to search for the track on Spotify
+                            track_uri = self.search_spotify_track_uri(item)
+                        
+                        if track_uri:
+                            track_uris.append(track_uri)
+                        else:
+                            not_found.append(item.get('title', f"Track {i+1}"))
+                    
+                    # Add tracks to the playlist (in batches of 100 if needed)
+                    if track_uris:
+                        batch_size = 100
+                        for i in range(0, len(track_uris), batch_size):
+                            batch = track_uris[i:i+batch_size]
+                            self.sp.playlist_add_items(playlist_id, batch)
+                    
+                    # Show results
+                    self.log(f"Playlist '{playlist_name}' creada con {len(track_uris)} canciones")
+                    
+                    if not_found:
+                        self.log(f"No se encontraron {len(not_found)} canciones en Spotify")
+                    
+                    # Reload playlists to update UI
+                    self.load_spotify_playlists(force_update=True)
+                    
+                except Exception as e:
+                    self.log(f"Error guardando playlist: {str(e)}")
+
+
+    def on_playlist_rss_changed(self, index):
+        """Handle selection change in the RSS playlist comboBox"""
+        combo = self.playlist_rss_comboBox
+        selected_text = combo.currentText()
+        
+        # In a real implementation, you would load RSS content here
+        self.log(f"RSS Playlist selected: {selected_text}")
+        
+        # For now, just show a placeholder message
+        self.treeWidget.clear()
+        from PyQt6.QtWidgets import QTreeWidgetItem
+        
+        root_item = QTreeWidgetItem(self.treeWidget)
+        root_item.setText(0, selected_text)
+        root_item.setText(1, "RSS")
+        root_item.setText(2, "Feed")
+        
+        # Make the root item bold
+        font = root_item.font(0)
+        font.setBold(True)
+        root_item.setFont(0, font)
+        
+        # Add a placeholder item
+        item = QTreeWidgetItem(root_item)
+        item.setText(0, "Implementación pendiente")
+        item.setText(1, "")
+        item.setText(2, "Info")
+        
+        root_item.setExpanded(True)
+
+    def on_playlist_local_changed(self, index):
+        """Handle selection change in the local playlist comboBox"""
+        combo = self.playlist_local_comboBox
+        selected_text = combo.currentText()
+        
+        # In a real implementation, you would load local playlist content here
+        self.log(f"Local Playlist selected: {selected_text}")
+        
+        # For now, just show a placeholder message
+        self.treeWidget.clear()
+        from PyQt6.QtWidgets import QTreeWidgetItem
+        
+        root_item = QTreeWidgetItem(self.treeWidget)
+        root_item.setText(0, selected_text)
+        root_item.setText(1, "Local")
+        root_item.setText(2, "Playlist")
+        
+        # Make the root item bold
+        font = root_item.font(0)
+        font.setBold(True)
+        root_item.setFont(0, font)
+        
+        # Add a placeholder item
+        item = QTreeWidgetItem(root_item)
+        item.setText(0, "Implementación pendiente")
+        item.setText(1, "")
+        item.setText(2, "Info")
+        
+        root_item.setExpanded(True)
+
+
 
 def run_direct_command(self, cmd, args=None):
     """Ejecuta un comando directo y devuelve su salida."""

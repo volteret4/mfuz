@@ -791,6 +791,9 @@ class MusicBrowser(BaseModule):
                 self.results_tree = self.results_tree_widget.findChild(QTreeWidget, "results_tree")
                 if self.results_tree:
                     container_layout.addWidget(self.results_tree_widget)
+                    self.results_tree.setColumnWidth(0, 150)
+                    self.results_tree.setColumnWidth(1, 50)
+                    self.results_tree.setColumnWidth(2, 80)
 
                     # Configurar eventos del árbol
                     self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)

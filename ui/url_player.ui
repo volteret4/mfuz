@@ -179,6 +179,9 @@ QProgressBar::chunk {
       </item>
       <item>
        <widget class="QPushButton" name="searchButton">
+        <property name="toolTip">
+         <string>Buscar</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -217,6 +220,9 @@ QProgressBar::chunk {
           <width>130</width>
           <height>30</height>
          </size>
+        </property>
+        <property name="toolTip">
+         <string>Servicios en los que buscar</string>
         </property>
         <property name="insertPolicy">
          <enum>QComboBox::InsertPolicy::NoInsert</enum>
@@ -260,70 +266,280 @@ QProgressBar::chunk {
       <number>0</number>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QFrame" name="tree_container">
         <property name="styleSheet">
-         <string notr="true">            QFrame {{
-                border: none
-                border-radius: 3px;
-            }}</string>
+         <string notr="true"/>
+        </property>
+        <property name="locale">
+         <locale language="Spanish" country="Spain"/>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
+         <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Shadow::Raised</enum>
         </property>
         <property name="lineWidth">
-         <number>0</number>
+         <number>1</number>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <property name="leftMargin">
-          <number>12</number>
+          <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>2</number>
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
          </property>
          <item>
-          <widget class="QTreeWidget" name="treeWidget">
+          <widget class="QFrame" name="resultados_container">
            <property name="frameShape">
             <enum>QFrame::Shape::StyledPanel</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Shadow::Plain</enum>
+            <enum>QFrame::Shadow::Raised</enum>
            </property>
-           <property name="lineWidth">
-            <number>0</number>
-           </property>
-           <property name="horizontalScrollBarPolicy">
-            <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-           </property>
-           <property name="columnCount">
-            <number>4</number>
-           </property>
-           <attribute name="headerVisible">
-            <bool>true</bool>
-           </attribute>
-           <column>
-            <property name="text">
-             <string notr="true">Titulo</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Artista</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Tipo</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string>Duración</string>
-            </property>
-           </column>
+           <layout class="QVBoxLayout" name="verticalLayout_15">
+            <item>
+             <widget class="QTreeWidget" name="treeWidget">
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Plain</enum>
+              </property>
+              <property name="lineWidth">
+               <number>0</number>
+              </property>
+              <property name="horizontalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+              </property>
+              <property name="columnCount">
+               <number>4</number>
+              </property>
+              <attribute name="headerVisible">
+               <bool>true</bool>
+              </attribute>
+              <column>
+               <property name="text">
+                <string notr="true">Titulo</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Artista</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Tipo</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Duración</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="tree_container_frame">
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QComboBox" name="playlist_spotify_comboBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Carga playlist spotify</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Nueva Playlist Spotify</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../images.qrc">
+                    <normaloff>:/services/b_plus_cross</normaloff>:/services/b_plus_cross</iconset>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Playlist Spotify 1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../images.qrc">
+                    <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="playlist_rss_comboBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Carga playlist del lector rss</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Blog Fresh Rss 1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../images.qrc">
+                    <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="playlist_local_comboBox">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Carga playlist local</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Playlist local 1</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="../images.qrc">
+                    <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="addButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>36</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>36</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>Segoe UI</family>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>Añadir al creador de playlists</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>30</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="delButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>36</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <family>Segoe UI</family>
+                   <pointsize>10</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
+                 <property name="toolTip">
+                  <string>Eliminar del creador de playlists</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/b_minus_star</normaloff>:/services/b_minus_star</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>30</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -354,10 +570,10 @@ QProgressBar::chunk {
           <number>0</number>
          </property>
          <property name="rightMargin">
-          <number>12</number>
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>9</number>
+          <number>0</number>
          </property>
          <item>
           <widget class="QFrame" name="botones_player">
@@ -413,7 +629,7 @@ QProgressBar::chunk {
             <enum>QFrame::Shape::NoFrame</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
+            <enum>QFrame::Shadow::Plain</enum>
            </property>
            <property name="lineWidth">
             <number>0</number>
@@ -440,7 +656,7 @@ QProgressBar::chunk {
             }}</string>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>0</number>
               </property>
               <property name="movable">
                <bool>false</bool>
@@ -462,18 +678,84 @@ QProgressBar::chunk {
                 <string>Playlist</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_6">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
-                 <widget class="QListWidget" name="listWidget">
-                  <property name="frameShape">
-                   <enum>QFrame::Shape::NoFrame</enum>
+                 <widget class="QScrollArea" name="playlist_scrollArea">
+                  <property name="autoFillBackground">
+                   <bool>false</bool>
                   </property>
-                  <property name="lineWidth">
-                   <number>0</number>
+                  <property name="widgetResizable">
+                   <bool>true</bool>
                   </property>
+                  <widget class="QWidget" name="scrollAreaWidgetContents_5">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>581</width>
+                     <height>625</height>
+                    </rect>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_16">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QListWidget" name="listWidget">
+                      <property name="styleSheet">
+                       <string notr="true">QListWidget {{
+	background-color: {theme['secondary_bg']};
+}}</string>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::Shape::NoFrame</enum>
+                      </property>
+                      <property name="lineWidth">
+                       <number>0</number>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>16</width>
+                        <height>16</height>
+                       </size>
+                      </property>
+                      <property name="sortingEnabled">
+                       <bool>true</bool>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QFrame" name="frame">
+                 <widget class="QFrame" name="botones_reproductor_frame">
+                  <property name="font">
+                   <font>
+                    <family>Segoe UI</family>
+                    <pointsize>10</pointsize>
+                   </font>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">            QFrame {{
                 border: none
@@ -484,97 +766,15 @@ QProgressBar::chunk {
                    <enum>QFrame::Shape::NoFrame</enum>
                   </property>
                   <property name="frameShadow">
-                   <enum>QFrame::Shadow::Raised</enum>
+                   <enum>QFrame::Shadow::Plain</enum>
                   </property>
                   <property name="lineWidth">
                    <number>0</number>
                   </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_3">
-                   <item>
-                    <widget class="QPushButton" name="addButton">
-                     <property name="minimumSize">
-                      <size>
-                       <width>36</width>
-                       <height>36</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>36</width>
-                       <height>36</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Segoe UI</family>
-                       <pointsize>10</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="../images.qrc">
-                       <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
-                     </property>
-                     <property name="iconSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QPushButton" name="delButton">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>36</width>
-                       <height>36</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Segoe UI</family>
-                       <pointsize>10</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="../images.qrc">
-                       <normaloff>:/services/b_minus_star</normaloff>:/services/b_minus_star</iconset>
-                     </property>
-                     <property name="iconSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <spacer name="horizontalSpacer_2">
-                     <property name="orientation">
-                      <enum>Qt::Orientation::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>40</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
+                   <property name="bottomMargin">
+                    <number>9</number>
+                   </property>
                    <item>
                     <widget class="QPushButton" name="rewButton">
                      <property name="minimumSize">
@@ -595,6 +795,9 @@ QProgressBar::chunk {
                        <pointsize>10</pointsize>
                        <bold>true</bold>
                       </font>
+                     </property>
+                     <property name="toolTip">
+                      <string>Canción anterior</string>
                      </property>
                      <property name="text">
                       <string/>
@@ -631,6 +834,9 @@ QProgressBar::chunk {
                        <pointsize>10</pointsize>
                        <bold>true</bold>
                       </font>
+                     </property>
+                     <property name="toolTip">
+                      <string>Reproducir/Pausar</string>
                      </property>
                      <property name="text">
                       <string/>
@@ -677,6 +883,9 @@ QProgressBar::chunk {
                      <property name="cursor">
                       <cursorShape>PointingHandCursor</cursorShape>
                      </property>
+                     <property name="toolTip">
+                      <string>Canción prósima</string>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">QPushButton {{
 	border-radius: 20
@@ -688,6 +897,136 @@ QProgressBar::chunk {
                      <property name="icon">
                       <iconset resource="../images.qrc">
                        <normaloff>:/services/b_ff</normaloff>:/services/b_ff</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_4">
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="guardar_playlist_comboBox">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Segoe UI</family>
+                       <pointsize>10</pointsize>
+                      </font>
+                     </property>
+                     <property name="toolTip">
+                      <string>Selecciona tipo de playlist a guardar</string>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Playlist local</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Spotify</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Youtube</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/yt</normaloff>:/services/yt</iconset>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="GuardarPlaylist">
+                     <property name="maximumSize">
+                      <size>
+                       <width>36</width>
+                       <height>36</height>
+                      </size>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="toolTip">
+                      <string>Guardar lista</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/b_save</normaloff>:/services/b_save</iconset>
+                     </property>
+                     <property name="iconSize">
+                      <size>
+                       <width>30</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="VaciarPlaylist">
+                     <property name="maximumSize">
+                      <size>
+                       <width>36</width>
+                       <height>36</height>
+                      </size>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="toolTip">
+                      <string>Vaciar lista</string>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/error</normaloff>:/services/error</iconset>
                      </property>
                      <property name="iconSize">
                       <size>
@@ -713,6 +1052,18 @@ QProgressBar::chunk {
                 <string>Información</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_7">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
                  <widget class="QScrollArea" name="scrollArea">
                   <property name="frameShape">
@@ -729,8 +1080,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>542</width>
-                     <height>640</height>
+                     <width>581</width>
+                     <height>685</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -740,6 +1091,18 @@ QProgressBar::chunk {
             }}</string>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_8">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTextEdit" name="textEdit">
                       <property name="frameShape">
@@ -750,6 +1113,9 @@ QProgressBar::chunk {
                       </property>
                       <property name="lineWidth">
                        <number>0</number>
+                      </property>
+                      <property name="placeholderText">
+                       <string>En esta pestaña se mostrará un log sobre la búsqueda y reproducción de elementos en esta ventana</string>
                       </property>
                      </widget>
                     </item>
@@ -764,6 +1130,18 @@ QProgressBar::chunk {
                 <string>Info Wiki</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_3">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
                  <widget class="QScrollArea" name="info_wiki_scroll">
                   <property name="widgetResizable">
@@ -774,11 +1152,23 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>542</width>
-                     <height>640</height>
+                     <width>581</width>
+                     <height>685</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_9">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTextEdit" name="info_wiki_textedit">
                       <property name="readOnly">
@@ -786,6 +1176,9 @@ QProgressBar::chunk {
                       </property>
                       <property name="textInteractionFlags">
                        <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                      </property>
+                      <property name="placeholderText">
+                       <string>Aqui se mostrará información sobre el elemento buscado</string>
                       </property>
                      </widget>
                     </item>

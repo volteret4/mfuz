@@ -94,5 +94,27 @@
         <file alias="b_alert">ui/svg/caution-svgrepo-com.svg</file>
         <file alias="b_plus_cross">ui/svg/plus-cross-svgrepo-com.svg</file>
         <file alias="bandcamp">ui/svg/bandcamp-svgrepo-com.svg</file>
+        <file alias="loading">ui/gif/mano.gif</file>
+        <file alias="trash">ui/svg/trash-2-svgrepo-com.svg</file>
+        <file alias="sound">ui/svg/sound-2-svgrepo-com.svg</file>
+        <file alias="sound1">ui/svg/sound-1-svgrepo-com.svg</file>
+        <file alias="share">ui/svg/share-1-svgrepo-com.svg</file>
+        <file alias="rewind">ui/svg/rewind-svgrepo-com.svg</file>
+        <file alias="save_ol">ui/svg/save-svgrepo-com.svg</file>
+        <file alias="onoff">ui/svg/power-svgrepo-com.svg</file>
+        <file alias="refresh">ui/svg/refresh-circle-svgrepo-com.svg</file>
+        <file alias="corchea">ui/svg/music-svgrepo-com.svg</file>
+        <file alias="prev_ol">ui/svg/previous-svgrepo-com.svg</file>
+        <file alias="next_ol">ui/svg/next-svgrepo-com.svg</file>
+        <file alias="ff_ol">ui/svg/forward-svgrepo-com.svg</file>
+        <file alias="delete_ol">ui/svg/delete-svgrepo-com.svg</file>
+        <file alias="ear_ol">ui/svg/music-ear-svgrepo-com.svg</file>
+        <file alias="play_ol">ui/svg/play-button-svgrepo-com.svg</file>
+        <file alias="spotify_ol">ui/svg/spotify-alt-1-svgrepo-com.svg</file>
+        <file alias="souncloud_ol">ui/svg/soundcloud-svgrepo-com.svg</file>
+        <file alias="lastfm_ol">ui/svg/lastfm-svgrepo-com.svg</file>
+        <file alias="youtube_ol">ui/svg/youtube-svgrepo-com.svg</file>
+        <file alias="db_ol">ui/svg/database-svgrepo-com.svg</file>
+        <file alias="search_ol">ui/svg/search-magnifier-outline-svgrepo-com.svg</file>
     </qresource>
 </RCC>

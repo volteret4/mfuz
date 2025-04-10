@@ -31,16 +31,24 @@
    </property>
    <item>
     <widget class="QScrollArea" name="scroll_area">
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
-     <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
-     </property>
      <widget class="QWidget" name="container">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>798</width>
+        <height>598</height>
+       </rect>
+      </property>
       <layout class="QVBoxLayout" name="container_layout">
        <property name="spacing">
         <number>10</number>
@@ -57,17 +65,15 @@
        <property name="bottomMargin">
         <number>10</number>
        </property>
-       <!-- Global Configuration Group -->
        <item>
         <widget class="QGroupBox" name="global_group">
-         <property name="title">
-          <string>Global Configuration</string>
-         </property>
          <property name="styleSheet">
           <string>QGroupBox { font-weight: bold; }</string>
          </property>
+         <property name="title">
+          <string/>
+         </property>
          <layout class="QVBoxLayout" name="global_layout">
-          <!-- The fields will be added dynamically in code -->
           <item>
            <widget class="QCheckBox" name="enable_individual_themes">
             <property name="text">
@@ -78,7 +84,7 @@
           <item>
            <widget class="QGroupBox" name="shared_db_group">
             <property name="title">
-             <string>Shared Database Paths</string>
+             <string/>
             </property>
             <layout class="QVBoxLayout" name="shared_db_layout">
              <item>
@@ -122,59 +128,52 @@
          </layout>
         </widget>
        </item>
-       <!-- Active Modules Group -->
        <item>
         <widget class="QGroupBox" name="active_modules_group">
-         <property name="title">
-          <string>Active Modules</string>
-         </property>
          <property name="styleSheet">
           <string>QGroupBox { font-weight: bold; color: #4CAF50; }</string>
          </property>
-         <layout class="QVBoxLayout" name="active_modules_layout">
-          <!-- The modules will be added dynamically in code -->
-         </layout>
+         <property name="title">
+          <string>Active Modules</string>
+         </property>
+         <layout class="QVBoxLayout" name="active_modules_layout"/>
         </widget>
        </item>
-       <!-- Disabled Modules Group -->
        <item>
         <widget class="QGroupBox" name="disabled_modules_group">
-         <property name="title">
-          <string>Disabled Modules</string>
-         </property>
          <property name="styleSheet">
           <string>QGroupBox { font-weight: bold; color: #F44336; }</string>
          </property>
-         <layout class="QVBoxLayout" name="disabled_modules_layout">
-          <!-- The modules will be added dynamically in code -->
-         </layout>
+         <property name="title">
+          <string>Disabled Modules</string>
+         </property>
+         <layout class="QVBoxLayout" name="disabled_modules_layout"/>
         </widget>
        </item>
-       <!-- Save/Reload Buttons -->
        <item>
         <widget class="QPushButton" name="save_all_button">
-         <property name="text">
-          <string>Save All Changes</string>
-         </property>
          <property name="styleSheet">
           <string>background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;</string>
+         </property>
+         <property name="text">
+          <string>Save All Changes</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="reload_button">
-         <property name="text">
-          <string>Reload Configuration</string>
-         </property>
          <property name="styleSheet">
           <string>background-color: #2196F3; color: white; padding: 8px;</string>
+         </property>
+         <property name="text">
+          <string>Reload Configuration</string>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

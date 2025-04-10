@@ -177,19 +177,19 @@ class BaseModule(QWidget):
 
         # The base module should have more minimal styling to avoid conflicts
         # when it's included in TabManager
-        self.setStyleSheet(f"""
-            /* Base styles - kept minimal to avoid conflicts */
-            QLabel {{
-                color: {theme['fg']};
-            }}
+        # self.setStyleSheet(f"""
+        #     /* Base styles - kept minimal to avoid conflicts */
+        #     QLabel {{
+        #         color: {theme['fg']};
+        #     }}
             
-            /* Custom module-specific styling - use class selectors */
-            .custom-widget {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-            }}
-        """)
+        #     /* Custom module-specific styling - use class selectors */
+        #     .custom-widget {{
+        #         background-color: {theme['secondary_bg']};
+        #         color: {theme['fg']};
+                
+        #     }}
+        # """)
 
         # Recursive theme application to child widgets
         self._apply_theme_to_children(self, theme)
@@ -212,55 +212,56 @@ class BaseModule(QWidget):
                 # Special handling for specific widget types
                 widget_type = child.__class__.__name__
                     
-                # Apply specific styling for various widget types
-                if hasattr(child, 'setStyleSheet'):
-                    # Using direct style application for better specificity
-                    if isinstance(child, QTableWidget) or isinstance(child, QTableView):
-                        child.setStyleSheet(f"""
-                            QTableWidget, QTableView {{
-                                background-color: {theme['secondary_bg']};
-                                color: {theme['fg']};
-                                gridline-color: {theme['border']};
-                            }}
-                        """)
-                        # Adjust header properties
-                        if hasattr(child, 'horizontalHeader') and hasattr(child, 'verticalHeader'):
-                            child.horizontalHeader().setStyleSheet(f"""
-                                QHeaderView::section {{
-                                    background-color: {theme['secondary_bg']};
-                                    color: {theme['fg']};
-                                    border: 1px solid {theme['border']};
-                                }}
-                            """)
-                            child.verticalHeader().setStyleSheet(f"""
-                                QHeaderView::section {{
-                                    background-color: {theme['secondary_bg']};
-                                    color: {theme['fg']};
-                                    border: 1px solid {theme['border']};
-                                }}
-                            """)
+                # # Apply specific styling for various widget types
+                # if hasattr(child, 'setStyleSheet'):
+                #     # Using direct style application for better specificity
+                #     if isinstance(child, QTableWidget) or isinstance(child, QTableView):
+                #         child.setStyleSheet(f"""
+                #             QTableWidget, QTableView {{
+                #                 background-color: {theme['secondary_bg']};
+                #                 color: {theme['fg']};
+                #                 gridline-color: {theme['border']};
+                #                 border: none;
+                #             }}
+                #         """)
+                #         # Adjust header properties
+                #         if hasattr(child, 'horizontalHeader') and hasattr(child, 'verticalHeader'):
+                #             child.horizontalHeader().setStyleSheet(f"""
+                #                 QHeaderView::section {{
+                #                     background-color: {theme['secondary_bg']};
+                #                     color: {theme['fg']};
+                #                     border: 1px solid {theme['border']};
+                #                 }}
+                #             """)
+                #             child.verticalHeader().setStyleSheet(f"""
+                #                 QHeaderView::section {{
+                #                     background-color: {theme['secondary_bg']};
+                #                     color: {theme['fg']};
+                #                     border: 1px solid {theme['border']};
+                #                 }}
+                #             """)
                     
-                    # Progress bars need special handling for chunks
-                    elif isinstance(child, QProgressBar):
-                        child.setStyleSheet(f"""
-                            QProgressBar {{
-                                text-align: center;
-                                border: 1px solid {theme['border']};
-                                border-radius: 3px;
-                                background-color: {theme['secondary_bg']};
-                                color: {theme['fg']};
-                            }}
-                            QProgressBar::chunk {{
-                                background-color: {theme['accent']};
-                            }}
-                        """)
+                #     # Progress bars need special handling for chunks
+                #     elif isinstance(child, QProgressBar):
+                #         child.setStyleSheet(f"""
+                #             QProgressBar {{
+                #                 text-align: center;
+                #                 border: 1px solid {theme['border']};
+                #                 border-radius: 3px;
+                #                 background-color: {theme['secondary_bg']};
+                #                 color: {theme['fg']};
+                #             }}
+                #             QProgressBar::chunk {{
+                #                 background-color: {theme['accent']};
+                #             }}
+                #         """)
                     
-                    # Apply theme to frames and containers
-                    elif isinstance(child, QFrame) or isinstance(child, QGroupBox):
-                        child.setStyleSheet(f"""
-                            border: 1px solid {theme['border']};
-                            background-color: {theme['bg']};
-                        """)
+                #     # Apply theme to frames and containers
+                #     elif isinstance(child, QFrame) or isinstance(child, QGroupBox):
+                #         child.setStyleSheet(f"""
+                #             border: none;
+                #             background-color: {theme['bg']};
+                #         """)
             except Exception as e:
                 print(f"Warning: Could not apply theme to {child}: {e}")
 
