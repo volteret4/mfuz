@@ -957,40 +957,40 @@ class MusicDatabaseQuery:
         }
 
 
-def interactive_mode(parser):
-    def categorize_arguments(actions):
-        """Categorizar los argumentos del parser."""
-        categories = {
-            'Identificadores (MBID)': [],
-            'Búsqueda de Información': [],
-            'Listados y Filtros': [],
-            'Contenido Multimedia': [],
-            'Gestión de Links y Reviews': [],
-            'Otras Funciones': []
-        }
-        
-        for action in actions:
-            if not isinstance(action, argparse._StoreAction):
-                continue
+    def interactive_mode(parser):
+        def categorize_arguments(actions):
+            """Categorizar los argumentos del parser."""
+            categories = {
+                'Identificadores (MBID)': [],
+                'Búsqueda de Información': [],
+                'Listados y Filtros': [],
+                'Contenido Multimedia': [],
+                'Gestión de Links y Reviews': [],
+                'Otras Funciones': []
+            }
             
-            dest = action.dest
-            help_text = action.help or 'Sin descripción'
+            for action in actions:
+                if not isinstance(action, argparse._StoreAction):
+                    continue
+                
+                dest = action.dest
+                help_text = action.help or 'Sin descripción'
+                
+                # Reglas de categorización
+                if 'mbid' in dest:
+                    categories['Identificadores (MBID)'].append((dest, help_text))
+                elif any(x in dest for x in ['artist', 'album', 'song', 'wiki', 'info', 'lyrics']):
+                    categories['Búsqueda de Información'].append((dest, help_text))
+                elif any(x in dest for x in ['listar', 'year', 'genre', 'label', 'ultimos']):
+                    categories['Listados y Filtros'].append((dest, help_text))
+                elif any(x in dest for x in ['links', 'services', 'review']):
+                    categories['Gestión de Links y Reviews'].append((dest, help_text))
+                elif 'path' in dest or 'buscar' in dest:
+                    categories['Otras Funciones'].append((dest, help_text))
+                else:
+                    categories['Otras Funciones'].append((dest, help_text))
             
-            # Reglas de categorización
-            if 'mbid' in dest:
-                categories['Identificadores (MBID)'].append((dest, help_text))
-            elif any(x in dest for x in ['artist', 'album', 'song', 'wiki', 'info', 'lyrics']):
-                categories['Búsqueda de Información'].append((dest, help_text))
-            elif any(x in dest for x in ['listar', 'year', 'genre', 'label', 'ultimos']):
-                categories['Listados y Filtros'].append((dest, help_text))
-            elif any(x in dest for x in ['links', 'services', 'review']):
-                categories['Gestión de Links y Reviews'].append((dest, help_text))
-            elif 'path' in dest or 'buscar' in dest:
-                categories['Otras Funciones'].append((dest, help_text))
-            else:
-                categories['Otras Funciones'].append((dest, help_text))
-        
-        return {k: v for k, v in categories.items() if v}
+            return {k: v for k, v in categories.items() if v}
 
     def display_menu(categories):
         """Mostrar menú interactivo de categorías y argumentos."""
@@ -1109,10 +1109,72 @@ def interactive_mode(parser):
         
         print("\n¡Gracias por usar el modo interactivo!")
 
-    # Retornar la función principal para ser llamada desde main()
-    return main_interactive_loop
+        # Retornar la función principal para ser llamada desde main()
+        return main_interactive_loop
 
-
+    def get_artist_song_paths(self, artist_name):
+        """
+        Obtiene todas las canciones de un artista con sus rutas organizadas por álbum
+        
+        :param artist_name: Nombre del artista
+        :return: Diccionario organizado por álbumes con las canciones y sus rutas
+        """
+        # Verificar que el artista existe
+        artist_query = """
+        SELECT id FROM artists 
+        WHERE LOWER(name) = LOWER(?)
+        LIMIT 1
+        """
+        self.cursor.execute(artist_query, (artist_name,))
+        artist_result = self.cursor.fetchone()
+        
+        if not artist_result:
+            return {"error": f"No se encontró al artista '{artist_name}'"}
+        
+        # Obtener todos los álbumes del artista
+        albums_query = """
+        SELECT id, name, year 
+        FROM albums 
+        WHERE artist_id = ?
+        ORDER BY year, name
+        """
+        self.cursor.execute(albums_query, (artist_result[0],))
+        albums = self.cursor.fetchall()
+        
+        # Resultado final organizado por álbumes
+        result = {
+            "artista": artist_name,
+            "albums": {}
+        }
+        
+        # Para cada álbum, obtener sus canciones con rutas
+        for album_id, album_name, album_year in albums:
+            # Consulta para obtener canciones con sus rutas
+            songs_query = """
+            SELECT title, track_number, file_path, duration 
+            FROM songs 
+            WHERE LOWER(artist) = LOWER(?) AND LOWER(album) = LOWER(?)
+            ORDER BY track_number, title
+            """
+            self.cursor.execute(songs_query, (artist_name, album_name))
+            songs = self.cursor.fetchall()
+            
+            # Crear estructura para este álbum
+            album_key = f"{album_name} ({album_year})" if album_year else album_name
+            result["albums"][album_key] = {
+                "nombre": album_name,
+                "año": album_year,
+                "canciones": [
+                    {
+                        "título": song[0], 
+                        "número": song[1], 
+                        "ruta": song[2],
+                        "duración": song[3]
+                    } for song in songs
+                ]
+            }
+        
+        return result
         
 def main():
     parser = argparse.ArgumentParser(description='Consultas a base de datos musical')
@@ -1152,6 +1214,7 @@ def main():
     parser.add_argument('--resumen', action='store_true', help='Mostrar solo el resumen de enlaces')
     parser.add_argument('--enlaces-totales', action='store_true', help='Mostrar solo el resumen de todos los enlaces')
     parser.add_argument('--interactivo', action='store_true', help='Permite un uso sin argumentos.')
+    parser.add_argument('--song-paths', action='store_true', help='Muestra los paths a las canciones del artista')
 
     args = parser.parse_args()
 
@@ -1188,6 +1251,9 @@ def main():
                 #print(f"\nEnlaces para {entity_type}:")
                 resumen = db.get_all_service_links(servicios, entity_type, summary_only=True)
                 print(json.dumps(resumen))
+
+        elif args.artist and args.song_paths:
+            print(json.dumps(db.get_artist_song_paths(args.artist)))
 
 
         elif args.ultimos:

@@ -19,9 +19,9 @@ from typing import Dict, List, Optional, Tuple
 from pathlib import Path
 from PyQt6 import uic
 from PyQt6.QtWidgets import (
-    QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem, QInputDialog,
-    QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu,
-    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox
+    QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem, QInputDialog, QComboBox, QCheckBox,
+    QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu, QDialogButtonBox, QLabel,
+    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize
 from PyQt6.QtGui import QIcon, QMovie
@@ -1836,7 +1836,7 @@ class UrlPlayer(BaseModule):
         self.spotify_client_secret = kwargs.get('spotify_client_secret')
         self.lastfm_api_key = kwargs.get('lastfm_api_key')
         self.lastfm_user = kwargs.get('lastfm_user')
-        
+        self.exclude_spotify_from_local = kwargs.get('exclude_spotify_from_local', True)
 
  
 
@@ -2078,7 +2078,7 @@ class UrlPlayer(BaseModule):
             # Conectar señales con verificación previa
             if self.searchButton:
                 self.searchButton.clicked.connect(self.perform_search)
-                print("Botón de búsqueda conectado")
+                
             if self.playButton:
                 self.playButton.clicked.connect(self.toggle_play_pause)
             
@@ -2130,18 +2130,19 @@ class UrlPlayer(BaseModule):
                 self.playlist_spotify_comboBox.currentIndexChanged.connect(self.on_spotify_playlist_changed)
             
             if hasattr(self, 'playlist_rss_comboBox'):
-                #self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_playlist_rss_changed)
-                self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_rss_playlist_selected)
-            if hasattr(self, 'playlist_local_comboBox'):
+                self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_playlist_rss_changed)
+                #self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_rss_playlist_selected)
+            
+            #if hasattr(self, 'playlist_local_comboBox'):
                 #self.playlist_local_comboBox.currentIndexChanged.connect(self.on_playlist_local_changed)
-                self.playlist_local_comboBox.currentIndexChanged.connect(self.on_local_playlist_selected)
+                
 
             if hasattr(self, 'GuardarPlaylist'):
                 self.GuardarPlaylist.clicked.connect(self.on_guardar_playlist_clicked)
-                self.GuardarPlaylist.clicked.connect(self.save_current_playlist)
+                #self.GuardarPlaylist.clicked.connect(self.save_current_playlist)
 
             if hasattr(self, 'VaciarPlaylist'):
-                self.VaciarPlaylist.clicked.connect(self.clear_temp_playlist)
+                #self.VaciarPlaylist.clicked.connect(self.clear_temp_playlist)
                 self.VaciarPlaylist.clicked.connect(self.clear_playlist)
             
             # Setup context menus
@@ -2149,6 +2150,37 @@ class UrlPlayer(BaseModule):
 
         except Exception as e:
             print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
+
+
+    def clear_playlist(self):
+        """Clear the current queue/playlist with confirmation"""
+        # Check if there are items to clear
+        if self.listWidget.count() == 0:
+            return
+            
+        # Confirm with user
+        from PyQt6.QtWidgets import QMessageBox
+        reply = QMessageBox.question(
+            self, "Limpiar lista", 
+            "¿Estás seguro de que quieres eliminar todas las canciones de la lista?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            # Clear the list widget
+            self.listWidget.clear()
+            
+            # Clear the internal playlist
+            self.current_playlist = []
+            
+            # Reset current track index
+            self.current_track_index = -1
+            
+            # Stop any current playback
+            self.stop_playback()
+            
+            self.log("Cola de reproducción limpiada")
 
     def load_selected_playlist(self, playlist):
         """Load a selected playlist into the player"""
@@ -2608,81 +2640,273 @@ class UrlPlayer(BaseModule):
                 )
 
     def save_current_playlist(self):
-        """Save the current playlist in the selected format"""
+        """Save the current playlist based on the selected format in guardar_playlist_comboBox."""
         # Get the selected playlist type
-        if not hasattr(self, 'playlist_local_comboBox_2'):
+        if not hasattr(self, 'guardar_playlist_comboBox'):
+            self.log("guardar_playlist_comboBox not found")
             return
-            
-        playlist_type = self.playlist_local_comboBox_2.currentText().lower()
+        
+        playlist_type = self.guardar_playlist_comboBox.currentText()
+        self.log(f"Saving playlist as {playlist_type}")
         
         # Verify we have items to save
         if self.listWidget.count() == 0:
-            QMessageBox.warning(self, "Warning", "No items to save in playlist")
+            self.log("No items to save in playlist")
             return
         
         # Ask for playlist name
         name, ok = QInputDialog.getText(self, "Playlist Name", "Enter a name for the playlist:")
         if not ok or not name:
+            self.log("Playlist name dialog canceled or empty name")
             return
         
-        # Collect items from the list
-        items = []
-        for i in range(self.listWidget.count()):
-            item = self.listWidget.item(i)
-            url = item.data(Qt.ItemDataRole.UserRole)
-            title = item.text()
+        # For local playlists
+        if playlist_type == "Playlist local":
+            self.log(f"Saving as local playlist: {name}")
+            self.save_local_playlist(name)
+        elif playlist_type == "Spotify":
+            # Use existing Spotify save functionality
+            self.log(f"Saving as Spotify playlist: {name}")
+            self.save_to_spotify_playlist()
+        elif playlist_type == "Youtube":
+            # Future implementation
+            self.log("Youtube playlist saving not implemented yet")
+
+    def fetch_artist_song_paths(self, artist_name):
+        """Fetch song paths for an artist using the database query API"""
+            # Check cache first
+        if not hasattr(self, 'path_cache'):
+            self.path_cache = {}
             
-            # Extract artist and title if possible
-            artist = ""
-            if " - " in title:
-                parts = title.split(" - ", 1)
-                artist = parts[0]
-                title = parts[1]
+        if artist_name in self.path_cache:
+            return self.path_cache[artist_name]
+        try:
+            if not self.db_path or not os.path.exists(self.db_path):
+                self.log(f"Database not found at: {self.db_path}")
+                return None
+                
+            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            db = MusicDatabaseQuery(self.db_path)
             
-            items.append({
-                "url": url,
-                "title": title,
-                "artist": artist
-            })
-        
-        # Create playlist object
-        playlist = {
-            "name": name,
-            "items": items,
-            "created": int(time.time()),
-            "modified": int(time.time())
-        }
-        
-        # Add to appropriate playlist collection
-        if playlist_type in ["spotify", "youtube", "local"]:
-            if playlist_type not in self.playlists:
-                self.playlists[playlist_type] = []
+            # Use the existing method from consultar_items_db.py
+            result = db.get_artist_song_paths(artist_name)
+            db.close()
+            if result:
+                self.path_cache[artist_name] = result
+            return result
+        except Exception as e:
+            self.log(f"Error fetching song paths: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return None
+
+
+
+    def save_local_playlist(self, name):
+        """Save the current queue as a local playlist file."""
+        try:
+            # Ensure playlists directory exists
+            local_playlist_dir = self.get_local_playlist_path()
+            os.makedirs(local_playlist_dir, exist_ok=True)
+            
+            # Create a clean filename
+            import re
+            safe_name = re.sub(r'[^\w\-_\. ]', '_', name)
+            playlist_path = os.path.join(local_playlist_dir, f"{safe_name}.pls")
+            
+            # Debug output to verify we have items
+            self.log(f"Saving playlist with {self.listWidget.count()} items")
+            
+            # Collect items from the list, excluding Spotify items if requested
+            items = []
+            for i in range(self.listWidget.count()):
+                item = self.listWidget.item(i)
+                if not item:
+                    self.log(f"Warning: Item at index {i} is None, skipping")
+                    continue
+                    
+                url = item.data(Qt.ItemDataRole.UserRole)
+                if not url:
+                    self.log(f"Warning: No URL for item at index {i}, skipping")
+                    continue
+                    
+                title = item.text()
+                
+                # Determine if this is a Spotify URL (skip if exclude_spotify is True)
+                is_spotify = 'spotify.com' in str(url).lower()
+                if is_spotify and self.exclude_spotify_from_local:
+                    self.log(f"Skipping Spotify item: {title}")
+                    continue
+                
+                # Extract artist and title if possible
+                artist = ""
+                if " - " in title:
+                    parts = title.split(" - ", 1)
+                    artist = parts[0]
+                    title = parts[1]
+                
+                # Add to items list
+                items.append({
+                    "url": url,
+                    "title": title,
+                    "artist": artist,
+                    "source": self._determine_source_from_url(url)
+                })
+                self.log(f"Added item to playlist: {artist} - {title}")
+            
+            # Debug check - if we still have no items, something is wrong
+            if not items:
+                self.log("Warning: No items collected from the listWidget")
+                
+                # Fallback: try to use the current_playlist instead
+                if self.current_playlist:
+                    self.log(f"Attempting to use current_playlist with {len(self.current_playlist)} items")
+                    for item in self.current_playlist:
+                        if not item.get('url'):
+                            continue
+                            
+                        # Skip Spotify if requested
+                        is_spotify = 'spotify.com' in str(item.get('url')).lower()
+                        if is_spotify and self.exclude_spotify_from_local:
+                            continue
+                            
+                        items.append({
+                            "url": item.get('url', ''),
+                            "title": item.get('title', ''),
+                            "artist": item.get('artist', ''),
+                            "source": item.get('source', self._determine_source_from_url(item.get('url', '')))
+                        })
+            
+            # Save in a simple PLS format
+            with open(playlist_path, 'w', encoding='utf-8') as f:
+                f.write("[playlist]\n")
+                f.write(f"NumberOfEntries={len(items)}\n\n")
+                
+                for i, item in enumerate(items, 1):
+                    f.write(f"File{i}={item['url']}\n")
+                    f.write(f"Title{i}={item['artist']} - {item['title']}\n" if item['artist'] else f"Title{i}={item['title']}\n")
+                    f.write(f"Length{i}=-1\n\n")  # -1 means unknown length
+            
+            # Also save as JSON for more metadata
+            json_path = os.path.join(local_playlist_dir, f"{safe_name}.json")
+            playlist_data = {
+                "name": name,
+                "items": items,
+                "created": int(time.time()),
+                "modified": int(time.time())
+            }
+            
+            with open(json_path, 'w', encoding='utf-8') as f:
+                json.dump(playlist_data, f, indent=2, ensure_ascii=False)
+            
+            # Update internal playlists
+            if not hasattr(self, 'playlists'):
+                self.playlists = self.load_playlists()
+            
+            if 'local' not in self.playlists:
+                self.playlists['local'] = []
             
             # Check if playlist with same name exists
-            for i, existing in enumerate(self.playlists[playlist_type]):
+            playlist_updated = False
+            for i, existing in enumerate(self.playlists['local']):
                 if existing.get('name') == name:
-                    # Ask for confirmation to replace
-                    reply = QMessageBox.question(
-                        self, "Replace Playlist", 
-                        f"A playlist named '{name}' already exists. Replace it?",
-                        QMessageBox.Yes | QMessageBox.No,
-                        QMessageBox.No
-                    )
-                    
-                    if reply == QMessageBox.Yes:
-                        self.playlists[playlist_type][i] = playlist
-                        self.save_playlists()
-                        self.update_playlist_comboboxes()
-                        QMessageBox.information(self, "Success", f"Playlist '{name}' updated successfully")
-                        return
-                    else:
-                        return
+                    # Replace existing
+                    self.playlists['local'][i] = playlist_data
+                    playlist_updated = True
+                    break
             
-            # Add new playlist
-            self.playlists[playlist_type].append(playlist)
+            # Add new playlist if not found
+            if not playlist_updated:
+                self.playlists['local'].append(playlist_data)
+                
+            # Save and update UI
             self.save_playlists()
             self.update_playlist_comboboxes()
-            QMessageBox.information(self, "Success", f"Playlist '{name}' saved successfully")
+            
+            self.log(f"Saved local playlist '{name}' with {len(items)} items to {playlist_path}")
+            
+        except Exception as e:
+            self.log(f"Error saving local playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def load_local_playlist(self, playlist_name):
+        """Load a local playlist into the player."""
+        try:
+            # Find the playlist in our playlists data
+            if not hasattr(self, 'playlists'):
+                self.playlists = self.load_playlists()
+            
+            selected_playlist = None
+            for playlist in self.playlists.get('local', []):
+                if playlist.get('name') == playlist_name:
+                    selected_playlist = playlist
+                    break
+            
+            if not selected_playlist:
+                self.log(f"Local playlist '{playlist_name}' not found")
+                return
+            
+            # Ask for confirmation if current playlist is not empty
+            if self.listWidget.count() > 0:
+                reply = QMessageBox.question(
+                    self, "Load Playlist", 
+                    f"Load playlist '{playlist_name}'? Current playlist will be replaced.",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                    QMessageBox.StandardButton.No
+                )
+                
+                if reply == QMessageBox.StandardButton.No:
+                    return
+            
+            # Clear current playlist
+            self.listWidget.clear()
+            self.current_playlist = []
+            
+            # Add items from selected playlist
+            for item in selected_playlist.get('items', []):
+                title = item.get('title', '')
+                artist = item.get('artist', '')
+                url = item.get('url', '')
+                source = item.get('source', self._determine_source_from_url(url))
+                
+                if not url:
+                    continue
+                
+                # Create display text
+                display_text = title
+                if artist:
+                    display_text = f"{artist} - {title}"
+                
+                # Add to list widget with icon
+                list_item = QListWidgetItem(display_text)
+                list_item.setData(Qt.ItemDataRole.UserRole, url)
+                
+                # Add the appropriate icon
+                icon = self.get_source_icon(url, {'source': source})
+                list_item.setIcon(icon)
+                
+                self.listWidget.addItem(list_item)
+                
+                # Add to internal playlist
+                self.current_playlist.append({
+                    'title': title,
+                    'artist': artist,
+                    'url': url,
+                    'source': source
+                })
+            
+            # Reset current track index
+            self.current_track_index = -1
+            
+            # Update UI
+            self.log(f"Loaded local playlist '{playlist_name}' with {len(selected_playlist.get('items', []))} items")
+            
+        except Exception as e:
+            self.log(f"Error loading local playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
 
     def _extract_global_credentials(self, config_data):
         """Extract credentials from global configuration section."""
@@ -3059,46 +3283,50 @@ class UrlPlayer(BaseModule):
 
 
     def extract_playable_url(self, item_data):
-            """
-            Extract a playable URL from item data with special handling for different sources.
-            Returns the most appropriate URL for playback.
-            """
-            try:
-                # Default to the item's URL if it exists
-                url = None
+        """
+        Extract a playable URL or file path from item data.
+        Returns the most appropriate URL or path for playback.
+        """
+        try:
+            # Default to the item's URL if it exists
+            url = None
+            
+            if isinstance(item_data, dict):
+                # First check for a file path (for local files)
+                url = item_data.get('file_path')
                 
-                if isinstance(item_data, dict):
-                    # Get direct URL
+                # If no file path, fall back to URL
+                if not url:
                     url = item_data.get('url')
+                
+                # Handle different sources
+                source = item_data.get('source', '').lower()
+                item_type = item_data.get('type', '').lower()
+                
+                if source == 'bandcamp' and item_type == 'track':
+                    # For Bandcamp tracks:
+                    # 1. Try direct track URL
+                    # 2. Fall back to album URL if necessary
                     
-                    # Handle different sources
-                    source = item_data.get('source', '').lower()
-                    item_type = item_data.get('type', '').lower()
+                    # If no URL but we have album URL, use that
+                    if not url and item_data.get('album_url'):
+                        url = item_data.get('album_url')
+                        self.log(f"Using album URL for Bandcamp track: {url}")
                     
-                    if source == 'bandcamp' and item_type == 'track':
-                        # For Bandcamp tracks:
-                        # 1. Try direct track URL
-                        # 2. Fall back to album URL if necessary
-                        
-                        # If no URL but we have album URL, use that
-                        if not url and item_data.get('album_url'):
-                            url = item_data.get('album_url')
-                            self.log(f"Using album URL for Bandcamp track: {url}")
-                        
-                        # Try to get URL from parent album if still needed
-                        if not url and item_data.get('album') and item_data.get('artist'):
-                            parent_album_url = self._find_parent_album_url(item_data)
-                            if parent_album_url:
-                                url = parent_album_url
-                                self.log(f"Using parent album URL for track: {url}")
-                else:
-                    # If item_data is a string, assume it's the URL
-                    url = str(item_data)
-                    
-                return url
-            except Exception as e:
-                self.log(f"Error extracting playable URL: {str(e)}")
-                return None
+                    # Try to get URL from parent album if still needed
+                    if not url and item_data.get('album') and item_data.get('artist'):
+                        parent_album_url = self._find_parent_album_url(item_data)
+                        if parent_album_url:
+                            url = parent_album_url
+                            self.log(f"Using parent album URL for track: {url}")
+            else:
+                # If item_data is a string, assume it's the URL or path
+                url = str(item_data)
+                
+            return url
+        except Exception as e:
+            self.log(f"Error extracting playable URL: {str(e)}")
+            return None
 
 
     def setup_services_combo(self):
@@ -3314,61 +3542,96 @@ class UrlPlayer(BaseModule):
 
     def on_tree_double_click(self, item, column):
         """Handle double click on tree item to add to queue or play immediately"""
-        # Si es un item raíz (fuente) con hijos, solo expandir/colapsar
+        # If it's a root item (source) with children, just expand/collapse
         if item.childCount() > 0:
             item.setExpanded(not item.isExpanded())
             return
                 
-        # Obtener los datos del resultado almacenados
+        # Get the result data stored with the item
         result_data = item.data(0, Qt.ItemDataRole.UserRole)
         
-        # Si es un resultado de búsqueda
+        # If it's a search result
         if isinstance(result_data, dict):
             url = result_data.get('url', '')
+            
+            # For database items that might not have a direct URL
+            if not url and result_data.get('source', '').lower() in ['database', 'local']:
+                # This is likely a database item, extract the best URL we can
+                if 'links' in result_data:
+                    # Try to find a playable URL in the links
+                    for service, service_url in result_data['links'].items():
+                        if service_url:
+                            url = service_url
+                            break
+            
             if url:
-                # Crear un texto para mostrar
-                display_text = f"{result_data.get('artist', '')} - {result_data.get('title', '')}"
+                # Create display text
+                title = result_data.get('title', '')
+                artist = result_data.get('artist', '')
+                display_text = f"{artist} - {title}" if artist and title else title or url
                 display_text = display_text.strip()
-                if not display_text:
-                    display_text = url
                 
-                # Añadir a la cola
+                # Add to the queue
                 self.add_to_queue_from_url(url, display_text, result_data)
-                self.log(f"Añadido a la cola: {display_text}")
+                self.log(f"Added to queue: {display_text}")
                 
-                # Opcional: Reproducir inmediatamente si no hay nada reproduciéndose
+                # Optional: Play immediately if nothing is playing
                 if not self.is_playing and self.current_track_index == -1:
                     self.current_track_index = len(self.current_playlist) - 1
                     self.play_media()
+            else:
+                self.log(f"No playable URL found for {result_data.get('title', 'Unknown item')}")
         else:
-            # Manejar la lógica existente para resultados no de búsqueda
+            # Handle the logic for non-search results
             if hasattr(self, 'on_tree_double_click_original'):
                 self.on_tree_double_click_original(item, column)
 
     def add_to_queue_from_url(self, url, display_text, metadata=None):
-        """Añade un elemento a la cola basado en URL y texto a mostrar."""
-        # Crear un nuevo item para la playlist
+        """Adds an item to the queue with the appropriate icon based on URL source."""
+        # Create a new item for the playlist
         queue_item = QListWidgetItem(display_text)
         queue_item.setData(Qt.ItemDataRole.UserRole, url)
         
-        # Añadir a la lista
+        # Add the appropriate icon
+        icon = self.get_source_icon(url, metadata)
+        queue_item.setIcon(icon)
+        
+        # Add to the list
         self.listWidget.addItem(queue_item)
         
-        # Actualizar la lista interna
+        # Update the internal list
         self.current_playlist.append({
             'title': metadata.get('title', display_text),
             'artist': metadata.get('artist', ''),
             'url': url,
+            'source': metadata.get('source', self._determine_source_from_url(url)),
             'entry_data': metadata
         })
         
-        self.log(f"Elemento añadido a la cola: {display_text}")
+        self.log(f"Element added to queue: {display_text}")
         
-        # Si no hay nada reproduciéndose actualmente, seleccionar este elemento
+        # If nothing is playing, select this item
         if not self.is_playing and self.current_track_index == -1:
             self.current_track_index = len(self.current_playlist) - 1
             self.listWidget.setCurrentRow(self.current_track_index)
     
+    def _determine_source_from_url(self, url):
+        """Determine the source (service) from a URL."""
+        url = str(url).lower()
+        if 'spotify.com' in url:
+            return 'spotify'
+        elif 'youtube.com' in url or 'youtu.be' in url:
+            return 'youtube'
+        elif 'soundcloud.com' in url:
+            return 'soundcloud'
+        elif 'bandcamp.com' in url:
+            return 'bandcamp'
+        elif url.startswith(('/', 'file:', '~', 'C:', 'D:')):
+            return 'local'
+        return 'unknown'
+
+
+
     def highlight_current_track(self):
         """Resalta visualmente la pista que se está reproduciendo actualmente."""
         # Primero, eliminar formato especial de todos los elementos
@@ -3414,19 +3677,19 @@ class UrlPlayer(BaseModule):
         # Seleccionar visualmente el elemento en la lista
         self.listWidget.setCurrentRow(index)
         
-        # Obtener la URL del elemento a reproducir
+        # Obtener la URL o path del elemento a reproducir
         current_item = self.current_playlist[index]
-        url = current_item['url']
+        url = current_item.get('file_path', current_item.get('url'))  # Try file_path first, then URL
         
-        # Verificar que la URL sea válida
+        # Verificar que la URL o path sea válido
         if not url:
-            self.log("URL inválida para reproducción")
+            self.log("URL/path inválido para reproducción")
             return
         
         # Detener reproducción actual si existe
         self.stop_playback()
         
-        # Reproducir la URL actual
+        # Reproducir la URL/path actual
         self.play_single_url(url)
         
         # Resaltar elemento actual
@@ -3438,18 +3701,19 @@ class UrlPlayer(BaseModule):
         display = f"{artist} - {title}" if artist else title
         self.log(f"Reproduciendo: {display}")
 
+
     def play_single_url(self, url):
-        """Reproduce una única URL con MPV."""
+        """Reproduce una única URL o archivo local con MPV."""
         if not url:
-            self.log("Error: URL vacía")
+            self.log("Error: URL/path vacío")
             return
         
-        # Asegurarse de que la URL es un string
+        # Asegurarse de que la URL/path es un string
         if isinstance(url, dict):
-            url = url.get('url', str(url))
+            url = url.get('file_path', url.get('url', str(url)))
         url = str(url)
         
-        self.log(f"Reproduciendo URL: {url}")
+        self.log(f"Reproduciendo URL/path: {url}")
         
         # Verificar o crear directorio temporal para el socket
         if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
@@ -3480,8 +3744,17 @@ class UrlPlayer(BaseModule):
             "--keep-open=yes",           # Mantener abierto al finalizar
         ]
         
+        # Special handling for local files vs. stream URLs
+        is_local_file = url.startswith(('/', '~', 'file:', 'C:', 'D:'))
+        
+        if is_local_file:
+            self.log("Reproduciendo archivo local")
+            # Make sure the file exists
+            if not os.path.exists(os.path.expanduser(url.replace('file://', ''))):
+                self.log(f"Advertencia: El archivo no existe: {url}")
+        
         # Special handling for Bandcamp URLs
-        if "bandcamp.com" in url:
+        elif "bandcamp.com" in url:
             # For Bandcamp, we might want to use specific options
             mpv_args.extend([
                 "--ytdl-raw-options=yes-playlist=",  # Handle as single track even if it's an album
@@ -4450,11 +4723,14 @@ class UrlPlayer(BaseModule):
         return result_item
 
     def _process_database_results(self, db_links):
-        """Process database links into results with proper hierarchy."""
+        """Process database links into results with proper hierarchy, including file paths."""
         results = []
         
         # Process artists with their albums and tracks
         for artist_name, artist_data in db_links.get('artists', {}).items():
+            # Try to fetch paths for this artist
+            paths_data = self.fetch_artist_song_paths(artist_name)
+            
             artist_result = {
                 "source": "local",
                 "title": artist_name,
@@ -4487,14 +4763,15 @@ class UrlPlayer(BaseModule):
                     if 'links' in album:
                         album_result['links'] = album['links']
                     
-                    # Process tracks
+                    # Process tracks and add paths if available
                     if 'tracks' in album and album['tracks']:
                         album_tracks = []
                         
                         for track in album['tracks']:
+                            track_title = track.get('title', '')
                             track_result = {
                                 "source": "local",
-                                "title": track.get('title', ''),
+                                "title": track_title,
                                 "artist": artist_name,
                                 "album": album_title,
                                 "type": "track",
@@ -4506,6 +4783,17 @@ class UrlPlayer(BaseModule):
                             # Add links if available
                             if 'links' in track:
                                 track_result['links'] = track['links']
+                            
+                            # Try to find the file path from paths_data
+                            if paths_data and 'albums' in paths_data:
+                                # Look for the album in paths_data
+                                for album_key, album_data in paths_data['albums'].items():
+                                    if album_data['nombre'] == album_title:
+                                        # Look for the track in the album
+                                        for song in album_data['canciones']:
+                                            if song['título'] == track_title:
+                                                track_result['file_path'] = song['ruta']
+                                                break
                             
                             album_tracks.append(track_result)
                         
@@ -4968,7 +5256,7 @@ class UrlPlayer(BaseModule):
         self.textEdit.setText(info_text)
 
     def add_to_queue(self):
-        """Adds the selected item to the playback queue."""
+        """Adds the selected item to the playback queue without changing tabs."""
         selected_items = self.treeWidget.selectedItems()
         if not selected_items:
             return
@@ -5007,7 +5295,7 @@ class UrlPlayer(BaseModule):
 
 
     def add_item_to_queue(self, item):
-        """Añade un elemento específico a la cola."""
+        """Add a specific item to the queue with appropriate icon."""
         title = item.text(0)
         artist = item.text(1)
         item_data = item.data(0, Qt.ItemDataRole.UserRole)
@@ -5015,39 +5303,71 @@ class UrlPlayer(BaseModule):
         if not item_data:
             return
         
-        # Use our extraction function to get the best URL
-        url = item_data.get('url') if isinstance(item_data, dict) else item_data
+        # Use our extraction function to get the best URL or file path
+        url = None
         
-        # For Bandcamp tracks, ensure we have a usable URL
-        if isinstance(item_data, dict) and item_data.get('source', '').lower() == 'bandcamp':
-            url = self.extract_playable_url(item_data)
-            self.log(f"Extracted Bandcamp playable URL: {url}")
+        if isinstance(item_data, dict):
+            # Check for file path first for local files
+            url = item_data.get('file_path')
+            
+            # If no file path, then check URL
+            if not url:
+                url = item_data.get('url')
+            
+            # For database items that might not have a direct URL
+            if not url and item_data.get('source', '').lower() in ['database', 'local']:
+                # Try to find a playable URL in the links
+                if 'links' in item_data:
+                    for service, service_url in item_data['links'].items():
+                        if service_url:
+                            url = service_url
+                            break
+            
+            # For Bandcamp tracks, ensure we have a usable URL
+            if not url and item_data.get('source', '').lower() == 'bandcamp':
+                url = self.extract_playable_url(item_data)
+                self.log(f"Extracted Bandcamp playable URL: {url}")
+        else:
+            url = str(item_data)
         
         if not url:
-            self.log(f"No URL found for: {title}")
+            self.log(f"No URL or file path found for: {title}")
             return
         
         # Create a new item for the playlist
         display_text = title
         if artist:
             display_text = f"{artist} - {title}"
-                
+        
+        # Create the item with appropriate icon
         queue_item = QListWidgetItem(display_text)
         queue_item.setData(Qt.ItemDataRole.UserRole, url)
         
-        # Añadir a la lista
+        # Determine source for icon
+        source = item_data.get('source', '') if isinstance(item_data, dict) else ''
+        icon = self.get_source_icon(url, {'source': source})
+        queue_item.setIcon(icon)
+        
+        # Add to the list
         self.listWidget.addItem(queue_item)
         
-        # Actualizar la lista interna de reproducción
-        entry_data = item.data(0, Qt.ItemDataRole.UserRole + 1)
-        self.current_playlist.append({
+        # Update internal playlist - include file_path if available
+        entry_data = item.data(0, Qt.ItemDataRole.UserRole + 1) or item_data
+        playlist_item = {
             'title': title, 
             'artist': artist, 
             'url': url,
+            'source': source or self._determine_source_from_url(url),
             'entry_data': entry_data
-        })
+        }
         
-        self.log(f"Added to queue: {display_text} with URL: {url}")
+        # Add file_path if it exists in the item data
+        if isinstance(item_data, dict) and 'file_path' in item_data:
+            playlist_item['file_path'] = item_data['file_path']
+        
+        self.current_playlist.append(playlist_item)
+        
+        self.log(f"Added to queue: {display_text} with URL/path: {url}")
     
     def remove_from_queue(self):
         """Elimina el elemento seleccionado de la cola de reproducción."""
@@ -5242,28 +5562,35 @@ class UrlPlayer(BaseModule):
         self.play_from_index(next_index)
     
     def rebuild_playlist_from_listwidget(self):
-        """Reconstruye la lista de reproducción desde el ListWidget."""
+        """Rebuilds the playlist from the ListWidget, preserving icons and source information."""
         self.current_playlist = []
         for i in range(self.listWidget.count()):
             item = self.listWidget.item(i)
-            title = item.text()
+            text = item.text()
             url = item.data(Qt.ItemDataRole.UserRole)
             
-            # Extraer artista si está presente en el formato "Artista - Título"
+            # Extract artist if present in the format "Artist - Title"
             artist = ""
-            if " - " in title:
-                parts = title.split(" - ", 1)
+            title = text
+            if " - " in text:
+                parts = text.split(" - ", 1)
                 artist = parts[0]
                 title = parts[1]
-                
+            
+            # Determine source from URL if not available from icon
+            source = self._determine_source_from_url(url)
+            
             self.current_playlist.append({
                 'title': title, 
                 'artist': artist, 
                 'url': url,
-                'entry_data': None  # No tenemos los datos completos en este caso
+                'source': source,
+                'entry_data': None  # No full data available in this case
             })
             
-        self.log(f"Lista de reproducción reconstruida con {len(self.current_playlist)} elementos")  
+        self.log(f"Playlist rebuilt with {len(self.current_playlist)} items")
+
+
 
     def check_dependencies(self):
         """Verifica que las dependencias necesarias estén instaladas."""
@@ -5909,7 +6236,7 @@ class UrlPlayer(BaseModule):
     def setup_service_icons(self):
         """Configura iconos para cada servicio."""
         self.service_icons = {
-            'local': QIcon(":/services/database"),
+            'local': QIcon(":/services/plslove"),  
             'database': QIcon(":/services/database"),
             'bandcamp': QIcon(":/services/bandcamp"),
             'spotify': QIcon(":/services/spotify"),
@@ -6639,6 +6966,46 @@ class UrlPlayer(BaseModule):
         self.log(f"Loaded {len(playlists_data)} Spotify playlists")
 
 
+    def get_local_playlist_path(self):
+        """Get the local playlist save path from configuration."""
+        # Default path if not specified in config
+        default_path = PROJECT_ROOT / ".content" / "local_playlists"
+        
+        try:
+            # Try to read from config
+            config_path = self.get_app_path("config/config.yml")
+            if not os.path.exists(config_path):
+                os.makedirs(os.path.dirname(default_path), exist_ok=True)
+                return default_path
+            
+            import yaml
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+            
+            # Check global configuration first
+            if 'global_theme_config' in config and 'local_playlist_path' in config['global_theme_config']:
+                path = config['global_theme_config']['local_playlist_path']
+                # Handle relative paths
+                if not os.path.isabs(path):
+                    path = os.path.join(PROJECT_ROOT, path)
+                return path
+            
+            # Then check module configuration
+            for module in config.get('modules', []):
+                if module.get('name') in ['Url Playlists', 'URL Playlist', 'URL Player']:
+                    if 'args' in module and 'local_playlist_path' in module['args']:
+                        path = module['args']['local_playlist_path']
+                        # Handle relative paths
+                        if not os.path.isabs(path):
+                            path = os.path.join(PROJECT_ROOT, path)
+                        return path
+            
+            # Default if not found
+            return default_path
+        except Exception as e:
+            self.log(f"Error reading local playlist path from config: {str(e)}")
+            return default_path
+
     def on_spotify_playlist_changed(self, index):
         """Handle selection change in the Spotify playlist comboBox"""
         combo = self.playlist_spotify_comboBox
@@ -6897,8 +7264,43 @@ class UrlPlayer(BaseModule):
         
         # Set custom context menu for listWidget
         self.listWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.listWidget.customContextMenuRequested.connect(self.show_list_context_menu)
+        #self.listWidget.customContextMenuRequested.connect(self.show_list_context_menu)
 
+
+    def get_source_icon(self, url, metadata=None):
+        """
+        Determine the source icon for a URL or metadata.
+        Returns a QIcon for the appropriate service.
+        """
+        if metadata and isinstance(metadata, dict) and 'source' in metadata:
+            # If metadata has a source field, use that directly
+            source = metadata['source'].lower()
+        else:
+            # Try to determine source from URL
+            url = str(url).lower()
+            if 'spotify.com' in url:
+                source = 'spotify'
+            elif 'youtube.com' in url or 'youtu.be' in url:
+                source = 'youtube'
+            elif 'soundcloud.com' in url:
+                source = 'soundcloud'
+            elif 'bandcamp.com' in url:
+                source = 'bandcamp'
+            elif url.startswith(('/', 'file:', '~', 'C:', 'D:')):
+                # Local file paths
+                # Check extension to determine audio file type
+                if url.endswith(('.mp3', '.flac', '.wav', '.ogg', '.m4a', '.opus')):
+                    source = 'local'
+                else:
+                    source = 'unknown'
+            else:
+                # Default or unknown
+                source = 'unknown'
+        
+        # Return the appropriate icon
+        if source in self.service_icons:
+            return self.service_icons[source]
+        return self.service_icons.get('unknown', QIcon())
 
     def show_tree_context_menu(self, position):
         """Show context menu for tree widget items"""
@@ -6969,11 +7371,36 @@ class UrlPlayer(BaseModule):
             self.current_track_index = index
             self.play_from_index(index)
 
+    def on_tree_selection_changed(self):
+        """Handle selection changes in the tree widget"""
+        try:
+            # Get the current selected item
+            selected_items = self.treeWidget.selectedItems()
+            if not selected_items:
+                return
+                
+            item = selected_items[0]
+            
+            # Get the data associated with the item
+            item_data = item.data(0, Qt.ItemDataRole.UserRole)
+            
+            # Display information about the selected item if available
+            if item_data:
+                self.display_wiki_info(item_data)
+        except Exception as e:
+            self.log(f"Error handling tree selection change: {str(e)}")
+
+
     def on_guardar_playlist_clicked(self):
         """Handle save playlist button click"""
+        # Use the correct combobox name from your UI file
+        if not hasattr(self, 'guardar_playlist_comboBox'):
+            self.log("ComboBox para guardar playlist no encontrado")
+            return
+            
         combo = self.guardar_playlist_comboBox
         selected = combo.currentText()
-        
+        print(f"selected!!! {selected}")
         if selected == "Spotify":
             self.save_to_spotify_playlist()
         elif selected == "Playlist local":
@@ -7318,34 +7745,17 @@ class UrlPlayer(BaseModule):
         root_item.setExpanded(True)
 
     def on_playlist_local_changed(self, index):
-        """Handle selection change in the local playlist comboBox"""
+        """Handle selection change in the local playlist comboBox."""
+        if index <= 0:
+            return
+            
         combo = self.playlist_local_comboBox
         selected_text = combo.currentText()
         
-        # In a real implementation, you would load local playlist content here
         self.log(f"Local Playlist selected: {selected_text}")
         
-        # For now, just show a placeholder message
-        self.treeWidget.clear()
-        from PyQt6.QtWidgets import QTreeWidgetItem
-        
-        root_item = QTreeWidgetItem(self.treeWidget)
-        root_item.setText(0, selected_text)
-        root_item.setText(1, "Local")
-        root_item.setText(2, "Playlist")
-        
-        # Make the root item bold
-        font = root_item.font(0)
-        font.setBold(True)
-        root_item.setFont(0, font)
-        
-        # Add a placeholder item
-        item = QTreeWidgetItem(root_item)
-        item.setText(0, "Implementación pendiente")
-        item.setText(1, "")
-        item.setText(2, "Info")
-        
-        root_item.setExpanded(True)
+        # Load the selected playlist
+        self.load_local_playlist(selected_text)
 
 
 
