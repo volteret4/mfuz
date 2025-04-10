@@ -2047,30 +2047,29 @@ class UrlPlayer(BaseModule):
         self.connect_signals()
 
     def on_tree_item_clicked(self, item, column):
-        """Handle click on tree items to expand/collapse and display info."""
+        """Handle click on tree items to expand/collapse without switching tabs"""
         try:
             # If item has children, toggle expanded state
             if item.childCount() > 0:
                 item.setExpanded(not item.isExpanded())
+                    
+            # Display info without changing tabs
+            item_data = item.data(0, Qt.ItemDataRole.UserRole)
+            if isinstance(item_data, dict) and (item_data.get('title') or item_data.get('artist')):
+                # Display info in text edit instead of wiki tab
+                title = item_data.get('title', '')
+                artist = item_data.get('artist', '')
+                item_type = item_data.get('type', '')
                 
-                # If it's a parent item with data, display info
-                item_data = item.data(0, Qt.ItemDataRole.UserRole)
-                if isinstance(item_data, dict) and (item_data.get('title') or item_data.get('artist')):
-                    self.display_wiki_info(item_data)
-            else:
-                # Get item data and display info
-                item_data = item.data(0, Qt.ItemDataRole.UserRole)
-                if isinstance(item_data, dict):
-                    # Ensure album data is available for songs
-                    if item_data.get('type') in ['track', 'song'] and not item_data.get('album'):
-                        # If no album but has parent, get album from parent
-                        parent = item.parent()
-                        if parent and parent.text(2) == "Álbum":
-                            item_data['album'] = parent.text(0)
-                            
-                    self.display_wiki_info(item_data)
+                info_text = f"Selected: {title}\n"
+                if artist:
+                    info_text += f"Artist: {artist}\n"
+                if item_type:
+                    info_text += f"Type: {item_type}\n"
+                
+                self.textEdit.append(info_text)
         except Exception as e:
-            self.log(f"Error en tree item clicked: {str(e)}")
+            self.log(f"Error in tree item clicked: {str(e)}")
 
     def connect_signals(self):
         """Conecta las señales de los widgets a sus respectivos slots."""
@@ -3541,50 +3540,19 @@ class UrlPlayer(BaseModule):
 
 
     def on_tree_double_click(self, item, column):
-        """Handle double click on tree item to add to queue or play immediately"""
+        """Handle double click on tree item to add to queue without switching tabs"""
         # If it's a root item (source) with children, just expand/collapse
         if item.childCount() > 0:
             item.setExpanded(not item.isExpanded())
             return
-                
-        # Get the result data stored with the item
-        result_data = item.data(0, Qt.ItemDataRole.UserRole)
         
-        # If it's a search result
-        if isinstance(result_data, dict):
-            url = result_data.get('url', '')
-            
-            # For database items that might not have a direct URL
-            if not url and result_data.get('source', '').lower() in ['database', 'local']:
-                # This is likely a database item, extract the best URL we can
-                if 'links' in result_data:
-                    # Try to find a playable URL in the links
-                    for service, service_url in result_data['links'].items():
-                        if service_url:
-                            url = service_url
-                            break
-            
-            if url:
-                # Create display text
-                title = result_data.get('title', '')
-                artist = result_data.get('artist', '')
-                display_text = f"{artist} - {title}" if artist and title else title or url
-                display_text = display_text.strip()
-                
-                # Add to the queue
-                self.add_to_queue_from_url(url, display_text, result_data)
-                self.log(f"Added to queue: {display_text}")
-                
-                # Optional: Play immediately if nothing is playing
-                if not self.is_playing and self.current_track_index == -1:
-                    self.current_track_index = len(self.current_playlist) - 1
-                    self.play_media()
-            else:
-                self.log(f"No playable URL found for {result_data.get('title', 'Unknown item')}")
-        else:
-            # Handle the logic for non-search results
-            if hasattr(self, 'on_tree_double_click_original'):
-                self.on_tree_double_click_original(item, column)
+        # Use the same method as the Add button to ensure paths are included
+        self.add_item_to_queue(item)
+        
+        # If nothing is playing, play the newly added item
+        if not self.is_playing and self.current_track_index == -1:
+            self.current_track_index = len(self.current_playlist) - 1
+            self.play_media()
 
     def add_to_queue_from_url(self, url, display_text, metadata=None):
         """Adds an item to the queue with the appropriate icon based on URL source."""
@@ -5303,34 +5271,34 @@ class UrlPlayer(BaseModule):
         if not item_data:
             return
         
+        # Debug logging to identify the issue
+        self.log(f"Adding item with data: {json.dumps(item_data, default=str)}")
+        
         # Use our extraction function to get the best URL or file path
         url = None
+        file_path = None
         
         if isinstance(item_data, dict):
             # Check for file path first for local files
-            url = item_data.get('file_path')
+            file_path = item_data.get('file_path')
+            self.log(f"Found file path: {file_path}")
             
             # If no file path, then check URL
-            if not url:
-                url = item_data.get('url')
+            url = item_data.get('url')
+            self.log(f"Found URL: {url}")
             
             # For database items that might not have a direct URL
-            if not url and item_data.get('source', '').lower() in ['database', 'local']:
+            if not url and not file_path and item_data.get('source', '').lower() in ['database', 'local']:
                 # Try to find a playable URL in the links
                 if 'links' in item_data:
                     for service, service_url in item_data['links'].items():
                         if service_url:
                             url = service_url
                             break
-            
-            # For Bandcamp tracks, ensure we have a usable URL
-            if not url and item_data.get('source', '').lower() == 'bandcamp':
-                url = self.extract_playable_url(item_data)
-                self.log(f"Extracted Bandcamp playable URL: {url}")
         else:
             url = str(item_data)
         
-        if not url:
+        if not url and not file_path:
             self.log(f"No URL or file path found for: {title}")
             return
         
@@ -5341,33 +5309,32 @@ class UrlPlayer(BaseModule):
         
         # Create the item with appropriate icon
         queue_item = QListWidgetItem(display_text)
-        queue_item.setData(Qt.ItemDataRole.UserRole, url)
+        queue_item.setData(Qt.ItemDataRole.UserRole, file_path or url)  # Prioritize file path
         
         # Determine source for icon
         source = item_data.get('source', '') if isinstance(item_data, dict) else ''
-        icon = self.get_source_icon(url, {'source': source})
+        icon = self.get_source_icon(file_path or url, {'source': source})
         queue_item.setIcon(icon)
         
         # Add to the list
         self.listWidget.addItem(queue_item)
         
         # Update internal playlist - include file_path if available
-        entry_data = item.data(0, Qt.ItemDataRole.UserRole + 1) or item_data
         playlist_item = {
             'title': title, 
             'artist': artist, 
             'url': url,
-            'source': source or self._determine_source_from_url(url),
-            'entry_data': entry_data
+            'source': source or self._determine_source_from_url(file_path or url),
+            'entry_data': item_data
         }
         
-        # Add file_path if it exists in the item data
-        if isinstance(item_data, dict) and 'file_path' in item_data:
-            playlist_item['file_path'] = item_data['file_path']
+        # Add file_path if it exists
+        if file_path:
+            playlist_item['file_path'] = file_path
         
         self.current_playlist.append(playlist_item)
         
-        self.log(f"Added to queue: {display_text} with URL/path: {url}")
+        self.log(f"Added to queue: {display_text} with URL/path: {file_path or url}")
     
     def remove_from_queue(self):
         """Elimina el elemento seleccionado de la cola de reproducción."""
@@ -7372,7 +7339,7 @@ class UrlPlayer(BaseModule):
             self.play_from_index(index)
 
     def on_tree_selection_changed(self):
-        """Handle selection changes in the tree widget"""
+        """Handle selection changes in the tree widget without switching tabs"""
         try:
             # Get the current selected item
             selected_items = self.treeWidget.selectedItems()
@@ -7384,9 +7351,25 @@ class UrlPlayer(BaseModule):
             # Get the data associated with the item
             item_data = item.data(0, Qt.ItemDataRole.UserRole)
             
-            # Display information about the selected item if available
-            if item_data:
-                self.display_wiki_info(item_data)
+            # Display information about the selected item without changing tabs
+            if item_data and hasattr(self, 'textEdit'):
+                # Format basic info in the text area instead of switching to Wiki tab
+                title = item_data.get('title', '')
+                artist = item_data.get('artist', '')
+                item_type = item_data.get('type', '')
+                
+                info_text = f"Selected: {title}\n"
+                if artist:
+                    info_text += f"Artist: {artist}\n"
+                if item_type:
+                    info_text += f"Type: {item_type}\n"
+                    
+                # Add file path if available
+                if item_data.get('file_path'):
+                    info_text += f"Path: {item_data.get('file_path')}\n"
+                    
+                # Update the text area
+                self.textEdit.append(info_text)
         except Exception as e:
             self.log(f"Error handling tree selection change: {str(e)}")
 
