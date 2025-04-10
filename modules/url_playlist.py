@@ -395,6 +395,44 @@ class SearchWorker(QRunnable):
             self.log(traceback.format_exc())
             return []
 
+  
+            
+    def _find_parent_album_url(self, track_data):
+        """Find the URL of the parent album for a track"""
+        try:
+            album_name = track_data.get('album')
+            artist_name = track_data.get('artist')
+            
+            if not album_name or not artist_name:
+                return None
+                
+            # Search the tree for matching album
+            for i in range(self.treeWidget.topLevelItemCount()):
+                top_item = self.treeWidget.topLevelItem(i)
+                
+                # Search child items (artists)
+                for j in range(top_item.childCount()):
+                    artist_item = top_item.child(j)
+                    
+                    # Check if this is the right artist
+                    if artist_item.text(1).lower() == artist_name.lower():
+                        # Search for the album
+                        for k in range(artist_item.childCount()):
+                            album_item = artist_item.child(k)
+                            
+                            # If this is an album and the name matches
+                            if album_item.text(2).lower() == "álbum" and album_item.text(0).lower() == album_name.lower():
+                                # Get album data
+                                album_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+                                if isinstance(album_data, dict) and album_data.get('url'):
+                                    return album_data.get('url')
+            
+            return None
+        except Exception as e:
+            self.log(f"Error finding parent album URL: {str(e)}")
+            return None
+
+
     def _search_bandcamp_in_db(self, artist, title, db_links, search_type):
         """Helper method to search Bandcamp info in database."""
         try:
@@ -856,27 +894,38 @@ class SearchWorker(QRunnable):
                 if 'entries' in data:
                     self.log(f"Encontradas {len(data['entries'])} entradas en el álbum")
                     for entry in data['entries']:
-                        # Saltear la entrada principal del álbum
+                        # Skip the main album entry
                         if entry.get('webpage_url') == album_url:
                             continue
                         
-                        # Crear objeto de pista
+                        # Get track URL - use track-specific URL if available, otherwise use album URL
+                        track_url = entry.get('webpage_url', '')
+                        if not track_url:
+                            track_url = album_url
+                            self.log(f"Using album URL for track: {entry.get('title', 'Unknown Track')}")
+                        
+                        # Get track number if available
+                        track_number = None
+                        if 'track_number' in entry:
+                            track_number = entry['track_number']
+                        else:
+                            # Try to extract from track title (e.g., "1. Track Name")
+                            title = entry.get('title', '')
+                            match = re.match(r'^(\d+)[\.:\)-]?\s+(.+)$', title)
+                            if match:
+                                track_number = match.group(1)
+                        
+                        # Create track object
                         track = {
                             "source": "bandcamp",
                             "title": entry.get('title', 'Unknown Track'),
                             "artist": artist_name,
-                            "album": album_name,  # Importante: incluir el álbum
-                            "url": entry.get('webpage_url', ''),
-                            "type": "track"
+                            "album": album_name,
+                            "url": entry.get('webpage_url', album_url),  # Use track URL if available, otherwise album URL
+                            "type": "track",
+                            "track_number": track_number,
+                            "duration": entry.get('duration')
                         }
-                        
-                        # Añadir número de pista si existe
-                        if 'track_number' in entry:
-                            track['track_number'] = entry['track_number']
-                        
-                        # Añadir duración si existe
-                        if 'duration' in entry:
-                            track['duration'] = entry['duration']
                         
                         tracks.append(track)
                     
@@ -2669,6 +2718,49 @@ class UrlPlayer(BaseModule):
             print("[UrlPlayer] Disabled Last.fm service due to missing credentials")
 
 
+    def extract_playable_url(self, item_data):
+            """
+            Extract a playable URL from item data with special handling for different sources.
+            Returns the most appropriate URL for playback.
+            """
+            try:
+                # Default to the item's URL if it exists
+                url = None
+                
+                if isinstance(item_data, dict):
+                    # Get direct URL
+                    url = item_data.get('url')
+                    
+                    # Handle different sources
+                    source = item_data.get('source', '').lower()
+                    item_type = item_data.get('type', '').lower()
+                    
+                    if source == 'bandcamp' and item_type == 'track':
+                        # For Bandcamp tracks:
+                        # 1. Try direct track URL
+                        # 2. Fall back to album URL if necessary
+                        
+                        # If no URL but we have album URL, use that
+                        if not url and item_data.get('album_url'):
+                            url = item_data.get('album_url')
+                            self.log(f"Using album URL for Bandcamp track: {url}")
+                        
+                        # Try to get URL from parent album if still needed
+                        if not url and item_data.get('album') and item_data.get('artist'):
+                            parent_album_url = self._find_parent_album_url(item_data)
+                            if parent_album_url:
+                                url = parent_album_url
+                                self.log(f"Using parent album URL for track: {url}")
+                else:
+                    # If item_data is a string, assume it's the URL
+                    url = str(item_data)
+                    
+                return url
+            except Exception as e:
+                self.log(f"Error extracting playable URL: {str(e)}")
+                return None
+
+
     def setup_services_combo(self):
         """Configura el combo box de servicios disponibles."""
         self.servicios.addItem(QIcon(":/services/add"), "Todos")
@@ -3017,6 +3109,8 @@ class UrlPlayer(BaseModule):
             url = url.get('url', str(url))
         url = str(url)
         
+        self.log(f"Reproduciendo URL: {url}")
+        
         # Verificar o crear directorio temporal para el socket
         if not self.mpv_temp_dir or not os.path.exists(self.mpv_temp_dir):
             try:
@@ -3044,8 +3138,19 @@ class UrlPlayer(BaseModule):
             "--ytdl=yes",                # Usar youtube-dl/yt-dlp para streaming
             "--ytdl-format=best",        # Mejor calidad disponible
             "--keep-open=yes",           # Mantener abierto al finalizar
-            url                          # La URL a reproducir
         ]
+        
+        # Special handling for Bandcamp URLs
+        if "bandcamp.com" in url:
+            # For Bandcamp, we might want to use specific options
+            mpv_args.extend([
+                "--ytdl-raw-options=yes-playlist=",  # Handle as single track even if it's an album
+                "--force-window=yes",               # Force window creation
+            ])
+            self.log("Aplicando configuración especial para Bandcamp")
+        
+        # Add the URL
+        mpv_args.append(url)
         
         # Registrar comando completo para depuración
         self.log(f"Comando MPV: mpv {' '.join(mpv_args)}")
@@ -3918,18 +4023,26 @@ class UrlPlayer(BaseModule):
         
         # Add tracks for albums correctly
         elif item_type == 'album' and 'tracks' in result and result['tracks']:
+            # Get the tracks from the result
+            tracks = result['tracks']
+            
             # Sort tracks by track number if available
-            sorted_tracks = sorted(
-                result['tracks'], 
-                key=lambda t: (int(t.get('track_number', 9999)) 
-                    if t.get('track_number') and str(t.get('track_number')).isdigit() 
-                    else 9999)
-            )
+            if tracks and all(t.get('track_number') is not None for t in tracks):
+                try:
+                    # Try to sort tracks by track number
+                    tracks = sorted(
+                        tracks, 
+                        key=lambda t: (int(t.get('track_number', 9999)) 
+                            if t.get('track_number') and str(t.get('track_number')).isdigit() 
+                            else 9999)
+                    )
+                except Exception as e:
+                    self.log(f"Error sorting tracks: {str(e)}")
             
-            # Agregar mensaje de log para depuración
-            self.log(f"Añadiendo {len(sorted_tracks)} pistas al álbum {result.get('title')}")
+            # Log for debugging
+            self.log(f"Añadiendo {len(tracks)} pistas al álbum {result.get('title')}")
             
-            for track in sorted_tracks:
+            for track in tracks:
                 # Create track item
                 track_item = QTreeWidgetItem(result_item)
                 track_item.setText(0, track.get('title', 'Unknown Track'))
@@ -3960,6 +4073,13 @@ class UrlPlayer(BaseModule):
                     track_data['artist'] = artist
                 if 'from_database' not in track_data:
                     track_data['from_database'] = from_db
+                
+                # CRITICAL FIX FOR BANDCAMP: Ensure URL is preserved
+                if ('url' not in track_data or not track_data['url']) and result.get('url'):
+                    # If track has no URL but we have album URL, create a fallback
+                    # This helps with Bandcamp tracks that might not have individual URLs
+                    track_data['url'] = result.get('url')
+                    self.log(f"Using album URL for track: {track_data['title']}")
                 
                 # Store the enhanced track data
                 track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
@@ -4527,16 +4647,28 @@ class UrlPlayer(BaseModule):
         """Añade un elemento específico a la cola."""
         title = item.text(0)
         artist = item.text(1)
-        url = item.data(0, Qt.ItemDataRole.UserRole)
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
         
-        if not url:
+        if not item_data:
             return
         
-        # Crear un nuevo item para la lista de reproducción
+        # Use our extraction function to get the best URL
+        url = item_data.get('url') if isinstance(item_data, dict) else item_data
+        
+        # For Bandcamp tracks, ensure we have a usable URL
+        if isinstance(item_data, dict) and item_data.get('source', '').lower() == 'bandcamp':
+            url = self.extract_playable_url(item_data)
+            self.log(f"Extracted Bandcamp playable URL: {url}")
+        
+        if not url:
+            self.log(f"No URL found for: {title}")
+            return
+        
+        # Create a new item for the playlist
         display_text = title
         if artist:
             display_text = f"{artist} - {title}"
-            
+                
         queue_item = QListWidgetItem(display_text)
         queue_item.setData(Qt.ItemDataRole.UserRole, url)
         
@@ -4551,6 +4683,8 @@ class UrlPlayer(BaseModule):
             'url': url,
             'entry_data': entry_data
         })
+        
+        self.log(f"Added to queue: {display_text} with URL: {url}")
     
     def remove_from_queue(self):
         """Elimina el elemento seleccionado de la cola de reproducción."""
