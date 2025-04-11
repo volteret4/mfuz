@@ -333,23 +333,68 @@ QHeaderView::section {
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="rss">
+       <widget class="QGroupBox" name="apariencia_playlists">
         <property name="title">
-         <string/>
+         <string>Apariencia de playlists</string>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QLabel" name="rss_label">
-           <property name="text">
-            <string>Selecciona desde tus servidor rss en qué categorías buscar</string>
+          <widget class="QFrame" name="radio_buttons">
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QRadioButton" name="pl_unidas">
+              <property name="text">
+               <string>Listas de reproducción unidas</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="pl_separadas">
+              <property name="text">
+               <string>Listas de reproducción por separado</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="rss_check_1">
-           <property name="text">
-            <string>CheckBox</string>
+          <widget class="QFrame" name="check_boxes">
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
            </property>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Raised</enum>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QCheckBox" name="blogs_checkbox">
+              <property name="text">
+               <string>Blogs</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="locale_checkbox">
+              <property name="text">
+               <string>Locales</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sp_checkbox">
+              <property name="text">
+               <string>Spotify</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -367,6 +412,22 @@ QHeaderView::section {
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="rss">
+        <property name="title">
+         <string>Categorias aceptadas en el RSS</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QCheckBox" name="rss_check_1">
+           <property name="text">
+            <string>CheckBox</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item>
        <widget class="QDialogButtonBox" name="adv_sett_buttonBox">
