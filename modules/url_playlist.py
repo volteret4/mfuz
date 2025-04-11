@@ -1900,12 +1900,12 @@ class UrlPlayer(BaseModule):
         # Now call the parent constructor which will call init_ui()
         super().__init__(parent, theme, **kwargs)
         
-
+        self._is_initializing = True
         
         # After parent initialization is complete, now we can safely load API credentials
-        # and set environment variables
-        if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
-            self._load_api_credentials_from_env()
+        # # and set environment variables
+        # if not all([self.spotify_client_id, self.spotify_client_secret, self.lastfm_api_key]):
+        #     self._load_api_credentials_from_env()
         
         # Primero cargar las credenciales con tu método existente
         self._load_api_credentials_from_env()  # Tu método existente
@@ -1932,6 +1932,7 @@ class UrlPlayer(BaseModule):
         # Log the final configuration
         print(f"[UrlPlayer] Final config - DB: {self.db_path}, Spotify enabled: {self.spotify_enabled}, Last.fm enabled: {self.lastfm_enabled}")
         
+        self._is_initializing = False
 
     def get_app_path(self, file_path):
         """Create standardized paths relative to PROJECT_ROOT"""
@@ -2147,9 +2148,20 @@ class UrlPlayer(BaseModule):
                 # Connect to the on_playlist_local_changed method
                 self.playlist_local_comboBox.currentIndexChanged.connect(self.on_playlist_local_changed)                
 
+            # For the save playlist button, properly disconnect first
             if hasattr(self, 'GuardarPlaylist'):
+                try:
+                    self.GuardarPlaylist.clicked.disconnect()
+                except TypeError:
+                    pass  # Not connected yet, that's fine
                 self.GuardarPlaylist.clicked.connect(self.on_guardar_playlist_clicked)
-                #self.GuardarPlaylist.clicked.connect(self.save_current_playlist)
+            
+            # Same for the combobox
+            if hasattr(self, 'guardar_playlist_comboBox'):
+                try:
+                    self.guardar_playlist_comboBox.currentIndexChanged.disconnect()
+                except TypeError:
+                    pass  # Not connected yet, that's fine
 
             if hasattr(self, 'VaciarPlaylist'):
                 #self.VaciarPlaylist.clicked.connect(self.clear_temp_playlist)
@@ -2637,6 +2649,19 @@ class UrlPlayer(BaseModule):
                 if not isinstance(self.playlists, dict):
                     self.playlists = {'spotify': [], 'local': [], 'rss': []}
             
+            # Cargar playlists locales directamente desde los archivos
+            local_playlists = self.load_local_playlists()
+            
+            # Mostrar información de debug
+            playlist_names = [p.get('name', 'Sin nombre') for p in local_playlists]
+            self.log(f"Playlists locales cargadas directamente: {', '.join(playlist_names)}")
+            
+            # Actualizar la estructura de playlists con los datos cargados
+            self.playlists['local'] = local_playlists
+            
+            # Guardar la estructura actualizada para que esté disponible en futuras llamadas
+            self.save_playlists()
+            
             # Actualizar combobox de playlists locales
             if hasattr(self, 'playlist_local_comboBox'):
                 # Guardar selección actual
@@ -2650,28 +2675,17 @@ class UrlPlayer(BaseModule):
                 self.playlist_local_comboBox.addItem(QIcon(":/services/plslove"), "Seleccionar Playlist Local")
                 
                 # Añadir todas las playlists locales
-                local_playlists = self.playlists.get('local', [])
-                
-                # Si no hay playlists locales, intentar cargarlas de nuevo
-                if not local_playlists:
-                    local_playlists = self.load_local_playlists()
-                    if local_playlists:
-                        self.playlists['local'] = local_playlists
-                        self.save_playlists()
-                
-                # Ordenar playlists por nombre
-                local_playlists = sorted(local_playlists, key=lambda x: x.get('name', '').lower())
-                
-                for playlist in local_playlists:
+                local_playlist_names = []
+                for playlist in self.playlists.get('local', []):
                     playlist_name = playlist.get('name', 'Playlist sin nombre')
+                    local_playlist_names.append(playlist_name)
                     self.playlist_local_comboBox.addItem(
                         QIcon(":/services/plslove"), 
                         playlist_name
                     )
                 
-                # Registrar cuántas playlists se añadieron
-                num_playlists = len(local_playlists)
-                self.log(f"Combobox actualizado con {num_playlists} playlists locales")
+                # Mostrar nombres para debug
+                self.log(f"Nombres de playlists añadidos al combobox: {', '.join(local_playlist_names)}")
                 
                 # Intentar restaurar la selección anterior si existe
                 index = self.playlist_local_comboBox.findText(current_selection)
@@ -2682,8 +2696,26 @@ class UrlPlayer(BaseModule):
                 
                 self.playlist_local_comboBox.blockSignals(False)  # Reactivar las señales
             
-            # Actualizar otros comboboxes...
-            # [Código existente para Spotify y RSS]
+            # Actualizar combobox de Spotify
+            if hasattr(self, 'playlist_spotify_comboBox'):
+                self.playlist_spotify_comboBox.clear()
+                self.playlist_spotify_comboBox.addItem(QIcon(":/services/b_plus_cross"), "Nueva Playlist Spotify")
+                
+                for playlist in self.playlists.get('spotify', []):
+                    self.playlist_spotify_comboBox.addItem(
+                        QIcon(":/services/spotify"), 
+                        playlist.get('name', 'Unnamed Playlist')
+                    )
+            
+            # Actualizar combobox de RSS
+            if hasattr(self, 'playlist_rss_comboBox'):
+                self.playlist_rss_comboBox.clear()
+                
+                for playlist in self.playlists.get('rss', []):
+                    self.playlist_rss_comboBox.addItem(
+                        QIcon(":/services/rss"), 
+                        playlist.get('name', 'Unnamed Blog')
+                    )
         
         except Exception as e:
             self.log(f"Error actualizando comboboxes de playlists: {str(e)}")
@@ -2754,69 +2786,70 @@ class UrlPlayer(BaseModule):
 
 
     def save_local_playlist(self, name):
-        """Save the current queue as a local playlist file."""
+        """Guarda la cola actual como una playlist local."""
         try:
-            # Ensure playlists directory exists
+            # Asegurar que el directorio de playlists existe
             local_playlist_dir = self.get_local_playlist_path()
             os.makedirs(local_playlist_dir, exist_ok=True)
             
-            # Create a clean filename
+            # Crear un nombre de archivo seguro
             import re
             safe_name = re.sub(r'[^\w\-_\. ]', '_', name)
             playlist_path = os.path.join(local_playlist_dir, f"{safe_name}.pls")
             
-            # Debug output to verify we have items
-            self.log(f"Saving playlist with {self.listWidget.count()} items")
+            # Debug output para verificar ruta
+            self.log(f"Guardando playlist en: {playlist_path}")
+            self.log(f"Guardando playlist con {self.listWidget.count()} elementos")
             
-            # Collect items from the list, excluding Spotify items if requested
+            # Recopilar elementos de la lista, excluyendo elementos de Spotify si se solicita
             items = []
             for i in range(self.listWidget.count()):
                 item = self.listWidget.item(i)
                 if not item:
-                    self.log(f"Warning: Item at index {i} is None, skipping")
+                    self.log(f"Advertencia: El elemento en el índice {i} es None, omitiendo")
                     continue
                     
                 url = item.data(Qt.ItemDataRole.UserRole)
                 if not url:
-                    self.log(f"Warning: No URL for item at index {i}, skipping")
+                    self.log(f"Advertencia: No hay URL para el elemento en el índice {i}, omitiendo")
                     continue
                     
                 title = item.text()
                 
-                # Determine if this is a Spotify URL (skip if exclude_spotify is True)
+                # Determinar si es una URL de Spotify (omitir si exclude_spotify es True)
                 is_spotify = 'spotify.com' in str(url).lower()
                 if is_spotify and self.exclude_spotify_from_local:
-                    self.log(f"Skipping Spotify item: {title}")
+                    self.log(f"Omitiendo elemento de Spotify: {title}")
                     continue
                 
-                # Extract artist and title if possible
+                # Extraer artista y título si es posible
                 artist = ""
                 if " - " in title:
                     parts = title.split(" - ", 1)
                     artist = parts[0]
                     title = parts[1]
                 
-                # Add to items list
+                # Añadir a la lista de elementos
                 items.append({
                     "url": url,
                     "title": title,
                     "artist": artist,
                     "source": self._determine_source_from_url(url)
                 })
-                self.log(f"Added item to playlist: {artist} - {title}")
+                self.log(f"Añadido elemento a la playlist: {artist} - {title}")
             
-            # Debug check - if we still have no items, something is wrong
+            # Debug check - si no tenemos elementos, algo está mal
             if not items:
-                self.log("Warning: No items collected from the listWidget")
+                self.log("Advertencia: No se recopilaron elementos del listWidget")
                 
-                # Fallback: try to use the current_playlist instead
+                # Fallback: intentar usar current_playlist en su lugar
                 if self.current_playlist:
-                    self.log(f"Attempting to use current_playlist with {len(self.current_playlist)} items")
+                    self.log(f"Intentando usar current_playlist con {len(self.current_playlist)} elementos")
                     for item in self.current_playlist:
                         if not item.get('url'):
                             continue
                             
-                        # Skip Spotify if requested
+                        # Omitir Spotify si se solicita
                         is_spotify = 'spotify.com' in str(item.get('url')).lower()
                         if is_spotify and self.exclude_spotify_from_local:
                             continue
@@ -2828,7 +2861,7 @@ class UrlPlayer(BaseModule):
                             "source": item.get('source', self._determine_source_from_url(item.get('url', '')))
                         })
             
-            # Save in a simple PLS format
+            # Guardar en formato PLS simple
             with open(playlist_path, 'w', encoding='utf-8') as f:
                 f.write("[playlist]\n")
                 f.write(f"NumberOfEntries={len(items)}\n\n")
@@ -2836,10 +2869,12 @@ class UrlPlayer(BaseModule):
                 for i, item in enumerate(items, 1):
                     f.write(f"File{i}={item['url']}\n")
                     f.write(f"Title{i}={item['artist']} - {item['title']}\n" if item['artist'] else f"Title{i}={item['title']}\n")
-                    f.write(f"Length{i}=-1\n\n")  # -1 means unknown length
+                    f.write(f"Length{i}=-1\n\n")  # -1 significa duración desconocida
             
-            # Also save as JSON for more metadata
+            # También guardar como JSON para más metadatos
             json_path = os.path.join(local_playlist_dir, f"{safe_name}.json")
+            self.log(f"Guardando metadata en: {json_path}")
+            
             playlist_data = {
                 "name": name,
                 "items": items,
@@ -2850,34 +2885,40 @@ class UrlPlayer(BaseModule):
             with open(json_path, 'w', encoding='utf-8') as f:
                 json.dump(playlist_data, f, indent=2, ensure_ascii=False)
             
-            # Update internal playlists
-            if not hasattr(self, 'playlists'):
-                self.playlists = self.load_playlists()
+            # Actualizar estructura interna de playlists
+            if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict):
+                self.playlists = {'spotify': [], 'local': [], 'rss': []}
             
             if 'local' not in self.playlists:
                 self.playlists['local'] = []
             
-            # Check if playlist with same name exists
+            # Verificar si ya existe una playlist con el mismo nombre
             playlist_updated = False
             for i, existing in enumerate(self.playlists['local']):
                 if existing.get('name') == name:
-                    # Replace existing
+                    # Reemplazar existente
                     self.playlists['local'][i] = playlist_data
                     playlist_updated = True
                     break
             
-            # Add new playlist if not found
+            # Añadir nueva playlist si no se encontró
             if not playlist_updated:
                 self.playlists['local'].append(playlist_data)
-                
-            # Save and update UI
+            
+            # Guardar y actualizar UI
             self.save_playlists()
             self.update_playlist_comboboxes()
             
-            self.log(f"Saved local playlist '{name}' with {len(items)} items to {playlist_path}")
+            self.log(f"Playlist local '{name}' guardada con {len(items)} elementos en {playlist_path}")
+            
+            # Verificación adicional
+            self.log("Verificando que la playlist se guardó correctamente...")
+            local_playlists = self.load_local_playlists()  # Recargar para confirmar
+            playlist_names = [p.get('name', 'Sin nombre') for p in local_playlists]
+            self.log(f"Playlists disponibles después de guardar: {', '.join(playlist_names)}")
             
         except Exception as e:
-            self.log(f"Error saving local playlist: {str(e)}")
+            self.log(f"Error guardando playlist local: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
 
@@ -6696,7 +6737,11 @@ class UrlPlayer(BaseModule):
             if not client_id or not client_secret:
                 self.log("Spotify client ID and secret are required for Spotify functionality")
                 return False
-                
+
+            if hasattr(self, 'playlist_spotify_comboBox'):
+                self.playlist_spotify_comboBox.blockSignals(True)
+
+
             print("Setting up Spotify client...")
             
             # Ensure cache directory exists - usa la ruta que prefieras
@@ -6745,6 +6790,10 @@ class UrlPlayer(BaseModule):
                 user_info = self.sp.current_user()
                 self.spotify_user_id = user_info['id']
                 print(f"Authenticated as user: {self.spotify_user_id}")
+
+                # Resultado exitoso, ahora activamos las señales
+                if hasattr(self, 'playlist_spotify_comboBox'):
+                    self.playlist_spotify_comboBox.blockSignals(False)
                 
                 # Flag that Spotify is authenticated
                 self.spotify_authenticated = True
@@ -6975,37 +7024,52 @@ class UrlPlayer(BaseModule):
             self.log(f"Error loading Spotify playlists: {str(e)}")
             print(f"Traceback: {traceback.format_exc()}")
             return False
-
     def update_spotify_playlists_ui(self, playlists_data):
         """Update UI with Spotify playlist data"""
-        # First clear the combo box keeping only the first "New Playlist" item
-        combo = self.playlist_spotify_comboBox
-        while combo.count() > 1:
-            combo.removeItem(1)
+        # Verificar que el combobox existe antes de usarlo
+        if not hasattr(self, 'playlist_spotify_comboBox') or not self.playlist_spotify_comboBox:
+            self.log("Error: No se encontró el combobox de playlists de Spotify")
+            return
+            
+        # Guardar la selección actual si existe
+        current_text = self.playlist_spotify_comboBox.currentText() if self.playlist_spotify_comboBox.count() > 0 else ""
         
-        # Store playlists for later use
+        # Bloquear señales durante la actualización
+        self.playlist_spotify_comboBox.blockSignals(True)
+        
+        # Limpiar y repoblar el combobox
+        self.playlist_spotify_comboBox.clear()
+        
+        # Siempre añadir la opción de "Nueva Playlist" primero
+        self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), "Nueva Playlist")
+        
+        # Almacenar playlists
         self.spotify_playlists = {}
         
+        # Añadir las playlists al combobox
         for playlist in playlists_data:
             playlist_name = playlist['name']
             playlist_id = playlist['id']
             
-            # Store the playlist
+            # Guardar la playlist
             self.spotify_playlists[playlist_name] = playlist
             
-            # Add to combo box
-            from PyQt6.QtGui import QIcon
-            combo.addItem(QIcon(":/services/spotify"), playlist_name)
+            # Añadir al combobox
+            self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), playlist_name)
         
-        # Connect signal if not already connected
-        try:
-            combo.currentIndexChanged.disconnect(self.on_spotify_playlist_changed)
-        except:
-            pass
-        combo.currentIndexChanged.connect(self.on_spotify_playlist_changed)
+        # Restaurar la selección anterior si es posible
+        if current_text:
+            index = self.playlist_spotify_comboBox.findText(current_text)
+            if index >= 0:
+                self.playlist_spotify_comboBox.setCurrentIndex(index)
         
-        self.log(f"Loaded {len(playlists_data)} Spotify playlists")
-
+        # Desbloquear señales
+        self.playlist_spotify_comboBox.blockSignals(False)
+        
+        # Forzar actualización visual
+        self.playlist_spotify_comboBox.update()
+        
+        self.log(f"Cargadas {len(playlists_data)} playlists de Spotify")
 
     def get_local_playlist_path(self):
         """Get the local playlist save path from configuration."""
@@ -7049,42 +7113,68 @@ class UrlPlayer(BaseModule):
 
     def on_spotify_playlist_changed(self, index):
         """Handle selection change in the Spotify playlist comboBox"""
+        if self._is_initializing:
+            return  # No hacer nada durante la inicialización
+            
         combo = self.playlist_spotify_comboBox
+        if not combo:
+            return
+            
         selected_text = combo.currentText()
         
-        if index == 0:  # "New Playlist" option
-            self.show_create_spotify_playlist_dialog()
+        if index == 0 or selected_text == "Nueva Playlist":  # Opción "Nueva Playlist"
+            # Forzar llamada directa (no a través de señal)
+            self.log("Mostrando diálogo de creación de playlist")
+            QTimer.singleShot(100, self.show_create_spotify_playlist_dialog)
         else:
-            # Show the selected playlist content
+            # Mostrar contenido de la playlist seleccionada
             if hasattr(self, 'spotify_playlists') and selected_text in self.spotify_playlists:
                 playlist = self.spotify_playlists[selected_text]
                 self.show_spotify_playlist_content(playlist['id'], playlist['name'])
-        
+
+
     def show_create_spotify_playlist_dialog(self):
         """Show dialog to create a new Spotify playlist"""
+        self.log("Iniciando diálogo de creación de playlist")
+        
         from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QDialogButtonBox
         
         dialog = QDialog(self)
         dialog.setWindowTitle("Crear Nueva Playlist de Spotify")
+        dialog.setMinimumWidth(300)
         
         layout = QVBoxLayout(dialog)
         
-        # Name input
+        # Nombre input
         layout.addWidget(QLabel("Nombre de la playlist:"))
         name_input = QLineEdit()
         layout.addWidget(name_input)
         
-        # Buttons
+        # Botones
         button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         button_box.accepted.connect(dialog.accept)
         button_box.rejected.connect(dialog.reject)
         layout.addWidget(button_box)
         
-        if dialog.exec() == QDialog.DialogCode.Accepted:
+        # Mostrar diálogo modal
+        result = dialog.exec()
+        
+        if result == QDialog.DialogCode.Accepted:
             playlist_name = name_input.text().strip()
             if playlist_name:
                 self.create_spotify_playlist(playlist_name)
+            else:
+                self.log("Nombre de playlist vacío, no se creó")
                 
+        # Si se canceló, restablecer el combobox
+        if result != QDialog.DialogCode.Accepted and hasattr(self, 'playlist_spotify_comboBox'):
+            # Seleccionar un ítem diferente a "Nueva Playlist"
+            if self.playlist_spotify_comboBox.count() > 1:
+                self.playlist_spotify_comboBox.setCurrentIndex(1)
+            self.log("Creación de playlist cancelada")
+
+
+            
     def create_spotify_playlist(self, name):
         """Create a new Spotify playlist"""
         if not name:
@@ -7141,9 +7231,13 @@ class UrlPlayer(BaseModule):
             root_item.setFont(0, font)
             root_item.setFont(1, font)
             
+            # Set the Spotify icon explicitly
+            root_item.setIcon(0, QIcon(":/services/spotify"))
+            
             # Fetch tracks from Spotify
             results = self.api_call_with_retry(self.sp.playlist_items, playlist_id)
             
+
             # Add tracks as children of the root item
             for item in results['items']:
                 if item['track']:
