@@ -21,7 +21,8 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem, QInputDialog, QComboBox, QCheckBox,
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu, QDialogButtonBox, QLabel,
-    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog
+    QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog,
+    QStackedWidget
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize, QTimer
 from PyQt6.QtGui import QIcon, QMovie
@@ -1979,6 +1980,10 @@ class UrlPlayer(BaseModule):
             print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
             return
         
+
+        # Inicializar referencias a widgets después de cargar la UI
+        self.initialize_playlist_ui_references()
+
         
         # Cargar configuración
         self.load_settings()
@@ -2006,6 +2011,9 @@ class UrlPlayer(BaseModule):
         self.playButton.setIcon(QIcon(":/services/b_addstar"))
 
         self.addButton.setToolTip("Añadir a la cola")
+        
+        self.setup_unified_playlist_button()  # Create the button
+        self.update_playlist_view()  # Apply current view settings
         
          # Configure TreeWidget for better display of hierarchical data
         if hasattr(self, 'treeWidget') and self.treeWidget:
@@ -2053,15 +2061,29 @@ class UrlPlayer(BaseModule):
             self.tipo_combo.addItem("Álbum")
             self.tipo_combo.addItem("Canción")
 
-        # Asegurar que playlist_rss_comboBox está accesible
+        # Ensure that playlist_rss_comboBox is accessible
         if not hasattr(self, 'playlist_rss_comboBox'):
             self.playlist_rss_comboBox = self.findChild(QComboBox, 'playlist_rss_comboBox')
             if self.playlist_rss_comboBox:
                 self.log("Combobox 'playlist_rss_comboBox' encontrado utilizando findChild")
             else:
                 self.log("ERROR: No se pudo encontrar el combobox 'playlist_rss_comboBox'")
-
-        # Cargar playlists al inicio
+        
+        # Check for critical widgets
+        critical_widgets = [
+            'playlist_stack', 
+            'separate_page', 
+            'unified_page', 
+            'unified_playlist_button',
+            'playlist_local_comboBox',
+            'playlist_spotify_comboBox',
+            'playlist_rss_comboBox'
+        ]
+        for widget_name in critical_widgets:
+            widget = self.findChild(QWidget, widget_name)
+            self.log(f"Widget '{widget_name}': {'Encontrado' if widget else 'NO ENCONTRADO'}")
+        
+        # Load playlists at startup
         self.load_all_playlists()
 
         # Setup service icons
@@ -2166,7 +2188,7 @@ class UrlPlayer(BaseModule):
                     pass
                 self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_playlist_rss_changed)
                 
-            # Configurar controles adicionales para RSS
+            # Set up additional controls for RSS
             self.setup_rss_controls()
                 
             
@@ -2480,6 +2502,24 @@ class UrlPlayer(BaseModule):
                     value = value.lower() == 'true'
                 checkbox.setChecked(value)
 
+        # Set the playlist view radio buttons
+        if hasattr(dialog, 'pl_unidas') and hasattr(dialog, 'pl_separadas'):
+            unified_view = getattr(self, 'playlist_unified_view', False)
+            dialog.pl_unidas.setChecked(unified_view)
+            dialog.pl_separadas.setChecked(not unified_view)
+        
+        # Set the playlist visibility checkboxes
+        if hasattr(dialog, 'locale_checkbox'):
+            dialog.locale_checkbox.setChecked(getattr(self, 'show_local_playlists', True))
+        
+        if hasattr(dialog, 'sp_checkbox'):
+            dialog.sp_checkbox.setChecked(getattr(self, 'show_spotify_playlists', True))
+        
+        if hasattr(dialog, 'blogs_checkbox'):
+            dialog.blogs_checkbox.setChecked(getattr(self, 'show_rss_playlists', True))
+
+
+
     def _initialize_default_values(self):
         """Initialize default values for settings when configuration can't be loaded"""
         self.log("Initializing default values for settings")
@@ -2541,11 +2581,26 @@ class UrlPlayer(BaseModule):
                     self.included_services[service_key] = checkbox.isChecked()
                     self.log(f"Service {service_key} included: {checkbox.isChecked()}")
             
-            # Actualizar UI o estado si es necesario
-            self.update_service_combo()
+            # Save playlist view settings
+            self.playlist_unified_view = dialog.pl_unidas.isChecked()
+            
+            # Save playlist visibility settings
+            self.show_local_playlists = dialog.locale_checkbox.isChecked()
+            self.show_spotify_playlists = dialog.sp_checkbox.isChecked()
+            self.show_rss_playlists = dialog.blogs_checkbox.isChecked()
+            
+            # Update the playlist view based on the new settings
+            self.update_playlist_view()
             
             # Guardar en archivo YAML
             self.save_settings()
+            
+            # Actualizar UI o estado si es necesario
+            self.update_service_combo()
+
+            # Cerrar el diálogo
+            dialog.accept()
+
             
             # Cerrar el diálogo
             dialog.accept()
@@ -2555,8 +2610,74 @@ class UrlPlayer(BaseModule):
             self.log(traceback.format_exc())
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
 
+    def get_setting_value(self, key, default=None):
+        """Get a setting value with default fallback"""
+        if hasattr(self, key):
+            return getattr(self, key)
+        return default
 
 
+    def update_playlist_view(self):
+        """Actualiza la vista de las playlists según la configuración actual"""
+        try:
+            # Diagnóstico inicial
+            self.log(f"Actualizando vista de playlist. Modo unificado: {getattr(self, 'playlist_unified_view', False)}")
+
+            # Asegurarnos que tenemos el widget stack
+            if not hasattr(self, 'playlist_stack'):
+                self.log("Error: QStackedWidget 'playlist_stack' no encontrado")
+                return False
+                
+            # Verificar botón unificado
+            if not hasattr(self, 'unified_playlist_button'):
+                self.log("Error: QPushButton 'unified_playlist_button' no encontrado")
+                return False
+            
+            # Make sure the button is visible first (this is critical)
+            self.unified_playlist_button.setVisible(True)
+                
+            # Configurar el botón unificado si aún no tiene menú
+            if not self.unified_playlist_button.menu():
+                self.setup_unified_playlist_menu()
+                
+
+            # Diagnóstico de los widgets
+            self.log(f"playlist_stack tiene {self.playlist_stack.count()} páginas")
+            self.log(f"Widget actual: {self.playlist_stack.currentWidget()}")
+
+            # Cambiar a la vista según la configuración
+            if hasattr(self, 'playlist_unified_view') and self.playlist_unified_view:
+                # Cambiar al índice de la página unificada (asumiendo que es el índice 1)
+                self.playlist_stack.setCurrentIndex(1)
+                
+                # Actualizar el menú unificado
+                self.update_unified_playlist_menu()
+                self.log("Cambiado a vista de playlist unificada")
+            else:
+                # Cambiar al índice de la página separada (asumiendo que es el índice 0)
+                self.playlist_stack.setCurrentIndex(0)
+                
+                # Actualizar visibilidad de los comboboxes individuales
+                if hasattr(self, 'playlist_local_comboBox'):
+                    self.playlist_local_comboBox.setVisible(
+                        self.get_setting_value('show_local_playlists', True))
+                    
+                if hasattr(self, 'playlist_spotify_comboBox'):
+                    self.playlist_spotify_comboBox.setVisible(
+                        self.get_setting_value('show_spotify_playlists', True))
+                    
+                if hasattr(self, 'playlist_rss_comboBox'):
+                    self.playlist_rss_comboBox.setVisible(
+                        self.get_setting_value('show_rss_playlists', True))
+                    
+                self.log("Cambiado a vista de playlists separadas")
+            
+            return True
+        except Exception as e:
+            self.log(f"Error actualizando vista de playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
 
 
 
@@ -2671,6 +2792,16 @@ class UrlPlayer(BaseModule):
                     mpv_temp_dir = os.path.join(os.path.expanduser("~"), mpv_temp_dir)
                 self.mpv_temp_dir = mpv_temp_dir
                 
+            # Load playlist view settings
+            self.playlist_unified_view = module_args.get('playlist_unified_view', False)
+            
+            # Load playlist visibility settings
+            self.show_local_playlists = module_args.get('show_local_playlists', True)
+            self.show_spotify_playlists = module_args.get('show_spotify_playlists', True)
+            self.show_rss_playlists = module_args.get('show_rss_playlists', True)
+            
+            # Additional your existing code...
+            
             self.log("Module settings loaded successfully")
         except Exception as e:
             self.log(f"Error loading module settings: {e}")
@@ -2770,22 +2901,28 @@ class UrlPlayer(BaseModule):
         try:
             # Verificar combobox
             if not hasattr(self, 'playlist_rss_comboBox') or self.playlist_rss_comboBox is None:
-                self.log("ERROR: Combobox 'playlist_rss_comboBox' no disponible")
-                return False
-                
+                self.playlist_rss_comboBox = self.findChild(QComboBox, 'playlist_rss_comboBox')
+                if not self.playlist_rss_comboBox:
+                    self.log("ERROR: Combobox 'playlist_rss_comboBox' no disponible")
+                    return False
+                    
             # Limpiar combobox actual
+            self.playlist_rss_comboBox.blockSignals(True)  # Block signals while updating
             self.playlist_rss_comboBox.clear()
             self.log(f"Combobox limpiado, elementos: {self.playlist_rss_comboBox.count()}")
             
             # Añadir opción por defecto
-            self.playlist_rss_comboBox.addItem("Playlists RSS")
+            self.playlist_rss_comboBox.addItem(QIcon(":/services/rss"), "Playlists RSS")
             self.log(f"Opción por defecto añadida, elementos: {self.playlist_rss_comboBox.count()}")
             
             # Verificar directorio
             if not os.path.exists(self.rss_pending_dir):
                 self.log(f"Directorio de playlists pendientes no existe: {self.rss_pending_dir}")
+                os.makedirs(self.rss_pending_dir, exist_ok=True)
+                self.log(f"Creado directorio de playlists pendientes: {self.rss_pending_dir}")
+                self.playlist_rss_comboBox.blockSignals(False)
                 return False
-                
+                    
             # Listar blogs (directorios)
             blogs = []
             for item in os.listdir(self.rss_pending_dir):
@@ -2827,7 +2964,7 @@ class UrlPlayer(BaseModule):
                         display_text = f"{playlist['name']} ({playlist['track_count']} pistas)"
                         
                         # Primero, añadir el texto
-                        self.playlist_rss_comboBox.addItem(display_text)
+                        self.playlist_rss_comboBox.addItem(QIcon(":/services/rss"), display_text)
                         
                         # Luego, establece los datos del usuario
                         idx = self.playlist_rss_comboBox.count() - 1
@@ -2836,6 +2973,7 @@ class UrlPlayer(BaseModule):
                         self.log(f"Playlist '{display_text}' añadida en índice {idx}")
                         total_playlists += 1
             
+            self.playlist_rss_comboBox.blockSignals(False)  # Unblock signals after updating
             self.log(f"Proceso completado. Total playlists añadidas: {total_playlists}")
             
             # Verificación final
@@ -2845,11 +2983,13 @@ class UrlPlayer(BaseModule):
             else:
                 self.log("ERROR: No se añadieron playlists al combobox")
                 return False
-                
+                    
         except Exception as e:
             self.log(f"ERROR en load_rss_playlists: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+            if hasattr(self, 'playlist_rss_comboBox') and self.playlist_rss_comboBox:
+                self.playlist_rss_comboBox.blockSignals(False)  # Ensure signals are unblocked on error
             return False
 
     def _restore_selection_in_tree(self, parent_item, target_data):
@@ -3101,7 +3241,7 @@ class UrlPlayer(BaseModule):
             self.log(traceback.format_exc())
 
     def load_local_playlist(self, playlist_name):
-        """Load a local playlist into the player."""
+        """Load a local playlist into the tree widget"""
         try:
             # Find the playlist in our playlists data
             if not hasattr(self, 'playlists'):
@@ -3117,60 +3257,11 @@ class UrlPlayer(BaseModule):
                 self.log(f"Local playlist '{playlist_name}' not found")
                 return
             
-            # Ask for confirmation if current playlist is not empty
-            if self.listWidget.count() > 0:
-                reply = QMessageBox.question(
-                    self, "Load Playlist", 
-                    f"Load playlist '{playlist_name}'? Current playlist will be replaced.",
-                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-                    QMessageBox.StandardButton.No
-                )
-                
-                if reply == QMessageBox.StandardButton.No:
-                    return
+            # Load the playlist into the TreeWidget instead of adding to queue
+            self.display_local_playlist(selected_playlist)
             
-            # Clear current playlist
-            self.listWidget.clear()
-            self.current_playlist = []
-            
-            # Add items from selected playlist
-            for item in selected_playlist.get('items', []):
-                title = item.get('title', '')
-                artist = item.get('artist', '')
-                url = item.get('url', '')
-                source = item.get('source', self._determine_source_from_url(url))
-                
-                if not url:
-                    continue
-                
-                # Create display text
-                display_text = title
-                if artist:
-                    display_text = f"{artist} - {title}"
-                
-                # Add to list widget with icon
-                list_item = QListWidgetItem(display_text)
-                list_item.setData(Qt.ItemDataRole.UserRole, url)
-                
-                # Add the appropriate icon
-                icon = self.get_source_icon(url, {'source': source})
-                list_item.setIcon(icon)
-                
-                self.listWidget.addItem(list_item)
-                
-                # Add to internal playlist
-                self.current_playlist.append({
-                    'title': title,
-                    'artist': artist,
-                    'url': url,
-                    'source': source
-                })
-            
-            # Reset current track index
-            self.current_track_index = -1
-            
-            # Update UI
-            self.log(f"Loaded local playlist '{playlist_name}' with {len(selected_playlist.get('items', []))} items")
+            # Log success
+            self.log(f"Loaded local playlist '{playlist_name}' into tree view")
             
         except Exception as e:
             self.log(f"Error loading local playlist: {str(e)}")
@@ -3381,8 +3472,17 @@ class UrlPlayer(BaseModule):
                 'spotify_client_id': self.spotify_client_id,
                 'spotify_client_secret': self.spotify_client_secret,
                 'lastfm_api_key': self.lastfm_api_key,
-                'lastfm_user': self.lastfm_user
+                'lastfm_user': self.lastfm_user,
+                
+                # Configuración de vista de playlists
+                'playlist_unified_view': getattr(self, 'playlist_unified_view', False),
+                'show_local_playlists': getattr(self, 'show_local_playlists', True),
+                'show_spotify_playlists': getattr(self, 'show_spotify_playlists', True),
+                'show_rss_playlists': getattr(self, 'show_rss_playlists', True)
             }
+            
+            # Añadir valores de depuración
+            self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
             
             # Bandera para saber si se encontró y actualizó el módulo
             module_updated = False
@@ -8516,19 +8616,31 @@ class UrlPlayer(BaseModule):
             self.load_rss_playlist_content_to_tree(playlist_data)
         except Exception as e:
             self.log(f"Error al seleccionar playlist RSS: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
 
 
 
     def setup_rss_controls(self):
         """Configura controles adicionales para playlists RSS"""
         try:
-            # Este método debería llamarse después de inicializar la UI
+            # Buscar el botón existente en la UI
+            existing_button = self.findChild(QPushButton, 'mark_as_listened_button')
             
-            # Crear botón para marcar como escuchada
-            self.mark_as_listened_button = QPushButton("Marcar como Escuchada")
-            self.mark_as_listened_button.setIcon(QIcon(":/services/done"))
-            self.mark_as_listened_button.setToolTip("Marcar la playlist actual como escuchada")
-            self.mark_as_listened_button.clicked.connect(self.mark_current_rss_as_listened)
+            if existing_button:
+                # Si existe, simplemente conectar su señal
+                existing_button.clicked.connect(self.mark_current_rss_as_listened)
+                self.log("Botón 'mark_as_listened_button' encontrado en UI y conectado")
+                
+                # Guardar referencia para uso posterior
+                self.mark_as_listened_button = existing_button
+                return True
+            else:
+                # Si no existe en la UI, crearlo programáticamente (código existente)
+                self.mark_as_listened_button = QPushButton("Marcar como Escuchada")
+                self.mark_as_listened_button.setIcon(QIcon(":/services/success"))
+                self.mark_as_listened_button.setToolTip("Marcar la playlist actual como escuchada")
+                self.mark_as_listened_button.clicked.connect(self.mark_current_rss_as_listened)
             
             # Encontrar el layout que contiene el combobox
             parent_layout = None
@@ -8793,6 +8905,18 @@ class UrlPlayer(BaseModule):
             self.treeWidget.clear()
             
             # Get playlist data
+            if isinstance(playlist, str):
+                # If we received a playlist name instead of a data structure
+                playlist_name = playlist
+                playlist = None
+                for p in self.playlists.get('local', []):
+                    if p.get('name') == playlist_name:
+                        playlist = p
+                        break
+                if not playlist:
+                    self.log(f"Local playlist '{playlist_name}' not found")
+                    return
+            
             playlist_name = playlist.get('name', 'Unnamed Playlist')
             items = playlist.get('items', [])
             
@@ -8815,6 +8939,13 @@ class UrlPlayer(BaseModule):
             # Add the playlist icon
             root_item.setIcon(0, QIcon(":/services/plslove"))
             
+            # Store playlist data on the root item
+            root_item.setData(0, Qt.ItemDataRole.UserRole, {
+                'name': playlist_name,
+                'type': 'playlist',
+                'source': 'local'
+            })
+            
             # Add tracks as children
             for i, item in enumerate(items):
                 title = item.get('title', 'Unknown Track')
@@ -8836,7 +8967,7 @@ class UrlPlayer(BaseModule):
                 source_icon = self.get_source_icon(url, {'source': source})
                 track_item.setIcon(0, source_icon)
                 
-                # Store track data 
+                # Store track data
                 track_data = {
                     'title': title,
                     'artist': artist,
@@ -8850,7 +8981,7 @@ class UrlPlayer(BaseModule):
             # Expand the root item
             root_item.setExpanded(True)
             
-            self.log(f"Loaded playlist '{playlist_name}' with {len(items)} tracks")
+            self.log(f"Loaded playlist '{playlist_name}' with {len(items)} tracks into tree view")
             
         except Exception as e:
             self.log(f"Error displaying local playlist: {str(e)}")
@@ -9018,130 +9149,290 @@ class UrlPlayer(BaseModule):
             if local_playlists:
                 self.playlists['local'] = local_playlists
             
-            # IMPORTANTE: Cargar playlists RSS en el combobox, NO en el treeWidget
-            self.log("PUNTO DE VERIFICACIÓN: Justo antes de cargar playlists RSS DELETEME")
+            # IMPORTANTE: Cargar playlists RSS en el combobox
+            self.log("Cargando playlists RSS...")
             if os.path.exists(self.rss_pending_dir):
-                self.load_rss_playlists()  # Asegúrate de que este método cargue en el combobox
-                self.log(f"Resultado de carga de playlists RSS: {'ÉXITO' if result else 'FALLIDO'}")
-                # Eliminar cualquier llamada que cargue RSS en el treeWidget
-                # Si hay algo como load_rss_playlists_tree() o similar, comentarlo
+                result = self.load_rss_playlists()
+                self.log(f"Resultado de carga de playlists RSS: {result}")
             
             # Actualizar los comboboxes con las playlists cargadas
             self.update_playlist_comboboxes()
+            
+            # Update playlist view
+            self.update_playlist_view()
             
         except Exception as e:
             self.log(f"Error cargando playlists: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
 
-
-    # def load_rss_playlists_tree(self):
-    #     """Carga las playlists de blogs/RSS en una estructura jerárquica en el árbol"""
-    #     try:
-    #         # Verificar que tenemos el widget treeWidget
-    #         if not hasattr(self, 'treeWidget') or not self.treeWidget:
-    #             self.log("Error: No se encontró el widget treeWidget")
-    #             return False
+    def setup_unified_playlist_menu(self):
+        """Configura el menú del botón unificado de playlists"""
+        try:
+            # Crear el menú principal
+            menu = QMenu(self)
+            self.unified_playlist_button.setMenu(menu)
+            
+            # Obtener configuración de visibilidad
+            show_local = self.get_setting_value('show_local_playlists', True)
+            show_spotify = self.get_setting_value('show_spotify_playlists', True) 
+            show_rss = self.get_setting_value('show_rss_playlists', True)
+            
+            # Añadir sección para playlists locales
+            if show_local:
+                local_menu = menu.addMenu(QIcon(":/services/plslove"), "Playlists Locales")
                 
-    #         # Guardar selección actual para restaurarla después
-    #         currently_selected = None
-    #         selected_items = self.treeWidget.selectedItems()
-    #         if selected_items:
-    #             item_data = selected_items[0].data(0, Qt.ItemDataRole.UserRole)
-    #             if item_data:
-    #                 currently_selected = item_data
+                # Añadir opción para crear nueva playlist
+                local_menu.addAction(QIcon(":/services/b_plus_cross"), "Nueva Playlist Local", 
+                                lambda: self.show_create_playlist_dialog("local"))
+                
+                local_menu.addSeparator()
+                
+                # Añadir playlists existentes
+                if hasattr(self, 'playlists') and 'local' in self.playlists:
+                    for playlist in sorted(self.playlists['local'], key=lambda x: x.get('name', '').lower()):
+                        name = playlist.get('name', 'Sin nombre')
+                        # Modify this lambda to display in tree instead of loading to queue
+                        local_menu.addAction(QIcon(":/services/plslove"), name, 
+                                        lambda p=playlist: self.display_local_playlist(p))
             
-    #         # Limpiar la vista actual
-    #         self.treeWidget.clear()
             
-    #         # Crear nodo raíz para RSS
-    #         rss_root = QTreeWidgetItem(self.treeWidget)
-    #         rss_root.setText(0, "RSS Feeds")
-    #         rss_root.setIcon(0, QIcon(":/services/rss"))
+            # Añadir sección para playlists de Spotify
+            if show_spotify and hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+                spotify_menu = menu.addMenu(QIcon(":/services/spotify"), "Playlists de Spotify")
+                
+                # Añadir opción para crear nueva playlist
+                spotify_menu.addAction(QIcon(":/services/b_plus_cross"), "Nueva Playlist de Spotify", 
+                                    lambda: self.show_create_playlist_dialog("spotify"))
+                
+                spotify_menu.addSeparator()
+                
+                # Añadir playlists existentes
+                if hasattr(self, 'spotify_playlists'):
+                    for name, playlist in self.spotify_playlists.items():
+                        spotify_menu.addAction(QIcon(":/services/spotify"), name, 
+                                        lambda id=playlist['id'], name=name: 
+                                        self.show_spotify_playlist_content(id, name))
             
-    #         # Formatear como negrita
-    #         font = rss_root.font(0)
-    #         font.setBold(True)
-    #         rss_root.setFont(0, font)
-            
-    #         # Datos para seguimiento rápido de blogs añadidos
-    #         added_blogs = {}
-    #         total_playlists = 0
-            
-    #         # Recorrer directorio de playlists pendientes
-    #         if os.path.exists(self.rss_pending_dir):
-    #             for blog_dir in os.listdir(self.rss_pending_dir):
-    #                 blog_path = os.path.join(self.rss_pending_dir, blog_dir)
-                    
-    #                 # Verificar que sea un directorio
-    #                 if os.path.isdir(blog_path):
-    #                     # Buscar archivos .m3u en el directorio del blog
-    #                     playlists = []
-    #                     for playlist_file in os.listdir(blog_path):
-    #                         if playlist_file.endswith('.m3u'):
-    #                             # Obtener el número de pistas en la playlist
-    #                             playlist_path = os.path.join(blog_path, playlist_file)
-    #                             track_count = self.count_tracks_in_playlist(playlist_path)
-                                
-    #                             playlists.append({
-    #                                 'name': playlist_file,
-    #                                 'path': playlist_path,
-    #                                 'track_count': track_count,
-    #                                 'blog': blog_dir,
-    #                                 'state': 'pending'
-    #                             })
+            # Añadir sección para playlists RSS
+            if show_rss:
+                rss_menu = menu.addMenu(QIcon(":/services/rss"), "Blogs RSS")
+                
+                # Organizar por blog
+                blogs = {}
+                
+                # Escanear directorios RSS
+                if os.path.exists(self.rss_pending_dir):
+                    for blog_dir in os.listdir(self.rss_pending_dir):
+                        blog_path = os.path.join(self.rss_pending_dir, blog_dir)
+                        if os.path.isdir(blog_path):
+                            blogs[blog_dir] = {'path': blog_path, 'playlists': []}
+                            
+                            # Buscar playlists para este blog
+                            for playlist_file in os.listdir(blog_path):
+                                if playlist_file.endswith('.m3u'):
+                                    playlist_path = os.path.join(blog_path, playlist_file)
+                                    track_count = self.count_tracks_in_playlist(playlist_path)
+                                    
+                                    blogs[blog_dir]['playlists'].append({
+                                        'name': playlist_file,
+                                        'path': playlist_path,
+                                        'track_count': track_count,
+                                        'blog': blog_dir,
+                                        'state': 'pending'
+                                    })
+                
+                # Crear submenús para cada blog
+                for blog_name, blog_data in sorted(blogs.items()):
+                    if blog_data['playlists']:
+                        blog_menu = rss_menu.addMenu(blog_name)
                         
-    #                     # Si el blog tiene playlists, añadir al árbol
-    #                     if playlists:
-    #                         # Crear nodo para el blog
-    #                         blog_item = QTreeWidgetItem(rss_root)
-    #                         blog_item.setText(0, blog_dir)
-    #                         blog_item.setText(1, "") # Columna de artista vacía
-    #                         blog_item.setText(2, "Blog") # Tipo
-    #                         blog_item.setText(3, f"{len(playlists)}") # Número de playlists
+                        # Añadir playlists de este blog
+                        for playlist in sorted(blog_data['playlists'], key=lambda x: x['name']):
+                            display_text = f"{playlist['name']} ({playlist['track_count']} pistas)"
+                            blog_menu.addAction(QIcon(":/services/rss"), display_text, 
+                                            lambda data=playlist: self.load_rss_playlist_content_to_tree(data))
+            
+            self.log("Menú unificado de playlists configurado correctamente")
+            return True
+        except Exception as e:
+            self.log(f"Error configurando menú unificado: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+
+
+    def update_unified_playlist_menu(self):
+        """Update the hierarchical menu with playlists from all sources"""
+        try:
+            if not hasattr(self, 'playlist_menu') or not self.playlist_menu:
+                self.log("Playlist menu not initialized")
+                return False
+                
+            # Clear the current menu
+            self.playlist_menu.clear()
+            
+            # Get settings values
+            show_local = self.get_setting_value('show_local_playlists', True)
+            show_spotify = self.get_setting_value('show_spotify_playlists', True)
+            show_rss = self.get_setting_value('show_rss_playlists', True)
+            
+            # Add local playlists submenu if enabled
+            if show_local:
+                local_menu = QMenu("Local Playlists", self.playlist_menu)
+                local_menu.setIcon(QIcon(":/services/plslove"))
+                
+                # Add "Create New" option
+                new_local_action = local_menu.addAction(QIcon(":/services/b_plus_cross"), "New Local Playlist")
+                new_local_action.triggered.connect(lambda: self.show_create_playlist_dialog("local"))
+                local_menu.addSeparator()
+                
+                # Add existing local playlists
+                if hasattr(self, 'playlists') and 'local' in self.playlists:
+                    for playlist in sorted(self.playlists['local'], key=lambda x: x.get('name', '').lower()):
+                        name = playlist.get('name', 'Unnamed Playlist')
+                        action = local_menu.addAction(QIcon(":/services/plslove"), name)
+                        # Create a lambda that captures the current value of playlist
+                        action.triggered.connect(lambda checked, p=playlist: self.load_local_playlist(p.get('name')))
+                
+                self.playlist_menu.addMenu(local_menu)
+            
+            # Add Spotify playlists submenu if enabled
+            if show_spotify and hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+                spotify_menu = QMenu("Spotify Playlists", self.playlist_menu)
+                spotify_menu.setIcon(QIcon(":/services/spotify"))
+                
+                # Add "Create New" option
+                new_spotify_action = spotify_menu.addAction(QIcon(":/services/b_plus_cross"), "New Spotify Playlist")
+                new_spotify_action.triggered.connect(lambda: self.show_create_playlist_dialog("spotify"))
+                spotify_menu.addSeparator()
+                
+                # Add existing Spotify playlists
+                if hasattr(self, 'spotify_playlists'):
+                    for name, playlist in self.spotify_playlists.items():
+                        action = spotify_menu.addAction(QIcon(":/services/spotify"), name)
+                        # Connect using playlist ID
+                        action.triggered.connect(lambda checked, id=playlist['id'], name=name: 
+                                                self.show_spotify_playlist_content(id, name))
+                
+                self.playlist_menu.addMenu(spotify_menu)
+            
+            # Add RSS playlists submenu if enabled
+            if show_rss:
+                rss_menu = QMenu("RSS Playlists", self.playlist_menu)
+                rss_menu.setIcon(QIcon(":/services/rss"))
+                
+                # Organize by blog
+                blogs = {}
+                
+                # Scan the RSS directories for blogs
+                if os.path.exists(self.rss_pending_dir):
+                    for blog_dir in os.listdir(self.rss_pending_dir):
+                        blog_path = os.path.join(self.rss_pending_dir, blog_dir)
+                        if os.path.isdir(blog_path):
+                            blogs[blog_dir] = {'path': blog_path, 'playlists': []}
                             
-    #                         # Formatear como negrita
-    #                         blog_item.setFont(0, font)
-                            
-    #                         # Guardar referencia al blog
-    #                         added_blogs[blog_dir] = blog_item
-                            
-    #                         # Añadir playlists del blog
-    #                         for playlist in playlists:
-    #                             display_name = playlist['name']
-                                
-    #                             # Crear item para la playlist
-    #                             playlist_item = QTreeWidgetItem(blog_item)
-    #                             playlist_item.setText(0, display_name)
-    #                             playlist_item.setText(1, blog_dir) # Blog como "artista"
-    #                             playlist_item.setText(2, "Playlist") # Tipo
-    #                             playlist_item.setText(3, f"{playlist['track_count']}") # Número de pistas
-                                
-    #                             # Guardar datos completos en el ítem
-    #                             playlist_item.setData(0, Qt.ItemDataRole.UserRole, playlist)
-                                
-    #                             total_playlists += 1
+                            # Find playlists for this blog
+                            for playlist_file in os.listdir(blog_path):
+                                if playlist_file.endswith('.m3u'):
+                                    playlist_path = os.path.join(blog_path, playlist_file)
+                                    track_count = self.count_tracks_in_playlist(playlist_path)
+                                    
+                                    blogs[blog_dir]['playlists'].append({
+                                        'name': playlist_file,
+                                        'path': playlist_path,
+                                        'track_count': track_count,
+                                        'blog': blog_dir,
+                                        'state': 'pending'
+                                    })
+                
+                # Create submenus for each blog with playlists
+                for blog_name, blog_data in sorted(blogs.items()):
+                    if blog_data['playlists']:
+                        blog_menu = QMenu(blog_name, rss_menu)
+                        
+                        # Add playlists for this blog
+                        for playlist in sorted(blog_data['playlists'], key=lambda x: x['name']):
+                            display_text = f"{playlist['name']} ({playlist['track_count']} tracks)"
+                            action = blog_menu.addAction(QIcon(":/services/rss"), display_text)
+                            # Connect with playlist data
+                            action.triggered.connect(lambda checked, data=playlist: self.load_rss_playlist_content_to_tree(data))
+                        
+                        rss_menu.addMenu(blog_menu)
+                
+                self.playlist_menu.addMenu(rss_menu)
             
-    #         # Actualizar texto del nodo raíz con recuento
-    #         rss_root.setText(0, f"RSS Feeds ({total_playlists} playlists)")
+            # Set the menu for the button
+            self.unified_playlist_button.setMenu(self.playlist_menu)
             
-    #         # Expandir el nodo raíz
-    #         rss_root.setExpanded(True)
+            self.log("Unified playlist menu updated")
+            return True
+        except Exception as e:
+            self.log(f"Error updating unified playlist menu: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+
+    def setup_unified_playlist_button(self):
+        """Create a unified button that shows a hierarchical menu of all playlist types"""
+        try:
+            # Create the unified button if it doesn't exist
+            if not hasattr(self, 'unified_playlist_button'):
+                self.unified_playlist_button = self.findChild(QPushButton, 'unified_playlist_button')
+                
+            if not self.unified_playlist_button:
+                self.log("Error: No se pudo encontrar el botón 'unified_playlist_button'")
+                return False
             
-    #         # Restaurar selección si es posible
-    #         if currently_selected:
-    #             # Intentar encontrar el item con los mismos datos
-    #             for i in range(self.treeWidget.topLevelItemCount()):
-    #                 top_item = self.treeWidget.topLevelItem(i)
-    #                 self._restore_selection_in_tree(top_item, currently_selected)
+            # Create the menu
+            self.playlist_menu = QMenu(self.unified_playlist_button)
             
-    #         self.log(f"Cargadas {total_playlists} playlists RSS de {len(added_blogs)} blogs")
-    #         return True
-    #     except Exception as e:
-    #         self.log(f"Error cargando playlists RSS: {str(e)}")
-    #         import traceback
-    #         self.log(traceback.format_exc())
-    #         return False
+            # Set up the menu
+            self.setup_unified_playlist_menu()
+            
+            # Make sure the button is visible
+            self.unified_playlist_button.setVisible(True)
+            
+            self.log("Unified playlist button set up")
+            return True
+        except Exception as e:
+            self.log(f"Error setting up unified playlist button: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+
+    def initialize_playlist_ui_references(self):
+        """Inicializa las referencias a los widgets de playlist en la UI"""
+        try:
+            # Comprobar si el stacked widget existe
+            self.playlist_stack = self.findChild(QStackedWidget, 'playlist_stack')
+            if not self.playlist_stack:
+                self.log("Error: No se pudo encontrar el widget 'playlist_stack'")
+                return False
+                
+            # Buscar las páginas
+            self.separate_page = self.findChild(QWidget, 'separate_page')
+            self.unified_page = self.findChild(QWidget, 'unified_page')
+            
+            # Buscar el botón unificado
+            self.unified_playlist_button = self.findChild(QPushButton, 'unified_playlist_button')
+            if not self.unified_playlist_button:
+                self.log("Error: No se pudo encontrar el botón 'unified_playlist_button'")
+                return False
+                
+            # Inicializar el botón unificado
+            self.setup_unified_playlist_menu()
+            
+            self.log("Referencias UI de playlist inicializadas correctamente")
+            return True
+        except Exception as e:
+            self.log(f"Error inicializando referencias UI: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
 
 def run_direct_command(self, cmd, args=None):
     """Ejecuta un comando directo y devuelve su salida."""

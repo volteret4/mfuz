@@ -10,6 +10,12 @@
     <height>800</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="styleSheet">
    <string notr="true">/* Base Styles */
 QWidget {
@@ -358,6 +364,18 @@ QProgressBar::chunk {
             </item>
             <item>
              <widget class="QFrame" name="tree_container_frame">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="frameShape">
                <enum>QFrame::Shape::StyledPanel</enum>
               </property>
@@ -378,78 +396,199 @@ QProgressBar::chunk {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QComboBox" name="playlist_spotify_comboBox">
-                 <property name="minimumSize">
+                <widget class="QStackedWidget" name="playlist_stack">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
                   <size>
-                   <width>0</width>
-                   <height>30</height>
+                   <width>16777215</width>
+                   <height>40</height>
                   </size>
                  </property>
-                 <property name="toolTip">
-                  <string>Carga playlist spotify</string>
+                 <property name="currentIndex">
+                  <number>1</number>
                  </property>
-                 <item>
-                  <property name="text">
-                   <string>Nueva Playlist Spotify</string>
+                 <widget class="QWidget" name="separate_page_stacked">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <property name="icon">
-                   <iconset resource="../images.qrc">
-                    <normaloff>:/services/b_plus_cross</normaloff>:/services/b_plus_cross</iconset>
+                  <layout class="QVBoxLayout" name="verticalLayout_10">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="separate_page" native="true">
+                     <layout class="QHBoxLayout" name="horizontalLayout_5">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QComboBox" name="playlist_rss_comboBox">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string>Carga playlist del lector rss</string>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Blog Fresh Rss 1</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../images.qrc">
+                           <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="playlist_spotify_comboBox">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string>Carga playlist spotify</string>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Nueva Playlist Spotify</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../images.qrc">
+                           <normaloff>:/services/b_plus_cross</normaloff>:/services/b_plus_cross</iconset>
+                         </property>
+                        </item>
+                        <item>
+                         <property name="text">
+                          <string>Playlist Spotify 1</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../images.qrc">
+                           <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="playlist_local_comboBox">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="toolTip">
+                         <string>Carga playlist local</string>
+                        </property>
+                        <item>
+                         <property name="text">
+                          <string>Playlist local 1</string>
+                         </property>
+                         <property name="icon">
+                          <iconset resource="../images.qrc">
+                           <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
+                         </property>
+                        </item>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="unified_page_stacked">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>Playlist Spotify 1</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../images.qrc">
-                    <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="playlist_rss_comboBox">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Carga playlist del lector rss</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Blog Fresh Rss 1</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../images.qrc">
-                    <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QComboBox" name="playlist_local_comboBox">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="toolTip">
-                  <string>Carga playlist local</string>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>Playlist local 1</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="../images.qrc">
-                    <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
-                  </property>
-                 </item>
+                  <layout class="QVBoxLayout" name="verticalLayout_11">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="unified_page" native="true">
+                     <layout class="QHBoxLayout" name="horizontalLayout_7">
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QPushButton" name="unified_playlist_button">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true"/>
+                        </property>
+                        <property name="text">
+                         <string>Listas de reproducción</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
                 </widget>
                </item>
                <item>
@@ -485,6 +624,29 @@ QProgressBar::chunk {
                  <property name="icon">
                   <iconset resource="../images.qrc">
                    <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
+                 </property>
+                 <property name="iconSize">
+                  <size>
+                   <width>30</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="mark_as_listened_button">
+                 <property name="maximumSize">
+                  <size>
+                   <width>36</width>
+                   <height>36</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../images.qrc">
+                   <normaloff>:/services/succes</normaloff>:/services/succes</iconset>
                  </property>
                  <property name="iconSize">
                   <size>
@@ -703,7 +865,7 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>581</width>
+                     <width>557</width>
                      <height>625</height>
                     </rect>
                    </property>
@@ -1080,8 +1242,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>86</height>
+                     <width>557</width>
+                     <height>685</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -1152,8 +1314,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>86</height>
+                     <width>557</width>
+                     <height>685</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_9">
