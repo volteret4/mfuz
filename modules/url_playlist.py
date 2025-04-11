@@ -23,7 +23,7 @@ from PyQt6.QtWidgets import (
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu, QDialogButtonBox, QLabel,
     QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog
 )
-from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize
+from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize, QTimer
 from PyQt6.QtGui import QIcon, QMovie
 
 
@@ -2649,19 +2649,6 @@ class UrlPlayer(BaseModule):
                 if not isinstance(self.playlists, dict):
                     self.playlists = {'spotify': [], 'local': [], 'rss': []}
             
-            # Cargar playlists locales directamente desde los archivos
-            local_playlists = self.load_local_playlists()
-            
-            # Mostrar información de debug
-            playlist_names = [p.get('name', 'Sin nombre') for p in local_playlists]
-            self.log(f"Playlists locales cargadas directamente: {', '.join(playlist_names)}")
-            
-            # Actualizar la estructura de playlists con los datos cargados
-            self.playlists['local'] = local_playlists
-            
-            # Guardar la estructura actualizada para que esté disponible en futuras llamadas
-            self.save_playlists()
-            
             # Actualizar combobox de playlists locales
             if hasattr(self, 'playlist_local_comboBox'):
                 # Guardar selección actual
@@ -2671,30 +2658,49 @@ class UrlPlayer(BaseModule):
                 self.playlist_local_comboBox.blockSignals(True)  # Evitar que se disparen eventos durante la actualización
                 self.playlist_local_comboBox.clear()
                 
-                # Añadir opción por defecto
-                self.playlist_local_comboBox.addItem(QIcon(":/services/plslove"), "Seleccionar Playlist Local")
+                # Añadir placeholder como primera opción
+                self.playlist_local_comboBox.addItem(QIcon(":/services/plslove"), "Playlists locales")
+                
+                # Añadir opción para crear nueva playlist
+                self.playlist_local_comboBox.addItem(QIcon(":/services/plslove"), "Nueva Playlist Local")
                 
                 # Añadir todas las playlists locales
-                local_playlist_names = []
-                for playlist in self.playlists.get('local', []):
+                local_playlists = self.playlists.get('local', [])
+                
+                # Si no hay playlists locales, intentar cargarlas de nuevo
+                if not local_playlists:
+                    local_playlists = self.load_local_playlists()
+                    if local_playlists:
+                        self.playlists['local'] = local_playlists
+                        self.save_playlists()
+                
+                # Ordenar playlists por nombre
+                local_playlists = sorted(local_playlists, key=lambda x: x.get('name', '').lower())
+                
+                for playlist in local_playlists:
                     playlist_name = playlist.get('name', 'Playlist sin nombre')
-                    local_playlist_names.append(playlist_name)
                     self.playlist_local_comboBox.addItem(
                         QIcon(":/services/plslove"), 
                         playlist_name
                     )
                 
-                # Mostrar nombres para debug
-                self.log(f"Nombres de playlists añadidos al combobox: {', '.join(local_playlist_names)}")
+                # Registrar cuántas playlists se añadieron
+                num_playlists = len(local_playlists)
+                self.log(f"Combobox actualizado con {num_playlists} playlists locales")
                 
-                # Intentar restaurar la selección anterior si existe
-                index = self.playlist_local_comboBox.findText(current_selection)
-                if index > 0:
-                    self.playlist_local_comboBox.setCurrentIndex(index)
+                # Restaurar selección o seleccionar placeholder
+                if current_selection and current_selection != "Playlists locales" and current_selection != "Nueva Playlist Local":
+                    index = self.playlist_local_comboBox.findText(current_selection)
+                    if index > 0:
+                        self.playlist_local_comboBox.setCurrentIndex(index)
+                    else:
+                        self.playlist_local_comboBox.setCurrentIndex(0)  # Seleccionar placeholder
                 else:
-                    self.playlist_local_comboBox.setCurrentIndex(0)
+                    self.playlist_local_comboBox.setCurrentIndex(0)  # Seleccionar placeholder
                 
                 self.playlist_local_comboBox.blockSignals(False)  # Reactivar las señales
+            
+            
             
             # Actualizar combobox de Spotify
             if hasattr(self, 'playlist_spotify_comboBox'):
@@ -6604,6 +6610,184 @@ class UrlPlayer(BaseModule):
             import traceback
             self.log(traceback.format_exc())
 
+
+    def show_create_playlist_dialog(self, playlist_type):
+        """Muestra el diálogo para crear una nueva playlist local o de Spotify"""
+        self.log(f"Iniciando diálogo de creación de playlist {playlist_type}")
+        
+        # Cargar el archivo UI para el diálogo
+        dialog = QDialog(self)
+        ui_path = os.path.join(PROJECT_ROOT, "ui", "create_playlist_dialog.ui")
+        
+        if os.path.exists(ui_path):
+            uic.loadUi(ui_path, dialog)
+        else:
+            # Fallback si no existe el archivo UI
+            self._create_fallback_dialog(dialog, playlist_type)
+        
+        # Configurar el título y el icono según el tipo
+        if playlist_type == "local":
+            dialog.setWindowTitle("Crear Nueva Playlist Local")
+            if hasattr(dialog, 'playlist_icon_label'):
+                dialog.playlist_icon_label.setPixmap(QIcon(":/services/plslove").pixmap(QSize(32, 32)))
+            if hasattr(dialog, 'title_label'):
+                dialog.title_label.setText("Crear nueva playlist local")
+        else:  # spotify
+            dialog.setWindowTitle("Crear Nueva Playlist de Spotify")
+            if hasattr(dialog, 'playlist_icon_label'):
+                dialog.playlist_icon_label.setPixmap(QIcon(":/services/spotify").pixmap(QSize(32, 32)))
+            if hasattr(dialog, 'title_label'):
+                dialog.title_label.setText("Crear nueva playlist de Spotify")
+        
+        # Conectar botones (asumiendo nombres en el UI)
+        if hasattr(dialog, 'buttonBox'):
+            dialog.buttonBox.accepted.connect(dialog.accept)
+            dialog.buttonBox.rejected.connect(dialog.reject)
+        
+        # Mostrar el diálogo
+        result = dialog.exec()
+        
+        if result == QDialog.DialogCode.Accepted:
+            # Obtener el nombre de la playlist (asumiendo un campo con nombre 'playlist_name_edit')
+            playlist_name = ""
+            description = ""
+            
+            if hasattr(dialog, 'playlist_name_edit'):
+                playlist_name = dialog.playlist_name_edit.text().strip()
+            
+            if hasattr(dialog, 'description_edit'):
+                description = dialog.description_edit.text().strip()
+            
+            if playlist_name:
+                if playlist_type == "local":
+                    self.create_local_playlist(playlist_name)
+                else:  # spotify
+                    self.create_spotify_playlist(playlist_name, public=False, description=description)
+            else:
+                self.log(f"Nombre de playlist vacío, no se creó la playlist {playlist_type}")
+        
+        # Si se canceló, restablecer el combobox correspondiente
+        if result != QDialog.DialogCode.Accepted:
+            if playlist_type == "local" and hasattr(self, 'playlist_local_comboBox'):
+                # Volver al placeholder
+                self.playlist_local_comboBox.setCurrentIndex(0)
+            elif playlist_type == "spotify" and hasattr(self, 'playlist_spotify_comboBox'):
+                # Volver al placeholder
+                self.playlist_spotify_comboBox.setCurrentIndex(0)
+            
+            self.log(f"Creación de playlist {playlist_type} cancelada")
+
+
+
+    def _create_fallback_dialog(self, dialog, playlist_type):
+        """Crea un diálogo de respaldo si no existe el archivo UI"""
+        dialog.setMinimumWidth(300)
+        layout = QVBoxLayout(dialog)
+        
+        # Icono y título
+        header_layout = QHBoxLayout()
+        icon_label = QLabel()
+        if playlist_type == "local":
+            icon_label.setPixmap(QIcon(":/services/plslove").pixmap(QSize(32, 32)))
+        else:  # spotify
+            icon_label.setPixmap(QIcon(":/services/spotify").pixmap(QSize(32, 32)))
+        
+        title_label = QLabel(f"Crear nueva playlist {playlist_type}")
+        font = title_label.font()
+        font.setBold(True)
+        title_label.setFont(font)
+        
+        header_layout.addWidget(icon_label)
+        header_layout.addWidget(title_label)
+        header_layout.addStretch()
+        
+        layout.addLayout(header_layout)
+        
+        # Separador
+        line = QFrame()
+        line.setFrameShape(QFrame.Shape.HLine)
+        line.setFrameShadow(QFrame.Shadow.Sunken)
+        layout.addWidget(line)
+        
+        # Campo de nombre
+        layout.addWidget(QLabel("Nombre de la playlist:"))
+        name_edit = QLineEdit()
+        name_edit.setObjectName("playlist_name_edit")  # Nombre importante para acceder después
+        layout.addWidget(name_edit)
+        
+        # Botones
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.setObjectName("buttonBox")  # Nombre importante para acceder después
+        layout.addWidget(button_box)
+        
+        # Guardar referencias
+        dialog.playlist_name_edit = name_edit
+        dialog.buttonBox = button_box
+
+
+    def create_local_playlist(self, name):
+        """Crea una nueva playlist local vacía"""
+        if not name:
+            self.log("Nombre de playlist vacío, no se creó")
+            return
+        
+        try:
+            # Asegurarse de que existe el directorio
+            local_playlist_dir = self.get_local_playlist_path()
+            os.makedirs(local_playlist_dir, exist_ok=True)
+            
+            # Crear una playlist vacía
+            import re
+            safe_name = re.sub(r'[^\w\-_\. ]', '_', name)
+            
+            playlist_data = {
+                "name": name,
+                "items": [],
+                "created": int(time.time()),
+                "modified": int(time.time())
+            }
+            
+            # Guardar como JSON
+            json_path = os.path.join(local_playlist_dir, f"{safe_name}.json")
+            with open(json_path, 'w', encoding='utf-8') as f:
+                json.dump(playlist_data, f, indent=2, ensure_ascii=False)
+            
+            # También crear un archivo PLS vacío
+            pls_path = os.path.join(local_playlist_dir, f"{safe_name}.pls")
+            with open(pls_path, 'w', encoding='utf-8') as f:
+                f.write("[playlist]\n")
+                f.write("NumberOfEntries=0\n\n")
+            
+            # Actualizar estructura interna
+            if not hasattr(self, 'playlists'):
+                self.playlists = self.load_playlists()
+            
+            if 'local' not in self.playlists:
+                self.playlists['local'] = []
+            
+            # Añadir nueva playlist
+            self.playlists['local'].append(playlist_data)
+            
+            # Guardar y actualizar UI
+            self.save_playlists()
+            self.update_playlist_comboboxes()
+            
+            # Seleccionar la nueva playlist
+            if hasattr(self, 'playlist_local_comboBox'):
+                index = self.playlist_local_comboBox.findText(name)
+                if index > 0:
+                    self.playlist_local_comboBox.setCurrentIndex(index)
+            
+            self.log(f"Playlist local '{name}' creada correctamente")
+            self.display_local_playlist(playlist_data)
+            
+        except Exception as e:
+            self.log(f"Error creando playlist local: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+
+
     def get_spotify_token(self):
         """Get or refresh Spotify API token"""
         if not self.spotify_enabled:
@@ -7024,6 +7208,9 @@ class UrlPlayer(BaseModule):
             self.log(f"Error loading Spotify playlists: {str(e)}")
             print(f"Traceback: {traceback.format_exc()}")
             return False
+  
+  
+  
     def update_spotify_playlists_ui(self, playlists_data):
         """Update UI with Spotify playlist data"""
         # Verificar que el combobox existe antes de usarlo
@@ -7040,8 +7227,11 @@ class UrlPlayer(BaseModule):
         # Limpiar y repoblar el combobox
         self.playlist_spotify_comboBox.clear()
         
-        # Siempre añadir la opción de "Nueva Playlist" primero
-        self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), "Nueva Playlist")
+        # Añadir placeholder como primera opción
+        self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), "Playlists Spotify")
+        
+        # Añadir la opción de "Nueva Playlist" después del placeholder
+        self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), "Nueva Playlist Spotify")
         
         # Almacenar playlists
         self.spotify_playlists = {}
@@ -7058,10 +7248,14 @@ class UrlPlayer(BaseModule):
             self.playlist_spotify_comboBox.addItem(QIcon(":/services/spotify"), playlist_name)
         
         # Restaurar la selección anterior si es posible
-        if current_text:
+        if current_text and current_text != "Playlists Spotify" and current_text != "Nueva Playlist Spotify":
             index = self.playlist_spotify_comboBox.findText(current_text)
             if index >= 0:
                 self.playlist_spotify_comboBox.setCurrentIndex(index)
+            else:
+                self.playlist_spotify_comboBox.setCurrentIndex(0)  # Seleccionar placeholder
+        else:
+            self.playlist_spotify_comboBox.setCurrentIndex(0)  # Seleccionar placeholder
         
         # Desbloquear señales
         self.playlist_spotify_comboBox.blockSignals(False)
@@ -7113,7 +7307,7 @@ class UrlPlayer(BaseModule):
 
     def on_spotify_playlist_changed(self, index):
         """Handle selection change in the Spotify playlist comboBox"""
-        if self._is_initializing:
+        if hasattr(self, '_is_initializing') and self._is_initializing:
             return  # No hacer nada durante la inicialización
             
         combo = self.playlist_spotify_comboBox
@@ -7122,15 +7316,22 @@ class UrlPlayer(BaseModule):
             
         selected_text = combo.currentText()
         
-        if index == 0 or selected_text == "Nueva Playlist":  # Opción "Nueva Playlist"
+        # Ignorar la selección de placeholder
+        if index == 0 or selected_text == "Playlists Spotify":
+            self.log("Seleccionado placeholder de Spotify")
+            return
+        
+        # Opción "Nueva Playlist Spotify"
+        if index == 1 or selected_text == "Nueva Playlist Spotify":
             # Forzar llamada directa (no a través de señal)
-            self.log("Mostrando diálogo de creación de playlist")
-            QTimer.singleShot(100, self.show_create_spotify_playlist_dialog)
-        else:
-            # Mostrar contenido de la playlist seleccionada
-            if hasattr(self, 'spotify_playlists') and selected_text in self.spotify_playlists:
-                playlist = self.spotify_playlists[selected_text]
-                self.show_spotify_playlist_content(playlist['id'], playlist['name'])
+            self.log("Mostrando diálogo de creación de playlist Spotify")
+            QTimer.singleShot(100, lambda: self.show_create_playlist_dialog("spotify"))
+            return
+        
+        # Mostrar contenido de la playlist seleccionada
+        if hasattr(self, 'spotify_playlists') and selected_text in self.spotify_playlists:
+            playlist = self.spotify_playlists[selected_text]
+            self.show_spotify_playlist_content(playlist['id'], playlist['name'])
 
 
     def show_create_spotify_playlist_dialog(self):
@@ -7174,37 +7375,50 @@ class UrlPlayer(BaseModule):
             self.log("Creación de playlist cancelada")
 
 
-            
-    def create_spotify_playlist(self, name):
+
+    def create_spotify_playlist(self, name, public=False, description=None):
         """Create a new Spotify playlist"""
         if not name:
-            return
+            self.log("Nombre de playlist vacío, no se creó")
+            return False
             
         if not hasattr(self, 'sp') or not self.sp:
             self.log("Spotify client not initialized")
-            return
-            
+            return False
+        
         try:
-            self.sp.user_playlist_create(
+            # Crear la playlist
+            result = self.api_call_with_retry(
+                self.sp.user_playlist_create,
                 user=self.spotify_user_id,
                 name=name,
-                public=False,
-                description="Created from Music App"
+                public=public,
+                description=description or "Created from Music App"
             )
             
-            self.log(f"Playlist created: {name}")
+            playlist_id = result['id']
+            self.log(f"Playlist '{name}' creada correctamente")
             
             # Reload playlists to update UI
             self.load_spotify_playlists(force_update=True)
             
-            # Select the newly created playlist in the comboBox
-            combo = self.playlist_spotify_comboBox
-            index = combo.findText(name)
-            if index > 0:
-                combo.setCurrentIndex(index)
-                
+            # Seleccionar la nueva playlist
+            if hasattr(self, 'playlist_spotify_comboBox'):
+                index = self.playlist_spotify_comboBox.findText(name)
+                if index >= 0:
+                    self.playlist_spotify_comboBox.setCurrentIndex(index)
+            
+            return True
+        
         except Exception as e:
-            self.log(f"Error creating playlist: {str(e)}")
+            self.log(f"Error creando playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Error", f"Error creando playlist: {str(e)}")
+            
+            return False
 
     def show_spotify_playlist_content(self, playlist_id, playlist_name):
         """Show Spotify playlist tracks in the tree widget"""
@@ -7897,14 +8111,26 @@ class UrlPlayer(BaseModule):
 
     def on_playlist_local_changed(self, index):
         """Maneja el cambio de selección en el combobox de playlist local."""
-        if index <= 0:
-            self.log("Seleccionada la opción por defecto, no se carga ninguna playlist")
-            return
+        if hasattr(self, '_is_initializing') and self._is_initializing:
+            return  # No hacer nada durante la inicialización
             
         combo = self.playlist_local_comboBox
         selected_text = combo.currentText()
         
+        # Ignorar la selección de placeholder
+        if index == 0 or selected_text == "Playlists locales":
+            self.log("Seleccionado placeholder de playlists locales")
+            return
+        
+        # Opción "Nueva Playlist Local"
+        if index == 1 or selected_text == "Nueva Playlist Local":
+            # Mostrar diálogo para crear una nueva playlist local
+            self.log("Mostrando diálogo de creación de playlist local")
+            self.show_create_playlist_dialog("local")
+            return
+        
         self.log(f"Playlist Local seleccionada: {selected_text}")
+
         
         # Verificar que self.playlists existe y es válido
         if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict) or 'local' not in self.playlists:
