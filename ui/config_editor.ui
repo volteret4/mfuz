@@ -129,14 +129,40 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>#### Módulos Activos</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::TextFormat::MarkdownText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="active_modules_group">
          <property name="styleSheet">
           <string>QGroupBox { font-weight: bold; color: #4CAF50; }</string>
          </property>
          <property name="title">
-          <string>Active Modules</string>
+          <string/>
          </property>
          <layout class="QVBoxLayout" name="active_modules_layout"/>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>#### Módulos Desactivados</string>
+         </property>
+         <property name="textFormat">
+          <enum>Qt::TextFormat::MarkdownText</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
         </widget>
        </item>
        <item>
@@ -145,7 +171,7 @@
           <string>QGroupBox { font-weight: bold; color: #F44336; }</string>
          </property>
          <property name="title">
-          <string>Disabled Modules</string>
+          <string/>
          </property>
          <layout class="QVBoxLayout" name="disabled_modules_layout"/>
         </widget>

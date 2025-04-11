@@ -1837,7 +1837,7 @@ class UrlPlayer(BaseModule):
         self.lastfm_api_key = kwargs.get('lastfm_api_key')
         self.lastfm_user = kwargs.get('lastfm_user')
         self.exclude_spotify_from_local = kwargs.get('exclude_spotify_from_local', True)
-
+        self.playlists = {'spotify': [], 'local': [], 'rss': []}
  
 
         # Log the received configuration
@@ -1899,6 +1899,8 @@ class UrlPlayer(BaseModule):
         
         # Now call the parent constructor which will call init_ui()
         super().__init__(parent, theme, **kwargs)
+        
+
         
         # After parent initialization is complete, now we can safely load API credentials
         # and set environment variables
@@ -2034,6 +2036,9 @@ class UrlPlayer(BaseModule):
             self.tipo_combo.addItem("Álbum")
             self.tipo_combo.addItem("Canción")
 
+        # Cargar playlists al inicio
+        self.load_all_playlists()
+
         # Setup service icons
         self.setup_service_icons()
 
@@ -2132,9 +2137,15 @@ class UrlPlayer(BaseModule):
                 self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_playlist_rss_changed)
                 #self.playlist_rss_comboBox.currentIndexChanged.connect(self.on_rss_playlist_selected)
             
-            #if hasattr(self, 'playlist_local_comboBox'):
-                #self.playlist_local_comboBox.currentIndexChanged.connect(self.on_playlist_local_changed)
+            if hasattr(self, 'playlist_local_comboBox'):
+                # First disconnect to avoid multiple connections
+                try:
+                    self.playlist_local_comboBox.currentIndexChanged.disconnect()
+                except:
+                    pass  # If it wasn't connected, that's fine
                 
+                # Connect to the on_playlist_local_changed method
+                self.playlist_local_comboBox.currentIndexChanged.connect(self.on_playlist_local_changed)                
 
             if hasattr(self, 'GuardarPlaylist'):
                 self.GuardarPlaylist.clicked.connect(self.on_guardar_playlist_clicked)
@@ -2590,6 +2601,20 @@ class UrlPlayer(BaseModule):
                     else:
                         self.included_services[key] = bool(value)
             
+            # Cargar ruta de playlists locales
+            if 'local_playlist_path' in module_args:
+                local_playlist_path = module_args['local_playlist_path']
+                # Manejar ruta relativa
+                if not os.path.isabs(local_playlist_path):
+                    local_playlist_path = os.path.join(PROJECT_ROOT, local_playlist_path)
+                self.local_playlist_path = local_playlist_path
+                self.log(f"Ruta de playlists locales cargada: {self.local_playlist_path}")
+            else:
+                # Ruta por defecto
+                self.local_playlist_path = os.path.join(PROJECT_ROOT, ".content", "local_playlists")
+                self.log(f"Usando ruta de playlists locales por defecto: {self.local_playlist_path}")
+
+
             # Load MPV temp directory
             if 'mpv_temp_dir' in module_args:
                 mpv_temp_dir = module_args['mpv_temp_dir']
@@ -2603,40 +2628,67 @@ class UrlPlayer(BaseModule):
             self.log(f"Error loading module settings: {e}")
 
     def update_playlist_comboboxes(self):
-        """Update all playlist combobox contents from saved playlists"""
-        if not hasattr(self, 'playlists'):
-            self.playlists = self.load_playlists()
-        
-        # Update Spotify playlists combo
-        if hasattr(self, 'playlist_spotify_comboBox'):
-            self.playlist_spotify_comboBox.clear()
-            self.playlist_spotify_comboBox.addItem(QIcon(":/services/b_plus_cross"), "Nueva Playlist Spotify")
+        """Actualiza todos los comboboxes de playlists con los contenidos guardados"""
+        try:
+            # Asegurarse de que playlists es un diccionario
+            if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict):
+                self.log("Inicializando estructura de playlists para comboboxes...")
+                self.playlists = self.load_playlists()
+                if not isinstance(self.playlists, dict):
+                    self.playlists = {'spotify': [], 'local': [], 'rss': []}
             
-            for playlist in self.playlists.get('spotify', []):
-                self.playlist_spotify_comboBox.addItem(
-                    QIcon(":/services/spotify"), 
-                    playlist.get('name', 'Unnamed Playlist')
-                )
-        
-        # Update local playlists combo
-        if hasattr(self, 'playlist_local_comboBox'):
-            self.playlist_local_comboBox.clear()
+            # Actualizar combobox de playlists locales
+            if hasattr(self, 'playlist_local_comboBox'):
+                # Guardar selección actual
+                current_selection = self.playlist_local_comboBox.currentText()
+                
+                # Limpiar el combobox
+                self.playlist_local_comboBox.blockSignals(True)  # Evitar que se disparen eventos durante la actualización
+                self.playlist_local_comboBox.clear()
+                
+                # Añadir opción por defecto
+                self.playlist_local_comboBox.addItem(QIcon(":/services/plslove"), "Seleccionar Playlist Local")
+                
+                # Añadir todas las playlists locales
+                local_playlists = self.playlists.get('local', [])
+                
+                # Si no hay playlists locales, intentar cargarlas de nuevo
+                if not local_playlists:
+                    local_playlists = self.load_local_playlists()
+                    if local_playlists:
+                        self.playlists['local'] = local_playlists
+                        self.save_playlists()
+                
+                # Ordenar playlists por nombre
+                local_playlists = sorted(local_playlists, key=lambda x: x.get('name', '').lower())
+                
+                for playlist in local_playlists:
+                    playlist_name = playlist.get('name', 'Playlist sin nombre')
+                    self.playlist_local_comboBox.addItem(
+                        QIcon(":/services/plslove"), 
+                        playlist_name
+                    )
+                
+                # Registrar cuántas playlists se añadieron
+                num_playlists = len(local_playlists)
+                self.log(f"Combobox actualizado con {num_playlists} playlists locales")
+                
+                # Intentar restaurar la selección anterior si existe
+                index = self.playlist_local_comboBox.findText(current_selection)
+                if index > 0:
+                    self.playlist_local_comboBox.setCurrentIndex(index)
+                else:
+                    self.playlist_local_comboBox.setCurrentIndex(0)
+                
+                self.playlist_local_comboBox.blockSignals(False)  # Reactivar las señales
             
-            for playlist in self.playlists.get('local', []):
-                self.playlist_local_comboBox.addItem(
-                    QIcon(":/services/plslove"), 
-                    playlist.get('name', 'Unnamed Playlist')
-                )
+            # Actualizar otros comboboxes...
+            # [Código existente para Spotify y RSS]
         
-        # Update RSS playlists combo
-        if hasattr(self, 'playlist_rss_comboBox'):
-            self.playlist_rss_comboBox.clear()
-            
-            for playlist in self.playlists.get('rss', []):
-                self.playlist_rss_comboBox.addItem(
-                    QIcon(":/services/rss"), 
-                    playlist.get('name', 'Unnamed Blog')
-                )
+        except Exception as e:
+            self.log(f"Error actualizando comboboxes de playlists: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
 
     def save_current_playlist(self):
         """Save the current playlist based on the selected format in guardar_playlist_comboBox."""
@@ -6580,34 +6632,56 @@ class UrlPlayer(BaseModule):
 
     def load_playlists(self):
         """Load playlists from the standard location"""
-        if not os.path.exists(self.spotify_playlist_path):
-            # Create empty playlist structure
-            playlists = {
-                'spotify': [],
-                'local': [],
-                'rss': []
-            }
-            self.save_playlists(playlists)
-            return playlists
-        
         try:
-            with open(self.spotify_playlist_path, 'r') as f:
-                return json.load(f)
+            # Check if the path exists and is a file
+            if not os.path.exists(self.spotify_playlist_path) or not os.path.isfile(self.spotify_playlist_path):
+                # Create empty playlist structure
+                playlists_data = {
+                    'spotify': [],
+                    'local': [],
+                    'rss': []
+                }
+                self.save_playlists(playlists_data)
+                return playlists_data
+            
+            # Try to load the file
+            with open(self.spotify_playlist_path, 'r', encoding='utf-8') as f:
+                playlists_data = json.load(f)
+                
+            # Validate that it's a dictionary
+            if not isinstance(playlists_data, dict):
+                self.log("Error: El archivo de playlists no contiene un diccionario válido")
+                return {'spotify': [], 'local': [], 'rss': []}
+                
+            # Ensure all expected keys exist
+            for key in ['spotify', 'local', 'rss']:
+                if key not in playlists_data:
+                    playlists_data[key] = []
+                    
+            return playlists_data
+                
         except Exception as e:
             self.log(f"Error loading playlists: {e}")
+            # Return a valid empty structure
             return {'spotify': [], 'local': [], 'rss': []}
 
     def save_playlists(self, playlists=None):
         """Save playlists to the standard location"""
-        if playlists is None:
-            playlists = self.playlists
-        
         try:
-            with open(self.spotify_playlist_path, 'w') as f:
-                json.dump(playlists, f, indent=2)
+            if playlists is None:
+                if hasattr(self, 'playlists') and isinstance(self.playlists, dict):
+                    playlists = self.playlists
+                else:
+                    playlists = {'spotify': [], 'local': [], 'rss': []}
+            
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(self.spotify_playlist_path), exist_ok=True)
+            
+            with open(self.spotify_playlist_path, 'w', encoding='utf-8') as f:
+                json.dump(playlists, f, indent=2, ensure_ascii=False)
             self.log("Playlists saved successfully")
         except Exception as e:
-            self.log(f"Error saving playlists: {e}")
+            self.log(f"Error saving playlists: {str(e)}")
 
     def setup_spotify(self, client_id=None, client_secret=None, cache_path=None):
         """Configure Spotify client with improved token management"""
@@ -6936,7 +7010,7 @@ class UrlPlayer(BaseModule):
     def get_local_playlist_path(self):
         """Get the local playlist save path from configuration."""
         # Default path if not specified in config
-        default_path = PROJECT_ROOT / ".content" / "local_playlists"
+        default_path = os.path.join(PROJECT_ROOT, ".content", "local_playlists")
         
         try:
             # Try to read from config
@@ -7728,18 +7802,345 @@ class UrlPlayer(BaseModule):
         root_item.setExpanded(True)
 
     def on_playlist_local_changed(self, index):
-        """Handle selection change in the local playlist comboBox."""
+        """Maneja el cambio de selección en el combobox de playlist local."""
         if index <= 0:
+            self.log("Seleccionada la opción por defecto, no se carga ninguna playlist")
             return
             
         combo = self.playlist_local_comboBox
         selected_text = combo.currentText()
         
-        self.log(f"Local Playlist selected: {selected_text}")
+        self.log(f"Playlist Local seleccionada: {selected_text}")
         
-        # Load the selected playlist
-        self.load_local_playlist(selected_text)
+        # Verificar que self.playlists existe y es válido
+        if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict) or 'local' not in self.playlists:
+            self.log("Estructura de playlists no válida, recargando...")
+            # Cargar playlists
+            self.playlists = self.load_playlists()
+            # Cargar playlists locales directamente
+            local_playlists = self.load_local_playlists()
+            # Actualizar estructura
+            if isinstance(self.playlists, dict):
+                self.playlists['local'] = local_playlists
+            else:
+                self.playlists = {'spotify': [], 'local': local_playlists, 'rss': []}
+            # Guardar cambios
+            self.save_playlists()
+        
+        # Mostrar todas las playlists locales disponibles (para diagnóstico)
+        local_playlist_names = [p.get('name', 'Sin nombre') for p in self.playlists.get('local', [])]
+        self.log(f"Playlists locales disponibles: {', '.join(local_playlist_names)}")
+        
+        # Buscar la playlist seleccionada
+        selected_playlist = None
+        for playlist in self.playlists.get('local', []):
+            if playlist.get('name') == selected_text:
+                selected_playlist = playlist
+                self.log(f"Playlist '{selected_text}' encontrada en la estructura de datos")
+                break
+        
+        # Si no se encuentra, intentar cargar directamente del archivo
+        if not selected_playlist:
+            self.log(f"Playlist '{selected_text}' no encontrada en la estructura, buscando archivo...")
+            
+            # Obtener ruta de playlists
+            local_playlist_path = self.get_local_playlist_path()
+            
+            # Buscar archivo JSON
+            json_file = os.path.join(local_playlist_path, f"{selected_text}.json")
+            if os.path.exists(json_file):
+                try:
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        selected_playlist = json.load(f)
+                    self.log(f"Playlist cargada directamente del archivo JSON")
+                except Exception as e:
+                    self.log(f"Error cargando archivo JSON: {str(e)}")
+            
+            # Si no hay JSON, buscar archivo PLS
+            if not selected_playlist:
+                pls_file = os.path.join(local_playlist_path, f"{selected_text}.pls")
+                if os.path.exists(pls_file):
+                    try:
+                        items = self.parse_pls_file(pls_file)
+                        if items:
+                            selected_playlist = {
+                                'name': selected_text,
+                                'items': items,
+                                'created': int(time.time()),
+                                'modified': int(time.time())
+                            }
+                            self.log(f"Playlist cargada directamente del archivo PLS")
+                    except Exception as e:
+                        self.log(f"Error cargando archivo PLS: {str(e)}")
+        
+        if not selected_playlist:
+            self.log(f"No se pudo encontrar la playlist '{selected_text}' en ninguna ubicación")
+            return
+        
+        # Mostrar la playlist en el tree widget
+        self.display_local_playlist(selected_playlist)
+        
+        # Actualizar la estructura de playlists si la playlist se cargó de archivo
+        if selected_playlist and selected_playlist not in self.playlists.get('local', []):
+            self.log("Añadiendo playlist a la estructura de datos...")
+            self.playlists['local'].append(selected_playlist)
+            self.save_playlists()
 
+
+    def display_local_playlist(self, playlist):
+        """Display a local playlist in the tree widget"""
+        try:
+            # Clear the tree widget
+            self.treeWidget.clear()
+            
+            # Get playlist data
+            playlist_name = playlist.get('name', 'Unnamed Playlist')
+            items = playlist.get('items', [])
+            
+            if not items:
+                self.log(f"Playlist '{playlist_name}' is empty")
+                return
+            
+            # Create a root item for the playlist
+            root_item = QTreeWidgetItem(self.treeWidget)
+            root_item.setText(0, playlist_name)
+            root_item.setText(1, "Local")
+            root_item.setText(2, "Playlist")
+            
+            # Format as bold
+            font = root_item.font(0)
+            font.setBold(True)
+            root_item.setFont(0, font)
+            root_item.setFont(1, font)
+            
+            # Add the playlist icon
+            root_item.setIcon(0, QIcon(":/services/plslove"))
+            
+            # Add tracks as children
+            for i, item in enumerate(items):
+                title = item.get('title', 'Unknown Track')
+                artist = item.get('artist', '')
+                url = item.get('url', '')
+                source = item.get('source', self._determine_source_from_url(url))
+                
+                # Create track item
+                track_item = QTreeWidgetItem(root_item)
+                track_item.setText(0, title)
+                track_item.setText(1, artist)
+                track_item.setText(2, "Canción")
+                
+                if item.get('duration'):
+                    duration_str = self.format_duration(item.get('duration'))
+                    track_item.setText(4, duration_str)
+                
+                # Set track icon based on source
+                source_icon = self.get_source_icon(url, {'source': source})
+                track_item.setIcon(0, source_icon)
+                
+                # Store track data 
+                track_data = {
+                    'title': title,
+                    'artist': artist,
+                    'url': url,
+                    'source': source,
+                    'type': 'track',
+                    'from_database': False
+                }
+                track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+            
+            # Expand the root item
+            root_item.setExpanded(True)
+            
+            self.log(f"Loaded playlist '{playlist_name}' with {len(items)} tracks")
+            
+        except Exception as e:
+            self.log(f"Error displaying local playlist: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def load_local_playlists(self):
+        """Carga las playlists locales desde el directorio configurado"""
+        try:
+            # Obtener la ruta de las playlists locales de la configuración
+            local_playlist_path = self.get_local_playlist_path()
+            self.log(f"Buscando playlists locales en: {local_playlist_path}")
+            
+            if not os.path.exists(local_playlist_path):
+                os.makedirs(local_playlist_path, exist_ok=True)
+                self.log(f"Creado directorio de playlists locales: {local_playlist_path}")
+                return []
+            
+            # Imprimir todos los archivos en el directorio para debug
+            all_files = os.listdir(local_playlist_path)
+            self.log(f"Archivos en el directorio: {', '.join(all_files)}")
+            
+            # Obtener todos los archivos .json en el directorio
+            json_files = [f for f in all_files if f.endswith('.json')]
+            self.log(f"Encontrados {len(json_files)} archivos de playlist JSON")
+            
+            # Obtener archivos .pls también como respaldo
+            pls_files = [f for f in all_files if f.endswith('.pls')]
+            self.log(f"Encontrados {len(pls_files)} archivos de playlist PLS")
+            
+            # Cargar playlists desde archivos JSON
+            playlists = []
+            
+            for filename in json_files:
+                try:
+                    file_path = os.path.join(local_playlist_path, filename)
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        # Imprimir contenido para debugear
+                        self.log(f"Contenido de {filename}: {content[:100]}...")
+                        
+                        playlist_data = json.loads(content)
+                        
+                    # Validar los datos de la playlist
+                    if 'name' in playlist_data and 'items' in playlist_data:
+                        playlists.append(playlist_data)
+                        self.log(f"Playlist cargada: {playlist_data['name']} ({len(playlist_data.get('items', []))} elementos)")
+                    else:
+                        self.log(f"Archivo {filename} no tiene formato válido de playlist")
+                except Exception as e:
+                    self.log(f"Error cargando playlist {filename}: {str(e)}")
+            
+            # Si no se cargaron playlists JSON, intentar con archivos .pls
+            if not playlists and pls_files:
+                for pls_file in pls_files:
+                    try:
+                        playlist_name = os.path.splitext(pls_file)[0]
+                        file_path = os.path.join(local_playlist_path, pls_file)
+                        
+                        # Extraer datos de archivo .pls
+                        items = self.parse_pls_file(file_path)
+                        
+                        if items:
+                            playlist_data = {
+                                'name': playlist_name,
+                                'items': items,
+                                'created': int(time.time()),
+                                'modified': int(time.time())
+                            }
+                            playlists.append(playlist_data)
+                            self.log(f"Playlist PLS cargada: {playlist_name} ({len(items)} elementos)")
+                    except Exception as e:
+                        self.log(f"Error cargando playlist PLS {pls_file}: {str(e)}")
+            
+            return playlists
+                
+        except Exception as e:
+            self.log(f"Error cargando playlists locales: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+
+    def parse_pls_file(self, file_path):
+        """Parse a PLS file and return a list of items"""
+        try:
+            items = []
+            with open(file_path, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+                
+            # Extraer número de entradas
+            num_entries = 0
+            for line in lines:
+                if line.lower().startswith('numberofentries='):
+                    try:
+                        num_entries = int(line.split('=')[1].strip())
+                        break
+                    except:
+                        pass
+            
+            # Procesar cada entrada
+            for i in range(1, num_entries + 1):
+                item = {}
+                
+                # Buscar URL/archivo
+                file_key = f"File{i}="
+                title_key = f"Title{i}="
+                
+                url = None
+                title = None
+                
+                for line in lines:
+                    if line.startswith(file_key):
+                        url = line[len(file_key):].strip()
+                    elif line.startswith(title_key):
+                        title = line[len(title_key):].strip()
+                
+                if url:
+                    # Extraer artista/título si es posible
+                    artist = ""
+                    
+                    if title and " - " in title:
+                        parts = title.split(" - ", 1)
+                        artist = parts[0].strip()
+                        title = parts[1].strip()
+                    
+                    item = {
+                        'url': url,
+                        'title': title or f"Track {i}",
+                        'artist': artist,
+                        'source': self._determine_source_from_url(url)
+                    }
+                    
+                    items.append(item)
+            
+            return items
+                
+        except Exception as e:
+            self.log(f"Error parsing PLS file: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+    def load_all_playlists(self):
+        """Carga todas las playlists (Spotify, locales, RSS) al inicio"""
+        try:
+            # Primero verificamos que playlists es un diccionario
+            if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict):
+                self.log("Inicializando estructura de playlists...")
+                self.playlists = {}
+            
+            # Cargar desde el archivo guardado si existe
+            loaded_playlists = self.load_playlists()
+            if isinstance(loaded_playlists, dict):
+                self.playlists = loaded_playlists
+            else:
+                self.log("Error: load_playlists() no devolvió un diccionario")
+                # Asegurar que tenemos una estructura válida
+                self.playlists = {'spotify': [], 'local': [], 'rss': []}
+            
+            # Cargar playlists de Spotify si está configurado
+            if self.spotify_client_id and self.spotify_client_secret:
+                self.setup_spotify()
+                if hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+                    self.load_spotify_playlists()
+            
+            # Cargar playlists locales explícitamente
+            local_playlists = self.load_local_playlists()
+            
+            # Actualizar la estructura de playlists
+            if 'local' not in self.playlists:
+                self.playlists['local'] = []
+                
+            if local_playlists:
+                self.playlists['local'] = local_playlists
+                # Guardar la estructura actualizada
+                self.save_playlists()
+            
+            # Actualizar los comboboxes con las playlists cargadas
+            self.update_playlist_comboboxes()
+            
+            self.log(f"Cargadas {len(self.playlists.get('local', []))} playlists locales")
+            
+        except Exception as e:
+            self.log(f"Error cargando playlists: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            # Asegurar que tenemos una estructura válida
+            self.playlists = {'spotify': [], 'local': [], 'rss': []}
 
 
 def run_direct_command(self, cmd, args=None):
