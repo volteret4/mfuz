@@ -356,16 +356,28 @@ def add_artist_to_db(conn, artist_info, interactive=False):
         bio = artist_info['bio']['content']
     
     if interactive:
-        print(f"\n===== NUEVO ARTISTA =====")
-        print(f"Artista: {artist_name}")
+        print("\n" + "="*60)
+        print(f"INFORMACIÓN DEL ARTISTA A AÑADIR:")
+        print("="*60)
+        print(f"Nombre: {artist_name}")
         print(f"MBID: {mbid}")
         print(f"URL: {url}")
         print(f"Tags: {tags_str}")
-        print(f"Bio: {bio[:100]}..." if len(bio) > 100 else f"Bio: {bio}")
+        print("Bio: " + bio[:150] + "..." if len(bio) > 150 else f"Bio: {bio}")
+        print("-"*60)
+        print("Columnas a insertar en la tabla 'artists':")
+        print("-"*60)
+        print(f"name = '{artist_name}'")
+        print(f"mbid = '{mbid}'")
+        print(f"tags = '{tags_str}'")
+        print(f"bio = '{bio[:50]}...'")
+        print(f"lastfm_url = '{url}'")
+        print(f"origen = 'online'")
+        print("="*60)
         
         respuesta = input("\n¿Añadir este artista a la base de datos? (s/n): ").lower()
         if respuesta != 's':
-            print("Artista no añadido por decisión del usuario.")
+            print("Operación cancelada por el usuario.")
             return None
     
     try:
@@ -377,6 +389,7 @@ def add_artist_to_db(conn, artist_info, interactive=False):
         
         artist_id = cursor.fetchone()[0]
         conn.commit()
+        print(f"Artista añadido con ID: {artist_id}")
         return artist_id
     except sqlite3.Error as e:
         print(f"Error al añadir el artista {artist_name}: {e}")
@@ -408,17 +421,42 @@ def add_album_to_db(conn, album_info, artist_id, interactive=False):
         else:
             total_tracks = 1
     
+    # Obtener el nombre del artista para mostrarlo en modo interactivo
+    artist_name = ""
     if interactive:
-        print(f"\n===== NUEVO ÁLBUM =====")
-        print(f"Álbum: {album_name}")
+        try:
+            cursor.execute("SELECT name FROM artists WHERE id = ?", (artist_id,))
+            result = cursor.fetchone()
+            if result:
+                artist_name = result[0]
+        except sqlite3.Error as e:
+            print(f"Error al obtener el nombre del artista: {e}")
+    
+    if interactive:
+        print("\n" + "="*60)
+        print(f"INFORMACIÓN DEL ÁLBUM A AÑADIR:")
+        print("="*60)
+        print(f"Nombre: {album_name}")
+        print(f"Artista: {artist_name} (ID: {artist_id})")
         print(f"MBID: {mbid}")
         print(f"URL: {url}")
         print(f"Año: {year}")
         print(f"Total pistas: {total_tracks}")
+        print("-"*60)
+        print("Columnas a insertar en la tabla 'albums':")
+        print("-"*60)
+        print(f"artist_id = {artist_id}")
+        print(f"name = '{album_name}'")
+        print(f"year = {year}")
+        print(f"lastfm_url = '{url}'")
+        print(f"mbid = '{mbid}'")
+        print(f"total_tracks = {total_tracks}")
+        print(f"origen = 'online'")
+        print("="*60)
         
         respuesta = input("\n¿Añadir este álbum a la base de datos? (s/n): ").lower()
         if respuesta != 's':
-            print("Álbum no añadido por decisión del usuario.")
+            print("Operación cancelada por el usuario.")
             return None
     
     try:
@@ -430,6 +468,7 @@ def add_album_to_db(conn, album_info, artist_id, interactive=False):
         
         album_id = cursor.fetchone()[0]
         conn.commit()
+        print(f"Álbum añadido con ID: {album_id}")
         return album_id
     except sqlite3.Error as e:
         print(f"Error al añadir el álbum {album_name}: {e}")
@@ -476,18 +515,56 @@ def add_song_to_db(conn, track_info, album_id, artist_id, interactive=False):
     added_month = now.month
     added_year = now.year
     
+    # Obtener nombres reales de álbum y artista para mostrarlos en modo interactivo
+    album_real_name = None
+    artist_real_name = None
+    
     if interactive:
-        print(f"\n===== NUEVA CANCIÓN =====")
-        print(f"Canción: {track_name}")
+        try:
+            if artist_id:
+                cursor.execute("SELECT name FROM artists WHERE id = ?", (artist_id,))
+                result = cursor.fetchone()
+                if result:
+                    artist_real_name = result[0]
+            
+            if album_id:
+                cursor.execute("SELECT name FROM albums WHERE id = ?", (album_id,))
+                result = cursor.fetchone()
+                if result:
+                    album_real_name = result[0]
+        except sqlite3.Error as e:
+            print(f"Error al obtener información de referencias: {e}")
+    
+    if interactive:
+        print("\n" + "="*60)
+        print(f"INFORMACIÓN DE LA CANCIÓN A AÑADIR:")
+        print("="*60)
+        print(f"Título: {track_name}")
+        print(f"Artista: {artist_real_name or artist_name} (ID: {artist_id})")
+        print(f"Álbum: {album_real_name or album_name} (ID: {album_id})")
         print(f"MBID: {mbid}")
         print(f"Duración: {duration} segundos")
-        print(f"Álbum: {album_name}")
-        print(f"Artista: {artist_name}")
         print(f"Género: {genre}")
+        print("-"*60)
+        print("Columnas a insertar en la tabla 'songs':")
+        print("-"*60)
+        print(f"title = '{track_name}'")
+        print(f"mbid = '{mbid}'")
+        print(f"added_timestamp = {added_timestamp}")
+        print(f"added_week = {added_week}")
+        print(f"added_month = {added_month}")
+        print(f"added_year = {added_year}")
+        print(f"duration = {duration}")
+        print(f"album = '{album_name}'")
+        print(f"album_artist = '{artist_name}'")
+        print(f"artist = '{artist_name}'")
+        print(f"genre = '{genre}'")
+        print(f"origen = 'online'")
+        print("="*60)
         
         respuesta = input("\n¿Añadir esta canción a la base de datos? (s/n): ").lower()
         if respuesta != 's':
-            print("Canción no añadida por decisión del usuario.")
+            print("Operación cancelada por el usuario.")
             return None
     
     try:
@@ -502,6 +579,7 @@ def add_song_to_db(conn, track_info, album_id, artist_id, interactive=False):
         
         song_id = cursor.fetchone()[0]
         conn.commit()
+        print(f"Canción añadida con ID: {song_id}")
         return song_id
     except sqlite3.Error as e:
         print(f"Error al añadir la canción {track_name}: {e}")
@@ -816,18 +894,13 @@ def update_song_in_db(conn, song_id, track_info):
     
     return False
 
-
-
-def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_songs, lastfm_api_key, interactive=False):
+def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_songs, lastfm_api_key, interactive=False, callback=None):
     """Procesa los scrobbles y actualiza la base de datos con los nuevos scrobbles"""
     cursor = conn.cursor()
     processed_count = 0
     linked_count = 0
     unlinked_count = 0
     newest_timestamp = 0
-    
-    print(f"Modo interactivo: {'ACTIVADO' if interactive else 'DESACTIVADO'}")
-    print(f"Total de tracks a procesar: {len(tracks)}")
     
     new_artists_attempts = 0
     new_artists_success = 0
@@ -854,19 +927,11 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         'db_errors': 0
     }
     
-    # Preparar lotes para inserción
-    scrobbles_batch = []
-    batch_size = 100
-    
     for track_idx, track in enumerate(tracks):
-        # Actualizar progreso
-        if progress_callback and (track_idx % 10 == 0 or track_idx == len(tracks) - 1):
-            progress_callback(f"Procesando scrobble {track_idx+1}/{len(tracks)}", 
-                             (track_idx + 1) / len(tracks) * 100)
+        print(f"\n{'='*60}")
+        print(f"Procesando scrobble {track_idx+1}/{len(tracks)}")
+        print(f"{'='*60}")
         
-        if progress_callback is None:
-            print(f"\nProcesando scrobble {track_idx+1}/{len(tracks)}")
-            
         artist_name = track['artist']['#text']
         album_name = track['album']['#text'] if track['album']['#text'] else None
         track_name = track['name']
@@ -874,8 +939,19 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         scrobble_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
         lastfm_url = track['url']
         
-        if progress_callback is None:
-            print(f"Artista: {artist_name}, Álbum: {album_name}, Canción: {track_name}")
+        print(f"Artista: {artist_name}")
+        print(f"Álbum: {album_name}")
+        print(f"Canción: {track_name}")
+        print(f"Fecha: {scrobble_date}")
+        print(f"URL: {lastfm_url}")
+        
+        # Si estamos en modo interactivo, preguntar si procesar este scrobble
+        if interactive:
+            print("-"*60)
+            respuesta = input("¿Procesar este scrobble? (s/n): ").lower()
+            if respuesta != 's':
+                print("Saltando este scrobble.")
+                continue
         
         # Actualizar el timestamp más reciente
         newest_timestamp = max(newest_timestamp, timestamp)
@@ -884,26 +960,13 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         cursor.execute("SELECT id FROM scrobbles WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
                       (timestamp, artist_name, track_name))
         if cursor.fetchone():
-            if progress_callback is None:
-                print(f"Scrobble duplicado, saltando")
+            print(f"Scrobble duplicado, saltando")
             continue  # El scrobble ya existe, continuamos con el siguiente
         
         # Buscar IDs existentes en la base de datos
-        artist_info = existing_artists.get(artist_name.lower())
-        artist_id = artist_info['id'] if artist_info else None
-        
+        artist_id = existing_artists.get(artist_name.lower())
         if artist_id:
-            if progress_callback is None:
-                print(f"Artista encontrado en la base de datos: ID {artist_id}")
-            
-            # Si el origen no es 'online', actualizar información
-            if artist_info.get('origen') != 'online':
-                if progress_callback is None:
-                    print(f"Artista con origen '{artist_info.get('origen')}', actualizando información")
-                artist_mbid = track['artist'].get('mbid', '')
-                last_artist_info = get_artist_info(artist_name, artist_mbid, lastfm_api_key)
-                if last_artist_info:
-                    update_artist_in_db(conn, artist_id, last_artist_info)
+            print(f"Artista encontrado en la base de datos: ID {artist_id}")
         
         album_id = None
         song_id = None
@@ -911,34 +974,27 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         # Si el artista no existe, comprobar si ya lo hemos procesado o necesitamos añadirlo
         if not artist_id and artist_name.lower() in new_artists:
             artist_id = new_artists[artist_name.lower()]
-            if progress_callback is None:
-                print(f"Artista encontrado en nuevos artistas procesados: ID {artist_id}")
+            print(f"Artista encontrado en nuevos artistas procesados: ID {artist_id}")
         elif not artist_id:
-            if progress_callback is None:
-                print(f"Intentando obtener información para nuevo artista: {artist_name}")
+            print(f"Intentando obtener información para nuevo artista: {artist_name}")
             new_artists_attempts += 1
             # Obtener información del artista desde Last.fm
             artist_mbid = track['artist'].get('mbid', '')
             artist_info = get_artist_info(artist_name, artist_mbid, lastfm_api_key)
             
             if artist_info:
-                if progress_callback is None:
-                    print(f"Información de artista obtenida correctamente, intentando añadir a la base de datos")
+                print(f"Información de artista obtenida correctamente, intentando añadir a la base de datos")
                 artist_id = add_artist_to_db(conn, artist_info, interactive)
                 if artist_id:
-                    if progress_callback is None:
-                        print(f"Artista añadido correctamente: ID {artist_id}")
+                    print(f"Artista añadido correctamente: ID {artist_id}")
                     new_artists[artist_name.lower()] = artist_id
-                    if existing_artists is not None:  # Importante: Verificar que no sea None
-                        existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'online'}
+                    existing_artists[artist_name.lower()] = artist_id
                     new_artists_success += 1
                 else:
-                    if progress_callback is None:
-                        print(f"Error al añadir el artista a la base de datos")
+                    print(f"Error al añadir el artista a la base de datos")
                     errors['db_errors'] += 1
             else:
-                if progress_callback is None:
-                    print(f"No se pudo obtener información para el artista {artist_name}")
+                print(f"No se pudo obtener información para el artista {artist_name}")
                 errors['artist_not_found'] += 1
         
         # Si hay un álbum y artista, buscar o añadir el álbum
@@ -946,186 +1002,153 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
             album_key = (album_name.lower(), artist_name.lower())
             
             # Buscar en álbumes existentes
-            album_info = existing_albums.get(album_key)
-            if album_info:
-                album_id = album_info['id']
-                if progress_callback is None:
-                    print(f"Álbum encontrado en la base de datos: ID {album_id}")
-                
-                # Si el origen no es 'online', actualizar información
-                if album_info.get('origen') != 'online':
-                    if progress_callback is None:
-                        print(f"Álbum con origen '{album_info.get('origen')}', actualizando información")
-                    album_mbid = track['album'].get('mbid', '')
-                    last_album_info = get_album_info(album_name, artist_name, album_mbid, lastfm_api_key)
-                    if last_album_info:
-                        update_album_in_db(conn, album_id, last_album_info)
-                
+            if album_key in existing_albums:
+                album_id, _ = existing_albums.get(album_key)
+                print(f"Álbum encontrado en la base de datos: ID {album_id}")
             elif album_key in new_albums:
                 album_id = new_albums[album_key]
-                if progress_callback is None:
-                    print(f"Álbum encontrado en nuevos álbumes procesados: ID {album_id}")
+                print(f"Álbum encontrado en nuevos álbumes procesados: ID {album_id}")
             else:
-                if progress_callback is None:
-                    print(f"Intentando obtener información para nuevo álbum: {album_name}")
+                print(f"Intentando obtener información para nuevo álbum: {album_name}")
                 new_albums_attempts += 1
                 # Obtener información del álbum desde Last.fm
                 album_mbid = track['album'].get('mbid', '')
                 album_info = get_album_info(album_name, artist_name, album_mbid, lastfm_api_key)
                 
                 if album_info:
-                    if progress_callback is None:
-                        print(f"Información de álbum obtenida correctamente, intentando añadir a la base de datos")
+                    print(f"Información de álbum obtenida correctamente, intentando añadir a la base de datos")
                     album_id = add_album_to_db(conn, album_info, artist_id, interactive)
                     if album_id:
-                        if progress_callback is None:
-                            print(f"Álbum añadido correctamente: ID {album_id}")
+                        print(f"Álbum añadido correctamente: ID {album_id}")
                         new_albums[album_key] = album_id
-                        if existing_albums is not None:  # Importante: Verificar que no sea None
-                            existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'online'}
+                        existing_albums[album_key] = (album_id, artist_id)
                         new_albums_success += 1
                     else:
-                        if progress_callback is None:
-                            print(f"Error al añadir el álbum a la base de datos")
+                        print(f"Error al añadir el álbum a la base de datos")
                         errors['db_errors'] += 1
                 else:
-                    if progress_callback is None:
-                        print(f"No se pudo obtener información para el álbum {album_name}")
+                    print(f"No se pudo obtener información para el álbum {album_name}")
                     errors['album_not_found'] += 1
         
         # Buscar o añadir la canción
         song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
         
-        song_info = existing_songs.get(song_key)
-        if song_info:
-            song_id = song_info['id']
-            if progress_callback is None:
-                print(f"Canción encontrada en la base de datos: ID {song_id}")
-            
-            # Si el origen no es 'online', actualizar información
-            if song_info.get('origen') != 'online':
-                if progress_callback is None:
-                    print(f"Canción con origen '{song_info.get('origen')}', actualizando información")
-                track_mbid = track.get('mbid', '')
-                last_track_info = get_track_info(track_name, artist_name, track_mbid, lastfm_api_key)
-                if last_track_info:
-                    update_song_in_db(conn, song_id, last_track_info)
-            
+        if song_key in existing_songs:
+            song_id = existing_songs.get(song_key)
+            print(f"Canción encontrada en la base de datos: ID {song_id}")
         elif song_key in new_songs:
             song_id = new_songs[song_key]
-            if progress_callback is None:
-                print(f"Canción encontrada en nuevas canciones procesadas: ID {song_id}")
+            print(f"Canción encontrada en nuevas canciones procesadas: ID {song_id}")
         elif artist_id:  # Solo añadir canciones si tenemos el artista
-            if progress_callback is None:
-                print(f"Intentando obtener información para nueva canción: {track_name}")
+            print(f"Intentando obtener información para nueva canción: {track_name}")
             new_songs_attempts += 1
             track_mbid = track.get('mbid', '')
             track_info = get_track_info(track_name, artist_name, track_mbid, lastfm_api_key)
             
             if track_info:
-                if progress_callback is None:
-                    print(f"Información de canción obtenida correctamente, intentando añadir a la base de datos")
+                print(f"Información de canción obtenida correctamente, intentando añadir a la base de datos")
                 song_id = add_song_to_db(conn, track_info, album_id, artist_id, interactive)
                 if song_id:
-                    if progress_callback is None:
-                        print(f"Canción añadida correctamente: ID {song_id}")
+                    print(f"Canción añadida correctamente: ID {song_id}")
                     new_songs[song_key] = song_id
-                    if existing_songs is not None:  # Importante: Verificar que no sea None
-                        existing_songs[song_key] = {'id': song_id, 'origen': 'online'}
+                    existing_songs[song_key] = song_id
                     new_songs_success += 1
                 else:
-                    if progress_callback is None:
-                        print(f"Error al añadir la canción a la base de datos")
+                    print(f"Error al añadir la canción a la base de datos")
                     errors['db_errors'] += 1
             else:
-                if progress_callback is None:
-                    print(f"No se pudo obtener información para la canción {track_name}")
+                print(f"No se pudo obtener información para la canción {track_name}")
                 errors['song_not_found'] += 1
         
-        try:
-            # Preparar el scrobble para inserción por lotes
-            scrobbles_batch.append({
-                'track_name': track_name,
-                'album_name': album_name,
-                'artist_name': artist_name,
-                'timestamp': timestamp,
-                'scrobble_date': scrobble_date,
-                'lastfm_url': lastfm_url,
-                'song_id': song_id,
-                'album_id': album_id,
-                'artist_id': artist_id
-            })
+        # Si estamos en modo interactivo, preguntar si insertar este scrobble
+        add_scrobble = True
+        if interactive:
+            print("-"*60)
+            print("INFORMACIÓN DEL SCROBBLE A INSERTAR:")
+            print("-"*60)
+            print(f"Canción: {track_name}")
+            print(f"Artista: {artist_name}")
+            print(f"Álbum: {album_name}")
+            print(f"Fecha: {scrobble_date}")
+            print(f"URL: {lastfm_url}")
+            print(f"Canción ID: {song_id}")
+            print(f"Álbum ID: {album_id}")
+            print(f"Artista ID: {artist_id}")
+            print("-"*60)
             
-            # Si alcanzamos el tamaño del lote, insertar
-            if len(scrobbles_batch) >= batch_size:
-                insert_scrobbles_batch(conn, scrobbles_batch)
+            respuesta = input("¿Insertar este scrobble en la base de datos? (s/n): ").lower()
+            add_scrobble = respuesta == 's'
+        
+        if add_scrobble:
+            try:
+                # Insertar el scrobble en la tabla
+                cursor.execute("""
+                    INSERT INTO scrobbles 
+                    (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id))
                 
-                # Contar resultados
-                for scrobble in scrobbles_batch:
-                    processed_count += 1
-                    if scrobble['song_id']:
-                        linked_count += 1
-                    else:
-                        unlinked_count += 1
-                        
-                scrobbles_batch = []
-            
-        except Exception as e:
-            if progress_callback is None:
-                print(f"Error al preparar scrobble para inserción: {e}")
-            errors['db_errors'] += 1
-    
-    # Insertar los scrobbles restantes del lote
-    if scrobbles_batch:
-        try:
-            insert_scrobbles_batch(conn, scrobbles_batch)
-            
-            # Contar resultados
-            for scrobble in scrobbles_batch:
                 processed_count += 1
-                if scrobble['song_id']:
+                
+                # Contabilizar si se pudo enlazar con la base de datos
+                if song_id:
                     linked_count += 1
+                    print(f"Scrobble enlazado correctamente con song_id: {song_id}")
+                    
+                    # Actualizar song_links si el song_id existe
+                    try:
+                        cursor.execute("""
+                            INSERT OR REPLACE INTO song_links (song_id, lastfm_url, links_updated)
+                            VALUES (?, ?, datetime('now'))
+                        """, (song_id, lastfm_url))
+                    except sqlite3.Error as e:
+                        # Es posible que la tabla song_links no exista, no es crítico
+                        print(f"Nota: No se pudo actualizar song_links: {e}")
                 else:
                     unlinked_count += 1
+                    print(f"Scrobble guardado pero sin enlazar a una canción")
+                
+                # Actualizar información de artista si existe en la base de datos
+                if artist_id and 'url' in track['artist']:
+                    cursor.execute("""
+                        UPDATE artists 
+                        SET lastfm_url = COALESCE(lastfm_url, ?)
+                        WHERE id = ?
+                    """, (track['artist']['url'], artist_id))
                     
-        except Exception as e:
-            if progress_callback is None:
-                print(f"Error al insertar lote final de scrobbles: {e}")
-            errors['db_errors'] += 1
+                # Actualizar información de álbum si existe en la base de datos
+                if album_id and 'url' in track['album']:
+                    cursor.execute("""
+                        UPDATE albums
+                        SET lastfm_url = COALESCE(lastfm_url, ?)
+                        WHERE id = ?
+                    """, (track['album']['url'], album_id))
+            
+            except sqlite3.Error as e:
+                print(f"Error al insertar scrobble en la base de datos: {e}")
+                errors['db_errors'] += 1
+        else:
+            print("Inserción de scrobble cancelada por el usuario.")
     
     conn.commit()
     
     # Resumen detallado
-    if progress_callback is None:
-        print("\n=== RESUMEN DE PROCESAMIENTO ===")
-        print(f"Scrobbles procesados: {processed_count}")
-        print(f"Scrobbles enlazados: {linked_count}")
-        print(f"Scrobbles no enlazados: {unlinked_count}")
-        print(f"Intentos de nuevos artistas: {new_artists_attempts}")
-        print(f"Nuevos artistas añadidos: {new_artists_success}")
-        print(f"Intentos de nuevos álbumes: {new_albums_attempts}")
-        print(f"Nuevos álbumes añadidos: {new_albums_success}")
-        print(f"Intentos de nuevas canciones: {new_songs_attempts}")
-        print(f"Nuevas canciones añadidas: {new_songs_success}")
-        print("\nErrores encontrados:")
-        print(f"Artistas no encontrados: {errors['artist_not_found']}")
-        print(f"Álbumes no encontrados: {errors['album_not_found']}")
-        print(f"Canciones no encontradas: {errors['song_not_found']}")
-        print(f"Errores de API: {errors['api_errors']}")
-        print(f"Errores de base de datos: {errors['db_errors']}")
-    
-    # Si hay callback, enviar resumen al final
-    if progress_callback:
-        summary = {
-            'processed': processed_count,
-            'linked': linked_count,
-            'unlinked': unlinked_count,
-            'new_artists': new_artists_success,
-            'new_albums': new_albums_success,
-            'new_songs': new_songs_success,
-            'errors': errors
-        }
-        progress_callback("Procesamiento completo", 100, summary)
+    print("\n=== RESUMEN DE PROCESAMIENTO ===")
+    print(f"Scrobbles procesados: {processed_count}")
+    print(f"Scrobbles enlazados: {linked_count}")
+    print(f"Scrobbles no enlazados: {unlinked_count}")
+    print(f"Intentos de nuevos artistas: {new_artists_attempts}")
+    print(f"Nuevos artistas añadidos: {new_artists_success}")
+    print(f"Intentos de nuevos álbumes: {new_albums_attempts}")
+    print(f"Nuevos álbumes añadidos: {new_albums_success}")
+    print(f"Intentos de nuevas canciones: {new_songs_attempts}")
+    print(f"Nuevas canciones añadidas: {new_songs_success}")
+    print("\nErrores encontrados:")
+    print(f"Artistas no encontrados: {errors['artist_not_found']}")
+    print(f"Álbumes no encontrados: {errors['album_not_found']}")
+    print(f"Canciones no encontradas: {errors['song_not_found']}")
+    print(f"Errores de API: {errors['api_errors']}")
+    print(f"Errores de base de datos: {errors['db_errors']}")
     
     return processed_count, linked_count, unlinked_count, newest_timestamp
 
@@ -2043,7 +2066,6 @@ class LastFMScrobbler:
             json.dump({'scrobbles': scrobbles}, f, indent=2, ensure_ascii=False)
         
         return len(scrobbles)
-
 def main(config=None):
     # Cargar configuración
     parser = argparse.ArgumentParser(description='enlaces_artista_album')
@@ -2052,13 +2074,8 @@ def main(config=None):
     parser.add_argument('--lastfm-api-key', type=str, help='API key de Last.fm')
     parser.add_argument('--db-path', type=str, help='Ruta al archivo de base de datos SQLite')
     parser.add_argument('--force-update', action='store_true', help='Forzar actualización completa')
-    parser.add_argument('--verify-db', action='store_true', help='Verificar y corregir integridad de la base de datos')
-    parser.add_argument('--update-metadata', action='store_true', help='Actualizar metadatos desde Last.fm')
     parser.add_argument('--output-json', type=str, help='Ruta para guardar todos los scrobbles en formato JSON (opcional)')
     parser.add_argument('--interactive', action='store_true', help='Modo interactivo para añadir nuevos elementos')
-    parser.add_argument('--export-json', type=str, help='Exportar scrobbles a archivo JSON')
-    parser.add_argument('--export-limit', type=int, help='Límite de scrobbles a exportar')
-    parser.add_argument('--include-details', action='store_true', help='Incluir detalles en exportación')
             
     args = parser.parse_args()
     
@@ -2073,30 +2090,27 @@ def main(config=None):
     elif config is None:
         config = {}
     
-    # Establecer variable global de modo interactivo
-    global INTERACTIVE_MODE
-    INTERACTIVE_MODE = args.interactive or config.get('interactive', False)
-    
     db_path = args.db_path or config.get('db_path')
     if not db_path: 
         print("Añade db_path al json o usa --db-path")
-        return 0, 0, 0, 0
+        return
 
     lastfm_user = args.lastfm_user or config.get('lastfm_user')
     if not lastfm_user: 
         print("Añade lastfm_user al json o usa --lastfm-user especificando tu usuario en lastfm")
-        return 0, 0, 0, 0
+        return
 
     lastfm_api_key = args.lastfm_api_key or config.get('lastfm_api_key')
     if not lastfm_api_key:
         print("Añade lastfm_api_key al json o usa --lastfm-api-key especificando tu api key en lastfm")
-        return 0, 0, 0, 0
+        return
 
     output_json = args.output_json or config.get("output_json", ".content/cache/scrobbles_lastfm.json")
     force_update = args.force_update or config.get('force_update', False)
-    verify_db = args.verify_db or config.get('verify_db', False)
-    update_metadata = args.update_metadata or config.get('update_metadata', False)
     interactive = args.interactive or config.get('interactive', False)
+
+    print(f"Modo force_update: {force_update}")
+    print(f"Modo interactive: {interactive}")
 
     # Verificar API key
     if not check_api_key(lastfm_api_key):
@@ -2104,84 +2118,112 @@ def main(config=None):
         print("Revisa tu API key y asegúrate de que el servicio de Last.fm esté disponible.")
         return 0, 0, 0, 0
 
-    # Crear la instancia del scrobbler
-    scrobbler = LastFMScrobbler(db_path, lastfm_user, lastfm_api_key)
-    scrobbler.interactive_mode = INTERACTIVE_MODE
+    # En la función main, antes de empezar el procesamiento normal:
+    print("\n=== PRUEBA DE API DE LAST.FM ===")
+    print("Realizando prueba directa de las API de Last.fm...")
+    test_artist = "The Beatles"  # Un artista que seguramente existe
+    test_album = "Abbey Road"
+    test_track = "Come Together"
 
-    # Realizar las operaciones solicitadas
-    if args.export_json:
-        print(f"Exportando scrobbles a {args.export_json}...")
-        export_limit = args.export_limit if args.export_limit else None
-        count = scrobbler.export_scrobbles_to_json(
-            args.export_json, 
-            limit=export_limit,
-            include_linked_info=args.include_details
-        )
-        print(f"Exportados {count} scrobbles a {args.export_json}")
-        return 0, 0, 0, 0
+    print(f"\nPrueba de artist.getInfo para '{test_artist}'")
+    test_artist_info = get_artist_info(test_artist, None, lastfm_api_key)
+    print(f"Resultado: {'Éxito' if test_artist_info else 'Fallo'}")
 
-    if verify_db:
-        print("Verificando integridad de la base de datos...")
-        corrections = scrobbler.verify_database_integrity()
-        print(f"Verificación completada: {corrections} correcciones realizadas")
+    print(f"\nPrueba de album.getInfo para '{test_album}' de '{test_artist}'")
+    test_album_info = get_album_info(test_album, test_artist, None, lastfm_api_key)
+    print(f"Resultado: {'Éxito' if test_album_info else 'Fallo'}")
 
-    if update_metadata:
-        print("Actualizando metadatos desde Last.fm...")
-        success, total = scrobbler.update_database_with_online_info()
-        print(f"Actualización de metadatos completada: {success} de {total} elementos actualizados")
+    print(f"\nPrueba de track.getInfo para '{test_track}' de '{test_artist}'")
+    test_track_info = get_track_info(test_track, test_artist, None, lastfm_api_key)
+    print(f"Resultado: {'Éxito' if test_track_info else 'Fallo'}")
 
-    # Actualizar scrobbles
-    processed = 0
-    linked = 0
-    unlinked = 0
-    newest_timestamp = 0
+    if not (test_artist_info and test_album_info and test_track_info):
+        print("\nALERTA: Al menos una de las pruebas ha fallado.")
+        print("Esto puede indicar problemas con la API key, conexión a Internet, o el servicio de Last.fm.")
+        if not interactive:
+            print("Continuando de todos modos, pero es posible que el procesamiento no funcione correctamente.")
+        else:
+            continuar = input("¿Deseas continuar de todos modos? (s/n): ").lower()
+            if continuar != 's':
+                return 0, 0, 0, 0
 
-    if force_update:
-        print("Modo force-update activado: obteniendo todos los scrobbles")
-        
+    print("\n=== FIN DE PRUEBA DE API ===\n")
+
+    # Conectar a la base de datos
+    conn = sqlite3.connect(db_path)
+    
     try:
-        # Esta es la línea clave - usar la clase LastFMScrobbler
-        processed, linked, unlinked, newest_timestamp = scrobbler.update_scrobbles(force_update, interactive)
+        # Configurar la base de datos
+        setup_database(conn)
         
-        # Si se solicitó guardar a JSON
-        if output_json and processed > 0:
-            # Asegurarse de que el directorio existe
-            output_dir = os.path.dirname(output_json)
-            if output_dir and not os.path.exists(output_dir):
-                os.makedirs(output_dir)
+        # Si force_update es True, eliminar todos los scrobbles existentes
+        if force_update:
+            confirm = True
+            if interactive:
+                response = input("¿Está seguro de que desea eliminar TODOS los scrobbles existentes? (s/n): ").lower()
+                confirm = response == 's'
                 
-            # Guardar los últimos scrobbles obtenidos
-            print(f"Guardando scrobbles en {output_json}")
-            limit = 1000  # Limitar a 1000 scrobbles por defecto
-            scrobbler.export_scrobbles_to_json(output_json, limit=limit)
-            print(f"Guardados hasta {limit} scrobbles recientes en {output_json}")
+            if confirm:
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM scrobbles")
+                cursor.execute("UPDATE lastfm_config SET last_timestamp = 0 WHERE id = 1")
+                conn.commit()
+                print("TODOS los scrobbles han sido eliminados. Se realizará una actualización completa.")
+        
+        # Obtener elementos existentes
+        existing_artists, existing_albums, existing_songs = get_existing_items(conn)
+        print(f"Elementos existentes: {len(existing_artists)} artistas, {len(existing_albums)} álbumes, {len(existing_songs)} canciones")
+        
+        # Obtener el último timestamp procesado
+        if force_update:
+            from_timestamp = 0
+            print("Obteniendo todos los scrobbles (esto puede tardar)")
+        else:
+            from_timestamp = get_last_timestamp(conn)
+            print(f"Obteniendo scrobbles desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
+
+        
+        # Obtener scrobbles
+        tracks = get_lastfm_scrobbles(lastfm_user, lastfm_api_key, from_timestamp)
+        print(f"Obtenidos {len(tracks)} scrobbles")
+        
+        # Guardar todos los scrobbles en JSON si se especificó
+        if output_json and tracks:
+            os.makedirs(os.path.dirname(output_json), exist_ok=True)
+            with open(output_json, 'w') as f:
+                json.dump(tracks, f, indent=2)
+            print(f"Guardados todos los scrobbles en {output_json}")
+        
+        # Procesar scrobbles
+        if tracks:
+            processed, linked, unlinked, newest_timestamp = process_scrobbles(
+                conn, tracks, existing_artists, existing_albums, existing_songs, 
+                lastfm_api_key, interactive
+            )
+            print(f"Procesados {processed} scrobbles: {linked} enlazados, {unlinked} no enlazados")
             
-    finally:
+            # Guardar el timestamp más reciente para la próxima ejecución
+            if newest_timestamp > 0:
+                save_last_timestamp(conn, newest_timestamp, lastfm_user)
+                print(f"Guardado último timestamp: {datetime.datetime.fromtimestamp(newest_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
+        else:
+            print("No se encontraron nuevos scrobbles para procesar")
+        
         # Mostrar estadísticas generales
-        stats = scrobbler.get_statistics()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM scrobbles")
+        total_scrobbles = cursor.fetchone()[0]
         
-        print("\n=== ESTADÍSTICAS GENERALES ===")
-        print(f"Total scrobbles: {stats['total_scrobbles']}")
-        print(f"Scrobbles enlazados: {stats['matched_scrobbles']} ({stats['match_percentage']:.1f}%)")
-        print(f"Total artistas: {stats['total_artists']}")
-        print(f"Total álbumes: {stats['total_albums']}")
-        print(f"Total canciones: {stats['total_songs']}")
+        cursor.execute("SELECT COUNT(*) FROM scrobbles WHERE song_id IS NOT NULL")
+        matched_scrobbles = cursor.fetchone()[0]
         
-        if stats['time_period']['days'] > 0:
-            time_str = ""
-            if stats['time_period']['years'] > 0:
-                time_str += f"{stats['time_period']['years']} años, "
-            if stats['time_period']['months'] > 0:
-                time_str += f"{stats['time_period']['months']} meses, "
-            time_str += f"{stats['time_period']['days_remainder']} días"
-            
-            print(f"Periodo cubierto: {time_str} ({stats['time_period']['start_date']} a {stats['time_period']['end_date']})")
-            print(f"Promedio: {stats['scrobbles_per_day']:.1f} scrobbles por día")
+        match_percentage = (matched_scrobbles/total_scrobbles*100) if total_scrobbles > 0 else 0
+        print(f"Estadísticas generales: {total_scrobbles} scrobbles totales, {matched_scrobbles} enlazados con canciones ({match_percentage:.1f}% de coincidencia)")
+    
+    finally:
+        conn.close()
         
-        # Desconectar
-        scrobbler.disconnect()
-        
-    return processed, linked, unlinked, newest_timestamp
+    return processed, linked, unlinked, newest_timestamp if 'processed' in locals() else (0, 0, 0, 0)
 
 if __name__ == "__main__":
     main()
