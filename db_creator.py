@@ -106,6 +106,12 @@ def main():
             # Cargar el script como módulo
             script_module = load_script_module(script_path)
 
+            if 'interactive' in filtered_config:
+                setattr(script_module, 'INTERACTIVE_MODE', filtered_config['interactive'])
+
+            if 'force_update' in filtered_config:
+                setattr(script_module, 'force_update', filtered_config['force_update'])
+
             # Llamar a la función main y pasarle la configuración directamente
             if hasattr(script_module, 'main'):
                 # Verificar si main acepta argumentos

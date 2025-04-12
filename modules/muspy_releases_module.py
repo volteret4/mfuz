@@ -13,6 +13,10 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPush
 from PyQt6.QtCore import pyqtSignal, Qt
 from PyQt6.QtGui import QColor, QTextDocument
 
+
+
+
+
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 
@@ -543,7 +547,7 @@ class MuspyArtistModule(BaseModule):
                 table = self.display_releases_table(future_releases)
                 
                 # Add a button to follow this artist
-                self.add_follow_button = QPushButton(f"Follow {artist_name}")
+                self.add_follow_button = QPushButton(f"Seguir a {artist_name} en Muspy")
                 self.add_follow_button.clicked.connect(self.follow_current_artist)
                 self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
             else:
@@ -560,11 +564,11 @@ class MuspyArtistModule(BaseModule):
             if success:
                 # Si estamos usando el widget de tabla desde el archivo UI
                 if hasattr(self, 'table_widget') and hasattr(self.table_widget, 'add_follow_button'):
-                    self.table_widget.add_follow_button.setText(f"Following {self.current_artist['name']}")
+                    self.table_widget.add_follow_button.setText(f"Siguiendo en Muspy a {self.current_artist['name']}")
                     self.table_widget.add_follow_button.setEnabled(False)
                 # Si estamos usando el fallback
                 elif hasattr(self, 'add_follow_button'):
-                    self.add_follow_button.setText(f"Following {self.current_artist['name']}")
+                    self.add_follow_button.setText(f"Siguiendo en Muspy a {self.current_artist['name']}")
                     self.add_follow_button.setEnabled(False)
         else:
             QMessageBox.warning(self, "Error", "No artist currently selected")
@@ -1102,7 +1106,7 @@ class MuspyArtistModule(BaseModule):
                 
                 # Configurar el botón de seguir artista si estamos viendo un artista específico
                 if hasattr(self, 'current_artist') and self.current_artist:
-                    table_widget.add_follow_button.setText(f"Follow {self.current_artist['name']}")
+                    table_widget.add_follow_button.setText(f"Seguir a  {self.current_artist['name']} en Muspy")
                     table_widget.add_follow_button.clicked.connect(self.follow_current_artist)
                 else:
                     table_widget.add_follow_button.setVisible(False)
@@ -1112,12 +1116,15 @@ class MuspyArtistModule(BaseModule):
                 
                 # Make the table sortable
                 table.setSortingEnabled(True)
+                table.sortItems(3, Qt.SortOrder.AscendingOrder)
+
                 
                 # Hide the text edit and add the table to the layout
                 self.results_text.hide()
                 # Insert the table widget
                 self.layout().insertWidget(self.layout().count() - 1, table_widget)
                 
+
                 # Store reference to table widget
                 self.table_widget = table_widget
                 return table
@@ -1157,7 +1164,7 @@ class MuspyArtistModule(BaseModule):
         
         # If we have a current artist, add a follow button
         if hasattr(self, 'current_artist') and self.current_artist:
-            self.add_follow_button = QPushButton(f"Follow {self.current_artist['name']}")
+            self.add_follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
             self.add_follow_button.clicked.connect(self.follow_current_artist)
             self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
         
@@ -1166,6 +1173,8 @@ class MuspyArtistModule(BaseModule):
         
         # Make the table sortable
         table.setSortingEnabled(True)
+        table.sortItems(3, Qt.SortOrder.AscendingOrder)
+
         
         # Hide the text edit and add the table to the layout
         self.results_text.hide()
