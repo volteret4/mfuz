@@ -906,7 +906,8 @@ def get_artist_from_musicbrainz_by_name(artist_name):
     
     if not artist_name:
         return None
-    album_name = str(album_name) if album_name else ""
+    
+    # Simply use artist_name directly, don't try to reference album_name
     artist_name = str(artist_name) if artist_name else ""
 
     # Verificar en caché primero
@@ -972,6 +973,10 @@ def get_album_from_musicbrainz_by_name(album_name, artist_name=None):
     
     if not album_name:
         return None
+    
+    # Proper string conversion to avoid errors
+    album_name = str(album_name) if album_name else ""
+    artist_name = str(artist_name) if artist_name else ""
     
     # Construir parámetros de búsqueda
     query = {'release': album_name, 'limit': 5}
@@ -1051,6 +1056,11 @@ def get_track_from_musicbrainz_by_name(track_name, artist_name=None, album_name=
     
     if not track_name:
         return None
+    
+    # Proper string conversion to avoid errors
+    track_name = str(track_name) if track_name else ""
+    artist_name = str(artist_name) if artist_name else ""
+    album_name = str(album_name) if album_name else ""
     
     # Construir parámetros de búsqueda
     query = {'recording': track_name, 'limit': 5}
@@ -1210,7 +1220,6 @@ def setup_database(conn):
     CREATE TABLE IF NOT EXISTS song_links (
         id INTEGER PRIMARY KEY,
         song_id INTEGER,
-        link_type TEXT,
         lastfm_url TEXT,
         FOREIGN KEY (song_id) REFERENCES songs(id)
     )
@@ -2207,6 +2216,153 @@ def update_song_in_db(conn, song_id, track_info):
     
     return False
 
+def ask_to_continue():
+    """Pregunta al usuario si desea continuar procesando"""
+    while True:
+        resp = input("\n¿Continuar procesando? (s/n/a para automático): ").lower()
+        if resp == 's':
+            return True, False
+        elif resp == 'n':
+            return False, False
+        elif resp == 'a':
+            return True, True
+    return False, False
+
+def search_related_elements(conn, scrobble_info):
+    """
+    Busca elementos relacionados en la base de datos cuando hay coincidencias parciales
+    
+    Args:
+        conn: Conexión a la base de datos
+        scrobble_info: Diccionario con información del scrobble
+        
+    Returns:
+        Diccionario con elementos relacionados
+    """
+    cursor = conn.cursor()
+    results = {
+        'related_songs': [],
+        'related_albums': [],
+        'related_artists': []
+    }
+    
+    artist_name = scrobble_info['artist_name']
+    album_name = scrobble_info['album_name']
+    track_name = scrobble_info['track_name']
+    
+    # Si coincide artista y álbum pero no canción, buscar todas las canciones de ese álbum
+    if scrobble_info['artist_match'] and scrobble_info['album_match'] and not scrobble_info['song_match']:
+        cursor.execute("""
+            SELECT s.id, s.title, s.lastfm_url 
+            FROM songs s
+            JOIN artists a ON LOWER(s.artist) = LOWER(a.name)
+            JOIN albums al ON LOWER(s.album) = LOWER(al.name) AND al.artist_id = a.id
+            WHERE LOWER(a.name) = LOWER(?) AND LOWER(al.name) = LOWER(?)
+            ORDER BY s.title
+        """, (artist_name, album_name))
+        
+        results['related_songs'] = cursor.fetchall()
+    
+    # Si coincide artista y canción pero no álbum, buscar álbumes que contengan esa canción
+    if scrobble_info['artist_match'] and scrobble_info['song_match'] and not scrobble_info['album_match'] and album_name:
+        cursor.execute("""
+            SELECT al.id, al.name, al.lastfm_url
+            FROM albums al
+            JOIN artists a ON al.artist_id = a.id
+            JOIN songs s ON LOWER(s.album) = LOWER(al.name) AND LOWER(s.artist) = LOWER(a.name)
+            WHERE LOWER(a.name) = LOWER(?) AND LOWER(s.title) = LOWER(?)
+            ORDER BY al.name
+        """, (artist_name, track_name))
+        
+        results['related_albums'] = cursor.fetchall()
+    
+    # Si coincide álbum y canción pero no artista, buscar artistas relacionados
+    if scrobble_info['album_match'] and scrobble_info['song_match'] and not scrobble_info['artist_match']:
+        cursor.execute("""
+            SELECT a.id, a.name, a.lastfm_url
+            FROM artists a
+            JOIN albums al ON al.artist_id = a.id
+            JOIN songs s ON LOWER(s.album) = LOWER(al.name) AND LOWER(s.artist) = LOWER(a.name)
+            WHERE LOWER(s.title) = LOWER(?) AND LOWER(al.name) = LOWER(?)
+            ORDER BY a.name
+        """, (track_name, album_name))
+        
+        results['related_artists'] = cursor.fetchall()
+    
+    return results
+
+def display_scrobble_info(scrobble_info, db_info, related_elements=None):
+    """
+    Muestra información detallada de un scrobble con coincidencias en la base de datos
+    """
+    artist_name = scrobble_info['artist_name']
+    album_name = scrobble_info['album_name']
+    track_name = scrobble_info['track_name']
+    scrobble_date = scrobble_info['scrobble_date']
+    lastfm_url = scrobble_info['lastfm_url']
+    
+    print("\n" + "="*80)
+    print(f"INFORMACIÓN DEL SCROBBLE")
+    print("="*80)
+    
+    # Información de la canción
+    print(f"Canción: {track_name}")
+    if db_info['song_id']:
+        print(f"  ID en base de datos: {db_info['song_id']}")
+        if db_info['song_lastfm_url']:
+            print(f"  Last.fm URL (DB): {db_info['song_lastfm_url']}")
+    print(f"  Last.fm URL (scrobble): {lastfm_url}")
+    
+    # Información del artista
+    print(f"Artista: {artist_name}")
+    if db_info['artist_id']:
+        print(f"  ID en base de datos: {db_info['artist_id']}")
+        if db_info['artist_lastfm_url']:
+            print(f"  Last.fm URL (DB): {db_info['artist_lastfm_url']}")
+    
+    # Información del álbum
+    if album_name:
+        print(f"Álbum: {album_name}")
+        if db_info['album_id']:
+            print(f"  ID en base de datos: {db_info['album_id']}")
+            if db_info['album_lastfm_url']:
+                print(f"  Last.fm URL (DB): {db_info['album_lastfm_url']}")
+    
+    # Fecha del scrobble
+    print(f"Fecha: {scrobble_date}")
+    
+    # Mostrar elementos relacionados si hay coincidencias parciales
+    if related_elements:
+        print("\n" + "-"*80)
+        print("ELEMENTOS RELACIONADOS EN BASE DE DATOS")
+        print("-"*80)
+        
+        # Mostrar canciones relacionadas
+        if related_elements['related_songs']:
+            print("\nCanciones en este álbum:")
+            for idx, (song_id, song_title, song_url) in enumerate(related_elements['related_songs']):
+                print(f"  [{idx+1}] {song_title} (ID: {song_id})")
+                if song_url:
+                    print(f"      URL: {song_url}")
+        
+        # Mostrar álbumes relacionados
+        if related_elements['related_albums']:
+            print("\nÁlbumes con esta canción:")
+            for idx, (album_id, album_name, album_url) in enumerate(related_elements['related_albums']):
+                print(f"  [{idx+1}] {album_name} (ID: {album_id})")
+                if album_url:
+                    print(f"      URL: {album_url}")
+        
+        # Mostrar artistas relacionados
+        if related_elements['related_artists']:
+            print("\nArtistas con esta canción/álbum:")
+            for idx, (artist_id, artist_name, artist_url) in enumerate(related_elements['related_artists']):
+                print(f"  [{idx+1}] {artist_name} (ID: {artist_id})")
+                if artist_url:
+                    print(f"      URL: {artist_url}")
+    
+    print("-"*80)
+
 def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_songs, lastfm_api_key, interactive=False, callback=None):
     """Procesa los scrobbles y actualiza la base de datos con los nuevos scrobbles,
     priorizando datos de la base de datos y MusicBrainz"""
@@ -2216,6 +2372,7 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
     unlinked_count = 0
     newest_timestamp = 0
     
+    # Variables para estadísticas
     new_artists_attempts = 0
     new_artists_success = 0
     new_albums_attempts = 0
@@ -2241,197 +2398,364 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         'db_errors': 0
     }
     
+    # Clasificar scrobbles
+    matched_scrobbles = []
+    new_scrobbles = []
+    partial_matches = []
+    
+    print("\nAnalizando scrobbles para clasificación...")
     for track_idx, track in enumerate(tracks):
-        # Existing extraction code...
+        # Extraer información básica
+        artist_name = track['artist']['#text']
+        album_name = track['album']['#text'] if track['album']['#text'] else None
+        track_name = track['name']
+        
+        # Verificar coincidencias en base de datos
+        artist_match = False
+        album_match = False
+        song_match = False
+        
+        # Buscar artista
+        artist_info = existing_artists.get(artist_name.lower())
+        if artist_info:
+            artist_match = True
+        
+        # Buscar álbum si hay artista
+        if artist_match and album_name:
+            album_key = (album_name.lower(), artist_name.lower())
+            album_info = existing_albums.get(album_key)
+            if album_info:
+                album_match = True
+        
+        # Buscar canción
+        song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
+        song_info = existing_songs.get(song_key)
+        if song_info:
+            song_match = True
+        
+        # Clasificar el scrobble
+        track_info = {
+            'track': track,
+            'index': track_idx,
+            'artist_match': artist_match,
+            'album_match': album_match,
+            'song_match': song_match
+        }
+        
+        if song_match:
+            matched_scrobbles.append(track_info)
+        elif not artist_match and not album_match:
+            new_scrobbles.append(track_info)
+        else:
+            partial_matches.append(track_info)
+    
+    # Mostrar resumen de la clasificación
+    print("\n" + "="*80)
+    print("RESUMEN DE SCROBBLES A PROCESAR")
+    print("="*80)
+    print(f"Total de scrobbles: {len(tracks)}")
+    print(f"Scrobbles con coincidencia completa (canción): {len(matched_scrobbles)}")
+    print(f"Scrobbles con coincidencia parcial (artista o álbum): {len(partial_matches)}")
+    print(f"Scrobbles sin coincidencias en base de datos: {len(new_scrobbles)}")
+    print("="*80)
+    
+    if interactive:
+        print("\nElija por dónde empezar el procesamiento:")
+        print("1. Scrobbles con coincidencia completa")
+        print("2. Scrobbles con coincidencia parcial")
+        print("3. Scrobbles sin coincidencias")
+        print("4. Todos en orden original")
+        
+        choice = input("\nIngrese su elección (1-4): ").strip()
+        
+        if choice == '1':
+            process_order = matched_scrobbles + partial_matches + new_scrobbles
+            print(f"\nProcesando primero {len(matched_scrobbles)} scrobbles con coincidencia completa...")
+        elif choice == '2':
+            process_order = partial_matches + new_scrobbles + matched_scrobbles
+            print(f"\nProcesando primero {len(partial_matches)} scrobbles con coincidencia parcial...")
+        elif choice == '3':
+            process_order = new_scrobbles + partial_matches + matched_scrobbles
+            print(f"\nProcesando primero {len(new_scrobbles)} scrobbles sin coincidencias...")
+        else:
+            # Usar el orden original
+            process_order = [{'track': track, 'index': idx} for idx, track in enumerate(tracks)]
+            print(f"\nProcesando todos los {len(tracks)} scrobbles en orden original...")
+    else:
+        # Modo no interactivo, usar orden original
+        process_order = [{'track': track, 'index': idx} for idx, track in enumerate(tracks)]
+    
+    # Indicador de modo automático
+    auto_mode = not interactive
+    
+    # Procesar cada scrobble
+    for idx, scrobble_info in enumerate(process_order):
+        track = scrobble_info['track']
+        
+        # Extraer información del track
         artist_name = track['artist']['#text']
         album_name = track['album']['#text'] if track['album']['#text'] else None
         track_name = track['name']
         timestamp = int(track['date']['uts'])
         scrobble_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        lastfm_url = track['url']  # URL de Last.fm para esta canción
+        lastfm_url = track['url']
         
-        # Extract Last.fm URLs for artist and album if available
-        artist_lastfm_url = track['artist'].get('url', '')
-        album_lastfm_url = track['album'].get('url', '') if track['album']['#text'] else ''
-        # Si estamos en modo interactivo, preguntar si procesar este scrobble
-        if interactive:
-            print("-"*60)
-            respuesta = input("¿Procesar este scrobble? (s/n): ").lower()
-            if respuesta != 's':
-                print("Saltando este scrobble.")
-                continue
+        artist_mbid = track['artist'].get('mbid', '')
         
         # Actualizar el timestamp más reciente
         newest_timestamp = max(newest_timestamp, timestamp)
         
-        # Verificar si el scrobble ya existe en la base de datos para evitar duplicados
+        # Verificar si el scrobble ya existe
         cursor.execute("SELECT id FROM scrobbles WHERE timestamp = ? AND artist_name = ? AND track_name = ?", 
-                      (timestamp, artist_name, track_name))
+                     (timestamp, artist_name, track_name))
         if cursor.fetchone():
-            print(f"Scrobble duplicado, saltando")
-            continue  # El scrobble ya existe, continuamos con el siguiente
+            if not auto_mode:
+                print(f"Scrobble duplicado, saltando: {track_name} - {artist_name}")
+            continue
         
-        # ARTISTA: Obtener o crear artista
-        artist_mbid = track['artist'].get('mbid', '')
+        # Obtener información de coincidencias para mostrar
         artist_id = None
-        if artist_lastfm_url:
-            artist_id, artist_info = lookup_artist_by_lastfm_url(conn, artist_lastfm_url)
-            if artist_id:
-                print(f"Artista encontrado por URL de Last.fm: ID {artist_id}")
-
-        # Convertir claves a minúsculas en los diccionarios
-        existing_artists_lower = CaseInsensitiveDict()
-        for key, value in existing_artists.items():
-            existing_artists_lower[key] = value
-        
-        existing_albums_lower = CaseInsensitiveDict()
-        for key, value in existing_albums.items():
-            existing_albums_lower[key] = value
-        
-        existing_songs_lower = CaseInsensitiveDict()
-        for key, value in existing_songs.items():
-            existing_songs_lower[key] = value
-            
-        # Reemplazar los diccionarios originales
-        existing_artists = existing_artists_lower
-        existing_albums = existing_albums_lower
-        existing_songs = existing_songs_lower
-        
-        new_artists = CaseInsensitiveDict()
-        new_albums = CaseInsensitiveDict()
-        new_songs = CaseInsensitiveDict()
-
-
-        # Primero verificar en caché de nuevos artistas
-        if artist_name.lower() in new_artists:
-            artist_id = new_artists[artist_name.lower()]
-            print(f"Artista encontrado en nuevos artistas procesados: ID {artist_id}")
-        else:
-            # Luego verificar en artistas existentes
-            artist_info = existing_artists.get(artist_name.lower())
-            if artist_info:
-                if isinstance(artist_info, dict):
-                    artist_id = artist_info['id']
-                else:
-                    artist_id = artist_info
-                print(f"Artista encontrado en caché de artistas existentes: ID {artist_id}")
-            else:
-                # Si no está en caché, buscar o crear
-                new_artists_attempts += 1
-                artist_id = get_or_update_artist(conn, artist_name, artist_mbid, interactive)
-                
-                if artist_id:
-                    new_artists[artist_name.lower()] = artist_id
-                    existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'musicbrainz'}
-                    new_artists_success += 1
-                else:
-                    errors['artist_not_found'] += 1
-        
-        # ÁLBUM: Procesar solo si tenemos artista y nombre de álbum
         album_id = None
-        if album_name and artist_id:
-            album_mbid = track['album'].get('mbid', '')
-            
-            # Primero verificar en caché de nuevos álbumes
-            album_key = (album_name.lower(), artist_name.lower())
-            if album_key in new_albums:
-                album_id = new_albums[album_key]
-                print(f"Álbum encontrado en nuevos álbumes procesados: ID {album_id}")
-            else:
-                # Luego verificar en álbumes existentes
-                album_info = existing_albums.get(album_key)
-                if album_info:
-                    if isinstance(album_info, tuple):
-                        album_id = album_info[0]
-                    elif isinstance(album_info, dict):
-                        album_id = album_info['id']
-                    else:
-                        album_id = album_info
-                    print(f"Álbum encontrado en caché de álbumes existentes: ID {album_id}")
-                else:
-                    # Si no está en caché, buscar o crear
-                    new_albums_attempts += 1
-                    album_id = get_or_update_album(conn, album_name, artist_name, artist_id, album_mbid, interactive)
-                    
-                    if album_id:
-                        new_albums[album_key] = album_id
-                        existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'musicbrainz'}
-                        new_albums_success += 1
-                    else:
-                        errors['album_not_found'] += 1
-        
-        # CANCIÓN: Procesar si tenemos al menos el artista
         song_id = None
-        if artist_id:
-            track_mbid = track.get('mbid', '')
-            
-            # Primero verificar en caché de nuevas canciones
-            song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
-            if song_key in new_songs:
-                song_id = new_songs[song_key]
-                print(f"Canción encontrada en nuevas canciones procesadas: ID {song_id}")
+        artist_lastfm_url = None
+        album_lastfm_url = None
+        song_lastfm_url = None
+        
+        # Información del artista
+        artist_info = existing_artists.get(artist_name.lower())
+        if artist_info:
+            if isinstance(artist_info, dict):
+                artist_id = artist_info['id']
+                # Obtener URL si está disponible
+                cursor.execute("SELECT lastfm_url FROM artists WHERE id = ?", (artist_id,))
+                result = cursor.fetchone()
+                if result:
+                    artist_lastfm_url = result[0]
             else:
-                # Luego verificar en canciones existentes
-                song_info = existing_songs.get(song_key)
-                if song_info:
-                    song_id = song_info['id'] if isinstance(song_info, dict) else song_info
-                    print(f"Canción encontrada en caché de canciones existentes: ID {song_id}")
+                artist_id = artist_info
+        
+        # Información del álbum
+        if album_name:
+            album_key = (album_name.lower(), artist_name.lower())
+            album_info = existing_albums.get(album_key)
+            if album_info:
+                if isinstance(album_info, dict):
+                    album_id = album_info['id']
+                elif isinstance(album_info, tuple):
+                    album_id = album_info[0]
                 else:
-                    # Si no está en caché, buscar o crear
-                    new_songs_attempts += 1
-                    song_id = get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, track_mbid, interactive)
-                    
-                    if song_id:
-                        new_songs[song_key] = song_id
-                        existing_songs[song_key] = {'id': song_id, 'origen': 'musicbrainz'}
-                        new_songs_success += 1
-                    else:
-                        errors['song_not_found'] += 1
+                    album_id = album_info
+                
+                # Obtener URL si está disponible
+                cursor.execute("SELECT lastfm_url FROM albums WHERE id = ?", (album_id,))
+                result = cursor.fetchone()
+                if result:
+                    album_lastfm_url = result[0]
         
-        # Si estamos en modo interactivo, preguntar si insertar este scrobble
-        add_scrobble = True
-        if interactive:
-            print("-"*60)
-            print("INFORMACIÓN DEL SCROBBLE A INSERTAR:")
-            print("-"*60)
-            print(f"Canción: {track_name}")
-            print(f"Artista: {artist_name}")
-            print(f"Álbum: {album_name}")
-            print(f"Fecha: {scrobble_date}")
-            print(f"URL: {lastfm_url}")
-            print(f"Canción ID: {song_id}")
-            print(f"Álbum ID: {album_id}")
-            print(f"Artista ID: {artist_id}")
-            print("-"*60)
+        # Información de la canción
+        song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
+        song_info = existing_songs.get(song_key)
+        if song_info:
+            if isinstance(song_info, dict):
+                song_id = song_info['id']
+            else:
+                song_id = song_info
+                
+            # Obtener URL si está disponible
+            cursor.execute("""
+                SELECT sl.lastfm_url 
+                FROM song_links sl 
+                WHERE sl.song_id = ? 
+            """, (song_id,))
+            result = cursor.fetchone()
+            if result:
+                song_lastfm_url = result[0]
+        
+        # Determinar coincidencias para este scrobble específico
+        artist_match = artist_id is not None
+        album_match = album_id is not None
+        song_match = song_id is not None
+        
+        # Preparar información para mostrar
+        scrobble_display_info = {
+            'artist_name': artist_name,
+            'album_name': album_name,
+            'track_name': track_name,
+            'scrobble_date': scrobble_date,
+            'lastfm_url': lastfm_url,
+            'artist_match': artist_match,
+            'album_match': album_match,
+            'song_match': song_match
+        }
+        
+        db_display_info = {
+            'artist_id': artist_id,
+            'album_id': album_id,
+            'song_id': song_id,
+            'artist_lastfm_url': artist_lastfm_url,
+            'album_lastfm_url': album_lastfm_url,
+            'song_lastfm_url': song_lastfm_url
+        }
+        
+        # En modo interactivo, mostrar información y preguntar si procesar
+        process_this_scrobble = True
+        
+        if interactive and not auto_mode:
+            # Buscar elementos relacionados si hay coincidencias parciales
+            related_elements = None
+            if (artist_match and album_match and not song_match) or \
+               (artist_match and song_match and not album_match) or \
+               (album_match and song_match and not artist_match):
+                related_elements = search_related_elements(conn, scrobble_display_info)
             
-            respuesta = input("¿Insertar este scrobble en la base de datos? (s/n): ").lower()
-            add_scrobble = respuesta == 's'
+            # Mostrar información detallada del scrobble
+            display_scrobble_info(scrobble_display_info, db_display_info, related_elements)
+            
+            # Si hay elementos relacionados, permitir seleccionar
+            selected_song_id = song_id
+            selected_album_id = album_id
+            selected_artist_id = artist_id
+            
+            if related_elements:
+                # Preguntar por canciones relacionadas
+                if related_elements['related_songs'] and not song_match:
+                    print("\nSeleccione una canción de la lista (0 para ninguna):")
+                    choice = input("Número de canción: ").strip()
+                    try:
+                        choice_idx = int(choice) - 1
+                        if choice_idx >= 0 and choice_idx < len(related_elements['related_songs']):
+                            selected_song_id = related_elements['related_songs'][choice_idx][0]
+                            print(f"Canción seleccionada con ID: {selected_song_id}")
+                    except ValueError:
+                        pass
+                
+                # Preguntar por álbumes relacionados
+                if related_elements['related_albums'] and not album_match:
+                    print("\nSeleccione un álbum de la lista (0 para ninguno):")
+                    choice = input("Número de álbum: ").strip()
+                    try:
+                        choice_idx = int(choice) - 1
+                        if choice_idx >= 0 and choice_idx < len(related_elements['related_albums']):
+                            selected_album_id = related_elements['related_albums'][choice_idx][0]
+                            print(f"Álbum seleccionado con ID: {selected_album_id}")
+                    except ValueError:
+                        pass
+                
+                # Preguntar por artistas relacionados
+                if related_elements['related_artists'] and not artist_match:
+                    print("\nSeleccione un artista de la lista (0 para ninguno):")
+                    choice = input("Número de artista: ").strip()
+                    try:
+                        choice_idx = int(choice) - 1
+                        if choice_idx >= 0 and choice_idx < len(related_elements['related_artists']):
+                            selected_artist_id = related_elements['related_artists'][choice_idx][0]
+                            print(f"Artista seleccionado con ID: {selected_artist_id}")
+                    except ValueError:
+                        pass
+            
+            # Preguntar si procesar este scrobble
+            respuesta = input("\n¿Procesar este scrobble? (s/n/q para salir/a para modo automático): ").lower()
+            if respuesta == 'q':
+                print("Interrumpiendo procesamiento por solicitud del usuario.")
+                break
+            elif respuesta == 'a':
+                auto_mode = True
+                print("Cambiando a modo automático para el resto del procesamiento.")
+            elif respuesta != 's':
+                print("Saltando este scrobble.")
+                process_this_scrobble = False
+            
+            # Actualizar IDs con las selecciones del usuario
+            if process_this_scrobble:
+                artist_id = selected_artist_id
+                album_id = selected_album_id
+                song_id = selected_song_id
         
-        if add_scrobble:
-            try:
-                # Insertar el scrobble en la tabla
-                cursor.execute("""
-                    INSERT INTO scrobbles 
-                    (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                """, (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id))
-                
-                processed_count += 1
-                
-                # Contabilizar si se pudo enlazar con la base de datos
-                if song_id:
-                    linked_count += 1
+        # Si no se va a procesar, continuar con el siguiente
+        if not process_this_scrobble:
+            continue
+        
+        # Si no tenemos artista en la base de datos, intentar encontrarlo o crearlo
+        if artist_id is None:
+            new_artists_attempts += 1
+            artist_id = get_or_update_artist(conn, artist_name, artist_mbid, interactive and not auto_mode)
+            
+            if artist_id:
+                new_artists[artist_name.lower()] = artist_id
+                existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'musicbrainz'}
+                new_artists_success += 1
+            else:
+                errors['artist_not_found'] += 1
+        
+        # Si no tenemos álbum en la base de datos, intentar encontrarlo o crearlo
+        if album_name and artist_id and album_id is None:
+            album_mbid = track['album'].get('mbid', '')
+            new_albums_attempts += 1
+            album_id = get_or_update_album(conn, album_name, artist_name, artist_id, album_mbid, interactive and not auto_mode)
+            
+            if album_id:
+                album_key = (album_name.lower(), artist_name.lower())
+                new_albums[album_key] = album_id
+                existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'musicbrainz'}
+                new_albums_success += 1
+            else:
+                errors['album_not_found'] += 1
+        
+        # Si no tenemos canción en la base de datos, intentar encontrarla o crearla
+        if artist_id and song_id is None:
+            track_mbid = track.get('mbid', '')
+            new_songs_attempts += 1
+            song_id = get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, track_mbid, interactive and not auto_mode)
+            
+            if song_id:
+                song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
+                new_songs[song_key] = song_id
+                existing_songs[song_key] = {'id': song_id, 'origen': 'musicbrainz'}
+                new_songs_success += 1
+            else:
+                errors['song_not_found'] += 1
+        
+        # Insertar el scrobble
+        try:
+            cursor.execute("""
+                INSERT INTO scrobbles 
+                (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (track_name, album_name, artist_name, timestamp, scrobble_date, lastfm_url, song_id, album_id, artist_id))
+            
+            processed_count += 1
+            
+            # Contabilizar si se pudo enlazar con la base de datos
+            if song_id:
+                linked_count += 1
+                if not auto_mode:
                     print(f"Scrobble enlazado correctamente con song_id: {song_id}")
-                else:
-                    unlinked_count += 1
+            else:
+                unlinked_count += 1
+                if not auto_mode:
                     print(f"Scrobble guardado pero sin enlazar a una canción")
-            
-            except sqlite3.Error as e:
-                print(f"Error al insertar scrobble en la base de datos: {e}")
-                errors['db_errors'] += 1
-        else:
-            print("Inserción de scrobble cancelada por el usuario.")
+                    
+            # Commit periódico para guardar avances
+            if processed_count % 10 == 0:
+                conn.commit()
+                if not auto_mode:
+                    print(f"Progreso guardado: {processed_count} scrobbles procesados hasta ahora.")
+        
+        except sqlite3.Error as e:
+            print(f"Error al insertar scrobble en la base de datos: {e}")
+            errors['db_errors'] += 1
+        
+        # Cada 10 scrobbles, preguntar si continuar o cambiar a modo automático
+        if interactive and not auto_mode and (idx + 1) % 10 == 0:
+            continue_processing, switch_to_auto = ask_to_continue()
+            if not continue_processing:
+                print("Procesamiento interrumpido por el usuario.")
+                break
+            if switch_to_auto:
+                auto_mode = True
+                print("Cambiando a modo automático para el resto del procesamiento.")
     
+    # Commit final para asegurar que todo quede guardado
     conn.commit()
     
     # Resumen detallado
@@ -2454,6 +2778,141 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
     
     return processed_count, linked_count, unlinked_count, newest_timestamp
 
+
+def search_related_elements(conn, scrobble_info):
+    """
+    Busca elementos relacionados en la base de datos cuando hay coincidencias parciales
+    
+    Args:
+        conn: Conexión a la base de datos
+        scrobble_info: Diccionario con información del scrobble
+        
+    Returns:
+        Diccionario con elementos relacionados
+    """
+    cursor = conn.cursor()
+    results = {
+        'related_songs': [],
+        'related_albums': [],
+        'related_artists': []
+    }
+    
+    artist_name = scrobble_info['artist_name']
+    album_name = scrobble_info['album_name']
+    track_name = scrobble_info['track_name']
+    
+    # Si coincide artista y álbum pero no canción, buscar todas las canciones de ese álbum
+    if scrobble_info['artist_match'] and scrobble_info['album_match'] and not scrobble_info['song_match']:
+        cursor.execute("""
+            SELECT s.id, s.title, s.lastfm_url 
+            FROM songs s
+            JOIN artists a ON LOWER(s.artist) = LOWER(a.name)
+            JOIN albums al ON LOWER(s.album) = LOWER(al.name) AND al.artist_id = a.id
+            WHERE LOWER(a.name) = LOWER(?) AND LOWER(al.name) = LOWER(?)
+            ORDER BY s.title
+        """, (artist_name, album_name))
+        
+        results['related_songs'] = cursor.fetchall()
+    
+    # Si coincide artista y canción pero no álbum, buscar álbumes que contengan esa canción
+    if scrobble_info['artist_match'] and scrobble_info['song_match'] and not scrobble_info['album_match'] and album_name:
+        cursor.execute("""
+            SELECT al.id, al.name, al.lastfm_url
+            FROM albums al
+            JOIN artists a ON al.artist_id = a.id
+            JOIN songs s ON LOWER(s.album) = LOWER(al.name) AND LOWER(s.artist) = LOWER(a.name)
+            WHERE LOWER(a.name) = LOWER(?) AND LOWER(s.title) = LOWER(?)
+            ORDER BY al.name
+        """, (artist_name, track_name))
+        
+        results['related_albums'] = cursor.fetchall()
+    
+    # Si coincide álbum y canción pero no artista, buscar artistas relacionados
+    if scrobble_info['album_match'] and scrobble_info['song_match'] and not scrobble_info['artist_match']:
+        cursor.execute("""
+            SELECT a.id, a.name, a.lastfm_url
+            FROM artists a
+            JOIN albums al ON al.artist_id = a.id
+            JOIN songs s ON LOWER(s.album) = LOWER(al.name) AND LOWER(s.artist) = LOWER(a.name)
+            WHERE LOWER(s.title) = LOWER(?) AND LOWER(al.name) = LOWER(?)
+            ORDER BY a.name
+        """, (track_name, album_name))
+        
+        results['related_artists'] = cursor.fetchall()
+    
+    return results
+
+def display_scrobble_info(scrobble_info, db_info, related_elements=None):
+    """
+    Muestra información detallada de un scrobble con coincidencias en la base de datos
+    """
+    artist_name = scrobble_info['artist_name']
+    album_name = scrobble_info['album_name']
+    track_name = scrobble_info['track_name']
+    scrobble_date = scrobble_info['scrobble_date']
+    lastfm_url = scrobble_info['lastfm_url']
+    
+    print("\n" + "="*80)
+    print(f"INFORMACIÓN DEL SCROBBLE")
+    print("="*80)
+    
+    # Información de la canción
+    print(f"Canción: {track_name}")
+    if db_info['song_id']:
+        print(f"  ID en base de datos: {db_info['song_id']}")
+        if db_info['song_lastfm_url']:
+            print(f"  Last.fm URL (DB): {db_info['song_lastfm_url']}")
+    print(f"  Last.fm URL (scrobble): {lastfm_url}")
+    
+    # Información del artista
+    print(f"Artista: {artist_name}")
+    if db_info['artist_id']:
+        print(f"  ID en base de datos: {db_info['artist_id']}")
+        if db_info['artist_lastfm_url']:
+            print(f"  Last.fm URL (DB): {db_info['artist_lastfm_url']}")
+    
+    # Información del álbum
+    if album_name:
+        print(f"Álbum: {album_name}")
+        if db_info['album_id']:
+            print(f"  ID en base de datos: {db_info['album_id']}")
+            if db_info['album_lastfm_url']:
+                print(f"  Last.fm URL (DB): {db_info['album_lastfm_url']}")
+    
+    # Fecha del scrobble
+    print(f"Fecha: {scrobble_date}")
+    
+    # Mostrar elementos relacionados si hay coincidencias parciales
+    if related_elements:
+        print("\n" + "-"*80)
+        print("ELEMENTOS RELACIONADOS EN BASE DE DATOS")
+        print("-"*80)
+        
+        # Mostrar canciones relacionadas
+        if related_elements['related_songs']:
+            print("\nCanciones en este álbum:")
+            for idx, (song_id, song_title, song_url) in enumerate(related_elements['related_songs']):
+                print(f"  [{idx+1}] {song_title} (ID: {song_id})")
+                if song_url:
+                    print(f"      URL: {song_url}")
+        
+        # Mostrar álbumes relacionados
+        if related_elements['related_albums']:
+            print("\nÁlbumes con esta canción:")
+            for idx, (album_id, album_name, album_url) in enumerate(related_elements['related_albums']):
+                print(f"  [{idx+1}] {album_name} (ID: {album_id})")
+                if album_url:
+                    print(f"      URL: {album_url}")
+        
+        # Mostrar artistas relacionados
+        if related_elements['related_artists']:
+            print("\nArtistas con esta canción/álbum:")
+            for idx, (artist_id, artist_name, artist_url) in enumerate(related_elements['related_artists']):
+                print(f"  [{idx+1}] {artist_name} (ID: {artist_id})")
+                if artist_url:
+                    print(f"      URL: {artist_url}")
+    
+    print("-"*80)
 
 
 def get_tracks_from_lastfm_album(album_lastfm_url, lastfm_api_key):
@@ -2722,19 +3181,19 @@ def update_song_links_from_albums(conn, lastfm_api_key, limit=50, progress_callb
                 # Verificar si ya existe un enlace para esta canción
                 cursor.execute("""
                 SELECT id FROM song_links
-                WHERE song_id = ? AND link_type = 'lastfm'
+                WHERE song_id = ? 
                 """, (song_id,))
                 
                 if cursor.fetchone():
                     # Actualizar el enlace existente
                     cursor.execute("""
                     UPDATE song_links SET lastfm_url = ?
-                    WHERE song_id = ? AND link_type = 'lastfm'
+                    WHERE song_id = ? 
                     """, (track['lastfm_url'], song_id))
                 else:
                     # Crear un nuevo enlace
                     cursor.execute("""
-                    INSERT INTO song_links (song_id, link_type, lastfm_url)
+                    INSERT INTO song_links (song_id, lastfm_url)
                     VALUES (?, 'lastfm', ?)
                     """, (song_id, track['lastfm_url']))
                 
@@ -2773,7 +3232,7 @@ def lookup_song_by_lastfm_url(conn, lastfm_url):
     SELECT sl.song_id, s.title, s.artist, s.album, s.mbid, s.origen
     FROM song_links sl
     JOIN songs s ON sl.song_id = s.id
-    WHERE sl.lastfm_url = ? AND sl.link_type = 'lastfm'
+    WHERE sl.lastfm_url = ? 
     """, (lastfm_url,))
     
     result = cursor.fetchone()
@@ -2854,7 +3313,7 @@ def lookup_artist_by_lastfm_url(conn, lastfm_url):
             'id': result[0],
             'mbid': result[1],
             'name': result[2],
-            'origen': result[3]
+            'origen': "online"
         }
     
     return None, None
@@ -3381,7 +3840,7 @@ class LastFMScrobbler:
                     'tags': ','.join([tag['name'] for tag in artist_info.get('tags', {}).get('tag', [])]) if 'tags' in artist_info and 'tag' in artist_info['tags'] else '',
                     'bio': artist_info.get('bio', {}).get('content', '') if 'bio' in artist_info else '',
                     'lastfm_url': artist_info.get('url', ''),
-                    'origen': 'online (no guardado)'
+                    'origen': 'online'
                 }
             return None
         
@@ -3392,7 +3851,7 @@ class LastFMScrobbler:
             'tags': result[3],
             'bio': result[4],
             'lastfm_url': result[5],
-            'origen': result[6]
+            'origen': "online"
         }
 
     def get_album_info_by_name(self, album_name, artist_name):
@@ -3438,7 +3897,7 @@ class LastFMScrobbler:
                     'lastfm_url': album_info.get('url', ''),
                     'mbid': album_info.get('mbid', ''),
                     'total_tracks': total_tracks,
-                    'origen': 'online (no guardado)',
+                    'origen': 'online',
                     'artist_id': None,
                     'artist_name': artist_name
                 }
@@ -3451,7 +3910,7 @@ class LastFMScrobbler:
             'lastfm_url': result[3],
             'mbid': result[4],
             'total_tracks': result[5],
-            'origen': result[6],
+            'origen': "online",
             'artist_id': result[7],
             'artist_name': result[8]
         }
