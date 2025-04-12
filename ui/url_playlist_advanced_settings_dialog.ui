@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
-    <height>938</height>
+    <width>1179</width>
+    <height>952</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -80,7 +80,7 @@ QHeaderView::section {
 	font-weight: bold;
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_12">
    <property name="spacing">
     <number>16</number>
    </property>
@@ -109,417 +109,751 @@ QHeaderView::section {
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QGroupBox" name="num_servicios">
-        <property name="title">
-         <string/>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="num_servicios_label">
-           <property name="text">
-            <string>Número de resultados por servicio:</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="num_servicios_spinBox">
-           <property name="minimum">
-            <number>5</number>
-           </property>
-           <property name="maximum">
-            <number>50</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>1159</width>
+           <height>897</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QWidget" name="widget_4" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_11">
+             <item>
+              <widget class="QGroupBox" name="num_servicios">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="num_servicios_label">
+                  <property name="text">
+                   <string>Número de resultados por servicio:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="num_servicios_spinBox">
+                  <property name="minimum">
+                   <number>5</number>
+                  </property>
+                  <property name="maximum">
+                   <number>50</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="tipo_group">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_2">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Elemento a buscar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="tipo_combo">
+                  <item>
+                   <property name="text">
+                    <string>Artista</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Álbum</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Canciones</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Todo</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="servicios_en_todos">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QFrame" name="frame_3">
+                  <property name="frameShape">
+                   <enum>QFrame::Shape::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Shadow::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <widget class="QLabel" name="serv_todos_label">
+                     <property name="text">
+                      <string>Señala qué servicios deseas incluir cuando buscas en &quot;Todos&quot;</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame">
+                  <property name="frameShape">
+                   <enum>QFrame::Shape::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Shadow::Raised</enum>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <item>
+                    <widget class="QGroupBox" name="servicios_musica">
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_6">
+                      <item>
+                       <widget class="QCheckBox" name="lastfm_check">
+                        <property name="text">
+                         <string>l&amp;astfm</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="bandcamp_check">
+                        <property name="text">
+                         <string>&amp;bancamp</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="soundcloud_check">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="text">
+                         <string>soun&amp;cloud</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="youtube_check">
+                        <property name="text">
+                         <string>&amp;youtube</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="spotify_check">
+                        <property name="text">
+                         <string>sp&amp;otify</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QGroupBox" name="servicios_info">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="title">
+                      <string/>
+                     </property>
+                     <layout class="QVBoxLayout" name="verticalLayout_3">
+                      <item>
+                       <widget class="QCheckBox" name="wikipedia_check">
+                        <property name="text">
+                         <string>&amp;Wikipedia</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="discogs_check">
+                        <property name="text">
+                         <string>&amp;Discogs</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QCheckBox" name="checkBox">
+                        <property name="text">
+                         <string>&amp;MusicBrainz</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="apariencia_playlists">
+               <property name="title">
+                <string/>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QFrame" name="radio_buttons">
+                  <property name="frameShape">
+                   <enum>QFrame::Shape::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Shadow::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_7">
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="text">
+                      <string>Apariencia de playlists</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="pl_unidas">
+                     <property name="text">
+                      <string>Listas de reproducción &amp;unidas</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="pl_separadas">
+                     <property name="text">
+                      <string>Listas de reproducción por &amp;separado</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="check_boxes">
+                  <property name="frameShape">
+                   <enum>QFrame::Shape::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Shadow::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="text">
+                      <string>Listas de reproducción visibles</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="blogs_checkbox">
+                     <property name="text">
+                      <string>Blo&amp;gs</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="locale_checkbox">
+                     <property name="text">
+                      <string>&amp;Locales</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="sp_checkbox">
+                     <property name="text">
+                      <string>&amp;Spotify</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QCheckBox" name="lastfm_checkbox">
+                     <property name="text">
+                      <string>&amp;Lastfm Scrobbles</string>
+                     </property>
+                     <property name="icon">
+                      <iconset resource="../images.qrc">
+                       <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="rss">
+               <property name="title">
+                <string>Categorias aceptadas en el RSS</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QWidget" name="widget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_6">
+                   <item>
+                    <widget class="QWidget" name="agents" native="true">
+                     <layout class="QVBoxLayout" name="verticalLayout_9">
+                      <item>
+                       <widget class="QRadioButton" name="lastfm_agent">
+                        <property name="text">
+                         <string>Lastfm</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QRadioButton" name="listenbrainz_agent">
+                        <property name="text">
+                         <string>Listenbrainz</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QWidget" name="mostrar_scrobbles" native="true">
+                     <layout class="QVBoxLayout" name="verticalLayout_10">
+                      <item>
+                       <widget class="QRadioButton" name="scrobbles_reproducciones">
+                        <property name="text">
+                         <string>Mostrar Scrobbles por &amp;reproducciones (únicos)</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QRadioButton" name="scrobbles_fecha">
+                        <property name="text">
+                         <string>Mostrar scrobbles por &amp;fecha</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="usuario_widget" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_10">
+                   <item>
+                    <widget class="QLabel" name="usuario_label">
+                     <property name="text">
+                      <string>Usuario Lastfm</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="entrada_usuario">
+                     <property name="text">
+                      <string>Introduce aqui tu usuario para lastfm</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="widget_3" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_8">
+                   <item>
+                    <widget class="QLabel" name="prim_label">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>1</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="combobox_1">
+                     <item>
+                      <property name="text">
+                       <string>Bandcamp</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Soundcloud</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Spotify</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Youtube</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="seg_label">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>2</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="comboBox_2">
+                     <property name="currentIndex">
+                      <number>1</number>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Bandcamp</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Soundcloud</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Spotify</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Youtube</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="terc_label">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>3</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="comboBox_3">
+                     <property name="currentIndex">
+                      <number>3</number>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Bandcamp</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Soundcloud</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Spotify</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Youtube</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="cuar_label">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>4</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="comboBox_4">
+                     <property name="currentIndex">
+                      <number>2</number>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Bandcamp</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Soundcloud</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Spotify</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Youtube</string>
+                      </property>
+                      <property name="icon">
+                       <iconset resource="../images.qrc">
+                        <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="widget_2" native="true">
+                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                   <item>
+                    <widget class="QLabel" name="scrobbles_mostrados">
+                     <property name="text">
+                      <string>Scrobbles a mostrar</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSlider" name="scrobbles_slider">
+                     <property name="minimum">
+                      <number>25</number>
+                     </property>
+                     <property name="maximum">
+                      <number>1000</number>
+                     </property>
+                     <property name="singleStep">
+                      <number>10</number>
+                     </property>
+                     <property name="pageStep">
+                      <number>100</number>
+                     </property>
+                     <property name="orientation">
+                      <enum>Qt::Orientation::Horizontal</enum>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="scrobblers_spinBox"/>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="tipo_group">
-        <property name="title">
-         <string>GroupBox</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Elemento a buscar</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="tipo_combo">
-           <item>
-            <property name="text">
-             <string>Artista</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Álbum</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Canciones</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Todo</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="servicios_en_todos">
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
-         <item>
-          <widget class="QFrame" name="frame_3">
-           <property name="frameShape">
-            <enum>QFrame::Shape::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <widget class="QLabel" name="serv_todos_label">
-              <property name="text">
-               <string>Señala qué servicios deseas incluir cuando buscas en &quot;Todos&quot;</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="frame">
-           <property name="frameShape">
-            <enum>QFrame::Shape::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QGroupBox" name="servicios_musica">
-              <property name="title">
-               <string>Música</string>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_6">
-               <item>
-                <widget class="QCheckBox" name="lastfm_check">
-                 <property name="text">
-                  <string>lastfm</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="bandcamp_check">
-                 <property name="text">
-                  <string>bancamp</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="soundcloud_check">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string>souncloud</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="youtube_check">
-                 <property name="text">
-                  <string>youtube</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="spotify_check">
-                 <property name="text">
-                  <string>spotify</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QGroupBox" name="servicios_info">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="title">
-               <string>Información</string>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
-                <widget class="QCheckBox" name="wikipedia_check">
-                 <property name="text">
-                  <string>Wikipedia</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="discogs_check">
-                 <property name="text">
-                  <string>Discogs</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QCheckBox" name="checkBox">
-                 <property name="text">
-                  <string>MusicBrainz</string>
-                 </property>
-                 <property name="icon">
-                  <iconset resource="../images.qrc">
-                   <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="apariencia_playlists">
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QFrame" name="radio_buttons">
-           <property name="frameShape">
-            <enum>QFrame::Shape::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>Apariencia de playlists</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="pl_unidas">
-              <property name="text">
-               <string>Listas de reproducción unidas</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="pl_separadas">
-              <property name="text">
-               <string>Listas de reproducción por separado</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="check_boxes">
-           <property name="frameShape">
-            <enum>QFrame::Shape::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Listas de reproducción visibles</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="blogs_checkbox">
-              <property name="text">
-               <string>Blogs</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="locale_checkbox">
-              <property name="text">
-               <string>Locales</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sp_checkbox">
-              <property name="text">
-               <string>Spotify</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="lastfm_checkbox">
-              <property name="text">
-               <string>Lastfm Scrobbles</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="rss">
-        <property name="title">
-         <string>Categorias aceptadas en el RSS</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QWidget" name="usuario_widget" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLabel" name="usuario_label">
-              <property name="text">
-               <string>Usuario</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="entrada_usuario">
-              <property name="text">
-               <string>Introduce tu nombre de usuario</string>
-              </property>
-              <property name="textInteractionFlags">
-               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="widget_2" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QLabel" name="scrobbles_mostrados">
-              <property name="text">
-               <string>Scrobbles a mostrar</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSlider" name="scrobbles_slider">
-              <property name="minimum">
-               <number>25</number>
-              </property>
-              <property name="maximum">
-               <number>1000</number>
-              </property>
-              <property name="singleStep">
-               <number>10</number>
-              </property>
-              <property name="pageStep">
-               <number>100</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QSpinBox" name="scrobblers_spinBox"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="mostrar_scrobbles" native="true">
-           <layout class="QHBoxLayout" name="horizontalLayout_8">
-            <item>
-             <widget class="QRadioButton" name="scrobbles_fecha">
-              <property name="text">
-               <string>Mostrar scrobbles pr fecha</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="scrobbles_reproducciones">
-              <property name="text">
-               <string>Mostrar Scrobbles por reproducciones (únicos)</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Orientation::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>122</height>
-         </size>
-        </property>
-       </spacer>
       </item>
       <item>
        <widget class="QDialogButtonBox" name="adv_sett_buttonBox">

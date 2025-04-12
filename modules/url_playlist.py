@@ -8,13 +8,15 @@ import requests
 from bs4 import BeautifulSoup
 import urllib3
 import sys
+import threading
+import urllib.parse
+import time
 import json
 import subprocess
 import tempfile
 import logging
 import traceback
 import base64
-import time
 from typing import Dict, List, Optional, Tuple
 from pathlib import Path
 from PyQt6 import uic
@@ -22,7 +24,7 @@ from PyQt6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QTreeWidget, QTreeWidgetItem, QInputDialog, QComboBox, QCheckBox,
     QListWidget, QListWidgetItem, QTextEdit, QTabWidget, QMessageBox, QMenu, QDialogButtonBox, QLabel,
     QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog,
-    QStackedWidget
+    QStackedWidget, QSlider, QSpinBox, QRadioButton
 )
 from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize, QTimer
 from PyQt6.QtGui import QIcon, QMovie
@@ -2090,7 +2092,33 @@ class UrlPlayer(BaseModule):
             widget = self.findChild(QWidget, widget_name)
             self.log(f"Widget '{widget_name}': {'Encontrado' if widget else 'NO ENCONTRADO'}")
         
+        # After all UI initialization, add Last.fm scrobbles setup
+        self.setup_scrobbles_menu()
+        
+        # Connect spinbox and slider in settings
+        scrobbles_slider = self.findChild(QSlider, 'scrobbles_slider')
+        scrobbles_spinbox = self.findChild(QSpinBox, 'scrobblers_spinBox')
+        
+        if scrobbles_slider and scrobbles_spinbox:
+            # Connect them bidirectionally
+            scrobbles_slider.valueChanged.connect(scrobbles_spinbox.setValue)
+            scrobbles_spinbox.valueChanged.connect(scrobbles_slider.setValue)
+        
+        # Default service priority indices (YouTube, SoundCloud, Bandcamp, Spotify)
+        if not hasattr(self, 'service_priority_indices'):
+            self.service_priority_indices = [0, 1, 3, 2]
 
+        # Configurar los controles de Last.fm
+        self.connect_lastfm_controls()
+        
+        # Configurar menús de Last.fm
+        self.setup_scrobbles_menu()
+        
+        # Cargar configuración de Last.fm
+        self.load_lastfm_settings()
+        
+        # Comprobar si hay caché existente y cargar datos
+        self.load_lastfm_cache_if_exists()
 
         # Load playlists at startup
         self.load_all_playlists()
@@ -2602,6 +2630,75 @@ class UrlPlayer(BaseModule):
             self.show_spotify_playlists = dialog.sp_checkbox.isChecked()
             self.show_rss_playlists = dialog.blogs_checkbox.isChecked()
             
+
+
+            # Last.fm username
+            if hasattr(dialog, 'entrada_usuario'):
+                # El problema es que 'entrada_usuario' es un QLabel, no un QLineEdit
+                # Necesitamos encontrar el campo de entrada correcto
+                user_input = dialog.findChild(QLineEdit, 'user_input')
+                if user_input:
+                    lastfm_user = user_input.text().strip()
+                    if lastfm_user:
+                        self.lastfm_user = lastfm_user
+                        self.log(f"Set Last.fm user to: {self.lastfm_user}")
+            
+            # Scrobbles limit
+            if hasattr(dialog, 'scrobbles_slider') and hasattr(dialog, 'scrobblers_spinBox'):
+                # Prefer spinbox value over slider for precision
+                scrobbles_limit = dialog.scrobblers_spinBox.value()
+                self.scrobbles_limit = scrobbles_limit
+                self.log(f"Set scrobbles limit to: {self.scrobbles_limit}")
+            
+            # Display mode
+            if hasattr(dialog, 'scrobbles_fecha') and hasattr(dialog, 'scrobbles_reproducciones'):
+                self.scrobbles_by_date = dialog.scrobbles_fecha.isChecked()
+                self.log(f"Set scrobbles display mode: by_date={self.scrobbles_by_date}")
+            
+
+            # Last.fm username - ahora usando QLineEdit
+            lastfm_user_input = dialog.findChild(QLineEdit, 'entrada_usuario')
+            if lastfm_user_input:
+                lastfm_user = lastfm_user_input.text().strip()
+                if lastfm_user:
+                    self.lastfm_user = lastfm_user
+                    self.log(f"Set Last.fm user to: {self.lastfm_user}")
+            
+            # Scrobbles limit - prioritize spinbox value
+            scrobbles_spinbox = dialog.findChild(QSpinBox, 'scrobblers_spinBox')
+            if scrobbles_spinbox:
+                self.scrobbles_limit = scrobbles_spinbox.value()
+                self.log(f"Set scrobbles limit to: {self.scrobbles_limit}")
+            
+            # Display mode
+            by_date_radio = dialog.findChild(QRadioButton, 'scrobbles_fecha')
+            by_plays_radio = dialog.findChild(QRadioButton, 'scrobbles_reproducciones')
+            if by_date_radio and by_plays_radio:
+                self.scrobbles_by_date = by_date_radio.isChecked()
+                self.log(f"Set scrobbles display mode: by_date={self.scrobbles_by_date}")
+            
+            # Last.fm checkbox
+            lastfm_checkbox = dialog.findChild(QCheckBox, 'lastfm_checkbox')
+            if lastfm_checkbox:
+                self.show_lastfm_scrobbles = lastfm_checkbox.isChecked()
+                self.log(f"Set show Last.fm scrobbles to: {self.show_lastfm_scrobbles}")
+            
+            # Service priority
+            service_priority_indices = []
+            for combo_name in ['comboBox', 'comboBox_2', 'comboBox_3', 'comboBox_4']:
+                combo = dialog.findChild(QComboBox, combo_name)
+                if combo:
+                    service_priority_indices.append(combo.currentIndex())
+            
+            if len(service_priority_indices) == 4:
+                self.service_priority_indices = service_priority_indices
+                self.log(f"Saved service priority indices: {service_priority_indices}")
+
+
+            # Save settings to file
+            self.save_settings()
+
+
             # Update the playlist view based on the new settings
             self.update_playlist_view()
             
@@ -2611,9 +2708,6 @@ class UrlPlayer(BaseModule):
             # Actualizar UI o estado si es necesario
             self.update_service_combo()
 
-            # Cerrar el diálogo
-            dialog.accept()
-
             
             # Cerrar el diálogo
             dialog.accept()
@@ -2622,6 +2716,62 @@ class UrlPlayer(BaseModule):
             import traceback
             self.log(traceback.format_exc())
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
+
+
+    def connect_lastfm_controls(self):
+        """Connect Last.fm controls (slider and spinbox) bidirectionally"""
+        try:
+            # Find the controls
+            scrobbles_slider = self.findChild(QSlider, 'scrobbles_slider')
+            scrobbles_spinbox = self.findChild(QSpinBox, 'scrobblers_spinBox')
+            
+            if scrobbles_slider and scrobbles_spinbox:
+                # Set proper ranges
+                scrobbles_slider.setMinimum(25)
+                scrobbles_slider.setMaximum(1000)
+                scrobbles_spinbox.setMinimum(25)
+                scrobbles_spinbox.setMaximum(1000)
+                
+                # Block signals during initial setup
+                scrobbles_slider.blockSignals(True)
+                scrobbles_spinbox.blockSignals(True)
+                
+                # Set initial values
+                scrobbles_slider.setValue(self.scrobbles_limit)
+                scrobbles_spinbox.setValue(self.scrobbles_limit)
+                
+                # Unblock signals
+                scrobbles_slider.blockSignals(False)
+                scrobbles_spinbox.blockSignals(False)
+                
+                # Connect bidirectionally
+                scrobbles_slider.valueChanged.connect(scrobbles_spinbox.setValue)
+                scrobbles_spinbox.valueChanged.connect(scrobbles_slider.setValue)
+                
+                # Also connect to save settings on change
+                scrobbles_slider.valueChanged.connect(lambda value: self.set_scrobbles_limit(value))
+                
+                self.log("Connected Last.fm controls")
+                return True
+            else:
+                self.log("Could not find scrobbles slider or spinbox")
+                return False
+        except Exception as e:
+            self.log(f"Error connecting Last.fm controls: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+            
+    def set_scrobbles_limit(self, value):
+        """Save the scrobbles limit when changed"""
+        try:
+            self.scrobbles_limit = value
+            self.log(f"Updated scrobbles limit to {value}")
+            self.save_settings()
+        except Exception as e:
+            self.log(f"Error setting scrobbles limit: {str(e)}")
+
+
 
     def get_setting_value(self, key, default=None):
         """Get a setting value with default fallback"""
@@ -3418,10 +3568,10 @@ class UrlPlayer(BaseModule):
         if not self.db_path:
             # Try common locations for the database
             common_db_paths = [
-                os.path.join(PROJECT_ROOT, "base_datos", "musica.sqlite"),
+                os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
                 os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
                 os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
+                os.path.join(PROJECT_ROOT, "base_datos", "musica1.db"),
                 os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
             ]
             
@@ -3442,6 +3592,7 @@ class UrlPlayer(BaseModule):
                 os.path.join(PROJECT_ROOT, ".content", "config", "config.yml")
             ]
             
+           
             config_path = None
             for path in config_paths:
                 if os.path.exists(path):
@@ -3479,7 +3630,15 @@ class UrlPlayer(BaseModule):
                 except Exception as e:
                     self.log(f"Error loading config file: {e}")
                     return
-            
+
+            # Add Last.fm specific settings
+            lastfm_settings = {
+                'lastfm_user': self.lastfm_user,
+                'scrobbles_limit': self.scrobbles_limit,
+                'scrobbles_by_date': self.scrobbles_by_date,
+                'service_priority_indices': getattr(self, 'service_priority_indices', [0, 1, 2, 3])
+            }
+
             # Asegurar que pagination_value esté sincronizado con num_servicios_spinBox
             self.pagination_value = self.num_servicios_spinBox
             
@@ -3511,9 +3670,22 @@ class UrlPlayer(BaseModule):
                 'playlist_unified_view': getattr(self, 'playlist_unified_view', False),
                 'show_local_playlists': getattr(self, 'show_local_playlists', True),
                 'show_spotify_playlists': getattr(self, 'show_spotify_playlists', True),
-                'show_rss_playlists': getattr(self, 'show_rss_playlists', True)
+                'show_rss_playlists': getattr(self, 'show_rss_playlists', True),
+                
+                # lastfm
+                'lastfm_user': lastfm_settings['lastfm_user'],
+                'scrobbles_limit': lastfm_settings['scrobbles_limit'],
+                'scrobbles_by_date': lastfm_settings['scrobbles_by_date'],
+                'service_priority_indices': lastfm_settings['service_priority_indices'],
+                
+                #freshrss
+                'freshrss_url': self.freshrss_url,
+                'freshrss_user': self.freshrss_username,
+                'freshrss_api_key': self.freshrss_auth_token
             }
             
+            
+
             # Añadir valores de depuración
             self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
             
@@ -5680,7 +5852,7 @@ class UrlPlayer(BaseModule):
 
 
     def add_item_to_queue(self, item):
-        """Add a specific item to the queue with appropriate icon."""
+        """Add a specific item to the queue with appropriate icon"""
         title = item.text(0)
         artist = item.text(1)
         item_data = item.data(0, Qt.ItemDataRole.UserRole)
@@ -5691,31 +5863,41 @@ class UrlPlayer(BaseModule):
         # Debug logging to identify the issue
         self.log(f"Adding item with data: {json.dumps(item_data, default=str)}")
         
-        # Use our extraction function to get the best URL or file path
+        # Get the playable URL based on priority
         url = None
-        file_path = None
+        source = None
         
         if isinstance(item_data, dict):
-            # Check for file path first for local files
-            file_path = item_data.get('file_path')
-            self.log(f"Found file path: {file_path}")
+            # Get service priority
+            service_priority = self.get_service_priority()
             
-            # If no file path, then check URL
-            url = item_data.get('url')
-            self.log(f"Found URL: {url}")
+            # Try each service in priority order
+            for service in service_priority:
+                service_url_key = f'{service}_url'
+                if service_url_key in item_data and item_data[service_url_key]:
+                    url = item_data[service_url_key]
+                    source = service
+                    self.log(f"Using {service} URL: {url}")
+                    break
             
-            # For database items that might not have a direct URL
-            if not url and not file_path and item_data.get('source', '').lower() in ['database', 'local']:
-                # Try to find a playable URL in the links
-                if 'links' in item_data:
-                    for service, service_url in item_data['links'].items():
-                        if service_url:
-                            url = service_url
-                            break
+            # If no service URL found, try file path or generic URL
+            if not url:
+                # Check for file path first for local files
+                file_path = item_data.get('file_path')
+                if file_path:
+                    url = file_path
+                    source = 'local'
+                    self.log(f"Using file path: {file_path}")
+                else:
+                    # Fall back to generic URL
+                    url = item_data.get('url')
+                    source = item_data.get('source', self._determine_source_from_url(url))
+                    self.log(f"Using generic URL: {url}")
         else:
             url = str(item_data)
+            source = self._determine_source_from_url(url)
         
-        if not url and not file_path:
+        if not url:
             self.log(f"No URL or file path found for: {title}")
             return
         
@@ -5726,11 +5908,10 @@ class UrlPlayer(BaseModule):
         
         # Create the item with appropriate icon
         queue_item = QListWidgetItem(display_text)
-        queue_item.setData(Qt.ItemDataRole.UserRole, file_path or url)  # Prioritize file path
+        queue_item.setData(Qt.ItemDataRole.UserRole, url)
         
-        # Determine source for icon
-        source = item_data.get('source', '') if isinstance(item_data, dict) else ''
-        icon = self.get_source_icon(file_path or url, {'source': source})
+        # Set icon based on source
+        icon = self.get_source_icon(url, {'source': source})
         queue_item.setIcon(icon)
         
         # Add to the list
@@ -5741,17 +5922,17 @@ class UrlPlayer(BaseModule):
             'title': title, 
             'artist': artist, 
             'url': url,
-            'source': source or self._determine_source_from_url(file_path or url),
+            'source': source,
             'entry_data': item_data
         }
         
         # Add file_path if it exists
-        if file_path:
-            playlist_item['file_path'] = file_path
+        if isinstance(item_data, dict) and 'file_path' in item_data:
+            playlist_item['file_path'] = item_data['file_path']
         
         self.current_playlist.append(playlist_item)
         
-        self.log(f"Added to queue: {display_text} with URL/path: {file_path or url}")
+        self.log(f"Added to queue: {display_text} with URL/path: {url}")
     
     def remove_from_queue(self):
         """Elimina el elemento seleccionado de la cola de reproducción."""
@@ -8206,6 +8387,7 @@ class UrlPlayer(BaseModule):
         dialog = QDialog(self)
         dialog.setWindowTitle("Guardar en Playlist de Spotify")
         dialog.setMinimumWidth(400)
+        dialog.setMaximumHeigth(400)
         
         layout = QVBoxLayout(dialog)
         
@@ -9413,7 +9595,21 @@ class UrlPlayer(BaseModule):
                             # Connect with specific handler function
                             action.triggered.connect(lambda checked=False, data=playlist_copy: 
                                                 self.on_rss_playlist_menu_clicked(data))
-                
+            # After setting up the regular menu items, add a separator
+            self.playlist_menu.addSeparator()
+            
+            # Add Last.fm submenu
+            lastfm_menu = self.playlist_menu.addMenu(QIcon(":/services/lastfm"), "Last.fm Scrobbles")
+            
+            # Set up Last.fm menu items in the submenu
+            lastfm_menu_refs = self.setup_lastfm_menu_items(lastfm_menu)
+            
+            # Store additional references for the unified menu
+            self.unified_months_menu = lastfm_menu_refs.get('months_menu')
+            self.unified_years_menu = lastfm_menu_refs.get('years_menu')
+            
+            # Set up Last.fm menu items in the submenu
+            self.setup_lastfm_menu_items(lastfm_menu)
             self.log("Unified playlist menu setup complete")
             return True
             
@@ -9606,6 +9802,1127 @@ class UrlPlayer(BaseModule):
             return result.stdout.strip(), result.stderr.strip(), result.returncode
         except Exception as e:
             return "", f"Error: {str(e)}", -1
+
+
+# LASTFM
+
+    def setup_scrobbles_menu(self):
+        """Configure the scrobbles menu for the Last.fm button"""
+        try:
+            # Find the scrobbles button
+            self.scrobbles_button = self.findChild(QPushButton, 'pushButton')  # As named in your UI file
+            
+            if not self.scrobbles_button:
+                self.log("Error: Scrobbles button not found")
+                return False
+                
+            # Create the menu
+            self.scrobbles_menu = QMenu(self.scrobbles_button)
+            
+            # Set up Last.fm menu items
+            menu_refs = self.setup_lastfm_menu_items(self.scrobbles_menu)
+            
+            # Store menu references
+            self.months_menu = menu_refs.get('months_menu')
+            self.years_menu = menu_refs.get('years_menu')
+            
+            # Set the menu for the button
+            self.scrobbles_button.setMenu(self.scrobbles_menu)
+            
+            self.log("Scrobbles menu set up")
+            return True
+        except Exception as e:
+            self.log(f"Error setting up scrobbles menu: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+
+    def load_lastfm_cache_if_exists(self):
+        """Load Last.fm cache if it exists and populate menus"""
+        try:
+            cache_file = self.get_lastfm_cache_path()
+            
+            if os.path.exists(cache_file):
+                self.log(f"Found Last.fm cache file: {cache_file}")
+                
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        cache_data = json.load(f)
+                        scrobbles = cache_data.get('scrobbles', [])
+                        
+                        if scrobbles:
+                            self.log(f"Loaded {len(scrobbles)} scrobbles from cache")
+                            # Populate menus
+                            self.populate_scrobbles_time_menus(scrobbles)
+                            return True
+                except Exception as e:
+                    self.log(f"Error loading Last.fm cache: {str(e)}")
+            else:
+                self.log("No Last.fm cache file found")
+            
+            return False
+        except Exception as e:
+            self.log(f"Error checking Last.fm cache: {str(e)}")
+            return False
+
+
+    def load_lastfm_settings(self):
+        """Load Last.fm specific settings"""
+        try:
+            # Default values
+            self.lastfm_user = self.lastfm_user or ""
+            self.scrobbles_limit = 200  # Default limit
+            self.scrobbles_by_date = True  # Default display mode
+            self.service_priority_indices = [0, 1, 2, 3]  # Default priority indices
+            
+            # Load from config
+            if hasattr(self, 'config') and isinstance(self.config, dict):
+                # Last.fm user
+                if 'lastfm_user' in self.config:
+                    self.lastfm_user = self.config.get('lastfm_user')
+                    
+                # Scrobbles limit
+                if 'scrobbles_limit' in self.config:
+                    self.scrobbles_limit = int(self.config.get('scrobbles_limit', 200))
+                    
+                # Display mode
+                if 'scrobbles_by_date' in self.config:
+                    self.scrobbles_by_date = self.config.get('scrobbles_by_date', True)
+                    if isinstance(self.scrobbles_by_date, str):
+                        self.scrobbles_by_date = self.scrobbles_by_date.lower() == 'true'
+                
+                # Service priority
+                if 'service_priority_indices' in self.config:
+                    indices = self.config.get('service_priority_indices')
+                    if isinstance(indices, list) and len(indices) == 4:
+                        self.service_priority_indices = indices
+            
+
+                # Show Last.fm scrobbles
+                if 'show_lastfm_scrobbles' in self.config:
+                    self.show_lastfm_scrobbles = self.config.get('show_lastfm_scrobbles', True)
+                    if isinstance(self.show_lastfm_scrobbles, str):
+                        self.show_lastfm_scrobbles = self.show_lastfm_scrobbles.lower() == 'true'
+
+            # Update UI elements
+            self.update_lastfm_ui_settings()
+            
+            self.log(f"Last.fm settings loaded: user={self.lastfm_user}, limit={self.scrobbles_limit}")
+            return True
+        except Exception as e:
+            self.log(f"Error loading Last.fm settings: {str(e)}")
+            return False
+            
+    def update_lastfm_ui_settings(self):
+        """Update UI elements with Last.fm settings"""
+        try:
+            # User input field - ahora usando QLineEdit
+            user_input = self.findChild(QLineEdit, 'entrada_usuario')
+            if user_input and self.lastfm_user:
+                user_input.setText(self.lastfm_user)
+            
+            # Scrobbles slider and spinbox
+            scrobbles_slider = self.findChild(QSlider, 'scrobbles_slider')
+            scrobbles_spinbox = self.findChild(QSpinBox, 'scrobblers_spinBox')
+            
+            if scrobbles_slider:
+                scrobbles_slider.setMinimum(25)
+                scrobbles_slider.setMaximum(1000)
+                scrobbles_slider.setValue(self.scrobbles_limit)
+            
+            if scrobbles_spinbox:
+                scrobbles_spinbox.setMinimum(25)
+                scrobbles_spinbox.setMaximum(1000)
+                scrobbles_spinbox.setValue(self.scrobbles_limit)
+            
+            # Display mode radio buttons
+            by_date_radio = self.findChild(QRadioButton, 'scrobbles_fecha')
+            by_plays_radio = self.findChild(QRadioButton, 'scrobbles_reproducciones')
+            
+            if by_date_radio and by_plays_radio:
+                by_date_radio.setChecked(self.scrobbles_by_date)
+                by_plays_radio.setChecked(not self.scrobbles_by_date)
+            
+            # Last.fm checkbox
+            lastfm_checkbox = self.findChild(QCheckBox, 'lastfm_checkbox')
+            if lastfm_checkbox:
+                lastfm_checkbox.setChecked(getattr(self, 'show_lastfm_scrobbles', True))
+            
+            # Service priority combo boxes
+            if hasattr(self, 'service_priority_indices') and len(self.service_priority_indices) == 4:
+                combo_names = ['comboBox', 'comboBox_2', 'comboBox_3', 'comboBox_4']
+                for i, combo_name in enumerate(combo_names):
+                    combo = self.findChild(QComboBox, combo_name)
+                    if combo and i < len(self.service_priority_indices):
+                        index = self.service_priority_indices[i]
+                        if 0 <= index < combo.count():
+                            combo.setCurrentIndex(index)
+        except Exception as e:
+            self.log(f"Error updating Last.fm UI: {str(e)}")
+
+    def get_lastfm_cache_path(self):
+        """Get the path to the Last.fm scrobbles cache file"""
+        cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+        os.makedirs(cache_dir, exist_ok=True)
+        return os.path.join(cache_dir, "lastfm_scrobbles.json")
+
+
+    def setup_lastfm_menu_items(self, menu):
+        """Set up Last.fm menu items in any menu"""
+        try:
+            # Add "Sync Scrobbles" option
+            sync_action = menu.addAction(QIcon(":/services/refresh"), "Sincronizar scrobbles")
+            sync_action.triggered.connect(self.sync_lastfm_scrobbles)
+            
+            menu.addSeparator()
+            
+            # Add "Latest" submenu
+            latest_menu = menu.addMenu(QIcon(":/services/lastfm"), "Últimos")
+            last_week = latest_menu.addAction("Última semana")
+            last_week.triggered.connect(lambda: self.load_lastfm_scrobbles_period("week"))
+            
+            last_month = latest_menu.addAction("Último mes")
+            last_month.triggered.connect(lambda: self.load_lastfm_scrobbles_period("month"))
+            
+            last_year = latest_menu.addAction("Último año")
+            last_year.triggered.connect(lambda: self.load_lastfm_scrobbles_period("year"))
+            
+            # Add "Months" submenu (will be populated dynamically later)
+            months_menu = menu.addMenu(QIcon(":/services/calendar"), "Meses")
+            
+            # Add "Years" submenu (will be populated dynamically later)
+            years_menu = menu.addMenu(QIcon(":/services/calendar"), "Años")
+            
+            return {
+                'months_menu': months_menu,
+                'years_menu': years_menu
+            }
+        except Exception as e:
+            self.log(f"Error setting up Last.fm menu items: {str(e)}")
+            return {}
+
+
+    def sync_lastfm_scrobbles(self):
+        """Synchronize Last.fm scrobbles and store them in a cache file"""
+        try:
+            # Check if we have valid configuration
+            if not self.lastfm_api_key:
+                self.log("Error: Last.fm API key not configured")
+                QMessageBox.warning(self, "Error", "Last.fm API key not configured. Check settings.")
+                return False
+                
+            if not self.lastfm_user:
+                self.log("Error: Last.fm username not configured")
+                QMessageBox.warning(self, "Error", "Last.fm username not configured. Check settings.")
+                return False
+            
+            # Show progress dialog
+            progress = QProgressDialog("Syncing Last.fm scrobbles...", "Cancel", 0, 100, self)
+            progress.setWindowTitle("Last.fm Sync")
+            progress.setWindowModality(Qt.WindowModality.WindowModal)
+            progress.show()
+            QApplication.processEvents()
+            
+            # Determine cache file path
+            cache_file = self.get_lastfm_cache_path()
+            
+            # Load existing cache if available
+            scrobbles_data = {
+                "last_updated": 0,
+                "scrobbles": []
+            }
+            
+            if os.path.exists(cache_file):
+                try:
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        scrobbles_data = json.load(f)
+                        self.log(f"Loaded {len(scrobbles_data.get('scrobbles', []))} cached scrobbles")
+                        progress.setValue(10)
+                except Exception as e:
+                    self.log(f"Error loading scrobbles cache: {str(e)}")
+                    # Continue with empty cache
+            
+            # Get the timestamp of the last update
+            last_updated = scrobbles_data.get("last_updated", 0)
+            
+            # Prepare for API requests
+            all_new_scrobbles = []
+            page = 1
+            total_pages = 1
+            
+            # Update progress to 20%
+            progress.setValue(20)
+            
+            while page <= total_pages:
+                if progress.wasCanceled():
+                    break
+                    
+                # Request parameters
+                params = {
+                    'method': 'user.getrecenttracks',
+                    'user': self.lastfm_user,
+                    'api_key': self.lastfm_api_key,
+                    'format': 'json',
+                    'limit': 200,  # Maximum allowed by Last.fm
+                    'page': page
+                }
+                
+                # Add from_timestamp if we have a previous update
+                if last_updated > 0:
+                    params['from'] = last_updated + 1  # +1 to avoid duplicates
+                
+                # Make the request
+                try:
+                    url = f"https://ws.audioscrobbler.com/2.0/?{urllib.parse.urlencode(params)}"
+                    response = requests.get(url)
+                    data = response.json()
+                    
+                    if 'error' in data:
+                        self.log(f"Last.fm API error: {data.get('message', 'Unknown error')}")
+                        break
+                    
+                    # Get total pages if first request
+                    if page == 1:
+                        recenttracks = data.get('recenttracks', {})
+                        attr = recenttracks.get('@attr', {})
+                        total_pages = int(attr.get('totalPages', '1'))
+                        
+                        self.log(f"Found {attr.get('total', '0')} new scrobbles across {total_pages} pages")
+                    
+                    # Process tracks
+                    tracks = data.get('recenttracks', {}).get('track', [])
+                    if not isinstance(tracks, list):
+                        tracks = [tracks]  # Handle single track response
+                    
+                    for track in tracks:
+                        # Skip 'now playing' tracks
+                        if '@attr' in track and track['@attr'].get('nowplaying') == 'true':
+                            continue
+                            
+                        # Create scrobble object
+                        scrobble = {
+                            'artist': track.get('artist', {}).get('#text', ''),
+                            'title': track.get('name', ''),
+                            'album': track.get('album', {}).get('#text', ''),
+                            'timestamp': int(track.get('date', {}).get('uts', '0')),
+                            'url': track.get('url', ''),
+                            'image': track.get('image', [{}])[-1].get('#text', ''),  # Get largest image
+                            'youtube_url': None  # Will be populated later
+                        }
+                        
+                        all_new_scrobbles.append(scrobble)
+                    
+                    # Update progress
+                    progress_value = 20 + int(70 * (page / total_pages))
+                    progress.setValue(progress_value)
+                    
+                    # Next page
+                    page += 1
+                    
+                except Exception as e:
+                    self.log(f"Error fetching scrobbles from Last.fm: {str(e)}")
+                    break
+            
+            # Update progress to 90%
+            progress.setValue(90)
+            
+            # Merge new scrobbles with existing ones
+            if all_new_scrobbles:
+                # Sorting by timestamp (newest first)
+                all_new_scrobbles.sort(key=lambda s: s['timestamp'], reverse=True)
+                
+                # Update last_updated timestamp
+                newest_timestamp = all_new_scrobbles[0]['timestamp']
+                if newest_timestamp > scrobbles_data['last_updated']:
+                    scrobbles_data['last_updated'] = newest_timestamp
+                
+                # Merge with existing scrobbles
+                existing_scrobbles = scrobbles_data.get('scrobbles', [])
+                
+                # Create a set of existing timestamps for quick lookup
+                existing_timestamps = {s['timestamp'] for s in existing_scrobbles}
+                
+                # Only add scrobbles with unique timestamps
+                unique_new_scrobbles = [s for s in all_new_scrobbles if s['timestamp'] not in existing_timestamps]
+                
+                # Combine and sort all scrobbles
+                all_scrobbles = existing_scrobbles + unique_new_scrobbles
+                all_scrobbles.sort(key=lambda s: s['timestamp'], reverse=True)
+                
+                scrobbles_data['scrobbles'] = all_scrobbles
+                
+                # Save updated data
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(scrobbles_data, f, indent=2)
+                    
+                self.log(f"Saved {len(all_scrobbles)} scrobbles to cache ({len(unique_new_scrobbles)} new)")
+                
+                # Start a background thread to fetch YouTube links
+                if unique_new_scrobbles:
+                    self.log(f"Starting background thread to fetch YouTube links for {len(unique_new_scrobbles)} tracks")
+                    fetch_thread = threading.Thread(
+                        target=self.fetch_youtube_links,
+                        args=(unique_new_scrobbles, cache_file),
+                        daemon=True
+                    )
+                    fetch_thread.start()
+                    
+                # Populate the year/month menus
+                self.populate_scrobbles_time_menus(all_scrobbles)
+            
+            # Complete progress
+            progress.setValue(100)
+            
+            QMessageBox.information(
+                self,
+                "Sync Complete", 
+                f"Synchronized Last.fm scrobbles for {self.lastfm_user}.\n\n" +
+                f"Added {len(unique_new_scrobbles if 'unique_new_scrobbles' in locals() else [])} new scrobbles.\n" +
+                f"Total scrobbles: {len(scrobbles_data.get('scrobbles', []))}"
+            )
+            
+            return True
+        except Exception as e:
+            self.log(f"Error synchronizing Last.fm scrobbles: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            QMessageBox.warning(self, "Error", f"Error synchronizing Last.fm scrobbles: {str(e)}")
+            return False
+
+
+    def fetch_youtube_links(self, scrobbles, cache_file):
+        """Fetch URLs for scrobbles in a background thread, checking database first"""
+        try:
+            self.log(f"Starting link fetching for {len(scrobbles)} scrobbles")
+            
+            # Load the current cache
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+            except Exception as e:
+                self.log(f"Error loading cache file for link updates: {str(e)}")
+                return
+            
+            # Track scrobbles by a unique key for efficient updates
+            all_scrobbles = cache_data.get('scrobbles', [])
+            scrobbles_dict = {f"{s['artist']}|{s['title']}|{s['timestamp']}": s for s in all_scrobbles}
+            
+            # Get service priority from settings
+            service_priority = self.get_service_priority()
+            self.log(f"Service priority: {', '.join(service_priority)}")
+            
+            # Process each scrobble
+            processed_count = 0
+            updated_count = 0
+            
+            for scrobble in scrobbles:
+                # Skip if already has a URL
+                if any(scrobble.get(f'{service}_url') for service in service_priority):
+                    continue
+                    
+                # Create a unique key
+                key = f"{scrobble['artist']}|{scrobble['title']}|{scrobble['timestamp']}"
+                
+                # Try to get URL from database first
+                links = self.get_track_links_from_db(scrobble['artist'], scrobble['title'], scrobble.get('album', ''))
+                
+                if links:
+                    # Check for each service in priority order
+                    for service in service_priority:
+                        if service in links and links[service]:
+                            # Update both the local scrobble and the cache dictionary
+                            service_url_key = f'{service}_url'
+                            scrobble[service_url_key] = links[service]
+                            
+                            if key in scrobbles_dict:
+                                scrobbles_dict[key][service_url_key] = links[service]
+                                updated_count += 1
+                                
+                                # Log successful link retrieval
+                                self.log(f"Found {service} link for {scrobble['artist']} - {scrobble['title']} in database")
+                                
+                                # Once we have one service URL, we can skip to the next scrobble
+                                break
+                
+                # If no links were found in the database, try fetching from Last.fm
+                if not any(scrobble.get(f'{service}_url') for service in service_priority):
+                    try:
+                        # Check if we have a Last.fm URL
+                        lastfm_url = scrobble.get('url')
+                        if lastfm_url:
+                            # Use the extract_links_from_lastfm function
+                            for service in service_priority:
+                                service_url = self.extract_link_from_lastfm(lastfm_url, service)
+                                
+                                if service_url:
+                                    # Update both the local scrobble and the cache dictionary
+                                    service_url_key = f'{service}_url'
+                                    scrobble[service_url_key] = service_url
+                                    
+                                    if key in scrobbles_dict:
+                                        scrobbles_dict[key][service_url_key] = service_url
+                                        updated_count += 1
+                                        
+                                        # Log successful link retrieval
+                                        self.log(f"Found {service} link for {scrobble['artist']} - {scrobble['title']} from Last.fm")
+                                        
+                                        # Once we have one service URL, we can skip to the next service
+                                        break
+                    except Exception as e:
+                        self.log(f"Error fetching links for {scrobble['artist']} - {scrobble['title']}: {str(e)}")
+                
+                # Update progress periodically
+                processed_count += 1
+                if processed_count % 20 == 0:
+                    self.log(f"Processed {processed_count}/{len(scrobbles)} scrobbles, found {updated_count} links")
+                    
+                    # Save intermediate results
+                    try:
+                        # Rebuild the scrobbles list from the dictionary
+                        cache_data['scrobbles'] = list(scrobbles_dict.values())
+                        with open(cache_file, 'w', encoding='utf-8') as f:
+                            json.dump(cache_data, f, indent=2)
+                    except Exception as e:
+                        self.log(f"Error saving intermediate link updates: {str(e)}")
+            
+            # Final save
+            try:
+                # Rebuild the scrobbles list from the dictionary
+                cache_data['scrobbles'] = list(scrobbles_dict.values())
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(cache_data, f, indent=2)
+                    
+                self.log(f"Link fetching complete. Updated {updated_count} scrobbles.")
+            except Exception as e:
+                self.log(f"Error saving final link updates: {str(e)}")
+        
+        except Exception as e:
+            self.log(f"Error in link fetching thread: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def extract_youtube_from_lastfm(self, lastfm_url):
+        """Extract YouTube URL from a Last.fm page"""
+        try:
+            # Check if we have BeautifulSoup
+            try:
+                from bs4 import BeautifulSoup
+            except ImportError:
+                self.log("BeautifulSoup not installed, cannot extract YouTube links")
+                return None
+                
+            # Make request to Last.fm page
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+            response = requests.get(lastfm_url, headers=headers, timeout=10)
+            
+            if response.status_code != 200:
+                return None
+                
+            # Parse the HTML
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Try different methods to find YouTube links
+            
+            # Method 1: Look for elements with data-youtube-id or data-youtube-url
+            youtube_elements = soup.select('[data-youtube-id], [data-youtube-url]')
+            for element in youtube_elements:
+                if 'data-youtube-url' in element.attrs:
+                    return element['data-youtube-url']
+                elif 'data-youtube-id' in element.attrs:
+                    return f"https://www.youtube.com/watch?v={element['data-youtube-id']}"
+            
+            # Method 2: Look for standard YouTube links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if 'youtube.com/watch' in href or 'youtu.be/' in href:
+                    return href
+            
+            return None
+        except Exception as e:
+            self.log(f"Error extracting YouTube from Last.fm: {str(e)}")
+            return None
+
+
+    def load_lastfm_scrobbles_period(self, period):
+        """Load Last.fm scrobbles for a specific time period"""
+        try:
+            # Determine cache file path
+            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "lastfm")
+            cache_file = os.path.join(cache_dir, f"{self.lastfm_user}_scrobbles.json")
+            
+            if not os.path.exists(cache_file):
+                self.log(f"No cache file found for {self.lastfm_user}")
+                QMessageBox.warning(self, "Error", f"No scrobbles data found for {self.lastfm_user}. Please sync first.")
+                return False
+            
+            # Load the cache
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+                
+            scrobbles = cache_data.get('scrobbles', [])
+            
+            if not scrobbles:
+                self.log("No scrobbles found in cache")
+                QMessageBox.information(self, "No Data", "No scrobbles found in cache. Please sync first.")
+                return False
+            
+            # Determine time range
+            current_time = int(time.time())
+            start_time = 0
+            
+            if period == "week":
+                start_time = current_time - (7 * 24 * 60 * 60)  # 7 days
+                title = "Última semana"
+            elif period == "month":
+                start_time = current_time - (30 * 24 * 60 * 60)  # 30 days
+                title = "Último mes"
+            elif period == "year":
+                start_time = current_time - (365 * 24 * 60 * 60)  # 365 days
+                title = "Último año"
+            
+            # Filter scrobbles by time period
+            filtered_scrobbles = [s for s in scrobbles if s['timestamp'] >= start_time]
+            
+            # Limit the number of scrobbles to display
+            max_scrobbles = min(len(filtered_scrobbles), self.scrobbles_limit)
+            display_scrobbles = filtered_scrobbles[:max_scrobbles]
+            
+            # Display in tree
+            self.display_scrobbles_in_tree(display_scrobbles, title)
+            
+            return True
+        except Exception as e:
+            self.log(f"Error loading scrobbles for period {period}: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+    def load_lastfm_scrobbles_month(self, year, month):
+        """Load Last.fm scrobbles for a specific year and month"""
+        try:
+            # Determine cache file path
+            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "lastfm")
+            cache_file = os.path.join(cache_dir, f"{self.lastfm_user}_scrobbles.json")
+            
+            if not os.path.exists(cache_file):
+                self.log(f"No cache file found for {self.lastfm_user}")
+                QMessageBox.warning(self, "Error", f"No scrobbles data found for {self.lastfm_user}. Please sync first.")
+                return False
+            
+            # Load the cache
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+                
+            scrobbles = cache_data.get('scrobbles', [])
+            
+            # Convert timestamps to datetime for easier filtering
+            import datetime
+            
+            # Calculate start and end timestamps for the month
+            if month == 12:
+                end_year = year + 1
+                end_month = 1
+            else:
+                end_year = year
+                end_month = month + 1
+                
+            start = datetime.datetime(year, month, 1, 0, 0, 0).timestamp()
+            end = datetime.datetime(end_year, end_month, 1, 0, 0, 0).timestamp()
+            
+            # Filter scrobbles for the month
+            month_scrobbles = [s for s in scrobbles if start <= s['timestamp'] < end]
+            
+            # Get month name
+            month_name = datetime.datetime(year, month, 1).strftime("%B")
+            title = f"{month_name} {year}"
+            
+            # Limit the number of scrobbles to display
+            max_scrobbles = min(len(month_scrobbles), self.scrobbles_limit)
+            display_scrobbles = month_scrobbles[:max_scrobbles]
+            
+            # Display in tree
+            self.display_scrobbles_in_tree(display_scrobbles, title)
+            
+            return True
+        except Exception as e:
+            self.log(f"Error loading scrobbles for {month}/{year}: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+    def load_lastfm_scrobbles_year(self, year):
+        """Load Last.fm scrobbles for a specific year"""
+        try:
+            # Determine cache file path
+            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "lastfm")
+            cache_file = os.path.join(cache_dir, f"{self.lastfm_user}_scrobbles.json")
+            
+            if not os.path.exists(cache_file):
+                self.log(f"No cache file found for {self.lastfm_user}")
+                QMessageBox.warning(self, "Error", f"No scrobbles data found for {self.lastfm_user}. Please sync first.")
+                return False
+            
+            # Load the cache
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+                
+            scrobbles = cache_data.get('scrobbles', [])
+            
+            # Convert timestamps to datetime for easier filtering
+            import datetime
+            
+            # Calculate start and end timestamps for the year
+            start = datetime.datetime(year, 1, 1, 0, 0, 0).timestamp()
+            end = datetime.datetime(year + 1, 1, 1, 0, 0, 0).timestamp()
+            
+            # Filter scrobbles for the year
+            year_scrobbles = [s for s in scrobbles if start <= s['timestamp'] < end]
+            
+            # Limit the number of scrobbles to display
+            max_scrobbles = min(len(year_scrobbles), self.scrobbles_limit)
+            display_scrobbles = year_scrobbles[:max_scrobbles]
+            
+            # Display in tree
+            self.display_scrobbles_in_tree(display_scrobbles, f"Año {year}")
+            
+            return True
+        except Exception as e:
+            self.log(f"Error loading scrobbles for year {year}: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+    def display_scrobbles_in_tree(self, scrobbles, title):
+        """Display scrobbles in the tree widget"""
+        try:
+            # Clear the tree
+            self.treeWidget.clear()
+            
+            # Get service priority for icon selection
+            service_priority = self.get_service_priority()
+
+            # Check if we need to reorganize by play count
+            if not self.scrobbles_by_date:
+                # Group by artist and title
+                play_counts = {}
+                for scrobble in scrobbles:
+                    key = f"{scrobble['artist']}|{scrobble['title']}"
+                    if key not in play_counts:
+                        play_counts[key] = {
+                            'artist': scrobble['artist'],
+                            'title': scrobble['title'],
+                            'album': scrobble['album'],
+                            'youtube_url': scrobble.get('youtube_url'),
+                            'count': 0,
+                            'timestamps': []
+                        }
+                    
+                    play_counts[key]['count'] += 1
+                    play_counts[key]['timestamps'].append(scrobble['timestamp'])
+                
+                # Convert to list and sort by play count
+                sorted_tracks = sorted(
+                    play_counts.values(), 
+                    key=lambda x: x['count'], 
+                    reverse=True
+                )
+                
+                # Create root item
+                root_item = QTreeWidgetItem(self.treeWidget)
+                root_item.setText(0, f"Top Tracks: {title}")
+                root_item.setText(1, self.lastfm_user)
+                root_item.setText(2, "Last.fm")
+                
+                # Format as bold
+                font = root_item.font(0)
+                font.setBold(True)
+                root_item.setFont(0, font)
+                
+                # Add icon
+                root_item.setIcon(0, QIcon(":/services/lastfm"))
+                
+                # Change column headers
+                self.treeWidget.headerItem().setText(3, "Reproducciones")
+                self.treeWidget.headerItem().setText(4, "Primer Play")
+                
+                # Add tracks
+                for track in sorted_tracks[:self.scrobbles_limit]:
+                    track_item = QTreeWidgetItem(root_item)
+                    track_item.setText(0, track['title'])
+                    track_item.setText(1, track['artist'])
+                    track_item.setText(2, "Track")
+                    track_item.setText(3, str(track['count']))
+                    
+                    # Format first play date
+                    first_play = min(track['timestamps'])
+                    date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
+                    track_item.setText(4, date_str)
+                    
+                    # Store all available URLs
+                    track_data = {
+                        'title': track['title'],
+                        'artist': track['artist'],
+                        'album': track['album'],
+                        'type': 'track',
+                        'source': 'lastfm'
+                    }
+                    
+                    # Add service URLs if available
+                    for service in service_priority:
+                        service_url_key = f'{service}_url'
+                        if service_url_key in track:
+                            track_data[service_url_key] = track[service_url_key]
+                    
+                    track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+                    
+                    # Set icon based on available URLs (use first available service in priority order)
+                    icon_set = False
+                    for service in service_priority:
+                        service_url_key = f'{service}_url'
+                        if service_url_key in track and track[service_url_key]:
+                            track_item.setIcon(0, QIcon(f":/services/{service}"))
+                            icon_set = True
+                            break
+                    
+                    # Default to Last.fm icon if no other service icons available
+                    if not icon_set:
+                        track_item.setIcon(0, QIcon(":/services/lastfm"))
+            
+            else:
+                # Display chronologically (by date)
+                # Create root item
+                root_item = QTreeWidgetItem(self.treeWidget)
+                root_item.setText(0, f"Scrobbles: {title}")
+                root_item.setText(1, self.lastfm_user)
+                root_item.setText(2, "Last.fm")
+                
+                # Format as bold
+                font = root_item.font(0)
+                font.setBold(True)
+                root_item.setFont(0, font)
+                
+                # Add icon
+                root_item.setIcon(0, QIcon(":/services/lastfm"))
+                
+                # Change column headers
+                self.treeWidget.headerItem().setText(4, "Fecha")
+                
+                # Add tracks chronologically
+                for scrobble in scrobbles:
+                    track_item = QTreeWidgetItem(root_item)
+                    track_item.setText(0, scrobble['title'])
+                    track_item.setText(1, scrobble['artist'])
+                    track_item.setText(2, "Track")
+                    
+                    if scrobble['album']:
+                        track_item.setText(3, scrobble['album'])
+                    
+                    # Format date
+                date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(scrobble['timestamp']))
+                track_item.setText(4, date_str)
+                
+                # Store data for playback
+                track_data = {
+                    'title': scrobble['title'],
+                    'artist': scrobble['artist'],
+                    'album': scrobble['album'],
+                    'type': 'track',
+                    'source': 'lastfm',
+                    'timestamp': scrobble['timestamp']
+                }
+                # Add available service URLs
+                for service in service_priority:
+                    service_url_key = f'{service}_url'
+                    if service_url_key in scrobble:
+                       track_item.setIcon(0, QIcon(f":/services/{service}"))
+                       icon_set = True
+                       break
+               
+                # Default to Last.fm icon if no other service icons available
+                if not icon_set:
+                    track_item.setIcon(0, QIcon(":/services/lastfm"))
+       
+            # Expand root item
+            root_item.setExpanded(True)
+            
+            # Log summary
+            self.log(f"Displayed {len(scrobbles)} scrobbles for {title}")
+            
+            return True
+        except Exception as e:
+            self.log(f"Error displaying scrobbles: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+    def populate_scrobbles_time_menus(self, scrobbles):
+        """Populate the year and month menus based on available scrobbles data"""
+        try:
+            if not scrobbles:
+                return False
+                
+            # Get menu references
+            menus_to_update = [
+                # Main scrobbles button menus
+                {'months': self.months_menu, 'years': self.years_menu},
+                # Unified button menus
+                {'months': getattr(self, 'unified_months_menu', None), 
+                'years': getattr(self, 'unified_years_menu', None)}
+            ]
+            
+            # Extract years and months from scrobbles
+            years_dict = {}
+            
+            for scrobble in scrobbles:
+                timestamp = scrobble['timestamp']
+                date = time.localtime(timestamp)
+                year = date.tm_year
+                month = date.tm_mon
+                
+                if year not in years_dict:
+                    years_dict[year] = set()
+                
+                years_dict[year].add(month)
+            
+            # Update each set of menus
+            for menu_set in menus_to_update:
+                months_menu = menu_set.get('months')
+                years_menu = menu_set.get('years')
+                
+                if not months_menu or not years_menu:
+                    continue
+                    
+                # Clear menus
+                months_menu.clear()
+                years_menu.clear()
+                
+                # Populate Years menu
+                years = sorted(years_dict.keys(), reverse=True)
+                for year in years:
+                    year_action = years_menu.addAction(str(year))
+                    year_action.triggered.connect(lambda checked, y=year: self.load_lastfm_scrobbles_year(y))
+                
+                # Populate Months menu (years as submenus, months within each year)
+                for year in years:
+                    year_menu = months_menu.addMenu(str(year))
+                    
+                    # Get months for this year and sort them
+                    months = sorted(years_dict[year])
+                    
+                    # Add month items
+                    for month in months:
+                        month_name = time.strftime("%B", time.struct_time((2000, month, 1, 0, 0, 0, 0, 0, 0)))
+                        month_action = year_menu.addAction(month_name)
+                        month_action.triggered.connect(lambda checked, y=year, m=month: self.load_lastfm_scrobbles_month(y, m))
+            
+            self.log(f"Populated scrobbles menus with {len(years)} years")
+            return True
+        except Exception as e:
+            self.log(f"Error populating scrobbles time menus: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+# Obtener desde la base de datos
+
+    def get_track_links_from_db(self, artist, title, album=None):
+        """Get track links from the database"""
+        try:
+            # Use the get_detailed_info method foundation
+            if not self.db_path or not os.path.exists(self.db_path):
+                self.log(f"Database not found at: {self.db_path}")
+                return None
+            
+            # Import the database query class
+            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            
+            db = MusicDatabaseQuery(self.db_path)
+            
+            # Get track links
+            if album:
+                track_links = db.get_track_links(album, title)
+            else:
+                # Try to find without album
+                # First get song info to find album
+                song_info = db.get_song_info(title, artist)
+                if song_info and song_info.get('album'):
+                    track_links = db.get_track_links(song_info['album'], title)
+                else:
+                    # If we don't have album info, we can't get links this way
+                    track_links = None
+            
+            # If we didn't find links via track, try artist->album->track path
+            if not track_links:
+                # Get albums by artist
+                artist_albums = db.get_artist_albums(artist)
+                if artist_albums:
+                    for album_tuple in artist_albums:
+                        album_name = album_tuple[0]
+                        
+                        # Get album info
+                        album_info = db.get_album_info(album_name, artist)
+                        
+                        if album_info and 'songs' in album_info:
+                            for song in album_info['songs']:
+                                if song.get('title', '').lower() == title.lower():
+                                    # Found the track, get links
+                                    track_links = db.get_track_links(album_name, title)
+                                    if track_links:
+                                        break
+                        
+                        if track_links:
+                            break
+            
+            db.close()
+            return track_links
+            
+        except Exception as e:
+            self.log(f"Error getting track links from database: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return None
+
+    def extract_link_from_lastfm(self, lastfm_url, service):
+        """Extract service link from a Last.fm page"""
+        try:
+            # Check if we have BeautifulSoup
+            try:
+                from bs4 import BeautifulSoup
+            except ImportError:
+                self.log("BeautifulSoup not installed, cannot extract links")
+                return None
+                
+            # Make request to Last.fm page
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+            response = requests.get(lastfm_url, headers=headers, timeout=10)
+            
+            if response.status_code != 200:
+                return None
+                
+            # Parse the HTML
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Service-specific extractors
+            if service == 'youtube':
+                return self.extract_youtube_from_lastfm_soup(soup)
+            elif service == 'spotify':
+                return self.extract_spotify_from_lastfm_soup(soup)
+            elif service == 'bandcamp':
+                return self.extract_bandcamp_from_lastfm_soup(soup)
+            elif service == 'soundcloud':
+                return self.extract_soundcloud_from_lastfm_soup(soup)
+            else:
+                return None
+                
+        except Exception as e:
+            self.log(f"Error extracting {service} link from Last.fm: {str(e)}")
+            return None
+
+    def extract_youtube_from_lastfm_soup(self, soup):
+        """Extract YouTube URL from a Last.fm page soup"""
+        try:
+            # Try different methods to find YouTube links
+            
+            # Method 1: Look for elements with data-youtube-id or data-youtube-url
+            youtube_elements = soup.select('[data-youtube-id], [data-youtube-url]')
+            for element in youtube_elements:
+                if 'data-youtube-url' in element.attrs:
+                    return element['data-youtube-url']
+                elif 'data-youtube-id' in element.attrs:
+                    return f"https://www.youtube.com/watch?v={element['data-youtube-id']}"
+            
+            # Method 2: Look for standard YouTube links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if 'youtube.com/watch' in href or 'youtu.be/' in href:
+                    return href
+            
+            return None
+        except Exception as e:
+            self.log(f"Error extracting YouTube from soup: {str(e)}")
+            return None
+
+    def extract_spotify_from_lastfm_soup(self, soup):
+        """Extract Spotify URL from a Last.fm page soup"""
+        try:
+            # Look for Spotify links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if 'open.spotify.com' in href:
+                    return href
+            
+            return None
+        except Exception as e:
+            self.log(f"Error extracting Spotify from soup: {str(e)}")
+            return None
+
+    def extract_bandcamp_from_lastfm_soup(self, soup):
+        """Extract Bandcamp URL from a Last.fm page soup"""
+        try:
+            # Look for Bandcamp links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if 'bandcamp.com' in href:
+                    return href
+            
+            return None
+        except Exception as e:
+            self.log(f"Error extracting Bandcamp from soup: {str(e)}")
+            return None
+
+    def extract_soundcloud_from_lastfm_soup(self, soup):
+        """Extract SoundCloud URL from a Last.fm page soup"""
+        try:
+            # Look for SoundCloud links
+            for link in soup.find_all('a', href=True):
+                href = link['href']
+                if 'soundcloud.com' in href:
+                    return href
+            
+            return None
+        except Exception as e:
+            self.log(f"Error extracting SoundCloud from soup: {str(e)}")
+            return None
+
+
+    def get_service_priority(self):
+        """Get the service priority from settings"""
+        try:
+            # Default priority
+            default_priority = ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+            
+            # Check if we have the combo boxes in settings
+            combo1 = self.findChild(QComboBox, 'comboBox_1')
+            combo2 = self.findChild(QComboBox, 'comboBox_2')
+            combo3 = self.findChild(QComboBox, 'comboBox_3')
+            combo4 = self.findChild(QComboBox, 'comboBox_4')
+            
+            if all([combo1, combo2, combo3, combo4]):
+                # Get the selected services
+                service1 = combo1.currentText().lower()
+                service2 = combo2.currentText().lower()
+                service3 = combo3.currentText().lower()
+                service4 = combo4.currentText().lower()
+                
+                # Create priority list
+                priority = [service1, service2, service3, service4]
+                
+                # Validate that we have valid services
+                valid_services = ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+                validated_priority = [s for s in priority if s in valid_services]
+                
+                # Make sure all required services are included
+                for service in valid_services:
+                    if service not in validated_priority:
+                        validated_priority.append(service)
+                
+                return validated_priority
+            else:
+                return default_priority
+        except Exception as e:
+            self.log(f"Error getting service priority: {str(e)}")
+            return ['youtube', 'spotify', 'bandcamp', 'soundcloud']
 
 def closeEvent(self, event):
     """Limpia recursos al cerrar."""

@@ -435,7 +435,7 @@ QProgressBar::chunk {
                   </size>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="separate_page_stacked">
                   <property name="sizePolicy">
@@ -473,7 +473,24 @@ QProgressBar::chunk {
                        <number>3</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="pushButton">
+                       <widget class="QPushButton" name="colecciones_mb_menu">
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Colecciones MB</string>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="scrobbles_menu">
                         <property name="maximumSize">
                          <size>
                           <width>16777215</width>
@@ -562,6 +579,23 @@ QProgressBar::chunk {
                            <normaloff>:/services/plslove</normaloff>:/services/plslove</iconset>
                          </property>
                         </item>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="favoritos_menu">
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>30</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string/>
+                        </property>
+                        <property name="icon">
+                         <iconset resource="../images.qrc">
+                          <normaloff>:/services/chicken</normaloff>:/services/chicken</iconset>
+                        </property>
                        </widget>
                       </item>
                      </layout>
@@ -811,7 +845,7 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>581</width>
+                     <width>464</width>
                      <height>643</height>
                     </rect>
                    </property>
@@ -936,7 +970,7 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>581</width>
+                     <width>464</width>
                      <height>649</height>
                     </rect>
                    </property>
@@ -1008,7 +1042,7 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>581</width>
+                     <width>464</width>
                      <height>649</height>
                     </rect>
                    </property>
