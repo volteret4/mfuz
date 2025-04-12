@@ -13,6 +13,10 @@ import musicbrainzngs
 INTERACTIVE_MODE = True  # This will be set by db_creator.py
 FORCE_UPDATE = True  # This will be set by db_creator.py
 
+# Variable global para el caché (inicializar en setup_musicbrainz)
+mb_cache = None
+lastfm_cache = None
+
 def handle_force_update(db_path):
     """
     Función crítica: Se ejecuta al principio del módulo para asegurar que force_update funcione
@@ -50,6 +54,252 @@ def handle_force_update(db_path):
     except Exception as e:
         print(f"Error al intentar limpiar la base de datos: {e}")
 
+def find_best_match(name, candidates, threshold=0.8):
+    """
+    Encuentra la mejor coincidencia para 'name' entre los candidatos.
+    Totalmente insensible a mayúsculas/minúsculas.
+    
+    Args:
+        name: Nombre a buscar
+        candidates: Lista de nombres candidatos o diccionario donde las claves son nombres
+        threshold: Umbral mínimo de coincidencia (0-1)
+    
+    Returns:
+        Tupla (mejor_coincidencia, puntuación) o (None, 0) si no hay coincidencias
+    """
+    import difflib
+    
+    if not candidates or not name:
+        return None, 0
+    
+    # Normalizar nombre para comparación (todo a minúsculas)
+    name_lower = name.lower().strip()
+    
+    # Si candidates es un diccionario, extraemos las claves (nombres)
+    if isinstance(candidates, dict):
+        candidate_items = list(candidates.items())
+        candidate_names = [k for k, v in candidate_items]
+    else:
+        candidate_names = candidates
+        candidate_items = [(c, c) for c in candidates]
+    
+    # Primero buscar coincidencias exactas (ignorando mayúsculas/minúsculas)
+    for i, cname in enumerate(candidate_names):
+        if cname.lower().strip() == name_lower:
+            return candidate_items[i][1], 1.0  # Coincidencia perfecta
+    
+    # Si no hay coincidencia exacta, calcular puntuaciones de similitud
+    scores = []
+    for i, cname in enumerate(candidate_names):
+        # Usar minúsculas para la comparación
+        ratio = difflib.SequenceMatcher(None, name_lower, cname.lower().strip()).ratio()
+        scores.append((candidate_items[i][1], ratio))
+    
+    # Encontrar la mejor coincidencia
+    if not scores:
+        return None, 0
+        
+    best_match = max(scores, key=lambda x: x[1])
+    
+    # Devolver sólo si supera el umbral
+    if best_match[1] >= threshold:
+        return best_match
+    
+    return None, 0
+
+
+
+def lookup_artist_in_database(conn, artist_name, mbid=None, threshold=0.85):
+    """
+    Lookup artist using database information with fuzzy matching
+    Returns (artist_id, artist_info) or (None, None) if not found
+    """
+    cursor = conn.cursor()
+    
+    # Try exact name match first
+    cursor.execute("SELECT id, mbid, name, origen FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
+    result = cursor.fetchone()
+    
+    # If no match by name but we have MBID, try by MBID
+    if not result and mbid:
+        cursor.execute("SELECT id, mbid, name, origen FROM artists WHERE mbid = ?", (mbid,))
+        result = cursor.fetchone()
+    
+    # If still no match and threshold < 1.0, try fuzzy matching
+    if not result and threshold < 1.0:
+        # Get all artists for fuzzy matching
+        cursor.execute("SELECT id, mbid, name, origen FROM artists")
+        all_artists = cursor.fetchall()
+        
+        # Build dictionary of names to full records
+        artist_dict = {row[2]: row for row in all_artists}
+        
+        # Find best match
+        best_match, score = find_best_match(artist_name, artist_dict.keys(), threshold)
+        
+        if best_match:
+            print(f"Encontrado artista por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+            result = artist_dict[best_match]
+    
+    if result:
+        return result[0], {
+            'id': result[0],
+            'mbid': result[1],
+            'name': result[2],
+            'origen': result[3]
+        }
+    
+    return None, None
+
+def lookup_album_in_database(conn, album_name, artist_id=None, artist_name=None, mbid=None, threshold=0.85):
+    """
+    Lookup album using database information with fuzzy matching
+    Prioritizes search by artist_id if available
+    Returns (album_id, album_info) or (None, None) if not found
+    """
+    cursor = conn.cursor()
+    
+    # Initial query construction for exact match
+    query = "SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE "
+    conditions = []
+    params = []
+    
+    # Base condition on album name
+    conditions.append("LOWER(a.name) = LOWER(?)")
+    params.append(album_name)
+    
+    # If we have artist_id, prioritize it
+    if artist_id:
+        conditions.append("a.artist_id = ?")
+        params.append(artist_id)
+    # Otherwise use artist name if available
+    elif artist_name:
+        conditions.append("LOWER(ar.name) = LOWER(?)")
+        params.append(artist_name)
+    
+    # Execute with available conditions
+    cursor.execute(query + " AND ".join(conditions), params)
+    result = cursor.fetchone()
+    
+    # If no match by name/artist but we have MBID, try by MBID
+    if not result and mbid:
+        cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE a.mbid = ?", (mbid,))
+        result = cursor.fetchone()
+    
+    # If still no match and threshold < 1.0, try fuzzy matching
+    if not result and threshold < 1.0:
+        # Get all albums for the artist if we have artist_id
+        if artist_id:
+            cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE a.artist_id = ?", (artist_id,))
+            artist_albums = cursor.fetchall()
+            
+            # Build dictionary of album names to full records
+            album_dict = {row[2]: row for row in artist_albums}
+            
+            # Find best match among this artist's albums
+            best_match, score = find_best_match(album_name, album_dict.keys(), threshold)
+            
+            if best_match:
+                print(f"Encontrado álbum por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+                result = album_dict[best_match]
+        
+        # If we still don't have a match but have artist_name, try all albums
+        elif artist_name and not result:
+            # Get all albums
+            cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id")
+            all_albums = cursor.fetchall()
+            
+            # Create composite keys with artist and album name
+            album_dict = {f"{row[4]} - {row[2]}": row for row in all_albums}
+            
+            # Find best match with combined artist-album key
+            best_match, score = find_best_match(f"{artist_name} - {album_name}", album_dict.keys(), threshold)
+            
+            if best_match:
+                print(f"Encontrado álbum por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+                result = album_dict[best_match]
+    
+    if result:
+        return result[0], {
+            'id': result[0],
+            'mbid': result[1],
+            'name': result[2],
+            'artist_id': result[3],
+            'artist_name': result[4],
+            'origen': result[5]
+        }
+    
+    return None, None
+
+def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, album_id=None, album_name=None, mbid=None, threshold=0.85):
+    """
+    Lookup song using database information with fuzzy matching
+    Prioritizes search by existing IDs when available
+    Returns (song_id, song_info) or (None, None) if not found
+    """
+    cursor = conn.cursor()
+    
+    # Primero intentar una búsqueda exacta pero case-insensitive
+    query = "SELECT id, mbid, title, artist, album, origen FROM songs WHERE "
+    conditions = ["LOWER(title) = LOWER(?)"]
+    params = [track_name]
+    
+    # Añadir condición de artista si disponible
+    if artist_name:
+        conditions.append("LOWER(artist) = LOWER(?)")
+        params.append(artist_name)
+    
+    # Añadir condición de álbum si disponible
+    if album_name:
+        conditions.append("LOWER(album) = LOWER(?)")
+        params.append(album_name)
+    
+    # Ejecutar consulta
+    cursor.execute(query + " AND ".join(conditions), params)
+    result = cursor.fetchone()
+    
+    # Si no hay resultado, intentar búsqueda más flexible sin importar mayúsculas/minúsculas
+    if not result:
+        # Obtener todas las canciones para búsqueda más flexible
+        additional_cond = ""
+        additional_params = []
+    
+        if artist_name:
+            additional_cond = " WHERE LOWER(artist) = LOWER(?)"
+            additional_params = [artist_name]
+        
+        cursor.execute(f"SELECT id, mbid, title, artist, album, origen FROM songs{additional_cond}", additional_params)
+        all_songs = cursor.fetchall()
+        
+        # Comparar manualmente para total insensibilidad a case
+        for song in all_songs:
+            song_title = song[2]
+            
+            # Comparación insensible a mayúsculas/minúsculas
+            if song_title.lower() == track_name.lower():
+                # Si tenemos artista, verificar también
+                if artist_name:
+                    song_artist = song[3]
+                    if song_artist.lower() == artist_name.lower():
+                        result = song
+                        print(f"Encontrada canción por coincidencia insensible a mayúsculas: '{song_title}' por '{song_artist}'")
+                        break
+                else:
+                    result = song
+                    print(f"Encontrada canción por coincidencia insensible a mayúsculas: '{song_title}'")
+                    break
+    
+    if result:
+        return result[0], {
+            'id': result[0],
+            'mbid': result[1],
+            'title': result[2],
+            'artist': result[3],
+            'album': result[4],
+            'origen': result[5]
+        }
+    
+    return None, None
 
 
 
@@ -113,46 +363,237 @@ def get_or_update_artist(conn, artist_name, mbid, lastfm_api_key, interactive=Fa
         print(f"Error al añadir el artista {artist_name}: {e}")
         return None
 
-def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_api_key, interactive=False):
-    """Busca un álbum por nombre y artista y lo actualiza con datos de MusicBrainz si es necesario"""
-    cursor = conn.cursor()
+def get_or_update_artist(conn, artist_name, mbid, interactive=False):
+    """
+    Busca un artista siguiendo la lógica prioritaria:
+    1. Primero en base de datos
+    2. Luego en MusicBrainz
+    3. Solo como último recurso, Last.fm
+    """
+    print(f"\n=== Procesando artista: {artist_name} ===")
     
-    # Buscar primero por nombre y artista en la base de datos
-    cursor.execute("""
-        SELECT a.id, a.mbid, a.origen 
-        FROM albums a
-        JOIN artists ar ON a.artist_id = ar.id
-        WHERE LOWER(a.name) = LOWER(?) AND (LOWER(ar.name) = LOWER(?) OR a.artist_id = ?)
-    """, (album_name, artist_name, artist_id))
+    # 1. Buscar en la base de datos
+    artist_id, artist_db_info = lookup_artist_in_database(conn, artist_name, mbid)
     
-    existing_album = cursor.fetchone()
-    
-    if existing_album:
-        album_id, existing_mbid, origen = existing_album
-        print(f"Álbum encontrado en base de datos por nombre: {album_name} (ID: {album_id})")
+    if artist_id:
+        print(f"Artista encontrado en base de datos: {artist_name} (ID: {artist_id})")
         
         # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-        if mbid and (not existing_mbid or existing_mbid != mbid):
+        if mbid and (not artist_db_info['mbid'] or artist_db_info['mbid'] != mbid):
+            cursor = conn.cursor()
+            print(f"Actualizando MBID para artista {artist_name}: {mbid}")
+            cursor.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
+            conn.commit()
+        
+        return artist_id
+    
+    # 2. Si no está en la base de datos, buscar en MusicBrainz
+    print(f"Artista no encontrado en base de datos, buscando en MusicBrainz: {artist_name}")
+    
+    mb_artist = None
+    if mbid:
+        # Si tenemos MBID, buscar directamente por él
+        mb_artist = get_artist_from_musicbrainz(mbid)
+        if mb_artist:
+            print(f"Artista encontrado en MusicBrainz por MBID: {mb_artist.get('name', artist_name)}")
+    
+    # Si no tenemos MBID o no se encontró por MBID, buscar por nombre
+    if not mb_artist:
+        mb_artist = get_artist_from_musicbrainz_by_name(artist_name)
+        if mb_artist:
+            print(f"Artista encontrado en MusicBrainz por nombre: {mb_artist.get('name', artist_name)}")
+            mbid = mb_artist.get('id', '')
+    
+    # 3. Si se encontró información en MusicBrainz, guardar en la base de datos
+    if mb_artist:
+        cursor = conn.cursor()
+        
+        # Extraer tags si existen
+        tags = []
+        if 'tag-list' in mb_artist:
+            tags = [tag['name'] for tag in mb_artist.get('tag-list', [])]
+        tags_str = ','.join(tags)
+        
+        # Extraer URLs oficiales
+        url = ''
+        if 'url-relation-list' in mb_artist:
+            for url_rel in mb_artist['url-relation-list']:
+                if url_rel.get('type') == 'official homepage':
+                    url = url_rel.get('target', '')
+                    break
+        
+        # Mostrar información en modo interactivo
+        if interactive:
+            print("\n" + "="*60)
+            print(f"INFORMACIÓN DEL ARTISTA A AÑADIR (desde MusicBrainz):")
+            print("="*60)
+            print(f"Nombre: {mb_artist.get('name', artist_name)}")
+            print(f"MBID: {mbid}")
+            print(f"URL: {url}")
+            print(f"Tags: {tags_str}")
+            print(f"Origen: musicbrainz")
+            print("-"*60)
+            
+            respuesta = input("\n¿Añadir este artista a la base de datos? (s/n): ").lower()
+            if respuesta != 's':
+                print("Operación cancelada por el usuario.")
+                return None
+        
+        try:
+            cursor.execute("""
+                INSERT INTO artists (name, mbid, tags, lastfm_url, origen)
+                VALUES (?, ?, ?, ?, 'musicbrainz')
+                RETURNING id
+            """, (
+                mb_artist.get('name', artist_name), 
+                mbid, 
+                tags_str, 
+                url
+            ))
+            
+            artist_id = cursor.fetchone()[0]
+            conn.commit()
+            print(f"Artista añadido con ID: {artist_id} (origen: MusicBrainz)")
+            return artist_id
+        except sqlite3.Error as e:
+            print(f"Error al añadir el artista {artist_name} desde MusicBrainz: {e}")
+    
+    # 4. Si todo lo anterior falla, preguntar al usuario
+    if interactive:
+        print("\n" + "="*60)
+        print(f"NO SE PUDO OBTENER INFORMACIÓN PARA EL ARTISTA:")
+        print("="*60)
+        print(f"Nombre: {artist_name}")
+        print(f"MBID: {mbid}")
+        print("-"*60)
+        respuesta = input("¿Añadir este artista con datos mínimos? (s/n): ").lower()
+        if respuesta != 's':
+            return None
+    
+    # 5. Añadir con datos mínimos
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO artists (name, mbid, origen)
+            VALUES (?, ?, 'manual')
+            RETURNING id
+        """, (artist_name, mbid))
+        
+        artist_id = cursor.fetchone()[0]
+        conn.commit()
+        print(f"Artista añadido con datos mínimos, ID: {artist_id}")
+        return artist_id
+    except sqlite3.Error as e:
+        print(f"Error al añadir el artista {artist_name}: {e}")
+        return None
+
+
+
+def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, interactive=False):
+    """
+    Busca un álbum siguiendo la lógica prioritaria:
+    1. Primero en base de datos
+    2. Luego en MusicBrainz
+    3. Solo como último recurso, datos mínimos
+    """
+    print(f"\n=== Procesando álbum: {album_name} de {artist_name} ===")
+    
+    # 1. Buscar en la base de datos
+    album_id, album_db_info = lookup_album_in_database(conn, album_name, artist_id, artist_name, mbid)
+    
+    if album_id:
+        print(f"Álbum encontrado en base de datos: {album_name} (ID: {album_id})")
+        
+        # Si el artista es diferente del que tenemos en nuestro scrobble, analizar
+        if album_db_info['artist_id'] != artist_id and artist_id is not None:
+            print(f"Nota: El álbum está asociado a otro artista en la base de datos: {album_db_info['artist_name']}")
+            # No modificaremos esto automáticamente, pero registramos la discrepancia
+        
+        # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
+        if mbid and (not album_db_info['mbid'] or album_db_info['mbid'] != mbid):
+            cursor = conn.cursor()
             print(f"Actualizando MBID para álbum {album_name}: {mbid}")
             cursor.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, album_id))
             conn.commit()
-            
-            # Opcionalmente obtener más datos de MusicBrainz
-            if 'online' not in origen:
-                album_info = get_album_info(album_name, artist_name, mbid, lastfm_api_key)
-                if album_info:
-                    update_album_in_db(conn, album_id, album_info)
         
         return album_id
     
-    # Si no existe, obtener info y crear nuevo
-    print(f"Álbum no encontrado, obteniendo información para: {album_name}")
-    album_info = get_album_info(album_name, artist_name, mbid, lastfm_api_key)
+    # 2. Si no está en la base de datos, buscar en MusicBrainz
+    print(f"Álbum no encontrado en base de datos, buscando en MusicBrainz: {album_name}")
     
-    if album_info:
-        return add_album_to_db(conn, album_info, artist_id, interactive)
+    mb_album = None
+    if mbid:
+        # Si tenemos MBID, buscar directamente por él
+        mb_album = get_album_from_musicbrainz(mbid)
+        if mb_album:
+            print(f"Álbum encontrado en MusicBrainz por MBID: {mb_album.get('title', album_name)}")
     
-    # Si no se puede obtener info, crear con datos mínimos
+    # Si no tenemos MBID o no se encontró por MBID, buscar por nombre y artista
+    if not mb_album:
+        mb_album = get_album_from_musicbrainz_by_name(album_name, artist_name)
+        if mb_album:
+            print(f"Álbum encontrado en MusicBrainz por nombre: {mb_album.get('title', album_name)}")
+            mbid = mb_album.get('id', '')
+    
+    # 3. Si se encontró información en MusicBrainz, guardar en la base de datos
+    if mb_album:
+        # Extraer año si existe
+        year = None
+        if 'date' in mb_album:
+            try:
+                year_str = mb_album['date']
+                if year_str and len(year_str) >= 4:
+                    year = int(year_str[:4])
+            except (ValueError, TypeError):
+                pass
+        
+        # Número de pistas
+        total_tracks = 0
+        if 'medium-list' in mb_album:
+            for medium in mb_album['medium-list']:
+                if 'track-count' in medium:
+                    total_tracks += int(medium['track-count'])
+        
+        # Mostrar información en modo interactivo
+        if interactive:
+            print("\n" + "="*60)
+            print(f"INFORMACIÓN DEL ÁLBUM A AÑADIR (desde MusicBrainz):")
+            print("="*60)
+            print(f"Nombre: {mb_album.get('title', album_name)}")
+            print(f"Artista: {artist_name} (ID: {artist_id})")
+            print(f"MBID: {mbid}")
+            print(f"Año: {year}")
+            print(f"Total pistas: {total_tracks}")
+            print(f"Origen: musicbrainz")
+            print("-"*60)
+            
+            respuesta = input("\n¿Añadir este álbum a la base de datos? (s/n): ").lower()
+            if respuesta != 's':
+                print("Operación cancelada por el usuario.")
+                return None
+        
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO albums (artist_id, name, year, mbid, total_tracks, origen)
+                VALUES (?, ?, ?, ?, ?, 'musicbrainz')
+                RETURNING id
+            """, (
+                artist_id, 
+                mb_album.get('title', album_name), 
+                year, 
+                mbid, 
+                total_tracks
+            ))
+            
+            album_id = cursor.fetchone()[0]
+            conn.commit()
+            print(f"Álbum añadido con ID: {album_id} (origen: MusicBrainz)")
+            return album_id
+        except sqlite3.Error as e:
+            print(f"Error al añadir el álbum {album_name} desde MusicBrainz: {e}")
+    
+    # 4. Si todo lo anterior falla, preguntar al usuario
     if interactive:
         print("\n" + "="*60)
         print(f"NO SE PUDO OBTENER INFORMACIÓN PARA EL ÁLBUM:")
@@ -165,7 +606,9 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_a
         if respuesta != 's':
             return None
     
+    # 5. Añadir con datos mínimos
     try:
+        cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO albums (name, artist_id, mbid, origen)
             VALUES (?, ?, ?, 'manual')
@@ -182,52 +625,124 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_a
 
 
 
-def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, mbid, lastfm_api_key, interactive=False):
-    """Busca una canción por nombre, artista y álbum y la actualiza con datos de MusicBrainz si es necesario"""
-    cursor = conn.cursor()
+def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, mbid, interactive=False):
+    """
+    Busca una canción siguiendo la lógica prioritaria:
+    1. Primero en base de datos
+    2. Luego en MusicBrainz
+    3. Solo como último recurso, datos mínimos
+    """
+    print(f"\n=== Procesando canción: {track_name} de {artist_name} ===")
     
-    # Buscar primero por nombre, artista y álbum en la base de datos
-    cursor.execute("""
-        SELECT id, mbid, origen 
-        FROM songs
-        WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
-        AND (LOWER(album) = LOWER(?) OR album IS NULL)
-    """, (track_name, artist_name, album_name))
+    # 1. Buscar en la base de datos
+    song_id, song_db_info = lookup_song_in_database(conn, track_name, artist_id, artist_name, album_id, album_name, mbid)
     
-    existing_song = cursor.fetchone()
-    
-    if existing_song:
-        song_id, existing_mbid, origen = existing_song
-        print(f"Canción encontrada en base de datos por nombre: {track_name} (ID: {song_id})")
+    if song_id:
+        print(f"Canción encontrada en base de datos: {track_name} (ID: {song_id})")
         
         # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-        if mbid and (not existing_mbid or existing_mbid != mbid):
+        if mbid and (not song_db_info['mbid'] or song_db_info['mbid'] != mbid):
+            cursor = conn.cursor()
             print(f"Actualizando MBID para canción {track_name}: {mbid}")
             cursor.execute("UPDATE songs SET mbid = ? WHERE id = ?", (mbid, song_id))
             
-            # Si tenemos un álbum, actualizar también ese dato
-            if album_name and album_id:
-                cursor.execute("UPDATE songs SET album = ?, album_id = ? WHERE id = ? AND (album IS NULL OR album = '')", 
+            # Si tenemos un álbum, actualizar también ese dato si está vacío
+            if album_name and album_id and (not song_db_info['album'] or song_db_info['album'] == ''):
+                cursor.execute("UPDATE songs SET album = ?, album_id = ? WHERE id = ?", 
                                (album_name, album_id, song_id))
             
             conn.commit()
-            
-            # Opcionalmente obtener más datos de MusicBrainz
-            if 'online' not in origen:
-                track_info = get_track_info(track_name, artist_name, mbid, lastfm_api_key)
-                if track_info:
-                    update_song_in_db(conn, song_id, track_info)
         
         return song_id
     
-    # Si no existe, obtener info y crear nuevo
-    print(f"Canción no encontrada, obteniendo información para: {track_name}")
-    track_info = get_track_info(track_name, artist_name, mbid, lastfm_api_key)
+    # 2. Si no está en la base de datos, buscar en MusicBrainz
+    print(f"Canción no encontrada en base de datos, buscando en MusicBrainz: {track_name}")
     
-    if track_info:
-        return add_song_to_db(conn, track_info, album_id, artist_id, interactive)
+    mb_track = None
+    if mbid:
+        # Si tenemos MBID, buscar directamente por él
+        mb_track = get_track_from_musicbrainz(mbid)
+        if mb_track:
+            print(f"Canción encontrada en MusicBrainz por MBID: {mb_track.get('title', track_name)}")
     
-    # Si no se puede obtener info, crear con datos mínimos
+    # Si no tenemos MBID o no se encontró por MBID, buscar por nombre, artista y álbum
+    if not mb_track:
+        mb_track = get_track_from_musicbrainz_by_name(track_name, artist_name, album_name)
+        if mb_track:
+            print(f"Canción encontrada en MusicBrainz por nombre: {mb_track.get('title', track_name)}")
+            mbid = mb_track.get('id', '')
+    
+    # 3. Si se encontró información en MusicBrainz, guardar en la base de datos
+    if mb_track:
+        # Extraer duración si existe
+        duration = None
+        if 'length' in mb_track:
+            try:
+                duration = int(mb_track['length']) // 1000  # ms a segundos
+            except (ValueError, TypeError):
+                pass
+        
+        # Géneros/tags
+        genre = ''
+        if 'tag-list' in mb_track and mb_track['tag-list']:
+            genre = mb_track['tag-list'][0]['name']
+        
+        # Fecha actual para campos de tiempo
+        now = datetime.datetime.now()
+        added_timestamp = int(time.time())
+        added_week = now.isocalendar()[1]
+        added_month = now.month
+        added_year = now.year
+        
+        # Mostrar información en modo interactivo
+        if interactive:
+            print("\n" + "="*60)
+            print(f"INFORMACIÓN DE LA CANCIÓN A AÑADIR (desde MusicBrainz):")
+            print("="*60)
+            print(f"Título: {mb_track.get('title', track_name)}")
+            print(f"Artista: {artist_name} (ID: {artist_id})")
+            print(f"Álbum: {album_name} (ID: {album_id})")
+            print(f"MBID: {mbid}")
+            print(f"Duración: {duration} segundos")
+            print(f"Género: {genre}")
+            print(f"Origen: musicbrainz")
+            print("-"*60)
+            
+            respuesta = input("\n¿Añadir esta canción a la base de datos? (s/n): ").lower()
+            if respuesta != 's':
+                print("Operación cancelada por el usuario.")
+                return None
+        
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO songs 
+                (title, mbid, added_timestamp, added_week, added_month, added_year, 
+                 duration, album, album_artist, artist, genre, origen)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'musicbrainz')
+                RETURNING id
+            """, (
+                mb_track.get('title', track_name), 
+                mbid, 
+                added_timestamp, 
+                added_week, 
+                added_month, 
+                added_year,
+                duration, 
+                album_name, 
+                artist_name, 
+                artist_name, 
+                genre
+            ))
+            
+            song_id = cursor.fetchone()[0]
+            conn.commit()
+            print(f"Canción añadida con ID: {song_id} (origen: MusicBrainz)")
+            return song_id
+        except sqlite3.Error as e:
+            print(f"Error al añadir la canción {track_name} desde MusicBrainz: {e}")
+    
+    # 4. Si todo lo anterior falla, preguntar al usuario
     if interactive:
         print("\n" + "="*60)
         print(f"NO SE PUDO OBTENER INFORMACIÓN PARA LA CANCIÓN:")
@@ -241,7 +756,7 @@ def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, alb
         if respuesta != 's':
             return None
     
-    # Fecha actual para campos de tiempo
+    # 5. Añadir con datos mínimos
     now = datetime.datetime.now()
     added_timestamp = int(time.time())
     added_week = now.isocalendar()[1]
@@ -249,6 +764,7 @@ def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, alb
     added_year = now.year
     
     try:
+        cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO songs 
             (title, artist, album, album_artist, mbid, added_timestamp, added_week, added_month, added_year, origen)
@@ -264,56 +780,288 @@ def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, alb
         print(f"Error al añadir la canción {track_name}: {e}")
         return None
 
-def setup_musicbrainz():
-    """Configura el cliente de MusicBrainz"""
+
+def setup_musicbrainz(cache_directory=None):
+    """Configura el cliente de MusicBrainz y el sistema de caché"""
+    global mb_cache, lastfm_cache
+    
+    # Configurar cliente de MusicBrainz
     musicbrainzngs.set_useragent(
         "TuAppMusical", 
         "1.0", 
-        "tu_email@example.com"  # Reemplaza con tu email real
+        "tu_email@example.com"
     )
-    # Opcional: puedes configurar el servidor de MusicBrainz si es necesario
-    # musicbrainzngs.set_hostname("musicbrainz.org")
+    
+    # Inicializar caché (en memoria por defecto)
+    if mb_cache is None:
+        mb_cache = MusicBrainzCache()
+    
+    if lastfm_cache is None:
+        lastfm_cache = LastFMCache()
+    
+    # Si se proporciona un directorio de caché, configurar persistencia
+    if cache_directory:
+        try:
+            os.makedirs(cache_directory, exist_ok=True)
+            
+            mb_cache_file = os.path.join(cache_directory, "musicbrainz_cache.json")
+            lastfm_cache_file = os.path.join(cache_directory, "lastfm_cache.json")
+            
+            mb_cache = MusicBrainzCache(mb_cache_file)
+            lastfm_cache = LastFMCache(lastfm_cache_file)
+            
+            print(f"Caché configurado en: {cache_directory}")
+        except Exception as e:
+            print(f"Error al configurar caché persistente: {e}")
+            print("Usando caché en memoria")
+    else:
+        print("Caché configurado en memoria (no persistente)")
 
 def get_artist_from_musicbrainz(mbid):
-    """Obtiene información de un artista desde MusicBrainz usando su MBID"""
+    """
+    Obtiene información de un artista desde MusicBrainz usando su MBID, usando caché
+    """
+    global mb_cache
+    
     if not mbid:
         return None
     
+    # Verificar en caché primero
+    if mb_cache:
+        cached_result = mb_cache.get("artist", mbid)
+        if cached_result:
+            print(f"Usando datos en caché para artista con MBID {mbid}")
+            return cached_result
+    
     try:
+        print(f"Consultando MusicBrainz para artista con MBID {mbid}")
         artist_data = musicbrainzngs.get_artist_by_id(mbid, includes=["tags", "url-rels"])
-        return artist_data.get("artist")
+        result = artist_data.get("artist")
+        
+        # Guardar en caché
+        if mb_cache and result:
+            mb_cache.put("artist", result, mbid)
+            
+        return result
     except musicbrainzngs.WebServiceError as e:
         print(f"Error al consultar MusicBrainz para artista con MBID {mbid}: {e}")
         return None
 
+def get_artist_from_musicbrainz_by_name(artist_name):
+    """
+    Búsqueda en MusicBrainz por nombre del artista, usando caché
+    """
+    global mb_cache
+    
+    if not artist_name:
+        return None
+    album_name = str(album_name) if album_name else ""
+    artist_name = str(artist_name) if artist_name else ""
+
+    # Verificar en caché primero
+    search_params = {"artist": artist_name, "limit": 1}
+    if mb_cache:
+        cached_result = mb_cache.get("artist-search", None, search_params)
+        if cached_result:
+            print(f"Usando datos en caché para búsqueda de artista '{artist_name}'")
+            return cached_result
+    
+    try:
+        print(f"Consultando MusicBrainz para búsqueda de artista '{artist_name}'")
+        result = musicbrainzngs.search_artists(artist=artist_name, limit=1)
+        
+        # Extraer primer resultado si existe
+        if result and 'artist-list' in result and result['artist-list']:
+            first_result = result['artist-list'][0]
+            
+            # Guardar en caché
+            if mb_cache:
+                mb_cache.put("artist-search", first_result, None, search_params)
+                
+            return first_result
+        return None
+    except musicbrainzngs.WebServiceError as e:
+        print(f"Error al buscar artista en MusicBrainz por nombre '{artist_name}': {e}")
+        return None
+
 def get_album_from_musicbrainz(mbid):
-    """Obtiene información de un álbum desde MusicBrainz usando su MBID"""
+    """Obtiene información de un álbum desde MusicBrainz usando su MBID, usando caché"""
+    global mb_cache
+    
     if not mbid:
         return None
     
+    # Verificar en caché primero
+    if mb_cache:
+        cached_result = mb_cache.get("release", mbid)
+        if cached_result:
+            print(f"Usando datos en caché para álbum con MBID {mbid}")
+            return cached_result
+    
     try:
+        print(f"Consultando MusicBrainz para álbum con MBID {mbid}")
         release_data = musicbrainzngs.get_release_by_id(
             mbid, 
             includes=["artists", "recordings", "release-groups", "url-rels"]
         )
-        return release_data.get("release")
+        result = release_data.get("release")
+        
+        # Guardar en caché
+        if mb_cache and result:
+            mb_cache.put("release", result, mbid)
+            
+        return result
     except musicbrainzngs.WebServiceError as e:
         print(f"Error al consultar MusicBrainz para álbum con MBID {mbid}: {e}")
         return None
 
+def get_album_from_musicbrainz_by_name(album_name, artist_name=None):
+    """Búsqueda en MusicBrainz por nombre del álbum y opcionalmente artista, usando caché"""
+    global mb_cache
+    
+    if not album_name:
+        return None
+    
+    # Construir parámetros de búsqueda
+    query = {'release': album_name, 'limit': 5}
+    if artist_name:
+        query['artist'] = artist_name
+        
+    # Verificar en caché primero
+    if mb_cache:
+        cached_result = mb_cache.get("release-search", None, query)
+        if cached_result:
+            print(f"Usando datos en caché para búsqueda de álbum '{album_name}'")
+            return cached_result
+    
+    try:
+        print(f"Consultando MusicBrainz para búsqueda de álbum '{album_name}'")
+        result = musicbrainzngs.search_releases(**query)
+        
+        if result and 'release-list' in result and result['release-list']:
+            # Si múltiples resultados y tenemos artista, priorizar coincidencias exactas
+            if artist_name and len(result['release-list']) > 1:
+                for release in result['release-list']:
+                    if 'artist-credit' in release:
+                        for credit in release['artist-credit']:
+                            if 'artist' in credit and 'name' in credit['artist'] and credit['artist']['name'].lower() == artist_name.lower():
+                                # Guardar en caché
+                                if mb_cache:
+                                    mb_cache.put("release-search", release, None, query)
+                                return release
+            
+            # Si no hay coincidencia exacta, usar el primer resultado
+            first_result = result['release-list'][0]
+            
+            # Guardar en caché
+            if mb_cache:
+                mb_cache.put("release-search", first_result, None, query)
+                
+            return first_result
+        return None
+    except musicbrainzngs.WebServiceError as e:
+        print(f"Error al buscar álbum en MusicBrainz por nombre '{album_name}': {e}")
+        return None
+
 def get_track_from_musicbrainz(mbid):
-    """Obtiene información de una canción desde MusicBrainz usando su MBID"""
+    """Obtiene información de una canción desde MusicBrainz usando su MBID, usando caché"""
+    global mb_cache
+    
     if not mbid:
         return None
     
+    # Verificar en caché primero
+    if mb_cache:
+        cached_result = mb_cache.get("recording", mbid)
+        if cached_result:
+            print(f"Usando datos en caché para canción con MBID {mbid}")
+            return cached_result
+    
     try:
+        print(f"Consultando MusicBrainz para canción con MBID {mbid}")
         recording_data = musicbrainzngs.get_recording_by_id(
             mbid, 
             includes=["artists", "releases", "tags", "url-rels"]
         )
-        return recording_data.get("recording")
+        result = recording_data.get("recording")
+        
+        # Guardar en caché
+        if mb_cache and result:
+            mb_cache.put("recording", result, mbid)
+            
+        return result
     except musicbrainzngs.WebServiceError as e:
         print(f"Error al consultar MusicBrainz para canción con MBID {mbid}: {e}")
+        return None
+
+def get_track_from_musicbrainz_by_name(track_name, artist_name=None, album_name=None):
+    """Búsqueda en MusicBrainz por nombre de la canción y opcionalmente artista/álbum, usando caché"""
+    global mb_cache
+    
+    if not track_name:
+        return None
+    
+    # Construir parámetros de búsqueda
+    query = {'recording': track_name, 'limit': 5}
+    if artist_name:
+        query['artist'] = artist_name
+        
+    # Verificar en caché primero
+    if mb_cache:
+        cached_result = mb_cache.get("recording-search", None, query)
+        if cached_result:
+            print(f"Usando datos en caché para búsqueda de canción '{track_name}'")
+            return cached_result
+    
+    try:
+        print(f"Consultando MusicBrainz para búsqueda de canción '{track_name}'")
+        result = musicbrainzngs.search_recordings(**query)
+        
+        if result and 'recording-list' in result and result['recording-list']:
+            recordings = result['recording-list']
+            
+            # Si tenemos artista y álbum, intentar encontrar coincidencia exacta
+            if artist_name and album_name:
+                for recording in recordings:
+                    if 'artist-credit' in recording and 'release-list' in recording:
+                        # Verificar coincidencia de artista
+                        artist_match = False
+                        for credit in recording['artist-credit']:
+                            if 'artist' in credit and 'name' in credit['artist'] and credit['artist']['name'].lower() == artist_name.lower():
+                                artist_match = True
+                                break
+                        
+                        # Si el artista coincide, verificar álbum
+                        if artist_match and 'release-list' in recording:
+                            for release in recording['release-list']:
+                                if release['title'].lower() == album_name.lower():
+                                    # Guardar en caché
+                                    if mb_cache:
+                                        mb_cache.put("recording-search", recording, None, query)
+                                    return recording
+            
+            # Si sólo tenemos artista, buscar mejor coincidencia por artista
+            elif artist_name:
+                for recording in recordings:
+                    if 'artist-credit' in recording:
+                        for credit in recording['artist-credit']:
+                            if 'artist' in credit and 'name' in credit['artist'] and credit['artist']['name'].lower() == artist_name.lower():
+                                # Guardar en caché
+                                if mb_cache:
+                                    mb_cache.put("recording-search", recording, None, query)
+                                return recording
+            
+            # Si no hay coincidencia exacta, usar el primer resultado
+            first_result = recordings[0]
+            
+            # Guardar en caché
+            if mb_cache:
+                mb_cache.put("recording-search", first_result, None, query)
+                
+            return first_result
+        return None
+    except musicbrainzngs.WebServiceError as e:
+        print(f"Error al buscar canción en MusicBrainz por nombre '{track_name}': {e}")
         return None
 
 def setup_database(conn):
@@ -483,7 +1231,10 @@ def save_last_timestamp(conn, timestamp, lastfm_username):
 # LASTFM INFO
 
 def get_artist_info(artist_name, mbid, lastfm_api_key):
-    """Obtiene información detallada de un artista desde Last.fm"""
+    """Obtiene información detallada de un artista desde Last.fm, usando caché"""
+    global lastfm_cache
+    
+    # Construir parámetros de consulta
     params = {
         'method': 'artist.getInfo',
         'artist': artist_name,
@@ -494,13 +1245,17 @@ def get_artist_info(artist_name, mbid, lastfm_api_key):
     if mbid:
         params['mbid'] = mbid
     
+    # Verificar en caché primero
+    if lastfm_cache:
+        cached_result = lastfm_cache.get('artist.getInfo', params)
+        if cached_result:
+            print(f"Usando datos en caché para artista Last.fm: {artist_name}")
+            return cached_result.get('artist')
+    
     print(f"Consultando información para artista: {artist_name} (MBID: {mbid})")
-    print(f"URL de consulta: http://ws.audioscrobbler.com/2.0/ con params: {params}")
     
     try:
         response = requests.get('http://ws.audioscrobbler.com/2.0/', params=params)
-        
-        print(f"Código de respuesta: {response.status_code}")
         
         if response.status_code != 200:
             print(f"Error al obtener información del artista {artist_name}: {response.status_code}")
@@ -516,25 +1271,25 @@ def get_artist_info(artist_name, mbid, lastfm_api_key):
             
         if 'artist' not in data:
             print(f"No se encontró información para el artista {artist_name}")
-            print(f"Respuesta completa: {data}")
             return None
         
         print(f"Información obtenida correctamente para artista: {artist_name}")
+        
+        # Guardar en caché
+        if lastfm_cache:
+            lastfm_cache.put('artist.getInfo', params, data)
+            
         return data['artist']
     
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión al consultar artista {artist_name}: {e}")
-        return None
-    except json.JSONDecodeError as e:
-        print(f"Error al decodificar respuesta JSON para artista {artist_name}: {e}")
-        print(f"Respuesta recibida: {response.text[:200]}...")
-        return None
     except Exception as e:
-        print(f"Error inesperado al consultar artista {artist_name}: {e}")
+        print(f"Error al consultar artista {artist_name}: {e}")
         return None
 
 def get_album_info(album_name, artist_name, mbid, lastfm_api_key):
-    """Obtiene información detallada de un álbum desde Last.fm"""
+    """Obtiene información detallada de un álbum desde Last.fm, usando caché"""
+    global lastfm_cache
+    
+    # Construir parámetros de consulta
     params = {
         'method': 'album.getInfo',
         'album': album_name,
@@ -546,13 +1301,17 @@ def get_album_info(album_name, artist_name, mbid, lastfm_api_key):
     if mbid:
         params['mbid'] = mbid
     
+    # Verificar en caché primero
+    if lastfm_cache:
+        cached_result = lastfm_cache.get('album.getInfo', params)
+        if cached_result:
+            print(f"Usando datos en caché para álbum Last.fm: {album_name}")
+            return cached_result.get('album')
+    
     print(f"Consultando información para álbum: {album_name} de {artist_name} (MBID: {mbid})")
-    print(f"URL de consulta: http://ws.audioscrobbler.com/2.0/ con params: {params}")
     
     try:
         response = requests.get('http://ws.audioscrobbler.com/2.0/', params=params)
-        
-        print(f"Código de respuesta: {response.status_code}")
         
         if response.status_code != 200:
             print(f"Error al obtener información del álbum {album_name}: {response.status_code}")
@@ -568,25 +1327,25 @@ def get_album_info(album_name, artist_name, mbid, lastfm_api_key):
             
         if 'album' not in data:
             print(f"No se encontró información para el álbum {album_name}")
-            print(f"Respuesta completa: {data}")
             return None
         
         print(f"Información obtenida correctamente para álbum: {album_name}")
+        
+        # Guardar en caché
+        if lastfm_cache:
+            lastfm_cache.put('album.getInfo', params, data)
+            
         return data['album']
     
-    except requests.exceptions.RequestException as e:
-        print(f"Error de conexión al consultar álbum {album_name}: {e}")
-        return None
-    except json.JSONDecodeError as e:
-        print(f"Error al decodificar respuesta JSON para álbum {album_name}: {e}")
-        print(f"Respuesta recibida: {response.text[:200]}...")
-        return None
     except Exception as e:
-        print(f"Error inesperado al consultar álbum {album_name}: {e}")
+        print(f"Error al consultar álbum {album_name}: {e}")
         return None
 
 def get_track_info(track_name, artist_name, mbid, lastfm_api_key):
-    """Obtiene información detallada de una canción desde Last.fm"""
+    """Obtiene información detallada de una canción desde Last.fm, usando caché"""
+    global lastfm_cache
+    
+    # Construir parámetros de consulta (todo a minúsculas para caché)
     params = {
         'method': 'track.getInfo',
         'track': track_name,
@@ -595,16 +1354,28 @@ def get_track_info(track_name, artist_name, mbid, lastfm_api_key):
         'format': 'json'
     }
     
+    # Crear clave de caché insensible a mayúsculas/minúsculas
+    cache_params = {
+        'method': 'track.getInfo',
+        'track': track_name.lower() if track_name else "",
+        'artist': artist_name.lower() if artist_name else "",
+    }
+    
     if mbid:
         params['mbid'] = mbid
+        cache_params['mbid'] = mbid
+    
+    # Verificar en caché primero
+    if lastfm_cache:
+        cached_result = lastfm_cache.get('track.getInfo', cache_params)
+        if cached_result:
+            print(f"Usando datos en caché para canción Last.fm: {track_name}")
+            return cached_result.get('track')
     
     print(f"Consultando información para canción: {track_name} de {artist_name} (MBID: {mbid})")
-    print(f"URL de consulta: http://ws.audioscrobbler.com/2.0/ con params: {params}")
     
     try:
         response = requests.get('http://ws.audioscrobbler.com/2.0/', params=params)
-        
-        print(f"Código de respuesta: {response.status_code}")
         
         if response.status_code != 200:
             print(f"Error al obtener información de la canción {track_name}: {response.status_code}")
@@ -620,10 +1391,14 @@ def get_track_info(track_name, artist_name, mbid, lastfm_api_key):
             
         if 'track' not in data:
             print(f"No se encontró información para la canción {track_name}")
-            print(f"Respuesta completa: {data}")
             return None
         
         print(f"Información obtenida correctamente para canción: {track_name}")
+        
+        # Guardar en caché
+        if lastfm_cache:
+            lastfm_cache.put('track.getInfo', params, data)
+            
         return data['track']
     
     except requests.exceptions.RequestException as e:
@@ -1020,7 +1795,9 @@ def add_song_to_db(conn, track_info, album_id, artist_id, interactive=False):
 
 # SCROBBLES
 def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limit=200, progress_callback=None):
-    """Obtiene los scrobbles de Last.fm para un usuario desde un timestamp específico
+    """
+    Obtiene los scrobbles de Last.fm para un usuario desde un timestamp específico.
+    Implementa caché para páginas ya consultadas.
     
     Args:
         lastfm_username: Nombre de usuario de Last.fm
@@ -1029,6 +1806,8 @@ def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limi
         limit: Número máximo de scrobbles por página
         progress_callback: Función para reportar progreso (mensaje, porcentaje)
     """
+    global lastfm_cache
+    
     all_tracks = []
     page = 1
     total_pages = 1
@@ -1051,61 +1830,77 @@ def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limi
             'from': from_timestamp
         }
         
-        try:
-            response = get_with_retry('http://ws.audioscrobbler.com/2.0/', params)
-            
-            if not response or response.status_code != 200:
-                error_msg = f"Error al obtener scrobbles: {response.status_code if response else 'Sin respuesta'}"
+        # Verificar caché para esta página específica
+        cached_data = None
+        if lastfm_cache:
+            # No cacheamos scrobbles más recientes (última página si empezamos desde la 1)
+            if not (from_timestamp == 0 and page == 1):
+                cached_data = lastfm_cache.get('user.getrecenttracks', params)
+        
+        if cached_data:
+            print(f"Usando datos en caché para página {page} de scrobbles")
+            data = cached_data
+        else:
+            try:
+                response = get_with_retry('http://ws.audioscrobbler.com/2.0/', params)
+                
+                if not response or response.status_code != 200:
+                    error_msg = f"Error al obtener scrobbles: {response.status_code if response else 'Sin respuesta'}"
+                    if progress_callback:
+                        progress_callback(error_msg, 0)
+                    else:
+                        print(error_msg)
+                        
+                    if page > 1:  # Si hemos obtenido algunas páginas, devolvemos lo que tenemos
+                        break
+                    else:
+                        return []
+                
+                data = response.json()
+                
+                # Guardar en caché todas las páginas excepto la primera si empezamos desde 0
+                # (porque la primera página contiene los scrobbles más recientes que cambian)
+                if lastfm_cache and not (from_timestamp == 0 and page == 1):
+                    lastfm_cache.put('user.getrecenttracks', params, data)
+                
+            except Exception as e:
+                error_msg = f"Error al procesar página {page}: {str(e)}"
                 if progress_callback:
                     progress_callback(error_msg, 0)
                 else:
                     print(error_msg)
-                    
+                
                 if page > 1:  # Si hemos obtenido algunas páginas, devolvemos lo que tenemos
                     break
                 else:
                     return []
-            
-            data = response.json()
-            
-            # Comprobar si hay tracks
-            if 'recenttracks' not in data or 'track' not in data['recenttracks']:
-                break
-            
-            # Actualizar total_pages
-            total_pages = int(data['recenttracks']['@attr']['totalPages'])
-            
-            # Añadir tracks a la lista
-            tracks = data['recenttracks']['track']
-            if not isinstance(tracks, list):
-                tracks = [tracks]
-            
-            # Filtrar tracks que están siendo escuchados actualmente (no tienen date)
-            filtered_tracks = [track for track in tracks if 'date' in track]
-            all_tracks.extend(filtered_tracks)
-            
-            # Reportar progreso
-            if progress_callback:
-                progress = (page / total_pages * 15) if total_pages > 1 else 15
-                progress_callback(f"Obtenida página {page} de {total_pages} ({len(filtered_tracks)} tracks)", progress)
-            else:
-                print(f"Obtenida página {page} de {total_pages} ({len(filtered_tracks)} tracks)")
-            
-            page += 1
-            # Pequeña pausa para no saturar la API
-            time.sleep(0.25)
-            
-        except Exception as e:
-            error_msg = f"Error al procesar página {page}: {str(e)}"
-            if progress_callback:
-                progress_callback(error_msg, 0)
-            else:
-                print(error_msg)
-            
-            if page > 1:  # Si hemos obtenido algunas páginas, devolvemos lo que tenemos
-                break
-            else:
-                return []
+        
+        # Comprobar si hay tracks
+        if 'recenttracks' not in data or 'track' not in data['recenttracks']:
+            break
+        
+        # Actualizar total_pages
+        total_pages = int(data['recenttracks']['@attr']['totalPages'])
+        
+        # Añadir tracks a la lista
+        tracks = data['recenttracks']['track']
+        if not isinstance(tracks, list):
+            tracks = [tracks]
+        
+        # Filtrar tracks que están siendo escuchados actualmente (no tienen date)
+        filtered_tracks = [track for track in tracks if 'date' in track]
+        all_tracks.extend(filtered_tracks)
+        
+        # Reportar progreso
+        if progress_callback:
+            progress = (page / total_pages * 15) if total_pages > 1 else 15
+            progress_callback(f"Obtenida página {page} de {total_pages} ({len(filtered_tracks)} tracks)", progress)
+        else:
+            print(f"Obtenida página {page} de {total_pages} ({len(filtered_tracks)} tracks)")
+        
+        page += 1
+        # Pequeña pausa para no saturar la API
+        time.sleep(0.25)
     
     # Informar del total obtenido
     if progress_callback:
@@ -1328,7 +2123,8 @@ def update_song_in_db(conn, song_id, track_info):
     return False
 
 def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_songs, lastfm_api_key, interactive=False, callback=None):
-    """Procesa los scrobbles y actualiza la base de datos con los nuevos scrobbles"""
+    """Procesa los scrobbles y actualiza la base de datos con los nuevos scrobbles,
+    priorizando datos de la base de datos y MusicBrainz"""
     cursor = conn.cursor()
     processed_count = 0
     linked_count = 0
@@ -1396,85 +2192,56 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
             print(f"Scrobble duplicado, saltando")
             continue  # El scrobble ya existe, continuamos con el siguiente
         
-        # ARTISTA: Buscar primero por nombre en la base de datos
+        # ARTISTA: Obtener o crear artista
         artist_mbid = track['artist'].get('mbid', '')
         artist_id = None
-        artist_found = False
         
-        # 1. Buscar por nombre exacto en la base de datos
-        cursor.execute("SELECT id, mbid, origen FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
-        existing_artist = cursor.fetchone()
+
+        # Convertir claves a minúsculas en los diccionarios
+        existing_artists_lower = CaseInsensitiveDict()
+        for key, value in existing_artists.items():
+            existing_artists_lower[key] = value
         
-        if existing_artist:
-            artist_id, existing_mbid, origen = existing_artist
-            artist_found = True
-            print(f"Artista encontrado en base de datos por nombre: {artist_name} (ID: {artist_id})")
+        existing_albums_lower = CaseInsensitiveDict()
+        for key, value in existing_albums.items():
+            existing_albums_lower[key] = value
+        
+        existing_songs_lower = CaseInsensitiveDict()
+        for key, value in existing_songs.items():
+            existing_songs_lower[key] = value
             
-            # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-            if artist_mbid and (not existing_mbid or existing_mbid != artist_mbid):
-                print(f"Actualizando MBID para artista {artist_name}: {artist_mbid}")
-                cursor.execute("UPDATE artists SET mbid = ? WHERE id = ?", (artist_mbid, artist_id))
-                conn.commit()
-                
-                # Opcionalmente obtener más datos de Last.fm
-                if 'online' not in origen:
-                    artist_info = get_artist_info(artist_name, artist_mbid, lastfm_api_key)
-                    if artist_info:
-                        update_artist_in_db(conn, artist_id, artist_info)
+        # Reemplazar los diccionarios originales
+        existing_artists = existing_artists_lower
+        existing_albums = existing_albums_lower
+        existing_songs = existing_songs_lower
         
-        # 2. Si no se encontró, buscar en la caché de nuevos artistas
-        if not artist_found and artist_name.lower() in new_artists:
+        new_artists = CaseInsensitiveDict()
+        new_albums = CaseInsensitiveDict()
+        new_songs = CaseInsensitiveDict()
+
+
+        # Primero verificar en caché de nuevos artistas
+        if artist_name.lower() in new_artists:
             artist_id = new_artists[artist_name.lower()]
-            artist_found = True
             print(f"Artista encontrado en nuevos artistas procesados: ID {artist_id}")
-        
-        # 3. Si no se encontró, buscar en la estructura existing_artists
-        if not artist_found:
+        else:
+            # Luego verificar en artistas existentes
             artist_info = existing_artists.get(artist_name.lower())
             if artist_info:
-                artist_id = artist_info['id'] if isinstance(artist_info, dict) else artist_info
-                artist_found = True
-                print(f"Artista encontrado en caché de artistas existentes: ID {artist_id}")
-        
-        # 4. Si sigue sin encontrarse, crear nuevo
-        if not artist_found:
-            print(f"Intentando obtener información para nuevo artista: {artist_name}")
-            new_artists_attempts += 1
-            # Obtener información del artista desde Last.fm
-            artist_info = get_artist_info(artist_name, artist_mbid, lastfm_api_key)
-            
-            if artist_info:
-                print(f"Información de artista obtenida correctamente, intentando añadir a la base de datos")
-                artist_id = add_artist_to_db(conn, artist_info, interactive)
-                if artist_id:
-                    print(f"Artista añadido correctamente: ID {artist_id}")
-                    new_artists[artist_name.lower()] = artist_id
-                    existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'online'}
-                    new_artists_success += 1
+                if isinstance(artist_info, dict):
+                    artist_id = artist_info['id']
                 else:
-                    print(f"Error al añadir el artista a la base de datos")
-                    errors['db_errors'] += 1
+                    artist_id = artist_info
+                print(f"Artista encontrado en caché de artistas existentes: ID {artist_id}")
             else:
-                print(f"No se pudo obtener información para el artista {artist_name}")
+                # Si no está en caché, buscar o crear
+                new_artists_attempts += 1
+                artist_id = get_or_update_artist(conn, artist_name, artist_mbid, interactive)
                 
-                # Crear con datos mínimos en modo no interactivo o preguntar en interactivo
-                if not interactive or (interactive and input(f"¿Añadir artista {artist_name} con datos mínimos? (s/n): ").lower() == 's'):
-                    try:
-                        cursor.execute("""
-                            INSERT INTO artists (name, mbid, origen)
-                            VALUES (?, ?, 'manual')
-                            RETURNING id
-                        """, (artist_name, artist_mbid))
-                        
-                        artist_id = cursor.fetchone()[0]
-                        conn.commit()
-                        print(f"Artista añadido con datos mínimos, ID: {artist_id}")
-                        new_artists[artist_name.lower()] = artist_id
-                        existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'manual'}
-                        new_artists_success += 1
-                    except sqlite3.Error as e:
-                        print(f"Error al añadir el artista con datos mínimos: {e}")
-                        errors['db_errors'] += 1
+                if artist_id:
+                    new_artists[artist_name.lower()] = artist_id
+                    existing_artists[artist_name.lower()] = {'id': artist_id, 'origen': 'musicbrainz'}
+                    new_artists_success += 1
                 else:
                     errors['artist_not_found'] += 1
         
@@ -1482,43 +2249,14 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         album_id = None
         if album_name and artist_id:
             album_mbid = track['album'].get('mbid', '')
-            album_found = False
             
-            # 1. Buscar por nombre exacto y artista en la base de datos
-            cursor.execute("""
-                SELECT a.id, a.mbid, a.origen 
-                FROM albums a
-                JOIN artists ar ON a.artist_id = ar.id
-                WHERE LOWER(a.name) = LOWER(?) AND (LOWER(ar.name) = LOWER(?) OR a.artist_id = ?)
-            """, (album_name, artist_name, artist_id))
-            
-            existing_album = cursor.fetchone()
-            if existing_album:
-                album_id, existing_mbid, origen = existing_album
-                album_found = True
-                print(f"Álbum encontrado en base de datos por nombre: {album_name} (ID: {album_id})")
-                
-                # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-                if album_mbid and (not existing_mbid or existing_mbid != album_mbid):
-                    print(f"Actualizando MBID para álbum {album_name}: {album_mbid}")
-                    cursor.execute("UPDATE albums SET mbid = ? WHERE id = ?", (album_mbid, album_id))
-                    conn.commit()
-                    
-                    # Opcionalmente obtener más datos de Last.fm
-                    if 'online' not in origen:
-                        album_info = get_album_info(album_name, artist_name, album_mbid, lastfm_api_key)
-                        if album_info:
-                            update_album_in_db(conn, album_id, album_info)
-            
-            # 2. Buscar en la caché de nuevos álbumes
+            # Primero verificar en caché de nuevos álbumes
             album_key = (album_name.lower(), artist_name.lower())
-            if not album_found and album_key in new_albums:
+            if album_key in new_albums:
                 album_id = new_albums[album_key]
-                album_found = True
                 print(f"Álbum encontrado en nuevos álbumes procesados: ID {album_id}")
-            
-            # 3. Buscar en la estructura existing_albums
-            if not album_found:
+            else:
+                # Luego verificar en álbumes existentes
                 album_info = existing_albums.get(album_key)
                 if album_info:
                     if isinstance(album_info, tuple):
@@ -1527,48 +2265,16 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
                         album_id = album_info['id']
                     else:
                         album_id = album_info
-                    album_found = True
                     print(f"Álbum encontrado en caché de álbumes existentes: ID {album_id}")
-            
-            # 4. Si sigue sin encontrarse, crear nuevo
-            if not album_found:
-                print(f"Intentando obtener información para nuevo álbum: {album_name}")
-                new_albums_attempts += 1
-                # Obtener información del álbum desde Last.fm
-                album_info = get_album_info(album_name, artist_name, album_mbid, lastfm_api_key)
-                
-                if album_info:
-                    print(f"Información de álbum obtenida correctamente, intentando añadir a la base de datos")
-                    album_id = add_album_to_db(conn, album_info, artist_id, interactive)
-                    if album_id:
-                        print(f"Álbum añadido correctamente: ID {album_id}")
-                        new_albums[album_key] = album_id
-                        existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'online'}
-                        new_albums_success += 1
-                    else:
-                        print(f"Error al añadir el álbum a la base de datos")
-                        errors['db_errors'] += 1
                 else:
-                    print(f"No se pudo obtener información para el álbum {album_name}")
+                    # Si no está en caché, buscar o crear
+                    new_albums_attempts += 1
+                    album_id = get_or_update_album(conn, album_name, artist_name, artist_id, album_mbid, interactive)
                     
-                    # Crear con datos mínimos en modo no interactivo o preguntar en interactivo
-                    if not interactive or (interactive and input(f"¿Añadir álbum {album_name} con datos mínimos? (s/n): ").lower() == 's'):
-                        try:
-                            cursor.execute("""
-                                INSERT INTO albums (name, artist_id, mbid, origen)
-                                VALUES (?, ?, ?, 'manual')
-                                RETURNING id
-                            """, (album_name, artist_id, album_mbid))
-                            
-                            album_id = cursor.fetchone()[0]
-                            conn.commit()
-                            print(f"Álbum añadido con datos mínimos, ID: {album_id}")
-                            new_albums[album_key] = album_id
-                            existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'manual'}
-                            new_albums_success += 1
-                        except sqlite3.Error as e:
-                            print(f"Error al añadir el álbum con datos mínimos: {e}")
-                            errors['db_errors'] += 1
+                    if album_id:
+                        new_albums[album_key] = album_id
+                        existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': 'musicbrainz'}
+                        new_albums_success += 1
                     else:
                         errors['album_not_found'] += 1
         
@@ -1576,107 +2282,27 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         song_id = None
         if artist_id:
             track_mbid = track.get('mbid', '')
-            song_found = False
             
-            # 1. Buscar por nombre, artista y álbum en la base de datos
-            if album_name:
-                cursor.execute("""
-                    SELECT id, mbid, origen 
-                    FROM songs
-                    WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
-                    AND (LOWER(album) = LOWER(?) OR album IS NULL)
-                """, (track_name, artist_name, album_name))
-            else:
-                cursor.execute("""
-                    SELECT id, mbid, origen 
-                    FROM songs
-                    WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
-                """, (track_name, artist_name))
-            
-            existing_song = cursor.fetchone()
-            if existing_song:
-                song_id, existing_mbid, origen = existing_song
-                song_found = True
-                print(f"Canción encontrada en base de datos por nombre: {track_name} (ID: {song_id})")
-                
-                # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-                if track_mbid and (not existing_mbid or existing_mbid != track_mbid):
-                    print(f"Actualizando MBID para canción {track_name}: {track_mbid}")
-                    cursor.execute("UPDATE songs SET mbid = ? WHERE id = ?", (track_mbid, song_id))
-                    
-                    # Si tenemos un álbum, actualizar también ese dato
-                    if album_name and album_id:
-                        cursor.execute("UPDATE songs SET album = ?, album_id = ? WHERE id = ? AND (album IS NULL OR album = '')", 
-                                    (album_name, album_id, song_id))
-                    
-                    conn.commit()
-                    
-                    # Opcionalmente obtener más datos de Last.fm
-                    if 'online' not in origen:
-                        track_info = get_track_info(track_name, artist_name, track_mbid, lastfm_api_key)
-                        if track_info:
-                            update_song_in_db(conn, song_id, track_info)
-            
-            # 2. Buscar en la caché de nuevas canciones
+            # Primero verificar en caché de nuevas canciones
             song_key = (track_name.lower(), artist_name.lower(), album_name.lower() if album_name else None)
-            if not song_found and song_key in new_songs:
+            if song_key in new_songs:
                 song_id = new_songs[song_key]
-                song_found = True
                 print(f"Canción encontrada en nuevas canciones procesadas: ID {song_id}")
-            
-            # 3. Buscar en la estructura existing_songs
-            if not song_found:
+            else:
+                # Luego verificar en canciones existentes
                 song_info = existing_songs.get(song_key)
                 if song_info:
                     song_id = song_info['id'] if isinstance(song_info, dict) else song_info
-                    song_found = True
                     print(f"Canción encontrada en caché de canciones existentes: ID {song_id}")
-            
-            # 4. Si sigue sin encontrarse, crear nueva
-            if not song_found:
-                print(f"Intentando obtener información para nueva canción: {track_name}")
-                new_songs_attempts += 1
-                track_info = get_track_info(track_name, artist_name, track_mbid, lastfm_api_key)
-                
-                if track_info:
-                    print(f"Información de canción obtenida correctamente, intentando añadir a la base de datos")
-                    song_id = add_song_to_db(conn, track_info, album_id, artist_id, interactive)
-                    if song_id:
-                        print(f"Canción añadida correctamente: ID {song_id}")
-                        new_songs[song_key] = song_id
-                        existing_songs[song_key] = {'id': song_id, 'origen': 'online'}
-                        new_songs_success += 1
-                    else:
-                        print(f"Error al añadir la canción a la base de datos")
-                        errors['db_errors'] += 1
                 else:
-                    print(f"No se pudo obtener información para la canción {track_name}")
+                    # Si no está en caché, buscar o crear
+                    new_songs_attempts += 1
+                    song_id = get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, track_mbid, interactive)
                     
-                    # Crear con datos mínimos en modo no interactivo o preguntar en interactivo
-                    now = datetime.datetime.now()
-                    added_timestamp = int(time.time())
-                    added_week = now.isocalendar()[1]
-                    added_month = now.month
-                    added_year = now.year
-                    
-                    if not interactive or (interactive and input(f"¿Añadir canción {track_name} con datos mínimos? (s/n): ").lower() == 's'):
-                        try:
-                            cursor.execute("""
-                                INSERT INTO songs 
-                                (title, artist, album, album_artist, mbid, added_timestamp, added_week, added_month, added_year, origen)
-                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'manual')
-                                RETURNING id
-                            """, (track_name, artist_name, album_name, artist_name, track_mbid, added_timestamp, added_week, added_month, added_year))
-                            
-                            song_id = cursor.fetchone()[0]
-                            conn.commit()
-                            print(f"Canción añadida con datos mínimos, ID: {song_id}")
-                            new_songs[song_key] = song_id
-                            existing_songs[song_key] = {'id': song_id, 'origen': 'manual'}
-                            new_songs_success += 1
-                        except sqlite3.Error as e:
-                            print(f"Error al añadir la canción con datos mínimos: {e}")
-                            errors['db_errors'] += 1
+                    if song_id:
+                        new_songs[song_key] = song_id
+                        existing_songs[song_key] = {'id': song_id, 'origen': 'musicbrainz'}
+                        new_songs_success += 1
                     else:
                         errors['song_not_found'] += 1
         
@@ -1714,35 +2340,9 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
                 if song_id:
                     linked_count += 1
                     print(f"Scrobble enlazado correctamente con song_id: {song_id}")
-                    
-                    # Actualizar song_links si el song_id existe
-                    try:
-                        cursor.execute("""
-                            INSERT OR REPLACE INTO song_links (song_id, lastfm_url, links_updated)
-                            VALUES (?, ?, datetime('now'))
-                        """, (song_id, lastfm_url))
-                    except sqlite3.Error as e:
-                        # Es posible que la tabla song_links no exista, no es crítico
-                        print(f"Nota: No se pudo actualizar song_links: {e}")
                 else:
                     unlinked_count += 1
                     print(f"Scrobble guardado pero sin enlazar a una canción")
-                
-                # Actualizar información de artista si existe en la base de datos
-                if artist_id and 'url' in track['artist']:
-                    cursor.execute("""
-                        UPDATE artists 
-                        SET lastfm_url = COALESCE(lastfm_url, ?)
-                        WHERE id = ?
-                    """, (track['artist']['url'], artist_id))
-                    
-                # Actualizar información de álbum si existe en la base de datos
-                if album_id and 'url' in track['album']:
-                    cursor.execute("""
-                        UPDATE albums
-                        SET lastfm_url = COALESCE(lastfm_url, ?)
-                        WHERE id = ?
-                    """, (track['album']['url'], album_id))
             
             except sqlite3.Error as e:
                 print(f"Error al insertar scrobble en la base de datos: {e}")
@@ -1846,7 +2446,7 @@ def check_api_key(lastfm_api_key):
         return False
 
 class LastFMScrobbler:
-    def __init__(self, db_path, lastfm_user, lastfm_api_key, progress_callback=None):
+    def __init__(self, db_path, lastfm_user, lastfm_api_key, progress_callback=None, cache_dir=None):
         self.db_path = db_path
         self.lastfm_user = lastfm_user
         self.lastfm_api_key = lastfm_api_key
@@ -1856,6 +2456,26 @@ class LastFMScrobbler:
         self.existing_songs = {}
         self.progress_callback = progress_callback
         self._interactive_mode = False
+        self._cache_dir = None  # Inicializar a None
+        
+        # Establecer cache_dir a través del setter
+        if cache_dir:
+            self.cache_dir = cache_dir
+        
+    @property
+    def cache_dir(self):
+        return self._cache_dir
+        
+    @cache_dir.setter
+    def cache_dir(self, value):
+        self._cache_dir = value
+        if value:
+            # Asegurarse de que setup_musicbrainz está accesible
+            global setup_musicbrainz
+            if 'setup_musicbrainz' in globals():
+                setup_musicbrainz(value)
+            else:
+                print("ADVERTENCIA: setup_musicbrainz no está definido globalmente")
         
     @property
     def interactive_mode(self):
@@ -1866,6 +2486,8 @@ class LastFMScrobbler:
         self._interactive_mode = value
         global INTERACTIVE_MODE
         INTERACTIVE_MODE = value
+        
+
         
     def _update_progress(self, message, percentage=None, extra_data=None):
         """Actualiza el progreso a través del callback si está disponible"""
@@ -2827,6 +3449,320 @@ class LastFMScrobbler:
             return True
         
         return False
+class MusicBrainzCache:
+    """
+    Caché para consultas a la API de MusicBrainz.
+    Almacena resultados para evitar peticiones repetidas.
+    """
+    
+    def __init__(self, cache_file=None, cache_duration=30):
+        """
+        Inicializa el caché de MusicBrainz.
+        
+        Args:
+            cache_file: Ruta al archivo para persistir el caché
+            cache_duration: Duración del caché en días
+        """
+        self.cache = {}
+        self.cache = CaseInsensitiveDict()  # Usar diccionario case-insensitive
+        self.cache_file = cache_file
+        self.cache_duration = cache_duration  # en días
+        
+        if cache_file and os.path.exists(cache_file):
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    loaded_cache = json.load(f)
+                    
+                    # Filtrar entradas expiradas
+                    now = time.time()
+                    for key, entry in loaded_cache.items():
+                        if 'timestamp' in entry:
+                            age_days = (now - entry['timestamp']) / (60 * 60 * 24)
+                            if age_days <= self.cache_duration:
+                                self.cache[key] = entry
+                        else:
+                            # Si no tiene timestamp, asumimos que es reciente
+                            self.cache[key] = entry
+                            
+                print(f"MusicBrainzCache: Cargadas {len(self.cache)} entradas válidas de {len(loaded_cache)} totales")
+            except Exception as e:
+                print(f"Error al cargar archivo de caché de MusicBrainz: {e}")
+                # Iniciar con caché vacío si hay error
+                self.cache = {}
+    
+    def get(self, query_type, query_id=None, query_params=None):
+        """
+        Obtiene un resultado desde el caché si está disponible y no ha expirado.
+        
+        Args:
+            query_type: Tipo de consulta (artist, release, recording, etc)
+            query_id: ID para búsquedas directas
+            query_params: Parámetros para búsquedas por parámetros
+            
+        Returns:
+            Datos en caché o None si no existe o expiró
+        """
+        cache_key = self._make_key(query_type, query_id, query_params)
+        entry = self.cache.get(cache_key)
+        
+        if not entry:
+            return None
+            
+        # Verificar expiración
+        if 'timestamp' in entry:
+            age_days = (time.time() - entry['timestamp']) / (60 * 60 * 24)
+            if age_days > self.cache_duration:
+                # Expirado, eliminar y retornar None
+                del self.cache[cache_key]
+                return None
+        
+        return entry.get('data')
+    
+    def put(self, query_type, result, query_id=None, query_params=None):
+        """
+        Almacena un resultado en el caché.
+        
+        Args:
+            query_type: Tipo de consulta
+            result: Resultado a almacenar
+            query_id: ID para búsquedas directas
+            query_params: Parámetros para búsquedas por parámetros
+        """
+        cache_key = self._make_key(query_type, query_id, query_params)
+        
+        # Almacenar con timestamp para expiración
+        self.cache[cache_key] = {
+            'data': result,
+            'timestamp': time.time()
+        }
+        
+        # Guardar en archivo si está configurado
+        self._save_cache()
+    
+    def clear(self, save=True):
+        """Limpia todo el caché"""
+        self.cache = {}
+        if save and self.cache_file:
+            self._save_cache()
+    
+    def _save_cache(self):
+        """Guarda el caché a disco si hay archivo configurado"""
+        if not self.cache_file:
+            return
+            
+        try:
+            # Crear directorio si no existe
+            cache_dir = os.path.dirname(self.cache_file)
+            if cache_dir and not os.path.exists(cache_dir):
+                os.makedirs(cache_dir)
+                
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"Error al guardar archivo de caché de MusicBrainz: {e}")
+    
+    def _make_key(self, query_type, query_id=None, query_params=None):
+        """
+        Crea una clave única para el caché a partir de los parámetros.
+        
+        Args:
+            query_type: Tipo de consulta (artist, release, recording)
+            query_id: ID para búsquedas directas
+            query_params: Parámetros para búsquedas por nombre, etc.
+            
+        Returns:
+            String único que identifica la consulta
+        """
+        if query_id:
+            return f"{query_type}:id:{query_id}"
+        elif query_params:
+            # Convertir params a representación estable
+            if isinstance(query_params, dict):
+                # Ordenar keys para consistencia
+                param_str = json.dumps(query_params, sort_keys=True)
+            else:
+                param_str = str(query_params)
+            
+            # Usar hash para claves muy largas
+            if len(param_str) > 200:
+                import hashlib
+                param_hash = hashlib.md5(param_str.encode('utf-8')).hexdigest()
+                return f"{query_type}:params:{param_hash}"
+            else:
+                return f"{query_type}:params:{param_str}"
+        
+        return f"{query_type}:generic"
+
+
+class LastFMCache:
+    """
+    Caché para consultas a la API de Last.fm.
+    Similar al caché de MusicBrainz pero adaptado a las particularidades de Last.fm.
+    """
+    
+    def __init__(self, cache_file=None, cache_duration=7):
+        """
+        Inicializa el caché de Last.fm.
+        
+        Args:
+            cache_file: Ruta al archivo para persistir el caché
+            cache_duration: Duración del caché en días (más corto que MusicBrainz)
+        """
+        self.cache = {}
+        self.cache = CaseInsensitiveDict()  # Usar diccionario case-insensitive
+        self.cache_file = cache_file
+        self.cache_duration = cache_duration  # en días
+        
+        if cache_file and os.path.exists(cache_file):
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    loaded_cache = json.load(f)
+                    
+                    # Filtrar entradas expiradas
+                    now = time.time()
+                    for key, entry in loaded_cache.items():
+                        if 'timestamp' in entry:
+                            age_days = (now - entry['timestamp']) / (60 * 60 * 24)
+                            if age_days <= self.cache_duration:
+                                self.cache[key] = entry
+                        else:
+                            # Si no tiene timestamp, asumimos que es reciente
+                            self.cache[key] = entry
+                            
+                print(f"LastFMCache: Cargadas {len(self.cache)} entradas válidas de {len(loaded_cache)} totales")
+            except Exception as e:
+                print(f"Error al cargar archivo de caché de Last.fm: {e}")
+                # Iniciar con caché vacío si hay error
+                self.cache = {}
+    
+    def get(self, method, params):
+        """
+        Obtiene un resultado desde el caché si está disponible y no ha expirado.
+        
+        Args:
+            method: Método de la API (artist.getInfo, album.getInfo, etc)
+            params: Diccionario con parámetros de la consulta
+            
+        Returns:
+            Datos en caché o None si no existe o expiró
+        """
+        # Para Last.fm, ignoramos api_key en la clave de caché
+        filtered_params = {k: v for k, v in params.items() if k != 'api_key'}
+        cache_key = self._make_key(method, filtered_params)
+        
+        entry = self.cache.get(cache_key)
+        
+        if not entry:
+            return None
+            
+        # Verificar expiración
+        if 'timestamp' in entry:
+            age_days = (time.time() - entry['timestamp']) / (60 * 60 * 24)
+            if age_days > self.cache_duration:
+                # Expirado, eliminar y retornar None
+                del self.cache[cache_key]
+                return None
+        
+        return entry.get('data')
+    
+    def put(self, method, params, result):
+        """
+        Almacena un resultado en el caché.
+        
+        Args:
+            method: Método de la API
+            params: Parámetros de la consulta
+            result: Resultado a almacenar
+        """
+        # Ignorar api_key en la clave de caché
+        filtered_params = {k: v for k, v in params.items() if k != 'api_key'}
+        cache_key = self._make_key(method, filtered_params)
+        
+        # No almacenar respuestas de error
+        if isinstance(result, dict) and 'error' in result:
+            return
+        
+        # Almacenar con timestamp para expiración
+        self.cache[cache_key] = {
+            'data': result,
+            'timestamp': time.time()
+        }
+        
+        # Guardar en archivo si está configurado
+        self._save_cache()
+    
+    def clear(self, save=True):
+        """Limpia todo el caché"""
+        self.cache = {}
+        if save and self.cache_file:
+            self._save_cache()
+    
+    def _save_cache(self):
+        """Guarda el caché a disco si hay archivo configurado"""
+        if not self.cache_file:
+            return
+            
+        try:
+            # Crear directorio si no existe
+            cache_dir = os.path.dirname(self.cache_file)
+            if cache_dir and not os.path.exists(cache_dir):
+                os.makedirs(cache_dir)
+                
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            print(f"Error al guardar archivo de caché de Last.fm: {e}")
+    
+    def _make_key(self, method, params):
+        """
+        Crea una clave única para el caché a partir de los parámetros.
+        
+        Args:
+            method: Método de la API
+            params: Diccionario con parámetros
+            
+        Returns:
+            String único que identifica la consulta
+        """
+        # Convertir params a representación estable
+        param_str = json.dumps(params, sort_keys=True)
+        
+        # Usar hash para claves muy largas
+        if len(param_str) > 200:
+            import hashlib
+            param_hash = hashlib.md5(param_str.encode('utf-8')).hexdigest()
+            return f"{method}:{param_hash}"
+        else:
+            return f"{method}:{param_str}"
+
+
+class CaseInsensitiveDict(dict):
+    """Diccionario con claves insensibles a mayúsculas/minúsculas"""
+    
+    def __init__(self, *args, **kwargs):
+        super(CaseInsensitiveDict, self).__init__(*args, **kwargs)
+        self._convert_keys()
+    
+    def __getitem__(self, key):
+        return super(CaseInsensitiveDict, self).__getitem__(key.lower() if isinstance(key, str) else key)
+    
+    def __setitem__(self, key, value):
+        super(CaseInsensitiveDict, self).__setitem__(key.lower() if isinstance(key, str) else key, value)
+    
+    def __delitem__(self, key):
+        return super(CaseInsensitiveDict, self).__delitem__(key.lower() if isinstance(key, str) else key)
+    
+    def __contains__(self, key):
+        return super(CaseInsensitiveDict, self).__contains__(key.lower() if isinstance(key, str) else key)
+    
+    def get(self, key, default=None):
+        return super(CaseInsensitiveDict, self).get(key.lower() if isinstance(key, str) else key, default)
+    
+    def _convert_keys(self):
+        for key in list(self.keys()):
+            if isinstance(key, str):
+                value = super(CaseInsensitiveDict, self).pop(key)
+                self[key.lower()] = value
 
 
 def main(config=None):
@@ -2839,6 +3775,7 @@ def main(config=None):
     parser.add_argument('--force-update', action='store_true', help='Forzar actualización completa')
     parser.add_argument('--output-json', type=str, help='Ruta para guardar todos los scrobbles en formato JSON (opcional)')
     parser.add_argument('--interactive', action='store_true', help='Modo interactivo para añadir nuevos elementos')
+    parser.add_argument('--cache-dir', type=str, help='Directorio para archivos de caché')
             
     args = parser.parse_args()
     
@@ -2870,10 +3807,10 @@ def main(config=None):
 
     output_json = args.output_json or config.get("output_json", ".content/cache/scrobbles_lastfm.json")
     
+    # Directorio de caché - Asegúrate de que este valor se defina
+    cache_dir = args.cache_dir or config.get('cache_dir', '.content/cache/api_cache')
+    
     # Check for force_update in multiple places
-    # 1. Command line arguments
-    # 2. Config file
-    # 3. Global variable that might be set by db_creator.py
     global FORCE_UPDATE
     force_update = args.force_update or config.get('force_update', False) or FORCE_UPDATE
     interactive = args.interactive or config.get('interactive', False) or INTERACTIVE_MODE
@@ -2881,7 +3818,8 @@ def main(config=None):
     print(f"Modo force_update: {force_update}")
     print(f"Modo interactive: {interactive}")
     
-    setup_musicbrainz()
+    # Configurar MusicBrainz y caché
+    setup_musicbrainz(cache_dir)
     
     # Verificar API key
     if not check_api_key(lastfm_api_key):
@@ -2889,113 +3827,17 @@ def main(config=None):
         print("Revisa tu API key y asegúrate de que el servicio de Last.fm esté disponible.")
         return 0, 0, 0, 0
 
-    # En la función main, antes de empezar el procesamiento normal:
-    print("\n=== PRUEBA DE API DE LAST.FM ===")
-    print("Realizando prueba directa de las API de Last.fm...")
-    test_artist = "The Beatles"  # Un artista que seguramente existe
-    test_album = "Abbey Road"
-    test_track = "Come Together"
-
-    print(f"\nPrueba de artist.getInfo para '{test_artist}'")
-    test_artist_info = get_artist_info(test_artist, None, lastfm_api_key)
-    print(f"Resultado: {'Éxito' if test_artist_info else 'Fallo'}")
-
-    print(f"\nPrueba de album.getInfo para '{test_album}' de '{test_artist}'")
-    test_album_info = get_album_info(test_album, test_artist, None, lastfm_api_key)
-    print(f"Resultado: {'Éxito' if test_album_info else 'Fallo'}")
-
-    print(f"\nPrueba de track.getInfo para '{test_track}' de '{test_artist}'")
-    test_track_info = get_track_info(test_track, test_artist, None, lastfm_api_key)
-    print(f"Resultado: {'Éxito' if test_track_info else 'Fallo'}")
-
-    if not (test_artist_info and test_album_info and test_track_info):
-        print("\nALERTA: Al menos una de las pruebas ha fallado.")
-        print("Esto puede indicar problemas con la API key, conexión a Internet, o el servicio de Last.fm.")
-        if not interactive:
-            print("Continuando de todos modos, pero es posible que el procesamiento no funcione correctamente.")
-        else:
-            continuar = input("¿Deseas continuar de todos modos? (s/n): ").lower()
-            if continuar != 's':
-                return 0, 0, 0, 0
-
-    print("\n=== FIN DE PRUEBA DE API ===\n")
-
-    # Conectar a la base de datos
-    conn = sqlite3.connect(db_path)
+    # Instanciar LastFMScrobbler
+    scrobbler = LastFMScrobbler(db_path, lastfm_user, lastfm_api_key)
+    scrobbler.interactive_mode = interactive
+    scrobbler.cache_dir = cache_dir  # Asignar cache_dir al scrobbler
     
-    try:
-        # Configurar la base de datos
-        setup_database(conn)
-        
-        # ===== IMPORTANTE: Aplicar force_update de manera explícita =====
-        # Si force_update es True, eliminar todos los scrobbles existentes
-        if force_update:
-            confirm = True
-            if interactive:
-                response = input("¿Está seguro de que desea eliminar TODOS los scrobbles existentes? (s/n): ").lower()
-                confirm = response == 's'
-                
-            if confirm:
-                cursor = conn.cursor()
-                print("Eliminando todos los scrobbles existentes...")
-                cursor.execute("DELETE FROM scrobbles")
-                cursor.execute("UPDATE lastfm_config SET last_timestamp = 0 WHERE id = 1")
-                conn.commit()
-                print("TODOS los scrobbles han sido eliminados. Se realizará una actualización completa.")
-        
-        # Obtener elementos existentes
-        existing_artists, existing_albums, existing_songs = get_existing_items(conn)
-        print(f"Elementos existentes: {len(existing_artists)} artistas, {len(existing_albums)} álbumes, {len(existing_songs)} canciones")
-        
-        # Obtener el último timestamp procesado
-        from_timestamp = 0 if force_update else get_last_timestamp(conn)
-        if from_timestamp > 0 and not force_update:
-            print(f"Obteniendo scrobbles desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
-            print("Obteniendo todos los scrobbles (esto puede tardar)")
-        
-        # Obtener scrobbles
-        tracks = get_lastfm_scrobbles(lastfm_user, lastfm_api_key, from_timestamp)
-        print(f"Obtenidos {len(tracks)} scrobbles")
-        
-        # Guardar todos los scrobbles en JSON si se especificó
-        if output_json and tracks:
-            os.makedirs(os.path.dirname(output_json), exist_ok=True)
-            with open(output_json, 'w') as f:
-                json.dump(tracks, f, indent=2)
-            print(f"Guardados todos los scrobbles en {output_json}")
-        
-        # Procesar scrobbles
-        if tracks:
-            processed, linked, unlinked, newest_timestamp = process_scrobbles(
-                conn, tracks, existing_artists, existing_albums, existing_songs, 
-                lastfm_api_key, interactive
-            )
-            print(f"Procesados {processed} scrobbles: {linked} enlazados, {unlinked} no enlazados")
-            
-            # Guardar el timestamp más reciente para la próxima ejecución
-            if newest_timestamp > 0:
-                save_last_timestamp(conn, newest_timestamp, lastfm_user)
-                print(f"Guardado último timestamp: {datetime.datetime.fromtimestamp(newest_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
-        else:
-            print("No se encontraron nuevos scrobbles para procesar")
-            processed, linked, unlinked, newest_timestamp = 0, 0, 0, 0
-        
-        # Mostrar estadísticas generales
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM scrobbles")
-        total_scrobbles = cursor.fetchone()[0]
-        
-        cursor.execute("SELECT COUNT(*) FROM scrobbles WHERE song_id IS NOT NULL")
-        matched_scrobbles = cursor.fetchone()[0]
-        
-        match_percentage = (matched_scrobbles/total_scrobbles*100) if total_scrobbles > 0 else 0
-        print(f"Estadísticas generales: {total_scrobbles} scrobbles totales, {matched_scrobbles} enlazados con canciones ({match_percentage:.1f}% de coincidencia)")
+    # Aplicar force_update si es necesario
+    if force_update:
+        handle_force_update(db_path)
     
-    finally:
-        conn.close()
-        
-    return processed, linked, unlinked, newest_timestamp if 'processed' in locals() else (0, 0, 0, 0)
+    # Obtener y procesar scrobbles
+    return scrobbler.update_scrobbles(force_update=force_update)
 
 if __name__ != "__main__" and FORCE_UPDATE:
     # We are being imported as a module, try to find db_path from globals
