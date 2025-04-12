@@ -9,7 +9,45 @@ import time
 import os
 from pathlib import Path
 
-INTERACTIVE_MODE = False  # This will be set by db_creator.py
+INTERACTIVE_MODE = True  # This will be set by db_creator.py
+FORCE_UPDATE = True  # This will be set by db_creator.py
+
+def handle_force_update(db_path):
+    """
+    Función crítica: Se ejecuta al principio del módulo para asegurar que force_update funcione
+    """
+    global FORCE_UPDATE
+    if not FORCE_UPDATE or not db_path:
+        return
+        
+    print("\n" + "!"*80)
+    print("MODO FORCE_UPDATE ACTIVADO: Eliminando todos los scrobbles existentes")
+    print("!"*80 + "\n")
+    
+    try:
+        # Conectar directamente a la base de datos
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Verificar si existe la tabla
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scrobbles'")
+        if cursor.fetchone():
+            # Eliminar datos
+            cursor.execute("DELETE FROM scrobbles")
+            # Restablecer el timestamp
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='lastfm_config'")
+            if cursor.fetchone():
+                cursor.execute("UPDATE lastfm_config SET last_timestamp = 0 WHERE id = 1")
+            
+            conn.commit()
+            print(f"Base de datos limpiada exitosamente: {db_path}")
+            print(f"Se han eliminado todos los scrobbles. Se realizará una actualización completa.\n")
+        else:
+            print(f"La tabla 'scrobbles' no existe aún en la base de datos: {db_path}")
+        
+        conn.close()
+    except Exception as e:
+        print(f"Error al intentar limpiar la base de datos: {e}")
 
 
 def setup_database(conn):
@@ -1287,7 +1325,7 @@ class LastFMScrobbler:
             self._update_progress("Obteniendo todos los scrobbles (esto puede tardar)", 15)
             
         tracks = get_lastfm_scrobbles(self.lastfm_user, self.lastfm_api_key, from_timestamp, 
-                                      progress_callback=self.progress_callback)
+                                    progress_callback=self.progress_callback)
         
         self._update_progress(f"Obtenidos {len(tracks)} scrobbles", 30)
         return tracks, from_timestamp
@@ -1327,11 +1365,19 @@ class LastFMScrobbler:
             
         return result
     
+  
     def update_scrobbles(self, force_update=False, interactive=None, callback=None):
         """Actualiza los scrobbles desde Last.fm y los procesa"""
         if interactive is None:
             interactive = self.interactive_mode
-            
+        
+        # Si force_update, primero limpiar la base de datos
+        if force_update:
+            if not self.force_update_database(interactive):
+                self._update_progress("Operación cancelada por el usuario", 0)
+                return 0, 0, 0, 0
+        
+        # Ahora obtener los nuevos scrobbles (desde cero si force_update era True)
         tracks, from_timestamp = self.get_new_scrobbles(force_update)
         if tracks:
             return self.process_scrobbles_batch(tracks, interactive, callback)
@@ -2066,6 +2112,31 @@ class LastFMScrobbler:
             json.dump({'scrobbles': scrobbles}, f, indent=2, ensure_ascii=False)
         
         return len(scrobbles)
+
+
+    def force_update_database(self, interactive=None):
+        """Elimina todos los scrobbles existentes para hacer una actualización completa."""
+        if interactive is None:
+            interactive = self.interactive_mode
+            
+        confirm = True
+        if interactive:
+            print("\n¡ATENCIÓN! Esta operación eliminará TODOS los scrobbles de la base de datos.")
+            response = input("¿Está seguro de que desea eliminar TODOS los scrobbles existentes? (s/n): ").lower()
+            confirm = response == 's'
+            
+        if confirm:
+            self.connect()
+            cursor = self.conn.cursor()
+            cursor.execute("DELETE FROM scrobbles")
+            cursor.execute("UPDATE lastfm_config SET last_timestamp = 0 WHERE id = 1")
+            self.conn.commit()
+            self._update_progress("TODOS los scrobbles han sido eliminados. Se realizará una actualización completa.", 10)
+            return True
+        
+        return False
+
+
 def main(config=None):
     # Cargar configuración
     parser = argparse.ArgumentParser(description='enlaces_artista_album')
@@ -2106,8 +2177,14 @@ def main(config=None):
         return
 
     output_json = args.output_json or config.get("output_json", ".content/cache/scrobbles_lastfm.json")
-    force_update = args.force_update or config.get('force_update', False)
-    interactive = args.interactive or config.get('interactive', False)
+    
+    # Check for force_update in multiple places
+    # 1. Command line arguments
+    # 2. Config file
+    # 3. Global variable that might be set by db_creator.py
+    global FORCE_UPDATE
+    force_update = args.force_update or config.get('force_update', False) or FORCE_UPDATE
+    interactive = args.interactive or config.get('interactive', False) or INTERACTIVE_MODE
 
     print(f"Modo force_update: {force_update}")
     print(f"Modo interactive: {interactive}")
@@ -2156,6 +2233,7 @@ def main(config=None):
         # Configurar la base de datos
         setup_database(conn)
         
+        # ===== IMPORTANTE: Aplicar force_update de manera explícita =====
         # Si force_update es True, eliminar todos los scrobbles existentes
         if force_update:
             confirm = True
@@ -2165,6 +2243,7 @@ def main(config=None):
                 
             if confirm:
                 cursor = conn.cursor()
+                print("Eliminando todos los scrobbles existentes...")
                 cursor.execute("DELETE FROM scrobbles")
                 cursor.execute("UPDATE lastfm_config SET last_timestamp = 0 WHERE id = 1")
                 conn.commit()
@@ -2175,13 +2254,11 @@ def main(config=None):
         print(f"Elementos existentes: {len(existing_artists)} artistas, {len(existing_albums)} álbumes, {len(existing_songs)} canciones")
         
         # Obtener el último timestamp procesado
-        if force_update:
-            from_timestamp = 0
-            print("Obteniendo todos los scrobbles (esto puede tardar)")
-        else:
-            from_timestamp = get_last_timestamp(conn)
+        from_timestamp = 0 if force_update else get_last_timestamp(conn)
+        if from_timestamp > 0 and not force_update:
             print(f"Obteniendo scrobbles desde {datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
-
+        else:
+            print("Obteniendo todos los scrobbles (esto puede tardar)")
         
         # Obtener scrobbles
         tracks = get_lastfm_scrobbles(lastfm_user, lastfm_api_key, from_timestamp)
@@ -2208,6 +2285,7 @@ def main(config=None):
                 print(f"Guardado último timestamp: {datetime.datetime.fromtimestamp(newest_timestamp).strftime('%Y-%m-%d %H:%M:%S')}")
         else:
             print("No se encontraron nuevos scrobbles para procesar")
+            processed, linked, unlinked, newest_timestamp = 0, 0, 0, 0
         
         # Mostrar estadísticas generales
         cursor = conn.cursor()
@@ -2225,5 +2303,17 @@ def main(config=None):
         
     return processed, linked, unlinked, newest_timestamp if 'processed' in locals() else (0, 0, 0, 0)
 
-if __name__ == "__main__":
-    main()
+if __name__ != "__main__" and FORCE_UPDATE:
+    # We are being imported as a module, try to find db_path from globals
+    try:
+        db_path = None
+        if 'CONFIG' in globals():
+            db_path = CONFIG.get('db_path')
+        if not db_path and 'filtered_config' in globals():
+            db_path = filtered_config.get('db_path')
+        
+        if db_path:
+            print(f"Módulo importado con FORCE_UPDATE=True, limpiando base de datos: {db_path}")
+            handle_force_update(db_path)
+    except Exception as e:
+        print(f"Error al intentar manejar force_update al importar el módulo: {e}")
