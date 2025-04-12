@@ -231,12 +231,63 @@ def lookup_album_in_database(conn, album_name, artist_id=None, artist_name=None,
     
     return None, None
 
-def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, album_id=None, album_name=None, mbid=None, threshold=0.85):
+
+
+def filter_duplicate_scrobbles(tracks):
+    """
+    Filtra scrobbles duplicados de Last.fm basándose en la misma canción y artista
+    Prioriza mantener el scrobble más reciente
+    
+    Args:
+        tracks: Lista de scrobbles obtenidos de Last.fm
+        
+    Returns:
+        Lista filtrada sin duplicados
+    """
+    if not tracks:
+        return []
+    
+    # Usaremos un diccionario para mantener solo el scrobble más reciente
+    # para cada combinación única de artista+canción
+    unique_tracks = {}
+    
+    # Ordenar por timestamp descendente (más recientes primero)
+    sorted_tracks = sorted(tracks, key=lambda x: int(x['date']['uts']), reverse=True)
+    
+    for track in sorted_tracks:
+        # Crear una clave única para esta canción+artista
+        key = (track['artist']['#text'].lower(), track['name'].lower())
+        
+        # Solo guardar si es la primera vez que vemos esta combinación
+        # (que será la más reciente debido al orden)
+        if key not in unique_tracks:
+            unique_tracks[key] = track
+    
+    # Convertir el diccionario de nuevo a lista
+    filtered_tracks = list(unique_tracks.values())
+    
+    # Re-ordenar por timestamp ascendente para procesamiento cronológico
+    filtered_tracks.sort(key=lambda x: int(x['date']['uts']))
+    
+    print(f"Filtrados {len(tracks) - len(filtered_tracks)} scrobbles duplicados")
+    print(f"Total de scrobbles únicos: {len(filtered_tracks)}")
+    
+    return filtered_tracks
+
+
+
+
+def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, album_id=None, album_name=None, mbid=None, lastfm_url=None, threshold=0.85):
     """
     Lookup song using database information with fuzzy matching
     Prioritizes search by existing IDs when available
     Returns (song_id, song_info) or (None, None) if not found
     """
+    # If we have a Last.fm URL, try to find by that first
+    if lastfm_url:
+        song_id, song_info = lookup_song_by_lastfm_url(conn, lastfm_url)
+        if song_id:
+            return song_id, song_info
     cursor = conn.cursor()
     
     # Primero intentar una búsqueda exacta pero case-insensitive
@@ -1091,7 +1142,12 @@ def setup_database(conn):
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_scrobbles_timestamp ON scrobbles(timestamp)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_scrobbles_artist ON scrobbles(artist_name)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_scrobbles_song_id ON scrobbles(song_id)")
-    
+     # Add indexes for Last.fm URLs
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_artists_lastfm_url ON artists(lastfm_url)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_albums_lastfm_url ON albums(lastfm_url)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_song_links_lastfm_url ON song_links(lastfm_url)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
+
     # Crear tabla para configuración
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS lastfm_config (
@@ -1145,6 +1201,18 @@ def setup_database(conn):
         date TEXT,
         genre TEXT,
         artist TEXT NOT NULL
+    )
+    """)
+    
+
+    # Crear tabla song_links si no existe
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS song_links (
+        id INTEGER PRIMARY KEY,
+        song_id INTEGER,
+        link_type TEXT,
+        lastfm_url TEXT,
+        FOREIGN KEY (song_id) REFERENCES songs(id)
     )
     """)
     
@@ -1794,7 +1862,7 @@ def add_song_to_db(conn, track_info, album_id, artist_id, interactive=False):
         return None
 
 # SCROBBLES
-def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limit=200, progress_callback=None):
+def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limit=200, progress_callback=None, filter_duplicates=True):
     """
     Obtiene los scrobbles de Last.fm para un usuario desde un timestamp específico.
     Implementa caché para páginas ya consultadas.
@@ -1908,6 +1976,23 @@ def get_lastfm_scrobbles(lastfm_username, lastfm_api_key, from_timestamp=0, limi
     else:
         print(f"Obtenidos {len(all_tracks)} scrobbles en total")
         
+    # At the end of the function, right before returning all_tracks:
+    if filter_duplicates and all_tracks:
+        if progress_callback:
+            progress_callback("Filtrando scrobbles duplicados...", 95)
+        else:
+            print("Filtrando scrobbles duplicados...")
+        
+        filtered_tracks = filter_duplicate_scrobbles(all_tracks)
+        
+        if progress_callback:
+            progress_callback(f"Obtenidos {len(filtered_tracks)} scrobbles únicos", 100)
+        else:
+            print(f"Obtenidos {len(filtered_tracks)} scrobbles únicos")
+            
+        return filtered_tracks
+    
+    # Only return the original all_tracks if filter_duplicates is False
     return all_tracks
 
 
@@ -2157,23 +2242,17 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
     }
     
     for track_idx, track in enumerate(tracks):
-        print(f"\n{'='*60}")
-        print(f"Procesando scrobble {track_idx+1}/{len(tracks)}")
-        print(f"{'='*60}")
-        
+        # Existing extraction code...
         artist_name = track['artist']['#text']
         album_name = track['album']['#text'] if track['album']['#text'] else None
         track_name = track['name']
         timestamp = int(track['date']['uts'])
         scrobble_date = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-        lastfm_url = track['url']
+        lastfm_url = track['url']  # URL de Last.fm para esta canción
         
-        print(f"Artista: {artist_name}")
-        print(f"Álbum: {album_name}")
-        print(f"Canción: {track_name}")
-        print(f"Fecha: {scrobble_date}")
-        print(f"URL: {lastfm_url}")
-        
+        # Extract Last.fm URLs for artist and album if available
+        artist_lastfm_url = track['artist'].get('url', '')
+        album_lastfm_url = track['album'].get('url', '') if track['album']['#text'] else ''
         # Si estamos en modo interactivo, preguntar si procesar este scrobble
         if interactive:
             print("-"*60)
@@ -2195,7 +2274,10 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
         # ARTISTA: Obtener o crear artista
         artist_mbid = track['artist'].get('mbid', '')
         artist_id = None
-        
+        if artist_lastfm_url:
+            artist_id, artist_info = lookup_artist_by_lastfm_url(conn, artist_lastfm_url)
+            if artist_id:
+                print(f"Artista encontrado por URL de Last.fm: ID {artist_id}")
 
         # Convertir claves a minúsculas en los diccionarios
         existing_artists_lower = CaseInsensitiveDict()
@@ -2373,6 +2455,115 @@ def process_scrobbles(conn, tracks, existing_artists, existing_albums, existing_
     return processed_count, linked_count, unlinked_count, newest_timestamp
 
 
+
+def get_tracks_from_lastfm_album(album_lastfm_url, lastfm_api_key):
+    """
+    Extrae información de canciones desde la URL de un álbum en Last.fm
+    
+    Args:
+        album_lastfm_url: URL del álbum en Last.fm
+        lastfm_api_key: API key de Last.fm
+    
+    Returns:
+        Lista de diccionarios con información de las canciones
+    """
+    if not album_lastfm_url or not lastfm_api_key:
+        return []
+    
+    # Intentar extraer el artista y el álbum desde la URL
+    # Formato típico: https://www.last.fm/music/Artist+Name/Album+Name
+    try:
+        parts = album_lastfm_url.strip('/').split('/')
+        if len(parts) >= 5 and parts[3] == 'music':
+            artist_name = parts[4].replace('+', ' ')
+            album_name = parts[5].replace('+', ' ') if len(parts) > 5 else None
+        else:
+            # Si no podemos extraer de la URL, no podemos continuar
+            return []
+    except Exception as e:
+        print(f"Error al parsear URL de álbum '{album_lastfm_url}': {e}")
+        return []
+    
+    # Construir parámetros para la API de Last.fm
+    params = {
+        'method': 'album.getInfo',
+        'artist': artist_name,
+        'album': album_name,
+        'api_key': lastfm_api_key,
+        'format': 'json'
+    }
+    
+    # Verificar en caché primero (podemos reutilizar el caché existente)
+    global lastfm_cache
+    if lastfm_cache:
+        cached_result = lastfm_cache.get('album.getInfo', params)
+        if cached_result and 'album' in cached_result and 'tracks' in cached_result['album']:
+            print(f"Usando datos en caché para álbum Last.fm: {album_name}")
+            return _extract_tracks_from_album_info(cached_result['album'])
+    
+    try:
+        response = requests.get('http://ws.audioscrobbler.com/2.0/', params=params)
+        
+        if response.status_code != 200:
+            print(f"Error al obtener información del álbum {album_name}: {response.status_code}")
+            return []
+        
+        data = response.json()
+        
+        # Verificar si hay error en la respuesta
+        if 'error' in data:
+            print(f"Error de Last.fm: {data['message']}")
+            return []
+            
+        if 'album' not in data:
+            print(f"No se encontró información para el álbum {album_name}")
+            return []
+        
+        # Guardar en caché
+        if lastfm_cache:
+            lastfm_cache.put('album.getInfo', params, data)
+        
+        # Extraer y devolver la información de las canciones
+        return _extract_tracks_from_album_info(data['album'])
+    
+    except Exception as e:
+        print(f"Error al consultar información del álbum {album_name}: {e}")
+        return []
+
+def _extract_tracks_from_album_info(album_info):
+    """
+    Extrae la información de las canciones de un álbum
+    desde la respuesta de Last.fm
+    """
+    tracks = []
+    
+    # Verificar que el álbum tenga canciones
+    if 'tracks' not in album_info or 'track' not in album_info['tracks']:
+        return tracks
+    
+    # Last.fm puede devolver un único track o una lista
+    track_data = album_info['tracks']['track']
+    
+    # Si es un solo track, convertirlo a lista
+    if not isinstance(track_data, list):
+        track_data = [track_data]
+    
+    # Extraer información relevante de cada canción
+    for track in track_data:
+        tracks.append({
+            'name': track.get('name', ''),
+            'artist': album_info.get('artist', ''),
+            'album': album_info.get('name', ''),
+            'lastfm_url': track.get('url', ''),
+            'duration': track.get('duration', 0),
+            'mbid': track.get('mbid', '')
+        })
+    
+    return tracks
+
+
+
+
 def insert_scrobbles_batch(conn, scrobbles, batch_size=100):
     """Inserta múltiples scrobbles en la base de datos usando operaciones por lotes"""
     cursor = conn.cursor()
@@ -2444,6 +2635,231 @@ def check_api_key(lastfm_api_key):
     except Exception as e:
         print(f"Error al verificar API key: {e}")
         return False
+
+
+
+def update_song_links_from_albums(conn, lastfm_api_key, limit=50, progress_callback=None):
+    """
+    Busca álbumes con URL de Last.fm pero sin enlaces para sus canciones
+    y actualiza la tabla song_links con los enlaces de Last.fm
+    
+    Args:
+        conn: Conexión a la base de datos
+        lastfm_api_key: API key de Last.fm
+        limit: Límite de álbumes a procesar por ejecución
+        progress_callback: Función para reportar progreso
+    
+    Returns:
+        Tuple (álbumes procesados, canciones encontradas, canciones actualizadas)
+    """
+    cursor = conn.cursor()
+    
+    # Asegurar que la tabla song_links existe
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS song_links (
+        id INTEGER PRIMARY KEY,
+        song_id INTEGER,
+        lastfm_url TEXT,
+        FOREIGN KEY (song_id) REFERENCES songs(id)
+    )
+    """)
+    
+    # Crear índice para búsquedas eficientes
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
+    
+    # Buscar álbumes con URL de Last.fm
+    cursor.execute("""
+    SELECT a.id, a.name, a.artist_id, ar.name as artist_name, a.lastfm_url
+    FROM albums a
+    JOIN artists ar ON a.artist_id = ar.id
+    WHERE a.lastfm_url IS NOT NULL AND a.lastfm_url != ''
+    ORDER BY a.id
+    LIMIT ?
+    """, (limit,))
+    
+    albums = cursor.fetchall()
+    albums_processed = 0
+    total_songs_found = 0
+    songs_updated = 0
+    
+    for i, (album_id, album_name, artist_id, artist_name, lastfm_url) in enumerate(albums):
+        if progress_callback:
+            progress_callback(f"Procesando álbum {i+1}/{len(albums)}: {album_name}", 
+                             (i / len(albums) * 100) if albums else 0)
+        else:
+            print(f"\nProcesando álbum {i+1}/{len(albums)}: {album_name} de {artist_name}")
+        
+        # Obtener canciones del álbum desde Last.fm
+        tracks = get_tracks_from_lastfm_album(lastfm_url, lastfm_api_key)
+        total_songs_found += len(tracks)
+        
+        if not tracks:
+            print(f"  No se encontraron canciones para el álbum '{album_name}'")
+            continue
+        
+        print(f"  Encontradas {len(tracks)} canciones para el álbum '{album_name}'")
+        
+        # Para cada canción, verificar si existe en la base de datos y actualizar el enlace
+        for track in tracks:
+            # Buscar la canción en la base de datos
+            cursor.execute("""
+            SELECT id FROM songs
+            WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?) AND LOWER(album) = LOWER(?)
+            """, (track['name'], track['artist'], track['album']))
+            
+            song_result = cursor.fetchone()
+            if not song_result:
+                # Si no encontramos coincidencia exacta, intentar solo por título y artista
+                cursor.execute("""
+                SELECT id FROM songs
+                WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
+                """, (track['name'], track['artist']))
+                song_result = cursor.fetchone()
+            
+            if song_result:
+                song_id = song_result[0]
+                
+                # Verificar si ya existe un enlace para esta canción
+                cursor.execute("""
+                SELECT id FROM song_links
+                WHERE song_id = ? AND link_type = 'lastfm'
+                """, (song_id,))
+                
+                if cursor.fetchone():
+                    # Actualizar el enlace existente
+                    cursor.execute("""
+                    UPDATE song_links SET lastfm_url = ?
+                    WHERE song_id = ? AND link_type = 'lastfm'
+                    """, (track['lastfm_url'], song_id))
+                else:
+                    # Crear un nuevo enlace
+                    cursor.execute("""
+                    INSERT INTO song_links (song_id, link_type, lastfm_url)
+                    VALUES (?, 'lastfm', ?)
+                    """, (song_id, track['lastfm_url']))
+                
+                songs_updated += 1
+        
+        albums_processed += 1
+    
+    conn.commit()
+    
+    if progress_callback:
+        progress_callback(f"Completado. {albums_processed} álbumes procesados, {songs_updated} canciones actualizadas", 100)
+    else:
+        print(f"\nCompletado. {albums_processed} álbumes procesados, {total_songs_found} canciones encontradas, {songs_updated} canciones actualizadas")
+    
+    return albums_processed, total_songs_found, songs_updated
+
+
+def lookup_song_by_lastfm_url(conn, lastfm_url):
+    """
+    Busca una canción en la base de datos por su URL de Last.fm
+    
+    Args:
+        conn: Conexión a la base de datos
+        lastfm_url: URL de Last.fm para la canción
+    
+    Returns:
+        (song_id, song_info) o (None, None) si no se encuentra
+    """
+    if not lastfm_url:
+        return None, None
+    
+    cursor = conn.cursor()
+    
+    # Primero buscar en song_links
+    cursor.execute("""
+    SELECT sl.song_id, s.title, s.artist, s.album, s.mbid, s.origen
+    FROM song_links sl
+    JOIN songs s ON sl.song_id = s.id
+    WHERE sl.lastfm_url = ? AND sl.link_type = 'lastfm'
+    """, (lastfm_url,))
+    
+    result = cursor.fetchone()
+    if result:
+        return result[0], {
+            'id': result[0],
+            'title': result[1],
+            'artist': result[2],
+            'album': result[3],
+            'mbid': result[4],
+            'origen': result[5]
+        }
+    
+    return None, None
+
+def lookup_album_by_lastfm_url(conn, lastfm_url):
+    """
+    Busca un álbum en la base de datos por su URL de Last.fm
+    """
+    if not lastfm_url:
+        return None, None
+    
+    cursor = conn.cursor()
+    
+    # Verificar primero si la columna lastfm_url existe en la tabla albums
+    cursor.execute("PRAGMA table_info(albums)")
+    columns = cursor.fetchall()
+    if not any(col[1] == 'lastfm_url' for col in columns):
+        print("La tabla albums no tiene la columna 'lastfm_url'")
+        return None, None
+    
+    # Ahora realizar la búsqueda
+    cursor.execute("""
+    SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen
+    FROM albums a
+    JOIN artists ar ON a.artist_id = ar.id
+    WHERE a.lastfm_url = ?
+    """, (lastfm_url,))
+    
+    result = cursor.fetchone()
+    if result:
+        return result[0], {
+            'id': result[0],
+            'mbid': result[1],
+            'name': result[2],
+            'artist_id': result[3],
+            'artist_name': result[4],
+            'origen': result[5]
+        }
+    
+    return None, None
+
+def lookup_artist_by_lastfm_url(conn, lastfm_url):
+    """
+    Busca un artista en la base de datos por su URL de Last.fm
+    
+    Args:
+        conn: Conexión a la base de datos
+        lastfm_url: URL de Last.fm para el artista
+    
+    Returns:
+        (artist_id, artist_info) o (None, None) si no se encuentra
+    """
+    if not lastfm_url:
+        return None, None
+    
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+    SELECT id, mbid, name, origen
+    FROM artists
+    WHERE lastfm_url = ?
+    """, (lastfm_url,))
+    
+    result = cursor.fetchone()
+    if result:
+        return result[0], {
+            'id': result[0],
+            'mbid': result[1],
+            'name': result[2],
+            'origen': result[3]
+        }
+    
+    return None, None
+
+
 
 class LastFMScrobbler:
     def __init__(self, db_path, lastfm_user, lastfm_api_key, progress_callback=None, cache_dir=None):
@@ -2517,22 +2933,23 @@ class LastFMScrobbler:
             self.conn = None
             self._update_progress("Conexión a la base de datos cerrada", 100)
     
-    def get_new_scrobbles(self, force_update=False):
-        """Obtiene los nuevos scrobbles desde el último timestamp"""
-        self.connect()
-        from_timestamp = 0 if force_update else get_last_timestamp(self.conn)
-        
-        if from_timestamp > 0:
-            date_str = datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')
-            self._update_progress(f"Obteniendo scrobbles desde {date_str}", 15)
-        else:
-            self._update_progress("Obteniendo todos los scrobbles (esto puede tardar)", 15)
+    def get_new_scrobbles(self, force_update=False, filter_duplicates=True):
+            """Obtiene los nuevos scrobbles desde el último timestamp"""
+            self.connect()
+            from_timestamp = 0 if force_update else get_last_timestamp(self.conn)
             
-        tracks = get_lastfm_scrobbles(self.lastfm_user, self.lastfm_api_key, from_timestamp, 
-                                    progress_callback=self.progress_callback)
-        
-        self._update_progress(f"Obtenidos {len(tracks)} scrobbles", 30)
-        return tracks, from_timestamp
+            if from_timestamp > 0:
+                date_str = datetime.datetime.fromtimestamp(from_timestamp).strftime('%Y-%m-%d %H:%M:%S')
+                self._update_progress(f"Obteniendo scrobbles desde {date_str}", 15)
+            else:
+                self._update_progress("Obteniendo todos los scrobbles (esto puede tardar)", 15)
+                
+            tracks = get_lastfm_scrobbles(self.lastfm_user, self.lastfm_api_key, from_timestamp, 
+                                        progress_callback=self.progress_callback,
+                                        filter_duplicates=filter_duplicates)
+            
+            self._update_progress(f"Obtenidos {len(tracks)} scrobbles", 30)
+            return tracks, from_timestamp
     
     def process_scrobbles_batch(self, tracks, interactive=None, callback=None):
         """Procesa un lote de scrobbles con posible interfaz gráfica"""
@@ -2570,24 +2987,24 @@ class LastFMScrobbler:
         return result
     
   
-    def update_scrobbles(self, force_update=False, interactive=None, callback=None, use_mbid_lookups=True):
-        """Actualiza los scrobbles desde Last.fm y los procesa, con opción para usar búsquedas por MBID"""
-        if interactive is None:
-            interactive = self.interactive_mode
-        
-        # Si force_update, primero limpiar la base de datos
-        if force_update:
-            if not self.force_update_database(interactive):
-                self._update_progress("Operación cancelada por el usuario", 0)
-                return 0, 0, 0, 0
-        
-        # Ahora obtener los nuevos scrobbles (desde cero si force_update era True)
-        tracks, from_timestamp = self.get_new_scrobbles(force_update)
-        if tracks:
-            if use_mbid_lookups:
-                self._update_progress("Usando búsquedas por nombre y actualización con MBIDs", 35)
-            return self.process_scrobbles_batch(tracks, interactive, callback)
-        return 0, 0, 0, 0
+    def update_scrobbles(self, force_update=False, interactive=None, callback=None, use_mbid_lookups=True, filter_duplicates=True):
+            """Actualiza los scrobbles desde Last.fm y los procesa"""
+            if interactive is None:
+                interactive = self.interactive_mode
+            
+            # Si force_update, primero limpiar la base de datos
+            if force_update:
+                if not self.force_update_database(interactive):
+                    self._update_progress("Operación cancelada por el usuario", 0)
+                    return 0, 0, 0, 0
+            
+            # Ahora obtener los nuevos scrobbles (desde cero si force_update era True)
+            tracks, from_timestamp = self.get_new_scrobbles(force_update, filter_duplicates)
+            if tracks:
+                if use_mbid_lookups:
+                    self._update_progress("Usando búsquedas por nombre y actualización con MBIDs", 35)
+                return self.process_scrobbles_batch(tracks, interactive, callback)
+            return 0, 0, 0, 0
     
     def merge_duplicates_by_mbid(conn):
         """Fusiona elementos duplicados identificados por MBID"""
