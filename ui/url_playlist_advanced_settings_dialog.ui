@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>550</height>
+    <width>516</width>
+    <height>938</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -335,7 +335,7 @@ QHeaderView::section {
       <item>
        <widget class="QGroupBox" name="apariencia_playlists">
         <property name="title">
-         <string>Apariencia de playlists</string>
+         <string/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
@@ -347,6 +347,13 @@ QHeaderView::section {
             <enum>QFrame::Shadow::Raised</enum>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Apariencia de playlists</string>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QRadioButton" name="pl_unidas">
               <property name="text">
@@ -374,6 +381,13 @@ QHeaderView::section {
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Listas de reproducción visibles</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="blogs_checkbox">
               <property name="text">
                <string>Blogs</string>
@@ -391,6 +405,100 @@ QHeaderView::section {
              <widget class="QCheckBox" name="sp_checkbox">
               <property name="text">
                <string>Spotify</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="lastfm_checkbox">
+              <property name="text">
+               <string>Lastfm Scrobbles</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="rss">
+        <property name="title">
+         <string>Categorias aceptadas en el RSS</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QWidget" name="usuario_widget" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="usuario_label">
+              <property name="text">
+               <string>Usuario</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="entrada_usuario">
+              <property name="text">
+               <string>Introduce tu nombre de usuario</string>
+              </property>
+              <property name="textInteractionFlags">
+               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_2" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QLabel" name="scrobbles_mostrados">
+              <property name="text">
+               <string>Scrobbles a mostrar</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSlider" name="scrobbles_slider">
+              <property name="minimum">
+               <number>25</number>
+              </property>
+              <property name="maximum">
+               <number>1000</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+              <property name="pageStep">
+               <number>100</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="scrobblers_spinBox"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="mostrar_scrobbles" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QRadioButton" name="scrobbles_fecha">
+              <property name="text">
+               <string>Mostrar scrobbles pr fecha</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="scrobbles_reproducciones">
+              <property name="text">
+               <string>Mostrar Scrobbles por reproducciones (únicos)</string>
               </property>
              </widget>
             </item>
@@ -412,22 +520,6 @@ QHeaderView::section {
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="rss">
-        <property name="title">
-         <string>Categorias aceptadas en el RSS</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QCheckBox" name="rss_check_1">
-           <property name="text">
-            <string>CheckBox</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
       </item>
       <item>
        <widget class="QDialogButtonBox" name="adv_sett_buttonBox">
