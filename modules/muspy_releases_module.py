@@ -321,8 +321,10 @@ class MuspyArtistModule(BaseModule):
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Conectar las señales de los botones de acción
-        self.load_artists_button.clicked.connect(self.load_artists_from_file)
+        # Modificar la conexión del botón de cargar artistas para mostrar un menú
+        self.load_artists_button.clicked.connect(self.show_load_menu)
+        
+        # El resto de las conexiones se mantienen igual
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         
         # Visibility for Last.fm button depends on configuration
@@ -340,6 +342,29 @@ class MuspyArtistModule(BaseModule):
         # Add a context menu for additional options
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
+
+
+    def show_load_menu(self):
+        """
+        Display a menu with load options when load_artists_button is clicked
+        """
+        menu = QMenu(self)
+        
+        # Add menu actions
+        artists_action = QAction("Seleccionar artistas", self)
+        albums_action = QAction("Seleccionar albums", self)
+        
+        # Connect actions to their respective functions
+        artists_action.triggered.connect(self.load_artists_from_file)
+        albums_action.triggered.connect(self.load_albums_from_file)
+        
+        # Add actions to menu
+        menu.addAction(artists_action)
+        menu.addAction(albums_action)
+        
+        # Show menu at button position
+        menu.exec(self.load_artists_button.mapToGlobal(QPoint(0, self.load_artists_button.height())))
+
 
     def show_context_menu(self, position):
         """Show context menu with additional options"""
@@ -700,6 +725,227 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             self.results_text.append(f"Error: {str(e)}")
             logger.error(f"Error en load_artists_from_file: {e}", exc_info=True)
+
+
+    def load_albums_from_file(self):
+            """
+            Ejecuta un script para cargar álbumes desde la base de datos, 
+            muestra un diálogo con checkboxes para seleccionar álbumes y
+            guarda los seleccionados en un archivo JSON
+            """
+            try:
+                # Asegurar que tenemos PROJECT_ROOT
+                self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
+
+                # Ensure db_path is absolute
+                if not os.path.isabs(self.db_path):
+                    full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+                else:
+                    full_db_path = self.db_path
+                
+                # Print debug info
+                self.results_text.append(f"Using database path: {full_db_path}")
+                self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
+
+                # Construir la ruta al script
+                script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+                
+                # Check if script exists
+                if not os.path.exists(script_path):
+                    self.results_text.append(f"Error: Script not found at {script_path}")
+                    return
+                    
+                # Ejecutar el script de consulta para álbumes
+                self.results_text.clear()
+                self.results_text.append("Ejecutando consulta de álbumes en la base de datos...")
+                QApplication.processEvents()  # Actualizar UI
+                
+                cmd = f"python {script_path} --db {full_db_path} --buscar albums"
+                self.results_text.append(f"Running command: {cmd}")
+                QApplication.processEvents()
+                
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                
+                if result.returncode != 0:
+                    self.results_text.append(f"Error al ejecutar el script: {result.stderr}")
+                    return
+                    
+                # Cargar los resultados como JSON
+                try:
+                    albums_data = json.loads(result.stdout)
+                except json.JSONDecodeError as e:
+                    self.results_text.append(f"Error al procesar la salida del script: {e}")
+                    self.results_text.append(f"Script output: {result.stdout[:500]}...")
+                    return
+                
+                # Verificar si hay álbumes
+                if not albums_data:
+                    self.results_text.append("No se encontraron álbumes en la base de datos.")
+                    return
+                
+                # Ensure cache directory exists
+                cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+                os.makedirs(cache_dir, exist_ok=True)
+                
+                # Cargar álbumes existentes si el archivo ya existe
+                json_path = os.path.join(cache_dir, "albums_selected.json")
+                existing_albums = []
+                if os.path.exists(json_path):
+                    try:
+                        with open(json_path, 'r', encoding='utf-8') as f:
+                            data = f.read()
+                            if data:  # Only try to load if not empty
+                                existing_albums = json.loads(data)
+                            else:
+                                self.results_text.append("Existing albums file is empty, using empty list")
+                    except Exception as e:
+                        self.results_text.append(f"Error al cargar álbumes existentes: {e}")
+                
+                # Create a list of existing album IDs - For checking if already selected
+                existing_ids = set()
+                if existing_albums:
+                    existing_ids = {album.get("mbid", "") for album in existing_albums if isinstance(album, dict) and "mbid" in album}
+                
+                    
+                # Crear el diálogo para selección de álbumes
+                dialog = QDialog(self)
+                dialog.setWindowTitle("Seleccionar Álbumes")
+                dialog.setMinimumWidth(700)  # Wider to accommodate album titles
+                dialog.setMinimumHeight(600)
+                
+                # Layout principal
+                layout = QVBoxLayout(dialog)
+                
+                # Etiqueta informativa
+                info_label = QLabel(f"Selecciona los álbumes que deseas guardar ({len(albums_data)} encontrados)")
+                layout.addWidget(info_label)
+                
+                # Campo de búsqueda
+                search_layout = QHBoxLayout()
+                search_label = QLabel("Buscar:")
+                search_input = QLineEdit()
+                search_layout.addWidget(search_label)
+                search_layout.addWidget(search_input)
+                layout.addLayout(search_layout)
+                
+                # Área de scroll con checkboxes
+                scroll_area = QScrollArea()
+                scroll_area.setWidgetResizable(True)
+                layout.addWidget(scroll_area)
+                
+                scroll_content = QWidget()
+                scroll_layout = QVBoxLayout(scroll_content)
+                
+                # Lista para almacenar los checkboxes
+                checkboxes = []
+                
+                # Crear un checkbox para cada álbum
+                for album in albums_data:
+                    artist_name = album.get('artista', 'Unknown Artist')
+                    album_name = album.get('nombre', 'Unknown Album')
+                    album_mbid = album.get('mbid', '')
+                    
+                    checkbox_text = f"{artist_name} - {album_name}"
+                    if album_mbid:
+                        checkbox_text += f" ({album_mbid})"
+                    
+                    checkbox = QCheckBox(checkbox_text)
+                    checkbox.setChecked(album_mbid in existing_ids)  # Pre-seleccionar si ya existe
+                    checkbox.setProperty("album_data", album)  # Almacenar datos del álbum en el checkbox
+                    checkboxes.append(checkbox)
+                    scroll_layout.addWidget(checkbox)
+                
+                scroll_area.setWidget(scroll_content)
+                
+                # Botones de selección
+                button_layout = QHBoxLayout()
+                select_all_button = QPushButton("Seleccionar Todos")
+                deselect_all_button = QPushButton("Deseleccionar Todos")
+                button_layout.addWidget(select_all_button)
+                button_layout.addWidget(deselect_all_button)
+                layout.addLayout(button_layout)
+                
+                # Botones de aceptar/cancelar
+                buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+                layout.addWidget(buttons)
+                
+                # Guardamos referencias para acceder a ellos desde otras funciones
+                dialog.scroll_layout = scroll_layout
+                dialog.search_input = search_input
+                dialog.select_all_button = select_all_button
+                dialog.deselect_all_button = deselect_all_button
+                dialog.buttons = buttons
+                
+                # Conectar señales
+                search_input.textChanged.connect(lambda text: self.filter_albums(text, checkboxes))
+                select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
+                deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
+                buttons.accepted.connect(dialog.accept)
+                buttons.rejected.connect(dialog.reject)
+                
+                # Mostrar el diálogo
+                if dialog.exec() == 1:  # 1 generalmente significa "aceptado"
+                    self.results_text.append("Diálogo aceptado, procesando selección...")
+                else:
+                    self.results_text.append("Operación cancelada por el usuario.")
+                    return
+                
+                # Recopilar álbumes seleccionados
+                selected_albums = []
+                for i in range(dialog.scroll_layout.count()):
+                    widget = dialog.scroll_layout.itemAt(i).widget()
+                    if isinstance(widget, QCheckBox) and widget.isChecked():
+                        album_data = widget.property("album_data")
+                        # Asegurarse de que los datos del álbum incluyen el artista y el MBID
+                        if "artista" not in album_data:
+                            album_data["artista"] = "Unknown Artist"
+                        selected_albums.append(album_data)
+                
+                # Guardar álbumes seleccionados en JSON
+                try:
+                    # Ensure the directory exists
+                    os.makedirs(os.path.dirname(json_path), exist_ok=True)
+                    
+                    with open(json_path, 'w', encoding='utf-8') as f:
+                        json.dump(selected_albums, f, ensure_ascii=False, indent=2)
+                    
+                    self.results_text.append(f"Se guardaron {len(selected_albums)} álbumes en {json_path}")
+                    
+                    # Show popup with results
+                    QMessageBox.information(
+                        self, 
+                        "Álbumes Guardados", 
+                        f"Se guardaron {len(selected_albums)} álbumes para sincronización.\n"
+                        f"Puedes sincronizarlos con Muspy, Last.fm o Spotify usando el botón de sincronización."
+                    )
+                except Exception as e:
+                    self.results_text.append(f"Error al guardar los álbumes: {e}")
+            
+            except Exception as e:
+                self.results_text.append(f"Error: {str(e)}")
+                logger.error(f"Error en load_albums_from_file: {e}", exc_info=True)
+
+
+    def filter_albums(self, search_text, checkboxes):
+        """
+        Filtra los álbumes en el diálogo según el texto de búsqueda.
+        
+        Args:
+            search_text (str): Texto de búsqueda
+            checkboxes (list): Lista de checkboxes de álbumes
+        """
+        search_text = search_text.lower()
+        for checkbox in checkboxes:
+            album_data = checkbox.property("album_data")
+            
+            # Buscar tanto en el nombre del artista como en el del álbum
+            artist_name = album_data.get("artista", "").lower()
+            album_name = album_data.get("nombre", "").lower()
+            
+            visible = search_text in artist_name or search_text in album_name
+            checkbox.setVisible(visible)
+
+
 
     def _fallback_artist_selection_dialog(self, dialog, artists_data, existing_names):
         """
