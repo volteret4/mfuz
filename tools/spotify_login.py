@@ -87,6 +87,7 @@ class SpotifyAuthManager:
         if redirect_uri is None:
             # Try to get redirect URI from config if possible
             try:
+                sys.path.append(os.path.dirname(os.path.dirname(__file__)))
                 from base_module import PROJECT_ROOT
                 import yaml
                 config_path = PROJECT_ROOT / "config" / "config.yml"
@@ -229,41 +230,65 @@ class SpotifyAuthManager:
     
     def authenticate(self, force_new_auth=False):
         """
-        Authenticate with Spotify.
+        Show a dialog where the user can authenticate with Spotify.
         
         Args:
             force_new_auth (bool): Force a new authentication flow even if a token exists.
-            
+                
         Returns:
             bool: True if authentication was successful, False otherwise.
         """
         if not SPOTIPY_AVAILABLE or not self.sp_oauth:
             return False
-            
+                
         # If we already have a valid token and are not forcing new auth, just refresh if needed
         if self.token_info and not force_new_auth:
             if self._refresh_token_if_needed():
                 return True
-        
+            
         # Start the OAuth flow
         try:
             # Get the authorization URL
             auth_url = self.sp_oauth.get_authorize_url()
             self.logger.info(f"Opening browser for Spotify authentication: {auth_url}")
-            
-            # Open the browser for the user to authenticate
-            webbrowser.open(auth_url)
-            
-            # Get the response URL from the user
+                
+            # Create a clickable message box with the URL
             if QT_AVAILABLE and self.parent_widget:
-                # Use QT dialog
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import Qt
+                
+                msg = QMessageBox(self.parent_widget)
+                msg.setWindowTitle("Spotify Authentication")
+                msg.setText(f"Please click the button below to open Spotify login in your browser:")
+                msg.setInformativeText(f"After logging in, you will be redirected to a URL. Copy that URL and paste it in the next dialog.")
+                msg.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+                msg.setDefaultButton(QMessageBox.StandardButton.Ok)
+                
+                # Custom button text
+                open_button = msg.button(QMessageBox.StandardButton.Ok)
+                open_button.setText("Open Spotify Login")
+                
+                # Show the message box
+                result = msg.exec()
+                
+                if result == QMessageBox.StandardButton.Cancel:
+                    self.logger.info("Authentication canceled by user")
+                    return False
+                    
+                # Open browser
+                import webbrowser
+                webbrowser.open(auth_url)
+                
+                # Get the redirect URL from the user with a dialog
+                from PyQt6.QtWidgets import QInputDialog
                 redirect_url, ok = QInputDialog.getText(
                     self.parent_widget,
                     "Spotify Authentication",
-                    "Please log in to Spotify in your browser and paste the URL you were redirected to:"
+                    "Please paste the entire URL you were redirected to:"
                 )
+                
                 if not ok or not redirect_url:
-                    self.logger.info("Authentication canceled by user")
+                    self.logger.info("URL input canceled by user")
                     return False
             else:
                 # Use console input
@@ -271,21 +296,23 @@ class SpotifyAuthManager:
                 print("After logging in, you will be redirected to a URL starting with your redirect URI.")
                 print("Please copy the entire URL and paste it here:")
                 redirect_url = input("Enter the URL you were redirected to: ")
-            
-            # Get the code from the URL
-            code = self.sp_oauth.parse_response_code(redirect_url)
-            
-            # Exchange the code for a token
-            self.token_info = self.sp_oauth.get_access_token(code)
-            
-            # Create the Spotify client
-            if self._create_spotify_client():
-                self.logger.info("Authentication successful")
-                return True
-            else:
-                self.logger.error("Failed to create Spotify client after authentication")
-                return False
                 
+            # Process the response
+            if redirect_url:
+                # Get the code from the URL
+                code = self.sp_oauth.parse_response_code(redirect_url)
+                
+                # Exchange the code for a token
+                self.token_info = self.sp_oauth.get_access_token(code)
+                
+                # Create the Spotify client
+                if self._create_spotify_client():
+                    self.logger.info("Authentication successful")
+                    return True
+                    
+            self.logger.error("Authentication failed - no valid URL provided")
+            return False
+                    
         except Exception as e:
             self.logger.error(f"Authentication error: {e}")
             return False

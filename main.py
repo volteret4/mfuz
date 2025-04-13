@@ -299,6 +299,9 @@ class TabManager(QMainWindow):
         try:
             config = load_config_file(self.config_path)
                 
+            # Get global settings that modules might need
+            global_config = config.get('global_theme_config', {})
+            
             for module_config in config['modules']:
                 parent_dir = Path(__file__).parent
                 relative_path = Path(module_config['path'])
@@ -306,9 +309,11 @@ class TabManager(QMainWindow):
                 module_name = module_config.get('name', Path(module_path).stem)
                 module_args = module_config.get('args', {})
                 
-                # Añadir config_path a los argumentos cuando se trata del ConfigEditorModule
-                if module_name == "Config Editor":
-                    module_args['config_path'] = self.config_path
+                # Add global Spotify credentials if module is Muspy
+                if module_name == "Muspy" and 'spotify_client_id' not in module_args:
+                    module_args['spotify_client_id'] = global_config.get('spotify_client_id')
+                    module_args['spotify_client_secret'] = global_config.get('spotify_client_secret')
+                    print(f"Added Spotify credentials to Muspy module")
                 
                 try:
                     # Dynamically load the module

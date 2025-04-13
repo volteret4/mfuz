@@ -59,6 +59,7 @@ class MuspyArtistModule(BaseModule):
             lastfm_username=None,
             spotify_client_id=None,
             spotify_client_secret=None,
+            spotify_redirect_uri=None,
             parent=None, 
             db_path='music_database.db',
             theme='Tokyo Night', 
@@ -126,14 +127,16 @@ class MuspyArtistModule(BaseModule):
             'spotify_client_id': spotify_client_id,
             'spotify_client_secret': spotify_client_secret,
             'lastfm_api_key': kwargs.get('lastfm_api_key'),
-            'lastfm_username': lastfm_username
+            'lastfm_username': lastfm_username,
+            'spotify_redirect_uri': spotify_redirect_uri
         }
+        self.spotify_redirect_uri = spotify_redirect_uri
         self.load_module_settings(module_args)
         
         # Initialize the Spotify Auth Manager with credentials received from main.py
         if self.spotify_enabled:
             # Get redirect URI from config if available
-            redirect_uri = kwargs.get('spotify_redirect_uri', "http://localhost:8888/callback")
+            redirect_uri = self.spotify_redirect_uri or kwargs.get('spotify_redirect_uri')
             
             self.spotify_auth = SpotifyAuthManager(
                 client_id=self.spotify_client_id,
@@ -340,7 +343,76 @@ class MuspyArtistModule(BaseModule):
         # Show the menu
         context_menu.exec(self.mapToGlobal(position))
 
-
+    def check_install_dependencies(self):
+        """Check and optionally install missing dependencies"""
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Checking dependencies...")
+        QApplication.processEvents()
+        
+        missing_deps = []
+        
+        # Check for required packages
+        try:
+            import requests
+            self.results_text.append("✓ requests package installed")
+        except ImportError:
+            missing_deps.append("requests")
+            self.results_text.append("✗ requests package missing")
+        
+        try:
+            import spotipy
+            self.results_text.append("✓ spotipy package installed")
+        except ImportError:
+            missing_deps.append("spotipy")
+            self.results_text.append("✗ spotipy package missing")
+        
+        try:
+            import pylast
+            self.results_text.append("✓ pylast package installed")
+        except ImportError:
+            missing_deps.append("pylast")
+            self.results_text.append("✗ pylast package missing")
+        
+        # Offer to install missing dependencies
+        if missing_deps:
+            self.results_text.append("\nMissing dependencies found. Would you like to install them?")
+            
+            # Create a message box to ask for installation
+            reply = QMessageBox.question(
+                self, 
+                "Install Dependencies", 
+                f"The following dependencies are missing:\n- {', '.join(missing_deps)}\n\nWould you like to install them?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                self.results_text.append("\nInstalling dependencies...")
+                QApplication.processEvents()
+                
+                # Create a string of all dependencies to install
+                deps_str = " ".join(missing_deps)
+                
+                try:
+                    import subprocess
+                    result = subprocess.run(
+                        f"pip install {deps_str}", 
+                        shell=True, 
+                        capture_output=True, 
+                        text=True
+                    )
+                    
+                    if result.returncode == 0:
+                        self.results_text.append("✓ Dependencies installed successfully!")
+                        self.results_text.append("\nPlease restart the application to use the new dependencies.")
+                    else:
+                        self.results_text.append(f"✗ Error installing dependencies: {result.stderr}")
+                except Exception as e:
+                    self.results_text.append(f"✗ Error running pip: {e}")
+            else:
+                self.results_text.append("\nDependency installation skipped.")
+        else:
+            self.results_text.append("\n✓ All required dependencies are installed!")
 
 
     def check_api_credentials(self):
@@ -434,26 +506,46 @@ class MuspyArtistModule(BaseModule):
             # Asegurar que tenemos PROJECT_ROOT
             self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
-            # Construir la ruta al script
-            script_path = PROJECT_ROOT / "base_datos" / "tools" / "consultar_items_db.py"
+            # Ensure db_path is absolute
+            if not os.path.isabs(self.db_path):
+                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            else:
+                full_db_path = self.db_path
             
+            # Print debug info
+            self.results_text.append(f"Using database path: {full_db_path}")
+            self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
+
+            # Construir la ruta al script
+            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            
+            # Check if script exists
+            if not os.path.exists(script_path):
+                self.results_text.append(f"Error: Script not found at {script_path}")
+                return
+                
             # Ejecutar el script de consulta
             self.results_text.clear()
             self.results_text.append("Ejecutando consulta de artistas en la base de datos...")
             QApplication.processEvents()  # Actualizar UI
             
-            cmd = f"python {script_path} --db {self.db_path} --buscar artistas"
+            cmd = f"python {script_path} --db {full_db_path} --buscar artistas"
+            self.results_text.append(f"Running command: {cmd}")
+            QApplication.processEvents()
+            
             result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
             
             if result.returncode != 0:
                 self.results_text.append(f"Error al ejecutar el script: {result.stderr}")
                 return
-            
+                
+            # Fix for the 'NoneType' is not subscriptable error
             # Cargar los resultados como JSON
             try:
                 artists_data = json.loads(result.stdout)
             except json.JSONDecodeError as e:
                 self.results_text.append(f"Error al procesar la salida del script: {e}")
+                self.results_text.append(f"Script output: {result.stdout[:500]}...")
                 return
             
             # Verificar si hay artistas
@@ -462,22 +554,29 @@ class MuspyArtistModule(BaseModule):
                 return
             
             # Ensure cache directory exists
-            cache_dir = PROJECT_ROOT / ".content" / "cache"
+            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
             os.makedirs(cache_dir, exist_ok=True)
             
             # Cargar artistas existentes si el archivo ya existe
-            json_path = cache_dir / "artists_selected.json"
+            json_path = os.path.join(cache_dir, "artists_selected.json")
             existing_artists = []
-            if json_path.exists():
+            if os.path.exists(json_path):
                 try:
                     with open(json_path, 'r', encoding='utf-8') as f:
-                        existing_artists = json.load(f)
+                        data = f.read()
+                        if data:  # Only try to load if not empty
+                            existing_artists = json.loads(data)
+                        else:
+                            self.results_text.append("Existing artists file is empty, using empty list")
                 except Exception as e:
                     self.results_text.append(f"Error al cargar artistas existentes: {e}")
             
-            # Crear una lista de nombres de artistas existentes para verificaciones más rápidas
-            existing_names = {artist["nombre"] for artist in existing_artists}
+            # Create a list of existing artist names - FIX FOR THE ERROR
+            existing_names = set()
+            if existing_artists:
+                existing_names = {artist.get("nombre", "") for artist in existing_artists if isinstance(artist, dict) and "nombre" in artist}
             
+                
             # Crear el diálogo usando el archivo UI
             dialog = QDialog(self)
             ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
@@ -1450,22 +1549,21 @@ class MuspyArtistModule(BaseModule):
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
         
-        # Make sure the functions exist before connecting
-        if hasattr(self, 'sync_lastfm_artists'):
+        # Connect Last.fm sync function
+        if self.lastfm_enabled:
             lastfm_action.triggered.connect(self.sync_lastfm_artists)
         else:
-            # Fallback to the original function or a temporary error message
-            lastfm_action.triggered.connect(lambda: self.results_text.append("Last.fm sync not implemented yet"))
+            lastfm_action.triggered.connect(lambda: QMessageBox.warning(
+                self, "Last.fm Error", "Last.fm credentials not configured. Please set them in the config file."
+            ))
         
-        # Same for Spotify
-        if hasattr(self, 'sync_spotify'):
+        # Connect Spotify sync function
+        if self.spotify_enabled:
             spotify_action.triggered.connect(self.sync_spotify)
         else:
-            spotify_action.triggered.connect(lambda: self.results_text.append("Spotify sync not implemented yet"))
-        
-        # Enable/disable actions based on available credentials
-        lastfm_action.setEnabled(self.lastfm_enabled)
-        spotify_action.setEnabled(self.spotify_enabled)
+            spotify_action.triggered.connect(lambda: QMessageBox.warning(
+                self, "Spotify Error", "Spotify credentials not configured. Please set them in the config file."
+            ))
         
         # Add status indicators to menu items
         if not self.lastfm_enabled:
@@ -1597,29 +1695,28 @@ class MuspyArtistModule(BaseModule):
         self.results_text.append("Starting Spotify synchronization...\n")
         QApplication.processEvents()
         
-        # Get an authenticated Spotify client using our SpotifyAuthManager
+        # Get an authenticated Spotify client
         try:
             self.results_text.append("Authenticating with Spotify...")
             QApplication.processEvents()
             
-            # Make sure we have a SpotifyAuthManager instance
-            if not hasattr(self, 'spotify_auth') or self.spotify_auth is None:
-                self.results_text.append("Initializing Spotify authentication...")
-                self.spotify_auth = SpotifyAuthManager(
-                    client_id=self.spotify_client_id,
-                    client_secret=self.spotify_client_secret,
-                    parent_widget=self,
-                    project_root=PROJECT_ROOT
-                )
-            
+            # Get the Spotify client
             spotify_client = self.spotify_auth.get_client()
             if not spotify_client:
-                self.results_text.append("Failed to authenticate with Spotify. Please check your credentials.")
+                self.results_text.append("Failed to get Spotify client. Please check authentication.")
+                return
+                
+            # Get user info to confirm authentication
+            user_info = spotify_client.current_user()
+            if user_info and 'id' in user_info:
+                self.results_text.append(f"Successfully authenticated as {user_info.get('display_name', user_info['id'])}")
+            else:
+                self.results_text.append("Authentication succeeded but user info couldn't be retrieved.")
                 return
             
-            # Get the selected artists from the JSON file
-            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
-            if not json_path.exists():
+            # Get the selected artists from JSON
+            json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+            if not os.path.exists(json_path):
                 self.results_text.append("No selected artists found. Please load artists first.")
                 return
                 
@@ -1634,22 +1731,54 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Found {total_artists} artists to synchronize with Spotify.")
             QApplication.processEvents()
             
-            # Follow each artist on Spotify
-            successful_follows = 0
-            failed_follows = 0
-            artists_not_found = 0
+            # Create a progress bar dialog
+            from PyQt6.QtWidgets import QProgressDialog
+            progress = QProgressDialog("Syncing artists with Spotify...", "Cancel", 0, total_artists, self)
+            progress.setWindowTitle("Spotify Synchronization")
+            progress.setWindowModality(Qt.WindowModality.WindowModal)
+            progress.setMinimumDuration(0)  # Show immediately
+            progress.setValue(0)
             
+            # Counters for results
+            successful_follows = 0
+            already_following = 0
+            artists_not_found = 0
+            failed_follows = 0
+            
+            # Create a text widget to log the results
+            log_text = QTextEdit()
+            log_text.setReadOnly(True)
+            log_text.append("Spotify Synchronization Log:\n")
+            
+            # Process each artist
             for i, artist_data in enumerate(artists_data):
-                artist_name = artist_data.get('nombre', '')
-                
+                # Check if user canceled
+                if progress.wasCanceled():
+                    self.results_text.append("Synchronization canceled by user.")
+                    break
+                    
+                # Handle None values in artist_data
+                if artist_data is None:
+                    log_text.append(f"Skipping artist at index {i} - data is None")
+                    failed_follows += 1
+                    continue
+                    
+                # Make sure artist_data is a dictionary
+                if not isinstance(artist_data, dict):
+                    log_text.append(f"Skipping artist at index {i} - data is not a dictionary: {type(artist_data)}")
+                    failed_follows += 1
+                    continue
+                    
+                artist_name = artist_data.get("nombre", "")
+                if not artist_name:
+                    log_text.append(f"Skipping artist with no name")
+                    failed_follows += 1
+                    continue
+                    
                 # Update progress
-                if (i + 1) % 5 == 0 or i == total_artists - 1:
-                    progress = int((i + 1) / total_artists * 50)
-                    self.results_text.clear()
-                    self.results_text.append(f"Syncing with Spotify... {i + 1}/{total_artists}\n")
-                    self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                    self.results_text.append(f"Followed: {successful_follows}, Not found: {artists_not_found}, Failed: {failed_follows}\n")
-                    QApplication.processEvents()
+                progress.setValue(i)
+                progress.setLabelText(f"Processing {artist_name} ({i+1}/{total_artists})")
+                QApplication.processEvents()
                 
                 # Search for the artist on Spotify
                 try:
@@ -1662,37 +1791,58 @@ class MuspyArtistModule(BaseModule):
                         # Check if already following
                         is_following = spotify_client.current_user_following_artists([artist_id])
                         if is_following and is_following[0]:
-                            logger.info(f"Already following {artist_name} on Spotify")
-                            successful_follows += 1  # Count as success
+                            log_text.append(f"✓ Already following {artist_name} on Spotify")
+                            already_following += 1
                         else:
                             # Follow the artist
                             spotify_client.user_follow_artists([artist_id])
-                            logger.info(f"Successfully followed {artist_name} on Spotify")
+                            log_text.append(f"✓ Successfully followed {artist_name} on Spotify")
                             successful_follows += 1
                     else:
-                        logger.warning(f"Artist '{artist_name}' not found on Spotify")
+                        log_text.append(f"✗ Artist not found: {artist_name}")
                         artists_not_found += 1
                 except Exception as e:
-                    logger.error(f"Error following artist {artist_name} on Spotify: {e}")
+                    log_text.append(f"✗ Error following {artist_name}: {str(e)}")
                     failed_follows += 1
+                    logger.error(f"Error following artist {artist_name} on Spotify: {e}")
             
-            # Show final summary
+            # Complete the progress
+            progress.setValue(total_artists)
+            
+            # Show summary in results text
             self.results_text.clear()
             self.results_text.append(f"Spotify synchronization completed\n")
-            self.results_text.append(f"Total artists processed: {total_artists}\n")
-            self.results_text.append(f"Successfully followed: {successful_follows}\n")
-            self.results_text.append(f"Not found on Spotify: {artists_not_found}\n")
-            self.results_text.append(f"Failed: {failed_follows}\n")
+            self.results_text.append(f"Total artists processed: {total_artists}")
+            self.results_text.append(f"Successfully followed: {successful_follows}")
+            self.results_text.append(f"Already following: {already_following}")
+            self.results_text.append(f"Not found on Spotify: {artists_not_found}")
+            self.results_text.append(f"Failed: {failed_follows}")
+            
+            # Show the detailed log in a dialog
+            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton
+            log_dialog = QDialog(self)
+            log_dialog.setWindowTitle("Spotify Sync Results")
+            log_dialog.setMinimumSize(600, 400)
+            
+            layout = QVBoxLayout(log_dialog)
+            layout.addWidget(log_text)
+            
+            close_button = QPushButton("Close")
+            close_button.clicked.connect(log_dialog.accept)
+            layout.addWidget(close_button)
+            
+            log_dialog.exec()
             
             # Show a message box with results
             QMessageBox.information(
                 self,
                 "Spotify Synchronization Complete",
                 f"Successfully followed {successful_follows} artists on Spotify.\n"
+                f"Already following: {already_following}\n"
                 f"Artists not found: {artists_not_found}\n"
                 f"Failed: {failed_follows}"
             )
-            
+                
         except Exception as e:
             error_msg = f"Error during Spotify synchronization: {e}"
             self.results_text.append(error_msg)
@@ -1709,14 +1859,12 @@ class MuspyArtistModule(BaseModule):
             # Setup cache path
             cache_path = os.path.join(PROJECT_ROOT, ".content", "cache", ".spotify_cache")
             
-            # Spotify API requires a redirect URI, but we can use a local port
-            redirect_uri = "http://localhost:8888/callback"
-            
+                    
             # Set up the OAuth object
             sp_oauth = SpotifyOAuth(
                 client_id=self.spotify_client_id,
                 client_secret=self.spotify_client_secret,
-                redirect_uri=redirect_uri,
+                redirect_uri=self.spotify_redirect_uri,
                 scope="user-follow-modify user-follow-read",
                 cache_path=cache_path
             )
