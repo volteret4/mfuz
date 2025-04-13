@@ -270,16 +270,23 @@ class MuspyArtistModule(BaseModule):
         self._connect_signals()
 
     def _connect_signals(self):
-        """Connect the signals of the widgets to their respective slots."""
-        # Connect the search signal
+        """Conectar las señales de los widgets a sus respectivos slots."""
+        # Conectar la señal de búsqueda
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Connect the action buttons signals
+        # Conectar las señales de los botones de acción
         self.load_artists_button.clicked.connect(self.load_artists_from_file)
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
-        # We'll remove this connection since the button will be hidden or removed
-        # self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
+        
+        # Visibility for Last.fm button depends on configuration
+        if hasattr(self, 'sync_lastfm_button'):
+            if self.lastfm_enabled:
+                self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
+                self.sync_lastfm_button.setVisible(True)
+            else:
+                self.sync_lastfm_button.setVisible(False)
+        
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
@@ -852,18 +859,19 @@ class MuspyArtistModule(BaseModule):
             return None
         
         try:
-            #First attempt: query existing database
+            # First attempt: query existing database
             if self.query_db_script_path:
                 # Add full absolute paths
                 full_db_path = os.path.expanduser(self.db_path) if self.db_path else None
                 full_script_path = os.path.expanduser(self.query_db_script_path)
                 
-                # Print out the actual paths being used
-                self.results_text.append(f"Consultando base de datos para {artist_name}...")
+                # Log the search
+                self.results_text.append(f"Searching for MBID for {artist_name}...")
                 logger.debug(f"Script Path: {full_script_path}")
                 logger.debug(f"DB Path: {full_db_path}")
                 logger.debug(f"Artist: {artist_name}")
 
+                # Try to find the artist in the database
                 mbid_result = subprocess.run(
                     ['python', full_script_path, "--db", full_db_path, "--artist", artist_name, "--mbid"], 
                     capture_output=True, 
@@ -871,66 +879,52 @@ class MuspyArtistModule(BaseModule):
                 )
                 
                 # Check if the output contains an error message
-                if "Error: no such table" in mbid_result.stderr:
-                    self.results_text.append("Error: La tabla 'artists' no existe en la base de datos.")
-                    logger.error(f"Database error: {mbid_result.stderr}")
-                elif mbid_result.returncode != 0:
-                    self.results_text.append(f"Error en la consulta: {mbid_result.stderr}")
-                    logger.error(f"Query error: {mbid_result.stderr}")
-                elif mbid_result.stdout.strip():
-                    # Limpiar el resultado eliminando comillas y espacios en blanco
+                if mbid_result.returncode == 0 and mbid_result.stdout.strip():
+                    # Clean the result
                     mbid = mbid_result.stdout.strip().strip('"\'')
                     # Verify that the MBID looks valid (should be a UUID)
                     if len(mbid) == 36 and mbid.count('-') == 4:
-                        self.results_text.append(f"MBID encontrado en la base de datos: {mbid}")
+                        logger.debug(f"MBID found in database: {mbid}")
                         return mbid
-                    else:
-                        self.results_text.append(f"MBID inválido encontrado: {mbid}")
-                        logger.warning(f"Invalid MBID format: {mbid}")
-                else:
-                    self.results_text.append("No se encontró MBID en la base de datos.")
-            
-            # Second attempt: search for MBID if first method fails
-            # if self.query_db_script_path:
-            #     self.results_text.append(f"Buscando MBID para {artist_name} en MusicBrainz...")
-            #     full_search_script_path = os.path.expanduser(self.query_db_script_path)
                 
-            #     mbid_search_result = subprocess.run(
-            #         ['python', full_search_script_path, "--db", full_db_path if full_db_path else "", "--artist", artist_name, "--mbid"], 
-            #         capture_output=True, 
-            #         text=True
-            #     )
+                # If we didn't find the MBID in the database, try searching MusicBrainz directly
+                self.results_text.append(f"Searching MusicBrainz for {artist_name}...")
+                QApplication.processEvents()
                 
-            #     if mbid_search_result.returncode == 0 and mbid_search_result.stdout.strip():
-            #         # Limpiar el resultado eliminando comillas y espacios en blanco
-            #         mbid = mbid_search_result.stdout.strip().strip('"\'')
-            #         if len(mbid) == 38 and mbid.count('-') == 4:
-            #             self.results_text.append(f"MBID encontrado en MusicBrainz: {mbid}")
-            #             return mbid
-            #         else:
-            #             self.results_text.append(f"MBID inválido recibido de MusicBrainz: {mbid}")
-            #             logger.warning(f"Invalid MBID format from search: {mbid}")
-            #     else:
-            #         self.results_text.append(f"No se pudo encontrar MBID: {mbid_search_result.stderr}")
-            #         logger.error(f"MBID search error: {mbid_search_result.stderr}")
+                # Use the MusicBrainz API directly
+                try:
+                    import requests
+                    url = "https://musicbrainz.org/ws/2/artist/"
+                    params = {
+                        "query": f"artist:{artist_name}",
+                        "fmt": "json"
+                    }
+                    headers = {
+                        "User-Agent": "MuspyReleasesModule/1.0"
+                    }
+                    
+                    response = requests.get(url, params=params, headers=headers)
+                    
+                    if response.status_code == 200:
+                        data = response.json()
+                        if "artists" in data and data["artists"]:
+                            # Get the first artist result
+                            artist = data["artists"][0]
+                            mbid = artist.get("id")
+                            
+                            if mbid and len(mbid) == 36 and mbid.count('-') == 4:
+                                self.results_text.append(f"MBID found on MusicBrainz: {mbid}")
+                                return mbid
+                except Exception as e:
+                    logger.error(f"Error searching MusicBrainz API: {e}")
             
-            # self.results_text.append(f"No se pudo encontrar MBID para {artist_name}")
-            # return None
+            self.results_text.append(f"Could not find MBID for {artist_name}")
+            return None
         
-        except subprocess.TimeoutExpired:
-            self.results_text.append("La ejecución del script expiró")
-            logger.error("Script execution timed out")
-        except PermissionError:
-            self.results_text.append(f"Permiso denegado al ejecutar el script")
-            logger.error(f"Permission denied running script: {self.query_db_script_path}")
-        except FileNotFoundError as e:
-            self.results_text.append(f"Script o base de datos no encontrados: {e}")
-            logger.error(f"File not found: {e}")
         except Exception as e:
-            self.results_text.append(f"Error inesperado: {e}")
-            logger.error(f"Unexpected error getting MBID for {artist_name}: {e}")
-        
-        return None
+            self.results_text.append(f"Error searching for MBID: {e}")
+            logger.error(f"Error getting MBID for {artist_name}: {e}", exc_info=True)
+            return None
  
     def add_artist_to_muspy(self, mbid=None, artist_name=None):
         """
@@ -991,81 +985,58 @@ class MuspyArtistModule(BaseModule):
 
     def sync_lastfm_muspy(self):
         """Synchronize Last.fm artists with Muspy"""
-        # Log para depuración
-        logger.info("Iniciando sincronización con Last.fm")
+        if not self.lastfm_username:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
+
+        if not self.muspy_id:
+            # Try to get the Muspy ID if it's not set
+            self.get_muspy_id()
+            if not self.muspy_id:
+                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
+                return
+
+        # Clear the results area and make sure it's visible
         self.results_text.clear()
-        self.results_text.append("Iniciando sincronización con Last.fm...\n")
-        QApplication.processEvents()
-        
-        if not self.lastfm_username or not self.lastfm_api_key:
-            error_msg = "Last.fm credentials not configured. Please check your settings."
-            self.results_text.append(error_msg)
-            logger.error(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-        
-        if not self.muspy_username or not self.muspy_api_key or not self.muspy_id:
-            error_msg = "Muspy credentials not configured. Please check your settings."
-            self.results_text.append(error_msg)
-            logger.error(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-            
-        self.results_text.append(f"Last.fm username: {self.lastfm_username}")
-        self.results_text.append(f"Muspy username: {self.muspy_username}")
-        self.results_text.append(f"Muspy ID: {self.muspy_id}")
-        QApplication.processEvents()
+        self.results_text.show()
+        self.results_text.append(f"Starting Last.fm synchronization for user {self.lastfm_username}...\n")
+        QApplication.processEvents()  # Update UI
 
         try:
             # Import artists via last.fm
-            url = f"{self.base_url}/artists/{self.muspy_id}/import"
-            
-            # Prepare the data payload
-            data = {
-                'source': 'lastfm',
-                'username': self.lastfm_username
-            }
-
-            # Usar autenticación básica
+            url = f"{self.base_url}/artists/{self.muspy_id}"  # Corrected URL
             auth = (self.muspy_username, self.muspy_api_key)
             
-            # Show progress indicator
-            self.results_text.append(f"Sending request to Muspy API: {url}\n")
-            self.results_text.append(f"Request data: {data}\n")
-            QApplication.processEvents()  # Update UI
+            # The correct endpoint for importing from Last.fm
+            import_url = f"{self.base_url}/import/{self.muspy_id}"
+            import_data = {
+                'type': 'lastfm',
+                'username': self.lastfm_username,
+                'count': 50,  # Import more artists
+                'period': 'overall'
+            }
             
-            # Make the API request
-            response = requests.post(url, auth=auth, json=data)
+            self.results_text.append("Sending request to Muspy API...")
+            QApplication.processEvents()
             
-            self.results_text.append(f"Response status: {response.status_code}")
-            self.results_text.append(f"Response text: {response.text}")
+            # Use POST for the import endpoint
+            response = requests.post(import_url, auth=auth, json=import_data)
             
             if response.status_code in [200, 201]:
-                self.results_text.append(f"Successfully synchronized artists from Last.fm account {self.lastfm_username}\n")
-                
-                # Try to parse the response to see how many artists were added
-                try:
-                    result = response.json()
-                    self.results_text.append(f"Response JSON: {result}")
-                    if 'added' in result:
-                        self.results_text.append(f"Added {result['added']} new artists to your Muspy account\n")
-                    if 'exists' in result:
-                        self.results_text.append(f"{result['exists']} artists were already in your Muspy account\n")
-                except Exception as e:
-                    self.results_text.append(f"Error parsing response: {e}")
-                    
-                QMessageBox.information(self, "Success", f"Synchronized artists from Last.fm account {self.lastfm_username}")
+                self.results_text.append(f"Successfully synchronized artists from Last.fm account {self.lastfm_username}")
+                self.results_text.append("You can now view your upcoming releases using the 'Mis próximos discos' button")
                 return True
             else:
-                error_msg = f"Could not sync Last.fm artists: {response.status_code} - {response.text}"
-                self.results_text.append(error_msg + "\n")
-                QMessageBox.warning(self, "Error", error_msg)
+                error_msg = f"Could not sync Last.fm artists: Status code {response.status_code}"
+                if hasattr(response, 'text') and response.text:
+                    error_msg += f" - {response.text}"
+                self.results_text.append(error_msg)
+                logger.error(error_msg)
                 return False
         except Exception as e:
             error_msg = f"Error syncing with Muspy: {e}"
-            self.results_text.append(error_msg + "\n")
+            self.results_text.append(error_msg)
             logger.error(error_msg, exc_info=True)
-            QMessageBox.warning(self, "Error", error_msg)
             return False
 
     def get_muspy_releases(self):
@@ -1374,14 +1345,12 @@ class MuspyArtistModule(BaseModule):
         """
         Display a menu with sync options when sync_artists_button is clicked
         """
-
-        
         menu = QMenu(self)
         
         # Add menu actions
-        muspy_action = QAction("Sincronizar con Muspy", self)
-        lastfm_action = QAction("Sincronizar con Last.fm", self)
-        spotify_action = QAction("Sincronizar con Spotify", self)
+        muspy_action = QAction("Sincronizar artistas seleccionados con Muspy", self)
+        lastfm_action = QAction("Importar artistas seguidos de Last.fm", self)
+        spotify_action = QAction("Importar artistas seguidos de Spotify", self)
         
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
@@ -1392,6 +1361,12 @@ class MuspyArtistModule(BaseModule):
         lastfm_action.setEnabled(self.lastfm_enabled)
         spotify_action.setEnabled(self.spotify_enabled)
         
+        # Add status indicators to menu items
+        if not self.lastfm_enabled:
+            lastfm_action.setText("Importar artistas seguidos de Last.fm (configuración incompleta)")
+        if not self.spotify_enabled:
+            spotify_action.setText("Importar artistas seguidos de Spotify (configuración incompleta)")
+        
         # Add actions to menu
         menu.addAction(muspy_action)
         menu.addAction(lastfm_action)
@@ -1400,135 +1375,128 @@ class MuspyArtistModule(BaseModule):
         # Show menu at button position
         menu.exec(self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height())))
 
-
     def sync_spotify(self):
         """
-        Synchronize selected artists with Spotify
+        Synchronize followed artists from Spotify to Muspy
         """
-        # Log para depuración
-        logger.info("Iniciando sincronización con Spotify")
-        self.results_text.append("Iniciando sincronización con Spotify...")
-        QApplication.processEvents()
-        
         # Check if Spotify credentials are configured
         if not self.spotify_enabled:
-            error_msg = "Spotify credentials not configured. Please check your settings."
-            self.results_text.append(error_msg)
-            logger.error(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-        
-        # Path to the JSON file with selected artists
-        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
-        self.results_text.append(f"Buscando archivo: {json_path}")
-        logger.info(f"Buscando archivo: {json_path}")
-        
-        # Check if the file exists
-        if not json_path.exists():
-            error_msg = f"No artists selected. File not found: {json_path}"
-            self.results_text.append(error_msg)
-            logger.error(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-        
-        # Read the JSON file
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                artists_data = json.load(f)
-                self.results_text.append(f"Archivo leído correctamente. Contiene {len(artists_data)} artistas.")
-                logger.info(f"Archivo leído correctamente. Contiene {len(artists_data)} artistas.")
-        except Exception as e:
-            error_msg = f"Error reading artists file: {e}"
-            self.results_text.append(error_msg)
-            logger.error(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-        
-        # Verify if there are artists in the JSON
-        if not artists_data:
-            error_msg = "No artists found in the file."
-            self.results_text.append(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append("Spotify credentials not configured. Please check your settings.")
             return
         
         # Clear the results area
         self.results_text.clear()
-        self.results_text.append("Starting Spotify synchronization...\n")
         self.results_text.show()
-        QApplication.processEvents()  # Update UI immediately
+        self.results_text.append("Starting Spotify synchronization...\n")
+        QApplication.processEvents()
         
         # Get an authenticated Spotify client using our SpotifyAuthManager
-        self.results_text.append("Authenticating with Spotify...\n")
-        QApplication.processEvents()  # Update UI
-        
-        spotify_client = self.spotify_auth.get_client()
-        if not spotify_client:
-            error_msg = "Failed to authenticate with Spotify. Please check your credentials."
-            self.results_text.append(error_msg)
-            QMessageBox.warning(self, "Error", error_msg)
-            return
-        
-        # Show authenticated user
         try:
-            user_info = spotify_client.current_user()
-            if user_info and 'display_name' in user_info:
-                self.results_text.append(f"Authenticated as: {user_info['display_name']}\n")
-        except:
-            pass
-        
-        self.results_text.append(f"Processing {len(artists_data)} artists...\n")
-        QApplication.processEvents()  # Update UI
-        
-        # Initialize counters for statistics
-        successful_adds = 0
-        failed_adds = 0
-        already_following = 0
-        
-        # Process artists in batches
-        total_artists = len(artists_data)
-        for i, artist_data in enumerate(artists_data):
-            try:
-                artist_name = artist_data["nombre"]
-                
-                # Update progress in UI
-                if (i + 1) % 5 == 0 or i == total_artists - 1:
-                    progress = int((i + 1) / total_artists * 50)
-                    self.results_text.clear()
-                    self.results_text.append(f"Syncing with Spotify... {i + 1}/{total_artists}\n")
-                    self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                    self.results_text.append(f"Added: {successful_adds}, Already Following: {already_following}, Failed: {failed_adds}\n")
-                    QApplication.processEvents()
-                
-                # Search for artist on Spotify and follow them
-                result = self.follow_artist_on_spotify(artist_name, spotify_client)
-                if result == 1:
-                    successful_adds += 1
-                elif result == 0:
-                    already_following += 1
-                else:
-                    failed_adds += 1
+            self.results_text.append("Authenticating with Spotify...")
+            QApplication.processEvents()
+            
+            # Make sure we have a SpotifyAuthManager instance
+            if not hasattr(self, 'spotify_auth') or self.spotify_auth is None:
+                self.results_text.append("Initializing Spotify authentication...")
+                self.spotify_auth = SpotifyAuthManager(
+                    client_id=self.spotify_client_id,
+                    client_secret=self.spotify_client_secret,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+            
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                self.results_text.append("Failed to authenticate with Spotify. Please check your credentials.")
+                return
+            
+            # Get followed artists from Spotify
+            self.results_text.append("Fetching your followed artists from Spotify...")
+            QApplication.processEvents()
+            
+            artists = []
+            after = None
+            while True:
+                # Spotify API paginates results, so we need to loop to get all artists
+                results = spotify_client.current_user_followed_artists(limit=50, after=after)
+                if not results or 'artists' not in results:
+                    break
                     
-            except Exception as e:
-                logger.error(f"Error syncing artist with Spotify: {e}")
-                failed_adds += 1
-        
-        # Show final summary
-        self.results_text.clear()
-        self.results_text.append(f"Spotify synchronization completed\n")
-        self.results_text.append(f"Total artists processed: {total_artists}\n")
-        self.results_text.append(f"Successfully added: {successful_adds}\n")
-        self.results_text.append(f"Already following: {already_following}\n")
-        self.results_text.append(f"Failed: {failed_adds}\n")
-        
-        # Show popup with results
-        QMessageBox.information(
-            self, 
-            "Spotify Sync Complete", 
-            f"Synchronized {total_artists} artists with Spotify.\n"
-            f"Added: {successful_adds}\n"
-            f"Already following: {already_following}\n"
-            f"Failed: {failed_adds}"
-        )
+                items = results['artists']['items']
+                if not items:
+                    break
+                    
+                artists.extend(items)
+                after = items[-1]['id']
+                
+                # Check if we've reached the end of the list
+                if results['artists']['next'] is None:
+                    break
+                    
+                # Update progress
+                self.results_text.append(f"Found {len(artists)} artists so far...")
+                QApplication.processEvents()
+            
+            if not artists:
+                self.results_text.append("No followed artists found on Spotify.")
+                return
+                
+            total_artists = len(artists)
+            self.results_text.append(f"Found {total_artists} artists followed on Spotify.")
+            self.results_text.append("Starting synchronization with Muspy...")
+            QApplication.processEvents()
+            
+            # Synchronize artists with Muspy
+            successful_adds = 0
+            failed_adds = 0
+            artists_not_found = 0
+            
+            for i, artist in enumerate(artists):
+                try:
+                    # Update progress in UI
+                    if (i + 1) % 5 == 0 or i == total_artists - 1:
+                        progress = int((i + 1) / total_artists * 50)
+                        self.results_text.clear()
+                        self.results_text.append(f"Syncing with Muspy... {i + 1}/{total_artists}\n")
+                        self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
+                        self.results_text.append(f"Added: {successful_adds}, Failed: {failed_adds}, Not found in MusicBrainz: {artists_not_found}\n")
+                        QApplication.processEvents()
+                    
+                    artist_name = artist['name']
+                    
+                    # Search for MBID for this artist (required for Muspy)
+                    mbid = self.get_mbid_artist_searched(artist_name)
+                    
+                    if mbid:
+                        # Add the artist to Muspy
+                        success = self.add_artist_to_muspy_silent(mbid, artist_name)
+                        if success == 1:  # Successfully added
+                            successful_adds += 1
+                        elif success == 0:  # Already exists
+                            successful_adds += 1  # Still count as success
+                        else:  # Failed
+                            failed_adds += 1
+                    else:
+                        artists_not_found += 1
+                        
+                except Exception as e:
+                    logger.error(f"Error syncing artist {artist.get('name', 'unknown')} with Muspy: {e}")
+                    failed_adds += 1
+            
+            # Show final summary
+            self.results_text.clear()
+            self.results_text.append(f"Spotify synchronization completed\n")
+            self.results_text.append(f"Total artists processed: {total_artists}\n")
+            self.results_text.append(f"Successfully added: {successful_adds}\n")
+            self.results_text.append(f"Not found in MusicBrainz: {artists_not_found}\n")
+            self.results_text.append(f"Failed: {failed_adds}\n")
+            
+        except Exception as e:
+            error_msg = f"Error during Spotify synchronization: {e}"
+            self.results_text.append(error_msg)
+            logger.error(error_msg, exc_info=True)
    
    
    
