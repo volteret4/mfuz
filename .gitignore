@@ -28,3 +28,5 @@ base_datos/musica.sqlite-wal
 test.mb
 test.mb-shm
 test.mb-wal
+tools/scripts_config.json
+tools/script_runner_settings.json

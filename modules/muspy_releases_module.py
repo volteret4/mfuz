@@ -9,10 +9,12 @@ import datetime
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                              QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
-                             QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox)
-from PyQt6.QtCore import pyqtSignal, Qt
-from PyQt6.QtGui import QColor, QTextDocument
-
+                             QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
+                             QMenu, QInputDialog)
+from PyQt6.QtCore import pyqtSignal, Qt, QPoint
+from PyQt6.QtGui import QColor, QTextDocument, QAction
+from spotipy.oauth2 import SpotifyOAuth
+from tools.spotify_login import SpotifyAuthManager
 
 
 
@@ -42,11 +44,10 @@ class PyQtFilter(logging.Filter):
             return False
         return True
 
-# Y aplica el filtro al logger global
-logging.getLogger().addFilter(PyQtFilter())
+    # Y aplica el filtro al logger global
+    logging.getLogger().addFilter(PyQtFilter())
 
 
-class MuspyArtistModule(BaseModule):
     def __init__(self, 
                 muspy_username=None, 
                 muspy_api_key=None,
@@ -56,6 +57,8 @@ class MuspyArtistModule(BaseModule):
                 query_db_script_path=None,
                 search_mbid_script_path=None,
                 lastfm_username=None,
+                spotify_client_id=None,
+                spotify_client_secret=None,
                 parent=None, 
                 db_path='music_database.db',
                 theme='Tokyo Night', 
@@ -69,6 +72,9 @@ class MuspyArtistModule(BaseModule):
             artists_file (str, optional): Path to artists file
             query_db_script_path (str, optional): Path to MBID query script
             search_mbid_script_path (str, optional): Path to MBID search script
+            lastfm_username (str, optional): Last.fm username
+            spotify_client_id (str, optional): Spotify API client ID
+            spotify_client_secret (str, optional): Spotify API client secret
             parent (QWidget, optional): Parent widget
             theme (str, optional): UI theme
         """
@@ -90,12 +96,36 @@ class MuspyArtistModule(BaseModule):
         # Intentar obtener el Muspy ID si no está configurado
         if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
             self.get_muspy_id()
-            
+                
         self.base_url = "https://muspy.com/api/1"
         self.artists_file = artists_file
         self.query_db_script_path = query_db_script_path
-        self.lastfm_username = lastfm_username
         self.db_path = db_path
+
+        # Initialize settings with defaults
+        self.initialize_default_values()
+        
+        # Load settings from kwargs
+        module_args = {
+            'spotify_client_id': spotify_client_id,
+            'spotify_client_secret': spotify_client_secret,
+            'lastfm_api_key': kwargs.get('lastfm_api_key'),
+            'lastfm_username': lastfm_username
+        }
+        self.load_module_settings(module_args)
+        
+        # Initialize the Spotify Auth Manager with credentials received from main.py
+        if self.spotify_enabled:
+            # Get redirect URI from config if available
+            redirect_uri = kwargs.get('spotify_redirect_uri', "http://localhost:8888/callback")
+            
+            self.spotify_auth = SpotifyAuthManager(
+                client_id=self.spotify_client_id,
+                client_secret=self.spotify_client_secret,
+                redirect_uri=redirect_uri,  # Pass the redirect URI from config
+                parent_widget=self,
+                project_root=PROJECT_ROOT
+            )
 
         # Usar logger específico para este módulo si está habilitado
         if self.enable_logging:
@@ -231,8 +261,9 @@ class MuspyArtistModule(BaseModule):
         
         # Conectar las señales de los botones de acción
         self.load_artists_button.clicked.connect(self.load_artists_from_file)
-        self.sync_artists_button.clicked.connect(self.sync_artists_with_muspy)
-        self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
+        self.sync_artists_button.clicked.connect(self.show_sync_menu)
+        # We'll remove this connection since the button will be hidden or removed
+        # self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
@@ -1247,6 +1278,283 @@ class MuspyArtistModule(BaseModule):
             details_item = QTableWidgetItem("; ".join(details) if details else "")
             table.setItem(row, 4, details_item)
 
+# Menú sincronización
+    def show_sync_menu(self):
+        """
+        Display a menu with sync options when sync_artists_button is clicked
+        """
+        from PyQt6.QtWidgets import QMenu
+        from PyQt6.QtGui import QAction
+        from PyQt6.QtCore import QPoint
+        
+        menu = QMenu(self)
+        
+        # Add menu actions
+        muspy_action = QAction("Sincronizar con Muspy", self)
+        lastfm_action = QAction("Sincronizar con Last.fm", self)
+        spotify_action = QAction("Sincronizar con Spotify", self)
+        
+        # Connect actions to their respective functions
+        muspy_action.triggered.connect(self.sync_artists_with_muspy)
+        lastfm_action.triggered.connect(self.sync_lastfm_muspy)
+        spotify_action.triggered.connect(self.sync_spotify)
+        
+        # Enable/disable actions based on available credentials
+        lastfm_action.setEnabled(self.lastfm_enabled)
+        spotify_action.setEnabled(self.spotify_enabled)
+        
+        # Add actions to menu
+        menu.addAction(muspy_action)
+        menu.addAction(lastfm_action)
+        menu.addAction(spotify_action)
+        
+        # Show menu at button position
+        menu.exec(self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height())))
+
+
+    def sync_spotify(self):
+        """
+        Synchronize selected artists with Spotify
+        """
+        # Check if Spotify credentials are configured
+        if not self.spotify_enabled:
+            self.results_text.append("Spotify credentials not configured. Please check your settings.")
+            return
+        
+        # Path to the JSON file with selected artists
+        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+        
+        # Check if the file exists
+        if not json_path.exists():
+            self.results_text.append("No artists selected. Please load artists first.")
+            return
+        
+        # Read the JSON file
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+        except Exception as e:
+            self.results_text.append(f"Error reading artists file: {e}")
+            return
+        
+        # Verify if there are artists in the JSON
+        if not artists_data:
+            self.results_text.append("No artists found in the file.")
+            return
+        
+        # Clear the results area
+        self.results_text.clear()
+        self.results_text.append("Starting Spotify synchronization...\n")
+        self.results_text.show()
+        
+        # Get an authenticated Spotify client using our SpotifyAuthManager
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to authenticate with Spotify. Please check your credentials.")
+            return
+        
+        # Initialize counters for statistics
+        successful_adds = 0
+        failed_adds = 0
+        
+        # Process artists in batches
+        total_artists = len(artists_data)
+        for i, artist_data in enumerate(artists_data):
+            try:
+                artist_name = artist_data["nombre"]
+                
+                # Update progress in UI
+                if (i + 1) % 5 == 0 or i == total_artists - 1:
+                    progress = int((i + 1) / total_artists * 50)
+                    self.results_text.clear()
+                    self.results_text.append(f"Syncing with Spotify... {i + 1}/{total_artists}\n")
+                    self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
+                    self.results_text.append(f"Added: {successful_adds}, Failed: {failed_adds}\n")
+                    QApplication.processEvents()
+                
+                # Search for artist on Spotify and follow them
+                success = self.follow_artist_on_spotify(artist_name, spotify_client)
+                if success:
+                    successful_adds += 1
+                else:
+                    failed_adds += 1
+                    
+            except Exception as e:
+                logger.error(f"Error syncing artist with Spotify: {e}")
+                failed_adds += 1
+        
+        # Show final summary
+        self.results_text.clear()
+        self.results_text.append(f"Spotify synchronization completed\n")
+        self.results_text.append(f"Total artists processed: {total_artists}\n")
+        self.results_text.append(f"Successfully added: {successful_adds}\n")
+        self.results_text.append(f"Failed: {failed_adds}\n")
+   
+   
+   
+    def authenticate_spotify(self):
+        """
+        Authenticate with Spotify using OAuth
+        """
+        try:
+            import spotipy
+            from spotipy.oauth2 import SpotifyOAuth
+            
+            # Setup cache path
+            cache_path = os.path.join(PROJECT_ROOT, ".content", "cache", ".spotify_cache")
+            
+            # Spotify API requires a redirect URI, but we can use a local port
+            redirect_uri = "http://localhost:8888/callback"
+            
+            # Set up the OAuth object
+            sp_oauth = SpotifyOAuth(
+                client_id=self.spotify_client_id,
+                client_secret=self.spotify_client_secret,
+                redirect_uri=redirect_uri,
+                scope="user-follow-modify user-follow-read",
+                cache_path=cache_path
+            )
+            
+            # Get the authorization URL
+            auth_url = sp_oauth.get_authorize_url()
+            
+            # Open the URL in the default browser
+            import webbrowser
+            webbrowser.open(auth_url)
+            
+            # Show a dialog to get the redirect URL
+            from PyQt6.QtWidgets import QInputDialog
+            redirect_url, ok = QInputDialog.getText(
+                self, 
+                "Spotify Authentication", 
+                "Please login to Spotify in your browser and paste the URL you were redirected to:"
+            )
+            
+            if not ok or not redirect_url:
+                self.results_text.append("Authentication canceled")
+                return False
+            
+            # Exchange the code for a token
+            code = sp_oauth.parse_response_code(redirect_url)
+            token_info = sp_oauth.get_access_token(code)
+            
+            # Create Spotify client
+            spotify_client= spotipy.Spotify(auth=token_info['access_token'])
+            
+            # Test with a simple API call
+            user_info = spotify_client.current_user()
+            if user_info and 'id' in user_info:
+                self.results_text.append(f"Successfully authenticated as {user_info['display_name']}")
+                return True
+            else:
+                self.results_text.append("Authentication failed")
+                return False
+            
+        except Exception as e:
+            logger.error(f"Spotify authentication error: {e}")
+            self.results_text.append(f"Error authenticating with Spotify: {e}")
+            return False
+
+    def follow_artist_on_spotify(self, artist_name, spotify_client=None):
+        """
+        Follow an artist on Spotify
+        
+        Args:
+            artist_name (str): Name of the artist to follow
+            spotify_client (spotipy.Spotify, optional): An authenticated Spotify client
+            
+        Returns:
+            bool: True if the artist was successfully followed, False otherwise
+        """
+        try:
+            # If no client provided, get one from our auth manager
+            if spotify_client is None:
+                spotify_client = self.spotify_auth.get_client()
+                if not spotify_client:
+                    logger.error("Could not get authenticated Spotify client")
+                    return False
+            
+            # Search for the artist on Spotify
+            results = spotify_client.search(q=f'artist:"{artist_name}"', type='artist', limit=1)
+            
+            # Check if we found a match
+            if results and 'artists' in results and 'items' in results['artists'] and results['artists']['items']:
+                artist = results['artists']['items'][0]
+                artist_id = artist['id']
+                
+                # Follow the artist
+                spotify_client.user_follow_artists([artist_id])
+                logger.info(f"Successfully followed {artist_name} on Spotify")
+                return True
+                
+            else:
+                logger.warning(f"Artist '{artist_name}' not found on Spotify")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error following artist on Spotify: {e}")
+            return False
+
+    def load_module_settings(self, module_args):
+        """Load module-specific settings from args dictionary"""
+        try:
+            # Load API credentials
+            if 'spotify_client_id' in module_args:
+                self.spotify_client_id = module_args['spotify_client_id']
+            if 'spotify_client_secret' in module_args:
+                self.spotify_client_secret = module_args['spotify_client_secret']
+            if 'lastfm_api_key' in module_args:
+                self.lastfm_api_key = module_args['lastfm_api_key']
+            if 'lastfm_username' in module_args:
+                self.lastfm_username = module_args['lastfm_username']
+                
+            # Update Spotify/LastFM enabled flags based on credentials
+            self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
+            self.lastfm_enabled = bool(self.lastfm_api_key and self.lastfm_username)
+            
+            logger.info("Module settings loaded successfully")
+        except Exception as e:
+            logger.error(f"Error loading module settings: {e}")
+
+    def initialize_default_values(self):
+        """Initialize default values for settings when configuration can't be loaded"""
+        logger.info("Initializing default values for settings")
+        
+        # Default API credentials (empty)
+        self.spotify_client_id = None
+        self.spotify_client_secret = None
+        self.lastfm_api_key = None
+        self.lastfm_username = None
+        
+        # Default flags
+        self.spotify_enabled = False
+        self.lastfm_enabled = False
+
+
+    def setup_spotify(self):
+        # Initialize Spotify auth manager with credentials
+        self.spotify_auth = SpotifyAuthManager(
+            client_id=self.spotify_client_id,
+            client_secret=self.spotify_client_secret,
+            parent_widget=self
+        )
+        
+        # Try to authenticate
+        if self.spotify_auth.is_authenticated() or self.spotify_auth.authenticate():
+            self.spotify_authenticated = True
+            user_info = self.spotify_auth.get_user_info()
+            if user_info:
+                self.spotify_user_id = user_info['id']
+                print(f"Authenticated with Spotify as: {user_info.get('display_name')}")
+        else:
+            self.spotify_authenticated = False
+            print("Failed to authenticate with Spotify")
+
+    def get_spotify_client(self):
+        """Get an authenticated Spotify client on demand"""
+        if hasattr(self, 'spotify_auth'):
+            return self.spotify_auth.get_client()
+        return None
 
 def main():
     """Main function to run the Muspy Artist Management Module"""
