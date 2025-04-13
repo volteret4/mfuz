@@ -44,10 +44,10 @@ class PyQtFilter(logging.Filter):
             return False
         return True
 
-    # Y aplica el filtro al logger global
-    logging.getLogger().addFilter(PyQtFilter())
+# Y aplica el filtro al logger global
+logging.getLogger().addFilter(PyQtFilter())
 
-
+class MuspyArtistModule(BaseModule):
     def __init__(self, 
                 muspy_username=None, 
                 muspy_api_key=None,
@@ -156,7 +156,7 @@ class PyQtFilter(logging.Filter):
         # Lista de widgets requeridos
         required_widgets = [
             'artist_input', 'search_button', 'results_text', 
-            'load_artists_button', 'sync_artists_button', 'sync_lastfm_button',
+            'load_artists_button', 'sync_artists_button', 
             'get_releases_button', 'get_new_releases_button', 'get_my_releases_button'
         ]
         
@@ -254,12 +254,12 @@ class PyQtFilter(logging.Filter):
         self._connect_signals()
 
     def _connect_signals(self):
-        """Conectar las señales de los widgets a sus respectivos slots."""
-        # Conectar la señal de búsqueda
+        """Connect the signals of the widgets to their respective slots."""
+        # Connect the search signal
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Conectar las señales de los botones de acción
+        # Connect the action buttons signals
         self.load_artists_button.clicked.connect(self.load_artists_from_file)
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         # We'll remove this connection since the button will be hidden or removed
@@ -306,7 +306,6 @@ class PyQtFilter(logging.Filter):
         
         return self.muspy_id
 
-
     def load_artists_from_file(self):
         """
         Ejecuta un script para cargar artistas desde la base de datos, 
@@ -344,8 +343,12 @@ class PyQtFilter(logging.Filter):
                 self.results_text.append("No se encontraron artistas en la base de datos.")
                 return
             
+            # Ensure cache directory exists
+            cache_dir = PROJECT_ROOT / ".content" / "cache"
+            os.makedirs(cache_dir, exist_ok=True)
+            
             # Cargar artistas existentes si el archivo ya existe
-            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+            json_path = cache_dir / "artists_selected.json"
             existing_artists = []
             if json_path.exists():
                 try:
@@ -412,13 +415,24 @@ class PyQtFilter(logging.Filter):
             
             # Guardar artistas seleccionados en JSON
             try:
+                # Ensure the directory exists
+                os.makedirs(os.path.dirname(json_path), exist_ok=True)
+                
                 with open(json_path, 'w', encoding='utf-8') as f:
                     json.dump(selected_artists, f, ensure_ascii=False, indent=2)
                 
-                # Actualizar artists en la instancia
+                # Update artists in the instance
                 self.artists = [artist["nombre"] for artist in selected_artists]
                 
                 self.results_text.append(f"Se guardaron {len(selected_artists)} artistas en {json_path}")
+                
+                # Show popup with results
+                QMessageBox.information(
+                    self, 
+                    "Artistas Guardados", 
+                    f"Se guardaron {len(selected_artists)} artistas para sincronización.\n"
+                    f"Puedes sincronizarlos con Muspy, Last.fm o Spotify usando el botón de sincronización."
+                )
             except Exception as e:
                 self.results_text.append(f"Error al guardar los artistas: {e}")
         
@@ -681,11 +695,13 @@ class PyQtFilter(logging.Filter):
     def sync_artists_with_muspy(self):
         """Synchronize artists from JSON file with Muspy"""
         # Ruta al archivo JSON
-        json_path = PROJECT_ROOT / "artists_selected.json"
+        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
         
         # Verificar si el archivo existe
         if not json_path.exists():
-            QMessageBox.warning(self, "Error", "El archivo artists_selected.json no existe.")
+            error_msg = "El archivo artists_selected.json no existe."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Leer el archivo JSON
@@ -693,12 +709,16 @@ class PyQtFilter(logging.Filter):
             with open(json_path, 'r', encoding='utf-8') as f:
                 artists_data = json.load(f)
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Error al leer el archivo JSON: {e}")
+            error_msg = f"Error al leer el archivo JSON: {e}"
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Verificar si hay artistas en el JSON
         if not artists_data:
-            QMessageBox.warning(self, "Error", "No hay artistas en el archivo JSON.")
+            error_msg = "No hay artistas en el archivo JSON."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
             
         # Limpiar solo una vez al principio
@@ -709,6 +729,7 @@ class PyQtFilter(logging.Filter):
         total_artists = len(artists_data)
         self.results_text.append(f"Total artistas a sincronizar: {total_artists}\n")
         self.results_text.append("Progreso: [" + "-" * 50 + "]\n")
+        QApplication.processEvents()  # Update UI immediately
         
         # Variables para llevar el conteo
         successful_adds = 0
@@ -755,6 +776,17 @@ class PyQtFilter(logging.Filter):
         self.results_text.append(f"Añadidos correctamente: {successful_adds}\n")
         self.results_text.append(f"Duplicados (ya existían): {duplicates}\n")
         self.results_text.append(f"Fallos: {failed_adds}\n")
+        
+        # Show popup with results
+        QMessageBox.information(
+            self, 
+            "Sincronización Completa", 
+            f"Sincronización de artistas con Muspy completada.\n"
+            f"Total procesados: {total_artists}\n"
+            f"Añadidos: {successful_adds}\n"
+            f"Duplicados: {duplicates}\n"
+            f"Fallos: {failed_adds}"
+        )
 
     def add_artist_to_muspy_silent(self, mbid=None, artist_name=None):
         """
@@ -943,38 +975,84 @@ class PyQtFilter(logging.Filter):
 
     def sync_lastfm_muspy(self):
         """Synchronize Last.fm artists with Muspy"""
-        if not self.lastfm_username:
-            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+        if not self.lastfm_username or not self.lastfm_api_key:
+            self.results_text.append("Last.fm credentials not configured. Please check your settings.")
+            QMessageBox.warning(self, "Error", "Last.fm username or API key not configured")
+            return
+
+        # Path to the JSON file with selected artists
+        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+        
+        # Check if the file exists
+        if not json_path.exists():
+            self.results_text.append("No artists selected. Please load artists first.")
+            QMessageBox.warning(self, "Error", "No artists selected. Please load artists first.")
+            return
+        
+        # Read the JSON file to verify artists exist
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+            if not artists_data:
+                self.results_text.append("No artists found in the file.")
+                QMessageBox.warning(self, "Error", "No artists found in the selection file.")
+                return
+        except Exception as e:
+            self.results_text.append(f"Error reading artists file: {e}")
+            QMessageBox.warning(self, "Error", f"Error reading artists file: {e}")
             return
 
         try:
+            # Clear the results area and show progress
+            self.results_text.clear()
+            self.results_text.append("Starting Last.fm synchronization...\n")
+            self.results_text.append(f"Syncing {len(artists_data)} artists with Last.fm user {self.lastfm_username}\n")
+            self.results_text.append("Connecting to Last.fm API...\n")
+            QApplication.processEvents()  # Update UI
+            
             # Import artists via last.fm
-            url = f"{self.base_url}/{self.muspy_username}"
-            method = 'PUT'
+            url = f"{self.base_url}/artists/{self.muspy_id}/import"
+            
+            # Prepare the data payload
             data = {
-                'import': 'last.fm',
-                'username': self.lastfm_username,
-                'count': 10,
-                'period': 'overall'
+                'source': 'lastfm',
+                'username': self.lastfm_username
             }
 
-            # Usar autenticación básica en lugar de token
+            # Usar autenticación básica
             auth = (self.muspy_username, self.muspy_api_key)
             
-            # Use the appropriate request method
-            if method == 'PUT':
-                response = requests.put(url, auth=auth, json=data)
-            else:
-                response = requests.post(url, auth=auth, json=data)
+            # Show progress indicator
+            self.results_text.append("Sending request to Muspy...\n")
+            QApplication.processEvents()  # Update UI
+            
+            # Make the API request
+            response = requests.post(url, auth=auth, json=data)
             
             if response.status_code in [200, 201]:
-                self.results_text.append(f"Synchronized artists from Last.fm account {self.lastfm_username}\n")
+                self.results_text.append(f"Successfully synchronized artists from Last.fm account {self.lastfm_username}\n")
+                
+                # Try to parse the response to see how many artists were added
+                try:
+                    result = response.json()
+                    if 'added' in result:
+                        self.results_text.append(f"Added {result['added']} new artists to your Muspy account\n")
+                    if 'exists' in result:
+                        self.results_text.append(f"{result['exists']} artists were already in your Muspy account\n")
+                except:
+                    pass
+                    
+                QMessageBox.information(self, "Success", f"Synchronized artists from Last.fm account {self.lastfm_username}")
                 return True
             else:
-                self.results_text.append(f"Could not sync Last.fm artists: {response.text}\n")
+                error_msg = f"Could not sync Last.fm artists: {response.status_code} - {response.text}"
+                self.results_text.append(error_msg + "\n")
+                QMessageBox.warning(self, "Error", error_msg)
                 return False
         except Exception as e:
-            self.results_text.append(f"Error syncing with Muspy: {e}\n")
+            error_msg = f"Error syncing with Muspy: {e}"
+            self.results_text.append(error_msg + "\n")
+            QMessageBox.warning(self, "Error", error_msg)
             return False
 
     def get_muspy_releases(self):
@@ -1283,10 +1361,6 @@ class PyQtFilter(logging.Filter):
         """
         Display a menu with sync options when sync_artists_button is clicked
         """
-        from PyQt6.QtWidgets import QMenu
-        from PyQt6.QtGui import QAction
-        from PyQt6.QtCore import QPoint
-        
         menu = QMenu(self)
         
         # Add menu actions
@@ -1318,7 +1392,9 @@ class PyQtFilter(logging.Filter):
         """
         # Check if Spotify credentials are configured
         if not self.spotify_enabled:
-            self.results_text.append("Spotify credentials not configured. Please check your settings.")
+            error_msg = "Spotify credentials not configured. Please check your settings."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Path to the JSON file with selected artists
@@ -1326,7 +1402,9 @@ class PyQtFilter(logging.Filter):
         
         # Check if the file exists
         if not json_path.exists():
-            self.results_text.append("No artists selected. Please load artists first.")
+            error_msg = "No artists selected. Please load artists first."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Read the JSON file
@@ -1334,28 +1412,50 @@ class PyQtFilter(logging.Filter):
             with open(json_path, 'r', encoding='utf-8') as f:
                 artists_data = json.load(f)
         except Exception as e:
-            self.results_text.append(f"Error reading artists file: {e}")
+            error_msg = f"Error reading artists file: {e}"
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Verify if there are artists in the JSON
         if not artists_data:
-            self.results_text.append("No artists found in the file.")
+            error_msg = "No artists found in the file."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Clear the results area
         self.results_text.clear()
         self.results_text.append("Starting Spotify synchronization...\n")
         self.results_text.show()
+        QApplication.processEvents()  # Update UI immediately
         
         # Get an authenticated Spotify client using our SpotifyAuthManager
+        self.results_text.append("Authenticating with Spotify...\n")
+        QApplication.processEvents()  # Update UI
+        
         spotify_client = self.spotify_auth.get_client()
         if not spotify_client:
-            self.results_text.append("Failed to authenticate with Spotify. Please check your credentials.")
+            error_msg = "Failed to authenticate with Spotify. Please check your credentials."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
+        
+        # Show authenticated user
+        try:
+            user_info = spotify_client.current_user()
+            if user_info and 'display_name' in user_info:
+                self.results_text.append(f"Authenticated as: {user_info['display_name']}\n")
+        except:
+            pass
+        
+        self.results_text.append(f"Processing {len(artists_data)} artists...\n")
+        QApplication.processEvents()  # Update UI
         
         # Initialize counters for statistics
         successful_adds = 0
         failed_adds = 0
+        already_following = 0
         
         # Process artists in batches
         total_artists = len(artists_data)
@@ -1369,13 +1469,15 @@ class PyQtFilter(logging.Filter):
                     self.results_text.clear()
                     self.results_text.append(f"Syncing with Spotify... {i + 1}/{total_artists}\n")
                     self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                    self.results_text.append(f"Added: {successful_adds}, Failed: {failed_adds}\n")
+                    self.results_text.append(f"Added: {successful_adds}, Already Following: {already_following}, Failed: {failed_adds}\n")
                     QApplication.processEvents()
                 
                 # Search for artist on Spotify and follow them
-                success = self.follow_artist_on_spotify(artist_name, spotify_client)
-                if success:
+                result = self.follow_artist_on_spotify(artist_name, spotify_client)
+                if result == 1:
                     successful_adds += 1
+                elif result == 0:
+                    already_following += 1
                 else:
                     failed_adds += 1
                     
@@ -1388,7 +1490,18 @@ class PyQtFilter(logging.Filter):
         self.results_text.append(f"Spotify synchronization completed\n")
         self.results_text.append(f"Total artists processed: {total_artists}\n")
         self.results_text.append(f"Successfully added: {successful_adds}\n")
+        self.results_text.append(f"Already following: {already_following}\n")
         self.results_text.append(f"Failed: {failed_adds}\n")
+        
+        # Show popup with results
+        QMessageBox.information(
+            self, 
+            "Spotify Sync Complete", 
+            f"Synchronized {total_artists} artists with Spotify.\n"
+            f"Added: {successful_adds}\n"
+            f"Already following: {already_following}\n"
+            f"Failed: {failed_adds}"
+        )
    
    
    
@@ -1464,7 +1577,7 @@ class PyQtFilter(logging.Filter):
             spotify_client (spotipy.Spotify, optional): An authenticated Spotify client
             
         Returns:
-            bool: True if the artist was successfully followed, False otherwise
+            int: 1 for success, 0 for already following, -1 for error
         """
         try:
             # If no client provided, get one from our auth manager
@@ -1472,7 +1585,7 @@ class PyQtFilter(logging.Filter):
                 spotify_client = self.spotify_auth.get_client()
                 if not spotify_client:
                     logger.error("Could not get authenticated Spotify client")
-                    return False
+                    return -1
             
             # Search for the artist on Spotify
             results = spotify_client.search(q=f'artist:"{artist_name}"', type='artist', limit=1)
@@ -1482,18 +1595,25 @@ class PyQtFilter(logging.Filter):
                 artist = results['artists']['items'][0]
                 artist_id = artist['id']
                 
+                # Check if already following
+                is_following = spotify_client.current_user_following_artists([artist_id])
+                if is_following and is_following[0]:
+                    logger.info(f"Already following {artist_name} on Spotify")
+                    return 0  # Already following
+                
                 # Follow the artist
                 spotify_client.user_follow_artists([artist_id])
                 logger.info(f"Successfully followed {artist_name} on Spotify")
-                return True
+                return 1  # Success
                 
             else:
                 logger.warning(f"Artist '{artist_name}' not found on Spotify")
-                return False
+                return -1  # Error/Not found
                 
         except Exception as e:
             logger.error(f"Error following artist on Spotify: {e}")
-            return False
+            return -1  # Error
+
 
     def load_module_settings(self, module_args):
         """Load module-specific settings from args dictionary"""
