@@ -26,3 +26,5 @@ config/config.yml
 base_datos/musica.sqlite-shm
 base_datos/musica.sqlite-wal
 test.mb
+test.mb-shm
+test.mb-wal

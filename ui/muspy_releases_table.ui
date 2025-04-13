@@ -20,8 +20,11 @@
    </item>
    <item>
     <widget class="QTableWidget" name="table">
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
      <property name="columnCount">
-      <number>5</number>
+      <number>6</number>
      </property>
      <attribute name="horizontalHeaderStretchLastSection">
       <bool>true</bool>
@@ -51,12 +54,17 @@
        <string>Disambiguation</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Calendario</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>
     <widget class="QPushButton" name="add_follow_button">
      <property name="text">
-      <string>que coño hará este botón</string>
+      <string>Seguir artista en Muspy</string>
      </property>
     </widget>
    </item>
