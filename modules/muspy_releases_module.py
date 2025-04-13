@@ -49,20 +49,20 @@ logging.getLogger().addFilter(PyQtFilter())
 
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
-                muspy_username=None, 
-                muspy_api_key=None,
-                muspy_password=None,
-                muspy_id=None,
-                artists_file=None,
-                query_db_script_path=None,
-                search_mbid_script_path=None,
-                lastfm_username=None,
-                spotify_client_id=None,
-                spotify_client_secret=None,
-                parent=None, 
-                db_path='music_database.db',
-                theme='Tokyo Night', 
-                *args, **kwargs):
+            muspy_username=None, 
+            muspy_api_key=None,
+            muspy_password=None,
+            muspy_id=None,
+            artists_file=None,
+            query_db_script_path=None,
+            search_mbid_script_path=None,
+            lastfm_username=None,
+            spotify_client_id=None,
+            spotify_client_secret=None,
+            parent=None, 
+            db_path='music_database.db',
+            theme='Tokyo Night', 
+            *args, **kwargs):
         """
         Initialize the Muspy Artist Management Module
         
@@ -78,6 +78,22 @@ class MuspyArtistModule(BaseModule):
             parent (QWidget, optional): Parent widget
             theme (str, optional): UI theme
         """
+        # Depuración de PROJECT_ROOT
+        from pathlib import Path
+        import os
+        global PROJECT_ROOT
+        if 'PROJECT_ROOT' in globals():
+            print(f"PROJECT_ROOT global: {PROJECT_ROOT}")
+        else:
+            print("PROJECT_ROOT no está definido globalmente")
+            
+        # Intentar obtener PROJECT_ROOT desde base_module
+        try:
+            sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+            from base_module import PROJECT_ROOT as BASE_PROJECT_ROOT
+            print(f"PROJECT_ROOT desde base_module: {BASE_PROJECT_ROOT}")
+        except ImportError:
+            print("No se pudo importar PROJECT_ROOT desde base_module")
         # Configuración de logging primero
         self.module_name = self.__class__.__name__
         
@@ -975,41 +991,32 @@ class MuspyArtistModule(BaseModule):
 
     def sync_lastfm_muspy(self):
         """Synchronize Last.fm artists with Muspy"""
+        # Log para depuración
+        logger.info("Iniciando sincronización con Last.fm")
+        self.results_text.clear()
+        self.results_text.append("Iniciando sincronización con Last.fm...\n")
+        QApplication.processEvents()
+        
         if not self.lastfm_username or not self.lastfm_api_key:
-            self.results_text.append("Last.fm credentials not configured. Please check your settings.")
-            QMessageBox.warning(self, "Error", "Last.fm username or API key not configured")
-            return
-
-        # Path to the JSON file with selected artists
-        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
-        
-        # Check if the file exists
-        if not json_path.exists():
-            self.results_text.append("No artists selected. Please load artists first.")
-            QMessageBox.warning(self, "Error", "No artists selected. Please load artists first.")
+            error_msg = "Last.fm credentials not configured. Please check your settings."
+            self.results_text.append(error_msg)
+            logger.error(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
         
-        # Read the JSON file to verify artists exist
-        try:
-            with open(json_path, 'r', encoding='utf-8') as f:
-                artists_data = json.load(f)
-            if not artists_data:
-                self.results_text.append("No artists found in the file.")
-                QMessageBox.warning(self, "Error", "No artists found in the selection file.")
-                return
-        except Exception as e:
-            self.results_text.append(f"Error reading artists file: {e}")
-            QMessageBox.warning(self, "Error", f"Error reading artists file: {e}")
+        if not self.muspy_username or not self.muspy_api_key or not self.muspy_id:
+            error_msg = "Muspy credentials not configured. Please check your settings."
+            self.results_text.append(error_msg)
+            logger.error(error_msg)
+            QMessageBox.warning(self, "Error", error_msg)
             return
-
-        try:
-            # Clear the results area and show progress
-            self.results_text.clear()
-            self.results_text.append("Starting Last.fm synchronization...\n")
-            self.results_text.append(f"Syncing {len(artists_data)} artists with Last.fm user {self.lastfm_username}\n")
-            self.results_text.append("Connecting to Last.fm API...\n")
-            QApplication.processEvents()  # Update UI
             
+        self.results_text.append(f"Last.fm username: {self.lastfm_username}")
+        self.results_text.append(f"Muspy username: {self.muspy_username}")
+        self.results_text.append(f"Muspy ID: {self.muspy_id}")
+        QApplication.processEvents()
+
+        try:
             # Import artists via last.fm
             url = f"{self.base_url}/artists/{self.muspy_id}/import"
             
@@ -1023,11 +1030,15 @@ class MuspyArtistModule(BaseModule):
             auth = (self.muspy_username, self.muspy_api_key)
             
             # Show progress indicator
-            self.results_text.append("Sending request to Muspy...\n")
+            self.results_text.append(f"Sending request to Muspy API: {url}\n")
+            self.results_text.append(f"Request data: {data}\n")
             QApplication.processEvents()  # Update UI
             
             # Make the API request
             response = requests.post(url, auth=auth, json=data)
+            
+            self.results_text.append(f"Response status: {response.status_code}")
+            self.results_text.append(f"Response text: {response.text}")
             
             if response.status_code in [200, 201]:
                 self.results_text.append(f"Successfully synchronized artists from Last.fm account {self.lastfm_username}\n")
@@ -1035,12 +1046,13 @@ class MuspyArtistModule(BaseModule):
                 # Try to parse the response to see how many artists were added
                 try:
                     result = response.json()
+                    self.results_text.append(f"Response JSON: {result}")
                     if 'added' in result:
                         self.results_text.append(f"Added {result['added']} new artists to your Muspy account\n")
                     if 'exists' in result:
                         self.results_text.append(f"{result['exists']} artists were already in your Muspy account\n")
-                except:
-                    pass
+                except Exception as e:
+                    self.results_text.append(f"Error parsing response: {e}")
                     
                 QMessageBox.information(self, "Success", f"Synchronized artists from Last.fm account {self.lastfm_username}")
                 return True
@@ -1052,6 +1064,7 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             error_msg = f"Error syncing with Muspy: {e}"
             self.results_text.append(error_msg + "\n")
+            logger.error(error_msg, exc_info=True)
             QMessageBox.warning(self, "Error", error_msg)
             return False
 
@@ -1361,6 +1374,8 @@ class MuspyArtistModule(BaseModule):
         """
         Display a menu with sync options when sync_artists_button is clicked
         """
+
+        
         menu = QMenu(self)
         
         # Add menu actions
@@ -1390,20 +1405,29 @@ class MuspyArtistModule(BaseModule):
         """
         Synchronize selected artists with Spotify
         """
+        # Log para depuración
+        logger.info("Iniciando sincronización con Spotify")
+        self.results_text.append("Iniciando sincronización con Spotify...")
+        QApplication.processEvents()
+        
         # Check if Spotify credentials are configured
         if not self.spotify_enabled:
             error_msg = "Spotify credentials not configured. Please check your settings."
             self.results_text.append(error_msg)
+            logger.error(error_msg)
             QMessageBox.warning(self, "Error", error_msg)
             return
         
         # Path to the JSON file with selected artists
         json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+        self.results_text.append(f"Buscando archivo: {json_path}")
+        logger.info(f"Buscando archivo: {json_path}")
         
         # Check if the file exists
         if not json_path.exists():
-            error_msg = "No artists selected. Please load artists first."
+            error_msg = f"No artists selected. File not found: {json_path}"
             self.results_text.append(error_msg)
+            logger.error(error_msg)
             QMessageBox.warning(self, "Error", error_msg)
             return
         
@@ -1411,9 +1435,12 @@ class MuspyArtistModule(BaseModule):
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 artists_data = json.load(f)
+                self.results_text.append(f"Archivo leído correctamente. Contiene {len(artists_data)} artistas.")
+                logger.info(f"Archivo leído correctamente. Contiene {len(artists_data)} artistas.")
         except Exception as e:
             error_msg = f"Error reading artists file: {e}"
             self.results_text.append(error_msg)
+            logger.error(error_msg)
             QMessageBox.warning(self, "Error", error_msg)
             return
         
