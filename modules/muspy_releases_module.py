@@ -269,6 +269,22 @@ class MuspyArtistModule(BaseModule):
         # Conectar señales
         self._connect_signals()
 
+
+    def toggle_debug_logging(self):
+        """Toggle debug logging on/off"""
+        self.enable_logging = not self.enable_logging
+        
+        # Simply update the log level of the existing loggers
+        if self.enable_logging:
+            self.logger.setLevel(logging.DEBUG)
+            logging.getLogger().setLevel(logging.DEBUG)
+            self.results_text.append("Debug logging enabled")
+        else:
+            self.logger.setLevel(logging.INFO)
+            logging.getLogger().setLevel(logging.INFO)
+            self.results_text.append("Debug logging disabled")
+
+
     def _connect_signals(self):
         """Conectar las señales de los widgets a sus respectivos slots."""
         # Conectar la señal de búsqueda
@@ -290,7 +306,86 @@ class MuspyArtistModule(BaseModule):
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
+        
+        # Add a context menu for additional options
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.customContextMenuRequested.connect(self.show_context_menu)
 
+    def show_context_menu(self, position):
+        """Show context menu with additional options"""
+        context_menu = QMenu(self)
+        
+        # Add API credential check action
+        check_credentials_action = QAction("Check API Credentials", self)
+        check_credentials_action.triggered.connect(self.check_api_credentials)
+        context_menu.addAction(check_credentials_action)
+        
+        # Add dependency check action
+        check_dependencies_action = QAction("Check Dependencies", self)
+        check_dependencies_action.triggered.connect(self.check_install_dependencies)
+        context_menu.addAction(check_dependencies_action)
+        
+        # Add separator
+        context_menu.addSeparator()
+        
+        # Add debug actions
+        if self.enable_logging:
+            toggle_debug_action = QAction("Disable Debug Logging", self)
+        else:
+            toggle_debug_action = QAction("Enable Debug Logging", self)
+        
+        toggle_debug_action.triggered.connect(self.toggle_debug_logging)
+        context_menu.addAction(toggle_debug_action)
+        
+        # Show the menu
+        context_menu.exec(self.mapToGlobal(position))
+
+
+
+
+    def check_api_credentials(self):
+        """
+        Check and display the status of API credentials for debugging
+        """
+        self.results_text.clear()
+        self.results_text.show()
+        
+        self.results_text.append("API Credentials Status:\n")
+        
+        # Check Muspy credentials
+        self.results_text.append("Muspy Credentials:")
+        if self.muspy_username and self.muspy_api_key:
+            self.results_text.append(f"  Username: {self.muspy_username}")
+            self.results_text.append(f"  API Key: {'*' * len(self.muspy_api_key) if self.muspy_api_key else 'Not configured'}")
+            self.results_text.append(f"  Muspy ID: {self.muspy_id or 'Not detected'}")
+            self.results_text.append("  Status: Configured")
+        else:
+            self.results_text.append("  Status: Not fully configured")
+        
+        # Check Spotify credentials
+        self.results_text.append("\nSpotify Credentials:")
+        if self.spotify_client_id and self.spotify_client_secret:
+            self.results_text.append(f"  Client ID: {self.spotify_client_id[:5]}...{self.spotify_client_id[-5:] if len(self.spotify_client_id) > 10 else ''}")
+            self.results_text.append(f"  Client Secret: {'*' * 10}")
+            self.results_text.append("  Status: Configured")
+            
+            # Test authentication if credentials are available
+            if hasattr(self, 'spotify_auth') and self.spotify_auth:
+                is_auth = self.spotify_auth.is_authenticated()
+                self.results_text.append(f"  Authentication: {'Successful' if is_auth else 'Failed or not attempted'}")
+        else:
+            self.results_text.append("  Status: Not fully configured")
+        
+        # Check Last.fm credentials
+        self.results_text.append("\nLast.fm Credentials:")
+        if self.lastfm_api_key and self.lastfm_username:
+            self.results_text.append(f"  API Key: {self.lastfm_api_key[:5]}...{self.lastfm_api_key[-5:] if len(self.lastfm_api_key) > 10 else ''}")
+            self.results_text.append(f"  Username: {self.lastfm_username}")
+            self.results_text.append("  Status: Configured")
+        else:
+            self.results_text.append("  Status: Not fully configured")
+        
+        self.results_text.append("\nTo test connections, use the sync menu options.")
 
     def get_muspy_id(self):
         """
@@ -1349,13 +1444,24 @@ class MuspyArtistModule(BaseModule):
         
         # Add menu actions
         muspy_action = QAction("Sincronizar artistas seleccionados con Muspy", self)
-        lastfm_action = QAction("Importar artistas seguidos de Last.fm", self)
-        spotify_action = QAction("Importar artistas seguidos de Spotify", self)
+        lastfm_action = QAction("Sincronizar artistas seleccionados con Last.fm", self)
+        spotify_action = QAction("Sincronizar artistas seleccionados con Spotify", self)
         
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
-        lastfm_action.triggered.connect(self.sync_lastfm_muspy)
-        spotify_action.triggered.connect(self.sync_spotify)
+        
+        # Make sure the functions exist before connecting
+        if hasattr(self, 'sync_lastfm_artists'):
+            lastfm_action.triggered.connect(self.sync_lastfm_artists)
+        else:
+            # Fallback to the original function or a temporary error message
+            lastfm_action.triggered.connect(lambda: self.results_text.append("Last.fm sync not implemented yet"))
+        
+        # Same for Spotify
+        if hasattr(self, 'sync_spotify'):
+            spotify_action.triggered.connect(self.sync_spotify)
+        else:
+            spotify_action.triggered.connect(lambda: self.results_text.append("Spotify sync not implemented yet"))
         
         # Enable/disable actions based on available credentials
         lastfm_action.setEnabled(self.lastfm_enabled)
@@ -1363,9 +1469,9 @@ class MuspyArtistModule(BaseModule):
         
         # Add status indicators to menu items
         if not self.lastfm_enabled:
-            lastfm_action.setText("Importar artistas seguidos de Last.fm (configuración incompleta)")
+            lastfm_action.setText("Sincronizar artistas seleccionados con Last.fm (configuración incompleta)")
         if not self.spotify_enabled:
-            spotify_action.setText("Importar artistas seguidos de Spotify (configuración incompleta)")
+            spotify_action.setText("Sincronizar artistas seleccionados con Spotify (configuración incompleta)")
         
         # Add actions to menu
         menu.addAction(muspy_action)
@@ -1375,9 +1481,108 @@ class MuspyArtistModule(BaseModule):
         # Show menu at button position
         menu.exec(self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height())))
 
+ 
+    def sync_lastfm_artists(self):
+        """
+        Synchronize selected artists with Last.fm (love tracks by these artists)
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm credentials not configured")
+            return
+
+        # Clear the results area and make sure it's visible
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Starting Last.fm synchronization...\n")
+        QApplication.processEvents()  # Update UI
+
+        try:
+            # Get the selected artists from the JSON file
+            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+            if not json_path.exists():
+                self.results_text.append("No selected artists found. Please load artists first.")
+                return
+                
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+                
+            if not artists_data:
+                self.results_text.append("No artists found in the selection file.")
+                return
+                
+            total_artists = len(artists_data)
+            self.results_text.append(f"Found {total_artists} artists to synchronize with Last.fm.")
+            QApplication.processEvents()
+            
+            # Configure Last.fm API
+            import pylast
+            
+            # Initialize Last.fm network
+            network = pylast.LastFMNetwork(
+                api_key=self.lastfm_api_key,
+                username=self.lastfm_username
+            )
+            
+            successful_syncs = 0
+            failed_syncs = 0
+            
+            # Process artists
+            for i, artist_data in enumerate(artists_data):
+                artist_name = artist_data.get('nombre', '')
+                
+                # Update progress
+                if (i + 1) % 5 == 0 or i == total_artists - 1:
+                    progress = int((i + 1) / total_artists * 50)
+                    self.results_text.clear()
+                    self.results_text.append(f"Syncing with Last.fm... {i + 1}/{total_artists}\n")
+                    self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
+                    self.results_text.append(f"Success: {successful_syncs}, Failed: {failed_syncs}\n")
+                    QApplication.processEvents()
+                
+                try:
+                    # Try to find the artist on Last.fm
+                    lastfm_artist = network.get_artist(artist_name)
+                    
+                    # Add the artist to Last.fm library (by loving a top track)
+                    top_tracks = lastfm_artist.get_top_tracks(limit=1)
+                    
+                    if top_tracks:
+                        top_track = top_tracks[0].item
+                        top_track.love()
+                        successful_syncs += 1
+                        logger.info(f"Successfully synced {artist_name} with Last.fm by loving track: {top_track.get_name()}")
+                    else:
+                        # If no top tracks, just mark as successful (we found the artist)
+                        successful_syncs += 1
+                        logger.info(f"Found artist {artist_name} on Last.fm, but no tracks to love")
+                        
+                except Exception as e:
+                    failed_syncs += 1
+                    logger.error(f"Error syncing {artist_name} with Last.fm: {e}")
+            
+            # Show final summary
+            self.results_text.clear()
+            self.results_text.append(f"Last.fm synchronization completed\n")
+            self.results_text.append(f"Total artists processed: {total_artists}\n")
+            self.results_text.append(f"Successfully synced: {successful_syncs}\n")
+            self.results_text.append(f"Failed: {failed_syncs}\n")
+            
+            # Show a message box with results
+            QMessageBox.information(
+                self,
+                "Last.fm Synchronization Complete",
+                f"Successfully synced {successful_syncs} artists with Last.fm.\n"
+                f"Failed: {failed_syncs}"
+            )
+            
+        except Exception as e:
+            error_msg = f"Error in Last.fm synchronization: {e}"
+            self.results_text.append(error_msg)
+            logger.error(error_msg, exc_info=True)
+ 
     def sync_spotify(self):
         """
-        Synchronize followed artists from Spotify to Muspy
+        Synchronize selected artists from JSON to Spotify (follow them on Spotify)
         """
         # Check if Spotify credentials are configured
         if not self.spotify_enabled:
@@ -1412,93 +1617,86 @@ class MuspyArtistModule(BaseModule):
                 self.results_text.append("Failed to authenticate with Spotify. Please check your credentials.")
                 return
             
-            # Get followed artists from Spotify
-            self.results_text.append("Fetching your followed artists from Spotify...")
-            QApplication.processEvents()
-            
-            artists = []
-            after = None
-            while True:
-                # Spotify API paginates results, so we need to loop to get all artists
-                results = spotify_client.current_user_followed_artists(limit=50, after=after)
-                if not results or 'artists' not in results:
-                    break
-                    
-                items = results['artists']['items']
-                if not items:
-                    break
-                    
-                artists.extend(items)
-                after = items[-1]['id']
-                
-                # Check if we've reached the end of the list
-                if results['artists']['next'] is None:
-                    break
-                    
-                # Update progress
-                self.results_text.append(f"Found {len(artists)} artists so far...")
-                QApplication.processEvents()
-            
-            if not artists:
-                self.results_text.append("No followed artists found on Spotify.")
+            # Get the selected artists from the JSON file
+            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+            if not json_path.exists():
+                self.results_text.append("No selected artists found. Please load artists first.")
                 return
                 
-            total_artists = len(artists)
-            self.results_text.append(f"Found {total_artists} artists followed on Spotify.")
-            self.results_text.append("Starting synchronization with Muspy...")
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+                
+            if not artists_data:
+                self.results_text.append("No artists found in the selection file.")
+                return
+                
+            total_artists = len(artists_data)
+            self.results_text.append(f"Found {total_artists} artists to synchronize with Spotify.")
             QApplication.processEvents()
             
-            # Synchronize artists with Muspy
-            successful_adds = 0
-            failed_adds = 0
+            # Follow each artist on Spotify
+            successful_follows = 0
+            failed_follows = 0
             artists_not_found = 0
             
-            for i, artist in enumerate(artists):
+            for i, artist_data in enumerate(artists_data):
+                artist_name = artist_data.get('nombre', '')
+                
+                # Update progress
+                if (i + 1) % 5 == 0 or i == total_artists - 1:
+                    progress = int((i + 1) / total_artists * 50)
+                    self.results_text.clear()
+                    self.results_text.append(f"Syncing with Spotify... {i + 1}/{total_artists}\n")
+                    self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
+                    self.results_text.append(f"Followed: {successful_follows}, Not found: {artists_not_found}, Failed: {failed_follows}\n")
+                    QApplication.processEvents()
+                
+                # Search for the artist on Spotify
                 try:
-                    # Update progress in UI
-                    if (i + 1) % 5 == 0 or i == total_artists - 1:
-                        progress = int((i + 1) / total_artists * 50)
-                        self.results_text.clear()
-                        self.results_text.append(f"Syncing with Muspy... {i + 1}/{total_artists}\n")
-                        self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                        self.results_text.append(f"Added: {successful_adds}, Failed: {failed_adds}, Not found in MusicBrainz: {artists_not_found}\n")
-                        QApplication.processEvents()
+                    results = spotify_client.search(q=f'artist:"{artist_name}"', type='artist', limit=1)
                     
-                    artist_name = artist['name']
-                    
-                    # Search for MBID for this artist (required for Muspy)
-                    mbid = self.get_mbid_artist_searched(artist_name)
-                    
-                    if mbid:
-                        # Add the artist to Muspy
-                        success = self.add_artist_to_muspy_silent(mbid, artist_name)
-                        if success == 1:  # Successfully added
-                            successful_adds += 1
-                        elif success == 0:  # Already exists
-                            successful_adds += 1  # Still count as success
-                        else:  # Failed
-                            failed_adds += 1
-                    else:
-                        artists_not_found += 1
+                    if results and 'artists' in results and 'items' in results['artists'] and results['artists']['items']:
+                        artist = results['artists']['items'][0]
+                        artist_id = artist['id']
                         
+                        # Check if already following
+                        is_following = spotify_client.current_user_following_artists([artist_id])
+                        if is_following and is_following[0]:
+                            logger.info(f"Already following {artist_name} on Spotify")
+                            successful_follows += 1  # Count as success
+                        else:
+                            # Follow the artist
+                            spotify_client.user_follow_artists([artist_id])
+                            logger.info(f"Successfully followed {artist_name} on Spotify")
+                            successful_follows += 1
+                    else:
+                        logger.warning(f"Artist '{artist_name}' not found on Spotify")
+                        artists_not_found += 1
                 except Exception as e:
-                    logger.error(f"Error syncing artist {artist.get('name', 'unknown')} with Muspy: {e}")
-                    failed_adds += 1
+                    logger.error(f"Error following artist {artist_name} on Spotify: {e}")
+                    failed_follows += 1
             
             # Show final summary
             self.results_text.clear()
             self.results_text.append(f"Spotify synchronization completed\n")
             self.results_text.append(f"Total artists processed: {total_artists}\n")
-            self.results_text.append(f"Successfully added: {successful_adds}\n")
-            self.results_text.append(f"Not found in MusicBrainz: {artists_not_found}\n")
-            self.results_text.append(f"Failed: {failed_adds}\n")
+            self.results_text.append(f"Successfully followed: {successful_follows}\n")
+            self.results_text.append(f"Not found on Spotify: {artists_not_found}\n")
+            self.results_text.append(f"Failed: {failed_follows}\n")
+            
+            # Show a message box with results
+            QMessageBox.information(
+                self,
+                "Spotify Synchronization Complete",
+                f"Successfully followed {successful_follows} artists on Spotify.\n"
+                f"Artists not found: {artists_not_found}\n"
+                f"Failed: {failed_follows}"
+            )
             
         except Exception as e:
             error_msg = f"Error during Spotify synchronization: {e}"
             self.results_text.append(error_msg)
             logger.error(error_msg, exc_info=True)
-   
-   
    
     def authenticate_spotify(self):
         """
