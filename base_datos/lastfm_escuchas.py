@@ -227,12 +227,12 @@ def calculate_match_quality(artist_match, album_match, song_match, match_score=N
 
 def lookup_artist_in_database(conn, artist_name, mbid=None, threshold=0.85):
     """
-    Lookup artist using database information with fuzzy matching
+    Enhanced lookup artist using database information with better fuzzy matching
     Returns (artist_id, artist_info) or (None, None) if not found
     """
     cursor = conn.cursor()
     
-    # Try exact name match first
+    # Try exact name match first (case-insensitive)
     cursor.execute("SELECT id, mbid, name, origen FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
     result = cursor.fetchone()
     
@@ -240,6 +240,10 @@ def lookup_artist_in_database(conn, artist_name, mbid=None, threshold=0.85):
     if not result and mbid:
         cursor.execute("SELECT id, mbid, name, origen FROM artists WHERE mbid = ?", (mbid,))
         result = cursor.fetchone()
+        
+        # If found by MBID but names differ significantly, log the discrepancy
+        if result and result[2].lower() != artist_name.lower():
+            print(f"Note: Artist '{artist_name}' matched by MBID to existing '{result[2]}'")
     
     # If still no match and threshold < 1.0, try fuzzy matching
     if not result and threshold < 1.0:
@@ -254,7 +258,7 @@ def lookup_artist_in_database(conn, artist_name, mbid=None, threshold=0.85):
         best_match, score = find_best_match(artist_name, artist_dict.keys(), threshold)
         
         if best_match:
-            print(f"Encontrado artista por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+            print(f"Found artist by approximate match: '{best_match}' (score: {score:.2f})")
             result = artist_dict[best_match]
     
     if result:
@@ -269,13 +273,13 @@ def lookup_artist_in_database(conn, artist_name, mbid=None, threshold=0.85):
 
 def lookup_album_in_database(conn, album_name, artist_id=None, artist_name=None, mbid=None, threshold=0.85):
     """
-    Lookup album using database information with fuzzy matching
+    Enhanced lookup album using database information with better fuzzy matching
     Prioritizes search by artist_id if available
     Returns (album_id, album_info) or (None, None) if not found
     """
     cursor = conn.cursor()
     
-    # Initial query construction for exact match
+    # Initial query construction for exact match (case-insensitive)
     query = "SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE "
     conditions = []
     params = []
@@ -301,10 +305,16 @@ def lookup_album_in_database(conn, album_name, artist_id=None, artist_name=None,
     if not result and mbid:
         cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE a.mbid = ?", (mbid,))
         result = cursor.fetchone()
+        
+        # If found by MBID but names differ significantly, log the discrepancy
+        if result and result[2].lower() != album_name.lower():
+            print(f"Note: Album '{album_name}' matched by MBID to existing '{result[2]}'")
     
     # If still no match and threshold < 1.0, try fuzzy matching
     if not result and threshold < 1.0:
-        # Get all albums for the artist if we have artist_id
+        # Try multiple approaches for fuzzy matching
+        
+        # 1. First try with artist_id if available (most reliable)
         if artist_id:
             cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id WHERE a.artist_id = ?", (artist_id,))
             artist_albums = cursor.fetchall()
@@ -316,24 +326,37 @@ def lookup_album_in_database(conn, album_name, artist_id=None, artist_name=None,
             best_match, score = find_best_match(album_name, album_dict.keys(), threshold)
             
             if best_match:
-                print(f"Encontrado álbum por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+                print(f"Found album by approximate match: '{best_match}' (score: {score:.2f})")
                 result = album_dict[best_match]
         
-        # If we still don't have a match but have artist_name, try all albums
-        elif artist_name and not result:
+        # 2. If we still don't have a match but have artist_name, try all albums
+        if not result and artist_name:
             # Get all albums
             cursor.execute("SELECT a.id, a.mbid, a.name, a.artist_id, ar.name, a.origen FROM albums a JOIN artists ar ON a.artist_id = ar.id")
             all_albums = cursor.fetchall()
             
-            # Create composite keys with artist and album name
-            album_dict = {f"{row[4]} - {row[2]}": row for row in all_albums}
+            # Try two approaches:
             
-            # Find best match with combined artist-album key
-            best_match, score = find_best_match(f"{artist_name} - {album_name}", album_dict.keys(), threshold)
+            # 2.1 First with artist name filter
+            artist_albums = [album for album in all_albums if album[4].lower() == artist_name.lower()]
+            album_dict = {album[2]: album for album in artist_albums}
+            best_match, score = find_best_match(album_name, album_dict.keys(), threshold)
             
             if best_match:
-                print(f"Encontrado álbum por coincidencia aproximada: '{best_match}' (score: {score:.2f})")
+                print(f"Found album by approximate match with artist filter: '{best_match}' (score: {score:.2f})")
                 result = album_dict[best_match]
+            
+            # 2.2 If still no match, try with composite keys (artist - album)
+            if not result:
+                # Create composite keys with artist and album name
+                album_dict = {f"{row[4]} - {row[2]}": row for row in all_albums}
+                
+                # Find best match with combined artist-album key
+                best_match, score = find_best_match(f"{artist_name} - {album_name}", album_dict.keys(), threshold)
+                
+                if best_match:
+                    print(f"Found album by composite match: '{best_match}' (score: {score:.2f})")
+                    result = album_dict[best_match]
     
     if result:
         return result[0], {
@@ -395,7 +418,7 @@ def filter_duplicate_scrobbles(tracks):
 
 def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, album_id=None, album_name=None, mbid=None, lastfm_url=None, threshold=0.85):
     """
-    Lookup song using database information with fuzzy matching
+    Enhanced lookup song using database information with better fuzzy matching
     Prioritizes search by existing IDs when available
     Returns (song_id, song_info) or (None, None) if not found
     """
@@ -404,57 +427,80 @@ def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, 
         song_id, song_info = lookup_song_by_lastfm_url(conn, lastfm_url)
         if song_id:
             return song_id, song_info
+    
     cursor = conn.cursor()
     
-    # Primero intentar una búsqueda exacta pero case-insensitive
+    # If we have MBID, try first by MBID (most reliable)
+    if mbid:
+        cursor.execute("SELECT id, mbid, title, artist, album, origen FROM songs WHERE mbid = ?", (mbid,))
+        result = cursor.fetchone()
+        if result:
+            return result[0], {
+                'id': result[0],
+                'mbid': result[1],
+                'title': result[2],
+                'artist': result[3],
+                'album': result[4],
+                'origen': result[5]
+            }
+    
+    # Try exact match with all available info
     query = "SELECT id, mbid, title, artist, album, origen FROM songs WHERE "
     conditions = ["LOWER(title) = LOWER(?)"]
     params = [track_name]
     
-    # Añadir condición de artista si disponible
+    # Add artist condition if available
     if artist_name:
         conditions.append("LOWER(artist) = LOWER(?)")
         params.append(artist_name)
     
-    # Añadir condición de álbum si disponible
+    # Add album condition if available
     if album_name:
         conditions.append("LOWER(album) = LOWER(?)")
         params.append(album_name)
     
-    # Ejecutar consulta
+    # Execute query
     cursor.execute(query + " AND ".join(conditions), params)
     result = cursor.fetchone()
     
-    # Si no hay resultado, intentar búsqueda más flexible sin importar mayúsculas/minúsculas
-    if not result:
-        # Obtener todas las canciones para búsqueda más flexible
-        additional_cond = ""
-        additional_params = []
+    # If no result, try with artist only (common case: same song different albums)
+    if not result and artist_name:
+        cursor.execute("""
+            SELECT id, mbid, title, artist, album, origen 
+            FROM songs 
+            WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
+        """, (track_name, artist_name))
+        result = cursor.fetchone()
     
+    # If still no result, try fuzzy matching
+    if not result and threshold < 1.0:
+        # Get candidate songs
+        query_cond = ""
+        query_params = []
+        
         if artist_name:
-            additional_cond = " WHERE LOWER(artist) = LOWER(?)"
-            additional_params = [artist_name]
+            query_cond = " WHERE LOWER(artist) = LOWER(?)"
+            query_params = [artist_name]
         
-        cursor.execute(f"SELECT id, mbid, title, artist, album, origen FROM songs{additional_cond}", additional_params)
-        all_songs = cursor.fetchall()
+        cursor.execute(f"SELECT id, mbid, title, artist, album, origen FROM songs{query_cond}", query_params)
+        candidates = cursor.fetchall()
         
-        # Comparar manualmente para total insensibilidad a case
-        for song in all_songs:
-            song_title = song[2]
+        # First try exact title match but case-insensitive
+        for song in candidates:
+            if song[2].lower() == track_name.lower():
+                result = song
+                print(f"Found song by case-insensitive match: '{song[2]}' by '{song[3]}'")
+                break
+        
+        # If still no match, try fuzzy matching on title
+        if not result:
+            # Create dictionary of songs by title
+            song_dict = {song[2]: song for song in candidates}
+            best_match, score = find_best_match(track_name, song_dict.keys(), threshold)
             
-            # Comparación insensible a mayúsculas/minúsculas
-            if song_title.lower() == track_name.lower():
-                # Si tenemos artista, verificar también
-                if artist_name:
-                    song_artist = song[3]
-                    if song_artist.lower() == artist_name.lower():
-                        result = song
-                        print(f"Encontrada canción por coincidencia insensible a mayúsculas: '{song_title}' por '{song_artist}'")
-                        break
-                else:
-                    result = song
-                    print(f"Encontrada canción por coincidencia insensible a mayúsculas: '{song_title}'")
-                    break
+            if best_match:
+                print(f"Found song by fuzzy title match: '{best_match}' (score: {score:.2f})")
+                result = song_dict[best_match]
     
     if result:
         return result[0], {
@@ -470,177 +516,206 @@ def lookup_song_in_database(conn, track_name, artist_id=None, artist_name=None, 
 
 
 
-def get_or_update_artist(conn, artist_name, mbid, lastfm_api_key, interactive=False):
-    """Busca un artista por nombre y lo actualiza con datos de MusicBrainz si es necesario"""
-    cursor = conn.cursor()
-    
-    # Buscar primero por nombre en la base de datos
-    cursor.execute("SELECT id, mbid, origen FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
-    existing_artist = cursor.fetchone()
-    
-    if existing_artist:
-        artist_id, existing_mbid, origen = existing_artist
-        print(f"Artista encontrado en base de datos por nombre: {artist_name} (ID: {artist_id})")
-        
-        # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
-        if mbid and (not existing_mbid or existing_mbid != mbid):
-            print(f"Actualizando MBID para artista {artist_name}: {mbid}")
-            cursor.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
-            conn.commit()
-            
-            # Opcionalmente obtener más datos de MusicBrainz
-            if 'scrobbles' not in origen:
-                artist_info = get_artist_info(artist_name, mbid, lastfm_api_key)
-                if artist_info:
-                    update_artist_in_db(conn, artist_id, artist_info)
-        
-        return artist_id
-    
-    # Si no existe, obtener info y crear nuevo
-    print(f"Artista no encontrado, obteniendo información para: {artist_name}")
-    artist_info = get_artist_info(artist_name, mbid, lastfm_api_key)
-    
-    if artist_info:
-        return add_artist_to_db(conn, artist_info, interactive)
-    
-    # Si no se puede obtener info, crear con datos mínimos
-    if interactive:
-        print("\n" + "="*60)
-        print(f"NO SE PUDO OBTENER INFORMACIÓN PARA EL ARTISTA:")
-        print("="*60)
-        print(f"Nombre: {artist_name}")
-        print(f"MBID: {mbid}")
-        print("-"*60)
-        respuesta = input("¿Añadir este artista con datos mínimos? (s/n): ").lower()
-        if respuesta != 's':
-            return None
-    
-    try:
-        cursor.execute("""
-            INSERT INTO artists (name, mbid, origen)
-            VALUES (?, ?, 'manual')
-            RETURNING id
-        """, (artist_name, mbid))
-        
-        artist_id = cursor.fetchone()[0]
-        conn.commit()
-        print(f"Artista añadido con datos mínimos, ID: {artist_id}")
-        return artist_id
-    except sqlite3.Error as e:
-        print(f"Error al añadir el artista {artist_name}: {e}")
-        return None
-
 def get_or_update_artist(conn, artist_name, mbid, interactive=False):
     """
-    Busca un artista siguiendo la lógica prioritaria:
-    1. Primero en base de datos
-    2. Luego en MusicBrainz
-    3. Solo como último recurso, Last.fm
+    Enhanced function to get artist by name or MBID with improved duplicate prevention
+    First looks in database, then in MusicBrainz, and only creates new if necessary
     """
-    print(f"\n=== Procesando artista: {artist_name} ===")
+    print(f"\n=== Processing artist: {artist_name} ===")
     
-    # 1. Buscar en la base de datos
-    artist_id, artist_db_info = lookup_artist_in_database(conn, artist_name, mbid)
+    # 1. First try to find in database with enhanced lookup
+    artist_id, artist_db_info = lookup_artist_in_database(conn, artist_name, mbid, threshold=0.90)
     
     if artist_id:
-        print(f"Artista encontrado en base de datos: {artist_name} (ID: {artist_id})")
+        print(f"Artist found in database: {artist_name} (ID: {artist_id})")
+        cursor = conn.cursor()
         
-        # Verificar si es de solo lectura
-        if is_read_only(conn, 'artists', artist_id):
-            print(f"Artista con ID {artist_id} es de origen 'local', no se actualizará")
-            return artist_id
-        
-        # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
+        # If we have a new MBID and the existing is different or doesn't exist, update
         if mbid and (not artist_db_info['mbid'] or artist_db_info['mbid'] != mbid):
-            cursor = conn.cursor()
-            print(f"Actualizando MBID para artista {artist_name}: {mbid}")
+            # Check if another artist already has this MBID to avoid duplicates
+            cursor.execute("SELECT id, name FROM artists WHERE mbid = ? AND id != ?", (mbid, artist_id))
+            existing_with_mbid = cursor.fetchone()
+            
+            if existing_with_mbid:
+                print(f"WARNING: Artist '{existing_with_mbid[1]}' (ID: {existing_with_mbid[0]}) already has MBID {mbid}")
+                print(f"This suggests a possible duplicate between '{artist_name}' and '{existing_with_mbid[1]}'")
+                
+                if interactive:
+                    # Let user decide how to handle this
+                    print("\n" + "="*60)
+                    print("DUPLICATE MBID DETECTED")
+                    print("="*60)
+                    print(f"Artist 1: {artist_name} (ID: {artist_id})")
+                    print(f"Artist 2: {existing_with_mbid[1]} (ID: {existing_with_mbid[0]})")
+                    print(f"Both share MBID: {mbid}")
+                    print("-"*60)
+                    choice = input("How to proceed? (1: Keep both, 2: Merge to first, 3: Merge to second): ")
+                    
+                    if choice == "2":
+                        # Merge to first (current artist)
+                        cursor.execute("UPDATE albums SET artist_id = ? WHERE artist_id = ?", 
+                                      (artist_id, existing_with_mbid[0]))
+                        cursor.execute("UPDATE scrobbles SET artist_id = ? WHERE artist_id = ?", 
+                                      (artist_id, existing_with_mbid[0]))
+                        cursor.execute("DELETE FROM artists WHERE id = ?", (existing_with_mbid[0],))
+                        conn.commit()
+                        print(f"Merged artist '{existing_with_mbid[1]}' into '{artist_name}'")
+                    elif choice == "3":
+                        # Merge to second (existing artist)
+                        cursor.execute("UPDATE albums SET artist_id = ? WHERE artist_id = ?", 
+                                      (existing_with_mbid[0], artist_id))
+                        cursor.execute("UPDATE scrobbles SET artist_id = ? WHERE artist_id = ?", 
+                                      (existing_with_mbid[0], artist_id))
+                        cursor.execute("DELETE FROM artists WHERE id = ?", (artist_id,))
+                        conn.commit()
+                        print(f"Merged artist '{artist_name}' into '{existing_with_mbid[1]}'")
+                        return existing_with_mbid[0]  # Return the ID of the artist we merged into
+                    # Choice 1 or default: keep both, just update the MBID for the current one
+            
+            # Update MBID if we didn't merge or chose to keep both
+            print(f"Updating MBID for artist {artist_name}: {mbid}")
             cursor.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
             conn.commit()
         
         return artist_id
     
-    # 2. Si no está en la base de datos, buscar en MusicBrainz
-    print(f"Artista no encontrado en base de datos, buscando en MusicBrainz: {artist_name}")
+    # 2. If not in database, search in MusicBrainz
+    print(f"Artist not found in database, searching in MusicBrainz: {artist_name}")
     
     mb_artist = None
     if mbid:
-        # Si tenemos MBID, buscar directamente por él
+        # If we have MBID, search directly by it
         mb_artist = get_artist_from_musicbrainz(mbid)
         if mb_artist:
-            print(f"Artista encontrado en MusicBrainz por MBID: {mb_artist.get('name', artist_name)}")
+            print(f"Artist found in MusicBrainz by MBID: {mb_artist.get('name', artist_name)}")
+            
+            # Double-check database again with the official name from MusicBrainz
+            if 'name' in mb_artist and mb_artist['name'] != artist_name:
+                mb_artist_name = mb_artist['name']
+                artist_id, artist_db_info = lookup_artist_in_database(conn, mb_artist_name, mbid, threshold=0.95)
+                
+                if artist_id:
+                    print(f"Artist found in database using MusicBrainz name: {mb_artist_name} (ID: {artist_id})")
+                    return artist_id
     
-    # Si no tenemos MBID o no se encontró por MBID, buscar por nombre
+    # If no MBID or not found by MBID, search by name
     if not mb_artist:
         mb_artist = get_artist_from_musicbrainz_by_name(artist_name)
         if mb_artist:
-            print(f"Artista encontrado en MusicBrainz por nombre: {mb_artist.get('name', artist_name)}")
+            print(f"Artist found in MusicBrainz by name: {mb_artist.get('name', artist_name)}")
             mbid = mb_artist.get('id', '')
+            
+            # Double-check database again with the official name from MusicBrainz
+            if 'name' in mb_artist and mb_artist['name'] != artist_name:
+                mb_artist_name = mb_artist['name']
+                artist_id, artist_db_info = lookup_artist_in_database(conn, mb_artist_name, mbid, threshold=0.95)
+                
+                if artist_id:
+                    print(f"Artist found in database using MusicBrainz name: {mb_artist_name} (ID: {artist_id})")
+                    return artist_id
     
-    # 3. Si se encontró información en MusicBrainz, guardar en la base de datos
+    # 3. If found information in MusicBrainz, save to database
     if mb_artist:
         cursor = conn.cursor()
         
-        # Extraer tags si existen
+        # Extract tags if they exist
         tags = []
         if 'tag-list' in mb_artist:
             tags = [tag['name'] for tag in mb_artist.get('tag-list', [])]
         tags_str = ','.join(tags)
         
-        # Extraer URLs oficiales
+        # Extract official URLs
         url = ''
-        website = ''
         if 'url-relation-list' in mb_artist:
             for url_rel in mb_artist['url-relation-list']:
                 if url_rel.get('type') == 'official homepage':
-                    website = url_rel.get('target', '')
+                    url = url_rel.get('target', '')
                     break
         
-        # Mostrar información en modo interactivo
+        # Final check for existing artist by MBID
+        if mbid:
+            cursor.execute("SELECT id, name FROM artists WHERE mbid = ?", (mbid,))
+            existing = cursor.fetchone()
+            if existing:
+                print(f"Found artist with same MBID already in database: {existing[1]} (ID: {existing[0]})")
+                return existing[0]
+        
+        # Show information in interactive mode
         if interactive:
-            # [Código existente de visualización]
-            print(f"Website: {website}")
-            # [Resto del código de visualización]
+            print("\n" + "="*60)
+            print(f"ARTIST INFORMATION TO ADD (from MusicBrainz):")
+            print("="*60)
+            print(f"Name: {mb_artist.get('name', artist_name)}")
+            print(f"MBID: {mbid}")
+            print(f"URL: {url}")
+            print(f"Tags: {tags_str}")
+            print(f"Origin: musicbrainz")
+            print("-"*60)
             
-            respuesta = input("\n¿Añadir este artista a la base de datos? (s/n): ").lower()
-            if respuesta != 's':
-                print("Operación cancelada por el usuario.")
+            response = input("\nAdd this artist to the database? (y/n): ").lower()
+            if response != 'y':
+                print("Operation canceled by user.")
                 return None
         
         try:
+            # Find most accurate artist name to use
+            artist_name_to_use = mb_artist.get('name', artist_name)
+            
+            # Check one more time by name
+            cursor.execute("SELECT id FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name_to_use,))
+            existing_by_name = cursor.fetchone()
+            if existing_by_name:
+                print(f"Found artist with same name: {artist_name_to_use} (ID: {existing_by_name[0]})")
+                
+                # Update the MBID if needed
+                if mbid:
+                    cursor.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, existing_by_name[0]))
+                    conn.commit()
+                
+                return existing_by_name[0]
+            
+            # Insert new artist
             cursor.execute("""
-                INSERT INTO artists (name, mbid, tags, lastfm_url, website, origen)
-                VALUES (?, ?, ?, ?, ?, 'musicbrainz')
+                INSERT INTO artists (name, mbid, tags, lastfm_url, origen)
+                VALUES (?, ?, ?, ?, 'musicbrainz')
                 RETURNING id
             """, (
-                mb_artist.get('name', artist_name), 
+                artist_name_to_use, 
                 mbid, 
                 tags_str, 
-                url,
-                website
+                url
             ))
             
             artist_id = cursor.fetchone()[0]
             conn.commit()
-            print(f"Artista añadido con ID: {artist_id} (origen: MusicBrainz)")
+            print(f"Artist added with ID: {artist_id} (source: MusicBrainz)")
             return artist_id
         except sqlite3.Error as e:
-            print(f"Error al añadir el artista {artist_name} desde MusicBrainz: {e}")
+            print(f"Error adding artist {artist_name} from MusicBrainz: {e}")
     
-    # 4. Si todo lo anterior falla, preguntar al usuario
+    # 4. If all else fails, ask user
     if interactive:
         print("\n" + "="*60)
-        print(f"NO SE PUDO OBTENER INFORMACIÓN PARA EL ARTISTA:")
+        print(f"COULD NOT GET INFORMATION FOR ARTIST:")
         print("="*60)
-        print(f"Nombre: {artist_name}")
+        print(f"Name: {artist_name}")
         print(f"MBID: {mbid}")
         print("-"*60)
-        respuesta = input("¿Añadir este artista con datos mínimos? (s/n): ").lower()
-        if respuesta != 's':
+        response = input("Add this artist with minimal data? (y/n): ").lower()
+        if response != 'y':
             return None
     
-    # 5. Añadir con datos mínimos
+    # 5. Add with minimal data
     try:
         cursor = conn.cursor()
+        
+        # Final check by name
+        cursor.execute("SELECT id FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
+        existing_by_name = cursor.fetchone()
+        if existing_by_name:
+            print(f"Found artist with same name: {artist_name} (ID: {existing_by_name[0]})")
+            return existing_by_name[0]
+        
         cursor.execute("""
             INSERT INTO artists (name, mbid, origen)
             VALUES (?, ?, 'manual')
@@ -649,10 +724,10 @@ def get_or_update_artist(conn, artist_name, mbid, interactive=False):
         
         artist_id = cursor.fetchone()[0]
         conn.commit()
-        print(f"Artista añadido con datos mínimos, ID: {artist_id}")
+        print(f"Artist added with minimal data, ID: {artist_id}")
         return artist_id
     except sqlite3.Error as e:
-        print(f"Error al añadir el artista {artist_name}: {e}")
+        print(f"Error adding artist {artist_name}: {e}")
         return None
 
 
@@ -663,54 +738,123 @@ def limpiar_terminal():
 
 def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, interactive=False):
     """
-    Busca un álbum siguiendo la lógica prioritaria:
-    1. Primero en base de datos
-    2. Luego en MusicBrainz
-    3. Solo como último recurso, datos mínimos
+    Enhanced function to get album by name or MBID with improved duplicate prevention
+    First looks in database, then in MusicBrainz, and only creates new if necessary
     """
-    limpiar_terminal()
-    print(f"\n=== Procesando álbum: {album_name} de {artist_name} ===")
+    print(f"\n=== Processing album: {album_name} by {artist_name} ===")
     
-    # 1. Buscar en la base de datos
-    album_id, album_db_info = lookup_album_in_database(conn, album_name, artist_id, artist_name, mbid)
+    # 1. First try to find in database with enhanced lookup
+    album_id, album_db_info = lookup_album_in_database(conn, album_name, artist_id, artist_name, mbid, threshold=0.90)
     
     if album_id:
-        print(f"Álbum encontrado en base de datos: {album_name} (ID: {album_id})")
+        print(f"Album found in database: {album_name} (ID: {album_id})")
         
-        # Si el artista es diferente del que tenemos en nuestro scrobble, analizar
+        cursor = conn.cursor()
+        
+        # If the artist is different from the one in our scrobble, analyze
         if album_db_info['artist_id'] != artist_id and artist_id is not None:
-            print(f"Nota: El álbum está asociado a otro artista en la base de datos: {album_db_info['artist_name']}")
-            # No modificaremos esto automáticamente, pero registramos la discrepancia
+            print(f"Note: Album is associated with different artist in database: {album_db_info['artist_name']}")
+            
+            if interactive:
+                print("\n" + "="*60)
+                print("ALBUM ARTIST MISMATCH DETECTED")
+                print("="*60)
+                print(f"Album: {album_name} (ID: {album_id})")
+                print(f"Current artist: {album_db_info['artist_name']} (ID: {album_db_info['artist_id']})")
+                print(f"Scrobble artist: {artist_name} (ID: {artist_id})")
+                print("-"*60)
+                choice = input("How to proceed? (1: Keep current artist, 2: Update to scrobble artist): ")
+                
+                if choice == "2":
+                    cursor.execute("UPDATE albums SET artist_id = ? WHERE id = ?", (artist_id, album_id))
+                    conn.commit()
+                    print(f"Updated album artist to {artist_name}")
         
-        # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
+        # If we have a new MBID and the existing is different or doesn't exist, update
         if mbid and (not album_db_info['mbid'] or album_db_info['mbid'] != mbid):
-            cursor = conn.cursor()
-            print(f"Actualizando MBID para álbum {album_name}: {mbid}")
+            # Check if another album already has this MBID to avoid duplicates
+            cursor.execute("SELECT id, name FROM albums WHERE mbid = ? AND id != ?", (mbid, album_id))
+            existing_with_mbid = cursor.fetchone()
+            
+            if existing_with_mbid:
+                print(f"WARNING: Album '{existing_with_mbid[1]}' (ID: {existing_with_mbid[0]}) already has MBID {mbid}")
+                print(f"This suggests a possible duplicate between '{album_name}' and '{existing_with_mbid[1]}'")
+                
+                if interactive:
+                    # Let user decide how to handle this
+                    print("\n" + "="*60)
+                    print("DUPLICATE ALBUM MBID DETECTED")
+                    print("="*60)
+                    print(f"Album 1: {album_name} (ID: {album_id})")
+                    print(f"Album 2: {existing_with_mbid[1]} (ID: {existing_with_mbid[0]})")
+                    print(f"Both share MBID: {mbid}")
+                    print("-"*60)
+                    choice = input("How to proceed? (1: Keep both, 2: Merge to first, 3: Merge to second): ")
+                    
+                    if choice == "2":
+                        # Merge to first (current album)
+                        cursor.execute("UPDATE scrobbles SET album_id = ? WHERE album_id = ?", 
+                                      (album_id, existing_with_mbid[0]))
+                        cursor.execute("DELETE FROM albums WHERE id = ?", (existing_with_mbid[0],))
+                        conn.commit()
+                        print(f"Merged album '{existing_with_mbid[1]}' into '{album_name}'")
+                    elif choice == "3":
+                        # Merge to second (existing album)
+                        cursor.execute("UPDATE scrobbles SET album_id = ? WHERE album_id = ?", 
+                                      (existing_with_mbid[0], album_id))
+                        cursor.execute("DELETE FROM albums WHERE id = ?", (album_id,))
+                        conn.commit()
+                        print(f"Merged album '{album_name}' into '{existing_with_mbid[1]}'")
+                        return existing_with_mbid[0]  # Return the ID of the album we merged into
+                    # Choice 1 or default: keep both, just update the MBID for the current one
+            
+            # Update MBID if we didn't merge or chose to keep both
+            print(f"Updating MBID for album {album_name}: {mbid}")
             cursor.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, album_id))
             conn.commit()
         
         return album_id
     
-    # 2. Si no está en la base de datos, buscar en MusicBrainz
-    print(f"Álbum no encontrado en base de datos, buscando en MusicBrainz: {album_name}")
+    # 2. If not in database, search in MusicBrainz
+    print(f"Album not found in database, searching in MusicBrainz: {album_name}")
     
     mb_album = None
     if mbid:
-        # Si tenemos MBID, buscar directamente por él
+        # If we have MBID, search directly by it
         mb_album = get_album_from_musicbrainz(mbid)
         if mb_album:
-            print(f"Álbum encontrado en MusicBrainz por MBID: {mb_album.get('title', album_name)}")
+            print(f"Album found in MusicBrainz by MBID: {mb_album.get('title', album_name)}")
+            
+            # Double-check database again with the official name from MusicBrainz
+            if 'title' in mb_album and mb_album['title'] != album_name:
+                mb_album_name = mb_album['title']
+                album_id, album_db_info = lookup_album_in_database(conn, mb_album_name, artist_id, artist_name, mbid, threshold=0.95)
+                
+                if album_id:
+                    print(f"Album found in database using MusicBrainz name: {mb_album_name} (ID: {album_id})")
+                    return album_id
     
-    # Si no tenemos MBID o no se encontró por MBID, buscar por nombre y artista
+    # If no MBID or not found by MBID, search by name and artist
     if not mb_album:
         mb_album = get_album_from_musicbrainz_by_name(album_name, artist_name)
         if mb_album:
-            print(f"Álbum encontrado en MusicBrainz por nombre: {mb_album.get('title', album_name)}")
+            print(f"Album found in MusicBrainz by name: {mb_album.get('title', album_name)}")
             mbid = mb_album.get('id', '')
+            
+            # Double-check database again with the official name from MusicBrainz
+            if 'title' in mb_album and mb_album['title'] != album_name:
+                mb_album_name = mb_album['title']
+                album_id, album_db_info = lookup_album_in_database(conn, mb_album_name, artist_id, artist_name, mbid, threshold=0.95)
+                
+                if album_id:
+                    print(f"Album found in database using MusicBrainz name: {mb_album_name} (ID: {album_id})")
+                    return album_id
     
-    # 3. Si se encontró información en MusicBrainz, guardar en la base de datos
+    # 3. If found information in MusicBrainz, save to database
     if mb_album:
-        # Extraer año si existe
+        cursor = conn.cursor()
+        
+        # Extract year if it exists
         year = None
         if 'date' in mb_album:
             try:
@@ -720,40 +864,66 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, interact
             except (ValueError, TypeError):
                 pass
         
-        # Número de pistas
+        # Track count
         total_tracks = 0
         if 'medium-list' in mb_album:
             for medium in mb_album['medium-list']:
                 if 'track-count' in medium:
                     total_tracks += int(medium['track-count'])
         
-        # Mostrar información en modo interactivo
+        # Final check for existing album by MBID
+        if mbid:
+            cursor.execute("SELECT id, name FROM albums WHERE mbid = ?", (mbid,))
+            existing = cursor.fetchone()
+            if existing:
+                print(f"Found album with same MBID already in database: {existing[1]} (ID: {existing[0]})")
+                return existing[0]
+        
+        # Show information in interactive mode
         if interactive:
             print("\n" + "="*60)
-            print(f"INFORMACIÓN DEL ÁLBUM A AÑADIR (desde MusicBrainz):")
+            print(f"ALBUM INFORMATION TO ADD (from MusicBrainz):")
             print("="*60)
-            print(f"Nombre: {mb_album.get('title', album_name)}")
-            print(f"Artista: {artist_name} (ID: {artist_id})")
+            print(f"Name: {mb_album.get('title', album_name)}")
+            print(f"Artist: {artist_name} (ID: {artist_id})")
             print(f"MBID: {mbid}")
-            print(f"Año: {year}")
-            print(f"Total pistas: {total_tracks}")
-            print(f"Origen: scrobbles")
+            print(f"Year: {year}")
+            print(f"Total tracks: {total_tracks}")
+            print(f"Origin: musicbrainz")
             print("-"*60)
             
-            respuesta = input("\n¿Añadir este álbum a la base de datos? (s/n): ").lower()
-            if respuesta != 's':
-                print("Operación cancelada por el usuario.")
+            response = input("\nAdd this album to the database? (y/n): ").lower()
+            if response != 'y':
+                print("Operation canceled by user.")
                 return None
         
+        # Find most accurate album name to use
+        album_name_to_use = mb_album.get('title', album_name)
+        
+        # Check one more time by name and artist_id
+        cursor.execute("""
+            SELECT id FROM albums 
+            WHERE LOWER(name) = LOWER(?) AND artist_id = ?
+        """, (album_name_to_use, artist_id))
+        existing_by_name = cursor.fetchone()
+        if existing_by_name:
+            print(f"Found album with same name and artist: {album_name_to_use} (ID: {existing_by_name[0]})")
+            
+            # Update the MBID if needed
+            if mbid:
+                cursor.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, existing_by_name[0]))
+                conn.commit()
+            
+            return existing_by_name[0]
+        
         try:
-            cursor = conn.cursor()
             cursor.execute("""
                 INSERT INTO albums (artist_id, name, year, mbid, total_tracks, origen)
-                VALUES (?, ?, ?, ?, ?, 'scrobbles')
+                VALUES (?, ?, ?, ?, ?, 'musicbrainz')
                 RETURNING id
             """, (
                 artist_id, 
-                mb_album.get('title', album_name), 
+                album_name_to_use, 
                 year, 
                 mbid, 
                 total_tracks
@@ -761,27 +931,38 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, interact
             
             album_id = cursor.fetchone()[0]
             conn.commit()
-            print(f"Álbum añadido con ID: {album_id} (origen: scrobbles)\nImportado desde Musicbrainz)")
+            print(f"Album added with ID: {album_id} (source: MusicBrainz)")
             return album_id
         except sqlite3.Error as e:
-            print(f"Error al añadir el álbum {album_name} desde MusicBrainz: {e}")
+            print(f"Error adding album {album_name} from MusicBrainz: {e}")
     
-    # 4. Si todo lo anterior falla, preguntar al usuario
+    # 4. If all else fails, ask user
     if interactive:
         print("\n" + "="*60)
-        print(f"NO SE PUDO OBTENER INFORMACIÓN PARA EL ÁLBUM:")
+        print(f"COULD NOT GET INFORMATION FOR ALBUM:")
         print("="*60)
-        print(f"Nombre: {album_name}")
-        print(f"Artista: {artist_name} (ID: {artist_id})")
+        print(f"Name: {album_name}")
+        print(f"Artist: {artist_name} (ID: {artist_id})")
         print(f"MBID: {mbid}")
         print("-"*60)
-        respuesta = input("¿Añadir este álbum con datos mínimos? (s/n): ").lower()
-        if respuesta != 's':
+        response = input("Add this album with minimal data? (y/n): ").lower()
+        if response != 'y':
             return None
     
-    # 5. Añadir con datos mínimos
+    # 5. Add with minimal data
     try:
         cursor = conn.cursor()
+        
+        # Final check by name and artist
+        cursor.execute("""
+            SELECT id FROM albums 
+            WHERE LOWER(name) = LOWER(?) AND artist_id = ?
+        """, (album_name, artist_id))
+        existing_by_name = cursor.fetchone()
+        if existing_by_name:
+            print(f"Found album with same name and artist: {album_name} (ID: {existing_by_name[0]})")
+            return existing_by_name[0]
+        
         cursor.execute("""
             INSERT INTO albums (name, artist_id, mbid, origen)
             VALUES (?, ?, ?, 'manual')
@@ -790,12 +971,11 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, interact
         
         album_id = cursor.fetchone()[0]
         conn.commit()
-        print(f"Álbum añadido con datos mínimos, ID: {album_id}")
+        print(f"Album added with minimal data, ID: {album_id}")
         return album_id
     except sqlite3.Error as e:
-        print(f"Error al añadir el álbum {album_name}: {e}")
+        print(f"Error adding album {album_name}: {e}")
         return None
-
 
 
 def get_or_update_song(conn, track_name, artist_name, album_name, artist_id, album_id, mbid, interactive=False):
@@ -3843,11 +4023,11 @@ class LastFMScrobbler:
             return 0, 0, 0, 0
     
     def merge_duplicates_by_mbid(conn):
-        """Fusiona elementos duplicados identificados por MBID"""
+        """Merges elements duplicated by MBID"""
         cursor = conn.cursor()
         
-        # 1. Fusionar artistas con el mismo MBID
-        print("Buscando artistas duplicados por MBID...")
+        # 1. Merge artists with the same MBID
+        print("Looking for duplicate artists by MBID...")
         cursor.execute("""
             SELECT mbid, GROUP_CONCAT(id) as ids, COUNT(*) as count
             FROM artists
@@ -3860,27 +4040,27 @@ class LastFMScrobbler:
         
         for mbid, ids_str, count in duplicated_artists:
             ids = ids_str.split(',')
-            primary_id = int(ids[0])  # Usar el primer ID como principal
+            primary_id = int(ids[0])  # Use first ID as primary
             
-            print(f"Encontrados {count} artistas duplicados con MBID {mbid}. Fusionando en ID {primary_id}...")
+            print(f"Found {count} duplicate artists with MBID {mbid}. Merging into ID {primary_id}...")
             
-            # Actualizar referencias en álbumes
+            # Update references in albums
             for other_id in ids[1:]:
                 cursor.execute("UPDATE albums SET artist_id = ? WHERE artist_id = ?", (primary_id, other_id))
                 
-            # Actualizar referencias en scrobbles
+            # Update references in scrobbles
             for other_id in ids[1:]:
                 cursor.execute("UPDATE scrobbles SET artist_id = ? WHERE artist_id = ?", (primary_id, other_id))
             
-            # Eliminar artistas duplicados
+            # Delete duplicate artists
             for other_id in ids[1:]:
                 try:
                     cursor.execute("DELETE FROM artists WHERE id = ?", (other_id,))
                 except sqlite3.Error as e:
-                    print(f"Error al eliminar artista duplicado {other_id}: {e}")
+                    print(f"Error deleting duplicate artist {other_id}: {e}")
         
-        # 2. Fusionar álbumes con el mismo MBID
-        print("Buscando álbumes duplicados por MBID...")
+        # 2. Merge albums with the same MBID
+        print("Looking for duplicate albums by MBID...")
         cursor.execute("""
             SELECT mbid, GROUP_CONCAT(id) as ids, COUNT(*) as count
             FROM albums
@@ -3893,23 +4073,23 @@ class LastFMScrobbler:
         
         for mbid, ids_str, count in duplicated_albums:
             ids = ids_str.split(',')
-            primary_id = int(ids[0])  # Usar el primer ID como principal
+            primary_id = int(ids[0])  # Use first ID as primary
             
-            print(f"Encontrados {count} álbumes duplicados con MBID {mbid}. Fusionando en ID {primary_id}...")
+            print(f"Found {count} duplicate albums with MBID {mbid}. Merging into ID {primary_id}...")
             
-            # Actualizar referencias en scrobbles
+            # Update references in scrobbles
             for other_id in ids[1:]:
                 cursor.execute("UPDATE scrobbles SET album_id = ? WHERE album_id = ?", (primary_id, other_id))
             
-            # Eliminar álbumes duplicados
+            # Delete duplicate albums
             for other_id in ids[1:]:
                 try:
                     cursor.execute("DELETE FROM albums WHERE id = ?", (other_id,))
                 except sqlite3.Error as e:
-                    print(f"Error al eliminar álbum duplicado {other_id}: {e}")
+                    print(f"Error deleting duplicate album {other_id}: {e}")
         
-        # 3. Fusionar canciones con el mismo MBID
-        print("Buscando canciones duplicadas por MBID...")
+        # 3. Merge songs with the same MBID
+        print("Looking for duplicate songs by MBID...")
         cursor.execute("""
             SELECT mbid, GROUP_CONCAT(id) as ids, COUNT(*) as count
             FROM songs
@@ -3922,20 +4102,20 @@ class LastFMScrobbler:
         
         for mbid, ids_str, count in duplicated_songs:
             ids = ids_str.split(',')
-            primary_id = int(ids[0])  # Usar el primer ID como principal
+            primary_id = int(ids[0])  # Use first ID as primary
             
-            print(f"Encontradas {count} canciones duplicadas con MBID {mbid}. Fusionando en ID {primary_id}...")
+            print(f"Found {count} duplicate songs with MBID {mbid}. Merging into ID {primary_id}...")
             
-            # Actualizar referencias en scrobbles
+            # Update references in scrobbles
             for other_id in ids[1:]:
                 cursor.execute("UPDATE scrobbles SET song_id = ? WHERE song_id = ?", (primary_id, other_id))
             
-            # Eliminar canciones duplicadas
+            # Delete duplicate songs
             for other_id in ids[1:]:
                 try:
                     cursor.execute("DELETE FROM songs WHERE id = ?", (other_id,))
                 except sqlite3.Error as e:
-                    print(f"Error al eliminar canción duplicada {other_id}: {e}")
+                    print(f"Error deleting duplicate song {other_id}: {e}")
         
         conn.commit()
         
