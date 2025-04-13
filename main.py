@@ -309,11 +309,18 @@ class TabManager(QMainWindow):
                 module_name = module_config.get('name', Path(module_path).stem)
                 module_args = module_config.get('args', {})
                 
-                # Add global Spotify credentials if module is Muspy
-                if module_name == "Muspy" and 'spotify_client_id' not in module_args:
-                    module_args['spotify_client_id'] = global_config.get('spotify_client_id')
-                    module_args['spotify_client_secret'] = global_config.get('spotify_client_secret')
-                    print(f"Added Spotify credentials to Muspy module")
+                # Add ALL global config to module_args
+                for key, value in global_config.items():
+                    # Only add if not already defined in module-specific args
+                    if key not in module_args:
+                        module_args[key] = value
+                
+                # Also pass complete lastfm section if available
+                if 'lastfm' in config and 'lastfm' not in module_args:
+                    module_args['lastfm'] = config.get('lastfm', {})
+                
+                # Add global_theme_config itself for modules that need access to all global settings
+                module_args['global_theme_config'] = global_config
                 
                 try:
                     # Dynamically load the module

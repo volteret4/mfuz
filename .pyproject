@@ -1,5 +1,18 @@
 {
     "files": [
+        "ui/svg/butterfly-svgrepo-com.svg",
+        "ui/svg/calendar-thirty-two-svgrepo-com.svg",
+        "ui/svg/calendar-svgrepo-com(1).svg",
+        "ui/svg/update-rotation-svgrepo-com.svg",
+        "ui/svg/sign-sync-svgrepo-com.svg",
+        "ui/svg/coding-svgrepo-com.svg",
+        "ui/svg/code-circle-svgrepo-com.svg",
+        "ui/svg/code-search-svgrepo-com.svg",
+        "ui/svg/research-svgrepo-com.svg",
+        "ui/svg/search-svgrepo-com(2).svg",
+        "ui/svg/search-svgrepo-com(1).svg",
+        "ui/svg/search-svgrepo-com.svg",
+        "ui/svg/search-love-svgrepo-com.svg",
         "ui/svg/trash-2-svgrepo-com.svg",
         "ui/svg/sound-2-svgrepo-com.svg",
         "ui/svg/sound-1-svgrepo-com.svg",

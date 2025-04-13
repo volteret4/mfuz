@@ -116,5 +116,18 @@
         <file alias="youtube_ol">ui/svg/youtube-svgrepo-com.svg</file>
         <file alias="db_ol">ui/svg/database-svgrepo-com.svg</file>
         <file alias="search_ol">ui/svg/search-magnifier-outline-svgrepo-com.svg</file>
+        <file alias="bluesky">ui/svg/butterfly-svgrepo-com.svg</file>
+        <file alias="cal_blue">ui/svg/calendar-thirty-two-svgrepo-com.svg</file>
+        <file alias="cal_Red">ui/svg/calendar-svgrepo-com(1).svg</file>
+        <file alias="sync_blue">ui/svg/update-rotation-svgrepo-com.svg</file>
+        <file alias="sync_blue_2">ui/svg/sign-sync-svgrepo-com.svg</file>
+        <file alias="monkey">ui/svg/coding-svgrepo-com.svg</file>
+        <file alias="code_circulo">ui/svg/code-circle-svgrepo-com.svg</file>
+        <file alias="qr_search">ui/svg/code-search-svgrepo-com.svg</file>
+        <file alias="brain">ui/svg/research-svgrepo-com.svg</file>
+        <file alias="search_music">ui/svg/search-svgrepo-com(2).svg</file>
+        <file alias="search_music_color">ui/svg/search-svgrepo-com(1).svg</file>
+        <file alias="search_circulo">ui/svg/search-svgrepo-com.svg</file>
+        <file alias="search_love">ui/svg/search-love-svgrepo-com.svg</file>
     </qresource>
 </RCC>

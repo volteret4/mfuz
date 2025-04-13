@@ -7,22 +7,53 @@ import requests
 import logging
 import datetime
 from PyQt6 import uic
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
-                             QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
-                             QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
-                             QMenu, QInputDialog)
-from PyQt6.QtCore import pyqtSignal, Qt, QPoint
-from PyQt6.QtGui import QColor, QTextDocument, QAction
-from spotipy.oauth2 import SpotifyOAuth
-from tools.spotify_login import SpotifyAuthManager
-from tools.lastfm_login import LastFMAuthManager
+try:
+    from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
+                                QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
+                                QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
+                                QMenu, QInputDialog)
+    from PyQt6.QtCore import pyqtSignal, Qt, QPoint
+    from PyQt6.QtGui import QColor, QTextDocument, QAction
+    QT_AVAILABLE = True
+except ImportError:
+    QT_AVAILABLE = False
+    print("PyQt6 not available. UI functionality will be limited.")
 
+# Set up a basic logger before any imports that might use it
+logger = logging.getLogger("MuspyArtistModule")
 
-
+# Configure path for imports
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 
-# Configure logging
+# Try to import specific modules that might not be available
+try:
+    from spotipy.oauth2 import SpotifyOAuth
+    from tools.spotify_login import SpotifyAuthManager
+    SPOTIFY_AVAILABLE = True
+except ImportError:
+    SPOTIFY_AVAILABLE = False
+    logger.warning("Spotipy/Spotify modules not available. Spotify features will be disabled.")
+
+try:
+    from tools.lastfm_login import LastFMAuthManager
+    LASTFM_AVAILABLE = True
+except ImportError:
+    LASTFM_AVAILABLE = False
+    logger.warning("LastFM module not available. LastFM features will be disabled.")
+
+# Filter PyQt logs
+class PyQtFilter(logging.Filter):
+    def filter(self, record):
+        # Filter PyQt messages
+        if record.name.startswith('PyQt6'):
+            return False
+        return True
+
+# Apply the filter to the global logger
+logging.getLogger().addFilter(PyQtFilter())
+
+# Try to set up better logging if available
 try:
     from loggin_helper import setup_module_logger
     logger = setup_module_logger(
@@ -31,21 +62,9 @@ try:
         log_types=["ERROR", "INFO", "WARNING", "UI"]
     )
 except ImportError:
-    # Fallback a logging estándar si no está disponible terminal_logger
+    # Fallback to standard logging if specialized logger isn't available
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("MuspyArtistModule")
-
-
-# Añade esto después de importar terminal_logger
-class PyQtFilter(logging.Filter):
-    def filter(self, record):
-        # Filtrar mensajes de PyQt
-        if record.name.startswith('PyQt6'):
-            return False
-        return True
-
-# Y aplica el filtro al logger global
-logging.getLogger().addFilter(PyQtFilter())
 
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
@@ -57,6 +76,8 @@ class MuspyArtistModule(BaseModule):
             query_db_script_path=None,
             search_mbid_script_path=None,
             lastfm_username=None,
+            lastfm_api_key=None,  # Add direct parameters for Last.fm
+            lastfm_api_secret=None,
             spotify_client_id=None,
             spotify_client_secret=None,
             spotify_redirect_uri=None,
@@ -66,125 +87,113 @@ class MuspyArtistModule(BaseModule):
             *args, **kwargs):
         """
         Initialize the Muspy Artist Management Module
-        
-        Args:
-            muspy_username (str, optional): Muspy username
-            muspy_api_key (str, optional): Muspy API key
-            artists_file (str, optional): Path to artists file
-            query_db_script_path (str, optional): Path to MBID query script
-            search_mbid_script_path (str, optional): Path to MBID search script
-            lastfm_username (str, optional): Last.fm username
-            spotify_client_id (str, optional): Spotify API client ID
-            spotify_client_secret (str, optional): Spotify API client secret
-            parent (QWidget, optional): Parent widget
-            theme (str, optional): UI theme
         """
-        # Depuración de PROJECT_ROOT
-        from pathlib import Path
-        import os
-        global PROJECT_ROOT
-        if 'PROJECT_ROOT' in globals():
-            print(f"PROJECT_ROOT global: {PROJECT_ROOT}")
-        else:
-            print("PROJECT_ROOT no está definido globalmente")
-            
-        # Intentar obtener PROJECT_ROOT desde base_module
-        try:
-            sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-            from base_module import PROJECT_ROOT as BASE_PROJECT_ROOT
-            print(f"PROJECT_ROOT desde base_module: {BASE_PROJECT_ROOT}")
-        except ImportError:
-            print("No se pudo importar PROJECT_ROOT desde base_module")
-        # Configuración de logging primero
+        # Logging configuration
         self.module_name = self.__class__.__name__
-        
-        # Obtener configuración de logging
         self.log_config = kwargs.get('logging', {})
         self.log_level = self.log_config.get('log_level', 'INFO')
         self.enable_logging = self.log_config.get('debug_enabled', False)
         self.log_types = self.log_config.get('log_types', ['ERROR', 'INFO'])
         
-        # Propiedades de Muspy
+        # Basic properties
         self.muspy_username = muspy_username
         self.muspy_password = muspy_password
         self.muspy_api_key = muspy_api_key
-        self.muspy_id = muspy_api_key
-        
-        # Intentar obtener el Muspy ID si no está configurado
-        if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
-            self.get_muspy_id()
-                
+        self.muspy_id = muspy_id
         self.base_url = "https://muspy.com/api/1"
         self.artists_file = artists_file
         self.query_db_script_path = query_db_script_path
         self.db_path = db_path
-        
-        self.load_lastfm_settings(kwargs)
-        
-        # Initialize settings with defaults
-        self.initialize_default_values()
-        # In your __init__ method, after initializing Spotify auth:
-        if self.lastfm_enabled:
-            self.lastfm_auth = LastFMAuthManager(
-                api_key=self.lastfm_api_key,
-                username=self.lastfm_username,
-                parent_widget=self,
-                project_root=PROJECT_ROOT
-            )
-        # Load settings from kwargs
-        module_args = {
-            'spotify_client_id': spotify_client_id,
-            'spotify_client_secret': spotify_client_secret,
-            'lastfm_api_key': kwargs.get('lastfm_api_key'),
-            'lastfm_username': lastfm_username,
-            'spotify_redirect_uri': spotify_redirect_uri
-        }
         self.spotify_redirect_uri = spotify_redirect_uri
-        self.load_module_settings(module_args)
         
-        # Initialize the Spotify Auth Manager with credentials received from main.py
-        if self.spotify_enabled:
-            # Get redirect URI from config if available
-            redirect_uri = self.spotify_redirect_uri or kwargs.get('spotify_redirect_uri')
-            
-            self.spotify_auth = SpotifyAuthManager(
-                client_id=self.spotify_client_id,
-                client_secret=self.spotify_client_secret,
-                redirect_uri=redirect_uri,  # Pass the redirect URI from config
-                parent_widget=self,
-                project_root=PROJECT_ROOT
-            )
-
+        # Theme configuration
+        self.available_themes = kwargs.pop('temas', [])
+        self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
-
-
-        # Usar logger específico para este módulo si está habilitado
+        # Initialize with default values
+        self.spotify_client_id = spotify_client_id
+        self.spotify_client_secret = spotify_client_secret
+        self.lastfm_api_key = lastfm_api_key
+        self.lastfm_api_secret = lastfm_api_secret
+        self.lastfm_username = lastfm_username
+        
+        # Debug print to see what's coming in from config
+        print(f"DEBUG - Last.fm config: api_key={lastfm_api_key}, username={lastfm_username}")
+        
+        # Call super init first to set up logging, etc.
+        super().__init__(parent, theme, **kwargs)
+        
+        # Set up logger
         if self.enable_logging:
             try:
-                from terminal_logger import setup_module_logger
+                from loggin_helper import setup_module_logger
                 self.logger = setup_module_logger(
                     module_name=self.module_name,
                     log_level=self.log_level,
                     log_types=self.log_types
                 )
-                global logger
-                logger = self.logger  # Actualiza la referencia global
             except ImportError:
-                self.logger = logger  # Usar el logger global
+                self.logger = logger
         else:
-            self.logger = logger  # Usar el logger global
-
-        self.available_themes = kwargs.pop('temas', [])
-        self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
+            self.logger = logger
         
-
+        # Now load settings after logging is set up
+        self.initialize_default_values()
+        
+        # Try to get Muspy ID if needed
+        if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
+            self.get_muspy_id()
+        
+        # Load Last.fm and other settings
+        self.load_lastfm_settings(kwargs)
+        self.load_module_settings({
+            'spotify_client_id': spotify_client_id,
+            'spotify_client_secret': spotify_client_secret,
+            'lastfm_api_key': lastfm_api_key,
+            'lastfm_username': lastfm_username,
+        })
+        
+        # Initialize the Last.fm auth if enabled
         if self.lastfm_enabled:
-            logger.info(f"LastFM configurado para usuario: {self.lastfm_username}")
+            try:
+                from tools.lastfm_login import LastFMAuthManager
+                
+                self.logger.info(f"Initializing LastFM auth with: api_key={self.lastfm_api_key}, username={self.lastfm_username}")
+                
+                self.lastfm_auth = LastFMAuthManager(
+                    api_key=self.lastfm_api_key,
+                    api_secret=self.lastfm_api_secret,
+                    username=self.lastfm_username,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+                self.logger.info(f"LastFM auth manager initialized for user: {self.lastfm_username}")
+            except Exception as e:
+                self.logger.error(f"Error initializing LastFM auth manager: {e}", exc_info=True)
+                self.lastfm_enabled = False
+        
+        # Initialize Spotify auth if enabled
+        if self.spotify_enabled:
+            try:
+                from tools.spotify_login import SpotifyAuthManager
+                
+                self.spotify_auth = SpotifyAuthManager(
+                    client_id=self.spotify_client_id,
+                    client_secret=self.spotify_client_secret,
+                    redirect_uri=self.spotify_redirect_uri,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+                self.logger.info("Spotify auth manager initialized")
+            except Exception as e:
+                self.logger.error(f"Error initializing Spotify auth manager: {e}")
+                self.spotify_enabled = False
+        
+        # Log status of integrations
+        if self.lastfm_enabled:
+            self.logger.info(f"LastFM configured for user: {self.lastfm_username}")
         else:
-            logger.warning("LastFM no configurado completamente. Algunas funciones estarán deshabilitadas.")
-
-        # Llamar al constructor de la superclase AL FINAL
-        super().__init__(parent, theme, **kwargs)
+            self.logger.warning("LastFM not configured completely. Some features will be disabled.")
         
 
    # Actualización del método init_ui en la clase MuspyArtistModule
@@ -1233,7 +1242,7 @@ class MuspyArtistModule(BaseModule):
 
         try:
             # First try direct API import
-            url = f"{self.base_url}/import/{self.muspy_id}"
+            import_url = f"{self.base_url}/import/{self.muspy_id}"
             auth = (self.muspy_username, self.muspy_api_key)
             
             import_data = {
@@ -1260,7 +1269,7 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             error_msg = f"Error syncing with Muspy API: {e}"
             self.results_text.append(error_msg)
-            logger.error(error_msg, exc_info=True)
+            self.logger.error(error_msg, exc_info=True)
             
             # Try alternative method
             self.results_text.append("Trying alternative synchronization method...")
@@ -2246,57 +2255,62 @@ class MuspyArtistModule(BaseModule):
         else:
             self.results_text.append("Connection failed. Please check your LastFM credentials.")
 
-    def load_lastfm_settings(self, module_args):
-        """Carga la configuración de LastFM basándose únicamente en la presencia de credenciales"""
+    def load_lastfm_settings(self, kwargs):
+        """Load Last.fm settings from configuration"""
         try:
-            # Variables para almacenar credenciales
-            api_key = None
-            api_secret = None
-            username = None
+            # Initialize with default values
+            self.lastfm_api_key = None
+            self.lastfm_api_secret = None
+            self.lastfm_username = None
             
-            # 1. Intentar cargar desde sección lastfm específica
-            lastfm_config = module_args.get('lastfm', {})
-            if lastfm_config:
-                api_key = lastfm_config.get('api_key')
-                api_secret = lastfm_config.get('api_secret')
-                username = lastfm_config.get('username')
+            # First try direct parameters that could be passed to the constructor
+            if 'lastfm_api_key' in kwargs and kwargs['lastfm_api_key']:
+                self.lastfm_api_key = kwargs['lastfm_api_key']
                 
-                if api_key and username:
-                    logger.info("Credenciales LastFM cargadas desde sección lastfm")
-            
-            # 2. Intentar cargar desde global_theme_config si algo falta
-            if not (api_key and username):
-                global_config = module_args.get('global_theme_config', {})
-                if global_config:
-                    api_key = api_key or global_config.get('lastfm_api_key')
-                    api_secret = api_secret or global_config.get('lastfm_api_secret')
-                    username = username or global_config.get('lastfm_username')
+            if 'lastfm_username' in kwargs and kwargs['lastfm_username']:
+                self.lastfm_username = kwargs['lastfm_username']
+                
+            # Then try lastfm section
+            lastfm_section = kwargs.get('lastfm', {})
+            if lastfm_section:
+                if not self.lastfm_api_key and 'api_key' in lastfm_section:
+                    self.lastfm_api_key = lastfm_section['api_key']
                     
-                    if api_key and username:
-                        logger.info("Credenciales LastFM cargadas desde global_theme_config")
+                if not self.lastfm_api_secret and 'api_secret' in lastfm_section:
+                    self.lastfm_api_secret = lastfm_section['api_secret']
+                    
+                if not self.lastfm_username and 'username' in lastfm_section:
+                    self.lastfm_username = lastfm_section['username']
             
-            # 3. Cargar desde kwargs directos (mayor prioridad)
-            api_key = module_args.get('lastfm_api_key', api_key)
-            api_secret = module_args.get('lastfm_api_secret', api_secret)
-            username = module_args.get('lastfm_username', username)
+            # Finally try from global_theme_config
+            global_config = kwargs.get('global_theme_config', {})
+            if global_config:
+                if not self.lastfm_api_key and 'lastfm_api_key' in global_config:
+                    self.lastfm_api_key = global_config['lastfm_api_key']
+                    
+                if not self.lastfm_api_secret and 'lastfm_api_secret' in global_config:
+                    self.lastfm_api_secret = global_config['lastfm_api_secret']
+                    
+                if not self.lastfm_username and 'lastfm_username' in global_config:
+                    self.lastfm_username = global_config['lastfm_username']
             
-            # Actualizar propiedades de la clase
-            self.lastfm_api_key = api_key
-            self.lastfm_api_secret = api_secret
-            self.lastfm_username = username
-            
-            # Determinar si LastFM está habilitado basado ÚNICAMENTE en la presencia de credenciales
+            # Determine if Last.fm is enabled
             self.lastfm_enabled = bool(self.lastfm_api_key and self.lastfm_username)
             
+            # Log the configuration
             if self.lastfm_enabled:
-                logger.info(f"LastFM configurado para usuario: {self.lastfm_username}")
+                print(f"LastFM configured for user: {self.lastfm_username}")
             else:
-                logger.warning("LastFM no configurado - API key o nombre de usuario faltantes")
-
+                missing = []
+                if not self.lastfm_api_key:
+                    missing.append("API key")
+                if not self.lastfm_username:
+                    missing.append("username")
+                print(f"LastFM not fully configured - missing: {', '.join(missing)}")
+                
         except Exception as e:
-            logger.error(f"Error cargando configuración de LastFM: {e}")
+            print(f"Error loading LastFM settings: {e}")
             self.lastfm_enabled = False
-
 
 
     def load_module_settings(self, module_args):
