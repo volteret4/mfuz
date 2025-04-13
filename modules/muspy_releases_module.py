@@ -15,7 +15,7 @@ from PyQt6.QtCore import pyqtSignal, Qt, QPoint
 from PyQt6.QtGui import QColor, QTextDocument, QAction
 from spotipy.oauth2 import SpotifyOAuth
 from tools.spotify_login import SpotifyAuthManager
-
+from tools.lastfm_login import LastFMAuthManager
 
 
 
@@ -118,10 +118,19 @@ class MuspyArtistModule(BaseModule):
         self.artists_file = artists_file
         self.query_db_script_path = query_db_script_path
         self.db_path = db_path
-
+        
+        self.load_lastfm_settings(kwargs)
+        
         # Initialize settings with defaults
         self.initialize_default_values()
-        
+        # In your __init__ method, after initializing Spotify auth:
+        if self.lastfm_enabled:
+            self.lastfm_auth = LastFMAuthManager(
+                api_key=self.lastfm_api_key,
+                username=self.lastfm_username,
+                parent_widget=self,
+                project_root=PROJECT_ROOT
+            )
         # Load settings from kwargs
         module_args = {
             'spotify_client_id': spotify_client_id,
@@ -146,6 +155,9 @@ class MuspyArtistModule(BaseModule):
                 project_root=PROJECT_ROOT
             )
 
+        
+
+
         # Usar logger específico para este módulo si está habilitado
         if self.enable_logging:
             try:
@@ -165,6 +177,12 @@ class MuspyArtistModule(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)        
         
+
+        if self.lastfm_enabled:
+            logger.info(f"LastFM configurado para usuario: {self.lastfm_username}")
+        else:
+            logger.warning("LastFM no configurado completamente. Algunas funciones estarán deshabilitadas.")
+
         # Llamar al constructor de la superclase AL FINAL
         super().__init__(parent, theme, **kwargs)
         
@@ -328,6 +346,12 @@ class MuspyArtistModule(BaseModule):
         check_dependencies_action.triggered.connect(self.check_install_dependencies)
         context_menu.addAction(check_dependencies_action)
         
+        # Add LastFM authentication action
+        if self.lastfm_enabled:
+            lastfm_auth_action = QAction("Manage LastFM Authentication", self)
+            lastfm_auth_action.triggered.connect(self.manage_lastfm_auth)
+            context_menu.addAction(lastfm_auth_action)
+        
         # Add separator
         context_menu.addSeparator()
         
@@ -342,6 +366,10 @@ class MuspyArtistModule(BaseModule):
         
         # Show the menu
         context_menu.exec(self.mapToGlobal(position))
+
+
+
+
 
     def check_install_dependencies(self):
         """Check and optionally install missing dependencies"""
@@ -454,11 +482,18 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"  API Key: {self.lastfm_api_key[:5]}...{self.lastfm_api_key[-5:] if len(self.lastfm_api_key) > 10 else ''}")
             self.results_text.append(f"  Username: {self.lastfm_username}")
             self.results_text.append("  Status: Configured")
+            
+            # Test authentication if LastFM auth manager exists
+            if hasattr(self, 'lastfm_auth'):
+                is_auth = self.lastfm_auth.is_authenticated()
+                self.results_text.append(f"  Authentication: {'Successful' if is_auth else 'Not authenticated for write operations'}")
         else:
             self.results_text.append("  Status: Not fully configured")
         
         self.results_text.append("\nTo test connections, use the sync menu options.")
-
+    
+    
+    
     def get_muspy_id(self):
         """
         Obtiene el ID de usuario de Muspy si no está configurado
@@ -1179,7 +1214,7 @@ class MuspyArtistModule(BaseModule):
 
     def sync_lastfm_muspy(self):
         """Synchronize Last.fm artists with Muspy"""
-        if not self.lastfm_username:
+        if not self.lastfm_enabled:
             QMessageBox.warning(self, "Error", "Last.fm username not configured")
             return
 
@@ -1197,12 +1232,10 @@ class MuspyArtistModule(BaseModule):
         QApplication.processEvents()  # Update UI
 
         try:
-            # Import artists via last.fm
-            url = f"{self.base_url}/artists/{self.muspy_id}"  # Corrected URL
+            # First try direct API import
+            url = f"{self.base_url}/import/{self.muspy_id}"
             auth = (self.muspy_username, self.muspy_api_key)
             
-            # The correct endpoint for importing from Last.fm
-            import_url = f"{self.base_url}/import/{self.muspy_id}"
             import_data = {
                 'type': 'lastfm',
                 'username': self.lastfm_username,
@@ -1221,17 +1254,105 @@ class MuspyArtistModule(BaseModule):
                 self.results_text.append("You can now view your upcoming releases using the 'Mis próximos discos' button")
                 return True
             else:
-                error_msg = f"Could not sync Last.fm artists: Status code {response.status_code}"
-                if hasattr(response, 'text') and response.text:
-                    error_msg += f" - {response.text}"
-                self.results_text.append(error_msg)
-                logger.error(error_msg)
-                return False
+                # If direct API fails, try using our LastFM manager as fallback
+                self.results_text.append("Direct API import failed. Trying alternative method...")
+                return self._sync_lastfm_alternative()
         except Exception as e:
-            error_msg = f"Error syncing with Muspy: {e}"
+            error_msg = f"Error syncing with Muspy API: {e}"
             self.results_text.append(error_msg)
             logger.error(error_msg, exc_info=True)
+            
+            # Try alternative method
+            self.results_text.append("Trying alternative synchronization method...")
+            return self._sync_lastfm_alternative()
+
+
+    def _sync_lastfm_alternative(self):
+        """Alternative method to sync LastFM artists using the LastFMAuthManager"""
+        try:
+            # Get LastFM network
+            network = self.lastfm_auth.get_network()
+            if not network:
+                self.results_text.append("Could not connect to LastFM. Please check your credentials.")
+                return False
+            
+            # Get top artists
+            self.results_text.append("Fetching top artists from LastFM...")
+            QApplication.processEvents()
+            
+            top_artists = self.lastfm_auth.get_top_artists(limit=50)
+            
+            if not top_artists:
+                self.results_text.append("No artists found on LastFM account.")
+                return False
+            
+            self.results_text.append(f"Found {len(top_artists)} artists on LastFM.")
+            QApplication.processEvents()
+            
+            # Search for MBIDs and add to Muspy
+            successful_adds = 0
+            failed_adds = 0
+            mbid_not_found = 0
+            
+            # Create a progress bar
+            progress_text = "Progress: [" + "-" * 50 + "]"
+            self.results_text.append(progress_text)
+            QApplication.processEvents()
+            
+            for i, artist in enumerate(top_artists):
+                artist_name = artist['name']
+                
+                # Try to use MBID from LastFM if available
+                mbid = artist.get('mbid')
+                
+                # If no MBID, search for it
+                if not mbid:
+                    mbid = self.get_mbid_artist_searched(artist_name)
+                
+                if mbid:
+                    # Add artist to Muspy
+                    result = self.add_artist_to_muspy_silent(mbid, artist_name)
+                    if result == 1:
+                        successful_adds += 1
+                    elif result == 0:
+                        # Already exists
+                        successful_adds += 1
+                    else:
+                        failed_adds += 1
+                else:
+                    mbid_not_found += 1
+                
+                # Update progress every few artists
+                if (i + 1) % 5 == 0 or i == len(top_artists) - 1:
+                    progress = int((i + 1) / len(top_artists) * 50)
+                    progress_bar = "Progress: [" + "#" * progress + "-" * (50 - progress) + "]"
+                    
+                    # Replace the last progress line
+                    text = self.results_text.toPlainText()
+                    text = text.replace(progress_text, progress_bar)
+                    self.results_text.setPlainText(text)
+                    progress_text = progress_bar
+                    
+                    self.results_text.append(f"Processed: {i+1}/{len(top_artists)}, Added: {successful_adds}, Failed: {failed_adds}, No MBID: {mbid_not_found}")
+                    QApplication.processEvents()
+            
+            # Show final results
+            self.results_text.append("\nSync complete!")
+            self.results_text.append(f"Total artists: {len(top_artists)}")
+            self.results_text.append(f"Successfully added: {successful_adds}")
+            self.results_text.append(f"Not found (no MBID): {mbid_not_found}")
+            self.results_text.append(f"Failed to add: {failed_adds}")
+            
+            if successful_adds > 0:
+                return True
             return False
+        
+        except Exception as e:
+            self.results_text.append(f"Error in alternative LastFM sync: {str(e)}")
+            logger.error(f"Error in alternative LastFM sync: {e}", exc_info=True)
+            return False
+
+
 
     def get_muspy_releases(self):
         """
@@ -1596,8 +1717,8 @@ class MuspyArtistModule(BaseModule):
 
         try:
             # Get the selected artists from the JSON file
-            json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
-            if not json_path.exists():
+            json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+            if not os.path.exists(json_path):
                 self.results_text.append("No selected artists found. Please load artists first.")
                 return
                 
@@ -1612,17 +1733,47 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Found {total_artists} artists to synchronize with Last.fm.")
             QApplication.processEvents()
             
-            # Configure Last.fm API
-            import pylast
-            
-            # Initialize Last.fm network
-            network = pylast.LastFMNetwork(
-                api_key=self.lastfm_api_key,
-                username=self.lastfm_username
-            )
+            # Get LastFM network
+            network = self.lastfm_auth.get_network()
+            if not network:
+                self.results_text.append("Could not connect to LastFM. Please check your credentials.")
+                return
+                
+            # Check if we're authenticated for write operations
+            if not self.lastfm_auth.is_authenticated():
+                if QT_AVAILABLE:
+                    reply = QMessageBox.question(
+                        self, 
+                        "LastFM Authentication Required",
+                        "Following artists requires LastFM authentication. Do you want to provide your password to authenticate?",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                    )
+                    
+                    if reply == QMessageBox.StandardButton.Yes:
+                        # Prompt for password
+                        password, ok = QInputDialog.getText(
+                            self,
+                            "LastFM Password",
+                            f"Enter LastFM password for {self.lastfm_username}:",
+                            QLineEdit.EchoMode.Password
+                        )
+                        
+                        if ok and password:
+                            # Update the auth manager with the password and try to authenticate
+                            self.lastfm_auth.password = password
+                            if not self.lastfm_auth.authenticate():
+                                self.results_text.append("Authentication failed. Cannot follow artists.")
+                                return
+                        else:
+                            self.results_text.append("Authentication canceled. Will only retrieve artist info.")
+                    else:
+                        self.results_text.append("Authentication declined. Will only retrieve artist info.")
+                else:
+                    self.results_text.append("Authentication required but not available without UI. Will only retrieve artist info.")
             
             successful_syncs = 0
             failed_syncs = 0
+            info_only = 0
             
             # Process artists
             for i, artist_data in enumerate(artists_data):
@@ -1634,26 +1785,27 @@ class MuspyArtistModule(BaseModule):
                     self.results_text.clear()
                     self.results_text.append(f"Syncing with Last.fm... {i + 1}/{total_artists}\n")
                     self.results_text.append(f"Progress: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                    self.results_text.append(f"Success: {successful_syncs}, Failed: {failed_syncs}\n")
+                    self.results_text.append(f"Success: {successful_syncs}, Info only: {info_only}, Failed: {failed_syncs}\n")
                     QApplication.processEvents()
                 
                 try:
-                    # Try to find the artist on Last.fm
-                    lastfm_artist = network.get_artist(artist_name)
-                    
-                    # Add the artist to Last.fm library (by loving a top track)
-                    top_tracks = lastfm_artist.get_top_tracks(limit=1)
-                    
-                    if top_tracks:
-                        top_track = top_tracks[0].item
-                        top_track.love()
-                        successful_syncs += 1
-                        logger.info(f"Successfully synced {artist_name} with Last.fm by loving track: {top_track.get_name()}")
+                    # If authenticated, try to follow the artist
+                    if self.lastfm_auth.is_authenticated():
+                        if self.lastfm_auth.follow_artist(artist_name):
+                            successful_syncs += 1
+                        else:
+                            failed_syncs += 1
                     else:
-                        # If no top tracks, just mark as successful (we found the artist)
-                        successful_syncs += 1
-                        logger.info(f"Found artist {artist_name} on Last.fm, but no tracks to love")
-                        
+                        # Just get artist info if not authenticated
+                        try:
+                            artist = network.get_artist(artist_name)
+                            # Just logging that we found the artist
+                            logger.info(f"Found artist {artist_name} on Last.fm")
+                            info_only += 1
+                        except Exception as e:
+                            logger.error(f"Error getting info for {artist_name}: {e}")
+                            failed_syncs += 1
+                            
                 except Exception as e:
                     failed_syncs += 1
                     logger.error(f"Error syncing {artist_name} with Last.fm: {e}")
@@ -1662,14 +1814,20 @@ class MuspyArtistModule(BaseModule):
             self.results_text.clear()
             self.results_text.append(f"Last.fm synchronization completed\n")
             self.results_text.append(f"Total artists processed: {total_artists}\n")
-            self.results_text.append(f"Successfully synced: {successful_syncs}\n")
+            
+            if self.lastfm_auth.is_authenticated():
+                self.results_text.append(f"Successfully followed: {successful_syncs}\n")
+            else:
+                self.results_text.append(f"Artists found (info only): {info_only}\n")
+                
             self.results_text.append(f"Failed: {failed_syncs}\n")
             
             # Show a message box with results
             QMessageBox.information(
                 self,
                 "Last.fm Synchronization Complete",
-                f"Successfully synced {successful_syncs} artists with Last.fm.\n"
+                f"Processed {total_artists} artists with Last.fm.\n" +
+                (f"Successfully followed: {successful_syncs}\n" if self.lastfm_auth.is_authenticated() else f"Artists found (info only): {info_only}\n") +
                 f"Failed: {failed_syncs}"
             )
             
@@ -1954,6 +2112,191 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             logger.error(f"Error following artist on Spotify: {e}")
             return -1  # Error
+
+
+
+
+    def manage_lastfm_auth(self):
+        """Manage LastFM authentication settings"""
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "LastFM credentials not configured")
+            return
+            
+        # Check current status
+        is_authenticated = False
+        user_info = None
+        
+        if hasattr(self, 'lastfm_auth'):
+            is_authenticated = self.lastfm_auth.is_authenticated()
+            user_info = self.lastfm_auth.get_user_info()
+        
+        # Create management menu
+        auth_menu = QMenu(self)
+        
+        # Show status
+        status_action = QAction(f"Status: {'Authenticated' if is_authenticated else 'Not Authenticated'}", self)
+        status_action.setEnabled(False)
+        auth_menu.addAction(status_action)
+        
+        # Show user info if available
+        if user_info:
+            user_info_action = QAction(f"User: {user_info.get('name')} (Playcount: {user_info.get('playcount', 'N/A')})", self)
+            user_info_action.setEnabled(False)
+            auth_menu.addAction(user_info_action)
+        
+        auth_menu.addSeparator()
+        
+        # Authentication actions
+        authenticate_action = QAction("Authenticate with LastFM", self)
+        authenticate_action.triggered.connect(self._authenticate_lastfm)
+        auth_menu.addAction(authenticate_action)
+        
+        if is_authenticated:
+            clear_action = QAction("Clear Authentication", self)
+            clear_action.triggered.connect(self._clear_lastfm_auth)
+            auth_menu.addAction(clear_action)
+        
+        auth_menu.addSeparator()
+        
+        # Test actions for authenticated users
+        if is_authenticated:
+            test_action = QAction("Test LastFM Connection", self)
+            test_action.triggered.connect(self._test_lastfm_connection)
+            auth_menu.addAction(test_action)
+        
+        # Show menu
+        auth_menu.exec(QCursor.pos())
+
+    def _authenticate_lastfm(self):
+        """Authenticate with LastFM by getting password from user"""
+        if not hasattr(self, 'lastfm_auth') or not self.lastfm_username:
+            QMessageBox.warning(self, "Error", "LastFM configuration not available")
+            return
+        
+        # Prompt for password
+        password, ok = QInputDialog.getText(
+            self,
+            "LastFM Authentication",
+            f"Enter password for LastFM user {self.lastfm_username}:",
+            QLineEdit.EchoMode.Password
+        )
+        
+        if not ok or not password:
+            self.results_text.append("Authentication canceled.")
+            return
+        
+        # Update password in auth manager
+        self.lastfm_auth.password = password
+        
+        # Try to authenticate
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Authenticating with LastFM...")
+        QApplication.processEvents()
+        
+        if self.lastfm_auth.authenticate():
+            self.results_text.append("Authentication successful!")
+            user_info = self.lastfm_auth.get_user_info()
+            if user_info:
+                self.results_text.append(f"Logged in as: {user_info.get('name')}")
+                self.results_text.append(f"Playcount: {user_info.get('playcount', 'N/A')}")
+        else:
+            self.results_text.append("Authentication failed. Please check your username and password.")
+
+    def _clear_lastfm_auth(self):
+        """Clear LastFM authentication data"""
+        if hasattr(self, 'lastfm_auth'):
+            self.lastfm_auth.clear_session()
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append("LastFM authentication data cleared.")
+            QMessageBox.information(self, "Authentication Cleared", "LastFM authentication data has been cleared.")
+
+    def _test_lastfm_connection(self):
+        """Test the LastFM connection with a simple API call"""
+        if not hasattr(self, 'lastfm_auth'):
+            QMessageBox.warning(self, "Error", "LastFM configuration not available")
+            return
+        
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Testing LastFM connection...")
+        QApplication.processEvents()
+        
+        # Get user info
+        user_info = self.lastfm_auth.get_user_info()
+        if user_info:
+            self.results_text.append("Connection successful!")
+            self.results_text.append(f"User: {user_info.get('name')}")
+            self.results_text.append(f"Playcount: {user_info.get('playcount', 'N/A')}")
+            self.results_text.append(f"URL: {user_info.get('url', 'N/A')}")
+            
+            # Try to get top artists if we're authenticated
+            if self.lastfm_auth.is_authenticated():
+                self.results_text.append("\nFetching top artists...")
+                QApplication.processEvents()
+                
+                top_artists = self.lastfm_auth.get_top_artists(limit=5)
+                if top_artists:
+                    self.results_text.append("\nTop 5 Artists:")
+                    for artist in top_artists:
+                        self.results_text.append(f"• {artist['name']} (Playcount: {artist['playcount']})")
+                else:
+                    self.results_text.append("Could not retrieve top artists.")
+        else:
+            self.results_text.append("Connection failed. Please check your LastFM credentials.")
+
+    def load_lastfm_settings(self, module_args):
+        """Carga la configuración de LastFM basándose únicamente en la presencia de credenciales"""
+        try:
+            # Variables para almacenar credenciales
+            api_key = None
+            api_secret = None
+            username = None
+            
+            # 1. Intentar cargar desde sección lastfm específica
+            lastfm_config = module_args.get('lastfm', {})
+            if lastfm_config:
+                api_key = lastfm_config.get('api_key')
+                api_secret = lastfm_config.get('api_secret')
+                username = lastfm_config.get('username')
+                
+                if api_key and username:
+                    logger.info("Credenciales LastFM cargadas desde sección lastfm")
+            
+            # 2. Intentar cargar desde global_theme_config si algo falta
+            if not (api_key and username):
+                global_config = module_args.get('global_theme_config', {})
+                if global_config:
+                    api_key = api_key or global_config.get('lastfm_api_key')
+                    api_secret = api_secret or global_config.get('lastfm_api_secret')
+                    username = username or global_config.get('lastfm_username')
+                    
+                    if api_key and username:
+                        logger.info("Credenciales LastFM cargadas desde global_theme_config")
+            
+            # 3. Cargar desde kwargs directos (mayor prioridad)
+            api_key = module_args.get('lastfm_api_key', api_key)
+            api_secret = module_args.get('lastfm_api_secret', api_secret)
+            username = module_args.get('lastfm_username', username)
+            
+            # Actualizar propiedades de la clase
+            self.lastfm_api_key = api_key
+            self.lastfm_api_secret = api_secret
+            self.lastfm_username = username
+            
+            # Determinar si LastFM está habilitado basado ÚNICAMENTE en la presencia de credenciales
+            self.lastfm_enabled = bool(self.lastfm_api_key and self.lastfm_username)
+            
+            if self.lastfm_enabled:
+                logger.info(f"LastFM configurado para usuario: {self.lastfm_username}")
+            else:
+                logger.warning("LastFM no configurado - API key o nombre de usuario faltantes")
+
+        except Exception as e:
+            logger.error(f"Error cargando configuración de LastFM: {e}")
+            self.lastfm_enabled = False
+
 
 
     def load_module_settings(self, module_args):
