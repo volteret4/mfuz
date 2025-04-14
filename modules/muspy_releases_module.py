@@ -11,7 +11,7 @@ try:
     from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                                 QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
                                 QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
-                                QMenu, QInputDialog)
+                                QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem)
     from PyQt6.QtCore import pyqtSignal, Qt, QPoint
     from PyQt6.QtGui import QColor, QTextDocument, QAction
     QT_AVAILABLE = True
@@ -567,12 +567,12 @@ class MuspyArtistModule(BaseModule):
 
     def load_artists_from_file(self):
         """
-        Ejecuta un script para cargar artistas desde la base de datos, 
-        muestra un diálogo con checkboxes para seleccionar artistas y
-        guarda los seleccionados en un archivo JSON
+        Executes a script to load artists from the database,
+        shows a dialog with checkboxes for selecting artists and
+        saves the selected ones to a JSON file
         """
         try:
-            # Asegurar que tenemos PROJECT_ROOT
+            # Ensure we have PROJECT_ROOT
             self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
             # Ensure db_path is absolute
@@ -585,7 +585,7 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Using database path: {full_db_path}")
             self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
 
-            # Construir la ruta al script
+            # Build path to the script
             script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
             
             # Check if script exists
@@ -593,10 +593,10 @@ class MuspyArtistModule(BaseModule):
                 self.results_text.append(f"Error: Script not found at {script_path}")
                 return
                 
-            # Ejecutar el script de consulta
+            # Execute the query script for artists
             self.results_text.clear()
-            self.results_text.append("Ejecutando consulta de artistas en la base de datos...")
-            QApplication.processEvents()  # Actualizar UI
+            self.results_text.append("Executing query for artists in the database...")
+            QApplication.processEvents()  # Update UI
             
             cmd = f"python {script_path} --db {full_db_path} --buscar artistas"
             self.results_text.append(f"Running command: {cmd}")
@@ -605,28 +605,27 @@ class MuspyArtistModule(BaseModule):
             result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
             
             if result.returncode != 0:
-                self.results_text.append(f"Error al ejecutar el script: {result.stderr}")
+                self.results_text.append(f"Error executing script: {result.stderr}")
                 return
                 
-            # Fix for the 'NoneType' is not subscriptable error
-            # Cargar los resultados como JSON
+            # Load results as JSON
             try:
                 artists_data = json.loads(result.stdout)
             except json.JSONDecodeError as e:
-                self.results_text.append(f"Error al procesar la salida del script: {e}")
+                self.results_text.append(f"Error processing script output: {e}")
                 self.results_text.append(f"Script output: {result.stdout[:500]}...")
                 return
             
-            # Verificar si hay artistas
+            # Check if there are artists
             if not artists_data:
-                self.results_text.append("No se encontraron artistas en la base de datos.")
+                self.results_text.append("No artists found in the database.")
                 return
             
             # Ensure cache directory exists
             cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
             os.makedirs(cache_dir, exist_ok=True)
             
-            # Cargar artistas existentes si el archivo ya existe
+            # Load existing artists if file already exists
             json_path = os.path.join(cache_dir, "artists_selected.json")
             existing_artists = []
             if os.path.exists(json_path):
@@ -638,68 +637,73 @@ class MuspyArtistModule(BaseModule):
                         else:
                             self.results_text.append("Existing artists file is empty, using empty list")
                 except Exception as e:
-                    self.results_text.append(f"Error al cargar artistas existentes: {e}")
+                    self.results_text.append(f"Error loading existing artists: {e}")
             
-            # Create a list of existing artist names - FIX FOR THE ERROR
+            # Create a list of existing artist names
             existing_names = set()
             if existing_artists:
                 existing_names = {artist.get("nombre", "") for artist in existing_artists if isinstance(artist, dict) and "nombre" in artist}
             
-                
-            # Crear el diálogo usando el archivo UI
+            # Create the dialog using the UI file
             dialog = QDialog(self)
             ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            
             if os.path.exists(ui_file_path):
                 try:
-                    # Cargar el archivo UI
+                    # Load the UI file
                     uic.loadUi(ui_file_path, dialog)
                     
-                    # Actualizar la etiqueta con el número de artistas
+                    # Update the label with artist count
                     dialog.info_label.setText(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
                     
-                    # Limpiar los artistas de ejemplo que vienen en el UI
+                    # Remove example checkboxes from scroll_layout
                     for i in reversed(range(dialog.scroll_layout.count())):
                         widget = dialog.scroll_layout.itemAt(i).widget()
                         if widget is not None:
                             widget.deleteLater()
                     
-                    # Crear checkboxes para cada artista
+                    # Create checkboxes for each artist
                     checkboxes = []
                     for artist in artists_data:
-                        checkbox = QCheckBox(f"{artist['nombre']} ({artist['mbid']})")
-                        checkbox.setChecked(artist['nombre'] in existing_names)  # Pre-seleccionar si ya existe
-                        checkbox.setProperty("artist_data", artist)  # Almacenar datos del artista en el checkbox
+                        artist_name = artist.get('nombre', '')
+                        artist_mbid = artist.get('mbid', '')
+                        
+                        checkbox = QCheckBox(f"{artist_name} ({artist_mbid})")
+                        checkbox.setChecked(artist_name in existing_names)  # Pre-select if already exists
+                        checkbox.setProperty("artist_data", artist)  # Store artist data in checkbox
                         checkboxes.append(checkbox)
                         dialog.scroll_layout.addWidget(checkbox)
                     
-                    # Conectar señales
+                    # Connect signals
                     dialog.search_input.textChanged.connect(lambda text: self.filter_artists(text, checkboxes))
-                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
-                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
-                    dialog.buttons.accepted.connect(dialog.accept)
-                    dialog.buttons.rejected.connect(dialog.reject)
+                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
+                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
+                    
                 except Exception as e:
-                    self.results_text.append(f"Error cargando UI de selección de artistas: {e}")
+                    self.results_text.append(f"Error loading UI for artist selection: {e}")
                     return
             else:
-                self.results_text.append(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
-                self._fallback_artist_selection_dialog(dialog, artists_data, existing_names)
-            
-            # Mostrar el diálogo
-            if dialog.exec() == 1:  # 1 generalmente significa "aceptado"
-                self.results_text.append("Diálogo aceptado, procesando selección...")
+                self.results_text.append(f"UI file not found: {ui_file_path}")
+                return
+                
+            # Show the dialog
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                self.results_text.append("Dialog accepted, processing selection...")
             else:
-                self.results_text.append("Operación cancelada por el usuario.")
+                self.results_text.append("Operation canceled by user.")
                 return
             
-            # Recopilar artistas seleccionados
+            # Collect selected artists
             selected_artists = []
-            for i in range(dialog.scroll_layout.count()):
-                widget = dialog.scroll_layout.itemAt(i).widget()
-                if isinstance(widget, QCheckBox) and widget.isChecked():
-                    selected_artists.append(widget.property("artist_data"))
             
-            # Guardar artistas seleccionados en JSON
+            # Get selected artists from checkboxes
+            for checkbox in checkboxes:
+                if checkbox.isChecked():
+                    artist_data = checkbox.property("artist_data")
+                    if artist_data:
+                        selected_artists.append(artist_data)
+            
+            # Save selected artists to JSON
             try:
                 # Ensure the directory exists
                 os.makedirs(os.path.dirname(json_path), exist_ok=True)
@@ -710,220 +714,318 @@ class MuspyArtistModule(BaseModule):
                 # Update artists in the instance
                 self.artists = [artist["nombre"] for artist in selected_artists]
                 
-                self.results_text.append(f"Se guardaron {len(selected_artists)} artistas en {json_path}")
+                self.results_text.append(f"Saved {len(selected_artists)} artists to {json_path}")
                 
                 # Show popup with results
                 QMessageBox.information(
                     self, 
-                    "Artistas Guardados", 
-                    f"Se guardaron {len(selected_artists)} artistas para sincronización.\n"
-                    f"Puedes sincronizarlos con Muspy, Last.fm o Spotify usando el botón de sincronización."
+                    "Artists Saved", 
+                    f"Saved {len(selected_artists)} artists for synchronization.\n"
+                    f"You can synchronize them with Muspy, Last.fm or Spotify using the sync button."
                 )
             except Exception as e:
-                self.results_text.append(f"Error al guardar los artistas: {e}")
+                self.results_text.append(f"Error saving artists: {e}")
         
         except Exception as e:
             self.results_text.append(f"Error: {str(e)}")
-            logger.error(f"Error en load_artists_from_file: {e}", exc_info=True)
+            logger.error(f"Error in load_artists_from_file: {e}", exc_info=True)
+
+    def filter_artists(self, search_text, checkboxes):
+        """
+        Filter artists in the dialog by search text
+        
+        Args:
+            search_text (str): Text to search for
+            checkboxes (list): List of artist checkboxes
+        """
+        search_text = search_text.lower()
+        for checkbox in checkboxes:
+            artist_data = checkbox.property("artist_data")
+            
+            # Show/hide based on artist name match
+            if isinstance(artist_data, dict) and "nombre" in artist_data:
+                artist_name = artist_data["nombre"].lower()
+                visible = search_text in artist_name
+                checkbox.setVisible(visible)
+            else:
+                # Fallback to checkbox text if artist_data not available
+                checkbox_text = checkbox.text().lower()
+                visible = search_text in checkbox_text
+                checkbox.setVisible(visible)
 
 
     def load_albums_from_file(self):
-            """
-            Ejecuta un script para cargar álbumes desde la base de datos, 
-            muestra un diálogo con checkboxes para seleccionar álbumes y
-            guarda los seleccionados en un archivo JSON
-            """
-            try:
-                # Asegurar que tenemos PROJECT_ROOT
-                self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
+        """
+        Executes a script to load albums from the database,
+        shows a dialog with a tree view for selecting albums and
+        saves the selected ones to a JSON file
+        """
+        try:
+            # Ensure we have PROJECT_ROOT
+            self.results_text.append(f"PROJECT_ROOT: {PROJECT_ROOT}")
 
-                # Ensure db_path is absolute
-                if not os.path.isabs(self.db_path):
-                    full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
-                else:
-                    full_db_path = self.db_path
-                
-                # Print debug info
-                self.results_text.append(f"Using database path: {full_db_path}")
-                self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
-
-                # Construir la ruta al script
-                script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
-                
-                # Check if script exists
-                if not os.path.exists(script_path):
-                    self.results_text.append(f"Error: Script not found at {script_path}")
-                    return
-                    
-                # Ejecutar el script de consulta para álbumes
-                self.results_text.clear()
-                self.results_text.append("Ejecutando consulta de álbumes en la base de datos...")
-                QApplication.processEvents()  # Actualizar UI
-                
-                cmd = f"python {script_path} --db {full_db_path} --buscar albums"
-                self.results_text.append(f"Running command: {cmd}")
-                QApplication.processEvents()
-                
-                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
-                
-                if result.returncode != 0:
-                    self.results_text.append(f"Error al ejecutar el script: {result.stderr}")
-                    return
-                    
-                # Cargar los resultados como JSON
-                try:
-                    albums_data = json.loads(result.stdout)
-                except json.JSONDecodeError as e:
-                    self.results_text.append(f"Error al procesar la salida del script: {e}")
-                    self.results_text.append(f"Script output: {result.stdout[:500]}...")
-                    return
-                
-                # Verificar si hay álbumes
-                if not albums_data:
-                    self.results_text.append("No se encontraron álbumes en la base de datos.")
-                    return
-                
-                # Ensure cache directory exists
-                cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
-                os.makedirs(cache_dir, exist_ok=True)
-                
-                # Cargar álbumes existentes si el archivo ya existe
-                json_path = os.path.join(cache_dir, "albums_selected.json")
-                existing_albums = []
-                if os.path.exists(json_path):
-                    try:
-                        with open(json_path, 'r', encoding='utf-8') as f:
-                            data = f.read()
-                            if data:  # Only try to load if not empty
-                                existing_albums = json.loads(data)
-                            else:
-                                self.results_text.append("Existing albums file is empty, using empty list")
-                    except Exception as e:
-                        self.results_text.append(f"Error al cargar álbumes existentes: {e}")
-                
-                # Create a list of existing album IDs - For checking if already selected
-                existing_ids = set()
-                if existing_albums:
-                    existing_ids = {album.get("mbid", "") for album in existing_albums if isinstance(album, dict) and "mbid" in album}
-                
-                    
-                # Crear el diálogo para selección de álbumes
-                dialog = QDialog(self)
-                dialog.setWindowTitle("Seleccionar Álbumes")
-                dialog.setMinimumWidth(700)  # Wider to accommodate album titles
-                dialog.setMinimumHeight(600)
-                
-                # Layout principal
-                layout = QVBoxLayout(dialog)
-                
-                # Etiqueta informativa
-                info_label = QLabel(f"Selecciona los álbumes que deseas guardar ({len(albums_data)} encontrados)")
-                layout.addWidget(info_label)
-                
-                # Campo de búsqueda
-                search_layout = QHBoxLayout()
-                search_label = QLabel("Buscar:")
-                search_input = QLineEdit()
-                search_layout.addWidget(search_label)
-                search_layout.addWidget(search_input)
-                layout.addLayout(search_layout)
-                
-                # Área de scroll con checkboxes
-                scroll_area = QScrollArea()
-                scroll_area.setWidgetResizable(True)
-                layout.addWidget(scroll_area)
-                
-                scroll_content = QWidget()
-                scroll_layout = QVBoxLayout(scroll_content)
-                
-                # Lista para almacenar los checkboxes
-                checkboxes = []
-                
-                # Crear un checkbox para cada álbum
-                for album in albums_data:
-                    artist_name = album.get('artista', 'Unknown Artist')
-                    album_name = album.get('nombre', 'Unknown Album')
-                    album_mbid = album.get('mbid', '')
-                    
-                    checkbox_text = f"{artist_name} - {album_name}"
-                    if album_mbid:
-                        checkbox_text += f" ({album_mbid})"
-                    
-                    checkbox = QCheckBox(checkbox_text)
-                    checkbox.setChecked(album_mbid in existing_ids)  # Pre-seleccionar si ya existe
-                    checkbox.setProperty("album_data", album)  # Almacenar datos del álbum en el checkbox
-                    checkboxes.append(checkbox)
-                    scroll_layout.addWidget(checkbox)
-                
-                scroll_area.setWidget(scroll_content)
-                
-                # Botones de selección
-                button_layout = QHBoxLayout()
-                select_all_button = QPushButton("Seleccionar Todos")
-                deselect_all_button = QPushButton("Deseleccionar Todos")
-                button_layout.addWidget(select_all_button)
-                button_layout.addWidget(deselect_all_button)
-                layout.addLayout(button_layout)
-                
-                # Botones de aceptar/cancelar
-                buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
-                layout.addWidget(buttons)
-                
-                # Guardamos referencias para acceder a ellos desde otras funciones
-                dialog.scroll_layout = scroll_layout
-                dialog.search_input = search_input
-                dialog.select_all_button = select_all_button
-                dialog.deselect_all_button = deselect_all_button
-                dialog.buttons = buttons
-                
-                # Conectar señales
-                search_input.textChanged.connect(lambda text: self.filter_albums(text, checkboxes))
-                select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
-                deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
-                buttons.accepted.connect(dialog.accept)
-                buttons.rejected.connect(dialog.reject)
-                
-                # Mostrar el diálogo
-                if dialog.exec() == 1:  # 1 generalmente significa "aceptado"
-                    self.results_text.append("Diálogo aceptado, procesando selección...")
-                else:
-                    self.results_text.append("Operación cancelada por el usuario.")
-                    return
-                
-                # Recopilar álbumes seleccionados
-                selected_albums = []
-                for i in range(dialog.scroll_layout.count()):
-                    widget = dialog.scroll_layout.itemAt(i).widget()
-                    if isinstance(widget, QCheckBox) and widget.isChecked():
-                        album_data = widget.property("album_data")
-                        # Asegurarse de que los datos del álbum incluyen el artista y el MBID
-                        if "artista" not in album_data:
-                            album_data["artista"] = "Unknown Artist"
-                        selected_albums.append(album_data)
-                
-                # Guardar álbumes seleccionados en JSON
-                try:
-                    # Ensure the directory exists
-                    os.makedirs(os.path.dirname(json_path), exist_ok=True)
-                    
-                    with open(json_path, 'w', encoding='utf-8') as f:
-                        json.dump(selected_albums, f, ensure_ascii=False, indent=2)
-                    
-                    self.results_text.append(f"Se guardaron {len(selected_albums)} álbumes en {json_path}")
-                    
-                    # Show popup with results
-                    QMessageBox.information(
-                        self, 
-                        "Álbumes Guardados", 
-                        f"Se guardaron {len(selected_albums)} álbumes para sincronización.\n"
-                        f"Puedes sincronizarlos con Muspy, Last.fm o Spotify usando el botón de sincronización."
-                    )
-                except Exception as e:
-                    self.results_text.append(f"Error al guardar los álbumes: {e}")
+            # Ensure db_path is absolute
+            if not os.path.isabs(self.db_path):
+                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            else:
+                full_db_path = self.db_path
             
+            # Print debug info
+            self.results_text.append(f"Using database path: {full_db_path}")
+            self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
+
+            # Build path to the script
+            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            
+            # Check if script exists
+            if not os.path.exists(script_path):
+                self.results_text.append(f"Error: Script not found at {script_path}")
+                return
+                
+            # Execute the query script
+            self.results_text.clear()
+            self.results_text.append("Executing album query in the database...")
+            QApplication.processEvents()  # Update UI
+            
+            cmd = f"python {script_path} --db {full_db_path} --buscar albums"
+            self.results_text.append(f"Running command: {cmd}")
+            QApplication.processEvents()
+            
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                self.results_text.append(f"Error executing script: {result.stderr}")
+                return
+                
+            # Load results as JSON
+            try:
+                albums_data = json.loads(result.stdout)
+            except json.JSONDecodeError as e:
+                self.results_text.append(f"Error processing script output: {e}")
+                self.results_text.append(f"Script output: {result.stdout[:500]}...")
+                return
+            
+            # Check if there are albums
+            if not albums_data:
+                self.results_text.append("No albums found in the database.")
+                return
+            
+            # Ensure cache directory exists
+            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+            os.makedirs(cache_dir, exist_ok=True)
+            
+            # Load existing albums if file already exists
+            json_path = os.path.join(cache_dir, "albums_selected.json")
+            existing_albums = []
+            if os.path.exists(json_path):
+                try:
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        data = f.read()
+                        if data:  # Only try to load if not empty
+                            existing_albums = json.loads(data)
+                        else:
+                            self.results_text.append("Existing albums file is empty, using empty list")
+                except Exception as e:
+                    self.results_text.append(f"Error loading existing albums: {e}")
+            
+            # Create a set of existing album MBIDs for checking
+            existing_mbids = set()
+            if existing_albums:
+                existing_mbids = {album.get("mbid", "") for album in existing_albums if isinstance(album, dict) and "mbid" in album}
+            
+            # Create the dialog using the UI file
+            dialog = QDialog(self)
+            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            
+            if os.path.exists(ui_file_path):
+                try:
+                    # Load the UI file
+                    uic.loadUi(ui_file_path, dialog)
+                    
+                    # Update the label with album count
+                    dialog.info_label.setText(f"Selecciona los álbumes que deseas guardar ({len(albums_data)} encontrados)")
+                    
+                    # Remove example checkboxes from scroll_layout
+                    for i in reversed(range(dialog.scroll_layout.count())):
+                        widget = dialog.scroll_layout.itemAt(i).widget()
+                        if widget is not None:
+                            widget.deleteLater()
+                    
+                    # Create the tree widget to replace checkboxes
+                    tree = QTreeWidget()
+                    tree.setColumnCount(4)
+                    tree.setHeaderLabels(["Artista", "Álbum", "Año", "MBID"])
+                    tree.setAlternatingRowColors(True)
+                    tree.setSortingEnabled(True)
+                    
+                    # Add the tree to the scroll layout
+                    dialog.scroll_layout.addWidget(tree)
+                    
+                    # Organize albums by artist
+                    artists = {}
+                    for album in albums_data:
+                        # Get correct album properties from the JSON data
+                        artist_name = album.get("artista", "Unknown Artist")
+                        album_name = album.get("album", "Unknown Album")
+                        album_mbid = album.get("mbid", "")
+                        
+                        # Add to artist dictionary
+                        if artist_name not in artists:
+                            artists[artist_name] = []
+                        
+                        artists[artist_name].append(album)
+                    
+                    # Create checkboxes for each album, organized by artist
+                    checkboxes = []
+                    
+                    # Populate tree with albums grouped by artist
+                    for artist_name, artist_albums in artists.items():
+                        # Create artist parent item
+                        artist_item = QTreeWidgetItem(tree)
+                        artist_item.setText(0, "")
+                        artist_item.setText(1, artist_name)
+                        artist_item.setExpanded(True)
+                        
+                        # Set bold font for artist
+                        font = artist_item.font(1)
+                        font.setBold(True)
+                        artist_item.setFont(1, font)
+                        
+                        # Add each album as a child item
+                        for album in artist_albums:
+                            album_item = QTreeWidgetItem()
+                            
+                            # Create a checkbox for the album
+                            checkbox = QCheckBox()
+                            checkbox.setText(f"{album.get('album', 'Unknown Album')}")
+                            checkbox.setChecked(album.get("mbid", "") in existing_mbids)
+                            checkbox.setProperty("album_data", album)
+                            checkboxes.append(checkbox)
+                            
+                            # Add album data to tree item
+                            album_item = QTreeWidgetItem(artist_item)
+                            album_item.setText(0, artist_name)
+                            album_item.setText(1, album.get("album", "Unknown Album"))
+                            album_item.setText(2, album.get("year", ""))
+                            album_item.setText(3, album.get("mbid", ""))
+                            
+                            # Store checkbox in first column
+                            tree.setItemWidget(album_item, 1, checkbox)
+                            
+                            # Store original album data in the item
+                            album_item.setData(0, Qt.ItemDataRole.UserRole, album)
+                    
+                    # Resize columns to content
+                    for i in range(4):
+                        tree.resizeColumnToContents(i)
+                    
+                    # Connect signals
+                    dialog.search_input.textChanged.connect(lambda text: self.filter_albums_tree(text, tree, checkboxes))
+                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
+                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
+                    
+                    # Store references for access from other functions
+                    dialog.tree = tree
+                    dialog.checkboxes = checkboxes
+                    
+                except Exception as e:
+                    self.results_text.append(f"Error loading UI for album selection: {e}")
+                    return
+            else:
+                self.results_text.append(f"UI file not found: {ui_file_path}")
+                return
+                
+            # Show the dialog
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                self.results_text.append("Dialog accepted, processing selection...")
+            else:
+                self.results_text.append("Operation canceled by user.")
+                return
+            
+            # Collect selected albums
+            selected_albums = []
+            
+            # Get selected albums from checkboxes
+            for checkbox in checkboxes:
+                if checkbox.isChecked():
+                    album_data = checkbox.property("album_data")
+                    if album_data:
+                        selected_albums.append(album_data)
+            
+            # Save selected albums to JSON
+            try:
+                # Ensure the directory exists
+                os.makedirs(os.path.dirname(json_path), exist_ok=True)
+                
+                with open(json_path, 'w', encoding='utf-8') as f:
+                    json.dump(selected_albums, f, ensure_ascii=False, indent=2)
+                
+                self.results_text.append(f"Saved {len(selected_albums)} albums to {json_path}")
+                
+                # Show popup with results
+                QMessageBox.information(
+                    self, 
+                    "Albums Saved", 
+                    f"Saved {len(selected_albums)} albums for synchronization.\n"
+                    f"You can synchronize them with Muspy, Last.fm or Spotify using the sync button."
+                )
             except Exception as e:
-                self.results_text.append(f"Error: {str(e)}")
-                logger.error(f"Error en load_albums_from_file: {e}", exc_info=True)
+                self.results_text.append(f"Error saving albums: {e}")
+        
+        except Exception as e:
+            self.results_text.append(f"Error: {str(e)}")
+            logger.error(f"Error in load_albums_from_file: {e}", exc_info=True)
+
+    def filter_albums_tree(self, search_text, tree, checkboxes=None):
+        """
+        Filter albums in the tree view by search text
+        """
+        search_text = search_text.lower()
+        
+        # Process all top-level items (artists)
+        for i in range(tree.topLevelItemCount()):
+            artist_item = tree.topLevelItem(i)
+            visible_children = 0
+            
+            # El nombre del artista ahora está en la columna 0
+            artist_name = artist_item.text(0).lower()
+            
+            # Check each album under this artist
+            for j in range(artist_item.childCount()):
+                album_item = artist_item.child(j)
+                
+                # El nombre del álbum ahora está en la columna 1
+                album_name = album_item.text(1).lower()
+                
+                # Show/hide based on search
+                if search_text in album_name or search_text in artist_name:
+                    album_item.setHidden(False)
+                    if checkboxes:
+                        # Necesitas ajustar dónde buscas el checkbox si estás usando setItemWidget
+                        checkbox = tree.itemWidget(album_item, 1)  # Ahora en columna 1
+                        if checkbox in checkboxes:
+                            checkbox.setHidden(False)
+                    visible_children += 1
+                else:
+                    album_item.setHidden(True)
+                    if checkboxes:
+                        checkbox = tree.itemWidget(album_item, 1)  # Ahora en columna 1
+                        if checkbox in checkboxes:
+                            checkbox.setHidden(True)
+            
+            # Show/hide artist based on whether any children are visible
+            artist_item.setHidden(visible_children == 0)
+            
+            # If search text matches artist name, show all albums
+            if search_text in artist_name:
+                artist_item.setHidden(False)
+                for j in range(artist_item.childCount()):
+                    album_item = artist_item.child(j)
+                    album_item.setHidden(False)
+                    if checkboxes:
+                        checkbox = tree.itemWidget(album_item, 1)  # Ahora en columna 1
+                        if checkbox in checkboxes:
+                            checkbox.setHidden(False)
 
 
     def filter_albums(self, search_text, checkboxes):
@@ -944,6 +1046,264 @@ class MuspyArtistModule(BaseModule):
             
             visible = search_text in artist_name or search_text in album_name
             checkbox.setVisible(visible)
+
+
+    def get_albums_with_mbids(self, artist_name=None):
+        """
+        Get albums and their MBIDs from the local database using consultar_items_db
+        
+        Args:
+            artist_name (str, optional): Filter by artist name
+            
+        Returns:
+            list: Albums with their MBIDs and metadata
+        """
+        try:
+            # Determine database path
+            if not os.path.isabs(self.db_path):
+                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            else:
+                full_db_path = self.db_path
+                
+            # Ensure script path is available
+            if not self.query_db_script_path or not os.path.exists(self.query_db_script_path):
+                script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            else:
+                script_path = self.query_db_script_path
+                
+            # Build command
+            if artist_name:
+                cmd = f"python {script_path} --db {full_db_path} --artist \"{artist_name}\" --album-info"
+            else:
+                cmd = f"python {script_path} --db {full_db_path} --ultimos --limite 500"
+                
+            self.logger.info(f"Running command: {cmd}")
+            
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                self.logger.error(f"Error executing script: {result.stderr}")
+                return []
+                
+            # Parse JSON result
+            albums_data = json.loads(result.stdout)
+            
+            # Log results for debugging
+            self.logger.debug(f"Found {len(albums_data)} albums")
+            if albums_data and len(albums_data) > 0:
+                self.logger.debug(f"Sample album data: {albums_data[0]}")
+                
+            return albums_data
+            
+        except Exception as e:
+            self.logger.error(f"Error getting albums with MBIDs: {e}", exc_info=True)
+            return []
+
+
+    def display_releases_tree(self, releases, group_by_artist=True):
+        """
+        Display releases in a tree view grouped by artist
+        
+        Args:
+            releases (list): List of release dictionaries
+            group_by_artist (bool): Whether to group by artist or not
+        """
+        # Clear any existing table/tree widget
+        for i in reversed(range(self.layout().count())): 
+            item = self.layout().itemAt(i)
+            if item is not None:
+                widget = item.widget()
+                if widget is not None and (isinstance(widget, QTreeWidget) or 
+                                        isinstance(widget, QTableWidget) or 
+                                        (hasattr(self, 'add_follow_button') and widget == self.add_follow_button)):
+                    self.layout().removeItem(item)
+                    widget.deleteLater()
+        
+        # Create new tree widget
+        tree = QTreeWidget()
+        tree.setHeaderLabels(["Artist/Release", "Type", "Date", "Details"])
+        tree.setColumnCount(4)
+        tree.setAlternatingRowColors(True)
+        tree.setSortingEnabled(True)
+        
+        # Organize releases by artist if requested
+        if group_by_artist:
+            artists = {}
+            for release in releases:
+                artist_name = release.get('artist', {}).get('name', 'Unknown Artist')
+                if artist_name not in artists:
+                    artists[artist_name] = []
+                artists[artist_name].append(release)
+                
+            # Create tree items
+            for artist_name, artist_releases in artists.items():
+                # Create parent item for artist
+                artist_item = QTreeWidgetItem(tree)
+                artist_item.setText(0, artist_name)
+                artist_item.setText(1, "")          # Álbum vacío para el nodo padre
+                artist_item.setExpanded(True)  # Expand by default
+                
+                # Add child items for each release
+                for release in artist_releases:
+                    release_item = QTreeWidgetItem(artist_item)
+                    release_item.setText(0, release.get('title', 'Unknown'))
+                    release_item.setText(1, release.get('type', 'Unknown').title())
+                    release_item.setText(2, release.get('date', 'No date'))
+                    
+                    # Format details
+                    details = []
+                    if release.get('format'):
+                        details.append(f"Format: {release.get('format')}")
+                    if release.get('tracks'):
+                        details.append(f"Tracks: {release.get('tracks')}")
+                    release_item.setText(3, "; ".join(details) if details else "")
+                    
+                    # Store release data for later reference
+                    release_item.setData(0, Qt.ItemDataRole.UserRole, release)
+                    
+                    # Color by date
+                    try:
+                        release_date = datetime.datetime.strptime(release.get('date', '9999-99-99'), "%Y-%m-%d").date()
+                        today = datetime.date.today()
+                        one_month = today + datetime.timedelta(days=30)
+                        
+                        if release_date <= today + datetime.timedelta(days=7):
+                            # Coming very soon - red background
+                            for col in range(4):
+                                release_item.setBackground(col, QColor(31, 60, 28))
+                        elif release_date <= one_month:
+                            # Coming in a month - yellow background
+                            for col in range(4):
+                                release_item.setBackground(col, QColor(60, 28, 31))
+                    except ValueError:
+                        # Invalid date format, don't color
+                        pass
+        else:
+            # Simple flat list
+            for release in releases:
+                release_item = QTreeWidgetItem(tree)
+                artist_name = release.get('artist', {}).get('name', 'Unknown Artist')
+                release_item.setText(0, f"{artist_name} - {release.get('title', 'Unknown')}")
+                release_item.setText(1, release.get('type', 'Unknown').title())
+                release_item.setText(2, release.get('date', 'No date'))
+                
+                # Format details
+                details = []
+                if release.get('format'):
+                    details.append(f"Format: {release.get('format')}")
+                if release.get('tracks'):
+                    details.append(f"Tracks: {release.get('tracks')}")
+                release_item.setText(3, "; ".join(details) if details else "")
+                
+                # Store release data
+                release_item.setData(0, Qt.ItemDataRole.UserRole, release)
+        
+        # Resize columns to content
+        for i in range(4):
+            tree.resizeColumnToContents(i)
+        
+        # Set minimum width for tree
+        tree.setMinimumWidth(600)
+        
+        # Connect signals
+        tree.itemDoubleClicked.connect(self.on_release_double_clicked)
+        tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        tree.customContextMenuRequested.connect(self.show_release_context_menu)
+        
+        # Hide the text edit and add the tree to the layout
+        self.results_text.hide()
+        # Insert the tree widget
+        self.layout().insertWidget(self.layout().count() - 1, tree)
+        
+        # Store reference to tree widget
+        self.tree_widget = tree
+        
+        return tree
+
+        
+    def show_release_context_menu(self, position):
+        """Show context menu for releases in tree view"""
+        if not hasattr(self, 'tree_widget'):
+            return
+            
+        # Get the item at position
+        item = self.tree_widget.itemAt(position)
+        if not item:
+            return
+            
+        # Create context menu
+        menu = QMenu(self)
+        
+        # Check if this is a release item (has parent) or an artist item
+        if item.parent():
+            # This is a release item
+            release_data = item.data(0, Qt.ItemDataRole.UserRole)
+            
+            if release_data:
+                # Add actions for release
+                open_muspy_action = QAction("View on Muspy", self)
+                open_muspy_action.triggered.connect(lambda: self.open_muspy_release(release_data))
+                menu.addAction(open_muspy_action)
+                
+                # Check if MusicBrainz ID is available
+                if 'mbid' in release_data:
+                    open_mb_action = QAction("View on MusicBrainz", self)
+                    open_mb_action.triggered.connect(lambda: self.open_musicbrainz_release(release_data))
+                    menu.addAction(open_mb_action)
+        else:
+            # This is an artist item
+            artist_name = item.text(0)
+            
+            follow_action = QAction(f"Follow {artist_name} on Muspy", self)
+            follow_action.triggered.connect(lambda: self.follow_artist_from_tree(artist_name))
+            menu.addAction(follow_action)
+            
+            # Add more artist actions as needed
+        
+        # Show the menu
+        menu.exec(self.tree_widget.mapToGlobal(position))
+
+    def open_muspy_release(self, release_data):
+        """Open a release on Muspy website"""
+        if 'mbid' in release_data:
+            url = f"https://muspy.com/release/{release_data['mbid']}"
+            import webbrowser
+            webbrowser.open(url)
+
+    def open_musicbrainz_release(self, release_data):
+        """Open a release on MusicBrainz website"""
+        if 'mbid' in release_data:
+            url = f"https://musicbrainz.org/release/{release_data['mbid']}"
+            import webbrowser
+            webbrowser.open(url)
+
+    def follow_artist_from_tree(self, artist_name):
+        """Follow an artist from the tree view"""
+        # First get the MBID
+        mbid = self.get_mbid_artist_searched(artist_name)
+        
+        if mbid:
+            # Store current artist
+            self.current_artist = {"name": artist_name, "mbid": mbid}
+            
+            # Follow the artist
+            success = self.add_artist_to_muspy(mbid, artist_name)
+            
+            if success:
+                QMessageBox.information(self, "Success", f"Now following {artist_name} on Muspy")
+            else:
+                QMessageBox.warning(self, "Error", f"Could not follow {artist_name} on Muspy")
+        else:
+            QMessageBox.warning(self, "Error", f"Could not find MBID for {artist_name}")
+
+    def on_release_double_clicked(self, item, column):
+        """Handle double-click on a tree item"""
+        # Check if this is a release item
+        if item.parent():
+            # This is a release, get its data
+            release_data = item.data(0, Qt.ItemDataRole.UserRole)
+            if release_data and 'mbid' in release_data:
+                self.open_musicbrainz_release(release_data)
 
 
 
@@ -1023,19 +1383,7 @@ class MuspyArtistModule(BaseModule):
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
 
-    def filter_artists(self, search_text, checkboxes):
-        """
-        Filtra los artistas en el diálogo según el texto de búsqueda.
-        
-        Args:
-            search_text (str): Texto de búsqueda
-            checkboxes (list): Lista de checkboxes de artistas
-        """
-        search_text = search_text.lower()
-        for checkbox in checkboxes:
-            artist_data = checkbox.property("artist_data")
-            visible = search_text in artist_data["nombre"].lower()
-            checkbox.setVisible(visible)
+
 
     def search_and_get_releases(self):
         """Search for artist releases without adding to Muspy"""
@@ -1059,6 +1407,201 @@ class MuspyArtistModule(BaseModule):
         
         # Get releases for the artist
         self.get_artist_releases(mbid, artist_name)
+
+    def search_album_mbid(self):
+        """
+        Search for album MBID from the database
+        Shows a dialog with album search results and allows selection
+        """
+        # Get search term
+        search_term, ok = QInputDialog.getText(
+            self, "Search Album", "Enter album name to search:"
+        )
+        
+        if not ok or not search_term.strip():
+            return
+            
+        # Show searching indicator
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Searching for album: {search_term}...")
+        QApplication.processEvents()
+        
+        try:
+            # Use consultar_items_db to search
+            if not os.path.isabs(self.db_path):
+                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            else:
+                full_db_path = self.db_path
+                
+            # Build the command - search for albums
+            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            cmd = f"python {script_path} --db {full_db_path} --buscar albums --limite 100"
+            
+            # Run the command
+            result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+            
+            if result.returncode != 0:
+                self.results_text.append(f"Error searching albums: {result.stderr}")
+                return
+                
+            # Parse the results
+            albums = json.loads(result.stdout)
+            
+            # Filter by search term
+            search_term = search_term.lower()
+            matching_albums = []
+            
+            for album in albums:
+                album_name = album.get('album', '').lower()
+                artist_name = album.get('artista', '').lower()
+                
+                if search_term in album_name or search_term in artist_name:
+                    matching_albums.append(album)
+            
+            if not matching_albums:
+                self.results_text.append("No matching albums found.")
+                return
+                
+            # Create a dialog to display results
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Album Search Results")
+            dialog.setMinimumWidth(600)
+            dialog.setMinimumHeight(400)
+            
+            # Layout
+            layout = QVBoxLayout(dialog)
+            
+            # Tree widget for results
+            tree = QTreeWidget()
+            tree.setHeaderLabels(["Album", "Artist", "MBID"])
+            tree.setColumnCount(3)
+            tree.setAlternatingRowColors(True)
+            
+            # Add albums to tree
+            for album in matching_albums:
+                item = QTreeWidgetItem(tree)
+                item.setText(0, album.get('album', 'Unknown'))
+                item.setText(1, album.get('artista', 'Unknown'))
+                item.setText(2, album.get('mbid', 'None'))
+                
+                # Store album data
+                item.setData(0, Qt.ItemDataRole.UserRole, album)
+            
+            # Resize columns
+            for i in range(3):
+                tree.resizeColumnToContents(i)
+                
+            layout.addWidget(tree)
+            
+            # Buttons
+            button_layout = QHBoxLayout()
+            select_button = QPushButton("Get Releases")
+            cancel_button = QPushButton("Cancel")
+            
+            button_layout.addWidget(select_button)
+            button_layout.addWidget(cancel_button)
+            layout.addLayout(button_layout)
+            
+            # Connect signals
+            select_button.clicked.connect(dialog.accept)
+            cancel_button.clicked.connect(dialog.reject)
+            
+            # Store tree in dialog
+            dialog.tree = tree
+            
+            # Show dialog
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                # Get selected album
+                selected_items = tree.selectedItems()
+                if selected_items:
+                    selected_album = selected_items[0].data(0, Qt.ItemDataRole.UserRole)
+                    album_mbid = selected_album.get('mbid')
+                    
+                    if album_mbid:
+                        # Get releases using the album MBID
+                        self.get_releases_by_album_mbid(album_mbid, selected_album.get('album'), selected_album.get('artista'))
+                    else:
+                        QMessageBox.warning(self, "Error", "Selected album does not have a MusicBrainz ID.")
+        
+        except Exception as e:
+            self.results_text.append(f"Error searching albums: {str(e)}")
+            self.logger.error(f"Error in search_album_mbid: {e}", exc_info=True)
+
+
+
+    def get_releases_by_album_mbid(self, album_mbid, album_name=None, artist_name=None):
+        """
+        Get releases for an album by its MusicBrainz ID
+        
+        Args:
+            album_mbid (str): MusicBrainz ID of the album
+            album_name (str, optional): Name of the album for display
+            artist_name (str, optional): Name of the artist for display
+        """
+        if not self.muspy_username or not self.muspy_api_key:
+            QMessageBox.warning(self, "Error", "Muspy configuration not available")
+            return
+
+        try:
+            # Clear results and show status
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append(f"Getting releases for album: {album_name or album_mbid}...")
+            QApplication.processEvents()
+            
+            # API query
+            url = f"{self.base_url}/releases"
+            params = {"since": album_mbid}
+            auth = (self.muspy_username, self.muspy_api_key)
+            
+            response = requests.get(url, auth=auth, params=params)
+            
+            if response.status_code == 200:
+                all_releases = response.json()
+                
+                # Filter for future releases
+                today = datetime.date.today().strftime("%Y-%m-%d")
+                future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                
+                if not future_releases:
+                    self.results_text.append(f"No future releases found for {album_name or 'this album'}")
+                    if all_releases:
+                        self.results_text.append(f"Found {len(all_releases)} past releases.")
+                        
+                        # Ask if user wants to see past releases
+                        reply = QMessageBox.question(
+                            self, 
+                            "Show Past Releases", 
+                            f"No future releases found, but there are {len(all_releases)} past releases. Do you want to see them?",
+                            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                        )
+                        
+                        if reply == QMessageBox.StandardButton.Yes:
+                            # Show past releases in tree view
+                            self.display_releases_tree(all_releases)
+                    return
+                
+                # Display releases in tree view
+                self.display_releases_tree(future_releases)
+                
+                # If we have artist information, store it for possible follow action
+                if artist_name:
+                    # Get artist MBID
+                    artist_mbid = self.get_mbid_artist_searched(artist_name)
+                    if artist_mbid:
+                        self.current_artist = {"name": artist_name, "mbid": artist_mbid}
+                        
+                        # Add a button to follow this artist
+                        self.add_follow_button = QPushButton(f"Follow {artist_name} on Muspy")
+                        self.add_follow_button.clicked.connect(self.follow_current_artist)
+                        self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
+            else:
+                self.results_text.append(f"Error retrieving releases: {response.status_code} - {response.text}")
+        
+        except Exception as e:
+            self.results_text.append(f"Connection error with Muspy: {e}")
+            self.logger.error(f"Error getting releases by album MBID: {e}", exc_info=True)
 
     def get_artist_releases(self, mbid, artist_name=None):
         """
