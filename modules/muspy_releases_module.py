@@ -11,8 +11,8 @@ try:
     from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                                 QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
                                 QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
-                                QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem)
-    from PyQt6.QtCore import pyqtSignal, Qt, QPoint
+                                QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem, QProgressDialog)
+    from PyQt6.QtCore import pyqtSignal, Qt, QPoint, QObject, QThread
     from PyQt6.QtGui import QColor, QTextDocument, QAction, QCursor, QTextCursor
     QT_AVAILABLE = True
 except ImportError:
@@ -65,6 +65,32 @@ except ImportError:
     # Fallback to standard logging if specialized logger isn't available
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger("MuspyArtistModule")
+
+
+class ProgressWorker(QObject):
+    progress = pyqtSignal(int)
+    finished = pyqtSignal(list)
+    status_update = pyqtSignal(str)
+    
+    def __init__(self, function, *args, **kwargs):
+        super().__init__()
+        self.function = function
+        self.args = args
+        self.kwargs = kwargs
+        
+    def run(self):
+        try:
+            result = self.function(
+                progress_callback=self.progress.emit, 
+                status_callback=self.status_update.emit,
+                *self.args, 
+                **self.kwargs
+            )
+            self.finished.emit(result)
+        except Exception as e:
+            self.status_update.emit(f"Error: {str(e)}")
+            self.finished.emit([])
+
 
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
@@ -407,7 +433,7 @@ class MuspyArtistModule(BaseModule):
 
     def show_lastfm_top_artists(self, count=50):
         """
-        Show top Last.fm artists in the results area
+        Show top Last.fm artists in the results area with progress bar
         
         Args:
             count (int): Number of top artists to display
@@ -420,59 +446,128 @@ class MuspyArtistModule(BaseModule):
         self.results_text.clear()
         self.results_text.show()
         self.results_text.append(f"Fetching top {count} artists for {self.lastfm_username} from Last.fm...\n")
-        QApplication.processEvents()  # Update UI
+        
+        # Create progress dialog
+        progress = QProgressDialog("Fetching artists from Last.fm...", "Cancel", 0, 100, self)
+        progress.setWindowTitle("Loading Artists")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setValue(0)
+        progress.show()
+        
+        # Create worker thread
+        self.thread = QThread()
+        self.worker = ProgressWorker(self._fetch_top_artists_with_progress, count)
+        self.worker.moveToThread(self.thread)
+        
+        # Connect signals
+        self.thread.started.connect(self.worker.run)
+        self.worker.progress.connect(progress.setValue)
+        self.worker.status_update.connect(self.update_status_text)
+        self.worker.finished.connect(self._display_top_artists_results)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(progress.close)
+        
+        # Start processing
+        self.thread.start()
 
+    def update_status_text(self, text):
+        """Update the status text in the results area"""
+        self.results_text.append(text)
+        QApplication.processEvents()  # Keep UI responsive
+
+    def _fetch_top_artists_with_progress(self, progress_callback, status_callback, count):
+        """
+        Background worker function to fetch top artists with progress updates
+        
+        Args:
+            progress_callback: Function to call for progress updates
+            status_callback: Function to call for status text updates
+            count: Number of artists to fetch
+            
+        Returns:
+            list: Top artists data
+        """
         try:
-            # Get LastFM network through our auth manager
+            # Get LastFM network
             if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
-                self.results_text.append("Last.fm authentication manager not initialized. Please check your configuration.")
-                return
+                status_callback("Last.fm authentication manager not initialized. Please check your configuration.")
+                return []
                 
             network = self.lastfm_auth.get_network()
             if not network:
-                self.results_text.append("Could not connect to Last.fm. Please check your credentials.")
-                return
+                status_callback("Could not connect to Last.fm. Please check your credentials.")
+                return []
+            
+            # Set initial progress
+            progress_callback(10)
+            status_callback("Connected to Last.fm. Retrieving artists...")
             
             # Get top artists
             top_artists = self.lastfm_auth.get_top_artists(limit=count)
             
             if not top_artists:
-                self.results_text.append("No artists found on Last.fm account.")
-                return
-                
-            # Display artists in a formatted way
-            self.results_text.append(f"Top {len(top_artists)} artists for {self.lastfm_username}:\n")
+                status_callback("No artists found on Last.fm account.")
+                return []
             
-            # Create a context menu for the results text
-            self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-            self.results_text.customContextMenuRequested.connect(self.show_artist_context_menu)
+            # Update progress
+            progress_callback(70)
+            status_callback(f"Retrieved {len(top_artists)} artists. Processing data...")
             
-            # Store top artists for context menu use
-            self.top_artists_list = top_artists
+            # Process data (could add more processing here if needed)
+            progress_callback(90)
+            status_callback("Processing complete!")
             
-            # Display each artist with playcount
-            for i, artist in enumerate(top_artists):
-                artist_name = artist['name']
-                playcount = artist.get('playcount', 'N/A')
-                
-                # Format line with index for easier selection
-                artist_line = f"{i+1}. {artist_name} (Playcount: {playcount})"
-                self.results_text.append(artist_line)
-                
-                # Add a special hidden marker for context menu to identify this line as an artist
-                # This uses HTML with a hidden span that won't be visible to users
-                hidden_marker = f'<span style="display:none" class="artist" data-index="{i}"></span>'
-                cursor = self.results_text.textCursor()
-                cursor.movePosition(QTextCursor.MoveOperation.End)
-                self.results_text.setTextCursor(cursor)
-                self.results_text.textCursor().insertHtml(hidden_marker)
-                
-            self.results_text.append("\nRight-click on an artist to see options.")
+            # Final progress
+            progress_callback(100)
             
+            return top_artists
         except Exception as e:
-            error_msg = f"Error fetching artists from Last.fm: {e}"
-            self.results_text.append(error_msg)
-            self.logger.error(error_msg, exc_info=True)
+            status_callback(f"Error fetching artists from Last.fm: {e}")
+            return []
+
+    def _display_top_artists_results(self, top_artists):
+        """
+        Display the results of top artists fetching
+        
+        Args:
+            top_artists (list): List of top artists data
+        """
+        if not top_artists:
+            self.results_text.append("No artists found or retrieval failed.")
+            return
+        
+        # Display artists in a formatted way
+        self.results_text.clear()
+        self.results_text.append(f"Top {len(top_artists)} artists for {self.lastfm_username}:\n")
+        
+        # Create a context menu for the results text
+        self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.results_text.customContextMenuRequested.connect(self.show_artist_context_menu)
+        
+        # Store top artists for context menu use
+        self.top_artists_list = top_artists
+        
+        # Display each artist with playcount
+        for i, artist in enumerate(top_artists):
+            artist_name = artist['name']
+            playcount = artist.get('playcount', 'N/A')
+            
+            # Format line with index for easier selection
+            artist_line = f"{i+1}. {artist_name} (Playcount: {playcount})"
+            self.results_text.append(artist_line)
+            
+            # Add a special hidden marker for context menu to identify this line as an artist
+            # This uses HTML with a hidden span that won't be visible to users
+            hidden_marker = f'<span style="display:none" class="artist" data-index="{i}"></span>'
+            cursor = self.results_text.textCursor()
+            cursor.movePosition(QTextCursor.MoveOperation.End)
+            self.results_text.setTextCursor(cursor)
+            self.results_text.textCursor().insertHtml(hidden_marker)
+            
+        self.results_text.append("\nRight-click on an artist to see options.")
 
     def show_lastfm_custom_top_artists(self):
         """
@@ -704,7 +799,7 @@ class MuspyArtistModule(BaseModule):
 
     def show_lastfm_loved_tracks(self, limit=50):
         """
-        Show user's loved tracks from Last.fm
+        Show user's loved tracks from Last.fm with progress bar
         
         Args:
             limit (int): Maximum number of tracks to display
@@ -717,62 +812,128 @@ class MuspyArtistModule(BaseModule):
         self.results_text.clear()
         self.results_text.show()
         self.results_text.append(f"Fetching loved tracks for {self.lastfm_username} from Last.fm...\n")
-        QApplication.processEvents()  # Update UI
+        
+        # Create progress dialog
+        progress = QProgressDialog("Fetching loved tracks from Last.fm...", "Cancel", 0, 100, self)
+        progress.setWindowTitle("Loading Loved Tracks")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setValue(0)
+        progress.show()
+        
+        # Create worker thread
+        self.thread = QThread()
+        self.worker = ProgressWorker(self._fetch_loved_tracks_with_progress, limit)
+        self.worker.moveToThread(self.thread)
+        
+        # Connect signals
+        self.thread.started.connect(self.worker.run)
+        self.worker.progress.connect(progress.setValue)
+        self.worker.status_update.connect(self.update_status_text)
+        self.worker.finished.connect(self._display_loved_tracks_results)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(progress.close)
+        
+        # Start processing
+        self.thread.start()
 
+    def _fetch_loved_tracks_with_progress(self, progress_callback, status_callback, limit):
+        """
+        Background worker function to fetch loved tracks with progress updates
+        
+        Args:
+            progress_callback: Function to call for progress updates
+            status_callback: Function to call for status text updates
+            limit: Maximum number of tracks to fetch
+            
+        Returns:
+            list: Loved tracks data
+        """
         try:
-            # Get LastFM network through our auth manager
+            # Get LastFM network
             if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
-                self.results_text.append("Last.fm authentication manager not initialized. Please check your configuration.")
-                return
+                status_callback("Last.fm authentication manager not initialized. Please check your configuration.")
+                return []
                 
             network = self.lastfm_auth.get_network()
             if not network:
-                self.results_text.append("Could not connect to Last.fm. Please check your credentials.")
-                return
+                status_callback("Could not connect to Last.fm. Please check your credentials.")
+                return []
+            
+            # Set initial progress
+            progress_callback(10)
+            status_callback("Connected to Last.fm. Retrieving user...")
             
             # Get user object
             user = network.get_user(self.lastfm_username)
+            
+            progress_callback(30)
+            status_callback("Retrieved user profile. Fetching loved tracks...")
             
             # Get loved tracks
             loved_tracks = user.get_loved_tracks(limit=limit)
             
             if not loved_tracks:
-                self.results_text.append("No loved tracks found on Last.fm account.")
-                return
-                
-            # Display tracks in a formatted way
-            self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}:\n")
+                status_callback("No loved tracks found on Last.fm account.")
+                return []
             
-            # Create a context menu for the results text
-            self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-            self.results_text.customContextMenuRequested.connect(self.show_track_context_menu)
+            # Update progress
+            progress_callback(80)
+            status_callback(f"Retrieved {len(loved_tracks)} loved tracks. Processing data...")
             
-            # Store loved tracks for context menu use
-            self.loved_tracks_list = loved_tracks
+            # Process data (could add more processing here if needed)
+            progress_callback(95)
+            status_callback("Processing complete!")
             
-            # Display each track
-            for i, track in enumerate(loved_tracks):
-                track_name = track.track.title
-                artist_name = track.track.artist.name
-                
-                # Format line with index for easier selection
-                track_line = f"{i+1}. {artist_name} - {track_name}"
-                self.results_text.append(track_line)
-                
-                # Add a special hidden marker for context menu to identify this line as a track
-                # This uses HTML with a hidden span that won't be visible to users
-                hidden_marker = f'<span style="display:none" class="track" data-index="{i}"></span>'
-                cursor = self.results_text.textCursor()
-                cursor.movePosition(QTextCursor.MoveOperation.End)
-                self.results_text.setTextCursor(cursor)
-                self.results_text.textCursor().insertHtml(hidden_marker)
-                
-            self.results_text.append("\nRight-click on a track to see options.")
+            # Final progress
+            progress_callback(100)
             
+            return loved_tracks
         except Exception as e:
-            error_msg = f"Error fetching loved tracks from Last.fm: {e}"
-            self.results_text.append(error_msg)
-            self.logger.error(error_msg, exc_info=True)
+            status_callback(f"Error fetching loved tracks from Last.fm: {e}")
+            return []
+
+    def _display_loved_tracks_results(self, loved_tracks):
+        """
+        Display the results of loved tracks fetching
+        
+        Args:
+            loved_tracks (list): List of loved tracks data
+        """
+        if not loved_tracks:
+            self.results_text.append("No loved tracks found or retrieval failed.")
+            return
+        
+        # Display tracks in a formatted way
+        self.results_text.clear()
+        self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}:\n")
+        
+        # Create a context menu for the results text
+        self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+        self.results_text.customContextMenuRequested.connect(self.show_track_context_menu)
+        
+        # Store loved tracks for context menu use
+        self.loved_tracks_list = loved_tracks
+        
+        # Display each track
+        for i, track in enumerate(loved_tracks):
+            track_name = track.track.title
+            artist_name = track.track.artist.name
+            
+            # Format line with index for easier selection
+            track_line = f"{i+1}. {artist_name} - {track_name}"
+            self.results_text.append(track_line)
+            
+            # Add a special hidden marker for context menu to identify this line as a track
+            hidden_marker = f'<span style="display:none" class="track" data-index="{i}"></span>'
+            cursor = self.results_text.textCursor()
+            cursor.movePosition(QTextCursor.MoveOperation.End)
+            self.results_text.setTextCursor(cursor)
+            self.results_text.textCursor().insertHtml(hidden_marker)
+            
+        self.results_text.append("\nRight-click on a track to see options.")
 
     def show_track_context_menu(self, position):
         """
@@ -1070,7 +1231,7 @@ class MuspyArtistModule(BaseModule):
 
     def sync_top_artists_from_lastfm(self, count=50):
         """
-        Synchronize top Last.fm artists with Muspy using progress bar
+        Synchronize top Last.fm artists with Muspy using a progress dialog
         
         Args:
             count (int): Number of top artists to sync
@@ -1086,67 +1247,232 @@ class MuspyArtistModule(BaseModule):
                 QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
                 return
 
-        # Función para procesar la sincronización con progreso
-        def process_lastfm_sync(update_progress, count=count):
-            # Primero intentar importación directa vía API
-            update_progress(0, 1, "Enviando solicitud a Muspy API...", indeterminate=True)
+        # Clear the results area and make sure it's visible
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Starting Last.fm synchronization for user {self.lastfm_username}...\n")
+        self.results_text.append(f"Syncing top {count} artists from Last.fm to Muspy\n")
+        
+        # Create progress dialog
+        progress = QProgressDialog("Syncing artists with Muspy...", "Cancel", 0, 100, self)
+        progress.setWindowTitle("Syncing with Muspy")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setMinimumDuration(0)
+        progress.setValue(0)
+        progress.show()
+        
+        # Create worker thread
+        self.thread = QThread()
+        self.worker = ProgressWorker(self._sync_artists_with_progress, count)
+        self.worker.moveToThread(self.thread)
+        
+        # Connect signals
+        self.thread.started.connect(self.worker.run)
+        self.worker.progress.connect(progress.setValue)
+        self.worker.status_update.connect(self.update_status_text)
+        self.worker.finished.connect(self._display_sync_results)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+        self.thread.finished.connect(progress.close)
+        
+        # Start processing
+        self.thread.start()
+
+    def _sync_artists_with_progress(self, progress_callback, status_callback, count):
+        """
+        Background worker function to sync artists with progress updates
+        
+        Args:
+            progress_callback: Function to call for progress updates
+            status_callback: Function to call for status text updates
+            count: Number of artists to sync
             
-            try:
-                import_url = f"{self.base_url}/import/{self.muspy_id}"
-                auth = (self.muspy_username, self.muspy_api_key)
-                
-                import_data = {
-                    'type': 'lastfm',
-                    'username': self.lastfm_username,
-                    'count': count,
-                    'period': 'overall'
+        Returns:
+            dict: Sync results summary
+        """
+        try:
+            # First try direct API import
+            import_url = f"{self.base_url}/import/{self.muspy_id}"
+            auth = (self.muspy_username, self.muspy_api_key)
+            
+            import_data = {
+                'type': 'lastfm',
+                'username': self.lastfm_username,
+                'count': count,
+                'period': 'overall'
+            }
+            
+            status_callback("Sending request to Muspy API...")
+            progress_callback(20)
+            
+            # Use POST for the import endpoint
+            response = requests.post(import_url, auth=auth, json=import_data)
+            
+            if response.status_code in [200, 201]:
+                status_callback(f"Successfully synchronized top {count} artists from Last.fm account {self.lastfm_username}")
+                progress_callback(100)
+                return {
+                    'success': True,
+                    'message': f"Successfully synchronized top {count} artists from Last.fm",
+                    'api_method': 'direct'
                 }
-                
-                # Use POST for the import endpoint
-                response = requests.post(import_url, auth=auth, json=import_data)
-                
-                if response.status_code in [200, 201]:
-                    return {
-                        "success": True,
-                        "method": "api",
-                        "message": f"Successfully synchronized top {count} artists from Last.fm"
-                    }
-                else:
-                    # If direct API fails, try the alternative method
-                    update_progress(0, 1, "API directa falló. Intentando método alternativo...", indeterminate=True)
-                    return self._sync_lastfm_alternative_with_progress(update_progress, count)
-            except Exception as e:
-                self.logger.error(f"Error syncing with Muspy API: {e}", exc_info=True)
-                
-                # Try alternative method
-                update_progress(0, 1, "Error con API. Intentando método alternativo...", indeterminate=True)
-                return self._sync_lastfm_alternative_with_progress(update_progress, count)
-        
-        # Ejecutar con el diálogo de progreso
-        results = self.show_progress_operation(
-            process_lastfm_sync,
-            title=f"Sincronizando Top {count} Artistas de Last.fm",
-            label_format="{status}",
-            finish_message=None  # Se generará basado en los resultados
-        )
-        
-        # Mostrar resultados
-        if results:
-            if results.get("success"):
-                method = "API directa" if results.get("method") == "api" else "método alternativo"
-                message = f"Sincronización completada con éxito usando {method}.\n" + results.get("message", "")
-                
-                # Actualizar la interfaz
-                self.results_text.clear()
-                self.results_text.append(message)
-                self.results_text.append("\nAhora puedes ver tus próximos lanzamientos usando el botón 'Mis próximos discos'")
-                
-                # Mostrar mensaje de éxito
-                QMessageBox.information(self, "Sincronización Completa", message)
             else:
-                error_msg = f"Error en la sincronización: {results.get('message', 'Error desconocido')}"
-                self.results_text.append(error_msg)
-                QMessageBox.warning(self, "Error", error_msg)
+                # If direct API fails, try using our LastFM manager as fallback
+                status_callback("Direct API import failed. Trying alternative method...")
+                progress_callback(30)
+                
+                # Use the alternative method
+                result = self._sync_lastfm_alternative_with_progress(
+                    progress_callback=lambda p: progress_callback(30 + int(p * 0.7)),  # Scale to 30-100%
+                    status_callback=status_callback,
+                    count=count
+                )
+                
+                return result
+        except Exception as e:
+            error_msg = f"Error syncing with Muspy API: {e}"
+            status_callback(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+            
+            # Try alternative method
+            status_callback("Trying alternative synchronization method...")
+            progress_callback(30)
+            
+            # Use the alternative method
+            result = self._sync_lastfm_alternative_with_progress(
+                progress_callback=lambda p: progress_callback(30 + int(p * 0.7)),  # Scale to 30-100%
+                status_callback=status_callback,
+                count=count
+            )
+            
+            return result
+
+    def _sync_lastfm_alternative_with_progress(self, progress_callback, status_callback, count=50):
+        """
+        Alternative method to sync LastFM artists with progress updates
+        
+        Args:
+            progress_callback: Function to call for progress updates
+            status_callback: Function to call for status text updates
+            count: Number of top artists to sync
+            
+        Returns:
+            dict: Sync results summary
+        """
+        try:
+            # Get LastFM network
+            network = self.lastfm_auth.get_network()
+            if not network:
+                status_callback("Could not connect to LastFM. Please check your credentials.")
+                return {'success': False, 'message': "Connection error", 'api_method': 'alternative'}
+            
+            # Get top artists
+            status_callback(f"Fetching top {count} artists from LastFM...")
+            progress_callback(10)
+            
+            top_artists = self.lastfm_auth.get_top_artists(limit=count)
+            
+            if not top_artists:
+                status_callback("No artists found on LastFM account.")
+                return {'success': False, 'message': "No artists found", 'api_method': 'alternative'}
+            
+            status_callback(f"Found {len(top_artists)} artists on LastFM.")
+            progress_callback(30)
+            
+            # Search for MBIDs and add to Muspy
+            successful_adds = 0
+            failed_adds = 0
+            mbid_not_found = 0
+            
+            # Process each artist
+            for i, artist in enumerate(top_artists):
+                artist_name = artist['name']
+                progress_value = 30 + int((i / len(top_artists)) * 60)  # Scale to 30-90%
+                progress_callback(progress_value)
+                
+                # Try to use MBID from LastFM if available
+                mbid = artist.get('mbid')
+                
+                # If no MBID, search for it
+                if not mbid:
+                    status_callback(f"Searching MBID for {artist_name}...")
+                    mbid = self.get_mbid_artist_searched(artist_name)
+                
+                if mbid:
+                    # Add artist to Muspy
+                    status_callback(f"Adding {artist_name} to Muspy...")
+                    result = self.add_artist_to_muspy_silent(mbid, artist_name)
+                    if result == 1:
+                        successful_adds += 1
+                        status_callback(f"Successfully added {artist_name} to Muspy")
+                    elif result == 0:
+                        # Already exists
+                        successful_adds += 1
+                        status_callback(f"{artist_name} already exists in Muspy")
+                    else:
+                        failed_adds += 1
+                        status_callback(f"Failed to add {artist_name} to Muspy")
+                else:
+                    mbid_not_found += 1
+                    status_callback(f"Could not find MBID for {artist_name}")
+                
+                # Check if we should continue
+                if i % 5 == 0:
+                    status_callback(f"Processed: {i+1}/{len(top_artists)}, Added: {successful_adds}, Failed: {failed_adds}, No MBID: {mbid_not_found}")
+            
+            # Final progress
+            progress_callback(100)
+            
+            # Return results
+            return {
+                'success': successful_adds > 0,
+                'message': f"Sync complete: Added {successful_adds}, Failed {failed_adds}, No MBID {mbid_not_found}",
+                'api_method': 'alternative',
+                'stats': {
+                    'total': len(top_artists),
+                    'success': successful_adds,
+                    'failed': failed_adds,
+                    'no_mbid': mbid_not_found
+                }
+            }
+        
+        except Exception as e:
+            status_callback(f"Error in alternative LastFM sync: {str(e)}")
+            self.logger.error(f"Error in alternative LastFM sync: {e}", exc_info=True)
+            return {'success': False, 'message': f"Error: {str(e)}", 'api_method': 'alternative'}
+
+    def _display_sync_results(self, result):
+        """
+        Display the results of the synchronization
+        
+        Args:
+            result (dict): Sync results summary
+        """
+        if result.get('success'):
+            self.results_text.clear()
+            self.results_text.append("Synchronization completed successfully!\n")
+            self.results_text.append(result.get('message', ""))
+            
+            # Show additional details if available
+            if 'stats' in result:
+                stats = result['stats']
+                self.results_text.append(f"\nSummary:")
+                self.results_text.append(f"Total artists processed: {stats.get('total', 0)}")
+                self.results_text.append(f"Successfully added: {stats.get('success', 0)}")
+                self.results_text.append(f"Not found (no MBID): {stats.get('no_mbid', 0)}")
+                self.results_text.append(f"Failed to add: {stats.get('failed', 0)}")
+            
+            self.results_text.append("\nYou can now view your upcoming releases using the 'Mis próximos discos' button")
+            
+            # Show success message
+            QMessageBox.information(self, "Synchronization Complete", result.get('message', "Synchronization successful"))
+        else:
+            self.results_text.append("\nSynchronization failed.")
+            self.results_text.append(result.get('message', "Unknown error"))
+            
+            # Show error message
+            QMessageBox.warning(self, "Synchronization Failed", result.get('message', "Synchronization failed"))
 
     def _sync_lastfm_alternative_with_progress(self, update_progress, count=50):
         """
