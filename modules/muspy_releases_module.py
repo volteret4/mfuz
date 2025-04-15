@@ -708,7 +708,7 @@ class MuspyArtistModule(BaseModule):
         Display loved tracks in the loved tracks page of the stacked widget
         
         Args:
-            loved_tracks (list): List of loved track objects from Last.fm
+            loved_tracks (list): List of loved track objects from Last.fm or cached dictionaries
         """
         # Find the stacked widget
         stack_widget = self.findChild(QStackedWidget, "stackedWidget")
@@ -746,10 +746,47 @@ class MuspyArtistModule(BaseModule):
         
         # Fill the table with data
         for i, loved_track in enumerate(loved_tracks):
-            # Extract data from pylast objects
-            track = loved_track.track
-            artist_name = track.artist.name
-            track_name = track.title
+            # Check if this is a pylast object or dictionary from cache
+            if hasattr(loved_track, 'track'):
+                # Extract data from pylast objects
+                track = loved_track.track
+                artist_name = track.artist.name
+                track_name = track.title
+                
+                # Get album if available
+                album_name = ""
+                try:
+                    album = track.get_album()
+                    if album:
+                        album_name = album.title
+                except:
+                    pass
+                    
+                # Get date if available
+                date_text = ""
+                if hasattr(loved_track, "date") and loved_track.date:
+                    try:
+                        import datetime
+                        date_obj = datetime.datetime.fromtimestamp(int(loved_track.date))
+                        date_text = date_obj.strftime("%Y-%m-%d")
+                    except:
+                        date_text = str(loved_track.date)
+            else:
+                # This is a dictionary from cache
+                artist_name = loved_track.get('artist', '')
+                track_name = loved_track.get('title', '')
+                album_name = loved_track.get('album', '')
+                
+                # Format date
+                date_value = loved_track.get('date')
+                date_text = ""
+                if date_value:
+                    try:
+                        import datetime
+                        date_obj = datetime.datetime.fromtimestamp(int(date_value))
+                        date_text = date_obj.strftime("%Y-%m-%d")
+                    except:
+                        date_text = str(date_value)
             
             # Set artist name column
             artist_item = QTableWidgetItem(artist_name)
@@ -759,27 +796,11 @@ class MuspyArtistModule(BaseModule):
             track_item = QTableWidgetItem(track_name)
             table.setItem(i, 1, track_item)
             
-            # Set album column (might be empty)
-            album_name = ""
-            try:
-                album = track.get_album()
-                if album:
-                    album_name = album.title
-            except:
-                pass
+            # Set album column
             album_item = QTableWidgetItem(album_name)
             table.setItem(i, 2, album_item)
             
-            # Date column (if available)
-            date_text = ""
-            if hasattr(loved_track, "date") and loved_track.date:
-                try:
-                    import datetime
-                    date_obj = datetime.datetime.fromtimestamp(int(loved_track.date))
-                    date_text = date_obj.strftime("%Y-%m-%d")
-                except:
-                    date_text = str(loved_track.date)
-            
+            # Date column
             date_item = QTableWidgetItem(date_text)
             date_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             table.setItem(i, 3, date_item)
@@ -949,20 +970,20 @@ class MuspyArtistModule(BaseModule):
         menu = QMenu(self)
         
         # Add menu options
-        top10_action = QAction("Show Top 10 Artists", self)
-        top50_action = QAction("Show Top 50 Artists", self)
+        top_artists_action = QAction("Show Top Artists...", self)
         loved_tracks_action = QAction("Show Loved Tracks", self)
+        refresh_cache_action = QAction("Refresh Cached Data", self)
         
         # Connect actions
-        top10_action.triggered.connect(lambda: self.show_lastfm_top_artists(10))
-        top50_action.triggered.connect(lambda: self.show_lastfm_top_artists(50))
+        top_artists_action.triggered.connect(self.show_lastfm_top_artists_dialog)
         loved_tracks_action.triggered.connect(self.show_lastfm_loved_tracks)
+        refresh_cache_action.triggered.connect(self.clear_lastfm_cache)
         
         # Add actions to menu
-        menu.addAction(top10_action)
-        menu.addAction(top50_action)
-        menu.addSeparator()
+        menu.addAction(top_artists_action)
         menu.addAction(loved_tracks_action)
+        menu.addSeparator()
+        menu.addAction(refresh_cache_action)
         
         # Get the button position
         pos = self.sync_lastfm_button.mapToGlobal(QPoint(0, self.sync_lastfm_button.height()))
@@ -970,17 +991,33 @@ class MuspyArtistModule(BaseModule):
         # Show menu
         menu.exec(pos)
 
-    def show_lastfm_top_artists(self, count=50):
+
+
+
+
+    def show_lastfm_top_artists(self, count=50, period="overall", use_cached=True):
         """
-        Show top Last.fm artists in the designated widget
+        Show top Last.fm artists in the designated widget with caching support
         
         Args:
             count (int): Number of top artists to display
+            period (str): Time period for artists (overall, 7day, 1month, 3month, 6month, 12month)
+            use_cached (bool): Whether to use cached data when available
         """
         # Check if Last.fm is enabled
         if not self.lastfm_enabled:
             QMessageBox.warning(self, "Error", "Last.fm is not configured in settings")
             return
+        
+        # Create a cache key that includes the period and count
+        cache_key = f"top_artists_{period}_{count}"
+        
+        # Try to get from cache first if allowed
+        if use_cached:
+            cached_data = self.cache_manager(cache_key)
+            if cached_data:
+                self.display_lastfm_artists_in_stacked_widget(cached_data)
+                return
         
         # Create progress dialog
         progress = QProgressDialog("Fetching artists from Last.fm...", "Cancel", 0, 100, self)
@@ -990,7 +1027,41 @@ class MuspyArtistModule(BaseModule):
         progress.show()
         
         try:
-            # ... [keep your existing code for fetching the data] ...
+            # Import pylast here to handle potential import error gracefully
+            import pylast
+            
+            # Update progress
+            progress.setValue(20)
+            QApplication.processEvents()
+            
+            # Convert period string to pylast constants if needed
+            pylast_period = period
+            if period == "7day":
+                pylast_period = pylast.PERIOD_7DAYS
+            elif period == "1month":
+                pylast_period = pylast.PERIOD_1MONTH
+            elif period == "3month":
+                pylast_period = pylast.PERIOD_3MONTHS
+            elif period == "6month":
+                pylast_period = pylast.PERIOD_6MONTHS
+            elif period == "12month":
+                pylast_period = pylast.PERIOD_12MONTHS
+            else:
+                pylast_period = pylast.PERIOD_OVERALL
+            
+            # Network setup
+            network = pylast.LastFMNetwork(
+                api_key=self.lastfm_api_key,
+                api_secret=self.lastfm_api_secret
+            )
+            
+            # Update progress
+            progress.setValue(40)
+            QApplication.processEvents()
+            
+            # Get user and top artists
+            user = network.get_user(self.lastfm_username)
+            pylast_artists = user.get_top_artists(limit=count, period=pylast_period)
             
             # Update progress
             progress.setValue(60)
@@ -1013,6 +1084,9 @@ class MuspyArtistModule(BaseModule):
             
             # Log what we found
             self.logger.info(f"Found {len(top_artists)} artists on Last.fm")
+            
+            # Cache the results
+            self.cache_manager(cache_key, top_artists)
             
             # Update progress
             progress.setValue(80)
@@ -1255,6 +1329,69 @@ class MuspyArtistModule(BaseModule):
             # User clicked OK, proceed with displaying artists
             self.show_lastfm_top_artists(count)
 
+
+    def show_lastfm_top_artists_dialog(self):
+        """
+        Show a dialog to select period and number of top artists to display
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm is not configured in settings")
+            return
+        
+        # Create the dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Last.fm Top Artists Options")
+        dialog.setMinimumWidth(300)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Period selection
+        period_layout = QHBoxLayout()
+        period_label = QLabel("Time period:")
+        period_combo = QComboBox()
+        period_combo.addItem("7 days", "7day")
+        period_combo.addItem("1 month", "1month")
+        period_combo.addItem("3 months", "3month")
+        period_combo.addItem("6 months", "6month")
+        period_combo.addItem("12 months", "12month")
+        period_combo.addItem("All time", "overall")
+        period_combo.setCurrentIndex(5)  # Default to "All time"
+        period_layout.addWidget(period_label)
+        period_layout.addWidget(period_combo)
+        layout.addLayout(period_layout)
+        
+        # Artist count
+        count_layout = QHBoxLayout()
+        count_label = QLabel("Number of artists:")
+        count_spin = QSpinBox()
+        count_spin.setRange(5, 1000)
+        count_spin.setValue(50)
+        count_spin.setSingleStep(5)
+        count_layout.addWidget(count_label)
+        count_layout.addWidget(count_spin)
+        layout.addLayout(count_layout)
+        
+        # Cache option
+        cache_check = QCheckBox("Use cached data if available")
+        cache_check.setChecked(True)
+        layout.addWidget(cache_check)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            period = period_combo.currentData()
+            count = count_spin.value()
+            use_cached = cache_check.isChecked()
+            
+            # Call function with selected parameters
+            self.show_lastfm_top_artists(count=count, period=period, use_cached=use_cached)
+
     def show_artist_context_menu(self, position):
         """
         Show context menu for artists in the results text
@@ -1298,7 +1435,7 @@ class MuspyArtistModule(BaseModule):
 
     def add_lastfm_artist_to_muspy(self, artist_name):
         """
-        Add a Last.fm artist to Muspy
+        Add a Last.fm artist to Muspy - revisada para asegurar la correcta autenticación
         
         Args:
             artist_name (str): Name of the artist to add
@@ -1306,19 +1443,45 @@ class MuspyArtistModule(BaseModule):
         if not self.muspy_username or not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Muspy configuration not available")
             return
-            
+        
+        # Comprobar y obtener ID de Muspy si no está establecido
+        if not self.muspy_id:
+            self.get_muspy_id()
+            if not self.muspy_id:
+                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
+                return
+
+        # Mostrar progreso mientras buscamos MBID
+        progress = QProgressDialog("Searching for artist...", "Cancel", 0, 100, self)
+        progress.setWindowTitle("Adding Artist")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setValue(20)
+        progress.show()
+        QApplication.processEvents()
+                
         # First get the MBID for the artist
         mbid = self.get_mbid_artist_searched(artist_name)
+        progress.setValue(50)
+        QApplication.processEvents()
         
         if mbid:
             # Try to add the artist to Muspy
+            progress.setLabelText(f"Adding {artist_name} to Muspy...")
+            progress.setValue(70)
+            QApplication.processEvents()
+            
             success = self.add_artist_to_muspy(mbid, artist_name)
+            
+            progress.setValue(100)
             
             if success:
                 QMessageBox.information(self, "Success", f"Successfully added {artist_name} to Muspy")
             else:
-                QMessageBox.warning(self, "Error", f"Failed to add {artist_name} to Muspy")
+                # Depuración adicional para identificar el problema
+                self.logger.error(f"Failed to add {artist_name} to Muspy. ID: {self.muspy_id}, MBID: {mbid}")
+                QMessageBox.warning(self, "Error", f"Failed to add {artist_name} to Muspy. Check logs for details.")
         else:
+            progress.close()
             QMessageBox.warning(self, "Error", f"Could not find MusicBrainz ID for {artist_name}")
 
     def follow_lastfm_artist_on_spotify(self, artist_name):
@@ -1458,16 +1621,25 @@ class MuspyArtistModule(BaseModule):
             self.logger.error(error_msg, exc_info=True)
 
 
-    def show_lastfm_loved_tracks(self, limit=50):
+    def show_lastfm_loved_tracks(self, limit=50, use_cached=True):
         """
-        Show user's loved tracks from Last.fm
+        Show user's loved tracks from Last.fm with caching support
         
         Args:
             limit (int): Maximum number of tracks to display
+            use_cached (bool): Whether to use cached data when available
         """
         if not self.lastfm_enabled:
             QMessageBox.warning(self, "Error", "Last.fm username not configured")
             return
+
+        # Try to get from cache first if allowed
+        cache_key = f"loved_tracks_{limit}"
+        if use_cached:
+            cached_data = self.cache_manager(cache_key)
+            if cached_data:
+                self.display_loved_tracks_in_stacked_widget(cached_data)
+                return
 
         # Create progress dialog
         progress = QProgressDialog("Fetching loved tracks from Last.fm...", "Cancel", 0, 100, self)
@@ -1509,12 +1681,36 @@ class MuspyArtistModule(BaseModule):
                 progress.close()
                 return
             
+            # Convert pylast objects to serializable format for caching
+            serializable_tracks = []
+            for track in loved_tracks:
+                track_dict = {
+                    'artist': track.track.artist.name,
+                    'title': track.track.title,
+                    'url': track.track.get_url(),
+                    'date': track.date if hasattr(track, 'date') else None,
+                }
+                
+                # Try to get album info if available
+                try:
+                    album = track.track.get_album()
+                    if album:
+                        track_dict['album'] = album.title
+                except:
+                    track_dict['album'] = ""
+                    
+                serializable_tracks.append(track_dict)
+            
+            # Cache the results
+            self.cache_manager(cache_key, serializable_tracks)
+            
             # Store for later use
             self.loved_tracks_list = loved_tracks
             
             # Update progress
             progress.setValue(80)
             
+            # Display in stacked widget
             self.display_loved_tracks_in_stacked_widget(loved_tracks)
             
             # Final progress
@@ -1526,7 +1722,6 @@ class MuspyArtistModule(BaseModule):
             self.logger.error(error_msg, exc_info=True)
         finally:
             progress.close()
-
 
 
 
@@ -1633,284 +1828,190 @@ class MuspyArtistModule(BaseModule):
             self.results_text.hide()
 
 
-    # def _fetch_loved_tracks_with_progress(self, progress_callback, status_callback, limit):
+    # def _display_loved_tracks_table(self, loved_tracks):
     #     """
-    #     Background worker function to fetch loved tracks with progress updates
+    #     Display loved tracks in a table
         
     #     Args:
-    #         progress_callback: Function to call for progress updates
-    #         status_callback: Function to call for status text updates
-    #         limit: Maximum number of tracks to fetch
-            
-    #     Returns:
-    #         list: Loved tracks data
+    #         loved_tracks (list): List of loved track objects from Last.fm
     #     """
-    #     try:
-    #         # Get LastFM network
-    #         if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
-    #             status_callback("Last.fm authentication manager not initialized. Please check your configuration.")
-    #             return []
+    #     # Look for the stacked widget
+    #     stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+    #     if stack_widget is None:
+    #         # Fallback to old display method
+    #         self.results_text.clear()
+    #         self.results_text.show()
+    #         self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}")
+    #         for i, track in enumerate(loved_tracks):
+    #             self.results_text.append(f"{i+1}. {track.track.artist.name} - {track.track.title}")
+    #         return
+            
+    #     # Find the loved tracks page in the stacked widget
+    #     loved_tracks_page = None
+    #     for i in range(stack_widget.count()):
+    #         page = stack_widget.widget(i)
+    #         if page.objectName() == "loved_tracks_page":
+    #             loved_tracks_page = page
+    #             break
                 
-    #         network = self.lastfm_auth.get_network()
-    #         if not network:
-    #             status_callback("Could not connect to Last.fm. Please check your credentials.")
-    #             return []
-            
-    #         # Set initial progress
-    #         progress_callback(10)
-    #         status_callback("Connected to Last.fm. Retrieving user...")
-            
-    #         # Get user object
-    #         user = network.get_user(self.lastfm_username)
-            
-    #         progress_callback(30)
-    #         status_callback("Retrieved user profile. Fetching loved tracks...")
-            
-    #         # Get loved tracks
-    #         loved_tracks = user.get_loved_tracks(limit=limit)
-            
-    #         if not loved_tracks:
-    #             status_callback("No loved tracks found on Last.fm account.")
-    #             return []
-            
-    #         # Update progress
-    #         progress_callback(80)
-    #         status_callback(f"Retrieved {len(loved_tracks)} loved tracks. Processing data...")
-            
-    #         # Process data (could add more processing here if needed)
-    #         progress_callback(95)
-    #         status_callback("Processing complete!")
-            
-    #         # Final progress
-    #         progress_callback(100)
-            
-    #         return loved_tracks
-    #     except Exception as e:
-    #         status_callback(f"Error fetching loved tracks from Last.fm: {e}")
-    #         return []
-
-    def _display_loved_tracks_table(self, loved_tracks):
-        """
-        Display loved tracks in a table
-        
-        Args:
-            loved_tracks (list): List of loved track objects from Last.fm
-        """
-        # Look for the stacked widget
-        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
-        if stack_widget is None:
-            # Fallback to old display method
-            self.results_text.clear()
-            self.results_text.show()
-            self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}")
-            for i, track in enumerate(loved_tracks):
-                self.results_text.append(f"{i+1}. {track.track.artist.name} - {track.track.title}")
-            return
-            
-        # Find the loved tracks page in the stacked widget
-        loved_tracks_page = None
-        for i in range(stack_widget.count()):
-            page = stack_widget.widget(i)
-            if page.objectName() == "loved_tracks_page":
-                loved_tracks_page = page
-                break
-                
-        if loved_tracks_page is None:
-            # Fallback to old display
-            self.results_text.append("Loved tracks page not found in stacked widget")
-            return
-        
-        # Get the table from the page
-        table = loved_tracks_page.findChild(QTableWidget, "loved_tracks_table")
-        if table is None:
-            self.results_text.append("Loved tracks table not found in page")
-            return
-            
-        # Get count label
-        count_label = loved_tracks_page.findChild(QLabel, "count_label")
-        if count_label:
-            count_label.setText(f"Showing {len(loved_tracks)} loved tracks for {self.lastfm_username}")
-        
-        # Configure table
-        table.setSortingEnabled(False)  # Disable sorting while updating
-        table.setRowCount(len(loved_tracks))
-        
-        # Fill table
-        for i, track in enumerate(loved_tracks):
-            # Artist
-            artist_name = track.track.artist.name
-            artist_item = QTableWidgetItem(artist_name)
-            table.setItem(i, 0, artist_item)
-            
-            # Track name
-            track_name = track.track.title
-            track_item = QTableWidgetItem(track_name)
-            table.setItem(i, 1, track_item)
-            
-            # Album - may not be available in all cases
-            album_name = ""
-            try:
-                album_name = track.track.get_album().title if track.track.get_album() else ""
-            except:
-                pass
-            album_item = QTableWidgetItem(album_name)
-            table.setItem(i, 2, album_item)
-            
-            # Date loved - may need conversion
-            date_str = ""
-            if hasattr(track, 'date'):
-                try:
-                    # Convert timestamp to readable format
-                    import datetime
-                    date_obj = datetime.datetime.fromtimestamp(int(track.date))
-                    date_str = date_obj.strftime('%Y-%m-%d %H:%M')
-                except:
-                    date_str = str(track.date)
-            date_item = QTableWidgetItem(date_str)
-            table.setItem(i, 3, date_item)
-            
-            # Actions - using a button
-            actions_widget = QWidget()
-            actions_layout = QHBoxLayout(actions_widget)
-            actions_layout.setContentsMargins(2, 2, 2, 2)
-            
-            # Unlove button
-            unlove_button = QPushButton("Unlove")
-            unlove_button.setProperty("track_index", i)
-            unlove_button.clicked.connect(lambda checked, idx=i: self.unlove_track_from_table(idx))
-            actions_layout.addWidget(unlove_button)
-            
-            # Follow artist button
-            follow_button = QPushButton("Follow Artist")
-            follow_button.setProperty("artist_name", artist_name)
-            follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
-            actions_layout.addWidget(follow_button)
-            
-            table.setCellWidget(i, 4, actions_widget)
-        
-        # Re-enable sorting
-        table.setSortingEnabled(True)
-        
-        # Switch to the loved tracks page
-        stack_widget.setCurrentWidget(loved_tracks_page)
-        
-        # Hide results text if visible
-        if hasattr(self, 'results_text') and self.results_text.isVisible():
-            self.results_text.hide()
-
-    def unlove_track_from_table(self, track_index):
-        """
-        Unlove a track directly from the table
-        
-        Args:
-            track_index (int): Index of the track in the loved_tracks_list
-        """
-        if not hasattr(self, 'loved_tracks_list') or track_index >= len(self.loved_tracks_list):
-            QMessageBox.warning(self, "Error", "Track information not available")
-            return
-        
-        loved_track = self.loved_tracks_list[track_index]
-        track = loved_track.track
-        
-        # Confirm with user
-        reply = QMessageBox.question(
-            self,
-            "Confirm Unlove",
-            f"Remove '{track.title}' by {track.artist.name} from your loved tracks?",
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        
-        if reply == QMessageBox.StandardButton.Yes:
-            try:
-                # Check if authentication is needed
-                if not self.lastfm_auth.is_authenticated():
-                    # Need to authenticate for write operations
-                    auth_reply = QMessageBox.question(
-                        self,
-                        "Authentication Required",
-                        "To remove a track from your loved tracks, you need to authenticate with Last.fm. Proceed?",
-                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-                    )
-                    
-                    if auth_reply == QMessageBox.StandardButton.Yes:
-                        # Prompt for password
-                        password, ok = QInputDialog.getText(
-                            self,
-                            "Last.fm Password",
-                            f"Enter password for {self.lastfm_username}:",
-                            QLineEdit.EchoMode.Password
-                        )
-                        
-                        if ok and password:
-                            # Try to authenticate
-                            self.lastfm_auth.password = password
-                            if not self.lastfm_auth.authenticate():
-                                QMessageBox.warning(self, "Authentication Failed", "Could not authenticate with Last.fm")
-                                return
-                        else:
-                            return  # Canceled
-                    else:
-                        return  # Declined authentication
-                
-                # Get the authenticated network
-                network = self.lastfm_auth.get_network()
-                if not network:
-                    QMessageBox.warning(self, "Error", "Could not connect to Last.fm")
-                    return
-                    
-                # Unlove the track
-                track.unlove()
-                
-                # Show success message
-                QMessageBox.information(self, "Success", "Track removed from loved tracks")
-                
-                # Refresh the list
-                self.show_lastfm_loved_tracks()
-                
-            except Exception as e:
-                error_msg = f"Error removing track from loved tracks: {e}"
-                QMessageBox.warning(self, "Error", error_msg)
-                self.logger.error(error_msg, exc_info=True)
-
-    # def _display_loved_tracks_results(self, loved_tracks):
-    #     """
-    #     Display the results of loved tracks fetching
-        
-    #     Args:
-    #         loved_tracks (list): List of loved tracks data
-    #     """
-    #     if not loved_tracks:
-    #         self.results_text.append("No loved tracks found or retrieval failed.")
+    #     if loved_tracks_page is None:
+    #         # Fallback to old display
+    #         self.results_text.append("Loved tracks page not found in stacked widget")
     #         return
         
-    #     # Display tracks in a formatted way
-    #     self.results_text.clear()
-    #     self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}:\n")
+    #     # Get the table from the page
+    #     table = loved_tracks_page.findChild(QTableWidget, "loved_tracks_table")
+    #     if table is None:
+    #         self.results_text.append("Loved tracks table not found in page")
+    #         return
+            
+    #     # Get count label
+    #     count_label = loved_tracks_page.findChild(QLabel, "count_label")
+    #     if count_label:
+    #         count_label.setText(f"Showing {len(loved_tracks)} loved tracks for {self.lastfm_username}")
         
-    #     # Create a context menu for the results text
-    #     self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-    #     self.results_text.customContextMenuRequested.connect(self.show_track_context_menu)
+    #     # Configure table
+    #     table.setSortingEnabled(False)  # Disable sorting while updating
+    #     table.setRowCount(len(loved_tracks))
         
-    #     # Store loved tracks for context menu use
-    #     self.loved_tracks_list = loved_tracks
-        
-    #     # Display each track
+    #     # Fill table
     #     for i, track in enumerate(loved_tracks):
-    #         track_name = track.track.title
+    #         # Artist
     #         artist_name = track.track.artist.name
+    #         artist_item = QTableWidgetItem(artist_name)
+    #         table.setItem(i, 0, artist_item)
             
-    #         # Format line with index for easier selection
-    #         track_line = f"{i+1}. {artist_name} - {track_name}"
-    #         self.results_text.append(track_line)
+    #         # Track name
+    #         track_name = track.track.title
+    #         track_item = QTableWidgetItem(track_name)
+    #         table.setItem(i, 1, track_item)
             
-    #         # Add a special hidden marker for context menu to identify this line as a track
-    #         hidden_marker = f'<span style="display:none" class="track" data-index="{i}"></span>'
-    #         cursor = self.results_text.textCursor()
-    #         cursor.movePosition(QTextCursor.MoveOperation.End)
-    #         self.results_text.setTextCursor(cursor)
-    #         self.results_text.textCursor().insertHtml(hidden_marker)
+    #         # Album - may not be available in all cases
+    #         album_name = ""
+    #         try:
+    #             album_name = track.track.get_album().title if track.track.get_album() else ""
+    #         except:
+    #             pass
+    #         album_item = QTableWidgetItem(album_name)
+    #         table.setItem(i, 2, album_item)
             
-    #     self.results_text.append("\nRight-click on a track to see options.")
+    #         # Date loved - may need conversion
+    #         date_str = ""
+    #         if hasattr(track, 'date'):
+    #             try:
+    #                 # Convert timestamp to readable format
+    #                 import datetime
+    #                 date_obj = datetime.datetime.fromtimestamp(int(track.date))
+    #                 date_str = date_obj.strftime('%Y-%m-%d %H:%M')
+    #             except:
+    #                 date_str = str(track.date)
+    #         date_item = QTableWidgetItem(date_str)
+    #         table.setItem(i, 3, date_item)
+            
+    #         # Actions - using a button
+    #         actions_widget = QWidget()
+    #         actions_layout = QHBoxLayout(actions_widget)
+    #         actions_layout.setContentsMargins(2, 2, 2, 2)
+            
+    #         # Unlove button
+    #         unlove_button = QPushButton("Unlove")
+    #         unlove_button.setProperty("track_index", i)
+    #         unlove_button.clicked.connect(lambda checked, idx=i: self.unlove_track_from_table(idx))
+    #         actions_layout.addWidget(unlove_button)
+            
+    #         # Follow artist button
+    #         follow_button = QPushButton("Follow Artist")
+    #         follow_button.setProperty("artist_name", artist_name)
+    #         follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
+    #         actions_layout.addWidget(follow_button)
+            
+    #         table.setCellWidget(i, 4, actions_widget)
+        
+    #     # Re-enable sorting
+    #     table.setSortingEnabled(True)
+        
+    #     # Switch to the loved tracks page
+    #     stack_widget.setCurrentWidget(loved_tracks_page)
+        
+    #     # Hide results text if visible
+    #     if hasattr(self, 'results_text') and self.results_text.isVisible():
+    #         self.results_text.hide()
+
+    # def unlove_track_from_table(self, track_index):
+    #     """
+    #     Unlove a track directly from the table
+        
+    #     Args:
+    #         track_index (int): Index of the track in the loved_tracks_list
+    #     """
+    #     if not hasattr(self, 'loved_tracks_list') or track_index >= len(self.loved_tracks_list):
+    #         QMessageBox.warning(self, "Error", "Track information not available")
+    #         return
+        
+    #     loved_track = self.loved_tracks_list[track_index]
+    #     track = loved_track.track
+        
+    #     # Confirm with user
+    #     reply = QMessageBox.question(
+    #         self,
+    #         "Confirm Unlove",
+    #         f"Remove '{track.title}' by {track.artist.name} from your loved tracks?",
+    #         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+    #     )
+        
+    #     if reply == QMessageBox.StandardButton.Yes:
+    #         try:
+    #             # Check if authentication is needed
+    #             if not self.lastfm_auth.is_authenticated():
+    #                 # Need to authenticate for write operations
+    #                 auth_reply = QMessageBox.question(
+    #                     self,
+    #                     "Authentication Required",
+    #                     "To remove a track from your loved tracks, you need to authenticate with Last.fm. Proceed?",
+    #                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+    #                 )
+                    
+    #                 if auth_reply == QMessageBox.StandardButton.Yes:
+    #                     # Prompt for password
+    #                     password, ok = QInputDialog.getText(
+    #                         self,
+    #                         "Last.fm Password",
+    #                         f"Enter password for {self.lastfm_username}:",
+    #                         QLineEdit.EchoMode.Password
+    #                     )
+                        
+    #                     if ok and password:
+    #                         # Try to authenticate
+    #                         self.lastfm_auth.password = password
+    #                         if not self.lastfm_auth.authenticate():
+    #                             QMessageBox.warning(self, "Authentication Failed", "Could not authenticate with Last.fm")
+    #                             return
+    #                     else:
+    #                         return  # Canceled
+    #                 else:
+    #                     return  # Declined authentication
+                
+    #             # Get the authenticated network
+    #             network = self.lastfm_auth.get_network()
+    #             if not network:
+    #                 QMessageBox.warning(self, "Error", "Could not connect to Last.fm")
+    #                 return
+                    
+    #             # Unlove the track
+    #             track.unlove()
+                
+    #             # Show success message
+    #             QMessageBox.information(self, "Success", "Track removed from loved tracks")
+                
+    #             # Refresh the list
+    #             self.show_lastfm_loved_tracks()
+                
+    #         except Exception as e:
+    #             error_msg = f"Error removing track from loved tracks: {e}"
+    #             QMessageBox.warning(self, "Error", error_msg)
+    #             self.logger.error(error_msg, exc_info=True)
+
+   
 
     def show_track_context_menu(self, position):
         """
@@ -3656,20 +3757,23 @@ class MuspyArtistModule(BaseModule):
 
 
     def search_and_get_releases(self):
-        """Search for artist releases without adding to Muspy"""
+        """Search for artist releases without adding to Muspy - revisada para cambiar a la página correcta"""
         artist_name = self.artist_input.text().strip()
         if not artist_name:
             QMessageBox.warning(self, "Error", "Please enter an artist name")
             return
 
-        # Ensure results_text is visible
-        self.results_text.show()
+        # Ensure we start with text page visible for status updates
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Searching for releases by {artist_name}...")
+        QApplication.processEvents()
 
         # Get MBID for the artist
         mbid = self.get_mbid_artist_searched(artist_name)
         
         if not mbid:
-            QMessageBox.warning(self, "Error", f"Could not find MBID for {artist_name}")
+            QMessageBox.warning(self, "Error", f"Could not find MusicBrainz ID for {artist_name}")
             return
         
         # Store the current artist for possible addition later
@@ -3875,7 +3979,7 @@ class MuspyArtistModule(BaseModule):
 
     def get_artist_releases(self, mbid, artist_name=None):
         """
-        Get future releases for a specific artist by MBID
+        Get future releases for a specific artist by MBID - adaptado para usar muspy_results
         
         Args:
             mbid (str): MusicBrainz ID of the artist
@@ -3886,6 +3990,11 @@ class MuspyArtistModule(BaseModule):
             return
 
         try:
+            # Asegurarnos de mostrar la página de texto para actualizaciones
+            self.show_text_page()
+            self.results_text.append(f"Getting releases for {artist_name or 'artist'}...")
+            QApplication.processEvents()
+            
             url = f"{self.base_url}/releases"
             params = {"mbid": mbid}
             auth = (self.muspy_username, self.muspy_api_key)
@@ -3904,23 +4013,21 @@ class MuspyArtistModule(BaseModule):
                     return
                 
                 # Log releases for debugging
-                logger.info(f"Received {len(future_releases)} future releases out of {len(all_releases)} total")
+                self.logger.info(f"Received {len(future_releases)} future releases out of {len(all_releases)} total")
                 if future_releases:
-                    logger.info(f"Sample release data: {future_releases[0]}")
+                    self.logger.info(f"Sample release data: {future_releases[0]}")
                 
-                # Display releases in table
-                table = self.display_releases_table(future_releases)
+                # Usar la página muspy_results
+                self.display_releases_in_muspy_results_page(future_releases, artist_name)
                 
                 # Add a button to follow this artist
-                self.add_follow_button = QPushButton(f"Seguir a {artist_name} en Muspy")
-                self.add_follow_button.clicked.connect(self.follow_current_artist)
-                self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
+                self.add_follow_button_to_results_page(artist_name)
             else:
                 self.results_text.append(f"Error retrieving releases: {response.status_code} - {response.text}")
         
         except Exception as e:
             self.results_text.append(f"Connection error with Muspy: {e}")
-            logger.error(f"Error getting releases: {e}")
+            self.logger.error(f"Error getting releases: {e}")
 
     def follow_current_artist(self):
         """Follow the currently displayed artist"""
@@ -4293,7 +4400,7 @@ class MuspyArtistModule(BaseModule):
  
     def add_artist_to_muspy(self, mbid=None, artist_name=None):
         """
-        Add/Follow an artist to Muspy using their MBID or name
+        Add/Follow an artist to Muspy using their MBID or name - versión revisada
         
         Args:
             mbid (str, optional): MusicBrainz ID of the artist
@@ -4315,50 +4422,41 @@ class MuspyArtistModule(BaseModule):
 
         if not mbid:
             message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: MBID no disponible"
-            self.results_text.append(message)
-            logger.error(message)
+            self.logger.error(message)
             return False
 
         # Validate MBID format (should be a UUID)
         if not (len(mbid) == 36 and mbid.count('-') == 4):
             message = f"MBID inválido para {artist_name or 'Desconocido'}: {mbid}"
-            self.results_text.append(message)
-            logger.error(message)
+            self.logger.error(message)
             return False
 
         try:
-            # Ensure results_text is visible
-            self.results_text.show()
-
             # Follow artist by MBID - Note the correct endpoint format
             url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
             
             # Use basic auth - username and API key
             auth = (self.muspy_username, self.muspy_api_key)
             
-            # Send as form data with empty dict (no additional params needed)
-            logger.info(f"Adding artist to Muspy: {artist_name} (MBID: {mbid})")
-            logger.debug(f"PUT URL: {url}")
+            # Depuración adicional
+            self.logger.debug(f"Adding artist to Muspy: {artist_name} (MBID: {mbid})")
+            self.logger.debug(f"URL: {url}")
+            self.logger.debug(f"Auth: username={self.muspy_username}, api_key={self.muspy_api_key[:4]}...")
             
+            # Send as form data with empty dict (no additional params needed)
             response = requests.put(url, auth=auth, data={})
             
             if response.status_code in [200, 201]:
-                message = f"Artista {artist_name or 'Desconocido'} agregado a Muspy"
-                self.results_text.append(message)
-                logger.info(message)
+                self.logger.info(f"Artista {artist_name or 'Desconocido'} agregado a Muspy")
                 return True
             else:
-                message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: {response.status_code} - {response.text}"
-                self.results_text.append(message)
-                logger.error(message)
+                self.logger.error(f"Error adding artist to Muspy: {response.status_code} - {response.text}")
                 # Add more detailed debugging
-                logger.debug(f"Response headers: {response.headers}")
-                logger.debug(f"Response content: {response.text}")
+                self.logger.debug(f"Response headers: {response.headers}")
+                self.logger.debug(f"Response content: {response.text}")
                 return False
         except Exception as e:
-            message = f"Error al agregar a Muspy: {e}"
-            self.results_text.append(message)
-            logger.error(message, exc_info=True)
+            self.logger.error(f"Error al agregar a Muspy: {e}", exc_info=True)
             return False
 
     def sync_lastfm_muspy(self):
@@ -4420,9 +4518,12 @@ class MuspyArtistModule(BaseModule):
 
 
 
-    def get_muspy_releases(self):
+    def get_muspy_releases(self, use_cached=True):
         """
-        Retrieve future releases from Muspy for the current user with progress bar
+        Retrieve future releases from Muspy for the current user with caching support
+        
+        Args:
+            use_cached (bool): Whether to use cached data when available
         """
         if not self.muspy_username or not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Muspy configuration not available")
@@ -4434,6 +4535,21 @@ class MuspyArtistModule(BaseModule):
             if not self.muspy_id:
                 QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
                 return
+
+        # Try to get from cache first if allowed
+        cache_key = f"muspy_releases_{self.muspy_id}"
+        if use_cached:
+            cached_data = self.cache_manager(cache_key, expiry_hours=12)  # Shorter expiry for releases
+            if cached_data:
+                future_releases = cached_data.get("future_releases", [])
+                if future_releases:
+                    self.display_releases_in_stacked_widget(future_releases)
+                    return
+                elif cached_data.get("all_releases"):
+                    QMessageBox.information(self, "No Future Releases", 
+                        f"No se encontraron próximos lanzamientos en Muspy.\n" +
+                        f"(Total de lanzamientos pasados: {len(cached_data.get('all_releases', []))})")
+                    return
 
         # Función de operación con progreso
         def fetch_releases(update_progress):
@@ -4455,6 +4571,13 @@ class MuspyArtistModule(BaseModule):
                     # Filter for future releases
                     today = datetime.date.today().strftime("%Y-%m-%d")
                     future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                    
+                    # Cache the results
+                    cache_data = {
+                        "all_releases": all_releases,
+                        "future_releases": future_releases
+                    }
+                    self.cache_manager(cache_key, cache_data, expiry_hours=12)
                     
                     # Actualizar progreso y terminar
                     update_progress(2, 2, "Generando visualización...")
@@ -4554,6 +4677,9 @@ class MuspyArtistModule(BaseModule):
         # Switch to the releases page - this will fully hide the text page
         stack_widget.setCurrentWidget(releases_page)
 
+    
+    
+    
     def show_text_page(self, html_content=None):
         """
         Switch to the text page and optionally update its content
@@ -4564,6 +4690,10 @@ class MuspyArtistModule(BaseModule):
         # Find the stacked widget
         stack_widget = self.findChild(QStackedWidget, "stackedWidget")
         if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            # Asegurarnos de que results_text es visible como fallback
+            if hasattr(self, 'results_text'):
+                self.results_text.show()
             return
         
         # Find the text page
@@ -4575,6 +4705,10 @@ class MuspyArtistModule(BaseModule):
                 break
         
         if not text_page:
+            self.logger.error("text_page not found in stacked widget")
+            # Asegurarnos de que results_text es visible como fallback
+            if hasattr(self, 'results_text'):
+                self.results_text.show()
             return
         
         # Update content if provided
@@ -4583,7 +4717,126 @@ class MuspyArtistModule(BaseModule):
         
         # Switch to text page
         stack_widget.setCurrentWidget(text_page)
+        
+        # Asegurarnos de que results_text es visible dentro de text_page
+        if hasattr(self, 'results_text'):
+            self.results_text.setVisible(True)
    
+
+    def display_releases_in_muspy_results_page(self, releases, artist_name=None):
+        """
+        Muestra los lanzamientos en la página específica de resultados de Muspy
+        
+        Args:
+            releases (list): Lista de lanzamientos
+            artist_name (str, optional): Nombre del artista para el título
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            # Fallback a la función original si no encontramos el widget
+            self.display_releases_table(releases)
+            return
+        
+        # Find the muspy_results page
+        results_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "muspy_results":
+                results_page = widget
+                break
+        
+        if not results_page:
+            self.logger.error("muspy_results page not found in stacked widget")
+            # Fallback a la función original si no encontramos la página
+            self.display_releases_table(releases)
+            return
+        
+        # Get the table widget and count label from the results page
+        table = results_page.findChild(QTableWidget, "tableWidget_muspy_results")
+        count_label = results_page.findChild(QLabel, "label_result_count")
+        
+        if not table:
+            self.logger.error("tableWidget_muspy_results not found in results page")
+            return
+        
+        # Update count label if exists
+        if count_label:
+            count_label.setText(f"Showing {len(releases)} upcoming releases for {artist_name or 'artist'}")
+        
+        # Configure table
+        table.setRowCount(len(releases))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table
+        self._fill_releases_table(table, releases)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Switch to the results page
+        stack_widget.setCurrentWidget(results_page)
+
+
+    def add_follow_button_to_results_page(self, artist_name):
+        """
+        Añade un botón para seguir al artista actual en la página de resultados
+        
+        Args:
+            artist_name (str): Nombre del artista
+        """
+        # Find the muspy_results page
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            return
+        
+        results_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "muspy_results":
+                results_page = widget
+                break
+        
+        if not results_page:
+            return
+        
+        # Buscar un botón existente o crear uno nuevo
+        follow_button = results_page.findChild(QPushButton, "follow_artist_button")
+        
+        if not follow_button:
+            # Si no existe, buscar un layout donde añadirlo
+            layout = None
+            
+            # Buscar primero un layout vertical al final de la página
+            bottom_layout = results_page.findChild(QVBoxLayout, "bottom_layout")
+            if bottom_layout:
+                layout = bottom_layout
+            else:
+                # Si no encontramos el layout específico, buscamos el layout principal
+                for child in results_page.children():
+                    if isinstance(child, QVBoxLayout) or isinstance(child, QHBoxLayout):
+                        layout = child
+                        break
+            
+            if layout:
+                # Crear el botón
+                follow_button = QPushButton(f"Seguir a {artist_name} en Muspy")
+                follow_button.setObjectName("follow_artist_button")
+                layout.addWidget(follow_button)
+            else:
+                self.logger.error("No suitable layout found in muspy_results page for follow button")
+                return
+        else:
+            # Si ya existe, actualizar el texto
+            follow_button.setText(f"Seguir a {artist_name} en Muspy")
+        
+        # Conectar el botón a la acción
+        follow_button.clicked.connect(self.follow_current_artist)
+        follow_button.setEnabled(True)
+
+
+
     def get_all_my_releases(self):
         """
         Retrieve all releases for the user's artists using the user ID with progress bar
@@ -5761,53 +6014,107 @@ class MuspyArtistModule(BaseModule):
             # Asegurarse de que el diálogo se cierre
             progress.close()
 
-    def fix_lastfm_auth_manager(self):
-        """Reinitialize and fix the LastFM auth manager"""
-        if not self.lastfm_enabled:
-            return False
+    
+
+    def cache_manager(self, cache_type, data=None, force_refresh=False, expiry_hours=24):
+        """
+        Manages caching for different types of data (top_artists, loved_tracks, releases)
+        
+        Args:
+            cache_type (str): Type of cache ('top_artists', 'loved_tracks', 'releases')
+            data (dict, optional): Data to cache. If None, retrieves cache.
+            force_refresh (bool): Whether to ignore cache and force refresh
+            expiry_hours (int): Hours after which cache expires (default 24)
             
-        try:
-            from tools.lastfm_login import LastFMAuthManager
+        Returns:
+            dict or None: Cached data if available and not expired, None otherwise
+        """
+        import json
+        import os
+        import time
+        
+        # Ensure cache directory exists
+        cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "muspy_module")
+        os.makedirs(cache_dir, exist_ok=True)
+        
+        # Define cache file path
+        cache_file = os.path.join(cache_dir, f"{cache_type}_cache.json")
+        
+        # If we're storing data
+        if data is not None:
+            cache_data = {
+                "timestamp": time.time(),
+                "data": data
+            }
             
-            # Reinitialize with proper credentials
-            self.lastfm_auth = LastFMAuthManager(
-                api_key=self.lastfm_api_key,
-                api_secret=self.lastfm_api_secret,
-                username=self.lastfm_username,
-                parent_widget=self,
-                project_root=PROJECT_ROOT
-            )
-            
-            # Try to get network to validate connection
-            network = self.lastfm_auth.get_network()
-            if not network:
-                self.logger.error("Failed to get LastFM network connection")
-                return False
-                
-            # Test with a simple API call
             try:
-                # Get user info directly using pylast
-                user = network.get_user(self.lastfm_username)
-                
-                # Try to get top artists (with minimal count)
-                top_artists = user.get_top_artists(limit=1)
-                
-                if top_artists:
-                    self.logger.info("LastFM connection successful with data retrieval")
-                    return True
-                else:
-                    self.logger.warning("LastFM connection succeeded but no data retrieved")
-                    return False
-                    
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(cache_data, f, ensure_ascii=False, indent=2)
+                self.logger.debug(f"Cached {cache_type} data successfully")
+                return True
             except Exception as e:
-                self.logger.error(f"Error testing LastFM connection: {e}", exc_info=True)
+                self.logger.error(f"Error caching {cache_type} data: {e}")
                 return False
+        
+        # If we're retrieving data
+        else:
+            # If force refresh, don't use cache
+            if force_refresh:
+                return None
                 
+            # Check if cache file exists
+            if not os.path.exists(cache_file):
+                return None
+                
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    
+                # Check if cache is expired
+                timestamp = cache_data.get("timestamp", 0)
+                expiry_time = timestamp + (expiry_hours * 3600)  # Convert hours to seconds
+                
+                if time.time() > expiry_time:
+                    self.logger.debug(f"{cache_type} cache expired")
+                    return None
+                    
+                # Cache is valid
+                self.logger.debug(f"Using cached {cache_type} data")
+                return cache_data.get("data")
+                
+            except Exception as e:
+                self.logger.error(f"Error loading {cache_type} cache: {e}")
+                return None
+
+    def clear_lastfm_cache(self):
+        """
+        Clear the LastFM cache files
+        """
+        import os
+        import glob
+        
+        cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "muspy_module")
+        
+        if not os.path.exists(cache_dir):
+            return
+        
+        try:
+            # Find all LastFM cache files
+            lastfm_cache_files = glob.glob(os.path.join(cache_dir, "top_artists_*.json"))
+            lastfm_cache_files.extend(glob.glob(os.path.join(cache_dir, "loved_tracks_*.json")))
+            
+            for cache_file in lastfm_cache_files:
+                try:
+                    os.remove(cache_file)
+                    self.logger.debug(f"Removed cache file: {cache_file}")
+                except Exception as e:
+                    self.logger.error(f"Error removing cache file {cache_file}: {e}")
+            
+            QMessageBox.information(self, "Cache Cleared", f"Cleared {len(lastfm_cache_files)} LastFM cache files")
         except Exception as e:
-            self.logger.error(f"Error initializing LastFM auth manager: {e}", exc_info=True)
-            return False
-
-
+            self.logger.error(f"Error clearing LastFM cache: {e}")
+            QMessageBox.warning(self, "Error", f"Error clearing cache: {e}")
+                
 def main():
     """Main function to run the Muspy Artist Management Module"""
     app = QApplication(sys.argv)
