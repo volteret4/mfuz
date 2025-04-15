@@ -335,20 +335,16 @@ class MuspyArtistModule(BaseModule):
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         
         # Conectar el botón de Last.fm para mostrar su menú
-        from PyQt6.QtWidgets import QPushButton
-        
-        # Para el botón de last.fm
         lastfm_button = self.findChild(QPushButton, 'sync_lastfm_button')
         if lastfm_button:
-            lastfm_enabled = getattr(self, 'lastfm_enabled', False)
-            
-            if lastfm_enabled:
+            if self.lastfm_enabled:
                 # Conectar al nuevo método para mostrar el menú en lugar de sync_lastfm_muspy
                 lastfm_button.clicked.connect(self.show_lastfm_options_menu)
                 lastfm_button.setVisible(True)
             else:
                 lastfm_button.setVisible(False)
         
+        # Conectar a las nuevas versiones con barra de progreso
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
@@ -1074,7 +1070,7 @@ class MuspyArtistModule(BaseModule):
 
     def sync_top_artists_from_lastfm(self, count=50):
         """
-        Synchronize top Last.fm artists with Muspy
+        Synchronize top Last.fm artists with Muspy using progress bar
         
         Args:
             count (int): Number of top artists to sync
@@ -1090,47 +1086,174 @@ class MuspyArtistModule(BaseModule):
                 QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
                 return
 
-        # Clear the results area and make sure it's visible
-        self.results_text.clear()
-        self.results_text.show()
-        self.results_text.append(f"Starting Last.fm synchronization for user {self.lastfm_username}...\n")
-        self.results_text.append(f"Syncing top {count} artists from Last.fm to Muspy\n")
-        QApplication.processEvents()  # Update UI
-
-        try:
-            # First try direct API import
-            import_url = f"{self.base_url}/import/{self.muspy_id}"
-            auth = (self.muspy_username, self.muspy_api_key)
+        # Función para procesar la sincronización con progreso
+        def process_lastfm_sync(update_progress, count=count):
+            # Primero intentar importación directa vía API
+            update_progress(0, 1, "Enviando solicitud a Muspy API...", indeterminate=True)
             
-            import_data = {
-                'type': 'lastfm',
-                'username': self.lastfm_username,
-                'count': count,
-                'period': 'overall'
-            }
-            
-            self.results_text.append("Sending request to Muspy API...")
-            QApplication.processEvents()
-            
-            # Use POST for the import endpoint
-            response = requests.post(import_url, auth=auth, json=import_data)
-            
-            if response.status_code in [200, 201]:
-                self.results_text.append(f"Successfully synchronized top {count} artists from Last.fm account {self.lastfm_username}")
-                self.results_text.append("You can now view your upcoming releases using the 'Mis próximos discos' button")
-                return True
+            try:
+                import_url = f"{self.base_url}/import/{self.muspy_id}"
+                auth = (self.muspy_username, self.muspy_api_key)
+                
+                import_data = {
+                    'type': 'lastfm',
+                    'username': self.lastfm_username,
+                    'count': count,
+                    'period': 'overall'
+                }
+                
+                # Use POST for the import endpoint
+                response = requests.post(import_url, auth=auth, json=import_data)
+                
+                if response.status_code in [200, 201]:
+                    return {
+                        "success": True,
+                        "method": "api",
+                        "message": f"Successfully synchronized top {count} artists from Last.fm"
+                    }
+                else:
+                    # If direct API fails, try the alternative method
+                    update_progress(0, 1, "API directa falló. Intentando método alternativo...", indeterminate=True)
+                    return self._sync_lastfm_alternative_with_progress(update_progress, count)
+            except Exception as e:
+                self.logger.error(f"Error syncing with Muspy API: {e}", exc_info=True)
+                
+                # Try alternative method
+                update_progress(0, 1, "Error con API. Intentando método alternativo...", indeterminate=True)
+                return self._sync_lastfm_alternative_with_progress(update_progress, count)
+        
+        # Ejecutar con el diálogo de progreso
+        results = self.show_progress_operation(
+            process_lastfm_sync,
+            title=f"Sincronizando Top {count} Artistas de Last.fm",
+            label_format="{status}",
+            finish_message=None  # Se generará basado en los resultados
+        )
+        
+        # Mostrar resultados
+        if results:
+            if results.get("success"):
+                method = "API directa" if results.get("method") == "api" else "método alternativo"
+                message = f"Sincronización completada con éxito usando {method}.\n" + results.get("message", "")
+                
+                # Actualizar la interfaz
+                self.results_text.clear()
+                self.results_text.append(message)
+                self.results_text.append("\nAhora puedes ver tus próximos lanzamientos usando el botón 'Mis próximos discos'")
+                
+                # Mostrar mensaje de éxito
+                QMessageBox.information(self, "Sincronización Completa", message)
             else:
-                # If direct API fails, try using our LastFM manager as fallback
-                self.results_text.append("Direct API import failed. Trying alternative method...")
-                return self._sync_lastfm_alternative(count)
-        except Exception as e:
-            error_msg = f"Error syncing with Muspy API: {e}"
-            self.results_text.append(error_msg)
-            self.logger.error(error_msg, exc_info=True)
+                error_msg = f"Error en la sincronización: {results.get('message', 'Error desconocido')}"
+                self.results_text.append(error_msg)
+                QMessageBox.warning(self, "Error", error_msg)
+
+    def _sync_lastfm_alternative_with_progress(self, update_progress, count=50):
+        """
+        Versión alternativa de sincronización LastFM con progreso
+        
+        Args:
+            update_progress: Función para actualizar el progreso
+            count (int): Número de artistas a sincronizar
+        
+        Returns:
+            dict: Resultados de la operación
+        """
+        try:
+            # Get LastFM network
+            update_progress(0, count, "Conectando con LastFM...", indeterminate=True)
             
-            # Try alternative method
-            self.results_text.append("Trying alternative synchronization method...")
-            return self._sync_lastfm_alternative(count)
+            network = self.lastfm_auth.get_network()
+            if not network:
+                return {
+                    "success": False,
+                    "message": "Could not connect to LastFM. Please check your credentials."
+                }
+            
+            # Get top artists
+            update_progress(0, count, f"Obteniendo top {count} artistas de LastFM...")
+            
+            top_artists = self.lastfm_auth.get_top_artists(limit=count)
+            
+            if not top_artists:
+                return {
+                    "success": False,
+                    "message": "No artists found on LastFM account."
+                }
+            
+            # Mostrar cuántos se han encontrado
+            update_progress(0, len(top_artists), f"Encontrados {len(top_artists)} artistas en LastFM")
+            
+            # Variables de seguimiento
+            successful_adds = 0
+            failed_adds = 0
+            mbid_not_found = 0
+            
+            # Procesar cada artista
+            for i, artist in enumerate(top_artists):
+                artist_name = artist['name']
+                
+                # Actualizar progreso con el nombre del artista actual
+                if not update_progress(i, len(top_artists), f"Procesando: {artist_name}"):
+                    return {
+                        "success": False,
+                        "message": "Operación cancelada por el usuario.",
+                        "stats": {
+                            "processed": i,
+                            "successful": successful_adds,
+                            "failed": failed_adds,
+                            "no_mbid": mbid_not_found
+                        }
+                    }
+                
+                # Try to use MBID from LastFM if available
+                mbid = artist.get('mbid')
+                
+                # If no MBID, search for it
+                if not mbid:
+                    mbid = self.get_mbid_artist_searched(artist_name)
+                
+                if mbid:
+                    # Add artist to Muspy
+                    result = self.add_artist_to_muspy_silent(mbid, artist_name)
+                    if result == 1:
+                        successful_adds += 1
+                    elif result == 0:
+                        # Already exists
+                        successful_adds += 1
+                    else:
+                        failed_adds += 1
+                else:
+                    mbid_not_found += 1
+            
+            # Actualizar progreso final
+            update_progress(len(top_artists), len(top_artists), "Sincronización completada")
+            
+            # Generar resultado
+            return {
+                "success": True,
+                "method": "alternative",
+                "message": (
+                    f"Sincronización completada.\n"
+                    f"Total artistas: {len(top_artists)}\n"
+                    f"Añadidos correctamente: {successful_adds}\n"
+                    f"No encontrados (sin MBID): {mbid_not_found}\n"
+                    f"Fallos: {failed_adds}"
+                ),
+                "stats": {
+                    "total": len(top_artists),
+                    "successful": successful_adds,
+                    "failed": failed_adds,
+                    "no_mbid": mbid_not_found
+                }
+            }
+        
+        except Exception as e:
+            self.logger.error(f"Error in alternative LastFM sync: {e}", exc_info=True)
+            return {
+                "success": False,
+                "message": f"Error en LastFM sync: {str(e)}",
+            }
 
     def sync_lastfm_custom_count(self):
         """
@@ -1289,31 +1412,25 @@ class MuspyArtistModule(BaseModule):
         """
         if not self.muspy_id and self.muspy_username and self.muspy_api_key:
             try:
+                # Using the /user endpoint to get user info
                 url = f"{self.base_url}/user"
                 auth = (self.muspy_username, self.muspy_api_key)
                 
                 response = requests.get(url, auth=auth)
                 
                 if response.status_code == 200:
-                    # La API devuelve información del usuario en el formato JSON
-                    # Intentamos obtener el ID directamente de la respuesta
-                    user_info_url = f"{self.base_url}/user"
-                    user_response = requests.get(user_info_url, auth=auth)
-                    
-                    if user_response.status_code == 200:
-                        user_data = user_response.json()
-                        if 'userid' in user_data:
-                            self.muspy_id = user_data['userid']
-                            logger.debug(f"Muspy ID obtenido: {self.muspy_id}")
-                            return self.muspy_id
-                        else:
-                            logger.error("No se encontró 'userid' en la respuesta JSON")
+                    # Try to parse user_id from response
+                    user_data = response.json()
+                    if 'userid' in user_data:
+                        self.muspy_id = user_data['userid']
+                        logger.debug(f"Muspy ID obtained: {self.muspy_id}")
+                        return self.muspy_id
                     else:
-                        logger.error(f"Error al obtener información del usuario: {user_response.status_code}")
+                        logger.error(f"No 'userid' in response JSON: {user_data}")
                 else:
-                    logger.error(f"Error en la llamada a la API de Muspy: {response.status_code}")
+                    logger.error(f"Error calling Muspy API: {response.status_code} - {response.text}")
             except Exception as e:
-                logger.error(f"Error al obtener Muspy ID: {e}")
+                logger.error(f"Error getting Muspy ID: {e}", exc_info=True)
         
         return self.muspy_id
 
@@ -2495,12 +2612,12 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", f"Error al obtener nuevos lanzamientos: {str(e)}")
 
     def sync_artists_with_muspy(self):
-        """Synchronize artists from JSON file with Muspy"""
+        """Synchronize artists from JSON file with Muspy using progress bar"""
         # Ruta al archivo JSON
-        json_path = PROJECT_ROOT / ".content" / "cache" / "artists_selected.json"
+        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
         
         # Verificar si el archivo existe
-        if not json_path.exists():
+        if not os.path.exists(json_path):
             error_msg = "El archivo artists_selected.json no existe."
             self.results_text.append(error_msg)
             QMessageBox.warning(self, "Error", error_msg)
@@ -2522,73 +2639,88 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(error_msg)
             QMessageBox.warning(self, "Error", error_msg)
             return
+        
+        # Función para procesar los artistas con progreso
+        def process_artists(update_progress, artists_data):
+            total_artists = len(artists_data)
             
-        # Limpiar solo una vez al principio
-        self.results_text.clear()
-        self.results_text.append("Comenzando sincronización de artistas desde JSON...\n")
-        
-        # Mostrar una barra de progreso simple
-        total_artists = len(artists_data)
-        self.results_text.append(f"Total artistas a sincronizar: {total_artists}\n")
-        self.results_text.append("Progreso: [" + "-" * 50 + "]\n")
-        QApplication.processEvents()  # Update UI immediately
-        
-        # Variables para llevar el conteo
-        successful_adds = 0
-        failed_adds = 0
-        duplicates = 0
-        
-        # Procesar por lotes para no sobrecargar la interfaz
-        for i, artist_data in enumerate(artists_data):
-            try:
-                # Obtener el nombre y MBID directamente del JSON
-                artist_name = artist_data["nombre"]
-                mbid = artist_data["mbid"]
+            # Variables para llevar el conteo
+            results = {
+                "successful_adds": 0,
+                "failed_adds": 0,
+                "duplicates": 0
+            }
+            
+            # Actualizar inicialmente
+            update_progress(0, total_artists, "Preparando sincronización...")
+            
+            # Procesar artistas
+            for i, artist_data in enumerate(artists_data):
+                # Comprobar si se canceló
+                if not update_progress(i, total_artists, f"Procesando {artist_data.get('nombre', 'Desconocido')}"):
+                    return {**results, "canceled": True}
                 
-                # Intentar añadir el artista con el MBID proporcionado
-                if mbid:
-                    response = self.add_artist_to_muspy_silent(mbid, artist_name)
-                    if response == 1:
-                        successful_adds += 1
-                    elif response == 0:
-                        duplicates += 1
+                try:
+                    # Obtener el nombre y MBID directamente del JSON
+                    artist_name = artist_data.get("nombre", "")
+                    mbid = artist_data.get("mbid", "")
+                    
+                    # Intentar añadir el artista con el MBID proporcionado
+                    if mbid:
+                        response = self.add_artist_to_muspy_silent(mbid, artist_name)
+                        if response == 1:
+                            results["successful_adds"] += 1
+                        elif response == 0:
+                            results["duplicates"] += 1
+                        else:
+                            results["failed_adds"] += 1
                     else:
-                        failed_adds += 1
-                else:
-                    logger.error(f"MBID no válido para el artista {artist_name}")
-                    failed_adds += 1
+                        self.logger.error(f"MBID no válido para el artista {artist_name}")
+                        results["failed_adds"] += 1
                 
-                # Actualizar la barra de progreso cada 5 artistas o al final
-                if (i + 1) % 5 == 0 or i == total_artists - 1:
-                    progress = int((i + 1) / total_artists * 50)
-                    self.results_text.clear()
-                    self.results_text.append(f"Sincronizando artistas... {i + 1}/{total_artists}\n")
-                    self.results_text.append(f"Progreso: [" + "#" * progress + "-" * (50 - progress) + "]\n")
-                    self.results_text.append(f"Añadidos: {successful_adds}, Duplicados: {duplicates}, Fallos: {failed_adds}\n")
-                    QApplication.processEvents()  # Permite que la interfaz se actualice
-            
-            except Exception as e:
-                logger.error(f"Error al sincronizar artista {artist_name if 'artist_name' in locals() else 'desconocido'}: {e}")
-                failed_adds += 1
+                except Exception as e:
+                    self.logger.error(f"Error al sincronizar artista {artist_name if 'artist_name' in locals() else 'desconocido'}: {e}")
+                    results["failed_adds"] += 1
+                    
+            # Actualizar con el resultado final
+            update_progress(total_artists, total_artists, "Sincronización completada")
+            return results
         
-        # Mostrar el resumen final
-        self.results_text.clear()
-        self.results_text.append(f"Sincronización completada\n")
-        self.results_text.append(f"Total artistas procesados: {total_artists}\n")
-        self.results_text.append(f"Añadidos correctamente: {successful_adds}\n")
-        self.results_text.append(f"Duplicados (ya existían): {duplicates}\n")
-        self.results_text.append(f"Fallos: {failed_adds}\n")
-        
-        # Show popup with results
-        QMessageBox.information(
-            self, 
-            "Sincronización Completa", 
-            f"Sincronización de artistas con Muspy completada.\n"
-            f"Total procesados: {total_artists}\n"
-            f"Añadidos: {successful_adds}\n"
-            f"Duplicados: {duplicates}\n"
-            f"Fallos: {failed_adds}"
+        # Ejecutar con el diálogo de progreso
+        results = self.show_progress_operation(
+            process_artists, 
+            operation_args={"artists_data": artists_data},
+            title="Sincronizando Artistas",
+            label_format="Artista {current} de {total} - {status}",
+            finish_message=None  # Personalizar luego
         )
+        
+        # Comprobar si fue cancelado
+        if results and results.get("canceled"):
+            self.results_text.append("Sincronización cancelada por el usuario.")
+            return
+        
+        # Mostrar el resumen final solo si no se canceló
+        if results:
+            # Construir mensaje de resultados
+            finish_message = (
+                f"Sincronización completada\n\n"
+                f"Total artistas procesados: {len(artists_data)}\n"
+                f"Añadidos correctamente: {results['successful_adds']}\n"
+                f"Duplicados (ya existían): {results['duplicates']}\n"
+                f"Fallos: {results['failed_adds']}"
+            )
+            
+            # Mostrar en la interfaz
+            self.results_text.clear()
+            self.results_text.append(finish_message)
+            
+            # Mostrar popup con resultados
+            QMessageBox.information(
+                self, 
+                "Sincronización Completa", 
+                finish_message.replace("\n\n", "\n")
+            )
 
     def add_artist_to_muspy_silent(self, mbid=None, artist_name=None):
         """
@@ -2601,27 +2733,36 @@ class MuspyArtistModule(BaseModule):
         Returns:
             int: 1 para éxito, 0 para duplicado, -1 para error
         """
-        if not self.muspy_username or not self.muspy_api_key or not self.muspy_id:
+        if not self.muspy_username or not self.muspy_api_key:
             return -1
+
+        if not self.muspy_id:
+            # Try to get the ID if not already set
+            self.get_muspy_id()
+            if not self.muspy_id:
+                return -1
 
         if not mbid or not (len(mbid) == 36 and mbid.count('-') == 4):
             return -1
 
         try:
-            # Follow artist by MBID
+            # Follow artist by MBID with correct endpoint format
             url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
-            auth = (self.muspy_username, self.muspy_password)
+            auth = (self.muspy_username, self.muspy_api_key)
             
-            response = requests.put(url, auth=auth)
+            # Send as form data with empty dict
+            response = requests.put(url, auth=auth, data={})
             
             if response.status_code in [200, 201]:
-                # Verificar si ya existía el artista
+                # Check if already exists message
                 if "already exists" in response.text.lower():
                     return 0  # Duplicado
                 return 1  # Éxito
             else:
+                logger.debug(f"Error following artist: {response.status_code} - {response.text}")
                 return -1  # Error
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error in silent follow: {e}", exc_info=True)
             return -1  # Error
 
     def get_mbid_artist_searched(self, artist_name):
@@ -2720,6 +2861,13 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", "Configuración de Muspy no disponible")
             return False
 
+        if not self.muspy_id:
+            # Try to get the Muspy ID if it's not set
+            self.get_muspy_id()
+            if not self.muspy_id:
+                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
+                return False
+
         if not mbid:
             message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: MBID no disponible"
             self.results_text.append(message)
@@ -2737,14 +2885,17 @@ class MuspyArtistModule(BaseModule):
             # Ensure results_text is visible
             self.results_text.show()
 
-            # Follow artist by MBID
+            # Follow artist by MBID - Note the correct endpoint format
             url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
             
-            # Usar autenticación básica en lugar de token
+            # Use basic auth - username and API key
             auth = (self.muspy_username, self.muspy_api_key)
             
-            logger.info(f"Agregando artista a Muspy: {artist_name} (MBID: {mbid})")
-            response = requests.put(url, auth=auth)
+            # Send as form data with empty dict (no additional params needed)
+            logger.info(f"Adding artist to Muspy: {artist_name} (MBID: {mbid})")
+            logger.debug(f"PUT URL: {url}")
+            
+            response = requests.put(url, auth=auth, data={})
             
             if response.status_code in [200, 201]:
                 message = f"Artista {artist_name or 'Desconocido'} agregado a Muspy"
@@ -2755,11 +2906,14 @@ class MuspyArtistModule(BaseModule):
                 message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: {response.status_code} - {response.text}"
                 self.results_text.append(message)
                 logger.error(message)
+                # Add more detailed debugging
+                logger.debug(f"Response headers: {response.headers}")
+                logger.debug(f"Response content: {response.text}")
                 return False
         except Exception as e:
             message = f"Error al agregar a Muspy: {e}"
             self.results_text.append(message)
-            logger.error(message)
+            logger.error(message, exc_info=True)
             return False
 
     def sync_lastfm_muspy(self):
@@ -2911,119 +3065,207 @@ class MuspyArtistModule(BaseModule):
 
     def get_muspy_releases(self):
         """
-        Retrieve future releases from Muspy for the current user
-        
-        Displays future releases in a QTableWidget
+        Retrieve future releases from Muspy for the current user with progress bar
         """
         if not self.muspy_username or not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Muspy configuration not available")
             return
 
-        try:
-            url = f"{self.base_url}/releases/{self.muspy_api_key}"
-            # Usar autenticación básica en lugar de token
-            auth = (self.muspy_username, self.muspy_api_key)
+        # Función de operación con progreso
+        def fetch_releases(update_progress):
+            update_progress(0, 1, "Conectando con Muspy API...", indeterminate=True)
             
-            response = requests.get(url, auth=auth)
-            
-            if response.status_code == 200:
-                all_releases = response.json()
+            try:
+                url = f"{self.base_url}/releases/{self.muspy_api_key}"
+                auth = (self.muspy_username, self.muspy_api_key)
                 
-                # Filter for future releases
-                today = datetime.date.today().strftime("%Y-%m-%d")
-                future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                response = requests.get(url, auth=auth)
+                
+                if response.status_code == 200:
+                    # Procesando datos
+                    update_progress(1, 2, "Procesando resultados...", indeterminate=True)
+                    
+                    all_releases = response.json()
+                    
+                    # Filter for future releases
+                    today = datetime.date.today().strftime("%Y-%m-%d")
+                    future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                    
+                    # Actualizar progreso y terminar
+                    update_progress(2, 2, "Generando visualización...")
+                    
+                    return {
+                        "success": True,
+                        "all_releases": all_releases,
+                        "future_releases": future_releases
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": f"Error retrieving releases: {response.status_code} - {response.text}"
+                    }
+            
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Connection error with Muspy: {e}"
+                }
+        
+        # Ejecutar con diálogo de progreso
+        result = self.show_progress_operation(
+            fetch_releases,
+            title="Obteniendo Próximos Lanzamientos",
+            label_format="{status}"
+        )
+        
+        # Procesar resultados
+        if result:
+            if result.get("success"):
+                future_releases = result.get("future_releases", [])
+                all_releases = result.get("all_releases", [])
                 
                 if not future_releases:
-                    QMessageBox.information(self, "No Future Releases", "No upcoming releases in Muspy")
+                    QMessageBox.information(self, "No Future Releases", 
+                        f"No se encontraron próximos lanzamientos en Muspy.\n" +
+                        f"(Total de lanzamientos: {len(all_releases)})")
                     return
                 
-                # Display releases in table
+                # Display releases in table or tree
                 self.display_releases_table(future_releases)
             else:
-                QMessageBox.warning(self, "Error", f"Error retrieving releases: {response.text}")
-        
-        except Exception as e:
-            QMessageBox.warning(self, "Connection Error", f"Connection error with Muspy: {e}")
+                error_msg = result.get("error", "Unknown error")
+                QMessageBox.warning(self, "Error", error_msg)
    
    
    
     def get_all_my_releases(self):
         """
-        Retrieve all releases for the user's artists using the user ID
-        
-        Handles pagination to get all releases even when there are many artists
+        Retrieve all releases for the user's artists using the user ID with progress bar
         """
         if not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Muspy ID not available. Please check your configuration.")
             return
 
-        try:
-            # Show progress in the text area
-            self.results_text.clear()
-            self.results_text.show()
-            self.results_text.append("Fetching your releases... This might take a while.")
-            QApplication.processEvents()  # Update UI
-            
+        # Función de operación con progreso
+        def fetch_all_releases(update_progress):
+            # Valores iniciales
             all_releases = []
             offset = 0
             limit = 100  # Maximum allowed by API
+            total_found = 0  # Lo actualizaremos después del primer lote
             more_releases = True
+            batch_num = 1
             
-            while more_releases:
-                # Create URL with user ID, offset, and limit
-                url = f"{self.base_url}/releases/{self.muspy_id}"
-                params = {
-                    "offset": offset,
-                    "limit": limit
+            # Iniciar progreso indeterminado hasta que sepamos cuántos hay
+            update_progress(0, 1, "Conectando con Muspy API...", indeterminate=True)
+            
+            try:
+                while more_releases:
+                    # Actualizar status
+                    batch_status = f"Obteniendo lote {batch_num} (registros {offset+1}-{offset+limit})..."
+                    
+                    if total_found > 0:
+                        # Ya conocemos el total aproximado
+                        update_progress(len(all_releases), total_found, batch_status)
+                    else:
+                        # Todavía en modo indeterminado
+                        update_progress(0, 1, batch_status, indeterminate=True)
+                    
+                    # Create URL with user ID, offset, and limit
+                    url = f"{self.base_url}/releases/{self.muspy_id}"
+                    params = {
+                        "offset": offset,
+                        "limit": limit
+                    }
+                    
+                    # Make the request
+                    response = requests.get(url, params=params)
+                    
+                    if response.status_code == 200:
+                        batch_releases = response.json()
+                        
+                        if not batch_releases:
+                            # No more releases to fetch
+                            more_releases = False
+                        else:
+                            # Add to our collection and update offset
+                            all_releases.extend(batch_releases)
+                            offset += limit
+                            batch_num += 1
+                            
+                            # Estimate total if we don't have it yet
+                            if total_found == 0 and len(batch_releases) == limit:
+                                # Si el primer lote está lleno, estimamos que podría haber
+                                # al menos 5 veces ese tamaño (sobreestimación)
+                                total_found = limit * 5
+                            elif total_found == 0:
+                                # Si el primer lote no está lleno, ya tenemos todos
+                                total_found = len(batch_releases)
+                            
+                            # If we got fewer than the limit, we've reached the end
+                            if len(batch_releases) < limit:
+                                more_releases = False
+                                # Update exact total
+                                total_found = len(all_releases)
+                    else:
+                        return {
+                            "success": False,
+                            "error": f"Error retrieving releases: {response.status_code} - {response.text}"
+                        }
+                
+                # Estamos procesando los resultados
+                update_progress(1, 2, "Procesando resultados...", indeterminate=True)
+                
+                # Filter for future releases
+                today = datetime.date.today().strftime("%Y-%m-%d")
+                future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                
+                # Sort releases by date
+                future_releases.sort(key=lambda x: x.get('date', '9999-99-99'))
+                
+                # Completar la operación
+                update_progress(2, 2, "Completado")
+                
+                return {
+                    "success": True,
+                    "all_releases": all_releases,
+                    "future_releases": future_releases
                 }
                 
-                self.results_text.append(f"Fetching releases {offset+1}-{offset+limit}...")
-                QApplication.processEvents()  # Update UI
-                
-                # Make the request
-                response = requests.get(url, params=params)
-                
-                if response.status_code == 200:
-                    batch_releases = response.json()
-                    
-                    if not batch_releases:
-                        # No more releases to fetch
-                        more_releases = False
-                    else:
-                        # Add to our collection and update offset
-                        all_releases.extend(batch_releases)
-                        offset += limit
-                        
-                        # Progress update
-                        self.results_text.append(f"Found {len(all_releases)} releases so far.")
-                        QApplication.processEvents()  # Update UI
-                        
-                        # If we got fewer than the limit, we've reached the end
-                        if len(batch_releases) < limit:
-                            more_releases = False
-                else:
-                    self.results_text.append(f"Error retrieving releases: {response.status_code} - {response.text}")
-                    more_releases = False
-            
-            # Filter for future releases
-            today = datetime.date.today().strftime("%Y-%m-%d")
-            future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
-            
-            self.results_text.append(f"Processing complete! Found {len(future_releases)} upcoming releases out of {len(all_releases)} total releases.")
-            
-            if not future_releases:
-                self.results_text.append("No upcoming releases found for your artists.")
-                return
-            
-            # Sort releases by date
-            future_releases.sort(key=lambda x: x.get('date', '9999-99-99'))
-            
-            # Display releases in table
-            self.display_releases_table(future_releases)
+            except Exception as e:
+                self.logger.error(f"Error getting all releases: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": f"Error obteniendo lanzamientos: {str(e)}"
+                }
         
-        except Exception as e:
-            self.results_text.append(f"Connection error with Muspy: {str(e)}")
-            logger.error(f"Error getting all releases: {e}")
+        # Ejecutar con el diálogo de progreso
+        result = self.show_progress_operation(
+            fetch_all_releases,
+            title="Obteniendo Todos los Lanzamientos",
+            label_format="{status}"
+        )
+        
+        # Procesar resultados
+        if result:
+            if result.get("success"):
+                all_releases = result.get("all_releases", [])
+                future_releases = result.get("future_releases", [])
+                
+                # Mostrar resultados en la interfaz
+                self.results_text.clear()
+                self.results_text.append(f"Procesamiento completo. Encontrados {len(future_releases)} lanzamientos futuros de un total de {len(all_releases)} lanzamientos.")
+                
+                if not future_releases:
+                    self.results_text.append("No se encontraron lanzamientos futuros para tus artistas.")
+                    return
+                
+                # Display releases in table
+                self.display_releases_table(future_releases)
+            else:
+                error_msg = result.get("error", "Error desconocido")
+                self.results_text.append(f"Error: {error_msg}")
+                QMessageBox.warning(self, "Error", error_msg)
 
 
 
@@ -3222,7 +3464,7 @@ class MuspyArtistModule(BaseModule):
         lastfm_action = QAction("Sincronizar Top Artists de Last.fm con Muspy", self)  # Renamed for clarity
         spotify_action = QAction("Sincronizar artistas seleccionados con Spotify", self)
         
-        # Connect actions to their respective functions
+        # Connect actions to their respective functions with progress bar
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
         
         # Create submenu for Last.fm top artists options
@@ -3234,7 +3476,7 @@ class MuspyArtistModule(BaseModule):
         top100_action = QAction("Top 100 Artists", self)
         custom_action = QAction("Custom Number of Artists...", self)
         
-        # Connect actions
+        # Connect actions to progress bar versions
         top10_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(10))
         top50_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(50))
         top100_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(100))
@@ -3937,6 +4179,100 @@ class MuspyArtistModule(BaseModule):
         if hasattr(self, 'spotify_auth'):
             return self.spotify_auth.get_client()
         return None
+
+
+    def show_progress_operation(self, operation_function, operation_args=None, title="Operación en progreso", 
+                            label_format="{current}/{total} - {status}", 
+                            cancel_button_text="Cancelar", 
+                            finish_message=None):
+        """
+        Ejecuta una operación con una barra de progreso, permitiendo cancelación.
+        
+        Args:
+            operation_function (callable): Función a ejecutar que debe aceptar un objeto QProgressDialog
+                                        como su primer argumento
+            operation_args (dict, optional): Argumentos para pasar a la función de operación
+            title (str): Título de la ventana de progreso
+            label_format (str): Formato del texto de progreso, con placeholders {current}, {total}, {status}
+            cancel_button_text (str): Texto del botón cancelar
+            finish_message (str, optional): Mensaje a mostrar cuando la operación termina con éxito
+                                        (None para no mostrar ningún mensaje)
+        
+        Returns:
+            Any: El valor devuelto por la función de operación
+        """
+        from PyQt6.QtWidgets import QProgressDialog, QApplication
+        from PyQt6.QtCore import Qt
+        
+        # Crear el diálogo de progreso
+        progress = QProgressDialog(self)
+        progress.setWindowTitle(title)
+        progress.setCancelButtonText(cancel_button_text)
+        progress.setMinimumDuration(0)  # Mostrar inmediatamente
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        
+        # Configuramos la progress bar para que permita rastreo indeterminado si es necesario
+        progress.setMinimum(0)
+        progress.setMaximum(100)  # Se puede cambiar desde la operación
+        progress.setValue(0)
+        
+        # Configurar el status label inicial
+        initial_status = label_format.format(current=0, total=0, status="Iniciando...")
+        progress.setLabelText(initial_status)
+        
+        # Crear una función de actualización que la operación pueda utilizar
+        def update_progress(current, total, status="Procesando...", indeterminate=False):
+            if progress.wasCanceled():
+                return False
+            
+            if indeterminate:
+                # Modo indeterminado: 0 indica progreso indeterminado en Qt
+                progress.setMinimum(0)
+                progress.setMaximum(0)
+            else:
+                # Modo normal con porcentaje
+                progress.setMinimum(0)
+                progress.setMaximum(total)
+                progress.setValue(current)
+                
+            # Actualizar el texto
+            progress_text = label_format.format(current=current, total=total, status=status)
+            progress.setLabelText(progress_text)
+            
+            # Procesar eventos para mantener la UI responsiva
+            QApplication.processEvents()
+            return True
+        
+        # Preparar argumentos
+        if operation_args is None:
+            operation_args = {}
+        
+        # Ejecutar la operación con la función de progreso
+        try:
+            result = operation_function(update_progress, **operation_args)
+            
+            # Mostrar mensaje de finalización si se proporciona
+            if finish_message and not progress.wasCanceled():
+                from PyQt6.QtWidgets import QMessageBox
+                QMessageBox.information(self, "Operación completa", finish_message)
+                
+            return result
+        except Exception as e:
+            # Capturar cualquier excepción para no dejar el diálogo colgado
+            from PyQt6.QtWidgets import QMessageBox
+            self.logger.error(f"Error en la operación: {e}", exc_info=True)
+            
+            # Solo mostrar error si no fue cancelado
+            if not progress.wasCanceled():
+                QMessageBox.critical(self, "Error", f"Se produjo un error durante la operación: {str(e)}")
+            
+            return None
+        finally:
+            # Asegurarse de que el diálogo se cierre
+            progress.close()
+
+
+
 
 def main():
     """Main function to run the Muspy Artist Management Module"""
