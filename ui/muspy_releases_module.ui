@@ -105,7 +105,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <number>0</number>
        </property>
        <item>
-        <widget class="QListView" name="listView"/>
+        <widget class="QWidget" name="table_widget_releases_artists_songs" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_3"/>
+        </widget>
        </item>
       </layout>
      </widget>
