@@ -401,10 +401,10 @@ class MuspyArtistModule(BaseModule):
         """Initialize the user interface for Muspy artist management"""
         # Lista de widgets requeridos
         required_widgets = [
-            'artist_input', 'search_button', 'results_text', 
+            'artist_input', 'search_button', 
             'load_artists_button', 'sync_artists_button', 
             'get_releases_button', 'get_new_releases_button', 'get_my_releases_button',
-            'stackedWidget'  # Added stackedWidget to required widgets
+            'stackedWidget'
         ]
         
         # Intentar cargar desde archivo UI
@@ -435,12 +435,14 @@ class MuspyArtistModule(BaseModule):
                 # Add floating navigation to stacked widget
                 self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
                 
-                # Initially show the results_text as placeholder
-                self.results_text.clear()
+                # Set initial welcome text
                 self.results_text.setHtml("""
                 <!DOCTYPE HTML>
                 <html><head><style>
-                body { text-align: center; margin-top: 100px; }
+                body { text-align: center; margin-top: 20px; }
+                h2 { color: #7aa2f7; }
+                ul { text-align: left; max-width: 600px; margin: 0 auto; }
+                li { margin-bottom: 10px; }
                 </style></head><body>
                 <h2>Muspy Artist Module</h2>
                 <p>Welcome to the Muspy Artist Module. This tool lets you:</p>
@@ -453,7 +455,9 @@ class MuspyArtistModule(BaseModule):
                 <p>Use the buttons at the bottom to get started.</p>
                 </body></html>
                 """)
-                self.results_text.show()
+                
+                # Make sure we start with the text page visible
+                self.stackedWidget.setCurrentIndex(0)
                 
                 # Connect signals
                 self._connect_signals()
@@ -476,82 +480,330 @@ class MuspyArtistModule(BaseModule):
             self.logger.error("Stacked widget not found in UI")
             return
         
-        # Check if the stacked widget already has pages
-        if self.stackedWidget.count() == 0:
-            # Create and add pages
-            
-            # Home page (info page)
-            home_page = QWidget()
-            home_page.setObjectName("home_page")
-            home_layout = QVBoxLayout(home_page)
-            home_layout.addWidget(self.results_text)
-            self.stackedWidget.addWidget(home_page)
-            
-            # Releases page
-            releases_page = QWidget()
-            releases_page.setObjectName("releases_page")
-            releases_layout = QVBoxLayout(releases_page)
-            
-            # Add a count label 
-            releases_count_label = QLabel("No releases loaded yet")
-            releases_count_label.setObjectName("count_label")
-            releases_layout.addWidget(releases_count_label)
-            
-            # Create table for releases
-            releases_table = QTableWidget()
-            releases_table.setObjectName("releases_table")
-            releases_table.setColumnCount(5)
-            releases_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
-            releases_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-            releases_layout.addWidget(releases_table)
-            
-            self.stackedWidget.addWidget(releases_page)
-            
-            # Top artists page
-            artists_page = QWidget()
-            artists_page.setObjectName("artists_page")
-            artists_layout = QVBoxLayout(artists_page)
-            
-            # Add a count label
-            artists_count_label = QLabel("No artists loaded yet")
-            artists_count_label.setObjectName("count_label")
-            artists_layout.addWidget(artists_count_label)
-            
-            # Create table for artists
-            artists_table = QTableWidget()
-            artists_table.setObjectName("artists_table")
-            artists_table.setColumnCount(4)
-            artists_table.setHorizontalHeaderLabels(["Artist", "Playcount", "Rank", "Actions"])
-            artists_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-            artists_layout.addWidget(artists_table)
-            
-            self.stackedWidget.addWidget(artists_page)
-            
-            # Loved tracks page
-            loved_tracks_page = QWidget()
-            loved_tracks_page.setObjectName("loved_tracks_page")
-            loved_layout = QVBoxLayout(loved_tracks_page)
-            
-            # Add a count label
-            loved_count_label = QLabel("No loved tracks loaded yet")
-            loved_count_label.setObjectName("count_label") 
-            loved_layout.addWidget(loved_count_label)
-            
-            # Create table for loved tracks
-            loved_table = QTableWidget()
-            loved_table.setObjectName("loved_tracks_table")
-            loved_table.setColumnCount(5)
-            loved_table.setHorizontalHeaderLabels(["Artist", "Track", "Album", "Date Loved", "Actions"])
-            loved_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-            loved_layout.addWidget(loved_table)
-            
-            self.stackedWidget.addWidget(loved_tracks_page)
+        # Clear any existing pages (in case of reinitialization)
+        while self.stackedWidget.count() > 0:
+            self.stackedWidget.removeWidget(self.stackedWidget.widget(0))
+        
+        # Create and add pages with identical structure
+        
+        # 1. Text page (for logs and instructions)
+        text_page = QWidget()
+        text_page.setObjectName("text_page")
+        text_layout = QVBoxLayout(text_page)
+        text_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        text_layout.setSpacing(0)  # Remove spacing
+        
+        # Create or use existing results_text widget
+        if hasattr(self, 'results_text'):
+            text_layout.addWidget(self.results_text)
+        else:
+            self.results_text = QTextEdit()
+            self.results_text.setReadOnly(True)
+            self.results_text.setObjectName("results_text")
+            text_layout.addWidget(self.results_text)
+        
+        self.stackedWidget.addWidget(text_page)
+        
+        # 2. Releases page
+        releases_page = QWidget()
+        releases_page.setObjectName("releases_page")
+        releases_layout = QVBoxLayout(releases_page)
+        releases_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        releases_layout.setSpacing(0)  # Remove spacing
+        
+        # Add a count label
+        releases_count_label = QLabel("No releases loaded yet")
+        releases_count_label.setObjectName("count_label")
+        releases_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        releases_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
+        releases_layout.addWidget(releases_count_label)
+        
+        # Create table for releases
+        releases_table = QTableWidget()
+        releases_table.setObjectName("releases_table")
+        releases_table.setColumnCount(5)
+        releases_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
+        releases_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        releases_table.verticalHeader().setVisible(False)  # Hide row numbers
+        releases_table.setShowGrid(False)  # More modern look without grid
+        releases_table.setAlternatingRowColors(True)  # Better readability
+        releases_layout.addWidget(releases_table)
+        
+        self.stackedWidget.addWidget(releases_page)
+        
+        # 3. Top artists page
+        artists_page = QWidget()
+        artists_page.setObjectName("artists_page")
+        artists_layout = QVBoxLayout(artists_page)
+        artists_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        artists_layout.setSpacing(0)  # Remove spacing
+        
+        # Add a count label (same style as releases)
+        artists_count_label = QLabel("No artists loaded yet")
+        artists_count_label.setObjectName("artists_count_label")
+        artists_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        artists_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
+        artists_layout.addWidget(artists_count_label)
+        
+        # Create table for artists
+        artists_table = QTableWidget()
+        artists_table.setObjectName("artists_table")
+        artists_table.setColumnCount(3)
+        artists_table.setHorizontalHeaderLabels(["Artist", "Playcount", "Actions"])
+        artists_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist column stretches
+        artists_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Playcount fixed size
+        artists_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Actions fixed size
+        artists_table.verticalHeader().setVisible(False)  # Hide row numbers
+        artists_table.setShowGrid(False)  # More modern look without grid
+        artists_table.setAlternatingRowColors(True)  # Better readability
+        artists_layout.addWidget(artists_table)
+        
+        self.stackedWidget.addWidget(artists_page)
+        
+        # 4. Loved tracks page
+        loved_tracks_page = QWidget()
+        loved_tracks_page.setObjectName("loved_tracks_page")
+        loved_layout = QVBoxLayout(loved_tracks_page)
+        loved_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        loved_layout.setSpacing(0)  # Remove spacing
+        
+        # Add a count label (same style as others)
+        loved_count_label = QLabel("No loved tracks loaded yet")
+        loved_count_label.setObjectName("loved_count_label")
+        loved_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        loved_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
+        loved_layout.addWidget(loved_count_label)
+        
+        # Create table for loved tracks
+        loved_table = QTableWidget()
+        loved_table.setObjectName("loved_tracks_table")
+        loved_table.setColumnCount(5)
+        loved_table.setHorizontalHeaderLabels(["Artist", "Track", "Album", "Date Loved", "Actions"])
+        loved_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist stretches
+        loved_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Track stretches
+        loved_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)  # Album stretches
+        loved_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Date fixed
+        loved_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Actions fixed
+        loved_table.verticalHeader().setVisible(False)  # Hide row numbers
+        loved_table.setShowGrid(False)  # More modern look without grid
+        loved_table.setAlternatingRowColors(True)  # Better readability
+        loved_layout.addWidget(loved_table)
+        
+        self.stackedWidget.addWidget(loved_tracks_page)
+        
+        # Apply consistent styling to all tables
+        table_style = """
+            QTableWidget {
+                background-color: transparent;
+                border: none;
+                gridline-color: transparent;
+            }
+            QHeaderView::section {
+                background-color: #24283b;
+                color: #a9b1d6;
+                border: none;
+                padding: 8px;
+                font-weight: bold;
+            }
+            QTableWidget::item {
+                border: none;
+                padding: 4px;
+            }
+            QTableWidget::item:selected {
+                background-color: #364A82;
+            }
+        """
+        
+        # Apply style to all tables
+        releases_table.setStyleSheet(table_style)
+        artists_table.setStyleSheet(table_style)
+        loved_table.setStyleSheet(table_style)
         
         # Make sure the stacked widget is visible
         self.stackedWidget.setVisible(True)
         
-        # Start with the home page
+        # Start with the text page
         self.stackedWidget.setCurrentIndex(0)
+
+
+    def display_lastfm_artists_in_stacked_widget(self, artists):
+        """
+        Display Last.fm artists in the artists page of the stacked widget
+        
+        Args:
+            artists (list): List of artist dictionaries from Last.fm
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            # Fallback if stacked widget not found
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the artists page
+        artists_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "artists_page":
+                artists_page = widget
+                break
+        
+        if not artists_page:
+            self.logger.error("Artists page not found in stacked widget")
+            return
+        
+        # Get the table widget and count label
+        table = artists_page.findChild(QTableWidget, "artists_table")
+        count_label = artists_page.findChild(QLabel, "artists_count_label")
+        
+        if not table:
+            self.logger.error("Artists table not found in artists page")
+            return
+        
+        # Update count label
+        if count_label:
+            count_label.setText(f"Showing {len(artists)} top artists for {self.lastfm_username}")
+        
+        # Configure table
+        table.setRowCount(len(artists))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill table with artist data
+        for i, artist in enumerate(artists):
+            artist_name = artist['name']
+            playcount = str(artist.get('playcount', 'N/A'))
+            
+            # Artist name
+            name_item = QTableWidgetItem(artist_name)
+            table.setItem(i, 0, name_item)
+            
+            # Playcount
+            playcount_item = QTableWidgetItem(playcount)
+            playcount_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 1, playcount_item)
+            
+            # Actions - create a widget with buttons
+            actions_widget = QWidget()
+            actions_layout = QHBoxLayout(actions_widget)
+            actions_layout.setContentsMargins(2, 2, 2, 2)
+            actions_layout.setSpacing(4)
+            
+            # Add "Follow" button
+            follow_button = QPushButton("Follow")
+            follow_button.setProperty("artist_name", artist_name)
+            follow_button.setMaximumWidth(80)
+            follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
+            actions_layout.addWidget(follow_button)
+            
+            table.setCellWidget(i, 2, actions_widget)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Switch to the artists page
+        stack_widget.setCurrentWidget(artists_page)
+
+    def display_loved_tracks_in_stacked_widget(self, loved_tracks):
+        """
+        Display loved tracks in the loved tracks page of the stacked widget
+        
+        Args:
+            loved_tracks (list): List of loved track objects from Last.fm
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the loved tracks page
+        loved_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "loved_tracks_page":
+                loved_page = widget
+                break
+        
+        if not loved_page:
+            self.logger.error("Loved tracks page not found in stacked widget")
+            return
+        
+        # Get the table and count label
+        table = loved_page.findChild(QTableWidget, "loved_tracks_table")
+        count_label = loved_page.findChild(QLabel, "loved_count_label")
+        
+        if not table:
+            self.logger.error("Loved tracks table not found in loved tracks page")
+            return
+        
+        # Update count label
+        if count_label:
+            count_label.setText(f"Showing {len(loved_tracks)} loved tracks for {self.lastfm_username}")
+        
+        # Configure table
+        table.setRowCount(len(loved_tracks))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table with data
+        for i, loved_track in enumerate(loved_tracks):
+            # Extract data from pylast objects
+            track = loved_track.track
+            artist_name = track.artist.name
+            track_name = track.title
+            
+            # Set artist name column
+            artist_item = QTableWidgetItem(artist_name)
+            table.setItem(i, 0, artist_item)
+            
+            # Set track name column
+            track_item = QTableWidgetItem(track_name)
+            table.setItem(i, 1, track_item)
+            
+            # Set album column (might be empty)
+            album_name = ""
+            try:
+                album = track.get_album()
+                if album:
+                    album_name = album.title
+            except:
+                pass
+            album_item = QTableWidgetItem(album_name)
+            table.setItem(i, 2, album_item)
+            
+            # Date column (if available)
+            date_text = ""
+            if hasattr(loved_track, "date") and loved_track.date:
+                try:
+                    import datetime
+                    date_obj = datetime.datetime.fromtimestamp(int(loved_track.date))
+                    date_text = date_obj.strftime("%Y-%m-%d")
+                except:
+                    date_text = str(loved_track.date)
+            
+            date_item = QTableWidgetItem(date_text)
+            date_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 3, date_item)
+            
+            # Actions column with buttons
+            actions_widget = QWidget()
+            actions_layout = QHBoxLayout(actions_widget)
+            actions_layout.setContentsMargins(2, 2, 2, 2)
+            actions_layout.setSpacing(4)
+            
+            # Follow artist button
+            follow_button = QPushButton("Follow Artist")
+            follow_button.setMaximumWidth(90)
+            follow_button.setProperty("artist_name", artist_name)
+            follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
+            actions_layout.addWidget(follow_button)
+            
+            table.setCellWidget(i, 4, actions_widget)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Switch to the loved tracks page
+        stack_widget.setCurrentWidget(loved_page)
 
 
 
@@ -738,27 +990,7 @@ class MuspyArtistModule(BaseModule):
         progress.show()
         
         try:
-            # Get LastFM network - using direct pylast approach for reliability
-            import pylast
-            network = pylast.LastFMNetwork(
-                api_key=self.lastfm_api_key,
-                api_secret=self.lastfm_api_secret
-            )
-            
-            # Update progress
-            progress.setValue(20)
-            QApplication.processEvents()
-            
-            # Get user object directly
-            user = network.get_user(self.lastfm_username)
-            
-            # Update progress
-            progress.setValue(40)
-            QApplication.processEvents()
-            
-            # Get top artists directly with pylast
-            self.logger.info(f"Fetching top {count} artists for user {self.lastfm_username}")
-            pylast_artists = user.get_top_artists(limit=count)
+            # ... [keep your existing code for fetching the data] ...
             
             # Update progress
             progress.setValue(60)
@@ -786,8 +1018,8 @@ class MuspyArtistModule(BaseModule):
             progress.setValue(80)
             QApplication.processEvents()
             
-            # Display artists in table - use your existing display function
-            self._display_lastfm_artists_table(top_artists)
+            # Display artists in stacked widget table
+            self.display_lastfm_artists_in_stacked_widget(top_artists)
             
             # Final progress
             progress.setValue(100)
@@ -1283,12 +1515,7 @@ class MuspyArtistModule(BaseModule):
             # Update progress
             progress.setValue(80)
             
-            # If we already have a display function, use it
-            if hasattr(self, '_display_loved_tracks_table'):
-                self._display_loved_tracks_table(loved_tracks)
-            else:
-                # Display in stacked widget table manually
-                self._display_loved_tracks_in_table(loved_tracks)
+            self.display_loved_tracks_in_stacked_widget(loved_tracks)
             
             # Final progress
             progress.setValue(100)
@@ -1299,6 +1526,9 @@ class MuspyArtistModule(BaseModule):
             self.logger.error(error_msg, exc_info=True)
         finally:
             progress.close()
+
+
+
 
 
     def _display_loved_tracks_in_table(self, loved_tracks):
@@ -2492,8 +2722,8 @@ class MuspyArtistModule(BaseModule):
         """
         Check and display the status of API credentials for debugging
         """
+        self.show_text_page()
         self.results_text.clear()
-        self.results_text.show()
         
         self.results_text.append("API Credentials Status:\n")
         
@@ -4321,14 +4551,38 @@ class MuspyArtistModule(BaseModule):
         # Re-enable sorting
         table.setSortingEnabled(True)
         
-        # Switch to the releases page
+        # Switch to the releases page - this will fully hide the text page
         stack_widget.setCurrentWidget(releases_page)
+
+    def show_text_page(self, html_content=None):
+        """
+        Switch to the text page and optionally update its content
         
-        # Hide results text if visible
-        if hasattr(self, 'results_text') and self.results_text.isVisible():
-            self.results_text.hide()
-
-
+        Args:
+            html_content (str, optional): HTML content to display
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            return
+        
+        # Find the text page
+        text_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "text_page":
+                text_page = widget
+                break
+        
+        if not text_page:
+            return
+        
+        # Update content if provided
+        if html_content and hasattr(self, 'results_text'):
+            self.results_text.setHtml(html_content)
+        
+        # Switch to text page
+        stack_widget.setCurrentWidget(text_page)
    
     def get_all_my_releases(self):
         """
