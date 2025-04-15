@@ -13,8 +13,8 @@ try:
                                 QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
                                 QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem, QProgressDialog, QSizePolicy,
                                 QStackedWidget)
-    from PyQt6.QtCore import pyqtSignal, Qt, QPoint, QObject, QThread
-    from PyQt6.QtGui import QColor, QTextDocument, QAction, QCursor, QTextCursor
+    from PyQt6.QtCore import pyqtSignal, Qt, QPoint, QObject, QThread, QSize, QEvent
+    from PyQt6.QtGui import QColor, QTextDocument, QAction, QCursor, QTextCursor, QIcon
     QT_AVAILABLE = True
 except ImportError:
     QT_AVAILABLE = False
@@ -91,6 +91,208 @@ class ProgressWorker(QObject):
         except Exception as e:
             self.status_update.emit(f"Error: {str(e)}")
             self.finished.emit([])
+
+
+class FloatingNavigationButtons(QObject):
+    """
+    Class to manage floating navigation buttons for a stacked widget.
+    The buttons appear when mouse hovers over the left/right edge of the widget.
+    """
+    def __init__(self, stacked_widget, parent=None):
+        super().__init__(parent)
+        self.stacked_widget = stacked_widget
+        self.parent_widget = parent if parent else stacked_widget.parent()
+        
+        # Create buttons
+        self.prev_button = QPushButton(self.parent_widget)
+        self.next_button = QPushButton(self.parent_widget)
+        
+        # Configure buttons
+        self.setup_buttons()
+        
+        # Set up event filter for mouse tracking
+        self.stacked_widget.setMouseTracking(True)
+        self.stacked_widget.installEventFilter(self)
+        
+        # Hide buttons initially
+        self.prev_button.hide()
+        self.next_button.hide()
+        
+        # Connect signals
+        self.connect_signals()
+        
+        # Track active areas
+        self.left_active = False
+        self.right_active = False
+        
+    def setup_buttons(self):
+        """Set up button appearance and positioning"""
+        # Set fixed size
+        button_size = 40
+        self.prev_button.setFixedSize(button_size, button_size)
+        self.next_button.setFixedSize(button_size, button_size)
+        
+        # Set icons - use predefined icons from theme if available
+        self.prev_button.setText("←")  # Fallback to text
+        self.next_button.setText("→")  # Fallback to text
+        
+        try:
+            self.prev_button.setIcon(QIcon.fromTheme("go-previous"))
+            self.next_button.setIcon(QIcon.fromTheme("go-next"))
+            # Set icon size
+            icon_size = int(button_size * 0.7)
+            self.prev_button.setIconSize(QSize(icon_size, icon_size))
+            self.next_button.setIconSize(QSize(icon_size, icon_size))
+        except:
+            # Fallback to text if icons not available
+            pass
+        
+        # Set style
+        button_style = """
+            QPushButton {
+                background-color: rgba(66, 133, 244, 0.8);
+                border-radius: 20px;
+                color: white;
+                border: none;
+                font-weight: bold;
+                font-size: 16px;
+            }
+            QPushButton:hover {
+                background-color: rgba(82, 148, 255, 0.9);
+            }
+            QPushButton:pressed {
+                background-color: rgba(58, 118, 216, 0.9);
+            }
+        """
+        self.prev_button.setStyleSheet(button_style)
+        self.next_button.setStyleSheet(button_style)
+        
+        # Add drop shadow effect for better visibility
+        try:
+            from PyQt6.QtWidgets import QGraphicsDropShadowEffect
+            shadow = QGraphicsDropShadowEffect()
+            shadow.setBlurRadius(10)
+            shadow.setColor(QColor(0, 0, 0, 160))
+            shadow.setOffset(0, 0)
+            self.prev_button.setGraphicsEffect(shadow)
+            
+            shadow2 = QGraphicsDropShadowEffect()
+            shadow2.setBlurRadius(10)
+            shadow2.setColor(QColor(0, 0, 0, 160))
+            shadow2.setOffset(0, 0)
+            self.next_button.setGraphicsEffect(shadow2)
+        except:
+            # Skip shadow effect if not available
+            pass
+        
+        # Position the buttons
+        self.update_button_positions()
+        
+    def update_button_positions(self):
+        """Update the position of navigation buttons based on stacked widget size"""
+        if not self.stacked_widget:
+            return
+            
+        # Get the size of the stacked widget
+        widget_rect = self.stacked_widget.rect()
+        widget_height = widget_rect.height()
+        
+        # Position buttons vertically centered, on the edges
+        y_position = (widget_height - self.prev_button.height()) // 2
+        
+        # Position the previous button on the left edge
+        self.prev_button.move(10, y_position)
+        
+        # Position the next button on the right edge
+        self.next_button.move(
+            self.stacked_widget.width() - self.next_button.width() - 10, 
+            y_position
+        )
+        
+    def connect_signals(self):
+        """Connect button signals to navigation functions"""
+        self.prev_button.clicked.connect(self.go_to_previous_page)
+        self.next_button.clicked.connect(self.go_to_next_page)
+        
+        # Connect to parent resize for repositioning
+        if self.parent_widget:
+            self.parent_widget.resizeEvent = self.handle_parent_resize
+        
+    def handle_parent_resize(self, event):
+        """Handle parent resize event to update button positions"""
+        self.update_button_positions()
+        
+        # Call original resize event if it exists
+        original_resize = getattr(self.parent_widget.__class__, "resizeEvent", None)
+        if original_resize and original_resize != self.handle_parent_resize:
+            original_resize(self.parent_widget, event)
+    
+    def go_to_previous_page(self):
+        """Navigate to the previous page in the stacked widget"""
+        current_index = self.stacked_widget.currentIndex()
+        if current_index > 0:
+            self.stacked_widget.setCurrentIndex(current_index - 1)
+        else:
+            # Wrap around to the last page
+            self.stacked_widget.setCurrentIndex(self.stacked_widget.count() - 1)
+            
+    def go_to_next_page(self):
+        """Navigate to the next page in the stacked widget"""
+        current_index = self.stacked_widget.currentIndex()
+        if current_index < self.stacked_widget.count() - 1:
+            self.stacked_widget.setCurrentIndex(current_index + 1)
+        else:
+            # Wrap around to the first page
+            self.stacked_widget.setCurrentIndex(0)
+    
+    def eventFilter(self, obj, event):
+        """Filter events to detect mouse hover on edges"""
+        if obj == self.stacked_widget:
+            if event.type() == QEvent.Type.Enter:
+                # Mouse entered widget, show buttons if near edges
+                # Fix: QEnterEvent uses position() not pos()
+                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+                self.check_mouse_position(pos)
+                
+            elif event.type() == QEvent.Type.Leave:
+                # Mouse left widget, hide buttons
+                self.prev_button.hide()
+                self.next_button.hide()
+                self.left_active = False
+                self.right_active = False
+                
+            elif event.type() == QEvent.Type.MouseMove:
+                # Mouse moved inside widget, check position
+                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+                self.check_mouse_position(pos)
+        
+        # Let the event continue to be processed
+        return super().eventFilter(obj, event)
+    
+    def check_mouse_position(self, pos):
+        """Check if mouse is near left or right edge and show appropriate button"""
+        # Define edge sensitivity (px from edge)
+        edge_sensitivity = 50
+        
+        # Check left edge
+        if pos.x() <= edge_sensitivity:
+            if not self.left_active:
+                self.prev_button.show()
+                self.left_active = True
+        else:
+            if self.left_active:
+                self.prev_button.hide()
+                self.left_active = False
+        
+        # Check right edge
+        if pos.x() >= (self.stacked_widget.width() - edge_sensitivity):
+            if not self.right_active:
+                self.next_button.show()
+                self.right_active = True
+        else:
+            if self.right_active:
+                self.next_button.hide()
+                self.right_active = False
 
 
 class MuspyArtistModule(BaseModule):
@@ -262,6 +464,15 @@ class MuspyArtistModule(BaseModule):
                     logger.error(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
                     raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
                 
+
+                self.stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
+                if self.stacked_widget:
+                    # Create floating navigation buttons
+                    self.nav_buttons = FloatingNavigationButtons(self.stacked_widget, self)
+                    self.logger.info("Navigation buttons initialized")
+                else:
+                    self.logger.warning("Stacked widget not found in UI")
+                
                 # Configuración adicional después de cargar UI
                 self._connect_signals()
                 
@@ -355,26 +566,27 @@ class MuspyArtistModule(BaseModule):
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Modify the button connection for loading artists to show a menu
+        # Connect buttons to their respective methods
         self.load_artists_button.clicked.connect(self.show_load_menu)
-        
-        # The rest of the connections remain the same
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         
-        # Conectar el botón de Last.fm para mostrar su menú
-        lastfm_button = self.findChild(QPushButton, 'sync_lastfm_button')
-        if lastfm_button:
+        # Connect Last.fm button if enabled
+        if hasattr(self, 'sync_lastfm_button'):
             if self.lastfm_enabled:
-                # Conectar al nuevo método para mostrar el menú en lugar de sync_lastfm_muspy
-                lastfm_button.clicked.connect(self.show_lastfm_options_menu)
-                lastfm_button.setVisible(True)
+                self.sync_lastfm_button.clicked.connect(self.show_lastfm_options_menu)
+                self.sync_lastfm_button.setVisible(True)
             else:
-                lastfm_button.setVisible(False)
+                self.sync_lastfm_button.setVisible(False)
         
-        # Conectar a las nuevas versiones con barra de progreso
-        self.get_releases_button.clicked.connect(self.get_muspy_releases)
-        self.get_new_releases_button.clicked.connect(self.get_new_releases)
-        self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
+        # Connect release buttons
+        if hasattr(self, 'get_releases_button'):
+            self.get_releases_button.clicked.connect(self.get_muspy_releases)
+        
+        if hasattr(self, 'get_new_releases_button'):
+            self.get_new_releases_button.clicked.connect(self.get_new_releases)
+        
+        if hasattr(self, 'get_my_releases_button'):
+            self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
         
         # Add a context menu for additional options
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -1346,7 +1558,8 @@ class MuspyArtistModule(BaseModule):
         menu.addAction(albums_action)
         
         # Show menu at button position
-        menu.exec(self.load_artists_button.mapToGlobal(QPoint(0, self.load_artists_button.height())))
+        button = self.load_artists_button
+        menu.exec(button.mapToGlobal(QPoint(0, button.height())))
 
 
     def show_context_menu(self, position):
@@ -2611,12 +2824,17 @@ class MuspyArtistModule(BaseModule):
                     self.layout().removeItem(item)
                     widget.deleteLater()
         
-        # Create new tree widget
+        # Create new tree widget with specific object name
         tree = QTreeWidget()
+        tree.setObjectName("releases_tree")
         tree.setHeaderLabels(["Artist/Release", "Type", "Date", "Details"])
         tree.setColumnCount(4)
         tree.setAlternatingRowColors(True)
         tree.setSortingEnabled(True)
+        
+        # Set the size policy to make it fill available space
+        tree.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        tree.setMinimumHeight(400)  # Set minimum height to ensure visibility
         
         # Organize releases by artist if requested
         if group_by_artist:
@@ -2632,7 +2850,7 @@ class MuspyArtistModule(BaseModule):
                 # Create parent item for artist
                 artist_item = QTreeWidgetItem(tree)
                 artist_item.setText(0, artist_name)
-                artist_item.setText(1, "")          # Álbum vacío para el nodo padre
+                artist_item.setText(1, "")
                 artist_item.setExpanded(True)  # Expand by default
                 
                 # Add child items for each release
@@ -2694,18 +2912,48 @@ class MuspyArtistModule(BaseModule):
         for i in range(4):
             tree.resizeColumnToContents(i)
         
-        # Set minimum width for tree
-        tree.setMinimumWidth(600)
-        
         # Connect signals
         tree.itemDoubleClicked.connect(self.on_release_double_clicked)
         tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         tree.customContextMenuRequested.connect(self.show_release_context_menu)
         
-        # Hide the text edit and add the tree to the layout
+        # Hide the text edit and add the tree to the layout at a specific position
         self.results_text.hide()
-        # Insert the tree widget
-        self.layout().insertWidget(self.layout().count() - 1, tree)
+        
+        # If we have a stacked widget, use it
+        stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if stacked_widget:
+            # Find the releases page by name or add the tree to it
+            releases_page = None
+            for i in range(stacked_widget.count()):
+                page = stacked_widget.widget(i)
+                if page.objectName() == "releases_page":
+                    releases_page = page
+                    break
+                    
+            if releases_page:
+                # Clear the existing layout
+                if releases_page.layout():
+                    while releases_page.layout().count():
+                        item = releases_page.layout().takeAt(0)
+                        widget = item.widget()
+                        if widget:
+                            widget.deleteLater()
+                else:
+                    # Create a layout if it doesn't exist
+                    page_layout = QVBoxLayout(releases_page)
+                    
+                # Add the tree to the page
+                releases_page.layout().addWidget(tree)
+                
+                # Switch to the releases page
+                stacked_widget.setCurrentWidget(releases_page)
+            else:
+                # If no specific page found, add to main layout
+                self.layout().insertWidget(self.layout().count() - 1, tree)
+        else:
+            # No stacked widget, add to main layout
+            self.layout().insertWidget(self.layout().count() - 1, tree)
         
         # Store reference to tree widget
         self.tree_widget = tree
@@ -3164,75 +3412,119 @@ class MuspyArtistModule(BaseModule):
         """
         Retrieve new releases using the Muspy API endpoint
         Gets a list of album MBIDs from a local script and checks for new releases since each album
-        Displays new releases in a QTableWidget
+        Displays new releases in the stacked widget
         """
-        try:
-            script_path = PROJECT_ROOT / "base_datos" / "tools" / "consultar_items_db.py"
-            # Ejecutar el script que devuelve el JSON de álbumes
-            result = subprocess.run(
-                f"python {script_pat}",
-                shell=True,
-                capture_output=True,
-                text=True
-            )
+        if not os.path.isabs(self.db_path):
+            full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+        else:
+            full_db_path = self.db_path
+        
+        script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+        
+        # Define the operation to run with progress monitoring
+        def fetch_new_releases(update_progress):
+            update_progress(0, 1, "Ejecutando consulta a la base de datos...", indeterminate=True)
             
-            if result.returncode != 0:
-                QMessageBox.warning(self, "Error", f"Error ejecutando el script: {result.stderr}")
-                return
-            
-            # Cargar el JSON de álbumes
             try:
-                albums = json.loads(result.stdout)
-            except json.JSONDecodeError:
-                QMessageBox.warning(self, "Error", "Error al parsear la respuesta del script")
-                return
-            
-            # Lista para almacenar todos los nuevos lanzamientos
-            all_new_releases = []
-            
-            # Consultar a muspy por cada MBID
-            for album in albums:
-                mbid = album.get('mbid')
-                if not mbid:
-                    continue
-                    
-                # Construir la URL con el parámetro 'since'
-                url = f"{self.base_url}/releases"
-                params = {'since': mbid}
+                # Execute the script to get albums
+                cmd = f"python {script_path} --db {full_db_path} --ultimos --limite 500"
                 
-                response = requests.get(url, params=params)
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
                 
-                if response.status_code == 200:
-                    releases = response.json()
-                    # Filtrar lanzamientos futuros
-                    today = datetime.date.today().strftime("%Y-%m-%d")
-                    future_releases = [release for release in releases if release.get('date', '0000-00-00') >= today]
+                if result.returncode != 0:
+                    return {
+                        "success": False, 
+                        "error": f"Error ejecutando el script: {result.stderr}"
+                    }
+                
+                # Parse album data
+                try:
+                    albums = json.loads(result.stdout)
+                except json.JSONDecodeError:
+                    return {
+                        "success": False,
+                        "error": "Error al parsear la respuesta del script"
+                    }
+                
+                if not albums:
+                    return {
+                        "success": False,
+                        "error": "No se encontraron álbumes en la base de datos"
+                    }
+                
+                update_progress(1, len(albums) + 1, f"Procesando {len(albums)} álbumes...")
+                
+                # Lista para almacenar todos los nuevos lanzamientos
+                all_new_releases = []
+                
+                # Consultar a muspy por cada MBID
+                for i, album in enumerate(albums):
+                    mbid = album.get('mbid')
+                    if not mbid:
+                        continue
                     
-                    # Agregar a la lista de todos los lanzamientos
-                    all_new_releases.extend(future_releases)
-                else:
-                    log.error(f"Error consultando lanzamientos para MBID {mbid}: {response.text}")
-            
-            # Eliminar duplicados (si el mismo lanzamiento aparece para varios álbumes)
-            unique_releases = []
-            seen_ids = set()
-            for release in all_new_releases:
-                if release.get('mbid') not in seen_ids:
-                    seen_ids.add(release.get('mbid'))
-                    unique_releases.append(release)
-            
-            # Ordenar por fecha
-            unique_releases.sort(key=lambda x: x.get('date', '0000-00-00'))
-            
-            if not unique_releases:
-                QMessageBox.information(self, "No New Releases", "No new releases available")
-                return
-            
-            # Mostrar en la tabla
-            self.display_releases_table(unique_releases)
-            
-        except Exception as e:
-            QMessageBox.warning(self, "Error", f"Error al obtener nuevos lanzamientos: {str(e)}")
+                    update_progress(i + 1, len(albums) + 1, f"Consultando álbum {i+1}/{len(albums)}: {album.get('album', 'Desconocido')}")
+                    
+                    # Construir la URL con el parámetro 'since'
+                    url = f"{self.base_url}/releases"
+                    params = {'since': mbid}
+                    auth = (self.muspy_username, self.muspy_api_key)
+                    
+                    response = requests.get(url, params=params, auth=auth)
+                    
+                    if response.status_code == 200:
+                        releases = response.json()
+                        # Filtrar lanzamientos futuros
+                        today = datetime.date.today().strftime("%Y-%m-%d")
+                        future_releases = [release for release in releases if release.get('date', '0000-00-00') >= today]
+                        
+                        # Agregar a la lista de todos los lanzamientos
+                        all_new_releases.extend(future_releases)
+                
+                # Eliminar duplicados (si el mismo lanzamiento aparece para varios álbumes)
+                unique_releases = []
+                seen_ids = set()
+                for release in all_new_releases:
+                    if release.get('mbid') not in seen_ids:
+                        seen_ids.add(release.get('mbid'))
+                        unique_releases.append(release)
+                
+                # Ordenar por fecha
+                unique_releases.sort(key=lambda x: x.get('date', '0000-00-00'))
+                
+                update_progress(len(albums) + 1, len(albums) + 1, "Procesamiento completado")
+                
+                return {
+                    "success": True,
+                    "releases": unique_releases
+                }
+                
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Error al obtener nuevos lanzamientos: {str(e)}"
+                }
+        
+        # Run the operation with progress dialog
+        result = self.show_progress_operation(
+            fetch_new_releases,
+            title="Buscando Nuevos Lanzamientos",
+            label_format="{status}"
+        )
+        
+        if result:
+            if result.get("success"):
+                releases = result.get("releases", [])
+                
+                if not releases:
+                    QMessageBox.information(self, "No New Releases", "No new releases available")
+                    return
+                
+                # Show releases in stacked widget
+                self.display_releases_in_stacked_widget(releases)
+            else:
+                error_msg = result.get("error", "Unknown error")
+                QMessageBox.warning(self, "Error", error_msg)
 
     def sync_artists_with_muspy(self):
         """Synchronize artists from JSON file with Muspy using progress bar"""
@@ -3694,12 +3986,20 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", "Muspy configuration not available")
             return
 
+        if not self.muspy_id:
+            # Try to get the Muspy ID if it's not set
+            self.get_muspy_id()
+            if not self.muspy_id:
+                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
+                return
+
         # Función de operación con progreso
         def fetch_releases(update_progress):
             update_progress(0, 1, "Conectando con Muspy API...", indeterminate=True)
             
             try:
-                url = f"{self.base_url}/releases/{self.muspy_api_key}"
+                # Use proper endpoint with the user ID
+                url = f"{self.base_url}/releases/{self.muspy_id}"
                 auth = (self.muspy_username, self.muspy_api_key)
                 
                 response = requests.get(url, auth=auth)
@@ -3753,13 +4053,70 @@ class MuspyArtistModule(BaseModule):
                         f"(Total de lanzamientos: {len(all_releases)})")
                     return
                 
-                # Display releases in table or tree
-                self.display_releases_table(future_releases)
+                # Display releases properly using stacked widget
+                self.display_releases_in_stacked_widget(future_releases)
             else:
                 error_msg = result.get("error", "Unknown error")
                 QMessageBox.warning(self, "Error", error_msg)
    
-   
+    def display_releases_in_stacked_widget(self, releases):
+        """
+        Display releases in the proper page of the stacked widget
+        
+        Args:
+            releases (list): List of release dictionaries
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            # Fallback if stacked widget not found
+            self.logger.error("Stacked widget not found in UI")
+            self.display_releases_table(releases)
+            return
+        
+        # Find the releases table page
+        releases_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "releases_page":
+                releases_page = widget
+                break
+        
+        if not releases_page:
+            # Fallback if page not found
+            self.logger.error("Releases page not found in stacked widget")
+            self.display_releases_table(releases)
+            return
+        
+        # Get the table widget from the releases page
+        table = releases_page.findChild(QTableWidget, "releases_table")
+        if not table:
+            self.logger.error("Releases table not found in releases page")
+            return
+        
+        # Get count label
+        count_label = releases_page.findChild(QLabel, "count_label")
+        if count_label:
+            count_label.setText(f"Showing {len(releases)} upcoming releases")
+        
+        # Configure table
+        table.setRowCount(len(releases))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table
+        self._fill_releases_table(table, releases)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Switch to the releases page
+        stack_widget.setCurrentWidget(releases_page)
+        
+        # Hide results text if visible
+        if hasattr(self, 'results_text') and self.results_text.isVisible():
+            self.results_text.hide()
+
+
    
     def get_all_my_releases(self):
         """
@@ -3900,71 +4257,96 @@ class MuspyArtistModule(BaseModule):
         Args:
             releases (list): List of release dictionaries to display
         """
-        # Find the stack widget and the target widget for displaying releases
-        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
-        if not stack_widget:
-            self.results_text.append("Stack widget not found in UI")
-            return
+        # Hide the results text area if it's visible
+        if hasattr(self, 'results_text') and self.results_text.isVisible():
+            self.results_text.hide()
             
-        table_widget = self.findChild(QWidget, "table_widget_releases_artists_songs")
-        if not table_widget:
-            self.results_text.append("Target widget for releases not found in UI")
-            return
-        
-        # Switch to the appropriate page in stack widget
-        for i in range(stack_widget.count()):
-            if stack_widget.widget(i) == table_widget:
-                stack_widget.setCurrentIndex(i)
-                break
-        
-        # Get the existing layout or create a new one if needed
-        layout = table_widget.layout()
-        if layout:
-            # Clear existing widgets from the layout
-            while layout.count():
-                item = layout.takeAt(0)
-                widget = item.widget()
-                if widget:
-                    widget.setParent(None)  # Remove from parent but don't delete
-                    widget.deleteLater()
-        else:
-            # Create a new layout if one doesn't exist
-            layout = QVBoxLayout(table_widget)
-        
-        # Add a label for the header
-        header_label = QLabel(f"Showing {len(releases)} upcoming releases")
-        header_label.setStyleSheet("font-weight: bold; font-size: 14px;")
-        layout.addWidget(header_label)
-        
-        # Add follow button if we're viewing a specific artist
-        if hasattr(self, 'current_artist') and self.current_artist:
-            follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
-            follow_button.clicked.connect(self.follow_current_artist)
-            layout.addWidget(follow_button)
-        
-        # Create table for displaying releases
+        # Create the table widget
         releases_table = QTableWidget()
+        releases_table.setObjectName("releases_table")
         releases_table.setColumnCount(5)
         releases_table.setHorizontalHeaderLabels(['Artist', 'Release Title', 'Type', 'Date', 'Disambiguation'])
+        
+        # Set table to expand to fill space
+        releases_table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        releases_table.setMinimumHeight(400)  # Set minimum height
+        
+        # Configure headers
         releases_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        
+        # Configure number of rows
         releases_table.setRowCount(len(releases))
         
         # Fill the table
         self._fill_releases_table(releases_table, releases)
         
-        # Set the table to expand to fill the widget
-        releases_table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        layout.addWidget(releases_table)
+        # Create a count label
+        count_label = QLabel(f"Showing {len(releases)} upcoming releases")
+        
+        # Find the stacked widget and the appropriate page
+        stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if stacked_widget:
+            # Find or create the table page
+            table_page = None
+            for i in range(stacked_widget.count()):
+                page = stacked_widget.widget(i)
+                if page.objectName() == "table_page":
+                    table_page = page
+                    break
+                    
+            if table_page:
+                # Clear existing layout
+                if table_page.layout():
+                    while table_page.layout().count():
+                        item = table_page.layout().takeAt(0)
+                        widget = item.widget()
+                        if widget:
+                            widget.deleteLater()
+                else:
+                    # Create layout if it doesn't exist
+                    page_layout = QVBoxLayout(table_page)
+                    
+                # Add widgets to layout
+                table_page.layout().addWidget(count_label)
+                table_page.layout().addWidget(releases_table)
+                
+                # Add follow button if we have a current artist
+                if hasattr(self, 'current_artist') and self.current_artist:
+                    follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
+                    follow_button.clicked.connect(self.follow_current_artist)
+                    table_page.layout().addWidget(follow_button)
+                    self.add_follow_button = follow_button
+                    
+                # Switch to the table page
+                stacked_widget.setCurrentWidget(table_page)
+            else:
+                # If page not found, add to main layout
+                self.layout().insertWidget(self.layout().count() - 1, count_label)
+                self.layout().insertWidget(self.layout().count() - 1, releases_table)
+                
+                # Add follow button if needed
+                if hasattr(self, 'current_artist') and self.current_artist:
+                    follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
+                    follow_button.clicked.connect(self.follow_current_artist)
+                    self.layout().insertWidget(self.layout().count() - 1, follow_button)
+                    self.add_follow_button = follow_button
+        else:
+            # No stacked widget, add to main layout
+            self.layout().insertWidget(self.layout().count() - 1, count_label)
+            self.layout().insertWidget(self.layout().count() - 1, releases_table)
+            
+            # Add follow button if needed
+            if hasattr(self, 'current_artist') and self.current_artist:
+                follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
+                follow_button.clicked.connect(self.follow_current_artist)
+                self.layout().insertWidget(self.layout().count() - 1, follow_button)
+                self.add_follow_button = follow_button
         
         # Make the table sortable
         releases_table.setSortingEnabled(True)
         releases_table.sortItems(3, Qt.SortOrder.AscendingOrder)
         
-        # Hide the text edit area if it's visible
-        if hasattr(self, 'results_text') and self.results_text.isVisible():
-            self.results_text.hide()
-        
-        # Store reference to table for later use
+        # Store reference for later use
         self.releases_table = releases_table
         
         return releases_table
@@ -4086,10 +4468,10 @@ class MuspyArtistModule(BaseModule):
         
         # Add menu actions
         muspy_action = QAction("Sincronizar artistas seleccionados con Muspy", self)
-        lastfm_action = QAction("Sincronizar Top Artists de Last.fm con Muspy", self)  # Renamed for clarity
+        lastfm_action = QAction("Sincronizar Top Artists de Last.fm con Muspy", self)
         spotify_action = QAction("Sincronizar artistas seleccionados con Spotify", self)
         
-        # Connect actions to their respective functions with progress bar
+        # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
         
         # Create submenu for Last.fm top artists options
@@ -4137,8 +4519,9 @@ class MuspyArtistModule(BaseModule):
         menu.addAction(lastfm_action)
         menu.addAction(spotify_action)
         
-        # Show menu at button position
-        menu.exec(self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height())))
+        # Show menu at button position - corrected to use the proper button
+        button = self.sync_artists_button
+        menu.exec(button.mapToGlobal(QPoint(0, button.height())))
 
  
     def sync_lastfm_artists(self):
