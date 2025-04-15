@@ -362,7 +362,7 @@ class MuspyArtistModule(BaseModule):
         # Call super init now that we've set up the required attributes
         super().__init__(parent, theme, **kwargs)
         
-        # Set up proper logger after super().__init__()
+        # Set up logger
         if self.enable_logging:
             try:
                 from loggin_helper import setup_module_logger
@@ -375,6 +375,25 @@ class MuspyArtistModule(BaseModule):
                 self.logger = logger
         else:
             self.logger = logger
+        
+        # Initialize the Last.fm auth if enabled
+        if self.lastfm_enabled:
+            try:
+                from tools.lastfm_login import LastFMAuthManager
+                
+                self.logger.info(f"Initializing LastFM auth with: api_key={self.lastfm_api_key}, username={self.lastfm_username}")
+                
+                self.lastfm_auth = LastFMAuthManager(
+                    api_key=self.lastfm_api_key,
+                    api_secret=self.lastfm_api_secret,
+                    username=self.lastfm_username,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+                self.logger.info(f"LastFM auth manager initialized for user: {self.lastfm_username}")
+            except Exception as e:
+                self.logger.error(f"Error initializing LastFM auth manager: {e}", exc_info=True)
+                self.lastfm_enabled = False
         
 
    # Actualización del método init_ui en la clase MuspyArtistModule
@@ -558,30 +577,30 @@ class MuspyArtistModule(BaseModule):
 
     def show_lastfm_top_artists(self, count=50):
         """
-        Show top Last.fm artists in the designated widget in the stack widget
+        Show top Last.fm artists in the designated widget
         
         Args:
             count (int): Number of top artists to display
         """
+        # Check if Last.fm is enabled and auth manager exists
         if not self.lastfm_enabled:
-            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            QMessageBox.warning(self, "Error", "Last.fm is not configured in settings")
             return
-
+            
+        if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
+            QMessageBox.warning(self, "Error", 
+                "Last.fm authentication manager not available. Check your configuration and restart the application.")
+            return
+        
         # Create progress dialog
         progress = QProgressDialog("Fetching artists from Last.fm...", "Cancel", 0, 100, self)
         progress.setWindowTitle("Loading Artists")
         progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setMinimumDuration(0)
-        progress.setValue(0)
         progress.show()
         
         try:
             # Get LastFM network
-            if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
-                QMessageBox.warning(self, "Error", "Last.fm authentication manager not initialized")
-                progress.close()
-                return
-            
             network = self.lastfm_auth.get_network()
             if not network:
                 QMessageBox.warning(self, "Error", "Could not connect to Last.fm")
@@ -603,75 +622,121 @@ class MuspyArtistModule(BaseModule):
             # Update progress
             progress.setValue(70)
             
-            # Store for later use
-            self.top_artists_list = top_artists
-            
-            # Clear the results area for displaying data
-            self.results_text.clear()
-            self.results_text.show()
-            self.results_text.append(f"Top {len(top_artists)} Artists for {self.lastfm_username}:\n")
-            
-            # Create table for displaying artists
-            table = QTableWidget()
-            table.setColumnCount(3)
-            table.setHorizontalHeaderLabels(["Artist", "Playcount", "Actions"])
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
-            table.setRowCount(len(top_artists))
-            
-            # Fill table with artist data
-            for i, artist in enumerate(top_artists):
-                artist_name = artist['name']
-                playcount = artist.get('playcount', 'N/A')
-                
-                # Artist name
-                name_item = QTableWidgetItem(artist_name)
-                table.setItem(i, 0, name_item)
-                
-                # Playcount
-                playcount_item = QTableWidgetItem(str(playcount))
-                table.setItem(i, 1, playcount_item)
-                
-                # Actions button
-                actions_widget = QWidget()
-                actions_layout = QHBoxLayout(actions_widget)
-                actions_layout.setContentsMargins(2, 2, 2, 2)
-                
-                # Add "Follow" button
-                follow_button = QPushButton("Follow")
-                follow_button.setProperty("artist_name", artist_name)
-                follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
-                actions_layout.addWidget(follow_button)
-                
-                table.setCellWidget(i, 2, actions_widget)
-            
-            # Hide the results text and show the table
-            self.results_text.hide()
-            
-            # Add the table directly to the layout
-            # First, clear any existing table
-            for i in reversed(range(self.layout().count())):
-                item = self.layout().itemAt(i)
-                if item and item.widget() and isinstance(item.widget(), QTableWidget):
-                    item.widget().setParent(None)
-            
-            # Insert the table before the last item in the layout (typically the button row)
-            self.layout().insertWidget(self.layout().count() - 1, table)
-            
-            # Store reference to the table
-            self.artists_table = table
+            # Display artists in table
+            self._display_lastfm_artists_table(top_artists)
             
             # Final progress
             progress.setValue(100)
             
         except Exception as e:
             error_msg = f"Error fetching artists from Last.fm: {e}"
-            self.results_text.append(error_msg)
-            self.logger.error(error_msg, exc_info=True)
+            QMessageBox.warning(self, "Error", error_msg)
             print(f"Exception: {e}")  # Debug output
         finally:
             progress.close()
+
+
+    def _display_lastfm_artists_table(self, artists):
+        """
+        Display Last.fm artists in a table
+        
+        Args:
+            artists (list): List of artist dictionaries from Last.fm
+        """
+        # Hide the results text if visible
+        if hasattr(self, 'results_text') and self.results_text.isVisible():
+            self.results_text.hide()
+        
+        # Remove any existing table widget if present
+        for i in reversed(range(self.layout().count())):
+            item = self.layout().itemAt(i)
+            if item and item.widget() and isinstance(item.widget(), QTableWidget):
+                item.widget().deleteLater()
+        
+        # Create the table widget
+        table = QTableWidget(self)
+        table.setObjectName("artists_table")
+        table.setColumnCount(3)
+        table.setHorizontalHeaderLabels(["Artist", "Playcount", "Actions"])
+        
+        # Make the table expand to fill all available space
+        table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        table.setMinimumHeight(400)  # Ensure reasonable minimum height
+        
+        # Configure table headers
+        table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist
+        table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Playcount
+        table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Actions
+        
+        # Set row count
+        table.setRowCount(len(artists))
+        
+        # Fill table with artist data
+        for i, artist in enumerate(artists):
+            artist_name = artist['name']
+            playcount = str(artist.get('playcount', 'N/A'))
+            
+            # Artist name
+            name_item = QTableWidgetItem(artist_name)
+            table.setItem(i, 0, name_item)
+            
+            # Playcount
+            playcount_item = QTableWidgetItem(playcount)
+            table.setItem(i, 1, playcount_item)
+            
+            # Actions - create a widget with buttons
+            actions_widget = QWidget()
+            actions_layout = QHBoxLayout(actions_widget)
+            actions_layout.setContentsMargins(2, 2, 2, 2)
+            
+            # Add "Follow" button
+            follow_button = QPushButton("Follow")
+            follow_button.setProperty("artist_name", artist_name)
+            follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
+            actions_layout.addWidget(follow_button)
+            
+            table.setCellWidget(i, 2, actions_widget)
+        
+        # Create a count label for the number of artists
+        count_label = QLabel(f"Showing {len(artists)} top artists for {self.lastfm_username}")
+        count_label.setObjectName("count_label")
+        
+        # Insert into layout - position before the bottom buttons
+        main_layout = self.layout()
+        insert_position = main_layout.count() - 1
+        main_layout.insertWidget(insert_position, count_label)
+        main_layout.insertWidget(insert_position + 1, table)
+        
+        # Add styling to match the releases table
+        table.setStyleSheet("""
+            QTableWidget {
+                background-color: transparent;
+                border: none;
+            }
+            QHeaderView::section {
+                background-color: #24283b;
+                color: #a9b1d6;
+                border: none;
+                padding: 6px;
+            }
+            QTableWidget::item {
+                border: none;
+                padding: 4px;
+            }
+            QTableWidget::item:selected {
+                background-color: #364A82;
+            }
+        """)
+        
+        # Make the table sortable
+        table.setSortingEnabled(True)
+        
+        # Store reference for later access
+        self.artists_table = table
+        
+        return table
+
+
 
     def update_status_text(self, text):
         """Update the status text in the results area"""
@@ -4168,104 +4233,85 @@ class MuspyArtistModule(BaseModule):
  
     def display_releases_table(self, releases):
         """
-        Display releases in the designated widget in the stack widget
+        Display releases in a table that takes up all available space
         
         Args:
-            releases (list): List of release dictionaries to display
+            releases (list): List of release dictionaries
         """
-        # Hide the results text area if it's visible
+        # Hide the results text if visible
         if hasattr(self, 'results_text') and self.results_text.isVisible():
             self.results_text.hide()
-            
+        
+        # Remove any existing table widget if present
+        for i in reversed(range(self.layout().count())):
+            item = self.layout().itemAt(i)
+            if item and item.widget() and isinstance(item.widget(), QTableWidget):
+                item.widget().deleteLater()
+        
         # Create the table widget
-        releases_table = QTableWidget()
-        releases_table.setObjectName("releases_table")
-        releases_table.setColumnCount(5)
-        releases_table.setHorizontalHeaderLabels(['Artist', 'Release Title', 'Type', 'Date', 'Disambiguation'])
+        table = QTableWidget(self)
+        table.setObjectName("releases_table")
+        table.setColumnCount(5)
+        table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
         
-        # Set table to expand to fill space
-        releases_table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        releases_table.setMinimumHeight(400)  # Set minimum height
+        # Make the table expand to fill all available space
+        table.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        table.setMinimumHeight(400)  # Ensure reasonable minimum height
         
-        # Configure headers
-        releases_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        # Configure table headers
+        table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist
+        table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Title
+        table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Type
+        table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Date
+        table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.Stretch)  # Disambiguation
         
-        # Configure number of rows
-        releases_table.setRowCount(len(releases))
+        # Set row count
+        table.setRowCount(len(releases))
         
-        # Fill the table
-        self._fill_releases_table(releases_table, releases)
+        # Fill the table with data
+        self._fill_releases_table(table, releases)
         
-        # Create a count label
+        # Insert the table into the layout in the correct position
+        # This should be after the search area and before the button area
+        main_layout = self.layout()
+        
+        # Create a count label for the number of releases
         count_label = QLabel(f"Showing {len(releases)} upcoming releases")
+        count_label.setObjectName("count_label")
         
-        # Find the stacked widget and the appropriate page
-        stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
-        if stacked_widget:
-            # Find or create the table page
-            table_page = None
-            for i in range(stacked_widget.count()):
-                page = stacked_widget.widget(i)
-                if page.objectName() == "table_page":
-                    table_page = page
-                    break
-                    
-            if table_page:
-                # Clear existing layout
-                if table_page.layout():
-                    while table_page.layout().count():
-                        item = table_page.layout().takeAt(0)
-                        widget = item.widget()
-                        if widget:
-                            widget.deleteLater()
-                else:
-                    # Create layout if it doesn't exist
-                    page_layout = QVBoxLayout(table_page)
-                    
-                # Add widgets to layout
-                table_page.layout().addWidget(count_label)
-                table_page.layout().addWidget(releases_table)
-                
-                # Add follow button if we have a current artist
-                if hasattr(self, 'current_artist') and self.current_artist:
-                    follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
-                    follow_button.clicked.connect(self.follow_current_artist)
-                    table_page.layout().addWidget(follow_button)
-                    self.add_follow_button = follow_button
-                    
-                # Switch to the table page
-                stacked_widget.setCurrentWidget(table_page)
-            else:
-                # If page not found, add to main layout
-                self.layout().insertWidget(self.layout().count() - 1, count_label)
-                self.layout().insertWidget(self.layout().count() - 1, releases_table)
-                
-                # Add follow button if needed
-                if hasattr(self, 'current_artist') and self.current_artist:
-                    follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
-                    follow_button.clicked.connect(self.follow_current_artist)
-                    self.layout().insertWidget(self.layout().count() - 1, follow_button)
-                    self.add_follow_button = follow_button
-        else:
-            # No stacked widget, add to main layout
-            self.layout().insertWidget(self.layout().count() - 1, count_label)
-            self.layout().insertWidget(self.layout().count() - 1, releases_table)
-            
-            # Add follow button if needed
-            if hasattr(self, 'current_artist') and self.current_artist:
-                follow_button = QPushButton(f"Seguir a {self.current_artist['name']} en Muspy")
-                follow_button.clicked.connect(self.follow_current_artist)
-                self.layout().insertWidget(self.layout().count() - 1, follow_button)
-                self.add_follow_button = follow_button
+        # Use consistent positioning - insert widgets before the last item (button row)
+        insert_position = main_layout.count() - 1
+        main_layout.insertWidget(insert_position, count_label)
+        main_layout.insertWidget(insert_position + 1, table)
         
-        # Make the table sortable
-        releases_table.setSortingEnabled(True)
-        releases_table.sortItems(3, Qt.SortOrder.AscendingOrder)
+        # Add styling to make the table fit the aesthetic
+        table.setStyleSheet("""
+            QTableWidget {
+                background-color: transparent;
+                border: none;
+            }
+            QHeaderView::section {
+                background-color: #24283b;
+                color: #a9b1d6;
+                border: none;
+                padding: 6px;
+            }
+            QTableWidget::item {
+                border: none;
+                padding: 4px;
+            }
+            QTableWidget::item:selected {
+                background-color: #364A82;
+            }
+        """)
         
-        # Store reference for later use
-        self.releases_table = releases_table
+        # Make the table sortable after data is loaded
+        table.setSortingEnabled(True)
         
-        return releases_table
+        # Store reference for later access
+        self.releases_table = table
+        
+        return table
 
     def _fallback_display_releases_table(self, releases):
         """
