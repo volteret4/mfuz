@@ -37,9 +37,9 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>4</number>
      </property>
-     <widget class="QWidget" name="page">
+     <widget class="QWidget" name="text_page">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
         <number>0</number>
@@ -90,7 +90,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page_2">
+     <widget class="QWidget" name="page_extra">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
         <number>0</number>
@@ -104,10 +104,62 @@ li.checked::marker { content: &quot;\2612&quot;; }
        <property name="bottomMargin">
         <number>0</number>
        </property>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="table_page_songs">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QWidget" name="table_widget_releases_artists_songs" native="true">
-         <layout class="QVBoxLayout" name="verticalLayout_3"/>
-        </widget>
+        <widget class="QTableWidget" name="tableWidget_songs"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="table_page_releases">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTableWidget" name="tableWidget_releases"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="table_page_artist">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTableWidget" name="tableWidget_artists"/>
        </item>
       </layout>
      </widget>
