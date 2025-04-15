@@ -13,7 +13,7 @@ try:
                                 QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
                                 QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem)
     from PyQt6.QtCore import pyqtSignal, Qt, QPoint
-    from PyQt6.QtGui import QColor, QTextDocument, QAction
+    from PyQt6.QtGui import QColor, QTextDocument, QAction, QCursor, QTextCursor
     QT_AVAILABLE = True
 except ImportError:
     QT_AVAILABLE = False
@@ -76,7 +76,7 @@ class MuspyArtistModule(BaseModule):
             query_db_script_path=None,
             search_mbid_script_path=None,
             lastfm_username=None,
-            lastfm_api_key=None,  # Add direct parameters for Last.fm
+            lastfm_api_key=None,
             lastfm_api_secret=None,
             spotify_client_id=None,
             spotify_client_secret=None,
@@ -106,21 +106,28 @@ class MuspyArtistModule(BaseModule):
         self.db_path = db_path
         self.spotify_redirect_uri = spotify_redirect_uri
         
-        # Theme configuration
-        self.available_themes = kwargs.pop('temas', [])
-        self.selected_theme = kwargs.pop('tema_seleccionado', theme)
-        
-        # Initialize with default values
+        # Initialize credentials
         self.spotify_client_id = spotify_client_id
         self.spotify_client_secret = spotify_client_secret
         self.lastfm_api_key = lastfm_api_key
         self.lastfm_api_secret = lastfm_api_secret
         self.lastfm_username = lastfm_username
         
-        # Debug print to see what's coming in from config
-        print(f"DEBUG - Last.fm config: api_key={lastfm_api_key}, username={lastfm_username}")
+        # IMPORTANTE: Inicializar lastfm_enabled y spotify_enabled ANTES de llamar a super().__init__()
+        # Determinar si Last.fm está habilitado (ahora basado en username como solicitaste)
+        self.lastfm_enabled = bool(self.lastfm_username and self.lastfm_api_key)
         
-        # Call super init first to set up logging, etc.
+        # Determinar si Spotify está habilitado
+        self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
+        
+        # Theme configuration
+        self.available_themes = kwargs.pop('temas', [])
+        self.selected_theme = kwargs.pop('tema_seleccionado', theme)
+        
+        # Debug print to see what's coming in from config
+        print(f"DEBUG - Last.fm config: api_key={lastfm_api_key}, username={lastfm_username}, enabled={self.lastfm_enabled}")
+        
+        # Call super init now that we've set up the required attributes
         super().__init__(parent, theme, **kwargs)
         
         # Set up logger
@@ -316,24 +323,31 @@ class MuspyArtistModule(BaseModule):
 
 
     def _connect_signals(self):
-        """Conectar las señales de los widgets a sus respectivos slots."""
-        # Conectar la señal de búsqueda
+        """Connect signals from widgets to their respective slots."""
+        # Connect the signal of search
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Modificar la conexión del botón de cargar artistas para mostrar un menú
+        # Modify the button connection for loading artists to show a menu
         self.load_artists_button.clicked.connect(self.show_load_menu)
         
-        # El resto de las conexiones se mantienen igual
+        # The rest of the connections remain the same
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         
-        # Visibility for Last.fm button depends on configuration
-        if hasattr(self, 'sync_lastfm_button'):
-            if self.lastfm_enabled:
-                self.sync_lastfm_button.clicked.connect(self.sync_lastfm_muspy)
-                self.sync_lastfm_button.setVisible(True)
+        # Conectar el botón de Last.fm para mostrar su menú
+        from PyQt6.QtWidgets import QPushButton
+        
+        # Para el botón de last.fm
+        lastfm_button = self.findChild(QPushButton, 'sync_lastfm_button')
+        if lastfm_button:
+            lastfm_enabled = getattr(self, 'lastfm_enabled', False)
+            
+            if lastfm_enabled:
+                # Conectar al nuevo método para mostrar el menú en lugar de sync_lastfm_muspy
+                lastfm_button.clicked.connect(self.show_lastfm_options_menu)
+                lastfm_button.setVisible(True)
             else:
-                self.sync_lastfm_button.setVisible(False)
+                lastfm_button.setVisible(False)
         
         self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(self.get_new_releases)
@@ -342,6 +356,661 @@ class MuspyArtistModule(BaseModule):
         # Add a context menu for additional options
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
+
+    def show_lastfm_options_menu(self):
+        """
+        Display a menu with Last.fm options when the Last.fm button is clicked
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm credentials not configured")
+            return
+        
+        menu = QMenu(self)
+        
+        # Option 1: Show top artists
+        show_top_submenu = QMenu("Show Top Artists", menu)
+        
+        # Add sub-options for different artist counts
+        show_top10_action = QAction("Show Top 10 Artists", self)
+        show_top50_action = QAction("Show Top 50 Artists", self)
+        show_top100_action = QAction("Show Top 100 Artists", self)
+        show_custom_action = QAction("Show Custom Number of Artists...", self)
+        
+        # Connect actions
+        show_top10_action.triggered.connect(lambda: self.show_lastfm_top_artists(10))
+        show_top50_action.triggered.connect(lambda: self.show_lastfm_top_artists(50))
+        show_top100_action.triggered.connect(lambda: self.show_lastfm_top_artists(100))
+        show_custom_action.triggered.connect(self.show_lastfm_custom_top_artists)
+        
+        # Add actions to submenu
+        show_top_submenu.addAction(show_top10_action)
+        show_top_submenu.addAction(show_top50_action)
+        show_top_submenu.addAction(show_top100_action)
+        show_top_submenu.addSeparator()
+        show_top_submenu.addAction(show_custom_action)
+        
+        # Option 2: Show loved tracks
+        show_loved_tracks_action = QAction("Show Loved Tracks", self)
+        show_loved_tracks_action.triggered.connect(self.show_lastfm_loved_tracks)
+        
+        # Add all menu items
+        menu.addMenu(show_top_submenu)
+        menu.addAction(show_loved_tracks_action)
+        
+        # Show menu at button position
+        # Buscar el botón por su nombre para asegurar que estamos usando el objeto correcto
+        from PyQt6.QtWidgets import QPushButton
+        from PyQt6.QtCore import QPoint
+        
+        lastfm_button = self.findChild(QPushButton, 'sync_lastfm_button')
+        if lastfm_button:
+            menu.exec(lastfm_button.mapToGlobal(QPoint(0, lastfm_button.height())))
+        else:
+            # Fallback en caso de que no encontremos el botón
+            menu.exec(self.mapToGlobal(QPoint(0, 0)))
+
+    def show_lastfm_top_artists(self, count=50):
+        """
+        Show top Last.fm artists in the results area
+        
+        Args:
+            count (int): Number of top artists to display
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
+
+        # Clear the results area and make sure it's visible
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Fetching top {count} artists for {self.lastfm_username} from Last.fm...\n")
+        QApplication.processEvents()  # Update UI
+
+        try:
+            # Get LastFM network through our auth manager
+            if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
+                self.results_text.append("Last.fm authentication manager not initialized. Please check your configuration.")
+                return
+                
+            network = self.lastfm_auth.get_network()
+            if not network:
+                self.results_text.append("Could not connect to Last.fm. Please check your credentials.")
+                return
+            
+            # Get top artists
+            top_artists = self.lastfm_auth.get_top_artists(limit=count)
+            
+            if not top_artists:
+                self.results_text.append("No artists found on Last.fm account.")
+                return
+                
+            # Display artists in a formatted way
+            self.results_text.append(f"Top {len(top_artists)} artists for {self.lastfm_username}:\n")
+            
+            # Create a context menu for the results text
+            self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            self.results_text.customContextMenuRequested.connect(self.show_artist_context_menu)
+            
+            # Store top artists for context menu use
+            self.top_artists_list = top_artists
+            
+            # Display each artist with playcount
+            for i, artist in enumerate(top_artists):
+                artist_name = artist['name']
+                playcount = artist.get('playcount', 'N/A')
+                
+                # Format line with index for easier selection
+                artist_line = f"{i+1}. {artist_name} (Playcount: {playcount})"
+                self.results_text.append(artist_line)
+                
+                # Add a special hidden marker for context menu to identify this line as an artist
+                # This uses HTML with a hidden span that won't be visible to users
+                hidden_marker = f'<span style="display:none" class="artist" data-index="{i}"></span>'
+                cursor = self.results_text.textCursor()
+                cursor.movePosition(QTextCursor.MoveOperation.End)
+                self.results_text.setTextCursor(cursor)
+                self.results_text.textCursor().insertHtml(hidden_marker)
+                
+            self.results_text.append("\nRight-click on an artist to see options.")
+            
+        except Exception as e:
+            error_msg = f"Error fetching artists from Last.fm: {e}"
+            self.results_text.append(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+
+    def show_lastfm_custom_top_artists(self):
+        """
+        Show a dialog to let the user input a custom number of artists to display
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
+            
+        # Create the input dialog
+        from PyQt6.QtWidgets import QInputDialog
+        
+        count, ok = QInputDialog.getInt(
+            self,
+            "Last.fm Top Artists",
+            "Enter number of top artists to display:",
+            value=50,
+            min=1,
+            max=1000,
+            step=10
+        )
+        
+        if ok:
+            # User clicked OK, proceed with displaying artists
+            self.show_lastfm_top_artists(count)
+
+    def show_artist_context_menu(self, position):
+        """
+        Show context menu for artists in the results text
+        """
+        # Get the cursor at the clicked position
+        cursor = self.results_text.cursorForPosition(position)
+        cursor.select(QTextCursor.SelectionType.LineUnderCursor)
+        
+        # Get the line text
+        line_text = cursor.selectedText()
+        
+        # Check if this is an artist line (starts with a number followed by a dot)
+        import re
+        if re.match(r'^\d+\.', line_text):
+            # Extract artist name from the line
+            match = re.search(r'^\d+\.\s+(.+?)\s+\(Playcount', line_text)
+            if match:
+                artist_name = match.group(1)
+                
+                # Create context menu
+                menu = QMenu(self)
+                
+                # Add options
+                add_muspy_action = QAction(f"Add {artist_name} to Muspy", self)
+                add_spotify_action = QAction(f"Follow {artist_name} on Spotify", self)
+                show_info_action = QAction(f"Show info for {artist_name}", self)
+                
+                # Connect actions
+                add_muspy_action.triggered.connect(lambda: self.add_lastfm_artist_to_muspy(artist_name))
+                add_spotify_action.triggered.connect(lambda: self.follow_lastfm_artist_on_spotify(artist_name))
+                show_info_action.triggered.connect(lambda: self.show_artist_info(artist_name))
+                
+                # Add actions to menu
+                menu.addAction(add_muspy_action)
+                menu.addAction(add_spotify_action)
+                menu.addSeparator()
+                menu.addAction(show_info_action)
+                
+                # Show menu
+                menu.exec(self.results_text.mapToGlobal(position))
+
+    def add_lastfm_artist_to_muspy(self, artist_name):
+        """
+        Add a Last.fm artist to Muspy
+        
+        Args:
+            artist_name (str): Name of the artist to add
+        """
+        if not self.muspy_username or not self.muspy_api_key:
+            QMessageBox.warning(self, "Error", "Muspy configuration not available")
+            return
+            
+        # First get the MBID for the artist
+        mbid = self.get_mbid_artist_searched(artist_name)
+        
+        if mbid:
+            # Try to add the artist to Muspy
+            success = self.add_artist_to_muspy(mbid, artist_name)
+            
+            if success:
+                QMessageBox.information(self, "Success", f"Successfully added {artist_name} to Muspy")
+            else:
+                QMessageBox.warning(self, "Error", f"Failed to add {artist_name} to Muspy")
+        else:
+            QMessageBox.warning(self, "Error", f"Could not find MusicBrainz ID for {artist_name}")
+
+    def follow_lastfm_artist_on_spotify(self, artist_name):
+        """
+        Follow a Last.fm artist on Spotify
+        
+        Args:
+            artist_name (str): Name of the artist to follow
+        """
+        if not self.spotify_enabled:
+            QMessageBox.warning(self, "Error", "Spotify configuration not available")
+            return
+            
+        try:
+            # Get the Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                self.results_text.append("Failed to get Spotify client. Please check authentication.")
+                return
+                
+            # Try to follow the artist
+            result = self.follow_artist_on_spotify(artist_name, spotify_client)
+            
+            if result == 1:
+                QMessageBox.information(self, "Success", f"Successfully followed {artist_name} on Spotify")
+            elif result == 0:
+                QMessageBox.information(self, "Already Following", f"You are already following {artist_name} on Spotify")
+            else:
+                QMessageBox.warning(self, "Error", f"Failed to follow {artist_name} on Spotify")
+                
+        except Exception as e:
+            error_msg = f"Error following artist on Spotify: {e}"
+            self.results_text.append(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+
+    def show_artist_info(self, artist_name):
+        """
+        Show detailed information about an artist
+        
+        Args:
+            artist_name (str): Name of the artist
+        """
+        try:
+            # Clear results
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append(f"Fetching information for {artist_name}...\n")
+            QApplication.processEvents()
+            
+            # Get Last.fm info
+            if hasattr(self, 'lastfm_auth') and self.lastfm_auth:
+                network = self.lastfm_auth.get_network()
+                if network:
+                    try:
+                        artist = network.get_artist(artist_name)
+                        
+                        # Display basic info
+                        self.results_text.append(f"🎵 {artist_name}")
+                        
+                        # Get listener and playcount info
+                        if hasattr(artist, 'get_listener_count'):
+                            self.results_text.append(f"Listeners: {artist.get_listener_count():,}")
+                        if hasattr(artist, 'get_playcount'):
+                            self.results_text.append(f"Total Playcount: {artist.get_playcount():,}")
+                        
+                        # Get bio if available
+                        bio = None
+                        if hasattr(artist, 'get_bio_summary'):
+                            bio = artist.get_bio_summary(language='en')
+                        
+                        if bio:
+                            # Strip HTML tags for cleaner display
+                            import re
+                            bio_text = re.sub(r'<[^>]+>', '', bio)
+                            self.results_text.append("\nBio:")
+                            self.results_text.append(bio_text)
+                        
+                        # Get top tracks
+                        if hasattr(artist, 'get_top_tracks'):
+                            top_tracks = artist.get_top_tracks(limit=5)
+                            if top_tracks:
+                                self.results_text.append("\nTop Tracks:")
+                                for i, track in enumerate(top_tracks, 1):
+                                    self.results_text.append(f"{i}. {track.item.title}")
+                        
+                        # Get similar artists
+                        if hasattr(artist, 'get_similar'):
+                            similar = artist.get_similar(limit=5)
+                            if similar:
+                                self.results_text.append("\nSimilar Artists:")
+                                for i, similar_artist in enumerate(similar, 1):
+                                    self.results_text.append(f"{i}. {similar_artist.item.name}")
+                    except Exception as e:
+                        self.results_text.append(f"Error getting Last.fm info: {e}")
+            
+            # Get local database info
+            self.results_text.append("\nLooking for local info...")
+            
+            # Use consultar_items_db to check if we have this artist in our database
+            if self.query_db_script_path and self.db_path:
+                try:
+                    import subprocess
+                    
+                    # Build command
+                    cmd = f"python {self.query_db_script_path} --db {self.db_path} --artist \"{artist_name}\" --artist-info"
+                    
+                    # Run command
+                    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                    
+                    if result.returncode == 0 and result.stdout:
+                        try:
+                            artist_info = json.loads(result.stdout)
+                            
+                            # Display database info
+                            if 'links' in artist_info:
+                                self.results_text.append("\nOnline Links:")
+                                for service, url in artist_info['links'].items():
+                                    self.results_text.append(f"- {service.capitalize()}: {url}")
+                            
+                            if 'albums' in artist_info:
+                                self.results_text.append(f"\nAlbums in Database: {len(artist_info['albums'])}")
+                                for album in artist_info['albums']:
+                                    year = f" ({album['year']})" if album.get('year') else ""
+                                    self.results_text.append(f"- {album['name']}{year}")
+                        except json.JSONDecodeError:
+                            self.results_text.append("Error parsing database info")
+                    else:
+                        self.results_text.append("Artist not found in local database")
+                except Exception as e:
+                    self.results_text.append(f"Error querying local database: {e}")
+            else:
+                self.results_text.append("Database query not available. Check configuration.")
+        
+        except Exception as e:
+            error_msg = f"Error fetching artist info: {e}"
+            self.results_text.append(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+
+
+    def show_lastfm_loved_tracks(self, limit=50):
+        """
+        Show user's loved tracks from Last.fm
+        
+        Args:
+            limit (int): Maximum number of tracks to display
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
+
+        # Clear the results area and make sure it's visible
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Fetching loved tracks for {self.lastfm_username} from Last.fm...\n")
+        QApplication.processEvents()  # Update UI
+
+        try:
+            # Get LastFM network through our auth manager
+            if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
+                self.results_text.append("Last.fm authentication manager not initialized. Please check your configuration.")
+                return
+                
+            network = self.lastfm_auth.get_network()
+            if not network:
+                self.results_text.append("Could not connect to Last.fm. Please check your credentials.")
+                return
+            
+            # Get user object
+            user = network.get_user(self.lastfm_username)
+            
+            # Get loved tracks
+            loved_tracks = user.get_loved_tracks(limit=limit)
+            
+            if not loved_tracks:
+                self.results_text.append("No loved tracks found on Last.fm account.")
+                return
+                
+            # Display tracks in a formatted way
+            self.results_text.append(f"Found {len(loved_tracks)} loved tracks for {self.lastfm_username}:\n")
+            
+            # Create a context menu for the results text
+            self.results_text.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            self.results_text.customContextMenuRequested.connect(self.show_track_context_menu)
+            
+            # Store loved tracks for context menu use
+            self.loved_tracks_list = loved_tracks
+            
+            # Display each track
+            for i, track in enumerate(loved_tracks):
+                track_name = track.track.title
+                artist_name = track.track.artist.name
+                
+                # Format line with index for easier selection
+                track_line = f"{i+1}. {artist_name} - {track_name}"
+                self.results_text.append(track_line)
+                
+                # Add a special hidden marker for context menu to identify this line as a track
+                # This uses HTML with a hidden span that won't be visible to users
+                hidden_marker = f'<span style="display:none" class="track" data-index="{i}"></span>'
+                cursor = self.results_text.textCursor()
+                cursor.movePosition(QTextCursor.MoveOperation.End)
+                self.results_text.setTextCursor(cursor)
+                self.results_text.textCursor().insertHtml(hidden_marker)
+                
+            self.results_text.append("\nRight-click on a track to see options.")
+            
+        except Exception as e:
+            error_msg = f"Error fetching loved tracks from Last.fm: {e}"
+            self.results_text.append(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+
+    def show_track_context_menu(self, position):
+        """
+        Show context menu for tracks in the results text
+        """
+        # Get the cursor at the clicked position
+        cursor = self.results_text.cursorForPosition(position)
+        cursor.select(QTextCursor.SelectionType.LineUnderCursor)
+        
+        # Get the line text
+        line_text = cursor.selectedText()
+        
+        # Check if this is a track line (starts with a number followed by a dot)
+        import re
+        if re.match(r'^\d+\.', line_text):
+            # Extract track info from the line
+            match = re.search(r'^\d+\.\s+(.+?)\s+-\s+(.+)$', line_text)
+            if match:
+                artist_name = match.group(1)
+                track_name = match.group(2)
+                
+                # Get the index
+                index_match = re.search(r'^(\d+)', line_text)
+                track_index = int(index_match.group(1)) - 1 if index_match else -1
+                
+                # Create context menu
+                menu = QMenu(self)
+                
+                # Add options
+                unlove_action = QAction(f"Remove from Loved Tracks", self)
+                search_action = QAction(f"Search for '{track_name}'", self)
+                add_artist_muspy_action = QAction(f"Add {artist_name} to Muspy", self)
+                
+                # Connect actions
+                if track_index >= 0 and hasattr(self, 'loved_tracks_list') and track_index < len(self.loved_tracks_list):
+                    unlove_action.triggered.connect(lambda: self.unlove_lastfm_track(track_index))
+                search_action.triggered.connect(lambda: self.search_track(artist_name, track_name))
+                add_artist_muspy_action.triggered.connect(lambda: self.add_lastfm_artist_to_muspy(artist_name))
+                
+                # Add actions to menu
+                menu.addAction(unlove_action)
+                menu.addSeparator()
+                menu.addAction(search_action)
+                menu.addAction(add_artist_muspy_action)
+                
+                # Show menu
+                menu.exec(self.results_text.mapToGlobal(position))
+
+    def unlove_lastfm_track(self, index):
+        """
+        Remove a track from Last.fm loved tracks
+        
+        Args:
+            index (int): Index of the track in the loved_tracks_list
+        """
+        if not hasattr(self, 'loved_tracks_list') or index >= len(self.loved_tracks_list):
+            QMessageBox.warning(self, "Error", "Track information not available")
+            return
+            
+        if not self.lastfm_auth.is_authenticated():
+            # Need to authenticate for write operations
+            reply = QMessageBox.question(
+                self,
+                "Authentication Required",
+                "To remove a track from your loved tracks, you need to authenticate with Last.fm. Proceed?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                # Prompt for password
+                password, ok = QInputDialog.getText(
+                    self,
+                    "Last.fm Password",
+                    f"Enter password for {self.lastfm_username}:",
+                    QLineEdit.EchoMode.Password
+                )
+                
+                if ok and password:
+                    # Try to authenticate
+                    self.lastfm_auth.password = password
+                    if not self.lastfm_auth.authenticate():
+                        QMessageBox.warning(self, "Authentication Failed", "Could not authenticate with Last.fm")
+                        return
+                else:
+                    return  # Canceled
+            else:
+                return  # Declined authentication
+        
+        # Now we should be authenticated
+        try:
+            # Get the track from our list
+            loved_track = self.loved_tracks_list[index]
+            track = loved_track.track
+            
+            # Confirm with user
+            reply = QMessageBox.question(
+                self,
+                "Confirm Unlove",
+                f"Remove '{track.title}' by {track.artist.name} from your loved tracks?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                # Try to unlove the track
+                network = self.lastfm_auth.get_network()
+                if network:
+                    track.unlove()
+                    
+                    # Show success message
+                    QMessageBox.information(self, "Success", "Track removed from loved tracks")
+                    
+                    # Refresh the list
+                    self.show_lastfm_loved_tracks()
+                else:
+                    QMessageBox.warning(self, "Error", "Could not connect to Last.fm")
+        except Exception as e:
+            error_msg = f"Error removing track from loved tracks: {e}"
+            QMessageBox.warning(self, "Error", error_msg)
+            self.logger.error(error_msg, exc_info=True)
+
+    def search_track(self, artist_name, track_name):
+        """
+        Search for a track in local database and online services
+        
+        Args:
+            artist_name (str): Name of the artist
+            track_name (str): Name of the track
+        """
+        # Clear results
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Searching for '{track_name}' by {artist_name}...\n")
+        QApplication.processEvents()
+        
+        # Check local database
+        if self.query_db_script_path and self.db_path:
+            try:
+                import subprocess
+                
+                # Build command
+                cmd = f"python {self.query_db_script_path} --db {self.db_path} --song \"{track_name}\" --artist \"{artist_name}\" --song-info"
+                
+                # Run command
+                result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+                
+                if result.returncode == 0 and result.stdout:
+                    try:
+                        song_info = json.loads(result.stdout)
+                        
+                        if song_info:
+                            self.results_text.append("Found in local database:")
+                            self.results_text.append(f"Title: {song_info.get('title', 'Unknown')}")
+                            self.results_text.append(f"Artist: {song_info.get('artist', 'Unknown')}")
+                            self.results_text.append(f"Album: {song_info.get('album', 'Unknown')}")
+                            
+                            if 'file_path' in song_info:
+                                self.results_text.append(f"Path: {song_info['file_path']}")
+                            
+                            if 'links' in song_info:
+                                self.results_text.append("\nOnline Links:")
+                                for service, url in song_info['links'].items():
+                                    self.results_text.append(f"- {service.capitalize()}: {url}")
+                        else:
+                            self.results_text.append("Track not found in local database")
+                    except json.JSONDecodeError:
+                        self.results_text.append("Error parsing database info")
+                else:
+                    self.results_text.append("Track not found in local database")
+            except Exception as e:
+                self.results_text.append(f"Error querying local database: {e}")
+        else:
+            self.results_text.append("Database query not available. Check configuration.")
+        
+        # Try to get Last.fm info
+        if hasattr(self, 'lastfm_auth') and self.lastfm_auth:
+            try:
+                self.results_text.append("\nLooking up on Last.fm...")
+                
+                network = self.lastfm_auth.get_network()
+                if network:
+                    track = network.get_track(artist_name, track_name)
+                    
+                    if track:
+                        self.results_text.append(f"Last.fm page: {track.get_url()}")
+                        
+                        # Try to get additional info
+                        try:
+                            track_info = track.get_info()
+                            if track_info:
+                                if 'playcount' in track_info:
+                                    self.results_text.append(f"Playcount: {track_info['playcount']}")
+                                if 'userplaycount' in track_info:
+                                    self.results_text.append(f"Your playcount: {track_info['userplaycount']}")
+                        except:
+                            pass
+            except Exception as e:
+                self.results_text.append(f"Error getting Last.fm info: {e}")
+
+
+
+
+    def show_lastfm_sync_menu(self):
+        """
+        Display a menu with Last.fm sync options when sync_lastfm_button is clicked
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm credentials not configured")
+            return
+        
+        menu = QMenu(self)
+        
+        # Add menu options for different top artist counts
+        top10_action = QAction("Sync Top 10 Last.fm Artists", self)
+        top50_action = QAction("Sync Top 50 Last.fm Artists", self)
+        top100_action = QAction("Sync Top 100 Last.fm Artists", self)
+        custom_action = QAction("Sync Custom Number of Artists...", self)
+        
+        # Connect actions to their respective functions
+        top10_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(10))
+        top50_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(50))
+        top100_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(100))
+        custom_action.triggered.connect(self.sync_lastfm_custom_count)
+        
+        # Add actions to menu
+        menu.addAction(top10_action)
+        menu.addAction(top50_action)
+        menu.addAction(top100_action)
+        menu.addSeparator()
+        menu.addAction(custom_action)
+        
+        # Show menu at button position
+        menu.exec(self.sync_lastfm_button.mapToGlobal(QPoint(0, self.sync_lastfm_button.height())))
+
+
 
 
     def show_load_menu(self):
@@ -403,7 +1072,90 @@ class MuspyArtistModule(BaseModule):
 
 
 
+    def sync_top_artists_from_lastfm(self, count=50):
+        """
+        Synchronize top Last.fm artists with Muspy
+        
+        Args:
+            count (int): Number of top artists to sync
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
 
+        if not self.muspy_id:
+            # Try to get the Muspy ID if it's not set
+            self.get_muspy_id()
+            if not self.muspy_id:
+                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
+                return
+
+        # Clear the results area and make sure it's visible
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Starting Last.fm synchronization for user {self.lastfm_username}...\n")
+        self.results_text.append(f"Syncing top {count} artists from Last.fm to Muspy\n")
+        QApplication.processEvents()  # Update UI
+
+        try:
+            # First try direct API import
+            import_url = f"{self.base_url}/import/{self.muspy_id}"
+            auth = (self.muspy_username, self.muspy_api_key)
+            
+            import_data = {
+                'type': 'lastfm',
+                'username': self.lastfm_username,
+                'count': count,
+                'period': 'overall'
+            }
+            
+            self.results_text.append("Sending request to Muspy API...")
+            QApplication.processEvents()
+            
+            # Use POST for the import endpoint
+            response = requests.post(import_url, auth=auth, json=import_data)
+            
+            if response.status_code in [200, 201]:
+                self.results_text.append(f"Successfully synchronized top {count} artists from Last.fm account {self.lastfm_username}")
+                self.results_text.append("You can now view your upcoming releases using the 'Mis próximos discos' button")
+                return True
+            else:
+                # If direct API fails, try using our LastFM manager as fallback
+                self.results_text.append("Direct API import failed. Trying alternative method...")
+                return self._sync_lastfm_alternative(count)
+        except Exception as e:
+            error_msg = f"Error syncing with Muspy API: {e}"
+            self.results_text.append(error_msg)
+            self.logger.error(error_msg, exc_info=True)
+            
+            # Try alternative method
+            self.results_text.append("Trying alternative synchronization method...")
+            return self._sync_lastfm_alternative(count)
+
+    def sync_lastfm_custom_count(self):
+        """
+        Show a dialog to let the user input a custom number of artists to sync
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "Last.fm username not configured")
+            return
+            
+        # Create the input dialog
+        from PyQt6.QtWidgets import QInputDialog
+        
+        count, ok = QInputDialog.getInt(
+            self,
+            "Sync Last.fm Artists",
+            "Enter number of top artists to sync:",
+            value=50,
+            min=1,
+            max=1000,
+            step=10
+        )
+        
+        if ok:
+            # User clicked OK, proceed with the sync
+            self.sync_top_artists_from_lastfm(count)
 
     def check_install_dependencies(self):
         """Check and optionally install missing dependencies"""
@@ -2065,8 +2817,13 @@ class MuspyArtistModule(BaseModule):
             return self._sync_lastfm_alternative()
 
 
-    def _sync_lastfm_alternative(self):
-        """Alternative method to sync LastFM artists using the LastFMAuthManager"""
+    def _sync_lastfm_alternative(self, count=50):
+        """
+        Alternative method to sync LastFM artists using the LastFMAuthManager
+        
+        Args:
+            count (int): Number of top artists to sync
+        """
         try:
             # Get LastFM network
             network = self.lastfm_auth.get_network()
@@ -2075,10 +2832,10 @@ class MuspyArtistModule(BaseModule):
                 return False
             
             # Get top artists
-            self.results_text.append("Fetching top artists from LastFM...")
+            self.results_text.append(f"Fetching top {count} artists from LastFM...")
             QApplication.processEvents()
             
-            top_artists = self.lastfm_auth.get_top_artists(limit=50)
+            top_artists = self.lastfm_auth.get_top_artists(limit=count)
             
             if not top_artists:
                 self.results_text.append("No artists found on LastFM account.")
@@ -2462,19 +3219,42 @@ class MuspyArtistModule(BaseModule):
         
         # Add menu actions
         muspy_action = QAction("Sincronizar artistas seleccionados con Muspy", self)
-        lastfm_action = QAction("Sincronizar artistas seleccionados con Last.fm", self)
+        lastfm_action = QAction("Sincronizar Top Artists de Last.fm con Muspy", self)  # Renamed for clarity
         spotify_action = QAction("Sincronizar artistas seleccionados con Spotify", self)
         
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
         
-        # Connect Last.fm sync function
+        # Create submenu for Last.fm top artists options
+        lastfm_submenu = QMenu("Sincronizar Top Artists", menu)
+        
+        # Add options for different numbers of artists
+        top10_action = QAction("Top 10 Artists", self)
+        top50_action = QAction("Top 50 Artists", self)
+        top100_action = QAction("Top 100 Artists", self)
+        custom_action = QAction("Custom Number of Artists...", self)
+        
+        # Connect actions
+        top10_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(10))
+        top50_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(50))
+        top100_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(100))
+        custom_action.triggered.connect(self.sync_lastfm_custom_count)
+        
+        # Add to submenu
+        lastfm_submenu.addAction(top10_action)
+        lastfm_submenu.addAction(top50_action)
+        lastfm_submenu.addAction(top100_action)
+        lastfm_submenu.addSeparator()
+        lastfm_submenu.addAction(custom_action)
+        
+        # Check if Last.fm is enabled
         if self.lastfm_enabled:
-            lastfm_action.triggered.connect(self.sync_lastfm_artists)
+            lastfm_action.setMenu(lastfm_submenu)
         else:
             lastfm_action.triggered.connect(lambda: QMessageBox.warning(
                 self, "Last.fm Error", "Last.fm credentials not configured. Please set them in the config file."
             ))
+            lastfm_action.setText("Sincronizar Top Artists de Last.fm con Muspy (configuración incompleta)")
         
         # Connect Spotify sync function
         if self.spotify_enabled:
@@ -2483,11 +3263,6 @@ class MuspyArtistModule(BaseModule):
             spotify_action.triggered.connect(lambda: QMessageBox.warning(
                 self, "Spotify Error", "Spotify credentials not configured. Please set them in the config file."
             ))
-        
-        # Add status indicators to menu items
-        if not self.lastfm_enabled:
-            lastfm_action.setText("Sincronizar artistas seleccionados con Last.fm (configuración incompleta)")
-        if not self.spotify_enabled:
             spotify_action.setText("Sincronizar artistas seleccionados con Spotify (configuración incompleta)")
         
         # Add actions to menu
@@ -3055,50 +3830,50 @@ class MuspyArtistModule(BaseModule):
             # First try direct parameters that could be passed to the constructor
             if 'lastfm_api_key' in kwargs and kwargs['lastfm_api_key']:
                 self.lastfm_api_key = kwargs['lastfm_api_key']
-                
+                    
             if 'lastfm_username' in kwargs and kwargs['lastfm_username']:
                 self.lastfm_username = kwargs['lastfm_username']
-                
+                    
             # Then try lastfm section
             lastfm_section = kwargs.get('lastfm', {})
             if lastfm_section:
                 if not self.lastfm_api_key and 'api_key' in lastfm_section:
                     self.lastfm_api_key = lastfm_section['api_key']
-                    
+                        
                 if not self.lastfm_api_secret and 'api_secret' in lastfm_section:
                     self.lastfm_api_secret = lastfm_section['api_secret']
-                    
+                        
                 if not self.lastfm_username and 'username' in lastfm_section:
                     self.lastfm_username = lastfm_section['username']
-            
+                
             # Finally try from global_theme_config
             global_config = kwargs.get('global_theme_config', {})
             if global_config:
                 if not self.lastfm_api_key and 'lastfm_api_key' in global_config:
                     self.lastfm_api_key = global_config['lastfm_api_key']
-                    
+                        
                 if not self.lastfm_api_secret and 'lastfm_api_secret' in global_config:
                     self.lastfm_api_secret = global_config['lastfm_api_secret']
-                    
+                        
                 if not self.lastfm_username and 'lastfm_username' in global_config:
                     self.lastfm_username = global_config['lastfm_username']
-            
-            # Determine if Last.fm is enabled
-            self.lastfm_enabled = bool(self.lastfm_api_key and self.lastfm_username)
-            
+                
+            # Determine if Last.fm is enabled - SOLO basándonos en username como pediste
+            self.lastfm_enabled = bool(self.lastfm_username and self.lastfm_api_key)
+                
             # Log the configuration
             if self.lastfm_enabled:
-                print(f"LastFM configured for user: {self.lastfm_username}")
+                print(f"LastFM configurado para el usuario: {self.lastfm_username}")
             else:
                 missing = []
                 if not self.lastfm_api_key:
                     missing.append("API key")
                 if not self.lastfm_username:
                     missing.append("username")
-                print(f"LastFM not fully configured - missing: {', '.join(missing)}")
-                
+                print(f"LastFM no está completamente configurado - falta: {', '.join(missing)}")
+                    
         except Exception as e:
-            print(f"Error loading LastFM settings: {e}")
+            print(f"Error cargando configuración de LastFM: {e}")
             self.lastfm_enabled = False
 
 

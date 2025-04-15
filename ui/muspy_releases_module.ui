@@ -146,6 +146,32 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="sync_lastfm_button">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Lastfm</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="get_releases_button">
         <property name="maximumSize">
          <size>
@@ -172,7 +198,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="get_releases_lastfm">
+       <widget class="QPushButton" name="get_releases_musicbrainz">
         <property name="maximumSize">
          <size>
           <width>40</width>
@@ -180,7 +206,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </size>
         </property>
         <property name="toolTip">
-         <string>Mis próximos discos</string>
+         <string>Musicbrainz</string>
         </property>
         <property name="text">
          <string/>
@@ -206,7 +232,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
          </size>
         </property>
         <property name="toolTip">
-         <string>Mis próximos discos</string>
+         <string>Spotify</string>
         </property>
         <property name="text">
          <string/>
