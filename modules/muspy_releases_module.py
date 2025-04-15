@@ -43,6 +43,9 @@ except ImportError:
     LASTFM_AVAILABLE = False
     logger.warning("LastFM module not available. LastFM features will be disabled.")
 
+# Musicbrainz
+from tools.musicbrainz_login import MusicBrainzAuthManager
+
 # Filter PyQt logs
 class PyQtFilter(logging.Filter):
     def filter(self, record):
@@ -310,6 +313,8 @@ class MuspyArtistModule(BaseModule):
             spotify_client_id=None,
             spotify_client_secret=None,
             spotify_redirect_uri=None,
+            musicbrainz_username=None,
+            musicbrainz_password=None,
             parent=None, 
             db_path='music_database.db',
             theme='Tokyo Night', 
@@ -342,6 +347,45 @@ class MuspyArtistModule(BaseModule):
         self.lastfm_api_secret = lastfm_api_secret
         self.lastfm_username = lastfm_username
         
+        # Set up a basic logger early so it's available before super().__init__()
+        self.logger = logging.getLogger(self.module_name)
+
+        # Initialize MusicBrainz credentials from all possible sources
+        self.musicbrainz_username = kwargs.get('musicbrainz_username')
+        self.musicbrainz_password = kwargs.get('musicbrainz_password')
+
+        # Check global theme config for credentials if not already set
+        global_config = kwargs.get('global_theme_config', {})
+        if global_config:
+            if not self.musicbrainz_username and 'musicbrainz_username' in global_config:
+                self.musicbrainz_username = global_config['musicbrainz_username']
+            if not self.musicbrainz_password and 'musicbrainz_password' in global_config:
+                self.musicbrainz_password = global_config['musicbrainz_password']
+
+        self.musicbrainz_enabled = bool(self.musicbrainz_username)
+
+        # Debug log for troubleshooting
+        if self.musicbrainz_username:
+            self.logger.info(f"MusicBrainz username configured: {self.musicbrainz_username}")
+            self.logger.info(f"MusicBrainz password configured: {bool(self.musicbrainz_password)}")
+        else:
+            self.logger.warning("MusicBrainz username not configured")
+
+        # Initialize MusicBrainz auth manager
+        if self.musicbrainz_enabled:
+            try:
+                from tools.musicbrainz_login import MusicBrainzAuthManager
+                self.musicbrainz_auth = MusicBrainzAuthManager(
+                    username=self.musicbrainz_username,
+                    password=self.musicbrainz_password,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+                self.logger.info(f"MusicBrainz auth manager initialized for user: {self.musicbrainz_username}")
+            except Exception as e:
+                self.logger.error(f"Error initializing MusicBrainz auth manager: {e}", exc_info=True)
+                self.musicbrainz_enabled = False
+
         # IMPORTANTE: Inicializar lastfm_enabled y spotify_enabled ANTES de llamar a super().__init__()
         # Determinar si Last.fm está habilitado (ahora basado en username como solicitaste)
         self.lastfm_enabled = bool(self.lastfm_username and self.lastfm_api_key)
@@ -353,8 +397,7 @@ class MuspyArtistModule(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
-        # Set up a basic logger early so it's available before super().__init__()
-        self.logger = logging.getLogger(self.module_name)
+
         
         # Debug print to see what's coming in from config
         print(f"DEBUG - Last.fm config: api_key={lastfm_api_key}, username={lastfm_username}, enabled={self.lastfm_enabled}")
@@ -598,21 +641,21 @@ class MuspyArtistModule(BaseModule):
         # 5. Results page
         results_page = QWidget()
         results_page.setObjectName("muspy_results_widget")
-        results_layout = QVBoxLayout(releases_page)
+        results_layout = QVBoxLayout(results_page)
         results_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
         results_layout.setSpacing(0)  # Remove spacing
 
 
         # Add a count label
         results_count_label = QLabel("No results loaded yet")
-        results_count_label.setObjectName("count_label")
+        results_count_label.setObjectName("label_result_count")
         results_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         results_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
         results_layout.addWidget(results_count_label)
         
         # Create table for results
         results_table = QTableWidget()
-        results_table.setObjectName("results_table")
+        results_table.setObjectName("tableWidget_muspy_results")
         results_table.setColumnCount(5)
         results_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
         results_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -620,6 +663,11 @@ class MuspyArtistModule(BaseModule):
         results_table.setShowGrid(False)  # More modern look without grid
         results_table.setAlternatingRowColors(True)  # Better readability
         results_layout.addWidget(results_table)
+
+        results_boton_sinc = QWidget()
+        results_boton_sinc = QHBoxLayout(results_boton_sinc)
+        results_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        #results_la
         
         self.stackedWidget.addWidget(results_page)
         # Apply consistent styling to all tables
@@ -987,6 +1035,10 @@ class MuspyArtistModule(BaseModule):
         
         next_shortcut = QShortcut(QKeySequence("Alt+Right"), self)
         next_shortcut.activated.connect(self.next_page)
+
+        # Connect MusicBrainz button if found
+        if hasattr(self, 'get_releases_musicbrainz'):
+            self.get_releases_musicbrainz.clicked.connect(self.show_musicbrainz_collection_menu)
 
     def show_lastfm_options_menu(self):
         """
@@ -4773,12 +4825,12 @@ class MuspyArtistModule(BaseModule):
         results_page = None
         for i in range(stack_widget.count()):
             widget = stack_widget.widget(i)
-            if widget.objectName() == "muspy_results":  # Updated object name
+            if widget.objectName() == "muspy_results_widget":  # Updated object name
                 results_page = widget
                 break
         
         if not results_page:
-            self.logger.error("muspy_results page not found in stacked widget")
+            self.logger.error("muspy_results_widget page not found in stacked widget")
             # Log more details for debugging
             self.logger.error(f"Available pages in stackedWidget ({stack_widget.count()}):")
             for i in range(stack_widget.count()):
@@ -4830,7 +4882,7 @@ class MuspyArtistModule(BaseModule):
         results_page = None
         for i in range(stack_widget.count()):
             widget = stack_widget.widget(i)
-            if widget.objectName() == "muspy_results":
+            if widget.objectName() == "muspy_results_widget":
                 results_page = widget
                 break
         
@@ -6169,6 +6221,673 @@ class MuspyArtistModule(BaseModule):
             for child in page.children():
                 if hasattr(child, 'objectName'):
                     self.logger.info(f"  Child: {child.objectName()} - Type: {type(child).__name__}")
+
+
+# Musicbrainz
+    def show_musicbrainz_collection_menu(self):
+        """
+        Display a menu with MusicBrainz collection options when get_releases_musicbrainz button is clicked
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
+            QMessageBox.warning(self, "Error", "MusicBrainz credentials not configured")
+            return
+        
+        # Show loading message
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Loading MusicBrainz collections...")
+        QApplication.processEvents()
+        
+        # Check if authenticated
+        is_auth = self.musicbrainz_auth.is_authenticated()
+        
+        if not is_auth:
+            # Prompt for login if not authenticated
+            self.authenticate_musicbrainz()
+            # Recheck authentication status after login attempt
+            is_auth = hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated()
+        
+        # Create menu
+        menu = QMenu(self)
+        
+        if not is_auth:
+            # Add login action if still not authenticated
+            login_action = QAction("Login to MusicBrainz...", self)
+            login_action.triggered.connect(self.authenticate_musicbrainz)
+            menu.addAction(login_action)
+        else:
+            # We're authenticated, fetch collections BEFORE showing the menu
+            collections = self.musicbrainz_auth.get_user_collections()
+            
+            # Add "Show Collections" submenu
+            collections_menu = QMenu("Show Collection", self)
+            
+            if collections:
+                for collection in collections:
+                    collection_name = collection.get('name', 'Unnamed Collection')
+                    collection_id = collection.get('id')
+                    collection_count = collection.get('count', 0)
+                    
+                    if collection_id:
+                        collection_action = QAction(f"{collection_name} ({collection_count} releases)", self)
+                        collection_action.setProperty("collection_id", collection_id)
+                        collection_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
+                                                        self.show_musicbrainz_collection(cid, cname))
+                        collections_menu.addAction(collection_action)
+            else:
+                fetch_collections_action = QAction("Fetch All Collections", self)
+                fetch_collections_action.triggered.connect(self.fetch_all_musicbrainz_collections)
+                menu.addAction(fetch_collections_action)
+                # If no collections found, try the API approach if available
+                if not collections and hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
+                    self.logger.info("No collections found with HTML parsing, trying API...")
+                    collections = self.musicbrainz_auth.get_collections_by_api()
+            menu.addMenu(collections_menu)
+            
+            # Add "Add Albums to Collection" submenu
+            add_menu = QMenu("Add Albums to Collection", self)
+            
+            # First check if we have the albums_selected.json file
+            albums_json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
+            
+            if not os.path.exists(albums_json_path):
+                no_albums_action = QAction("No albums selected (load albums first)", self)
+                no_albums_action.setEnabled(False)
+                add_menu.addAction(no_albums_action)
+            else:
+                # We have albums, populate the collections
+                if collections:
+                    for collection in collections:
+                        collection_name = collection.get('name', 'Unnamed Collection')
+                        collection_id = collection.get('id')
+                        
+                        if collection_id:
+                            add_action = QAction(f"Add to: {collection_name}", self)
+                            add_action.setProperty("collection_id", collection_id)
+                            add_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
+                                                    self.add_selected_albums_to_collection(cid, cname))
+                            add_menu.addAction(add_action)
+                else:
+                    no_collections_action = QAction("No collections found", self)
+                    no_collections_action.setEnabled(False)
+                    add_menu.addAction(no_collections_action)
+            
+            menu.addMenu(add_menu)
+            
+            # Add separator and logout option
+            menu.addSeparator()
+            logout_action = QAction("Logout from MusicBrainz", self)
+            logout_action.triggered.connect(self.logout_musicbrainz)
+            menu.addAction(logout_action)
+        
+        # Update status text with feedback
+        if is_auth:
+            self.results_text.append(f"Logged in as {self.musicbrainz_username}")
+            if collections:
+                self.results_text.append(f"Found {len(collections)} collections")
+            else:
+                self.results_text.append("No collections found")
+        else:
+            self.results_text.append("Not logged in to MusicBrainz")
+        
+        # Show the menu at the button position
+        if hasattr(self, 'get_releases_musicbrainz'):
+            pos = self.get_releases_musicbrainz.mapToGlobal(QPoint(0, self.get_releases_musicbrainz.height()))
+            menu.exec(pos)
+
+
+   
+
+
+    def authenticate_musicbrainz(self):
+        """
+        Authenticate with MusicBrainz by getting username/password from user
+        
+        Returns:
+            bool: Whether authentication was successful
+        """
+        if not hasattr(self, 'musicbrainz_auth'):
+            QMessageBox.warning(self, "Error", "MusicBrainz configuration not available")
+            return False
+        
+        # If we already have a username, use it as default
+        default_username = self.musicbrainz_username or ""
+        
+        # Output debug information to help diagnose the issue
+        self.logger.debug(f"MusicBrainz auth attempt with username: {default_username}")
+        self.logger.debug(f"Password exists: {bool(self.musicbrainz_password)}")
+        
+        # Prompt for username if not already set
+        if not default_username:
+            username, ok = QInputDialog.getText(
+                self,
+                "MusicBrainz Authentication",
+                "Enter your MusicBrainz username:",
+                QLineEdit.EchoMode.Normal,
+                default_username
+            )
+            
+            if not ok or not username:
+                self.results_text.append("Authentication canceled.")
+                return False
+            
+            self.musicbrainz_username = username
+            self.musicbrainz_auth.username = username
+        
+        # Use existing password if available, otherwise prompt
+        if not self.musicbrainz_password:
+            password, ok = QInputDialog.getText(
+                self,
+                "MusicBrainz Authentication",
+                f"Enter password for MusicBrainz user {self.musicbrainz_username}:",
+                QLineEdit.EchoMode.Password
+            )
+            
+            if not ok or not password:
+                self.results_text.append("Authentication canceled.")
+                return False
+                
+            self.musicbrainz_password = password
+        
+        # Update password in auth manager
+        self.musicbrainz_auth.password = self.musicbrainz_password
+        
+        # Try to authenticate
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Authenticating with MusicBrainz...")
+        QApplication.processEvents()
+        
+        # More detailed logging
+        self.logger.debug("Attempting to authenticate with MusicBrainz...")
+        
+        if self.musicbrainz_auth.authenticate():
+            self.results_text.append("Authentication successful!")
+            self.musicbrainz_enabled = True
+            
+            # Show success message
+            QMessageBox.information(self, "Success", "Successfully logged in to MusicBrainz")
+            return True
+        else:
+            error_msg = "Authentication failed. Please check your username and password."
+            self.results_text.append(error_msg)
+            QMessageBox.warning(self, "Authentication Failed", error_msg)
+            
+            # Clear password on failure
+            self.musicbrainz_password = None
+            return False
+
+    def logout_musicbrainz(self):
+        """
+        Log out from MusicBrainz by clearing session
+        """
+        if hasattr(self, 'musicbrainz_auth'):
+            self.musicbrainz_auth.clear_session()
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append("MusicBrainz authentication data cleared.")
+            QMessageBox.information(self, "Authentication Cleared", "MusicBrainz authentication data has been cleared.")
+
+
+  
+
+    def fetch_all_musicbrainz_collections(self):
+        """
+        Fetch all MusicBrainz collections with enhanced debugging
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            return
+        
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append(f"Fetching collections for {self.musicbrainz_username}...")
+        QApplication.processEvents()
+        
+        try:
+            # Try to get collections using HTML parsing
+            html_collections = self.musicbrainz_auth.get_user_collections()
+            self.results_text.append(f"Found {len(html_collections)} collections via HTML parsing")
+            
+            # Try to get collections using API if the method exists
+            api_collections = []
+            if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
+                api_collections = self.musicbrainz_auth.get_collections_by_api()
+                self.results_text.append(f"Found {len(api_collections)} collections via API")
+            else:
+                self.results_text.append("API method not available - update MusicBrainzAuthManager class")
+            
+            # Combine both approaches, removing duplicates
+            all_collections = []
+            added_ids = set()
+            
+            for collection in html_collections + api_collections:
+                coll_id = collection.get('id')
+                if coll_id and coll_id not in added_ids:
+                    all_collections.append(collection)
+                    added_ids.add(coll_id)
+            
+            # Lookup each collection by ID directly
+            direct_collections = []
+            for coll_id in added_ids:
+                try:
+                    url = f"https://musicbrainz.org/collection/{coll_id}"
+                    response = self.musicbrainz_auth.session.get(url)
+                    
+                    if response.status_code == 200:
+                        from bs4 import BeautifulSoup
+                        soup = BeautifulSoup(response.text, 'html.parser')
+                        title = soup.title.text.strip() if soup.title else "Unknown Collection"
+                        
+                        # Extract name from title (usually in format "Collection "Name" - MusicBrainz")
+                        import re
+                        name_match = re.search(r'Collection "(.*?)"', title)
+                        coll_name = name_match.group(1) if name_match else title
+                        
+                        direct_collections.append({
+                            'id': coll_id,
+                            'name': coll_name,
+                            'count': 0  # Count unknown
+                        })
+                except Exception as e:
+                    self.logger.error(f"Error looking up collection {coll_id}: {e}")
+            
+            # Check which collections we've found with various methods
+            if direct_collections:
+                self.results_text.append(f"Found {len(direct_collections)} collections via direct lookup:")
+                for coll in direct_collections:
+                    self.results_text.append(f"• {coll['name']} (ID: {coll['id']})")
+            
+            if all_collections:
+                self.results_text.append(f"Found {len(all_collections)} unique collections in total:")
+                for coll in all_collections:
+                    self.results_text.append(f"• {coll['name']} (ID: {coll['id']})")
+            else:
+                self.results_text.append("No collections found with any method.")
+                
+            return all_collections
+            
+        except Exception as e:
+            error_msg = f"Error fetching collections: {str(e)}"
+            self.logger.error(error_msg, exc_info=True)
+            self.results_text.append(error_msg)
+            return []
+
+
+    def show_musicbrainz_collection(self, collection_id, collection_name):
+        """
+        Show the contents of a MusicBrainz collection in the table
+        
+        Args:
+            collection_id (str): ID of the collection to display
+            collection_name (str): Name of the collection for display
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            self.results_text.append("Not authenticated with MusicBrainz. Attempting login...")
+            QApplication.processEvents()
+            
+            # Try to authenticate
+            if not self.authenticate_musicbrainz():
+                QMessageBox.warning(self, "Error", "Authentication required to view collections")
+                return
+    
+        # Create function to fetch collection data with progress bar
+        def fetch_collection_data(update_progress):
+            update_progress(0, 1, "Connecting to MusicBrainz...", indeterminate=True)
+            
+            try:
+                # Make sure we're still authenticated
+                if not self.musicbrainz_auth.is_authenticated():
+                    return {
+                        "success": False,
+                        "error": "Not authenticated with MusicBrainz"
+                    }
+                
+                # Get the collection page directly (the API is too limited)
+                url = f"https://musicbrainz.org/collection/{collection_id}"
+                
+                update_progress(1, 3, "Fetching collection data...", indeterminate=True)
+                
+                response = self.musicbrainz_auth.session.get(url)
+                
+                if response.status_code == 200:
+                    # Parse the HTML to extract collection releases
+                    from bs4 import BeautifulSoup
+                    soup = BeautifulSoup(response.text, 'html.parser')
+                    
+                    # Find the release table
+                    release_table = soup.select_one("table.tbl")
+                    if not release_table:
+                        return {
+                            "success": False,
+                            "error": "Could not find releases in the collection"
+                        }
+                    
+                    # Extract releases
+                    release_rows = release_table.select("tbody tr")
+                    
+                    update_progress(2, 3, f"Processing {len(release_rows)} releases...", indeterminate=True)
+                    
+                    releases = []
+                    for row in release_rows:
+                        # Extract release ID from the link
+                        link = row.select_one("a.release")
+                        if not link or not link.get('href'):
+                            continue
+                            
+                        mbid = link.get('href').split('/')[-1]
+                        title = link.text.strip()
+                        
+                        # Extract artist
+                        artist_cell = row.select_one("td.artist")
+                        artist = artist_cell.text.strip() if artist_cell else "Unknown Artist"
+                        
+                        # Extract type
+                        type_cell = row.select_one("td.type")
+                        release_type = type_cell.text.strip() if type_cell else ""
+                        
+                        # Extract date
+                        date_cell = row.select_one("td.date")
+                        date = date_cell.text.strip() if date_cell else ""
+                        
+                        # Extract status
+                        status_cell = row.select_one("td.status")
+                        status = status_cell.text.strip() if status_cell else ""
+                        
+                        # Extract country
+                        country_cell = row.select_one("td.country")
+                        country = country_cell.text.strip() if country_cell else ""
+                        
+                        releases.append({
+                            'mbid': mbid,
+                            'title': title,
+                            'artist': artist,
+                            'type': release_type,
+                            'date': date,
+                            'status': status,
+                            'country': country
+                        })
+                    
+                    update_progress(3, 3, "Data processed successfully")
+                    
+                    return {
+                        "success": True,
+                        "releases": releases
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": f"Error fetching collection: {response.status_code}"
+                    }
+            
+            except Exception as e:
+                self.logger.error(f"Error fetching collection: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": f"Error fetching collection: {str(e)}"
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_collection_data,
+            title=f"Loading Collection: {collection_name}",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            releases = result.get("releases", [])
+            
+            if not releases:
+                QMessageBox.information(self, "Empty Collection", f"The collection '{collection_name}' is empty.")
+                return
+            
+            # Display releases in the table
+            self.display_musicbrainz_collection_table(releases, collection_name)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            QMessageBox.warning(self, "Error", f"Could not load collection: {error_msg}")
+
+    def display_musicbrainz_collection_table(self, releases, collection_name):
+        """
+        Display MusicBrainz collection releases in the table
+        
+        Args:
+            releases (list): List of processed release dictionaries
+            collection_name (str): Name of the collection for display
+        """
+        # Find the table_musicbrainz_collection widget
+        table = self.findChild(QTableWidget, "table_musicbrainz_collection")
+        if not table:
+            self.logger.error("Could not find table_musicbrainz_collection widget")
+            # Fallback to displaying in text area
+            self.results_text.clear()
+            self.results_text.show()
+            self.results_text.append(f"Collection: {collection_name} ({len(releases)} releases)")
+            for release in releases[:20]:  # Limit to 20 for text display
+                self.results_text.append(f"{release['artist']} - {release['title']} ({release['date']})")
+            if len(releases) > 20:
+                self.results_text.append(f"... and {len(releases)-20} more releases.")
+            return
+        
+        # Configure table
+        table.setRowCount(len(releases))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # If we're using a stacked widget, switch to the appropriate page
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if stack_widget:
+            # Find the musicbrainz_collection_page
+            for i in range(stack_widget.count()):
+                page = stack_widget.widget(i)
+                if page.objectName() == "musicbrainz_collection_page":
+                    stack_widget.setCurrentWidget(page)
+                    break
+        
+        # Set label if it exists
+        collection_label = self.findChild(QLabel, "label_musicbrainz_collection")
+        if collection_label:
+            collection_label.setText(f"Collection: {collection_name} ({len(releases)} releases)")
+        
+        # Fill the table
+        for row, release in enumerate(releases):
+            # Artist
+            artist_item = QTableWidgetItem(release.get('artist', 'Unknown'))
+            table.setItem(row, 0, artist_item)
+            
+            # Title
+            title_item = QTableWidgetItem(release.get('title', 'Unknown'))
+            table.setItem(row, 1, title_item)
+            
+            # Type
+            type_item = QTableWidgetItem(release.get('type', '').title())
+            table.setItem(row, 2, type_item)
+            
+            # Date
+            date_item = QTableWidgetItem(release.get('date', ''))
+            table.setItem(row, 3, date_item)
+            
+            # Status
+            status_item = QTableWidgetItem(release.get('status', '').title())
+            table.setItem(row, 4, status_item)
+            
+            # Country
+            country_item = QTableWidgetItem(release.get('country', ''))
+            table.setItem(row, 5, country_item)
+            
+            # Store MBID for context menu actions
+            for col in range(6):
+                if table.item(row, col):
+                    table.item(row, col).setData(Qt.ItemDataRole.UserRole, release.get('mbid', ''))
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Set context menu for the table if not already set
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_musicbrainz_table_context_menu)
+
+    def show_musicbrainz_table_context_menu(self, position):
+        """
+        Show context menu for items in the MusicBrainz collection table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the MBID from the item
+        mbid = item.data(Qt.ItemDataRole.UserRole)
+        if not mbid:
+            return
+        
+        # Get the full row data
+        row = item.row()
+        artist = table.item(row, 0).text() if table.item(row, 0) else "Unknown"
+        title = table.item(row, 1).text() if table.item(row, 1) else "Unknown"
+        
+        # Create the context menu
+        menu = QMenu(self)
+        
+        # Add actions
+        view_action = QAction(f"View {title} on MusicBrainz", self)
+        view_action.triggered.connect(lambda: self.open_musicbrainz_release(mbid))
+        menu.addAction(view_action)
+        
+        menu.addSeparator()
+        
+        follow_action = QAction(f"Follow {artist} on Muspy", self)
+        follow_action.triggered.connect(lambda: self.add_lastfm_artist_to_muspy(artist))
+        menu.addAction(follow_action)
+        
+        # Show the menu
+        menu.exec(table.mapToGlobal(position))
+
+    def add_selected_albums_to_collection(self, collection_id, collection_name):
+        """
+        Add albums from albums_selected.json to a MusicBrainz collection
+        
+        Args:
+            collection_id (str): ID of the collection to add albums to
+            collection_name (str): Name of the collection for display
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            return
+        
+        # Path to the JSON file
+        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
+        
+        # Check if file exists
+        if not os.path.exists(json_path):
+            QMessageBox.warning(self, "Error", "No selected albums file found. Please load albums first.")
+            return
+        
+        # Load albums from JSON
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                albums_data = json.load(f)
+                
+            if not albums_data:
+                QMessageBox.warning(self, "Error", "No albums found in the selection file.")
+                return
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error loading selected albums: {str(e)}")
+            return
+        
+        # Function to add albums with progress dialog
+        def add_albums_to_collection(update_progress):
+            # Prepare list of MBIDs
+            album_mbids = []
+            valid_albums = []
+            
+            update_progress(0, 3, "Preparing album data...", indeterminate=True)
+            
+            # Extract MBIDs from albums data
+            for album in albums_data:
+                mbid = album.get('mbid')
+                if mbid and len(mbid) == 36 and mbid.count('-') == 4:
+                    album_mbids.append(mbid)
+                    valid_albums.append(album)
+            
+            if not album_mbids:
+                return {
+                    "success": False,
+                    "error": "No valid MusicBrainz IDs found in selected albums"
+                }
+            
+            update_progress(1, 3, f"Adding {len(album_mbids)} albums to collection...", indeterminate=True)
+            
+            # Add albums to collection
+            result = self.musicbrainz_auth.add_releases_to_collection(collection_id, album_mbids)
+            
+            update_progress(2, 3, "Finalizing...", indeterminate=True)
+            
+            if result:
+                update_progress(3, 3, "Successfully added albums to collection")
+                return {
+                    "success": True,
+                    "count": len(album_mbids),
+                    "albums": valid_albums
+                }
+            else:
+                return {
+                    "success": False,
+                    "error": "Failed to add albums to collection"
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            add_albums_to_collection,
+            title=f"Adding to Collection: {collection_name}",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            count = result.get("count", 0)
+            QMessageBox.information(
+                self, 
+                "Success", 
+                f"Successfully added {count} albums to collection '{collection_name}'"
+            )
+            
+            # Offer to show the collection
+            reply = QMessageBox.question(
+                self,
+                "View Collection",
+                f"Would you like to view the updated collection '{collection_name}'?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                self.show_musicbrainz_collection(collection_id, collection_name)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            QMessageBox.warning(self, "Error", f"Could not add albums to collection: {error_msg}")
+
+    def open_musicbrainz_release(self, mbid):
+        """
+        Open a MusicBrainz release page in the browser
+        
+        Args:
+            mbid (str): MusicBrainz ID of the release
+        """
+        if not mbid:
+            return
+            
+        url = f"https://musicbrainz.org/release/{mbid}"
+        
+        import webbrowser
+        webbrowser.open(url)
+
 
 
 
