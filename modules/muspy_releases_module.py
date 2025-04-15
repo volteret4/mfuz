@@ -353,13 +353,16 @@ class MuspyArtistModule(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
+        # Set up a basic logger early so it's available before super().__init__()
+        self.logger = logging.getLogger(self.module_name)
+        
         # Debug print to see what's coming in from config
         print(f"DEBUG - Last.fm config: api_key={lastfm_api_key}, username={lastfm_username}, enabled={self.lastfm_enabled}")
         
         # Call super init now that we've set up the required attributes
         super().__init__(parent, theme, **kwargs)
         
-        # Set up logger
+        # Set up proper logger after super().__init__()
         if self.enable_logging:
             try:
                 from loggin_helper import setup_module_logger
@@ -372,64 +375,6 @@ class MuspyArtistModule(BaseModule):
                 self.logger = logger
         else:
             self.logger = logger
-        
-        # Now load settings after logging is set up
-        self.initialize_default_values()
-        
-        # Try to get Muspy ID if needed
-        if not self.muspy_id or self.muspy_id == '' or self.muspy_id == 'None':
-            self.get_muspy_id()
-        
-        # Load Last.fm and other settings
-        self.load_lastfm_settings(kwargs)
-        self.load_module_settings({
-            'spotify_client_id': spotify_client_id,
-            'spotify_client_secret': spotify_client_secret,
-            'lastfm_api_key': lastfm_api_key,
-            'lastfm_username': lastfm_username,
-        })
-        
-        # Initialize the Last.fm auth if enabled
-        if self.lastfm_enabled:
-            try:
-                from tools.lastfm_login import LastFMAuthManager
-                
-                self.logger.info(f"Initializing LastFM auth with: api_key={self.lastfm_api_key}, username={self.lastfm_username}")
-                
-                self.lastfm_auth = LastFMAuthManager(
-                    api_key=self.lastfm_api_key,
-                    api_secret=self.lastfm_api_secret,
-                    username=self.lastfm_username,
-                    parent_widget=self,
-                    project_root=PROJECT_ROOT
-                )
-                self.logger.info(f"LastFM auth manager initialized for user: {self.lastfm_username}")
-            except Exception as e:
-                self.logger.error(f"Error initializing LastFM auth manager: {e}", exc_info=True)
-                self.lastfm_enabled = False
-        
-        # Initialize Spotify auth if enabled
-        if self.spotify_enabled:
-            try:
-                from tools.spotify_login import SpotifyAuthManager
-                
-                self.spotify_auth = SpotifyAuthManager(
-                    client_id=self.spotify_client_id,
-                    client_secret=self.spotify_client_secret,
-                    redirect_uri=self.spotify_redirect_uri,
-                    parent_widget=self,
-                    project_root=PROJECT_ROOT
-                )
-                self.logger.info("Spotify auth manager initialized")
-            except Exception as e:
-                self.logger.error(f"Error initializing Spotify auth manager: {e}")
-                self.spotify_enabled = False
-        
-        # Log status of integrations
-        if self.lastfm_enabled:
-            self.logger.info(f"LastFM configured for user: {self.lastfm_username}")
-        else:
-            self.logger.warning("LastFM not configured completely. Some features will be disabled.")
         
 
    # Actualización del método init_ui en la clase MuspyArtistModule
@@ -461,29 +406,20 @@ class MuspyArtistModule(BaseModule):
                             missing_widgets.append(widget_name)
                 
                 if missing_widgets:
-                    logger.error(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                    print(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
                     raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
-                
-
-                self.stacked_widget = self.findChild(QStackedWidget, "stackedWidget")
-                if self.stacked_widget:
-                    # Create floating navigation buttons
-                    self.nav_buttons = FloatingNavigationButtons(self.stacked_widget, self)
-                    self.logger.info("Navigation buttons initialized")
-                else:
-                    self.logger.warning("Stacked widget not found in UI")
                 
                 # Configuración adicional después de cargar UI
                 self._connect_signals()
                 
-                logger.ui(f"UI MuspyArtistModule cargada desde {ui_file_path}")
+                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
-                logger.error(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
+                print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
                 import traceback
-                logger.debug(traceback.format_exc())
+                print(traceback.format_exc())
                 self._fallback_init_ui()
         else:
-            logger.ui(f"Archivo UI MuspyArtistModule no encontrado: {ui_file_path}, usando creación manual")
+            print(f"Archivo UI MuspyArtistModule no encontrado: {ui_file_path}, usando creación manual")
             self._fallback_init_ui()
 
     def _fallback_init_ui(self):
@@ -562,11 +498,11 @@ class MuspyArtistModule(BaseModule):
 
     def _connect_signals(self):
         """Connect signals from widgets to their respective slots."""
-        # Connect the signal of search
+        # Connect search functions
         self.search_button.clicked.connect(self.search_and_get_releases)
         self.artist_input.returnPressed.connect(self.search_and_get_releases)
         
-        # Connect buttons to their respective methods
+        # Connect menu buttons
         self.load_artists_button.clicked.connect(self.show_load_menu)
         self.sync_artists_button.clicked.connect(self.show_sync_menu)
         
@@ -578,17 +514,12 @@ class MuspyArtistModule(BaseModule):
             else:
                 self.sync_lastfm_button.setVisible(False)
         
-        # Connect release buttons
-        if hasattr(self, 'get_releases_button'):
-            self.get_releases_button.clicked.connect(self.get_muspy_releases)
+        # Connect other action buttons
+        self.get_releases_button.clicked.connect(self.get_muspy_releases)
+        self.get_new_releases_button.clicked.connect(self.get_new_releases)
+        self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
         
-        if hasattr(self, 'get_new_releases_button'):
-            self.get_new_releases_button.clicked.connect(self.get_new_releases)
-        
-        if hasattr(self, 'get_my_releases_button'):
-            self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
-        
-        # Add a context menu for additional options
+        # Enable context menu
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
 
@@ -600,48 +531,30 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", "Last.fm credentials not configured")
             return
         
+        # Create menu
         menu = QMenu(self)
         
-        # Option 1: Show top artists
-        show_top_submenu = QMenu("Show Top Artists", menu)
-        
-        # Add sub-options for different artist counts
-        show_top10_action = QAction("Show Top 10 Artists", self)
-        show_top50_action = QAction("Show Top 50 Artists", self)
-        show_top100_action = QAction("Show Top 100 Artists", self)
-        show_custom_action = QAction("Show Custom Number of Artists...", self)
+        # Add menu options
+        top10_action = QAction("Show Top 10 Artists", self)
+        top50_action = QAction("Show Top 50 Artists", self)
+        loved_tracks_action = QAction("Show Loved Tracks", self)
         
         # Connect actions
-        show_top10_action.triggered.connect(lambda: self.show_lastfm_top_artists(10))
-        show_top50_action.triggered.connect(lambda: self.show_lastfm_top_artists(50))
-        show_top100_action.triggered.connect(lambda: self.show_lastfm_top_artists(100))
-        show_custom_action.triggered.connect(self.show_lastfm_custom_top_artists)
+        top10_action.triggered.connect(lambda: self.show_lastfm_top_artists(10))
+        top50_action.triggered.connect(lambda: self.show_lastfm_top_artists(50))
+        loved_tracks_action.triggered.connect(self.show_lastfm_loved_tracks)
         
-        # Add actions to submenu
-        show_top_submenu.addAction(show_top10_action)
-        show_top_submenu.addAction(show_top50_action)
-        show_top_submenu.addAction(show_top100_action)
-        show_top_submenu.addSeparator()
-        show_top_submenu.addAction(show_custom_action)
+        # Add actions to menu
+        menu.addAction(top10_action)
+        menu.addAction(top50_action)
+        menu.addSeparator()
+        menu.addAction(loved_tracks_action)
         
-        # Option 2: Show loved tracks
-        show_loved_tracks_action = QAction("Show Loved Tracks", self)
-        show_loved_tracks_action.triggered.connect(self.show_lastfm_loved_tracks)
+        # Get the button position
+        pos = self.sync_lastfm_button.mapToGlobal(QPoint(0, self.sync_lastfm_button.height()))
         
-        # Add all menu items
-        menu.addMenu(show_top_submenu)
-        menu.addAction(show_loved_tracks_action)
-        
-        # Show menu at button position
-        from PyQt6.QtWidgets import QPushButton
-        from PyQt6.QtCore import QPoint
-        
-        lastfm_button = self.findChild(QPushButton, 'sync_lastfm_button')
-        if lastfm_button:
-            menu.exec(lastfm_button.mapToGlobal(QPoint(0, lastfm_button.height())))
-        else:
-            # Fallback if button not found
-            menu.exec(self.mapToGlobal(QPoint(0, 0)))
+        # Show menu
+        menu.exec(pos)
 
     def show_lastfm_top_artists(self, count=50):
         """
@@ -1543,6 +1456,7 @@ class MuspyArtistModule(BaseModule):
         """
         Display a menu with load options when load_artists_button is clicked
         """
+        # Create menu
         menu = QMenu(self)
         
         # Add menu actions
@@ -1557,9 +1471,11 @@ class MuspyArtistModule(BaseModule):
         menu.addAction(artists_action)
         menu.addAction(albums_action)
         
-        # Show menu at button position
-        button = self.load_artists_button
-        menu.exec(button.mapToGlobal(QPoint(0, button.height())))
+        # Get the button position
+        pos = self.load_artists_button.mapToGlobal(QPoint(0, self.load_artists_button.height()))
+        
+        # Show menu
+        menu.exec(pos)
 
 
     def show_context_menu(self, position):
@@ -4464,64 +4380,29 @@ class MuspyArtistModule(BaseModule):
         """
         Display a menu with sync options when sync_artists_button is clicked
         """
+        # Create menu
         menu = QMenu(self)
         
         # Add menu actions
-        muspy_action = QAction("Sincronizar artistas seleccionados con Muspy", self)
-        lastfm_action = QAction("Sincronizar Top Artists de Last.fm con Muspy", self)
-        spotify_action = QAction("Sincronizar artistas seleccionados con Spotify", self)
+        muspy_action = QAction("Sincronizar artistas con Muspy", self)
+        lastfm_action = QAction("Sincronizar Last.fm con Muspy", self)
+        spotify_action = QAction("Sincronizar con Spotify", self)
         
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
-        
-        # Create submenu for Last.fm top artists options
-        lastfm_submenu = QMenu("Sincronizar Top Artists", menu)
-        
-        # Add options for different numbers of artists
-        top10_action = QAction("Top 10 Artists", self)
-        top50_action = QAction("Top 50 Artists", self)
-        top100_action = QAction("Top 100 Artists", self)
-        custom_action = QAction("Custom Number of Artists...", self)
-        
-        # Connect actions to progress bar versions
-        top10_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(10))
-        top50_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(50))
-        top100_action.triggered.connect(lambda: self.sync_top_artists_from_lastfm(100))
-        custom_action.triggered.connect(self.sync_lastfm_custom_count)
-        
-        # Add to submenu
-        lastfm_submenu.addAction(top10_action)
-        lastfm_submenu.addAction(top50_action)
-        lastfm_submenu.addAction(top100_action)
-        lastfm_submenu.addSeparator()
-        lastfm_submenu.addAction(custom_action)
-        
-        # Check if Last.fm is enabled
-        if self.lastfm_enabled:
-            lastfm_action.setMenu(lastfm_submenu)
-        else:
-            lastfm_action.triggered.connect(lambda: QMessageBox.warning(
-                self, "Last.fm Error", "Last.fm credentials not configured. Please set them in the config file."
-            ))
-            lastfm_action.setText("Sincronizar Top Artists de Last.fm con Muspy (configuración incompleta)")
-        
-        # Connect Spotify sync function
-        if self.spotify_enabled:
-            spotify_action.triggered.connect(self.sync_spotify)
-        else:
-            spotify_action.triggered.connect(lambda: QMessageBox.warning(
-                self, "Spotify Error", "Spotify credentials not configured. Please set them in the config file."
-            ))
-            spotify_action.setText("Sincronizar artistas seleccionados con Spotify (configuración incompleta)")
+        lastfm_action.triggered.connect(self.sync_lastfm_muspy)
+        spotify_action.triggered.connect(self.sync_spotify)
         
         # Add actions to menu
         menu.addAction(muspy_action)
         menu.addAction(lastfm_action)
         menu.addAction(spotify_action)
         
-        # Show menu at button position - corrected to use the proper button
-        button = self.sync_artists_button
-        menu.exec(button.mapToGlobal(QPoint(0, button.height())))
+        # Get the button position
+        pos = self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height()))
+        
+        # Show menu
+        menu.exec(pos)
 
  
     def sync_lastfm_artists(self):
