@@ -36,6 +36,9 @@
    </item>
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
      <widget class="QWidget" name="table_page_artist">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <property name="leftMargin">
@@ -51,7 +54,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="tableWidget_3"/>
+        <widget class="QTableWidget" name="tableWidget_artists"/>
        </item>
       </layout>
      </widget>
@@ -70,7 +73,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="tableWidget_2">
+        <widget class="QTableWidget" name="tableWidget_releases">
          <column>
           <property name="text">
            <string>Artista</string>
@@ -115,7 +118,33 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="tableWidget"/>
+        <widget class="QTableWidget" name="tableWidget_songs">
+         <column>
+          <property name="text">
+           <string>Canción</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Álbum</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Scrobbles</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Último Scrobble</string>
+          </property>
+         </column>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -134,7 +163,11 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="results_text">
+         <property name="textInteractionFlags">
+          <set>Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
