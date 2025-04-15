@@ -66,15 +66,12 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
-       <item>
-        <widget class="QTableWidget" name="asd_2"/>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="muspy_results">
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QWidget" name="widget" native="true">
+        <widget class="QWidget" name="muspy_results_widget" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <property name="leftMargin">
            <number>0</number>

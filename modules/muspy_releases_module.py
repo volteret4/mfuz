@@ -461,6 +461,10 @@ class MuspyArtistModule(BaseModule):
                 
                 # Connect signals
                 self._connect_signals()
+
+                # Add this after loading the UI
+                self.logger.info("UI loaded, inspecting stackedWidget...")
+                self.debug_stacked_widget_hierarchy()
                 
                 print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
@@ -591,6 +595,33 @@ class MuspyArtistModule(BaseModule):
         
         self.stackedWidget.addWidget(loved_tracks_page)
         
+        # 5. Results page
+        results_page = QWidget()
+        results_page.setObjectName("muspy_results_widget")
+        results_layout = QVBoxLayout(releases_page)
+        results_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
+        results_layout.setSpacing(0)  # Remove spacing
+
+
+        # Add a count label
+        results_count_label = QLabel("No results loaded yet")
+        results_count_label.setObjectName("count_label")
+        results_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
+        results_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
+        results_layout.addWidget(results_count_label)
+        
+        # Create table for results
+        results_table = QTableWidget()
+        results_table.setObjectName("results_table")
+        results_table.setColumnCount(5)
+        results_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
+        results_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        results_table.verticalHeader().setVisible(False)  # Hide row numbers
+        results_table.setShowGrid(False)  # More modern look without grid
+        results_table.setAlternatingRowColors(True)  # Better readability
+        results_layout.addWidget(results_table)
+        
+        self.stackedWidget.addWidget(results_page)
         # Apply consistent styling to all tables
         table_style = """
             QTableWidget {
@@ -599,8 +630,8 @@ class MuspyArtistModule(BaseModule):
                 gridline-color: transparent;
             }
             QHeaderView::section {
-                background-color: #24283b;
-                color: #a9b1d6;
+                
+                
                 border: none;
                 padding: 8px;
                 font-weight: bold;
@@ -609,12 +640,11 @@ class MuspyArtistModule(BaseModule):
                 border: none;
                 padding: 4px;
             }
-            QTableWidget::item:selected {
-                background-color: #364A82;
-            }
+            
         """
         
         # Apply style to all tables
+        results_table.setStyleSheet(table_style)
         releases_table.setStyleSheet(table_style)
         artists_table.setStyleSheet(table_style)
         loved_table.setStyleSheet(table_style)
@@ -4739,16 +4769,22 @@ class MuspyArtistModule(BaseModule):
             self.display_releases_table(releases)
             return
         
-        # Find the muspy_results page
+        # Find the muspy_results page - CHANGED TO MATCH UI OBJECT NAME
         results_page = None
         for i in range(stack_widget.count()):
             widget = stack_widget.widget(i)
-            if widget.objectName() == "muspy_results":
+            if widget.objectName() == "muspy_results":  # Updated object name
                 results_page = widget
                 break
         
         if not results_page:
             self.logger.error("muspy_results page not found in stacked widget")
+            # Log more details for debugging
+            self.logger.error(f"Available pages in stackedWidget ({stack_widget.count()}):")
+            for i in range(stack_widget.count()):
+                widget = stack_widget.widget(i)
+                self.logger.error(f"  - Page {i}: {widget.objectName()}")            
+            
             # Fallback a la función original si no encontramos la página
             self.display_releases_table(releases)
             return
@@ -6114,7 +6150,28 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             self.logger.error(f"Error clearing LastFM cache: {e}")
             QMessageBox.warning(self, "Error", f"Error clearing cache: {e}")
-                
+
+    def debug_stacked_widget_hierarchy(self):
+        """Debug the stacked widget hierarchy to troubleshoot issues"""
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+            
+        self.logger.info(f"Found stackedWidget with {stack_widget.count()} pages")
+        
+        # Log details about each page
+        for i in range(stack_widget.count()):
+            page = stack_widget.widget(i)
+            self.logger.info(f"Page {i} - objectName: {page.objectName()}")
+            
+            # Log children of the page
+            for child in page.children():
+                if hasattr(child, 'objectName'):
+                    self.logger.info(f"  Child: {child.objectName()} - Type: {type(child).__name__}")
+
+
+
 def main():
     """Main function to run the Muspy Artist Management Module"""
     app = QApplication(sys.argv)
