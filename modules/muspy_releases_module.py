@@ -2968,6 +2968,14 @@ class MuspyArtistModule(BaseModule):
                     # Load the UI file
                     uic.loadUi(ui_file_path, dialog)
                     
+                    # Explicitly connect dialog buttons
+                    if hasattr(dialog, 'buttonBox'):
+                        dialog.buttonBox.accepted.connect(dialog.accept)
+                        dialog.buttonBox.rejected.connect(dialog.reject)
+                        self.results_text.append("Dialog buttonBox connections established")
+                    else:
+                        self.results_text.append("Warning: buttonBox not found in dialog")
+                    
                     # Update the label with artist count
                     dialog.info_label.setText(f"Selecciona los artistas que deseas guardar ({len(artists_data)} encontrados)")
                     
@@ -3002,7 +3010,11 @@ class MuspyArtistModule(BaseModule):
                 return
                 
             # Show the dialog
-            if dialog.exec() == QDialog.DialogCode.Accepted:
+            result = dialog.exec()
+            self.results_text.append(f"Dialog execution result: {result}")
+            self.results_text.append(f"QDialog.DialogCode.Accepted value: {QDialog.DialogCode.Accepted}")
+            
+            if result == QDialog.DialogCode.Accepted:
                 self.results_text.append("Dialog accepted, processing selection...")
             else:
                 self.results_text.append("Operation canceled by user.")
@@ -3018,13 +3030,29 @@ class MuspyArtistModule(BaseModule):
                     if artist_data:
                         selected_artists.append(artist_data)
             
+            self.results_text.append(f"Number of selected artists: {len(selected_artists)}")
+            if selected_artists:
+                self.results_text.append(f"First selected artist: {str(selected_artists[0])}")
+            
             # Save selected artists to JSON
             try:
                 # Ensure the directory exists
-                os.makedirs(os.path.dirname(json_path), exist_ok=True)
+                cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+                os.makedirs(cache_dir, exist_ok=True)
+                json_path = os.path.join(cache_dir, "artists_selected.json")
+                
+                self.results_text.append(f"Trying to save to: {json_path}")
+                self.results_text.append(f"Directory exists: {os.path.exists(os.path.dirname(json_path))}")
                 
                 with open(json_path, 'w', encoding='utf-8') as f:
                     json.dump(selected_artists, f, ensure_ascii=False, indent=2)
+                
+                # Verify file was created
+                if os.path.exists(json_path):
+                    file_size = os.path.getsize(json_path)
+                    self.results_text.append(f"File created successfully. Size: {file_size} bytes")
+                else:
+                    self.results_text.append("File not created despite no errors")
                 
                 # Update artists in the instance
                 self.artists = [artist["nombre"] for artist in selected_artists]
@@ -3040,6 +3068,7 @@ class MuspyArtistModule(BaseModule):
                 )
             except Exception as e:
                 self.results_text.append(f"Error saving artists: {e}")
+                self.logger.error(f"Error saving artists file: {e}", exc_info=True)
         
         except Exception as e:
             self.results_text.append(f"Error: {str(e)}")
@@ -3156,7 +3185,13 @@ class MuspyArtistModule(BaseModule):
                 try:
                     # Load the UI file
                     uic.loadUi(ui_file_path, dialog)
-                    
+                    if hasattr(dialog, 'buttonBox'):
+                        # Conecta las señales a los slots de QDialog
+                        dialog.buttonBox.accepted.connect(dialog.accept)
+                        dialog.buttonBox.rejected.connect(dialog.reject)
+                        self.logger.debug("Dialog buttonBox signals connected for albums")
+
+
                     # Update the label with album count
                     dialog.info_label.setText(f"Selecciona los álbumes que deseas guardar ({len(albums_data)} encontrados)")
                     
