@@ -4361,9 +4361,49 @@ class MuspyArtistModule(BaseModule):
             logger.error(f"Error getting MBID for {artist_name}: {e}", exc_info=True)
             return None
  
+    def add_artist_to_muspy_silent(self, mbid, artist_name=None):
+        """
+        Add artist to Muspy without showing dialog boxes
+        
+        Args:
+            mbid (str): MusicBrainz ID of the artist
+            artist_name (str, optional): Name of the artist for logging
+        
+        Returns:
+            int: 1 for success, 0 for already exists, -1 for error
+        """
+        if not self.muspy_username or not self.muspy_api_key or not self.muspy_id:
+            return -1
+
+        try:
+            # Use the same URL format as the working curl command
+            url = f"https://muspy.com/api/1/artists/{self.muspy_id}/{mbid}"
+            auth = (self.muspy_username, self.muspy_password)
+            
+            # Check if artist already exists first
+            check_response = requests.get(url, auth=auth)
+            
+            # If status code is 200, artist already exists
+            if check_response.status_code == 200:
+                return 0  # Already exists
+            
+            # Otherwise, add the artist
+            response = requests.put(url, auth=auth)
+            
+            if response.status_code in [200, 201]:
+                return 1  # Success
+            else:
+                self.logger.error(f"Error adding artist {artist_name or mbid} to Muspy: {response.status_code} - {response.text}")
+                return -1  # Error
+        except Exception as e:
+            self.logger.error(f"Error adding artist {artist_name or mbid} to Muspy: {e}")
+            return -1  # Error
+
+
+
     def add_artist_to_muspy(self, mbid=None, artist_name=None):
         """
-        Add/Follow an artist to Muspy using their MBID - simplificado para usar directamente el muspy_id
+        Add/Follow an artist to Muspy using their MBID - fixed to match working curl pattern
         
         Args:
             mbid (str, optional): MusicBrainz ID of the artist
@@ -4373,38 +4413,44 @@ class MuspyArtistModule(BaseModule):
             bool: True if artist was successfully added, False otherwise
         """
         if not self.muspy_username or not self.muspy_api_key:
-            QMessageBox.warning(self, "Error", "Configuración de Muspy no disponible")
+            self.logger.error("Muspy credentials not configured")
             return False
 
         if not mbid:
-            message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: MBID no disponible"
-            self.logger.error(message)
+            self.logger.error(f"No MBID provided for {artist_name or 'Unknown'}")
             return False
 
-        # Validate MBID format (should be a UUID)
-        if not (len(mbid) == 36 and mbid.count('-') == 4):
-            message = f"MBID inválido para {artist_name or 'Desconocido'}: {mbid}"
-            self.logger.error(message)
-            return False
+        # Ensure muspy_id is available
+        if not self.muspy_id:
+            self.get_muspy_id()
+            if not self.muspy_id:
+                self.logger.error("Could not get Muspy ID")
+                return False
 
         try:
-            # Usar exactamente la misma URL que funciona en curl
+            # Use exactly the same URL format as in the working curl command
             url = f"https://muspy.com/api/1/artists/{self.muspy_id}/{mbid}"
             
-            # Usar exactamente el mismo formato de autenticación
-            auth = (self.muspy_username, self.muspy_api_key)
+            # Use the same authentication method
+            auth = (self.muspy_username, self.muspy_password)
             
-            # Realizar la solicitud PUT como en curl
+            # Use a PUT request with no body, exactly like the curl command
             response = requests.put(url, auth=auth)
             
+            # Log detailed information for debugging
+            self.logger.debug(f"PUT request to {url}")
+            self.logger.debug(f"Using auth: {self.muspy_username}:***")
+            self.logger.debug(f"Response status: {response.status_code}")
+            self.logger.debug(f"Response text: {response.text}")
+            
             if response.status_code in [200, 201]:
-                self.logger.info(f"Artista {artist_name or 'Desconocido'} agregado a Muspy")
+                self.logger.info(f"Successfully added {artist_name or mbid} to Muspy")
                 return True
             else:
                 self.logger.error(f"Error adding artist to Muspy: {response.status_code} - {response.text}")
                 return False
         except Exception as e:
-            self.logger.error(f"Error al agregar a Muspy: {e}", exc_info=True)
+            self.logger.error(f"Exception adding artist to Muspy: {e}", exc_info=True)
             return False
 
     def sync_lastfm_muspy(self):
