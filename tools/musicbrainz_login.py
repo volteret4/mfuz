@@ -205,100 +205,88 @@ class MusicBrainzAuthManager:
                 
             # Parse the HTML to extract collections
             soup = BeautifulSoup(response.text, 'html.parser')
-            collection_items = soup.select("ul.collections li")
             
+            # Enable debug output to see the page structure
+            self.logger.debug(f"Collection page title: {soup.title.text if soup.title else 'No title'}")
+            
+            # Specifically look for the user's collections section
             collections = []
-            for item in collection_items:
-                # Extract the collection ID from the URL
-                link = item.find('a')
-                if not link or not link.get('href'):
-                    continue
+            
+            # Try different possible selectors for the collections list
+            collection_lists = soup.select("div.collection-list")
+            if not collection_lists:
+                # Try alternative selectors
+                collection_lists = soup.select("ul.collections")
+                
+            if not collection_lists:
+                # More aggressive search - find any list that might contain collections
+                collection_lists = soup.select("ul")
+            
+            for collection_list in collection_lists:
+                collection_items = collection_list.select("li")
+                
+                for item in collection_items:
+                    # Extract the collection ID from the URL
+                    link = item.find('a')
+                    if not link or not link.get('href'):
+                        continue
+                        
+                    href = link.get('href')
+                    if '/collection/' not in href:
+                        continue
+                        
+                    collection_id = href.split('/')[-1]
+                    collection_name = link.text.strip()
                     
-                href = link.get('href')
-                collection_id = href.split('/')[-1]
-                collection_name = link.text.strip()
+                    # Extract count if available
+                    count_span = item.select_one("span.count")
+                    count_text = count_span.text.strip() if count_span else ""
+                    
+                    # Try to parse count from text like "(123)"
+                    count = 0
+                    if count_text:
+                        import re
+                        count_match = re.search(r'\((\d+)\)', count_text)
+                        if count_match:
+                            count = int(count_match.group(1))
+                    
+                    collections.append({
+                        'id': collection_id,
+                        'name': collection_name,
+                        'count': count
+                    })
+            
+            # If still no collections found, try a more direct approach
+            if not collections:
+                # Look specifically for collection links
+                collection_links = soup.select("a[href*='/collection/']")
                 
-                # Extract count if available
-                count_span = item.select_one("span.count")
-                count = int(count_span.text.strip('()')) if count_span else 0
-                
-                collections.append({
-                    'id': collection_id,
-                    'name': collection_name,
-                    'count': count
-                })
-                
+                for link in collection_links:
+                    href = link.get('href')
+                    if '/collection/' in href:
+                        collection_id = href.split('/')[-1]
+                        collection_name = link.text.strip()
+                        
+                        # Add only if it's not a duplicate
+                        if not any(c['id'] == collection_id for c in collections):
+                            collections.append({
+                                'id': collection_id,
+                                'name': collection_name,
+                                'count': 0  # Count unknown
+                            })
+            
+            # Log all found collections
+            self.logger.info(f"Found {len(collections)} collections for user {self.username}")
+            for collection in collections:
+                self.logger.info(f"Collection: {collection['name']} (ID: {collection['id']}, Count: {collection['count']})")
+            
             return collections
             
         except Exception as e:
             self.logger.error(f"Error getting collections: {e}")
             return []
     
-    def add_releases_to_collection(self, collection_id, release_ids):
-        """
-        Add releases to a MusicBrainz collection
-        
-        Args:
-            collection_id (str): ID of the collection
-            release_ids (list): List of release MBIDs to add
-            
-        Returns:
-            bool: Whether the operation was successful
-        """
-        if not self.is_authenticated():
-            self.logger.warning("Not authenticated, cannot add to collection")
-            return False
-            
-        if not collection_id or not release_ids:
-            self.logger.error("Collection ID or release IDs not provided")
-            return False
-            
-        try:
-            # First get the edit collection page to extract CSRF token
-            url = f"https://musicbrainz.org/collection/{collection_id}/edit"
-            response = self.session.get(url)
-            
-            if response.status_code != 200:
-                self.logger.error(f"Error accessing collection edit page: {response.status_code}")
-                return False
-                
-            # Parse the HTML to extract CSRF token
-            soup = BeautifulSoup(response.text, 'html.parser')
-            csrf_input = soup.find('input', {'name': 'csrf'})
-            
-            if not csrf_input or not csrf_input.get('value'):
-                self.logger.error("Could not find CSRF token on collection edit page")
-                return False
-                
-            csrf_token = csrf_input.get('value')
-            
-            # Prepare release IDs
-            if isinstance(release_ids, list):
-                releases_str = ','.join(release_ids)
-            else:
-                releases_str = release_ids
-                
-            # Build data for the POST request
-            data = {
-                'csrf': csrf_token,
-                'add-releases': releases_str
-            }
-            
-            # Make the POST request
-            response = self.session.post(url, data=data)
-            
-            # Check response
-            if response.status_code in [200, 201, 302, 303]:
-                # Success status codes (302 is redirect after success)
-                self.logger.info(f"Successfully added releases to collection {collection_id}")
-                return True
-            else:
-                self.logger.error(f"Error adding to collection: {response.status_code}")
-                return False
-                
-        except Exception as e:
-            self.logger.error(f"Error adding to collection: {e}")
-            return False
+   
     
     def clear_session(self):
         """Clear authentication session"""
@@ -314,3 +302,217 @@ class MusicBrainzAuthManager:
                 self.logger.info("Removed cached cookies")
             except Exception as e:
                 self.logger.error(f"Error removing cached cookies: {e}")
+
+
+    def get_collections_by_api(self, username=None):
+        """
+        Get all collections for the authenticated user or a specified user using the MusicBrainz API
+        
+        Args:
+            username (str, optional): Username to get collections for. 
+                                    If None, uses the authenticated user.
+        
+        Returns:
+            list: List of collection dictionaries with id, name, and count
+        """
+        if not self.is_authenticated():
+            self.logger.error("Not authenticated with MusicBrainz")
+            return []
+        
+        # Use the provided username or default to authenticated user
+        username_to_use = username or self.username
+        
+        if not username_to_use:
+            self.logger.error("No username provided and not authenticated")
+            return []
+        
+        try:
+            # Use the MusicBrainz API to get collections
+            url = f"https://musicbrainz.org/ws/2/collection"
+            params = {
+                "editor": username_to_use,
+                "fmt": "json"
+            }
+            
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0"
+            }
+            
+            response = self.session.get(url, params=params, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                collections = []
+                
+                if "collections" in data:
+                    for coll in data["collections"]:
+                        collection = {
+                            "id": coll.get("id"),
+                            "name": coll.get("name"),
+                            "entity_count": coll.get("entity_count", 0),
+                            "type": coll.get("entity_type")
+                        }
+                        collections.append(collection)
+                    
+                    self.logger.info(f"Found {len(collections)} collections for user {username_to_use}")
+                    return collections
+                else:
+                    self.logger.warning(f"No collections found in API response for {username_to_use}")
+                    return []
+            else:
+                self.logger.error(f"Error getting collections: {response.status_code} - {response.text}")
+                return []
+                
+        except Exception as e:
+            self.logger.error(f"Error getting collections by API: {e}", exc_info=True)
+            return []
+
+    def get_collection_contents(self, collection_id, entity_type="release"):
+        """
+        Get the contents of a MusicBrainz collection using the API
+        
+        Args:
+            collection_id (str): ID of the collection
+            entity_type (str): Type of entity in the collection (release, artist, etc.)
+            
+        Returns:
+            list: List of entities in the collection
+        """
+        if not self.is_authenticated():
+            self.logger.error("Not authenticated with MusicBrainz")
+            return []
+        
+        try:
+            # Use the MusicBrainz API to get collection contents
+            url = f"https://musicbrainz.org/ws/2/{entity_type}"
+            params = {
+                "collection": collection_id,
+                "fmt": "json",
+                "limit": 100  # Adjust as needed
+            }
+            
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0"
+            }
+            
+            entities = []
+            offset = 0
+            total_count = None
+            
+            # Paginate through results if needed
+            while True:
+                params["offset"] = offset
+                response = self.session.get(url, params=params, headers=headers)
+                
+                if response.status_code != 200:
+                    self.logger.error(f"Error getting collection contents: {response.status_code} - {response.text}")
+                    break
+                    
+                data = response.json()
+                
+                # Get total count for pagination
+                if total_count is None:
+                    total_count = data.get("count", 0)
+                    
+                # Different entity types have different response structures
+                items = []
+                if entity_type == "release":
+                    items = data.get("releases", [])
+                elif entity_type == "artist":
+                    items = data.get("artists", [])
+                # Add more entity types as needed
+                
+                entities.extend(items)
+                
+                # Check if we need to fetch more pages
+                offset += len(items)
+                if offset >= total_count or len(items) == 0:
+                    break
+            
+            return entities
+            
+        except Exception as e:
+            self.logger.error(f"Error getting collection contents: {e}", exc_info=True)
+            return []
+
+    def add_releases_to_collection(self, collection_id, release_mbids):
+        """
+        Add releases to a MusicBrainz collection using the API
+        
+        Args:
+            collection_id (str): ID of the collection
+            release_mbids (list): List of MusicBrainz IDs of releases to add
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        if not self.is_authenticated():
+            self.logger.error("Not authenticated with MusicBrainz")
+            return False
+        
+        try:
+            # MusicBrainz API allows adding multiple releases at once
+            # But there's a limit to how many we can add in one request
+            batch_size = 100  # Adjust as needed
+            success = True
+            
+            for i in range(0, len(release_mbids), batch_size):
+                batch = release_mbids[i:i+batch_size]
+                
+                # Join MBIDs with semicolons as per API spec
+                mbids_param = ";".join(batch)
+                
+                # Use the MusicBrainz API to add releases
+                url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{mbids_param}"
+                
+                headers = {
+                    "User-Agent": "MuspyReleasesModule/1.0"
+                }
+                
+                response = self.session.put(url, headers=headers)
+                
+                if response.status_code not in [200, 201]:
+                    self.logger.error(f"Error adding releases: {response.status_code} - {response.text}")
+                    success = False
+                    break
+            
+            return success
+            
+        except Exception as e:
+            self.logger.error(f"Error adding releases to collection: {e}", exc_info=True)
+            return False
+
+    def remove_release_from_collection(self, collection_id, release_mbid):
+        """
+        Remove a release from a MusicBrainz collection using the API
+        
+        Args:
+            collection_id (str): ID of the collection
+            release_mbid (str): MusicBrainz ID of the release to remove
+            
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        if not self.is_authenticated():
+            self.logger.error("Not authenticated with MusicBrainz")
+            return False
+        
+        try:
+            # Use the MusicBrainz API to remove the release
+            url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{release_mbid}"
+            
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0"
+            }
+            
+            response = self.session.delete(url, headers=headers)
+            
+            if response.status_code in [200, 204]:
+                return True
+            else:
+                self.logger.error(f"Error removing release: {response.status_code} - {response.text}")
+                return False
+            
+        except Exception as e:
+            self.logger.error(f"Error removing release from collection: {e}", exc_info=True)
+            return False             

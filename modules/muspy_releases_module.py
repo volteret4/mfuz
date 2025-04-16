@@ -96,6 +96,31 @@ class ProgressWorker(QObject):
             self.finished.emit([])
 
 
+class AuthWorker(QObject):
+    finished = pyqtSignal(bool)
+    
+    def __init__(self, auth_manager, username, password):
+        super().__init__()
+        self.auth_manager = auth_manager
+        self.username = username
+        self.password = password
+    
+    def authenticate(self):
+        success = False
+        try:
+            # Actualizar credenciales
+            self.auth_manager.username = self.username
+            self.auth_manager.password = self.password
+            
+            # Intentar autenticar
+            success = self.auth_manager.authenticate()
+        except Exception as e:
+            print(f"Error en autenticación en segundo plano: {e}")
+        
+        # Emitir señal cuando termine
+        self.finished.emit(success)
+
+
 class FloatingNavigationButtons(QObject):
     """
     Class to manage floating navigation buttons for a stacked widget.
@@ -6257,7 +6282,16 @@ class MuspyArtistModule(BaseModule):
             menu.addAction(login_action)
         else:
             # We're authenticated, fetch collections BEFORE showing the menu
-            collections = self.musicbrainz_auth.get_user_collections()
+            # Try API method first
+            collections = []
+            if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
+                self.logger.info("Getting collections using API...")
+                collections = self.musicbrainz_auth.get_collections_by_api()
+            
+            # Fallback to HTML parsing if API method failed or doesn't exist
+            if not collections and hasattr(self.musicbrainz_auth, 'get_user_collections'):
+                self.logger.info("API failed, trying HTML parsing...")
+                collections = self.musicbrainz_auth.get_user_collections()
             
             # Add "Show Collections" submenu
             collections_menu = QMenu("Show Collection", self)
@@ -6266,7 +6300,7 @@ class MuspyArtistModule(BaseModule):
                 for collection in collections:
                     collection_name = collection.get('name', 'Unnamed Collection')
                     collection_id = collection.get('id')
-                    collection_count = collection.get('count', 0)
+                    collection_count = collection.get('entity_count', 0)
                     
                     if collection_id:
                         collection_action = QAction(f"{collection_name} ({collection_count} releases)", self)
@@ -6275,13 +6309,15 @@ class MuspyArtistModule(BaseModule):
                                                         self.show_musicbrainz_collection(cid, cname))
                         collections_menu.addAction(collection_action)
             else:
-                fetch_collections_action = QAction("Fetch All Collections", self)
-                fetch_collections_action.triggered.connect(self.fetch_all_musicbrainz_collections)
-                menu.addAction(fetch_collections_action)
-                # If no collections found, try the API approach if available
-                if not collections and hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
-                    self.logger.info("No collections found with HTML parsing, trying API...")
-                    collections = self.musicbrainz_auth.get_collections_by_api()
+                no_collections_action = QAction("No collections found", self)
+                no_collections_action.setEnabled(False)
+                collections_menu.addAction(no_collections_action)
+                
+                # Add refresh action
+                refresh_action = QAction("Refresh Collections", self)
+                refresh_action.triggered.connect(self.fetch_all_musicbrainz_collections)
+                collections_menu.addAction(refresh_action)
+                
             menu.addMenu(collections_menu)
             
             # Add "Add Albums to Collection" submenu
@@ -6314,6 +6350,11 @@ class MuspyArtistModule(BaseModule):
             
             menu.addMenu(add_menu)
             
+            # Add "Create New Collection" action
+            create_action = QAction("Create New Collection...", self)
+            create_action.triggered.connect(self.create_new_collection)
+            menu.addAction(create_action)
+            
             # Add separator and logout option
             menu.addSeparator()
             logout_action = QAction("Logout from MusicBrainz", self)
@@ -6323,10 +6364,6 @@ class MuspyArtistModule(BaseModule):
         # Update status text with feedback
         if is_auth:
             self.results_text.append(f"Logged in as {self.musicbrainz_username}")
-            if collections:
-                self.results_text.append(f"Found {len(collections)} collections")
-            else:
-                self.results_text.append("No collections found")
         else:
             self.results_text.append("Not logged in to MusicBrainz")
         
@@ -6335,11 +6372,132 @@ class MuspyArtistModule(BaseModule):
             pos = self.get_releases_musicbrainz.mapToGlobal(QPoint(0, self.get_releases_musicbrainz.height()))
             menu.exec(pos)
 
+    def create_new_collection(self):
+        """
+        Create a new MusicBrainz collection
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            return
+        
+        # Prompt for collection name
+        collection_name, ok = QInputDialog.getText(
+            self,
+            "Create Collection",
+            "Enter name for new collection:",
+            QLineEdit.EchoMode.Normal
+        )
+        
+        if not ok or not collection_name.strip():
+            return
+        
+        # Prompt for collection type
+        collection_types = ["release", "artist", "label", "recording", "work"]
+        collection_type, ok = QInputDialog.getItem(
+            self,
+            "Collection Type",
+            "Select collection type:",
+            collection_types,
+            0,  # Default to "release"
+            False  # Not editable
+        )
+        
+        if not ok:
+            return
+        
+        # Show progress dialog
+        progress = QProgressDialog("Creating collection...", "Cancel", 0, 100, self)
+        progress.setWindowTitle("Creating Collection")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.setValue(20)
+        
+        try:
+            # Call MusicBrainz API to create collection
+            url = "https://musicbrainz.org/ws/2/collection"
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0",
+                "Content-Type": "application/json"
+            }
+            
+            data = {
+                "name": collection_name,
+                "entity_type": collection_type,
+                "editor": self.musicbrainz_username
+            }
+            
+            progress.setValue(50)
+            QApplication.processEvents()
+            
+            response = self.musicbrainz_auth.session.post(url, json=data, headers=headers)
+            
+            progress.setValue(80)
+            
+            if response.status_code in [200, 201]:
+                # Success
+                collection_id = None
+                try:
+                    result_data = response.json()
+                    collection_id = result_data.get("id")
+                except:
+                    pass
+                    
+                progress.setValue(100)
+                
+                success_msg = f"Collection '{collection_name}' created successfully"
+                if collection_id:
+                    success_msg += f"\nCollection ID: {collection_id}"
+                    
+                QMessageBox.information(self, "Success", success_msg)
+                
+                # Update collections - just fetch them again
+                self.fetch_all_musicbrainz_collections()
+            else:
+                error_msg = f"Error creating collection: {response.status_code}"
+                try:
+                    error_data = response.json()
+                    if 'error' in error_data:
+                        error_msg += f"\n{error_data['error']}"
+                except:
+                    error_msg += f"\n{response.text}"
+                    
+                QMessageBox.warning(self, "Error", error_msg)
+        
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error creating collection: {str(e)}")
+        
+        finally:
+            progress.close()
 
-   
+    def authenticate_musicbrainz_silently(self):
+        """
+        Intenta autenticar con MusicBrainz usando las credenciales almacenadas
+        sin mostrar diálogos de UI
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_username or not self.musicbrainz_password:
+            return
+        
+        try:
+            # Autenticar en segundo plano
+            worker = QThread()
+            worker_obj = AuthWorker(self.musicbrainz_auth, self.musicbrainz_username, self.musicbrainz_password)
+            worker_obj.moveToThread(worker)
+            
+            # Conectar señales
+            worker.started.connect(worker_obj.authenticate)
+            worker_obj.finished.connect(worker.quit)
+            worker_obj.finished.connect(worker_obj.deleteLater)
+            worker.finished.connect(worker.deleteLater)
+            
+            # Iniciar el hilo
+            worker.start()
+            
+            self.logger.info(f"Iniciada autenticación silenciosa para MusicBrainz usuario: {self.musicbrainz_username}")
+        except Exception as e:
+            self.logger.error(f"Error en autenticación silenciosa: {e}", exc_info=True)
 
 
-    def authenticate_musicbrainz(self):
+
+    def authenticate_musicbrainz_dialog(self):
         """
         Authenticate with MusicBrainz by getting username/password from user
         
@@ -6530,7 +6688,7 @@ class MuspyArtistModule(BaseModule):
             if not self.authenticate_musicbrainz():
                 QMessageBox.warning(self, "Error", "Authentication required to view collections")
                 return
-    
+        
         # Create function to fetch collection data with progress bar
         def fetch_collection_data(update_progress):
             update_progress(0, 1, "Connecting to MusicBrainz...", indeterminate=True)
@@ -6543,10 +6701,58 @@ class MuspyArtistModule(BaseModule):
                         "error": "Not authenticated with MusicBrainz"
                     }
                 
+                # Try to use API method first if available
+                if hasattr(self.musicbrainz_auth, 'get_collection_contents'):
+                    update_progress(1, 3, "Fetching collection data via API...", indeterminate=True)
+                    
+                    # Get collection contents using API
+                    contents = self.musicbrainz_auth.get_collection_contents(collection_id)
+                    
+                    if contents:
+                        update_progress(2, 3, f"Processing {len(contents)} releases...", indeterminate=True)
+                        
+                        # Process the releases
+                        releases = []
+                        for item in contents:
+                            release = {
+                                'mbid': item.get('id', ''),
+                                'title': item.get('title', 'Unknown'),
+                                'artist': "",  # We need to extract this from artist-credit
+                                'type': item.get('release-group', {}).get('primary-type', ''),
+                                'date': item.get('date', ''),
+                                'status': item.get('status', ''),
+                                'country': item.get('country', '')
+                            }
+                            
+                            # Extract artist name from artist-credit if available
+                            artist_credits = item.get('artist-credit', [])
+                            if artist_credits:
+                                artist_names = []
+                                for credit in artist_credits:
+                                    if isinstance(credit, dict) and 'artist' in credit:
+                                        artist_names.append(credit['artist'].get('name', ''))
+                                    elif isinstance(credit, str):
+                                        artist_names.append(credit)
+                                
+                                release['artist'] = " ".join(artist_names)
+                            
+                            releases.append(release)
+                        
+                        update_progress(3, 3, "Data processed successfully")
+                        
+                        return {
+                            "success": True,
+                            "releases": releases
+                        }
+                    else:
+                        # Fall back to HTML parsing if API returns nothing
+                        update_progress(1, 3, "API failed, trying HTML parsing...", indeterminate=True)
+                
+                # If API method doesn't exist or failed, try HTML parsing
+                update_progress(1, 3, "Fetching collection data via HTML...", indeterminate=True)
+                
                 # Get the collection page directly (the API is too limited)
                 url = f"https://musicbrainz.org/collection/{collection_id}"
-                
-                update_progress(1, 3, "Fetching collection data...", indeterminate=True)
                 
                 response = self.musicbrainz_auth.session.get(url)
                 
@@ -6648,82 +6854,166 @@ class MuspyArtistModule(BaseModule):
             error_msg = result.get("error", "Unknown error") if result else "Operation failed"
             QMessageBox.warning(self, "Error", f"Could not load collection: {error_msg}")
 
+    def get_collection_contents(self, collection_id, entity_type="release"):
+        """
+        Get the contents of a MusicBrainz collection using the API
+        
+        Args:
+            collection_id (str): ID of the collection
+            entity_type (str): Type of entity in the collection (release, artist, etc.)
+            
+        Returns:
+            list: List of entities in the collection
+        """
+        if not self.is_authenticated():
+            self.logger.error("Not authenticated with MusicBrainz")
+            return []
+        
+        try:
+            # Use the MusicBrainz API to get collection contents
+            url = f"https://musicbrainz.org/ws/2/{entity_type}"
+            params = {
+                "collection": collection_id,
+                "fmt": "json",
+                "limit": 100  # MusicBrainz API default limit
+            }
+            
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0"
+            }
+            
+            entities = []
+            offset = 0
+            total_count = None
+            
+            # Paginate through results
+            while True:
+                params["offset"] = offset
+                response = self.session.get(url, params=params, headers=headers)
+                
+                if response.status_code != 200:
+                    self.logger.error(f"Error getting collection contents: {response.status_code} - {response.text}")
+                    break
+                    
+                data = response.json()
+                
+                # Get total count for pagination
+                if total_count is None:
+                    total_count = data.get("release-count", data.get("count", 0))
+                    self.logger.info(f"Total items in collection: {total_count}")
+                
+                # Different entity types have different response structures
+                items = []
+                if entity_type == "release":
+                    items = data.get("releases", [])
+                elif entity_type == "artist":
+                    items = data.get("artists", [])
+                # Add more entity types as needed
+                
+                self.logger.info(f"Got {len(items)} items at offset {offset}")
+                entities.extend(items)
+                
+                # Check if we need to fetch more pages
+                offset += len(items)
+                if offset >= total_count or len(items) == 0:
+                    self.logger.info(f"Finished pagination with {len(entities)} total items")
+                    break
+            
+            return entities
+            
+        except Exception as e:
+            self.logger.error(f"Error getting collection contents: {e}", exc_info=True)
+            return []
+
+
+
+
     def display_musicbrainz_collection_table(self, releases, collection_name):
         """
-        Display MusicBrainz collection releases in the table
+        Display MusicBrainz collection releases in the tabla_musicbrainz_collection table
+        from the UI file
         
         Args:
             releases (list): List of processed release dictionaries
             collection_name (str): Name of the collection for display
         """
-        # Find the table_musicbrainz_collection widget
-        table = self.findChild(QTableWidget, "table_musicbrainz_collection")
+        # Find the tabla_musicbrainz_collection widget - usar el nombre EXACTO del archivo UI
+        table = self.findChild(QTableWidget, "tabla_musicbrainz_collection")
+        
         if not table:
-            self.logger.error("Could not find table_musicbrainz_collection widget")
-            # Fallback to displaying in text area
+            self.logger.error("No se encontró la tabla 'tabla_musicbrainz_collection' en la UI")
+            self.logger.info("Buscando todas las tablas disponibles...")
+            
+            # Log all table widgets for debugging
+            all_tables = self.findChildren(QTableWidget)
+            for t in all_tables:
+                self.logger.info(f"Tabla encontrada: {t.objectName()}")
+            
+            # Fallback - mostrar en results_text
             self.results_text.clear()
             self.results_text.show()
-            self.results_text.append(f"Collection: {collection_name} ({len(releases)} releases)")
-            for release in releases[:20]:  # Limit to 20 for text display
+            self.results_text.append(f"Colección: {collection_name} ({len(releases)} lanzamientos)")
+            for release in releases[:20]:  # Limitar a 20 para mostrar en texto
                 self.results_text.append(f"{release['artist']} - {release['title']} ({release['date']})")
             if len(releases) > 20:
-                self.results_text.append(f"... and {len(releases)-20} more releases.")
+                self.results_text.append(f"... y {len(releases)-20} lanzamientos más.")
             return
         
-        # Configure table
-        table.setRowCount(len(releases))
-        table.setSortingEnabled(False)  # Disable sorting while updating
-        
-        # If we're using a stacked widget, switch to the appropriate page
+        # Verificar si estamos usando un stacked widget
         stack_widget = self.findChild(QStackedWidget, "stackedWidget")
         if stack_widget:
-            # Find the musicbrainz_collection_page
+            # Encontrar la página para mostrar la colección
             for i in range(stack_widget.count()):
                 page = stack_widget.widget(i)
+                # Usar el nombre exacto de la página que contiene la tabla en el archivo UI
                 if page.objectName() == "musicbrainz_collection_page":
                     stack_widget.setCurrentWidget(page)
                     break
         
-        # Set label if it exists
+        # Configurar la etiqueta si existe
         collection_label = self.findChild(QLabel, "label_musicbrainz_collection")
         if collection_label:
-            collection_label.setText(f"Collection: {collection_name} ({len(releases)} releases)")
+            collection_label.setText(f"Colección: {collection_name} ({len(releases)} lanzamientos)")
         
-        # Fill the table
+        # Configurar la tabla
+        table.setRowCount(len(releases))
+        table.setSortingEnabled(False)  # Desactivar ordenación mientras actualizamos
+        
+        # Llenar la tabla
         for row, release in enumerate(releases):
-            # Artist
-            artist_item = QTableWidgetItem(release.get('artist', 'Unknown'))
+            # Artista
+            artist_item = QTableWidgetItem(release.get('artist', 'Desconocido'))
             table.setItem(row, 0, artist_item)
             
-            # Title
-            title_item = QTableWidgetItem(release.get('title', 'Unknown'))
+            # Título
+            title_item = QTableWidgetItem(release.get('title', 'Desconocido'))
             table.setItem(row, 1, title_item)
             
-            # Type
+            # Tipo
             type_item = QTableWidgetItem(release.get('type', '').title())
             table.setItem(row, 2, type_item)
             
-            # Date
+            # Fecha
             date_item = QTableWidgetItem(release.get('date', ''))
             table.setItem(row, 3, date_item)
             
-            # Status
+            # Estado
             status_item = QTableWidgetItem(release.get('status', '').title())
             table.setItem(row, 4, status_item)
             
-            # Country
+            # País
             country_item = QTableWidgetItem(release.get('country', ''))
             table.setItem(row, 5, country_item)
             
-            # Store MBID for context menu actions
+            # Almacenar MBID para acciones del menú contextual
             for col in range(6):
                 if table.item(row, col):
                     table.item(row, col).setData(Qt.ItemDataRole.UserRole, release.get('mbid', ''))
         
-        # Re-enable sorting
+        # Reactivar ordenación
         table.setSortingEnabled(True)
         
-        # Set context menu for the table if not already set
+        # Configurar menú contextual para la tabla si no está ya configurado
         if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
             table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
             table.customContextMenuRequested.connect(self.show_musicbrainz_table_context_menu)
@@ -6825,23 +7115,58 @@ class MuspyArtistModule(BaseModule):
             
             update_progress(1, 3, f"Adding {len(album_mbids)} albums to collection...", indeterminate=True)
             
-            # Add albums to collection
-            result = self.musicbrainz_auth.add_releases_to_collection(collection_id, album_mbids)
-            
-            update_progress(2, 3, "Finalizing...", indeterminate=True)
-            
-            if result:
-                update_progress(3, 3, "Successfully added albums to collection")
-                return {
-                    "success": True,
-                    "count": len(album_mbids),
-                    "albums": valid_albums
-                }
+            # Use API method if available
+            if hasattr(self.musicbrainz_auth, 'add_releases_to_collection'):
+                result = self.musicbrainz_auth.add_releases_to_collection(collection_id, album_mbids)
+                
+                update_progress(2, 3, "Finalizing...", indeterminate=True)
+                
+                if result:
+                    update_progress(3, 3, "Successfully added albums to collection")
+                    return {
+                        "success": True,
+                        "count": len(album_mbids),
+                        "albums": valid_albums
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": "Failed to add albums to collection"
+                    }
             else:
-                return {
-                    "success": False,
-                    "error": "Failed to add albums to collection"
-                }
+                # Fallback to manual API call
+                try:
+                    # Add albums to collection using direct API call
+                    # Join MBIDs with semicolons as per API spec
+                    mbids_param = ";".join(album_mbids)
+                    
+                    # Call MusicBrainz API
+                    url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{mbids_param}"
+                    headers = {
+                        "User-Agent": "MuspyReleasesModule/1.0"
+                    }
+                    
+                    response = self.musicbrainz_auth.session.put(url, headers=headers)
+                    
+                    update_progress(2, 3, "Finalizing...", indeterminate=True)
+                    
+                    if response.status_code in [200, 201]:
+                        update_progress(3, 3, "Successfully added albums to collection")
+                        return {
+                            "success": True,
+                            "count": len(album_mbids),
+                            "albums": valid_albums
+                        }
+                    else:
+                        return {
+                            "success": False,
+                            "error": f"Error adding albums: {response.status_code} - {response.text}"
+                        }
+                except Exception as e:
+                    return {
+                        "success": False,
+                        "error": f"Error adding albums: {str(e)}"
+                    }
         
         # Execute with progress dialog
         result = self.show_progress_operation(
