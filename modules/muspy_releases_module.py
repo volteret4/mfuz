@@ -578,6 +578,9 @@ class MuspyArtistModule(BaseModule):
                 # Make sure we start with the text page visible
                 self.stackedWidget.setCurrentIndex(0)
                 
+
+                self.setup_table_context_menus()
+                
                 # Connect signals
                 self._connect_signals()
                 
@@ -8450,6 +8453,493 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             self.logger.error(f"Error clearing Spotify cache: {e}")
             QMessageBox.warning(self, "Error", f"Error al limpiar la caché: {e}")
+
+
+# MENU CONTEXTUAL TABLAS:
+
+    def show_unified_context_menu(self, position):
+        """
+        Unified context menu handler for all tables in the application
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        # Get the sender table widget
+        table = self.sender()
+        if not table:
+            return
+            
+        # Get the item at the position
+        item = table.itemAt(position)
+        if not item:
+            return
+            
+        # Get the table name
+        table_name = table.objectName()
+        
+        # Get the row of the item
+        row = item.row()
+        
+        # Extract information based on table type
+        info = self._extract_item_info(table, row, table_name)
+        if not info:
+            return
+            
+        # Create the context menu
+        menu = QMenu(self)
+        
+        # Add actions based on available information
+        self._build_context_menu(menu, info, table_name)
+        
+        # Show the menu
+        menu.exec(table.mapToGlobal(position))
+
+    def _extract_item_info(self, table, row, table_name):
+        """
+        Extract item information based on the table type
+        
+        Args:
+            table (QTableWidget): The table widget
+            row (int): Row index of the selected item
+            table_name (str): Name of the table widget
+            
+        Returns:
+            dict: Dictionary with extracted information or None if extraction failed
+        """
+        info = {
+            'artist_name': None,
+            'artist_mbid': None,
+            'release_title': None,
+            'release_mbid': None,
+            'spotify_artist_id': None,
+            'spotify_release_id': None
+        }
+        
+        try:
+            # MusicBrainz collection table
+            if table_name == "tabla_musicbrainz_collection":
+                # Artist name is in column 0
+                if table.item(row, 0):
+                    info['artist_name'] = table.item(row, 0).text()
+                
+                # Artist MBID is in column 1
+                if table.columnCount() > 1 and table.item(row, 1):
+                    info['artist_mbid'] = table.item(row, 1).text()
+                    
+                # Release title is in column 2
+                if table.columnCount() > 2 and table.item(row, 2):
+                    info['release_title'] = table.item(row, 2).text()
+                    
+                # Release MBID might be stored in the item data
+                if table.item(row, 0):
+                    info['release_mbid'] = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    
+            # Spotify artists table
+            elif table_name == "spotify_artists_table":
+                # Artist name is in column 0
+                if table.item(row, 0):
+                    info['artist_name'] = table.item(row, 0).text()
+                    
+                # Spotify artist ID might be stored in the item data
+                if table.item(row, 0):
+                    info['spotify_artist_id'] = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    
+            # Artists table
+            elif table_name == "tableWidget_artists":
+                # Artist name is in column 0
+                if table.item(row, 0):
+                    info['artist_name'] = table.item(row, 0).text()
+                    
+                # Artist MBID might be in column 1 or in the item data
+                if table.columnCount() > 1 and table.item(row, 1):
+                    mbid_col = table.item(row, 1).text()
+                    if len(mbid_col) == 36 and mbid_col.count('-') == 4:
+                        info['artist_mbid'] = mbid_col
+                
+                # Try to get MBID from data if not found in columns
+                if not info['artist_mbid'] and table.item(row, 0):
+                    data = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    if isinstance(data, dict) and 'mbid' in data:
+                        info['artist_mbid'] = data['mbid']
+                    
+            # Songs table
+            elif table_name == "tableWidget_songs":
+                # Artist name is usually in column 0 or 1
+                for col in [0, 1]:
+                    if col < table.columnCount() and table.item(row, col):
+                        text = table.item(row, col).text()
+                        if text and not any(char.isdigit() for char in text):
+                            info['artist_name'] = text
+                            break
+                
+                # Try to get data from item
+                if table.item(row, 0):
+                    data = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    if isinstance(data, dict):
+                        if 'artist_mbid' in data:
+                            info['artist_mbid'] = data['artist_mbid']
+                        elif 'mbid' in data:
+                            info['artist_mbid'] = data['mbid']
+                        
+            # Releases table
+            elif table_name == "tableWidget_releases" or table_name == "tableWidget_muspy_results":
+                # Artist name is in column 0
+                if table.item(row, 0):
+                    info['artist_name'] = table.item(row, 0).text()
+                    
+                # Release title is in column 1
+                if table.columnCount() > 1 and table.item(row, 1):
+                    info['release_title'] = table.item(row, 1).text()
+                    
+                # Try to get MBID from data
+                if table.item(row, 0):
+                    data = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    if isinstance(data, dict):
+                        if 'artist_mbid' in data:
+                            info['artist_mbid'] = data['artist_mbid']
+                        elif 'mbid' in data:
+                            info['artist_mbid'] = data['mbid']
+                        
+                        if 'release_mbid' in data:
+                            info['release_mbid'] = data['release_mbid']
+                    
+            # For any other table, try some common patterns
+            else:
+                # Try to find artist name in first 2 columns
+                for col in range(min(2, table.columnCount())):
+                    if table.item(row, col):
+                        info['artist_name'] = table.item(row, col).text()
+                        break
+                
+                # Try to get data from item
+                if table.item(row, 0):
+                    data = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+                    if isinstance(data, dict):
+                        if 'artist_mbid' in data:
+                            info['artist_mbid'] = data['artist_mbid']
+                        elif 'mbid' in data:
+                            info['artist_mbid'] = data['mbid']
+                        
+                        if 'artist_name' in data:
+                            info['artist_name'] = data['artist_name']
+            
+            return info
+        
+        except Exception as e:
+            self.logger.error(f"Error extracting item info: {e}", exc_info=True)
+            return None
+
+
+    def _build_context_menu(self, menu, info, table_name):
+        """
+        Build context menu based on available information
+        
+        Args:
+            menu (QMenu): The menu to populate
+            info (dict): Dictionary with extracted information
+            table_name (str): Name of the table widget
+        """
+        artist_name = info.get('artist_name')
+        artist_mbid = info.get('artist_mbid')
+        release_title = info.get('release_title')
+        release_mbid = info.get('release_mbid')
+        spotify_artist_id = info.get('spotify_artist_id')
+        
+        # Add artist-related actions if we have an artist name
+        if artist_name:
+            # Follow on Muspy
+            if self.muspy_username and self.muspy_api_key:
+                if artist_mbid:
+                    # Follow using MBID (more reliable)
+                    follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
+                    follow_muspy_action.triggered.connect(lambda: self.add_artist_to_muspy(artist_mbid, artist_name))
+                    menu.addAction(follow_muspy_action)
+                else:
+                    # Search for MBID first
+                    follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy (search by name)", self)
+                    follow_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(artist_name))
+                    menu.addAction(follow_muspy_action)
+            
+            # Follow on Spotify
+            if self.spotify_enabled:
+                if spotify_artist_id:
+                    # Follow using Spotify ID
+                    follow_spotify_action = QAction(f"Follow '{artist_name}' on Spotify", self)
+                    follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_id(spotify_artist_id))
+                    menu.addAction(follow_spotify_action)
+                else:
+                    # Search by name
+                    follow_spotify_action = QAction(f"Follow '{artist_name}' on Spotify (search by name)", self)
+                    follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_name(artist_name))
+                    menu.addAction(follow_spotify_action)
+            
+            # View artist info (MusicBrainz, Spotify, etc.)
+            menu.addSeparator()
+            
+            # MusicBrainz actions
+            if artist_mbid:
+                view_mb_action = QAction(f"View '{artist_name}' on MusicBrainz", self)
+                view_mb_action.triggered.connect(lambda: self.open_musicbrainz_artist(artist_mbid))
+                menu.addAction(view_mb_action)
+            
+            # Spotify actions
+            if spotify_artist_id:
+                view_spotify_action = QAction(f"View '{artist_name}' on Spotify", self)
+                view_spotify_action.triggered.connect(lambda: self.open_spotify_artist(spotify_artist_id))
+                menu.addAction(view_spotify_action)
+            elif self.spotify_enabled:
+                # Search on Spotify
+                search_spotify_action = QAction(f"Search '{artist_name}' on Spotify", self)
+                search_spotify_action.triggered.connect(lambda: self.search_and_open_spotify_artist(artist_name))
+                menu.addAction(search_spotify_action)
+        
+        # Add release-related actions if we have a release title
+        if release_title:
+            if menu.actions():  # If we already have actions, add a separator
+                menu.addSeparator()
+            
+            # Add to MusicBrainz collection if we have a release MBID
+            if release_mbid and hasattr(self, 'musicbrainz_auth') and self.musicbrainz_enabled:
+                # Get collections list if we haven't done so yet
+                if not hasattr(self, '_mb_collections') or not self._mb_collections:
+                    self._mb_collections = self.fetch_all_musicbrainz_collections()
+                
+                if hasattr(self, '_mb_collections') and self._mb_collections:
+                    # Create a submenu for collections
+                    collections_menu = QMenu("Add to Collection", self)
+                    
+                    for collection in self._mb_collections:
+                        collection_name = collection.get('name', 'Unnamed Collection')
+                        collection_id = collection.get('id')
+                        
+                        if collection_id:
+                            collection_action = QAction(collection_name, self)
+                            collection_action.triggered.connect(
+                                lambda checked, cid=collection_id, cname=collection_name, rmbid=release_mbid: 
+                                self.add_release_to_collection(cid, cname, rmbid)
+                            )
+                            collections_menu.addAction(collection_action)
+                    
+                    menu.addMenu(collections_menu)
+            
+            # View release info
+            if release_mbid:
+                view_release_mb_action = QAction(f"View '{release_title}' on MusicBrainz", self)
+                view_release_mb_action.triggered.connect(lambda: self.open_musicbrainz_release(release_mbid))
+                menu.addAction(view_release_mb_action)
+
+
+
+    def follow_artist_on_spotify_by_id(self, artist_id):
+        """
+        Follow an artist on Spotify using their Spotify ID
+        
+        Args:
+            artist_id (str): Spotify ID of the artist
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify authentication required")
+            return
+            
+        try:
+            # Get Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                QMessageBox.warning(self, "Error", "Failed to get Spotify client")
+                return
+                
+            # Check if already following
+            is_following = spotify_client.current_user_following_artists([artist_id])
+            if is_following and is_following[0]:
+                QMessageBox.information(self, "Already Following", "You are already following this artist on Spotify")
+                return
+                
+            # Follow the artist
+            spotify_client.user_follow_artists([artist_id])
+            QMessageBox.information(self, "Success", "Successfully followed artist on Spotify")
+            
+        except Exception as e:
+            self.logger.error(f"Error following artist on Spotify: {e}", exc_info=True)
+            QMessageBox.warning(self, "Error", f"Failed to follow artist on Spotify: {e}")
+
+    def follow_artist_on_spotify_by_name(self, artist_name):
+        """
+        Search for an artist on Spotify by name and follow them
+        
+        Args:
+            artist_name (str): Name of the artist
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify authentication required")
+            return
+            
+        try:
+            # Get Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                QMessageBox.warning(self, "Error", "Failed to get Spotify client")
+                return
+                
+            # Search for the artist
+            results = spotify_client.search(q=f'artist:"{artist_name}"', type='artist', limit=1)
+            
+            if not results or not results.get('artists') or not results['artists'].get('items'):
+                QMessageBox.warning(self, "Not Found", f"Could not find artist '{artist_name}' on Spotify")
+                return
+                
+            # Get the artist ID
+            artist = results['artists']['items'][0]
+            artist_id = artist['id']
+            
+            # Check if already following
+            is_following = spotify_client.current_user_following_artists([artist_id])
+            if is_following and is_following[0]:
+                QMessageBox.information(self, "Already Following", f"You are already following {artist['name']} on Spotify")
+                return
+                
+            # Follow the artist
+            spotify_client.user_follow_artists([artist_id])
+            QMessageBox.information(self, "Success", f"Successfully followed {artist['name']} on Spotify")
+            
+        except Exception as e:
+            self.logger.error(f"Error following artist on Spotify: {e}", exc_info=True)
+            QMessageBox.warning(self, "Error", f"Failed to follow artist on Spotify: {e}")
+
+    def search_and_open_spotify_artist(self, artist_name):
+        """
+        Search for an artist on Spotify by name and open their page
+        
+        Args:
+            artist_name (str): Name of the artist
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify authentication required")
+            return
+            
+        try:
+            # Get Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                QMessageBox.warning(self, "Error", "Failed to get Spotify client")
+                return
+                
+            # Search for the artist
+            results = spotify_client.search(q=f'artist:"{artist_name}"', type='artist', limit=1)
+            
+            if not results or not results.get('artists') or not results['artists'].get('items'):
+                QMessageBox.warning(self, "Not Found", f"Could not find artist '{artist_name}' on Spotify")
+                return
+                
+            # Get the artist ID
+            artist = results['artists']['items'][0]
+            artist_id = artist['id']
+            
+            # Open the artist page
+            self.open_spotify_artist(artist_id)
+            
+        except Exception as e:
+            self.logger.error(f"Error searching artist on Spotify: {e}", exc_info=True)
+            QMessageBox.warning(self, "Error", f"Failed to search for artist on Spotify: {e}")
+
+    def add_release_to_collection(self, collection_id, collection_name, release_mbid):
+        """
+        Add a single release to a MusicBrainz collection
+        
+        Args:
+            collection_id (str): ID of the collection
+            collection_name (str): Name of the collection
+            release_mbid (str): MusicBrainz ID of the release
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            return
+            
+        try:
+            # Call MusicBrainz API to add the release
+            url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{release_mbid}"
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0"
+            }
+            
+            response = self.musicbrainz_auth.session.put(url, headers=headers)
+            
+            if response.status_code in [200, 201]:
+                QMessageBox.information(self, "Success", f"Successfully added release to collection '{collection_name}'")
+            else:
+                error_msg = f"Error adding release to collection: {response.status_code}"
+                try:
+                    error_data = response.json()
+                    if 'error' in error_data:
+                        error_msg += f"\n{error_data['error']}"
+                except:
+                    error_msg += f"\n{response.text}"
+                    
+                QMessageBox.warning(self, "Error", error_msg)
+                
+        except Exception as e:
+            self.logger.error(f"Error adding release to collection: {e}", exc_info=True)
+            QMessageBox.warning(self, "Error", f"Failed to add release to collection: {e}")
+
+    def ensure_spotify_auth(self):
+        """
+        Ensure Spotify authentication is available
+        
+        Returns:
+            bool: True if authenticated, False otherwise
+        """
+        if not self.spotify_enabled:
+            return False
+            
+        if not hasattr(self, 'spotify_auth'):
+            return False
+            
+        # Check if we have a valid client
+        try:
+            spotify_client = self.spotify_auth.get_client()
+            if spotify_client:
+                return True
+        except:
+            pass
+            
+        # Try to authenticate
+        try:
+            return self.spotify_auth.authenticate()
+        except:
+            return False
+
+
+    def setup_table_context_menus(self):
+        """
+        Set up context menus for all tables in the application
+        """
+        # List of table object names to configure
+        table_names = [
+            "tabla_musicbrainz_collection",
+            "spotify_artists_table",
+            "artists_table",
+            "loved_songs_table",
+            "releases_table",
+            "tableWidget_muspy_results"
+        ]
+        
+        # Find and configure each table
+        for table_name in table_names:
+            table = self.findChild(QTableWidget, table_name)
+            if table:
+                # Set context menu policy
+                table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                
+                # Connect signal to unified handler
+                table.customContextMenuRequested.disconnect() if table.receivers(table.customContextMenuRequested) > 0 else None
+                table.customContextMenuRequested.connect(self.show_unified_context_menu)
+                
+                self.logger.debug(f"Set up context menu for table: {table_name}")
+
+
+
+
+
+
 
 
 
