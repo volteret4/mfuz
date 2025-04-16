@@ -52,7 +52,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="table_mb_page">
+     <widget class="QWidget" name="musicbrainz_collection_page">
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <property name="leftMargin">
         <number>0</number>
@@ -67,7 +67,50 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTableWidget" name="tabla_musicbrainz_collection"/>
+        <widget class="QTableWidget" name="tabla_musicbrainz_collection">
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Artista MBID</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Título Lanzamiento</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Tipo</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Fecha</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Estado</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>País</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="_create_releases_page">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTableWidget" name="tabla_crear_collection"/>
        </item>
       </layout>
      </widget>
@@ -245,7 +288,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTextEdit" name="textEdit"/>
+        <widget class="QTextEdit" name="results_text"/>
        </item>
       </layout>
      </widget>

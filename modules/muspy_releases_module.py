@@ -472,7 +472,7 @@ class MuspyArtistModule(BaseModule):
             'artist_input', 'search_button', 
             'load_artists_button', 'sync_artists_button', 
             'get_releases_button', 'get_new_releases_button', 'get_my_releases_button',
-            'stackedWidget'
+            'stackedWidget', 'tabla_musicbrainz_collection'  # Added the table to required widgets
         ]
         
         # Intentar cargar desde archivo UI
@@ -483,6 +483,25 @@ class MuspyArtistModule(BaseModule):
                 # Cargar el archivo UI
                 uic.loadUi(ui_file_path, self)
                 
+                # Log UI loading success
+                self.logger.info(f"UI loaded from {ui_file_path}")
+                
+                # Debug: List all widgets to identify what's available
+                self.logger.debug("Listing all widgets after UI load:")
+                for widget in self.findChildren(QWidget):
+                    self.logger.debug(f"  - {widget.objectName()} : {type(widget).__name__}")
+                
+                # Look specifically for stacked widget pages
+                if hasattr(self, 'stackedWidget'):
+                    self.logger.debug(f"StackedWidget has {self.stackedWidget.count()} pages:")
+                    for i in range(self.stackedWidget.count()):
+                        page = self.stackedWidget.widget(i)
+                        self.logger.debug(f"  - Page {i} objectName: {page.objectName()}")
+                        # Check for the table in each page
+                        table = page.findChild(QTableWidget, "tabla_musicbrainz_collection")
+                        if table:
+                            self.logger.debug(f"    Found tabla_musicbrainz_collection in page {i}")
+                
                 # Verificar que se han cargado los widgets principales
                 missing_widgets = []
                 for widget_name in required_widgets:
@@ -490,15 +509,18 @@ class MuspyArtistModule(BaseModule):
                         widget = self.findChild(QWidget, widget_name)
                         if widget:
                             setattr(self, widget_name, widget)
+                            self.logger.debug(f"Found and set widget: {widget_name}")
                         else:
                             missing_widgets.append(widget_name)
+                            self.logger.warning(f"Widget not found: {widget_name}")
                 
                 if missing_widgets:
-                    print(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
-                    raise AttributeError(f"Widgets no encontrados en UI: {', '.join(missing_widgets)}")
+                    self.logger.error(f"Widgets not found in UI: {', '.join(missing_widgets)}")
+                    raise AttributeError(f"Widgets not found in UI: {', '.join(missing_widgets)}")
                 
-                # Set up the stacked widget pages
-                self._setup_stacked_widget()
+                # Do NOT replace the stacked widget pages if they're already there
+                # Instead, augment them if needed
+                self._setup_stacked_widget(respect_existing=True)
                 
                 # Add floating navigation to stacked widget
                 self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
@@ -529,11 +551,18 @@ class MuspyArtistModule(BaseModule):
                 
                 # Connect signals
                 self._connect_signals()
-
-                # Add this after loading the UI
-                self.logger.info("UI loaded, inspecting stackedWidget...")
-                self.debug_stacked_widget_hierarchy()
                 
+                # Intentar autenticación silenciosa con MusicBrainz al iniciar
+                if hasattr(self, 'musicbrainz_username') and self.musicbrainz_username and hasattr(self, 'musicbrainz_password') and self.musicbrainz_password:
+                    self.logger.info("Intentando autenticación automática con MusicBrainz...")
+                    try:
+                        # Autenticar silenciosamente
+                        self.authenticate_musicbrainz_silently()
+                    except Exception as e:
+                        self.logger.error(f"Error en autenticación inicial: {e}", exc_info=True)
+                
+                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
+
                 print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
                 print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
@@ -545,188 +574,28 @@ class MuspyArtistModule(BaseModule):
             self._fallback_init_ui()
 
 
-    def _setup_stacked_widget(self):
-        """Set up the stacked widget with necessary pages"""
+    def _setup_stacked_widget(self, respect_existing=True):
+        """Set up the stacked widget references without creating new pages"""
         # Check if stacked widget exists
         if not hasattr(self, 'stackedWidget'):
             self.logger.error("Stacked widget not found in UI")
             return
         
-        # Clear any existing pages (in case of reinitialization)
-        while self.stackedWidget.count() > 0:
-            self.stackedWidget.removeWidget(self.stackedWidget.widget(0))
-        
-        # Create and add pages with identical structure
-        
-        # 1. Text page (for logs and instructions)
-        text_page = QWidget()
-        text_page.setObjectName("text_page")
-        text_layout = QVBoxLayout(text_page)
-        text_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        text_layout.setSpacing(0)  # Remove spacing
-        
-        # Create or use existing results_text widget
-        if hasattr(self, 'results_text'):
-            text_layout.addWidget(self.results_text)
-        else:
-            self.results_text = QTextEdit()
-            self.results_text.setReadOnly(True)
-            self.results_text.setObjectName("results_text")
-            text_layout.addWidget(self.results_text)
-        
-        self.stackedWidget.addWidget(text_page)
-        
-        # 2. Releases page
-        releases_page = QWidget()
-        releases_page.setObjectName("releases_page")
-        releases_layout = QVBoxLayout(releases_page)
-        releases_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        releases_layout.setSpacing(0)  # Remove spacing
-        
-        # Add a count label
-        releases_count_label = QLabel("No releases loaded yet")
-        releases_count_label.setObjectName("count_label")
-        releases_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        releases_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
-        releases_layout.addWidget(releases_count_label)
-        
-        # Create table for releases
-        releases_table = QTableWidget()
-        releases_table.setObjectName("releases_table")
-        releases_table.setColumnCount(5)
-        releases_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
-        releases_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        releases_table.verticalHeader().setVisible(False)  # Hide row numbers
-        releases_table.setShowGrid(False)  # More modern look without grid
-        releases_table.setAlternatingRowColors(True)  # Better readability
-        releases_layout.addWidget(releases_table)
-        
-        self.stackedWidget.addWidget(releases_page)
-        
-        # 3. Top artists page
-        artists_page = QWidget()
-        artists_page.setObjectName("artists_page")
-        artists_layout = QVBoxLayout(artists_page)
-        artists_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        artists_layout.setSpacing(0)  # Remove spacing
-        
-        # Add a count label (same style as releases)
-        artists_count_label = QLabel("No artists loaded yet")
-        artists_count_label.setObjectName("artists_count_label")
-        artists_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        artists_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
-        artists_layout.addWidget(artists_count_label)
-        
-        # Create table for artists
-        artists_table = QTableWidget()
-        artists_table.setObjectName("artists_table")
-        artists_table.setColumnCount(3)
-        artists_table.setHorizontalHeaderLabels(["Artist", "Playcount", "Actions"])
-        artists_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist column stretches
-        artists_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Playcount fixed size
-        artists_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Actions fixed size
-        artists_table.verticalHeader().setVisible(False)  # Hide row numbers
-        artists_table.setShowGrid(False)  # More modern look without grid
-        artists_table.setAlternatingRowColors(True)  # Better readability
-        artists_layout.addWidget(artists_table)
-        
-        self.stackedWidget.addWidget(artists_page)
-        
-        # 4. Loved tracks page
-        loved_tracks_page = QWidget()
-        loved_tracks_page.setObjectName("loved_tracks_page")
-        loved_layout = QVBoxLayout(loved_tracks_page)
-        loved_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        loved_layout.setSpacing(0)  # Remove spacing
-        
-        # Add a count label (same style as others)
-        loved_count_label = QLabel("No loved tracks loaded yet")
-        loved_count_label.setObjectName("loved_count_label")
-        loved_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        loved_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
-        loved_layout.addWidget(loved_count_label)
-        
-        # Create table for loved tracks
-        loved_table = QTableWidget()
-        loved_table.setObjectName("loved_tracks_table")
-        loved_table.setColumnCount(5)
-        loved_table.setHorizontalHeaderLabels(["Artist", "Track", "Album", "Date Loved", "Actions"])
-        loved_table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)  # Artist stretches
-        loved_table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)  # Track stretches
-        loved_table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)  # Album stretches
-        loved_table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # Date fixed
-        loved_table.horizontalHeader().setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Actions fixed
-        loved_table.verticalHeader().setVisible(False)  # Hide row numbers
-        loved_table.setShowGrid(False)  # More modern look without grid
-        loved_table.setAlternatingRowColors(True)  # Better readability
-        loved_layout.addWidget(loved_table)
-        
-        self.stackedWidget.addWidget(loved_tracks_page)
-        
-        # 5. Results page
-        results_page = QWidget()
-        results_page.setObjectName("muspy_results_widget")
-        results_layout = QVBoxLayout(results_page)
-        results_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        results_layout.setSpacing(0)  # Remove spacing
-
-
-        # Add a count label
-        results_count_label = QLabel("No results loaded yet")
-        results_count_label.setObjectName("label_result_count")
-        results_count_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
-        results_count_label.setStyleSheet("padding: 5px; font-weight: bold;")
-        results_layout.addWidget(results_count_label)
-        
-        # Create table for results
-        results_table = QTableWidget()
-        results_table.setObjectName("tableWidget_muspy_results")
-        results_table.setColumnCount(5)
-        results_table.setHorizontalHeaderLabels(["Artist", "Release Title", "Type", "Date", "Disambiguation"])
-        results_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
-        results_table.verticalHeader().setVisible(False)  # Hide row numbers
-        results_table.setShowGrid(False)  # More modern look without grid
-        results_table.setAlternatingRowColors(True)  # Better readability
-        results_layout.addWidget(results_table)
-
-        results_boton_sinc = QWidget()
-        results_boton_sinc = QHBoxLayout(results_boton_sinc)
-        results_layout.setContentsMargins(0, 0, 0, 0)  # Remove margins
-        #results_la
-        
-        self.stackedWidget.addWidget(results_page)
-        # Apply consistent styling to all tables
-        table_style = """
-            QTableWidget {
-                background-color: transparent;
-                border: none;
-                gridline-color: transparent;
-            }
-            QHeaderView::section {
-                
-                
-                border: none;
-                padding: 8px;
-                font-weight: bold;
-            }
-            QTableWidget::item {
-                border: none;
-                padding: 4px;
-            }
+        # Log what's in the stacked widget for debugging
+        self.logger.info(f"StackedWidget has {self.stackedWidget.count()} pages")
+        for i in range(self.stackedWidget.count()):
+            page = self.stackedWidget.widget(i)
+            self.logger.info(f"Page {i}: {page.objectName()}")
             
-        """
+            # If we find the musicbrainz_collection_page, check for the table
+            if page.objectName() == "musicbrainz_collection_page":
+                table = page.findChild(QTableWidget, "tabla_musicbrainz_collection")
+                if table:
+                    self.logger.info("Found tabla_musicbrainz_collection in musicbrainz_collection_page")
+                else:
+                    self.logger.warning("tabla_musicbrainz_collection NOT found in musicbrainz_collection_page")
         
-        # Apply style to all tables
-        results_table.setStyleSheet(table_style)
-        releases_table.setStyleSheet(table_style)
-        artists_table.setStyleSheet(table_style)
-        loved_table.setStyleSheet(table_style)
-        
-        # Make sure the stacked widget is visible
-        self.stackedWidget.setVisible(True)
-        
-        # Start with the text page
-        self.stackedWidget.setCurrentIndex(0)
+        # We're NOT creating any new pages - all should be defined in the UI file
 
 
     def display_lastfm_artists_in_stacked_widget(self, artists):
@@ -6268,7 +6137,7 @@ class MuspyArtistModule(BaseModule):
         
         if not is_auth:
             # Prompt for login if not authenticated
-            self.authenticate_musicbrainz()
+            self.authenticate_musicbrainz_silently()
             # Recheck authentication status after login attempt
             is_auth = hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated()
         
@@ -6278,7 +6147,7 @@ class MuspyArtistModule(BaseModule):
         if not is_auth:
             # Add login action if still not authenticated
             login_action = QAction("Login to MusicBrainz...", self)
-            login_action.triggered.connect(self.authenticate_musicbrainz)
+            login_action.triggered.connect(self.authenticate_musicbrainz_silently)
             menu.addAction(login_action)
         else:
             # We're authenticated, fetch collections BEFORE showing the menu
@@ -6472,28 +6341,33 @@ class MuspyArtistModule(BaseModule):
         """
         Intenta autenticar con MusicBrainz usando las credenciales almacenadas
         sin mostrar diálogos de UI
+        
+        Returns:
+            bool: True si se logró autenticar, False en caso contrario
         """
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_username or not self.musicbrainz_password:
-            return
+            self.logger.debug("No auth manager or credentials available for silent auth")
+            return False
         
         try:
-            # Autenticar en segundo plano
-            worker = QThread()
-            worker_obj = AuthWorker(self.musicbrainz_auth, self.musicbrainz_username, self.musicbrainz_password)
-            worker_obj.moveToThread(worker)
+            # Configurar la sesión con las credenciales
+            self.musicbrainz_auth.username = self.musicbrainz_username
+            self.musicbrainz_auth.password = self.musicbrainz_password
             
-            # Conectar señales
-            worker.started.connect(worker_obj.authenticate)
-            worker_obj.finished.connect(worker.quit)
-            worker_obj.finished.connect(worker_obj.deleteLater)
-            worker.finished.connect(worker.deleteLater)
+            # Iniciar autenticación
+            self.logger.info(f"Attempting silent authentication for user: {self.musicbrainz_username}")
+            result = self.musicbrainz_auth.authenticate(silent=True)
             
-            # Iniciar el hilo
-            worker.start()
-            
-            self.logger.info(f"Iniciada autenticación silenciosa para MusicBrainz usuario: {self.musicbrainz_username}")
+            if result:
+                self.logger.info("Silent authentication successful")
+                return True
+            else:
+                self.logger.warning("Silent authentication failed")
+                return False
+        
         except Exception as e:
-            self.logger.error(f"Error en autenticación silenciosa: {e}", exc_info=True)
+            self.logger.error(f"Error in silent authentication: {e}", exc_info=True)
+            return False
 
 
 
@@ -6680,140 +6554,54 @@ class MuspyArtistModule(BaseModule):
             collection_id (str): ID of the collection to display
             collection_name (str): Name of the collection for display
         """
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Loading collection: {collection_name}...")
+        self.results_text.append("Please wait while data is being retrieved...")
+        QApplication.processEvents()
+        
+        # Verificar autenticación una sola vez en esta sesión
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            self.results_text.append("Not authenticated with MusicBrainz. Attempting login...")
+            # Si no hay autenticación explícita previa, informar y salir
+            self.results_text.append("Not authenticated with MusicBrainz. Please log in first.")
             QApplication.processEvents()
             
-            # Try to authenticate
-            if not self.authenticate_musicbrainz():
-                QMessageBox.warning(self, "Error", "Authentication required to view collections")
+            # Ofrecer opción de iniciar sesión
+            reply = QMessageBox.question(
+                self, 
+                "Authentication Required", 
+                "You need to be logged in to MusicBrainz to view collections. Log in now?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                if not self.authenticate_musicbrainz_silently():
+                    QMessageBox.warning(self, "Error", "Authentication failed. Please try again.")
+                    return
+            else:
                 return
         
         # Create function to fetch collection data with progress bar
         def fetch_collection_data(update_progress):
-            update_progress(0, 1, "Connecting to MusicBrainz...", indeterminate=True)
+            update_progress(0, 3, "Connecting to MusicBrainz...", indeterminate=True)
             
             try:
-                # Make sure we're still authenticated
-                if not self.musicbrainz_auth.is_authenticated():
-                    return {
-                        "success": False,
-                        "error": "Not authenticated with MusicBrainz"
-                    }
+                # Mostrar progreso mientras trabajamos
+                update_progress(1, 3, "Retrieving collection data...", indeterminate=True)
                 
-                # Try to use API method first if available
-                if hasattr(self.musicbrainz_auth, 'get_collection_contents'):
-                    update_progress(1, 3, "Fetching collection data via API...", indeterminate=True)
-                    
-                    # Get collection contents using API
-                    contents = self.musicbrainz_auth.get_collection_contents(collection_id)
-                    
-                    if contents:
-                        update_progress(2, 3, f"Processing {len(contents)} releases...", indeterminate=True)
-                        
-                        # Process the releases
-                        releases = []
-                        for item in contents:
-                            release = {
-                                'mbid': item.get('id', ''),
-                                'title': item.get('title', 'Unknown'),
-                                'artist': "",  # We need to extract this from artist-credit
-                                'type': item.get('release-group', {}).get('primary-type', ''),
-                                'date': item.get('date', ''),
-                                'status': item.get('status', ''),
-                                'country': item.get('country', '')
-                            }
-                            
-                            # Extract artist name from artist-credit if available
-                            artist_credits = item.get('artist-credit', [])
-                            if artist_credits:
-                                artist_names = []
-                                for credit in artist_credits:
-                                    if isinstance(credit, dict) and 'artist' in credit:
-                                        artist_names.append(credit['artist'].get('name', ''))
-                                    elif isinstance(credit, str):
-                                        artist_names.append(credit)
-                                
-                                release['artist'] = " ".join(artist_names)
-                            
-                            releases.append(release)
-                        
-                        update_progress(3, 3, "Data processed successfully")
-                        
-                        return {
-                            "success": True,
-                            "releases": releases
-                        }
-                    else:
-                        # Fall back to HTML parsing if API returns nothing
-                        update_progress(1, 3, "API failed, trying HTML parsing...", indeterminate=True)
+                # Usar nuestra función de paginación mejorada
+                result = self.fetch_collection_data_with_pagination(
+                    collection_id, 
+                    page_size=100,  # ajusta según sea necesario
+                    max_pages=50    # ajusta según sea necesario
+                )
                 
-                # If API method doesn't exist or failed, try HTML parsing
-                update_progress(1, 3, "Fetching collection data via HTML...", indeterminate=True)
-                
-                # Get the collection page directly (the API is too limited)
-                url = f"https://musicbrainz.org/collection/{collection_id}"
-                
-                response = self.musicbrainz_auth.session.get(url)
-                
-                if response.status_code == 200:
-                    # Parse the HTML to extract collection releases
-                    from bs4 import BeautifulSoup
-                    soup = BeautifulSoup(response.text, 'html.parser')
+                if result.get("success"):
+                    releases = result.get("releases", [])
+                    update_progress(2, 3, f"Processing {len(releases)} releases...")
                     
-                    # Find the release table
-                    release_table = soup.select_one("table.tbl")
-                    if not release_table:
-                        return {
-                            "success": False,
-                            "error": "Could not find releases in the collection"
-                        }
-                    
-                    # Extract releases
-                    release_rows = release_table.select("tbody tr")
-                    
-                    update_progress(2, 3, f"Processing {len(release_rows)} releases...", indeterminate=True)
-                    
-                    releases = []
-                    for row in release_rows:
-                        # Extract release ID from the link
-                        link = row.select_one("a.release")
-                        if not link or not link.get('href'):
-                            continue
-                            
-                        mbid = link.get('href').split('/')[-1]
-                        title = link.text.strip()
-                        
-                        # Extract artist
-                        artist_cell = row.select_one("td.artist")
-                        artist = artist_cell.text.strip() if artist_cell else "Unknown Artist"
-                        
-                        # Extract type
-                        type_cell = row.select_one("td.type")
-                        release_type = type_cell.text.strip() if type_cell else ""
-                        
-                        # Extract date
-                        date_cell = row.select_one("td.date")
-                        date = date_cell.text.strip() if date_cell else ""
-                        
-                        # Extract status
-                        status_cell = row.select_one("td.status")
-                        status = status_cell.text.strip() if status_cell else ""
-                        
-                        # Extract country
-                        country_cell = row.select_one("td.country")
-                        country = country_cell.text.strip() if country_cell else ""
-                        
-                        releases.append({
-                            'mbid': mbid,
-                            'title': title,
-                            'artist': artist,
-                            'type': release_type,
-                            'date': date,
-                            'status': status,
-                            'country': country
-                        })
-                    
+                    # Más procesamiento si es necesario
                     update_progress(3, 3, "Data processed successfully")
                     
                     return {
@@ -6821,10 +6609,7 @@ class MuspyArtistModule(BaseModule):
                         "releases": releases
                     }
                 else:
-                    return {
-                        "success": False,
-                        "error": f"Error fetching collection: {response.status_code}"
-                    }
+                    return result  # Devolver error
             
             except Exception as e:
                 self.logger.error(f"Error fetching collection: {e}", exc_info=True)
@@ -6845,38 +6630,202 @@ class MuspyArtistModule(BaseModule):
             releases = result.get("releases", [])
             
             if not releases:
+                # Keep showing text instead of empty table
+                self.show_text_page()
+                self.results_text.append(f"The collection '{collection_name}' is empty.")
                 QMessageBox.information(self, "Empty Collection", f"The collection '{collection_name}' is empty.")
                 return
+            
+            # Show all processing text before attempting to switch to table view
+            self.show_text_page()
+            self.results_text.append(f"Successfully retrieved {len(releases)} releases.")
+            self.results_text.append("Preparing table display...")
+            QApplication.processEvents()
             
             # Display releases in the table
             self.display_musicbrainz_collection_table(releases, collection_name)
         else:
+            # Keep showing text for error case
+            self.show_text_page()
             error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
             QMessageBox.warning(self, "Error", f"Could not load collection: {error_msg}")
+
+
+
+    def fetch_collection_data_with_pagination(self, collection_id, page_size=100, max_pages=50):
+        """
+        Fetch collection data with robust pagination support
+        
+        Args:
+            collection_id (str): ID of the collection
+            page_size (int): Number of items per page
+            max_pages (int): Maximum number of pages to fetch
+            
+        Returns:
+            dict: Result with success flag and releases data
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
+            return {"success": False, "error": "Not authenticated with MusicBrainz"}
+        
+        try:
+            self.results_text.append(f"Fetching collection data with pagination (page size: {page_size}, max pages: {max_pages})...")
+            QApplication.processEvents()
+            
+            # API URL para colecciones
+            base_url = f"https://musicbrainz.org/ws/2/release"
+            headers = {"User-Agent": "MuspyReleasesModule/1.0"}
+            
+            all_releases = []
+            offset = 0
+            page = 1
+            continue_pagination = True
+            
+            while continue_pagination and page <= max_pages:
+                # Construir parámetros para esta página
+                params = {
+                    "collection": collection_id,
+                    "limit": page_size,
+                    "offset": offset,
+                    "fmt": "json",
+                    "inc": "artist-credits"  # Incluir datos de artistas
+                }
+                
+                # Actualizar status
+                self.results_text.append(f"Fetching page {page} (offset: {offset})...")
+                QApplication.processEvents()
+                
+                # Hacer la petición
+                response = self.musicbrainz_auth.session.get(base_url, params=params, headers=headers)
+                
+                if response.status_code != 200:
+                    self.logger.error(f"API error on page {page}: {response.status_code} - {response.text}")
+                    self.results_text.append(f"Error fetching page {page}: {response.status_code}")
+                    break
+                
+                # Procesar los datos
+                try:
+                    data = response.json()
+                    
+                    # Extraer releases y metadata
+                    releases = data.get("releases", [])
+                    total_count = data.get("release-count", -1)
+                    
+                    # Actualizar status
+                    self.results_text.append(f"Retrieved {len(releases)} releases on page {page} (total: {total_count if total_count >= 0 else 'unknown'})")
+                    QApplication.processEvents()
+                    
+                    # Procesar cada release
+                    page_releases = []
+                    for release in releases:
+                        # Extraer datos básicos con manejo seguro (prevenir KeyErrors)
+                        processed_release = {
+                            'mbid': release.get('id', ''),
+                            'title': release.get('title', 'Unknown Title'),
+                            'artist': "",
+                            'artist_mbid': "",
+                            'type': "",
+                            'date': release.get('date', ''),
+                            'status': release.get('status', ''),
+                            'country': release.get('country', '')
+                        }
+                        
+                        # Extraer tipo del grupo de release (si existe)
+                        release_group = release.get('release-group', {})
+                        if isinstance(release_group, dict):
+                            processed_release['type'] = release_group.get('primary-type', '')
+                        
+                        # Procesar información de artistas
+                        artist_credits = release.get('artist-credit', [])
+                        
+                        if artist_credits:
+                            artist_names = []
+                            artist_mbids = []
+                            
+                            for credit in artist_credits:
+                                if isinstance(credit, dict):
+                                    if 'artist' in credit and isinstance(credit['artist'], dict):
+                                        artist_info = credit['artist']
+                                        artist_names.append(artist_info.get('name', ''))
+                                        if 'id' in artist_info:
+                                            artist_mbids.append(artist_info['id'])
+                                    elif 'name' in credit:
+                                        artist_names.append(credit['name'])
+                                elif isinstance(credit, str):
+                                    artist_names.append(credit)
+                            
+                            processed_release['artist'] = " ".join(filter(None, artist_names))
+                            if artist_mbids:
+                                processed_release['artist_mbid'] = artist_mbids[0]
+                        
+                        page_releases.append(processed_release)
+                    
+                    # Añadir los releases de esta página al total
+                    all_releases.extend(page_releases)
+                    
+                    # Verificar si hay más páginas
+                    # 1. Si no obtuvimos resultados o menos de los solicitados
+                    if len(releases) < page_size:
+                        self.results_text.append(f"Fetched less than {page_size} items, pagination complete.")
+                        continue_pagination = False
+                    
+                    # 2. Si sabemos el total y ya lo alcanzamos o superamos
+                    elif total_count >= 0 and offset + len(releases) >= total_count:
+                        self.results_text.append(f"Reached end of collection ({total_count} items).")
+                        continue_pagination = False
+                    
+                    # 3. Si alcanzamos el número máximo de páginas
+                    elif page >= max_pages:
+                        self.results_text.append(f"Reached max pages limit ({max_pages}).")
+                        continue_pagination = False
+                    
+                    # Preparar para la siguiente página
+                    page += 1
+                    offset += len(releases)
+                
+                except json.JSONDecodeError:
+                    self.logger.error(f"Invalid JSON response on page {page}")
+                    self.results_text.append(f"Error processing page {page}: invalid response format")
+                    continue_pagination = False
+                    
+            # Resumen final
+            self.results_text.append(f"Pagination complete: retrieved {len(all_releases)} releases from {page-1} pages")
+            QApplication.processEvents()
+            
+            return {
+                "success": True,
+                "releases": all_releases
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error in pagination: {e}", exc_info=True)
+            self.results_text.append(f"Error retrieving data: {str(e)}")
+            return {
+                "success": False,
+                "error": f"Error: {str(e)}"
+            }
+
+
+
 
     def get_collection_contents(self, collection_id, entity_type="release"):
         """
-        Get the contents of a MusicBrainz collection using the API
+        Get the contents of a MusicBrainz collection using the API with proper pagination
         
         Args:
             collection_id (str): ID of the collection
             entity_type (str): Type of entity in the collection (release, artist, etc.)
-            
+                
         Returns:
             list: List of entities in the collection
         """
-        if not self.is_authenticated():
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
             self.logger.error("Not authenticated with MusicBrainz")
             return []
         
         try:
             # Use the MusicBrainz API to get collection contents
             url = f"https://musicbrainz.org/ws/2/{entity_type}"
-            params = {
-                "collection": collection_id,
-                "fmt": "json",
-                "limit": 100  # MusicBrainz API default limit
-            }
             
             headers = {
                 "User-Agent": "MuspyReleasesModule/1.0"
@@ -6884,12 +6833,30 @@ class MuspyArtistModule(BaseModule):
             
             entities = []
             offset = 0
-            total_count = None
+            page_size = 100  # MusicBrainz API default limit
+            more_pages = True
+            
+            # Update text display
+            if hasattr(self, 'results_text'):
+                self.results_text.append(f"Fetching collection data (page size: {page_size})...")
+                QApplication.processEvents()
             
             # Paginate through results
-            while True:
-                params["offset"] = offset
-                response = self.session.get(url, params=params, headers=headers)
+            while more_pages:
+                params = {
+                    "collection": collection_id,
+                    "fmt": "json",
+                    "limit": page_size,
+                    "offset": offset,
+                    "inc": "artist-credits"  # Add inc parameter to get artist data
+                }
+                
+                # Update text display for pagination
+                if hasattr(self, 'results_text'):
+                    self.results_text.append(f"Fetching page at offset {offset}...")
+                    QApplication.processEvents()
+                
+                response = self.musicbrainz_auth.session.get(url, params=params, headers=headers)
                 
                 if response.status_code != 200:
                     self.logger.error(f"Error getting collection contents: {response.status_code} - {response.text}")
@@ -6897,30 +6864,43 @@ class MuspyArtistModule(BaseModule):
                     
                 data = response.json()
                 
-                # Get total count for pagination
-                if total_count is None:
-                    total_count = data.get("release-count", data.get("count", 0))
-                    self.logger.info(f"Total items in collection: {total_count}")
-                
                 # Different entity types have different response structures
                 items = []
+                total_count = 0
+                
                 if entity_type == "release":
                     items = data.get("releases", [])
+                    total_count = data.get("release-count", 0)
                 elif entity_type == "artist":
                     items = data.get("artists", [])
-                # Add more entity types as needed
+                    total_count = data.get("artist-count", 0)
+                else:
+                    # Default fallback
+                    items = data.get(f"{entity_type}s", [])
+                    total_count = data.get(f"{entity_type}-count", data.get("count", 0))
                 
-                self.logger.info(f"Got {len(items)} items at offset {offset}")
+                # Update text display for progress
+                if hasattr(self, 'results_text'):
+                    self.results_text.append(f"Retrieved {len(items)} items (total expected: {total_count})")
+                    QApplication.processEvents()
+                
+                self.logger.info(f"Got {len(items)} items at offset {offset} of {total_count} total")
                 entities.extend(items)
                 
                 # Check if we need to fetch more pages
                 offset += len(items)
-                if offset >= total_count or len(items) == 0:
+                
+                # If we got fewer items than requested, or we've reached the total, we're done
+                if len(items) < page_size or offset >= total_count:
+                    more_pages = False
                     self.logger.info(f"Finished pagination with {len(entities)} total items")
+                
+                # Safeguard against infinite loops
+                if len(items) == 0:
                     break
             
             return entities
-            
+                
         except Exception as e:
             self.logger.error(f"Error getting collection contents: {e}", exc_info=True)
             return []
@@ -6931,92 +6911,220 @@ class MuspyArtistModule(BaseModule):
     def display_musicbrainz_collection_table(self, releases, collection_name):
         """
         Display MusicBrainz collection releases in the tabla_musicbrainz_collection table
-        from the UI file
         
         Args:
             releases (list): List of processed release dictionaries
             collection_name (str): Name of the collection for display
         """
-        # Find the tabla_musicbrainz_collection widget - usar el nombre EXACTO del archivo UI
-        table = self.findChild(QTableWidget, "tabla_musicbrainz_collection")
+        # First make sure we have the text displayed while we work
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Collection: {collection_name}")
+        self.results_text.append(f"Found {len(releases)} releases")
+        self.results_text.append("Preparing display...")
+        QApplication.processEvents()
         
-        if not table:
-            self.logger.error("No se encontró la tabla 'tabla_musicbrainz_collection' en la UI")
-            self.logger.info("Buscando todas las tablas disponibles...")
-            
-            # Log all table widgets for debugging
-            all_tables = self.findChildren(QTableWidget)
-            for t in all_tables:
-                self.logger.info(f"Tabla encontrada: {t.objectName()}")
-            
-            # Fallback - mostrar en results_text
-            self.results_text.clear()
-            self.results_text.show()
-            self.results_text.append(f"Colección: {collection_name} ({len(releases)} lanzamientos)")
-            for release in releases[:20]:  # Limitar a 20 para mostrar en texto
-                self.results_text.append(f"{release['artist']} - {release['title']} ({release['date']})")
-            if len(releases) > 20:
-                self.results_text.append(f"... y {len(releases)-20} lanzamientos más.")
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Could not find stackedWidget")
+            # Continue with text display only
+            self._show_releases_as_text(releases, collection_name)
             return
         
-        # Verificar si estamos usando un stacked widget
-        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
-        if stack_widget:
-            # Encontrar la página para mostrar la colección
-            for i in range(stack_widget.count()):
-                page = stack_widget.widget(i)
-                # Usar el nombre exacto de la página que contiene la tabla en el archivo UI
-                if page.objectName() == "musicbrainz_collection_page":
-                    stack_widget.setCurrentWidget(page)
-                    break
+        # Find the MusicBrainz collection page
+        mb_page_index = -1
+        for i in range(stack_widget.count()):
+            page = stack_widget.widget(i)
+            if page.objectName() == "musicbrainz_collection_page":
+                mb_page_index = i
+                self.logger.info(f"Found musicbrainz_collection_page at index {i}")
+                break
         
-        # Configurar la etiqueta si existe
-        collection_label = self.findChild(QLabel, "label_musicbrainz_collection")
+        if mb_page_index < 0:
+            self.logger.error("Could not find musicbrainz_collection_page in stackedWidget")
+            # Continue with text display only
+            self._show_releases_as_text(releases, collection_name)
+            return
+        
+        # Get the page widget
+        mb_page = stack_widget.widget(mb_page_index)
+        
+        # Find the table within the page
+        table = mb_page.findChild(QTableWidget, "tabla_musicbrainz_collection")
+        if not table:
+            self.logger.error("Could not find tabla_musicbrainz_collection in musicbrainz_collection_page")
+            
+            # Look for ANY table in the page
+            tables = mb_page.findChildren(QTableWidget)
+            self.logger.debug(f"Found {len(tables)} tables in the page:")
+            for t in tables:
+                self.logger.debug(f"  - Table: {t.objectName()}")
+                
+                # Use the first table found as a fallback
+                if not table and isinstance(t, QTableWidget):
+                    table = t
+                    self.logger.warning(f"Using fallback table: {t.objectName()}")
+            
+            if not table:
+                # No table found at all, continue with text display
+                self._show_releases_as_text(releases, collection_name)
+                return
+        
+        # Find the label for collection info
+        collection_label = mb_page.findChild(QLabel, "label_musicbrainz_collection")
         if collection_label:
-            collection_label.setText(f"Colección: {collection_name} ({len(releases)} lanzamientos)")
+            collection_label.setText(f"Collection: {collection_name} ({len(releases)} releases)")
         
-        # Configurar la tabla
-        table.setRowCount(len(releases))
-        table.setSortingEnabled(False)  # Desactivar ordenación mientras actualizamos
+        # Setup the table
+        try:
+            # Ensure table has enough columns - ADDING ARTIST MBID COLUMN
+            if table.columnCount() < 7:
+                table.setColumnCount(7)
+                table.setHorizontalHeaderLabels(["Artist", "Artist MBID", "Release Title", "Type", "Date", "Status", "Country"])
+            
+            # Set row count
+            table.setRowCount(len(releases))
+            table.setSortingEnabled(False)  # Disable sorting while updating
+            
+            # Fill the table
+            for row, release in enumerate(releases):
+                try:
+                    # Artist - con manejo de errores
+                    artist_text = release.get('artist', '')
+                    if not artist_text or not isinstance(artist_text, str):
+                        artist_text = "Unknown Artist"
+                    artist_item = QTableWidgetItem(artist_text)
+                    table.setItem(row, 0, artist_item)
+                    
+                    # Artist MBID - con manejo de errores
+                    artist_mbid = release.get('artist_mbid', '')
+                    if not isinstance(artist_mbid, str):
+                        artist_mbid = ""
+                    artist_mbid_item = QTableWidgetItem(artist_mbid)
+                    table.setItem(row, 1, artist_mbid_item)
+                    
+                    # Title - con manejo de errores
+                    title_text = release.get('title', '')
+                    if not title_text or not isinstance(title_text, str):
+                        title_text = "Untitled Release"
+                    title_item = QTableWidgetItem(title_text)
+                    table.setItem(row, 2, title_item)
+                    
+                    # Type - con manejo de errores
+                    type_text = release.get('type', '')
+                    if not isinstance(type_text, str):
+                        type_text = ""
+                    type_item = QTableWidgetItem(type_text.title())
+                    table.setItem(row, 3, type_item)
+                    
+                    # Date - con manejo de errores
+                    date_text = release.get('date', '')
+                    if not isinstance(date_text, str):
+                        date_text = ""
+                    date_item = QTableWidgetItem(date_text)
+                    table.setItem(row, 4, date_item)
+                    
+                    # Status - con manejo de errores
+                    status_text = release.get('status', '')
+                    if not isinstance(status_text, str):
+                        status_text = ""
+                    status_item = QTableWidgetItem(status_text.title())
+                    table.setItem(row, 5, status_item)
+                    
+                    # Country - con manejo de errores
+                    country_text = release.get('country', '')
+                    if not isinstance(country_text, str):
+                        country_text = ""
+                    country_item = QTableWidgetItem(country_text)
+                    table.setItem(row, 6, country_item)
+                    
+                    # Store MBID for context menu actions
+                    release_mbid = release.get('mbid', '')
+                    if isinstance(release_mbid, str):
+                        for col in range(7):
+                            if table.item(row, col):
+                                table.item(row, col).setData(Qt.ItemDataRole.UserRole, release_mbid)
+                
+                except Exception as e:
+                    self.logger.error(f"Error adding row {row}: {e}", exc_info=True)
+                    # Intentar continuar con la siguiente fila
+                    continue
+            
+            # Re-enable sorting
+            table.setSortingEnabled(True)
+            
+            # Configure context menu for the table if not already configured
+            if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+                table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                table.customContextMenuRequested.connect(self.show_musicbrainz_table_context_menu)
+            
+            # Switch to the MusicBrainz collection page
+            stack_widget.setCurrentIndex(mb_page_index)
+            self.logger.info(f"Successfully displayed {len(releases)} releases in the MusicBrainz collection table")
         
-        # Llenar la tabla
-        for row, release in enumerate(releases):
-            # Artista
-            artist_item = QTableWidgetItem(release.get('artist', 'Desconocido'))
-            table.setItem(row, 0, artist_item)
-            
-            # Título
-            title_item = QTableWidgetItem(release.get('title', 'Desconocido'))
-            table.setItem(row, 1, title_item)
-            
-            # Tipo
-            type_item = QTableWidgetItem(release.get('type', '').title())
-            table.setItem(row, 2, type_item)
-            
-            # Fecha
-            date_item = QTableWidgetItem(release.get('date', ''))
-            table.setItem(row, 3, date_item)
-            
-            # Estado
-            status_item = QTableWidgetItem(release.get('status', '').title())
-            table.setItem(row, 4, status_item)
-            
-            # País
-            country_item = QTableWidgetItem(release.get('country', ''))
-            table.setItem(row, 5, country_item)
-            
-            # Almacenar MBID para acciones del menú contextual
-            for col in range(6):
-                if table.item(row, col):
-                    table.item(row, col).setData(Qt.ItemDataRole.UserRole, release.get('mbid', ''))
+        except Exception as e:
+            self.logger.error(f"Error displaying collection in table: {e}", exc_info=True)
+            # Fall back to text display
+            self._show_releases_as_text(releases, collection_name)
+
+
+    def _show_releases_as_text(self, releases, collection_name, limit=100):
+        """
+        Muestra lanzamientos como texto en el visor de resultados
         
-        # Reactivar ordenación
-        table.setSortingEnabled(True)
+        Args:
+            releases (list): Lista de diccionarios con información de lanzamientos
+            collection_name (str): Nombre de la colección
+            limit (int): Número máximo de lanzamientos a mostrar
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Collection: {collection_name}")
+        self.results_text.append(f"Found {len(releases)} releases")
+        self.results_text.append("-" * 50)
+        QApplication.processEvents()
         
-        # Configurar menú contextual para la tabla si no está ya configurado
-        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
-            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-            table.customContextMenuRequested.connect(self.show_musicbrainz_table_context_menu)
+        # Mostrar solo hasta el límite
+        for i, release in enumerate(releases[:limit]):
+            try:
+                # Extraer datos con manejo seguro
+                artist = release.get('artist', 'Unknown Artist')
+                if not isinstance(artist, str):
+                    artist = "Unknown Artist"
+                    
+                title = release.get('title', 'Untitled Release')
+                if not isinstance(title, str):
+                    title = "Untitled Release"
+                    
+                date = release.get('date', '')
+                if not isinstance(date, str):
+                    date = ""
+                    
+                artist_mbid = release.get('artist_mbid', '')
+                if not isinstance(artist_mbid, str):
+                    artist_mbid = ""
+                    
+                # Formatear línea
+                line = f"{i+1}. {artist}"
+                if artist_mbid:
+                    line += f" (MBID: {artist_mbid})"
+                line += f" - {title}"
+                if date:
+                    line += f" ({date})"
+                    
+                self.results_text.append(line)
+            except Exception as e:
+                self.logger.error(f"Error displaying release {i}: {e}")
+                self.results_text.append(f"{i+1}. [Error displaying release]")
+        
+        # Si hay más releases que el límite
+        if len(releases) > limit:
+            self.results_text.append(f"... and {len(releases)-limit} more releases.")
+        
+        self.results_text.append("-" * 50)
+        self.results_text.append("Switch to the table view for a better display experience (if available).")
+
 
     def show_musicbrainz_table_context_menu(self, position):
         """
@@ -7033,32 +7141,70 @@ class MuspyArtistModule(BaseModule):
         if not item:
             return
         
-        # Get the MBID from the item
-        mbid = item.data(Qt.ItemDataRole.UserRole)
-        if not mbid:
-            return
+        # Get the release MBID from the item
+        release_mbid = item.data(Qt.ItemDataRole.UserRole)
         
         # Get the full row data
         row = item.row()
         artist = table.item(row, 0).text() if table.item(row, 0) else "Unknown"
-        title = table.item(row, 1).text() if table.item(row, 1) else "Unknown"
+        artist_mbid = table.item(row, 1).text() if table.columnCount() > 1 and table.item(row, 1) else ""
+        title = table.item(row, 2).text() if table.columnCount() > 2 and table.item(row, 2) else "Unknown"
         
         # Create the context menu
         menu = QMenu(self)
         
         # Add actions
-        view_action = QAction(f"View {title} on MusicBrainz", self)
-        view_action.triggered.connect(lambda: self.open_musicbrainz_release(mbid))
-        menu.addAction(view_action)
+        view_release_action = QAction(f"View '{title}' on MusicBrainz", self)
+        view_release_action.triggered.connect(lambda: self.open_musicbrainz_release(release_mbid))
+        menu.addAction(view_release_action)
+        
+        if artist_mbid:
+            view_artist_action = QAction(f"View artist '{artist}' on MusicBrainz", self)
+            view_artist_action.triggered.connect(lambda: self.open_musicbrainz_artist(artist_mbid))
+            menu.addAction(view_artist_action)
         
         menu.addSeparator()
         
-        follow_action = QAction(f"Follow {artist} on Muspy", self)
-        follow_action.triggered.connect(lambda: self.add_lastfm_artist_to_muspy(artist))
+        if artist_mbid:
+            follow_artist_mbid_action = QAction(f"Follow '{artist}' on Muspy (using MBID)", self)
+            follow_artist_mbid_action.triggered.connect(lambda: self.add_artist_to_muspy(artist_mbid, artist))
+            menu.addAction(follow_artist_mbid_action)
+        
+        follow_action = QAction(f"Follow '{artist}' on Muspy (search by name)", self)
+        follow_action.triggered.connect(lambda: self.follow_artist_from_name(artist))
         menu.addAction(follow_action)
         
         # Show the menu
         menu.exec(table.mapToGlobal(position))
+
+    def follow_artist_from_name(self, artist_name):
+        """Follow artist by searching for their MBID first"""
+        # First get the MBID
+        mbid = self.get_mbid_artist_searched(artist_name)
+        
+        if mbid:
+            # Store current artist
+            self.current_artist = {"name": artist_name, "mbid": mbid}
+            
+            # Follow the artist
+            success = self.add_artist_to_muspy(mbid, artist_name)
+            
+            if success:
+                QMessageBox.information(self, "Success", f"Now following {artist_name} on Muspy")
+            else:
+                QMessageBox.warning(self, "Error", f"Could not follow {artist_name} on Muspy")
+        else:
+            QMessageBox.warning(self, "Error", f"Could not find MBID for {artist_name}")
+
+    def open_musicbrainz_artist(self, artist_mbid):
+        """Open MusicBrainz artist page in browser"""
+        if not artist_mbid:
+            return
+            
+        url = f"https://musicbrainz.org/artist/{artist_mbid}"
+        
+        import webbrowser
+        webbrowser.open(url)
 
     def add_selected_albums_to_collection(self, collection_id, collection_name):
         """
@@ -7198,20 +7344,7 @@ class MuspyArtistModule(BaseModule):
             error_msg = result.get("error", "Unknown error") if result else "Operation failed"
             QMessageBox.warning(self, "Error", f"Could not add albums to collection: {error_msg}")
 
-    def open_musicbrainz_release(self, mbid):
-        """
-        Open a MusicBrainz release page in the browser
-        
-        Args:
-            mbid (str): MusicBrainz ID of the release
-        """
-        if not mbid:
-            return
-            
-        url = f"https://musicbrainz.org/release/{mbid}"
-        
-        import webbrowser
-        webbrowser.open(url)
+
 
 
 
