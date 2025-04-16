@@ -71,6 +71,18 @@ except ImportError:
     logger = logging.getLogger("MuspyArtistModule")
 
 
+class NumericTableWidgetItem(QTableWidgetItem):
+    """A QTableWidgetItem that sorts numerically"""
+    
+    def __lt__(self, other):
+        try:
+            # Convert both items to numbers for comparison
+            return float(self.text().replace(',', '')) < float(other.text().replace(',', ''))
+        except (ValueError, TypeError):
+            # Fall back to default string comparison if numeric conversion fails
+            return super().__lt__(other)
+
+
 class ProgressWorker(QObject):
     progress = pyqtSignal(int)
     finished = pyqtSignal(list)
@@ -418,6 +430,23 @@ class MuspyArtistModule(BaseModule):
         # Determinar si Spotify está habilitado
         self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
         
+        # Initialize Spotify auth manager if credentials are available
+        if self.spotify_enabled:
+            try:
+                self.spotify_auth = SpotifyAuthManager(
+                    client_id=self.spotify_client_id,
+                    client_secret=self.spotify_client_secret,
+                    redirect_uri=self.spotify_redirect_uri,
+                    parent_widget=self,
+                    project_root=PROJECT_ROOT
+                )
+                self.logger.info(f"Spotify auth manager initialized")
+            except Exception as e:
+                self.logger.error(f"Error initializing Spotify auth manager: {e}", exc_info=True)
+                self.spotify_enabled = False
+
+
+
         # Theme configuration
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
@@ -933,6 +962,14 @@ class MuspyArtistModule(BaseModule):
         # Connect MusicBrainz button if found
         if hasattr(self, 'get_releases_musicbrainz'):
             self.get_releases_musicbrainz.clicked.connect(self.show_musicbrainz_collection_menu)
+
+        # Connect Spotify button if enabled
+        if hasattr(self, 'get_releases_spotify_button'):
+            if self.spotify_enabled:
+                self.get_releases_spotify_button.clicked.connect(self.show_spotify_menu)
+                self.get_releases_spotify_button.setVisible(True)
+            else:
+                self.get_releases_spotify_button.setVisible(False)
 
     def show_lastfm_options_menu(self):
         """
@@ -7344,8 +7381,1075 @@ class MuspyArtistModule(BaseModule):
             error_msg = result.get("error", "Unknown error") if result else "Operation failed"
             QMessageBox.warning(self, "Error", f"Could not add albums to collection: {error_msg}")
 
+    def show_spotify_menu(self):
+        """
+        Display a menu with Spotify options when get_releases_spotify button is clicked
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify credentials not configured")
+            return
+        
+        # Create menu
+        menu = QMenu(self)
+        
+        # Add menu actions
+        show_artists_action = QAction("Mostrar artistas seguidos", self)
+        show_releases_action = QAction("Nuevos álbumes de artistas seguidos", self)
+        
+        # Connect actions to their respective functions
+        show_artists_action.triggered.connect(self.show_spotify_followed_artists)
+        show_releases_action.triggered.connect(self.show_spotify_new_releases)
+        
+        # Add actions to menu
+        menu.addAction(show_artists_action)
+        menu.addAction(show_releases_action)
+        
+        # Add separator and cache management option
+        menu.addSeparator()
+        clear_cache_action = QAction("Limpiar caché de Spotify", self)
+        clear_cache_action.triggered.connect(self.clear_spotify_cache)
+        menu.addAction(clear_cache_action)
+        
+        # Get the button position
+        pos = self.get_releases_spotify_button.mapToGlobal(QPoint(0, self.get_releases_spotify_button.height()))
+        
+        # Show menu
+        menu.exec(pos)
+
+    def show_spotify_followed_artists(self):
+        """
+        Show a list of artists the user follows on Spotify with caching
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify credentials not configured")
+            return
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        
+        # Try to get from cache first
+        cache_key = "followed_artists"
+        cached_data = self.spotify_cache_manager(cache_key, expiry_hours=24)
+        if cached_data:
+            self.results_text.append("Showing cached followed artists data...")
+            self.display_spotify_artists_in_stacked_widget(cached_data)
+            return
+        
+        self.results_text.append("Retrieving artists you follow on Spotify...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to get Spotify client. Please check authentication.")
+            return
+        
+        # Function to fetch artists with progress dialog
+        def fetch_spotify_artists(update_progress):
+            try:
+                update_progress(0, 100, "Connecting to Spotify API...")
+                
+                all_artists = []
+                offset = 0
+                limit = 50  # Spotify's maximum
+                total = 1  # Will be updated after first request
+                
+                # Paginate through all followed artists
+                while offset < total:
+                    # Update progress
+                    progress_percent = min(100, int((offset / max(1, total)) * 100))
+                    update_progress(progress_percent, 100, f"Fetching artists ({offset}/{total})...")
+                    
+                    # Fetch current page of artists
+                    results = spotify_client.current_user_followed_artists(limit=limit, after=None if offset == 0 else all_artists[-1]['id'])
+                    
+                    if 'artists' in results and 'items' in results['artists']:
+                        # Get artists from this page
+                        artists_page = results['artists']['items']
+                        all_artists.extend(artists_page)
+                        
+                        # Update total count
+                        total = results['artists']['total']
+                        
+                        # If we got fewer than requested, we're done
+                        if len(artists_page) < limit:
+                            break
+                            
+                        # Update offset
+                        offset += len(artists_page)
+                    else:
+                        # No more results or error
+                        break
+                
+                # Process artists data
+                update_progress(95, 100, "Processing artist data...")
+                
+                processed_artists = []
+                for artist in all_artists:
+                    processed_artists.append({
+                        'name': artist.get('name', 'Unknown'),
+                        'id': artist.get('id', ''),
+                        'popularity': artist.get('popularity', 0),
+                        'followers': artist.get('followers', {}).get('total', 0) if 'followers' in artist else 0,
+                        'genres': ', '.join(artist.get('genres', [])),
+                        'image_url': artist.get('images', [{}])[0].get('url', '') if artist.get('images') else ''
+                    })
+                
+                # Cache the processed artists
+                self.spotify_cache_manager(cache_key, processed_artists)
+                
+                update_progress(100, 100, "Complete!")
+                
+                return {
+                    "success": True,
+                    "artists": processed_artists,
+                    "total": len(processed_artists)
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error fetching Spotify artists: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": str(e)
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_spotify_artists,
+            title="Loading Spotify Artists",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            artists = result.get("artists", [])
+            
+            if not artists:
+                self.results_text.append("You don't follow any artists on Spotify.")
+                return
+            
+            # Display artists in the stack widget table
+            self.display_spotify_artists_in_stacked_widget(artists)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
+            QMessageBox.warning(self, "Error", f"Could not load Spotify artists: {error_msg}")
+
+    def show_spotify_new_releases(self):
+        """
+        Show new releases from artists the user follows on Spotify with caching
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify credentials not configured")
+            return
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        
+        # Try to get from cache first
+        cache_key = "new_releases"
+        cached_data = self.spotify_cache_manager(cache_key, expiry_hours=12)  # Shorter expiry for releases
+        if cached_data:
+            self.results_text.append("Showing cached new releases data...")
+            self.display_spotify_releases_in_stacked_widget(cached_data)
+            return
+        
+        self.results_text.append("Retrieving new releases from artists you follow on Spotify...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to get Spotify client. Please check authentication.")
+            return
+        
+        # Function to fetch new releases with progress dialog
+        def fetch_spotify_releases(update_progress):
+            try:
+                update_progress(0, 100, "Connecting to Spotify API...")
+                
+                # First get all artists the user follows
+                update_progress(10, 100, "Getting artists you follow...")
+                
+                followed_artists = []
+                offset = 0
+                limit = 50  # Spotify's maximum
+                total = 1  # Will be updated after first request
+                
+                # Paginate through all followed artists
+                while offset < total:
+                    # Fetch current page of artists
+                    results = spotify_client.current_user_followed_artists(limit=limit, after=None if offset == 0 else followed_artists[-1]['id'])
+                    
+                    if 'artists' in results and 'items' in results['artists']:
+                        # Get artists from this page
+                        artists_page = results['artists']['items']
+                        followed_artists.extend(artists_page)
+                        
+                        # Update total count
+                        total = results['artists']['total']
+                        
+                        # If we got fewer than requested, we're done
+                        if len(artists_page) < limit:
+                            break
+                            
+                        # Update offset
+                        offset += len(artists_page)
+                    else:
+                        # No more results or error
+                        break
+                
+                # We have all followed artists, now get their recent releases
+                update_progress(30, 100, f"Found {len(followed_artists)} artists. Getting their recent releases...")
+                
+                all_releases = []
+                artist_count = len(followed_artists)
+                
+                # Only process a reasonable number of artists to avoid rate limits
+                max_artists_to_process = min(artist_count, 50)
+                artists_to_process = followed_artists[:max_artists_to_process]
+                
+                for i, artist in enumerate(artists_to_process):
+                    artist_id = artist['id']
+                    artist_name = artist['name']
+                    
+                    progress = 30 + int((i / max_artists_to_process) * 60)
+                    update_progress(progress, 100, f"Getting releases for {artist_name} ({i+1}/{max_artists_to_process})...")
+                    
+                    # Get albums for this artist
+                    try:
+                        # Get all album types: album, single, appears_on, compilation
+                        for album_type in ['album', 'single']:
+                            albums = spotify_client.artist_albums(artist_id, album_type=album_type, limit=10)
+                            
+                            if 'items' in albums:
+                                # Filter for recent releases (last 3 months)
+                                import datetime
+                                three_months_ago = (datetime.datetime.now() - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
+                                
+                                for album in albums['items']:
+                                    release_date = album.get('release_date', '0000-00-00')
+                                    
+                                    # Only include recent releases
+                                    if release_date >= three_months_ago:
+                                        # Add artist info to album
+                                        album['artist_name'] = artist_name
+                                        album['artist_id'] = artist_id
+                                        all_releases.append(album)
+                    except Exception as e:
+                        self.logger.error(f"Error getting albums for {artist_name}: {e}")
+                        # Continue with next artist
+                        continue
+                
+                # Process releases data
+                update_progress(95, 100, "Processing release data...")
+                
+                # Sort by release date (newest first)
+                all_releases.sort(key=lambda x: x.get('release_date', '0000-00-00'), reverse=True)
+                
+                # Format for display
+                processed_releases = []
+                for release in all_releases:
+                    processed_releases.append({
+                        'artist': release.get('artist_name', 'Unknown'),
+                        'artist_id': release.get('artist_id', ''),
+                        'title': release.get('name', 'Unknown'),
+                        'id': release.get('id', ''),
+                        'type': release.get('album_type', '').title(),
+                        'date': release.get('release_date', ''),
+                        'total_tracks': release.get('total_tracks', 0),
+                        'image_url': release.get('images', [{}])[0].get('url', '') if release.get('images') else ''
+                    })
+                
+                # Cache the processed releases
+                self.spotify_cache_manager(cache_key, processed_releases)
+                
+                update_progress(100, 100, "Complete!")
+                
+                return {
+                    "success": True,
+                    "releases": processed_releases,
+                    "total": len(processed_releases)
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error fetching Spotify releases: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": str(e)
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_spotify_releases,
+            title="Loading Spotify Releases",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            releases = result.get("releases", [])
+            
+            if not releases:
+                self.results_text.append("No new releases found from artists you follow on Spotify.")
+                return
+            
+            # Display releases in the stack widget table
+            self.display_spotify_releases_in_stacked_widget(releases)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
+            QMessageBox.warning(self, "Error", f"Could not load Spotify releases: {error_msg}")
 
 
+
+    def display_spotify_artists_in_stacked_widget(self, artists):
+        """
+        Display Spotify artists in the stacked widget
+        
+        Args:
+            artists (list): List of artist dictionaries
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the spotify_artists_page (assuming it exists in the UI)
+        spotify_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "spotify_artists_page":
+                spotify_page = widget
+                break
+        
+        if not spotify_page:
+            self.logger.error("spotify_artists_page not found in stacked widget")
+            # Fallback to text display
+            self._display_spotify_artists_as_text(artists)
+            return
+        
+        # Get the table from the page
+        table = spotify_page.findChild(QTableWidget, "spotify_artists_table")
+        if not table:
+            self.logger.error("spotify_artists_table not found in spotify_artists_page")
+            # Fallback to text display
+            self._display_spotify_artists_as_text(artists)
+            return
+        
+        # Get the count label
+        count_label = spotify_page.findChild(QLabel, "spotify_artists_count_label")
+        if count_label:
+            count_label.setText(f"Showing {len(artists)} artists you follow on Spotify")
+        
+        # Configure table
+        table.setRowCount(len(artists))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table with data
+        for i, artist in enumerate(artists):
+            # Name column
+            name_item = QTableWidgetItem(artist.get('name', 'Unknown'))
+            table.setItem(i, 0, name_item)
+            
+            # Genres column
+            genres_item = QTableWidgetItem(artist.get('genres', ''))
+            table.setItem(i, 1, genres_item)
+            
+            # Followers column - Usar NumericTableWidgetItem
+            followers = artist.get('followers', 0)
+            followers_item = NumericTableWidgetItem(f"{followers:,}" if followers else "0")
+            followers_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 2, followers_item)
+            
+            # Popularity column - Usar NumericTableWidgetItem
+            popularity = artist.get('popularity', 0)
+            popularity_item = NumericTableWidgetItem(str(popularity))
+            popularity_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 3, popularity_item)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_spotify_artist_context_menu)
+        
+        # Switch to the Spotify artists page
+        stack_widget.setCurrentWidget(spotify_page)
+
+        def display_spotify_releases_in_stacked_widget(self, releases):
+            """
+            Display Spotify releases in the stacked widget
+            
+            Args:
+                releases (list): List of release dictionaries
+            """
+            # Find the stacked widget
+            stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+            if not stack_widget:
+                self.logger.error("Stacked widget not found in UI")
+                return
+            
+            # Find the spotify_releases_page (assuming it exists in the UI)
+            spotify_page = None
+            for i in range(stack_widget.count()):
+                widget = stack_widget.widget(i)
+                if widget.objectName() == "spotify_releases_page":
+                    spotify_page = widget
+                    break
+            
+            if not spotify_page:
+                self.logger.error("spotify_releases_page not found in stacked widget")
+                # Fallback to text display
+                self._display_spotify_releases_as_text(releases)
+                return
+            
+            # Get the table from the page
+            table = spotify_page.findChild(QTableWidget, "spotify_releases_table")
+            if not table:
+                self.logger.error("spotify_releases_table not found in spotify_releases_page")
+                # Fallback to text display
+                self._display_spotify_releases_as_text(releases)
+                return
+            
+            # Get the count label
+            count_label = spotify_page.findChild(QLabel, "spotify_releases_count_label")
+            if count_label:
+                count_label.setText(f"Showing {len(releases)} new releases from artists you follow on Spotify")
+            
+            # Configure table
+            table.setRowCount(len(releases))
+            table.setSortingEnabled(False)  # Disable sorting while updating
+            
+            # Fill the table with data
+            for i, release in enumerate(releases):
+                # Artist column
+                artist_item = QTableWidgetItem(release.get('artist', 'Unknown'))
+                table.setItem(i, 0, artist_item)
+                
+                # Title column
+                title_item = QTableWidgetItem(release.get('title', 'Unknown'))
+                table.setItem(i, 1, title_item)
+                
+                # Type column
+                type_item = QTableWidgetItem(release.get('type', ''))
+                table.setItem(i, 2, type_item)
+                
+                # Date column
+                date_item = QTableWidgetItem(release.get('date', ''))
+                table.setItem(i, 3, date_item)
+                
+                # Tracks column - Usar NumericTableWidgetItem
+                tracks_item = NumericTableWidgetItem(str(release.get('total_tracks', 0)))
+                tracks_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                table.setItem(i, 4, tracks_item)
+                
+                # Store the Spotify IDs for context menu actions
+                for col in range(table.columnCount()):
+                    if table.item(i, col):
+                        # Store both release ID and artist ID
+                        item_data = {
+                            'release_id': release.get('id', ''),
+                            'artist_id': release.get('artist_id', '')
+                        }
+                        table.item(i, col).setData(Qt.ItemDataRole.UserRole, item_data)
+            
+            # Re-enable sorting
+            table.setSortingEnabled(True)
+            
+            # Configure context menu for the table
+            if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+                table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                table.customContextMenuRequested.connect(self.show_spotify_release_context_menu)
+            
+            # Switch to the Spotify releases page
+            stack_widget.setCurrentWidget(spotify_page)
+
+
+    def _display_spotify_artists_as_text(self, artists):
+        """
+        Display Spotify artists as text in the results area
+        
+        Args:
+            artists (list): List of artist dictionaries
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"You follow {len(artists)} artists on Spotify")
+        self.results_text.append("-" * 50)
+        
+        # Sort by name
+        sorted_artists = sorted(artists, key=lambda x: x.get('name', '').lower())
+        
+        for i, artist in enumerate(sorted_artists):
+            name = artist.get('name', 'Unknown')
+            followers = artist.get('followers', 0)
+            genres = artist.get('genres', '')
+            popularity = artist.get('popularity', 0)
+            
+            self.results_text.append(f"{i+1}. {name}")
+            self.results_text.append(f"   Followers: {followers:,}")
+            if genres:
+                self.results_text.append(f"   Genres: {genres}")
+            self.results_text.append(f"   Popularity: {popularity}/100")
+            self.results_text.append("")
+        
+        self.results_text.append("-" * 50)
+
+    def _display_spotify_releases_as_text(self, releases):
+        """
+        Display Spotify releases as text in the results area
+        
+        Args:
+            releases (list): List of release dictionaries
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Found {len(releases)} new releases from artists you follow")
+        self.results_text.append("-" * 50)
+        
+        for i, release in enumerate(releases):
+            artist = release.get('artist', 'Unknown')
+            title = release.get('title', 'Unknown')
+            release_type = release.get('type', '')
+            date = release.get('date', '')
+            tracks = release.get('total_tracks', 0)
+            
+            self.results_text.append(f"{i+1}. {artist} - {title}")
+            self.results_text.append(f"   Type: {release_type}")
+            self.results_text.append(f"   Released: {date}")
+            self.results_text.append(f"   Tracks: {tracks}")
+            self.results_text.append("")
+        
+        self.results_text.append("-" * 50)
+
+
+    def show_spotify_artist_context_menu(self, position):
+        """
+        Show context menu for Spotify artists in the table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the artist ID from the item
+        artist_id = item.data(Qt.ItemDataRole.UserRole)
+        if not artist_id:
+            return
+        
+        # Get the artist name from the row
+        row = item.row()
+        artist_name = table.item(row, 0).text() if table.item(row, 0) else "Unknown"
+        
+        # Create the context menu
+        menu = QMenu(self)
+        
+        # Add actions
+        view_spotify_action = QAction(f"View '{artist_name}' on Spotify", self)
+        view_spotify_action.triggered.connect(lambda: self.open_spotify_artist(artist_id))
+        menu.addAction(view_spotify_action)
+        
+        # Add action to follow on Muspy
+        follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
+        follow_muspy_action.triggered.connect(lambda: self.follow_spotify_artist_on_muspy(artist_id, artist_name))
+        menu.addAction(follow_muspy_action)
+        
+        # Add action to get artist's albums
+        get_albums_action = QAction(f"Get '{artist_name}' releases", self)
+        get_albums_action.triggered.connect(lambda: self.get_spotify_artist_albums(artist_id, artist_name))
+        menu.addAction(get_albums_action)
+        
+        # Show the menu
+        menu.exec(table.mapToGlobal(position))
+
+    def show_spotify_release_context_menu(self, position):
+        """
+        Show context menu for Spotify releases in the table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the release and artist IDs from the item
+        item_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(item_data, dict):
+            return
+        
+        release_id = item_data.get('release_id', '')
+        artist_id = item_data.get('artist_id', '')
+        
+        if not release_id:
+            return
+        
+        # Get the release title and artist name from the row
+        row = item.row()
+        artist_name = table.item(row, 0).text() if table.item(row, 0) else "Unknown"
+        release_title = table.item(row, 1).text() if table.item(row, 1) else "Unknown"
+        
+        # Create the context menu
+        menu = QMenu(self)
+        
+        # Add actions
+        view_release_action = QAction(f"View '{release_title}' on Spotify", self)
+        view_release_action.triggered.connect(lambda: self.open_spotify_album(release_id))
+        menu.addAction(view_release_action)
+        
+        if artist_id:
+            view_artist_action = QAction(f"View artist '{artist_name}' on Spotify", self)
+            view_artist_action.triggered.connect(lambda: self.open_spotify_artist(artist_id))
+            menu.addAction(view_artist_action)
+            
+            # Add action to follow artist on Muspy
+            follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
+            follow_muspy_action.triggered.connect(lambda: self.follow_spotify_artist_on_muspy(artist_id, artist_name))
+            menu.addAction(follow_muspy_action)
+        
+        # Show the menu
+        menu.exec(table.mapToGlobal(position))
+
+    def open_spotify_artist(self, artist_id):
+        """Open Spotify artist page in browser"""
+        if not artist_id:
+            return
+            
+        url = f"https://open.spotify.com/artist/{artist_id}"
+        
+        import webbrowser
+        webbrowser.open(url)
+
+    def open_spotify_album(self, album_id):
+        """Open Spotify album page in browser"""
+        if not album_id:
+            return
+            
+        url = f"https://open.spotify.com/album/{album_id}"
+        
+        import webbrowser
+        webbrowser.open(url)
+
+    def follow_spotify_artist_on_muspy(self, artist_id, artist_name):
+        """
+        Follow a Spotify artist on Muspy by first finding their MBID
+        
+        Args:
+            artist_id (str): Spotify ID of the artist
+            artist_name (str): Name of the artist
+        """
+        # First get the MBID by searching for the artist name
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Searching for MusicBrainz ID for {artist_name}...")
+        QApplication.processEvents()
+        
+        mbid = self.get_mbid_artist_searched(artist_name)
+        
+        if mbid:
+            # Store current artist
+            self.current_artist = {"name": artist_name, "mbid": mbid}
+            
+            # Follow the artist
+            success = self.add_artist_to_muspy(mbid, artist_name)
+            
+            if success:
+                self.results_text.append(f"Successfully added {artist_name} to Muspy")
+                QMessageBox.information(self, "Success", f"Now following {artist_name} on Muspy")
+            else:
+                self.results_text.append(f"Failed to add {artist_name} to Muspy")
+                QMessageBox.warning(self, "Error", f"Could not follow {artist_name} on Muspy")
+        else:
+            self.results_text.append(f"Could not find MusicBrainz ID for {artist_name}")
+            QMessageBox.warning(self, "Error", f"Could not find MusicBrainz ID for {artist_name}")
+
+    def get_spotify_artist_albums(self, artist_id, artist_name):
+        """
+        Get and display all albums for a Spotify artist
+        
+        Args:
+            artist_id (str): Spotify ID of the artist
+            artist_name (str): Name of the artist
+        """
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Retrieving albums for {artist_name}...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to get Spotify client. Please check authentication.")
+            return
+        
+        # Function to fetch albums with progress dialog
+        def fetch_artist_albums(update_progress):
+            try:
+                update_progress(0, 100, "Connecting to Spotify API...")
+                
+                all_albums = []
+                album_types = ['album', 'single', 'compilation']
+                
+                for i, album_type in enumerate(album_types):
+                    progress = i * 30
+                    update_progress(progress, 100, f"Fetching {album_type}s...")
+                    
+                    offset = 0
+                    limit = 50  # Spotify's maximum
+                    total = 1  # Will be updated after first request
+                    
+                    # Paginate through all albums of this type
+                    while offset < total:
+                        # Fetch current page of albums
+                        results = spotify_client.artist_albums(
+                            artist_id, 
+                            album_type=album_type,
+                            limit=limit,
+                            offset=offset
+                        )
+                        
+                        if 'items' in results:
+                            # Get albums from this page
+                            albums_page = results['items']
+                            
+                            # Add albums to our list
+                            for album in albums_page:
+                                # Add album type for filtering
+                                album['fetch_type'] = album_type
+                                all_albums.append(album)
+                            
+                            # Update total count
+                            total = results['total']
+                            
+                            # If we got fewer than requested, we're done
+                            if len(albums_page) < limit:
+                                break
+                                
+                            # Update offset
+                            offset += len(albums_page)
+                        else:
+                            # No more results or error
+                            break
+                
+                # Process albums data
+                update_progress(95, 100, "Processing album data...")
+                
+                # Remove duplicates (sometimes the same album appears in different categories)
+                unique_albums = {}
+                for album in all_albums:
+                    album_id = album.get('id')
+                    if album_id and album_id not in unique_albums:
+                        unique_albums[album_id] = album
+                
+                # Convert to list and sort by release date (newest first)
+                processed_albums = list(unique_albums.values())
+                processed_albums.sort(key=lambda x: x.get('release_date', '0000-00-00'), reverse=True)
+                
+                # Format for display
+                display_albums = []
+                for album in processed_albums:
+                    display_albums.append({
+                        'artist': artist_name,
+                        'artist_id': artist_id,
+                        'title': album.get('name', 'Unknown'),
+                        'id': album.get('id', ''),
+                        'type': album.get('album_type', '').title(),
+                        'fetch_type': album.get('fetch_type', ''),
+                        'date': album.get('release_date', ''),
+                        'total_tracks': album.get('total_tracks', 0),
+                        'image_url': album.get('images', [{}])[0].get('url', '') if album.get('images') else ''
+                    })
+                
+                update_progress(100, 100, "Complete!")
+                
+                return {
+                    "success": True,
+                    "albums": display_albums,
+                    "total": len(display_albums)
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error fetching artist albums: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": str(e)
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_artist_albums,
+            title=f"Loading Albums for {artist_name}",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            albums = result.get("albums", [])
+            
+            if not albums:
+                self.results_text.append(f"No albums found for {artist_name}.")
+                return
+            
+            # Display albums in the stack widget table
+            self.display_spotify_artist_albums_in_stacked_widget(albums, artist_name)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
+            QMessageBox.warning(self, "Error", f"Could not load albums: {error_msg}")
+
+    def display_spotify_artist_albums_in_stacked_widget(self, albums, artist_name):
+        """
+        Display albums for a specific Spotify artist in the stacked widget
+        
+        Args:
+            albums (list): List of album dictionaries
+            artist_name (str): Name of the artist
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the spotify_releases_page (we'll reuse it for albums)
+        spotify_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "spotify_releases_page":
+                spotify_page = widget
+                break
+        
+        if not spotify_page:
+            self.logger.error("spotify_releases_page not found in stacked widget")
+            # Fallback to text display
+            self._display_spotify_artist_albums_as_text(albums, artist_name)
+            return
+        
+        # Get the table from the page
+        table = spotify_page.findChild(QTableWidget, "spotify_releases_table")
+        if not table:
+            self.logger.error("spotify_releases_table not found in spotify_releases_page")
+            # Fallback to text display
+            self._display_spotify_artist_albums_as_text(albums, artist_name)
+            return
+        
+        # Get the count label
+        count_label = spotify_page.findChild(QLabel, "spotify_releases_count_label")
+        if count_label:
+            count_label.setText(f"Showing {len(albums)} albums for {artist_name}")
+        
+        # Configure table
+        table.setRowCount(len(albums))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table with data
+        for i, album in enumerate(albums):
+            # Artist column
+            artist_item = QTableWidgetItem(artist_name)
+            table.setItem(i, 0, artist_item)
+            
+            # Title column
+            title_item = QTableWidgetItem(album.get('title', 'Unknown'))
+            table.setItem(i, 1, title_item)
+            
+            # Type column
+            type_item = QTableWidgetItem(album.get('type', ''))
+            table.setItem(i, 2, type_item)
+            
+            # Date column
+            date_item = QTableWidgetItem(album.get('date', ''))
+            table.setItem(i, 3, date_item)
+            
+            # Tracks column - Usar NumericTableWidgetItem
+            tracks_item = NumericTableWidgetItem(str(release.get('total_tracks', 0)))
+            tracks_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 4, tracks_item)
+            
+            # Store the Spotify IDs for context menu actions
+            for col in range(table.columnCount()):
+                if table.item(i, col):
+                    # Store both album ID and artist ID
+                    item_data = {
+                        'release_id': album.get('id', ''),
+                        'artist_id': album.get('artist_id', '')
+                    }
+                    table.item(i, col).setData(Qt.ItemDataRole.UserRole, item_data)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_spotify_release_context_menu)
+        
+        # Switch to the Spotify releases page
+        stack_widget.setCurrentWidget(spotify_page)
+
+    def _display_spotify_artist_albums_as_text(self, albums, artist_name):
+        """
+        Display albums for a specific Spotify artist as text in the results area
+        
+        Args:
+            albums (list): List of album dictionaries
+            artist_name (str): Name of the artist
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Found {len(albums)} albums for {artist_name}")
+        self.results_text.append("-" * 50)
+        
+        # Group by type
+        albums_by_type = {}
+        for album in albums:
+            album_type = album.get('type', 'Unknown').title()
+            if album_type not in albums_by_type:
+                albums_by_type[album_type] = []
+            albums_by_type[album_type].append(album)
+        
+        # Display by type
+        for album_type, type_albums in albums_by_type.items():
+            self.results_text.append(f"\n{album_type}s ({len(type_albums)}):")
+            self.results_text.append("-" * 30)
+            
+            # Sort by date (newest first)
+            sorted_albums = sorted(type_albums, key=lambda x: x.get('date', '0000-00-00'), reverse=True)
+            
+            for i, album in enumerate(sorted_albums):
+                title = album.get('title', 'Unknown')
+                date = album.get('date', '')
+                tracks = album.get('total_tracks', 0)
+                
+                self.results_text.append(f"{i+1}. {title}")
+                if date:
+                    self.results_text.append(f"   Released: {date}")
+                self.results_text.append(f"   Tracks: {tracks}")
+                self.results_text.append("")
+        
+        self.results_text.append("-" * 50)
+
+    def spotify_cache_manager(self, cache_key, data=None, force_refresh=False, expiry_hours=24):
+        """
+        Manages caching for Spotify data
+        
+        Args:
+            cache_key (str): Unique key for the cache entry
+            data (dict, optional): Data to cache. If None, retrieves cache.
+            force_refresh (bool): Whether to ignore cache and force refresh
+            expiry_hours (int): Hours after which cache expires (default 24)
+                
+        Returns:
+            dict or None: Cached data if available and not expired, None otherwise
+        """
+        import json
+        import os
+        import time
+        
+        # Ensure cache directory exists
+        cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "muspy", "spotify")
+        os.makedirs(cache_dir, exist_ok=True)
+        
+        # Define cache file path
+        cache_file = os.path.join(cache_dir, f"{cache_key}_cache.json")
+        
+        # If we're storing data
+        if data is not None:
+            cache_data = {
+                "timestamp": time.time(),
+                "data": data
+            }
+            
+            try:
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(cache_data, f, ensure_ascii=False, indent=2)
+                self.logger.debug(f"Cached Spotify {cache_key} data successfully")
+                return True
+            except Exception as e:
+                self.logger.error(f"Error caching Spotify {cache_key} data: {e}")
+                return False
+        
+        # If we're retrieving data
+        else:
+            # If force refresh, don't use cache
+            if force_refresh:
+                return None
+                    
+            # Check if cache file exists
+            if not os.path.exists(cache_file):
+                return None
+                    
+            try:
+                with open(cache_file, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                        
+                # Check if cache is expired
+                timestamp = cache_data.get("timestamp", 0)
+                expiry_time = timestamp + (expiry_hours * 3600)  # Convert hours to seconds
+                    
+                if time.time() > expiry_time:
+                    self.logger.debug(f"Spotify {cache_key} cache expired")
+                    return None
+                        
+                # Cache is valid
+                self.logger.debug(f"Using cached Spotify {cache_key} data")
+                return cache_data.get("data")
+                    
+            except Exception as e:
+                self.logger.error(f"Error loading Spotify {cache_key} cache: {e}")
+                return None
+
+    def clear_spotify_cache(self):
+        """
+        Clear all Spotify cache files
+        """
+        import os
+        import glob
+        
+        # Ensure cache directory exists
+        cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache", "muspy", "spotify")
+        
+        if not os.path.exists(cache_dir):
+            QMessageBox.information(self, "Cache", "No hay archivos de caché para limpiar.")
+            return
+        
+        try:
+            # Find all Spotify cache files
+            cache_files = glob.glob(os.path.join(cache_dir, "*_cache.json"))
+            
+            if not cache_files:
+                QMessageBox.information(self, "Cache", "No hay archivos de caché para limpiar.")
+                return
+            
+            # Delete each cache file
+            count = 0
+            for cache_file in cache_files:
+                try:
+                    os.remove(cache_file)
+                    count += 1
+                except Exception as e:
+                    self.logger.error(f"Error removing cache file {cache_file}: {e}")
+            
+            QMessageBox.information(self, "Cache limpiada", f"Se han eliminado {count} archivos de caché de Spotify.")
+        except Exception as e:
+            self.logger.error(f"Error clearing Spotify cache: {e}")
+            QMessageBox.warning(self, "Error", f"Error al limpiar la caché: {e}")
 
 
 

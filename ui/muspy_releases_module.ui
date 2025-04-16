@@ -292,6 +292,81 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="spotify_artists_page">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QLabel" name="spotify_artists_count_label">
+         <property name="text">
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="spotify_artists_table">
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Género</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Seguidores</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Popularidad</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="spotify_releases_page">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QLabel" name="spotify_releases_count_label">
+         <property name="text">
+          <string>Nuevos álbumes</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="spotify_releases_table">
+         <column>
+          <property name="text">
+           <string>New Column</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Lanzamiento</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Tipo</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Fecha</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Canciones</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -440,7 +515,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="get_releases_spotify">
+       <widget class="QPushButton" name="get_releases_spotify_button">
         <property name="maximumSize">
          <size>
           <width>40</width>
