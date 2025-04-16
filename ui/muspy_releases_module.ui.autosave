@@ -469,6 +469,32 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="get_releases_spotify_button">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Spotify</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="sync_lastfm_button">
         <property name="maximumSize">
          <size>
@@ -485,32 +511,6 @@
         <property name="icon">
          <iconset resource="../images.qrc">
           <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>36</width>
-          <height>36</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="get_releases_button">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Mis próximos discos</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/services/vinyl</normaloff>:/services/vinyl</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -547,7 +547,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="get_releases_spotify_button">
+       <widget class="QPushButton" name="get_releases_button">
         <property name="maximumSize">
          <size>
           <width>40</width>
@@ -555,14 +555,14 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Spotify</string>
+         <string>Mis próximos discos</string>
         </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+          <normaloff>:/services/vinyl</normaloff>:/services/vinyl</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -588,7 +588,7 @@
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/pls</normaloff>:/services/pls</iconset>
+          <normaloff>:/services/share</normaloff>:/services/share</iconset>
         </property>
         <property name="iconSize">
          <size>

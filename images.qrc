@@ -129,5 +129,15 @@
         <file alias="search_music_color">ui/svg/search-svgrepo-com(1).svg</file>
         <file alias="search_circulo">ui/svg/search-svgrepo-com.svg</file>
         <file alias="search_love">ui/svg/search-love-svgrepo-com.svg</file>
+        <file alias="db_ol">ui/svg/database-thin-svgrepo-com.svg</file>
+        <file alias="networks_ol">ui/svg/network-svgrepo-com.svg</file>
+        <file alias="discogs_ol">ui/svg/vinyl-svgrepo-com.svg</file>
+        <file alias="links_ol">ui/svg/link-circle-svgrepo-com.svg</file>
+        <file alias="links_ol">ui/svg/link-svgrepo-com.svg</file>
+        <file alias="lastfm_ol">ui/svg/lastfm-svgrepo-com(2).svg</file>
+        <file alias="lastfm_h">ui/svg/lastfm-svgrepo-com(1).svg</file>
+        <file alias="spotify_ol">ui/svg/spotify-svgrepo-com.svg</file>
+        <file alias="yt_ol">ui/svg/youtube-svgrepo-com(1).svg</file>
+        <file alias="yt_ol2">ui/svg/youtube-168-svgrepo-com.svg</file>
     </qresource>
 </RCC>

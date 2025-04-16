@@ -376,7 +376,7 @@ class MuspyArtistModule(BaseModule):
         self.query_db_script_path = query_db_script_path
         self.db_path = db_path
         self.spotify_redirect_uri = spotify_redirect_uri
-        
+        self.follow_artist_auth_method = "tuple"  # Default authentication method (can be "tuple", "basic", or "manual")    
         # Initialize credentials
         self.spotify_client_id = spotify_client_id
         self.spotify_client_secret = spotify_client_secret
@@ -1229,55 +1229,7 @@ class MuspyArtistModule(BaseModule):
         self.results_text.append(text)
         QApplication.processEvents()  # Keep UI responsive
 
-    # def _fetch_top_artists_with_progress(self, progress_callback, status_callback, count):
-    #     """
-    #     Background worker function to fetch top artists with progress updates
-        
-    #     Args:
-    #         progress_callback: Function to call for progress updates
-    #         status_callback: Function to call for status text updates
-    #         count: Number of artists to fetch
-            
-    #     Returns:
-    #         list: Top artists data
-    #     """
-    #     try:
-    #         # Get LastFM network
-    #         if not hasattr(self, 'lastfm_auth') or not self.lastfm_auth:
-    #             status_callback("Last.fm authentication manager not initialized. Please check your configuration.")
-    #             return []
-                
-    #         network = self.lastfm_auth.get_network()
-    #         if not network:
-    #             status_callback("Could not connect to Last.fm. Please check your credentials.")
-    #             return []
-            
-    #         # Set initial progress
-    #         progress_callback(10)
-    #         status_callback("Connected to Last.fm. Retrieving artists...")
-            
-    #         # Get top artists
-    #         top_artists = self.lastfm_auth.get_top_artists(limit=count)
-            
-    #         if not top_artists:
-    #             status_callback("No artists found on Last.fm account.")
-    #             return []
-            
-    #         # Update progress
-    #         progress_callback(70)
-    #         status_callback(f"Retrieved {len(top_artists)} artists. Processing data...")
-            
-    #         # Process data (could add more processing here if needed)
-    #         progress_callback(90)
-    #         status_callback("Processing complete!")
-            
-    #         # Final progress
-    #         progress_callback(100)
-            
-    #         return top_artists
-    #     except Exception as e:
-    #         status_callback(f"Error fetching artists from Last.fm: {e}")
-    #         return []
+
 
     def _display_top_artists_results(self, top_artists):
         """
@@ -2888,13 +2840,20 @@ class MuspyArtistModule(BaseModule):
     
     def get_muspy_id(self):
         """
-        Obtiene el ID de usuario de Muspy si no está configurado
+        Returns the Muspy ID, using the one from config and only fetching if not available
         
         Returns:
             str: ID de usuario de Muspy
         """
+        # If we already have an ID, use it
+        if self.muspy_id:
+            self.logger.debug(f"Using existing Muspy ID: {self.muspy_id}")
+            return self.muspy_id
+            
+        # If not available and we have credentials, try to fetch it once
         if not self.muspy_id and self.muspy_username and self.muspy_api_key:
             try:
+                self.logger.info("No Muspy ID in config, attempting to fetch from API")
                 # Using the /user endpoint to get user info
                 url = f"{self.base_url}/user"
                 auth = (self.muspy_username, self.muspy_api_key)
@@ -2906,14 +2865,18 @@ class MuspyArtistModule(BaseModule):
                     user_data = response.json()
                     if 'userid' in user_data:
                         self.muspy_id = user_data['userid']
-                        logger.debug(f"Muspy ID obtained: {self.muspy_id}")
+                        self.logger.info(f"Muspy ID obtained: {self.muspy_id}")
                         return self.muspy_id
                     else:
-                        logger.error(f"No 'userid' in response JSON: {user_data}")
+                        self.logger.error(f"No 'userid' in response JSON: {user_data}")
                 else:
-                    logger.error(f"Error calling Muspy API: {response.status_code} - {response.text}")
+                    self.logger.error(f"Error calling Muspy API: {response.status_code} - {response.text}")
             except Exception as e:
-                logger.error(f"Error getting Muspy ID: {e}", exc_info=True)
+                self.logger.error(f"Error getting Muspy ID: {e}", exc_info=True)
+        
+        # If we still don't have an ID, log the error
+        if not self.muspy_id:
+            self.logger.error("No valid Muspy ID available. Please set it in configuration.")
         
         return self.muspy_id
 
@@ -4047,19 +4010,44 @@ class MuspyArtistModule(BaseModule):
 
     def follow_current_artist(self):
         """Follow the currently displayed artist"""
-        if hasattr(self, 'current_artist') and self.current_artist:
-            success = self.add_artist_to_muspy(self.current_artist["mbid"], self.current_artist["name"])
-            if success:
-                # Si estamos usando el widget de tabla desde el archivo UI
-                if hasattr(self, 'table_widget') and hasattr(self.table_widget, 'add_follow_button'):
-                    self.table_widget.add_follow_button.setText(f"Siguiendo en Muspy a {self.current_artist['name']}")
-                    self.table_widget.add_follow_button.setEnabled(False)
-                # Si estamos usando el fallback
-                elif hasattr(self, 'add_follow_button'):
-                    self.add_follow_button.setText(f"Siguiendo en Muspy a {self.current_artist['name']}")
-                    self.add_follow_button.setEnabled(False)
-        else:
+        # Check if we have a current artist
+        if not hasattr(self, 'current_artist') or not self.current_artist:
+            self.logger.error("No current artist to follow")
             QMessageBox.warning(self, "Error", "No artist currently selected")
+            return
+        
+        # Log the attempt
+        self.logger.info(f"Attempting to follow artist: {self.current_artist.get('name')}, MBID: {self.current_artist.get('mbid')}")
+        
+        # No need to get the Muspy ID, we should already have it from config
+        if not self.muspy_id:
+            self.logger.error("Muspy ID not available")
+            QMessageBox.warning(self, "Error", "Muspy ID not available. Please check your configuration.")
+            return
+        
+        # Follow the artist
+        success = self.add_artist_to_muspy(self.current_artist.get("mbid"), self.current_artist.get("name"))
+        
+        # Update UI based on result
+        if success:
+            # Find and update the appropriate button
+            stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+            if stack_widget:
+                current_page = stack_widget.currentWidget()
+                if current_page and current_page.objectName() == "muspy_results_widget":
+                    follow_button = current_page.findChild(QPushButton, "follow_artist_button")
+                    if follow_button:
+                        follow_button.setText(f"Siguiendo a {self.current_artist.get('name')} en Muspy")
+                        follow_button.setEnabled(False)
+                        self.logger.debug("Updated follow button in results widget")
+            
+            # Also update any standalone button
+            if hasattr(self, 'add_follow_button'):
+                self.add_follow_button.setText(f"Siguiendo a {self.current_artist.get('name')} en Muspy")
+                self.add_follow_button.setEnabled(False)
+                self.logger.debug("Updated standalone follow button")
+            
+            QMessageBox.information(self, "Success", f"Now following {self.current_artist.get('name')} on Muspy")
 
     def get_new_releases(self, PROJECT_ROOT):
         """
@@ -4290,48 +4278,7 @@ class MuspyArtistModule(BaseModule):
                 finish_message.replace("\n\n", "\n")
             )
 
-    def add_artist_to_muspy_silent(self, mbid=None, artist_name=None):
-        """
-        Versión silenciosa de add_artist_to_muspy que no escribe en la interfaz
-        
-        Args:
-            mbid (str, optional): MusicBrainz ID of the artist
-            artist_name (str, optional): Name of the artist for logging
-        
-        Returns:
-            int: 1 para éxito, 0 para duplicado, -1 para error
-        """
-        if not self.muspy_username or not self.muspy_api_key:
-            return -1
-
-        if not self.muspy_id:
-            # Try to get the ID if not already set
-            self.get_muspy_id()
-            if not self.muspy_id:
-                return -1
-
-        if not mbid or not (len(mbid) == 36 and mbid.count('-') == 4):
-            return -1
-
-        try:
-            # Follow artist by MBID with correct endpoint format
-            url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
-            auth = (self.muspy_username, self.muspy_api_key)
-            
-            # Send as form data with empty dict
-            response = requests.put(url, auth=auth, data={})
-            
-            if response.status_code in [200, 201]:
-                # Check if already exists message
-                if "already exists" in response.text.lower():
-                    return 0  # Duplicado
-                return 1  # Éxito
-            else:
-                logger.debug(f"Error following artist: {response.status_code} - {response.text}")
-                return -1  # Error
-        except Exception as e:
-            logger.error(f"Error in silent follow: {e}", exc_info=True)
-            return -1  # Error
+  
 
     def get_mbid_artist_searched(self, artist_name):
         """
@@ -4416,7 +4363,7 @@ class MuspyArtistModule(BaseModule):
  
     def add_artist_to_muspy(self, mbid=None, artist_name=None):
         """
-        Add/Follow an artist to Muspy using their MBID or name - versión revisada
+        Add/Follow an artist to Muspy using their MBID - simplificado para usar directamente el muspy_id
         
         Args:
             mbid (str, optional): MusicBrainz ID of the artist
@@ -4428,13 +4375,6 @@ class MuspyArtistModule(BaseModule):
         if not self.muspy_username or not self.muspy_api_key:
             QMessageBox.warning(self, "Error", "Configuración de Muspy no disponible")
             return False
-
-        if not self.muspy_id:
-            # Try to get the Muspy ID if it's not set
-            self.get_muspy_id()
-            if not self.muspy_id:
-                QMessageBox.warning(self, "Error", "Could not get Muspy ID. Please check your credentials.")
-                return False
 
         if not mbid:
             message = f"No se pudo agregar {artist_name or 'Desconocido'} a Muspy: MBID no disponible"
@@ -4448,28 +4388,20 @@ class MuspyArtistModule(BaseModule):
             return False
 
         try:
-            # Follow artist by MBID - Note the correct endpoint format
-            url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
+            # Usar exactamente la misma URL que funciona en curl
+            url = f"https://muspy.com/api/1/artists/{self.muspy_id}/{mbid}"
             
-            # Use basic auth - username and API key
+            # Usar exactamente el mismo formato de autenticación
             auth = (self.muspy_username, self.muspy_api_key)
             
-            # Depuración adicional
-            self.logger.debug(f"Adding artist to Muspy: {artist_name} (MBID: {mbid})")
-            self.logger.debug(f"URL: {url}")
-            self.logger.debug(f"Auth: username={self.muspy_username}, api_key={self.muspy_api_key[:4]}...")
-            
-            # Send as form data with empty dict (no additional params needed)
-            response = requests.put(url, auth=auth, data={})
+            # Realizar la solicitud PUT como en curl
+            response = requests.put(url, auth=auth)
             
             if response.status_code in [200, 201]:
                 self.logger.info(f"Artista {artist_name or 'Desconocido'} agregado a Muspy")
                 return True
             else:
                 self.logger.error(f"Error adding artist to Muspy: {response.status_code} - {response.text}")
-                # Add more detailed debugging
-                self.logger.debug(f"Response headers: {response.headers}")
-                self.logger.debug(f"Response content: {response.text}")
                 return False
         except Exception as e:
             self.logger.error(f"Error al agregar a Muspy: {e}", exc_info=True)
@@ -4811,6 +4743,7 @@ class MuspyArtistModule(BaseModule):
         # Find the muspy_results page
         stack_widget = self.findChild(QStackedWidget, "stackedWidget")
         if not stack_widget:
+            self.logger.error("stackedWidget not found")
             return
         
         results_page = None
@@ -4821,21 +4754,27 @@ class MuspyArtistModule(BaseModule):
                 break
         
         if not results_page:
+            self.logger.error("muspy_results_widget page not found")
             return
         
         # Buscar un botón existente o crear uno nuevo
         follow_button = results_page.findChild(QPushButton, "follow_artist_button")
         
         if not follow_button:
+            self.logger.info("Creating new follow button")
             # Si no existe, buscar un layout donde añadirlo
             layout = None
             
-            # Buscar primero un layout vertical al final de la página
-            bottom_layout = results_page.findChild(QVBoxLayout, "bottom_layout")
-            if bottom_layout:
-                layout = bottom_layout
-            else:
-                # Si no encontramos el layout específico, buscamos el layout principal
+            # Look for the button container
+            button_container = results_page.findChild(QWidget, "button_container")
+            if button_container:
+                for child in button_container.children():
+                    if isinstance(child, QVBoxLayout) or isinstance(child, QHBoxLayout):
+                        layout = child
+                        break
+            
+            # If no specific container found, look for any layout
+            if not layout:
                 for child in results_page.children():
                     if isinstance(child, QVBoxLayout) or isinstance(child, QHBoxLayout):
                         layout = child
@@ -4851,9 +4790,34 @@ class MuspyArtistModule(BaseModule):
                 return
         else:
             # Si ya existe, actualizar el texto
+            self.logger.info(f"Updating existing follow button for {artist_name}")
             follow_button.setText(f"Seguir a {artist_name} en Muspy")
         
+        # Check if this artist is already being followed
+        if hasattr(self, 'current_artist') and self.current_artist and self.current_artist.get('name') == artist_name:
+            # Check with the API if we're already following this artist
+            if self.muspy_id and self.current_artist.get('mbid'):
+                url = f"{self.base_url}/artists/{self.muspy_id}/{self.current_artist['mbid']}"
+                auth = (self.muspy_username, self.muspy_api_key)
+                
+                try:
+                    response = requests.get(url, auth=auth)
+                    if response.status_code == 200:
+                        # We're already following this artist
+                        follow_button.setText(f"Ya sigues a {artist_name} en Muspy")
+                        follow_button.setEnabled(False)
+                        return
+                except:
+                    # If check fails, assume we're not following
+                    pass
+        
         # Conectar el botón a la acción
+        # Disconnect any previous connections to avoid multiple triggers
+        try:
+            follow_button.clicked.disconnect()
+        except:
+            pass
+        
         follow_button.clicked.connect(self.follow_current_artist)
         follow_button.setEnabled(True)
 
@@ -8936,7 +8900,101 @@ class MuspyArtistModule(BaseModule):
                 self.logger.debug(f"Set up context menu for table: {table_name}")
 
 
+    def test_muspy_auth(self):
+        """
+        Test Muspy authentication and API endpoint access
+        """
+        if not self.muspy_username or not self.muspy_api_key:
+            self.results_text.append("Error: Configuración de Muspy no disponible")
+            return
+            
+        self.results_text.clear()
+        self.results_text.show()
+        self.results_text.append("Testing Muspy authentication...")
+        QApplication.processEvents()
+        
+        try:
+            # Test the user endpoint
+            url = f"{self.base_url}/user"
+            auth = (self.muspy_username, self.muspy_api_key)
+            
+            self.results_text.append(f"Testing endpoint: {url}")
+            self.results_text.append(f"Using username: {self.muspy_username}")
+            self.results_text.append(f"Using API key: {self.muspy_api_key[:4]}..." if self.muspy_api_key else "No API key")
+            QApplication.processEvents()
+            
+            response = requests.get(url, auth=auth)
+            
+            self.results_text.append(f"Response status: {response.status_code}")
+            
+            if response.status_code == 200:
+                user_data = response.json()
+                self.results_text.append(f"Authentication successful!")
+                self.results_text.append(f"User ID: {user_data.get('userid')}")
+            else:
+                self.results_text.append(f"Authentication failed: {response.text}")
+                
+        except Exception as e:
+            self.results_text.append(f"Error in test: {str(e)}")
 
+    def call_muspy_api(self, endpoint, method="GET", data=None, params=None):
+        """
+        Make a call to the Muspy API with consistent authentication
+        
+        Args:
+            endpoint (str): API endpoint (without base URL)
+            method (str): HTTP method (GET, POST, PUT, DELETE)
+            data (dict, optional): Data to send in the request body
+            params (dict, optional): Query parameters
+            
+        Returns:
+            tuple: (success, response_data or error_message)
+        """
+        if not self.muspy_username or not self.muspy_api_key:
+            return False, "Muspy credentials not configured"
+            
+        # Ensure we have the user ID if needed
+        if "/artists/" in endpoint and not self.muspy_id:
+            self.get_muspy_id()
+            if not self.muspy_id:
+                return False, "Could not get Muspy ID"
+                
+        # Build the full URL
+        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        
+        # Set up authentication
+        auth = (self.muspy_username, self.muspy_api_key)
+        
+        # Add debug logging
+        self.logger.debug(f"Muspy API call: {method} {url}")
+        
+        try:
+            # Make the request
+            if method.upper() == "GET":
+                response = requests.get(url, auth=auth, params=params)
+            elif method.upper() == "POST":
+                response = requests.post(url, auth=auth, json=data, params=params)
+            elif method.upper() == "PUT":
+                response = requests.put(url, auth=auth, data=data or {}, params=params)
+            elif method.upper() == "DELETE":
+                response = requests.delete(url, auth=auth, params=params)
+            else:
+                return False, f"Unsupported method: {method}"
+                
+            # Check response
+            if response.status_code in [200, 201]:
+                # Try to parse as JSON, but handle text responses too
+                try:
+                    return True, response.json()
+                except:
+                    return True, response.text
+            else:
+                self.logger.error(f"API error: {response.status_code} - {response.text}")
+                return False, f"API error: {response.status_code} - {response.text}"
+                
+        except Exception as e:
+            self.logger.error(f"Request error: {e}", exc_info=True)
+            return False, f"Request error: {str(e)}"
 
 
 
