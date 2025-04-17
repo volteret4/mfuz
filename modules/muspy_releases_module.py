@@ -1012,7 +1012,6 @@ class MuspyArtistModule(BaseModule):
                 self.sync_lastfm_button.setVisible(False)
         
         # Connect other action buttons
-        self.get_releases_button.clicked.connect(self.get_muspy_releases)
         self.get_new_releases_button.clicked.connect(lambda: self.get_new_releases(PROJECT_ROOT))
         self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
         
@@ -1038,6 +1037,8 @@ class MuspyArtistModule(BaseModule):
                 self.get_releases_spotify_button.setVisible(True)
             else:
                 self.get_releases_spotify_button.setVisible(False)
+
+        self.get_releases_button.clicked.connect(self.show_releases_menu)
 
     def show_lastfm_options_menu(self):
         """
@@ -4509,6 +4510,217 @@ class MuspyArtistModule(BaseModule):
             logger.error(f"Error getting MBID for {artist_name}: {e}", exc_info=True)
             return None
  
+    def show_releases_menu(self):
+        """
+        Display a menu with release options when get_releases_button is clicked
+        """
+        # Create menu
+        menu = QMenu(self)
+        
+        # Add menu actions
+        my_releases_action = QAction("Mis Próximos Discos", self)
+        all_releases_action = QAction("Obtener Todos los Lanzamientos...", self)
+        
+        # Connect actions to their respective functions
+        my_releases_action.triggered.connect(self.get_muspy_releases)
+        all_releases_action.triggered.connect(self.show_get_all_releases_dialog)
+        
+        # Add actions to menu
+        menu.addAction(my_releases_action)
+        menu.addAction(all_releases_action)
+        
+        # Get the button position
+        pos = self.get_releases_button.mapToGlobal(QPoint(0, self.get_releases_button.height()))
+        
+        # Show menu
+        menu.exec(pos)
+
+
+    def show_get_all_releases_dialog(self):
+        """
+        Show a dialog to configure options for retrieving all releases
+        """
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Obtener Lanzamientos")
+        dialog.setMinimumWidth(300)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Limit selection
+        limit_layout = QHBoxLayout()
+        limit_label = QLabel("Número máximo de lanzamientos:")
+        limit_spin = QSpinBox()
+        limit_spin.setRange(10, 1000)
+        limit_spin.setValue(100)
+        limit_spin.setSingleStep(10)
+        limit_layout.addWidget(limit_label)
+        limit_layout.addWidget(limit_spin)
+        layout.addLayout(limit_layout)
+        
+        # Date filter
+        date_filter_check = QCheckBox("Solo lanzamientos futuros")
+        date_filter_check.setChecked(True)
+        layout.addWidget(date_filter_check)
+        
+        # Cache option
+        cache_check = QCheckBox("Usar datos en caché si están disponibles")
+        cache_check.setChecked(True)
+        layout.addWidget(cache_check)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            # Get values
+            limit = limit_spin.value()
+            future_only = date_filter_check.isChecked()
+            use_cache = cache_check.isChecked()
+            
+            # Call function with selected parameters
+            self.get_all_releases(limit=limit, future_only=future_only, use_cache=use_cache)
+
+
+
+    def get_all_releases(self, limit=100, future_only=True, use_cache=True):
+        """
+        Retrieve releases without requiring a user ID, with optional limits
+        
+        Args:
+            limit (int): Maximum number of releases to retrieve
+            future_only (bool): Whether to show only future releases
+            use_cache (bool): Whether to use cached data when available
+        """
+        if not self.muspy_username or not self.muspy_api_key:
+            QMessageBox.warning(self, "Error", "Muspy configuration not available")
+            return
+
+        # Try to get from cache first if allowed
+        cache_key = f"all_releases_{limit}_{future_only}"
+        if use_cache:
+            cached_data = self.cache_manager(cache_key, expiry_hours=12)  # Shorter expiry for releases
+            if cached_data:
+                future_releases = cached_data.get("future_releases", [])
+                if future_releases:
+                    self.display_releases_in_stacked_widget(future_releases)
+                    return
+                elif cached_data.get("all_releases"):
+                    QMessageBox.information(self, "No Future Releases", 
+                        f"No se encontraron próximos lanzamientos.\n" +
+                        f"(Total de lanzamientos: {len(cached_data.get('all_releases', []))})")
+                    return
+
+        # Función de operación con progreso
+        def fetch_releases(update_progress):
+            update_progress(0, 1, "Conectando con Muspy API...", indeterminate=True)
+            
+            try:
+                # Use the releases endpoint without user ID
+                url = f"{self.base_url}/releases"
+                auth = (self.muspy_username, self.muspy_api_key)
+                
+                all_releases = []
+                offset = 0
+                page_size = min(100, limit)  # Maximum allowed by API is 100
+                more_pages = True
+                
+                while more_pages and offset < limit:
+                    params = {
+                        "limit": page_size,
+                        "offset": offset
+                    }
+                    
+                    # Update progress message
+                    update_progress(0, 1, f"Obteniendo lanzamientos ({offset+1}-{min(offset+page_size, limit)})...", indeterminate=True)
+                    
+                    response = requests.get(url, auth=auth, params=params)
+                    
+                    if response.status_code != 200:
+                        return {
+                            "success": False,
+                            "error": f"Error retrieving releases: {response.status_code} - {response.text}"
+                        }
+                    
+                    # Process page results
+                    page_releases = response.json()
+                    all_releases.extend(page_releases)
+                    
+                    # Stop if we got fewer items than requested
+                    if len(page_releases) < page_size:
+                        more_pages = False
+                    
+                    # Update offset for next page
+                    offset += len(page_releases)
+                    
+                    # Stop if we've reached the limit
+                    if offset >= limit:
+                        more_pages = False
+                
+                # Procesando datos
+                update_progress(1, 2, "Procesando resultados...", indeterminate=True)
+                
+                # Filter for future releases if requested
+                if future_only:
+                    today = datetime.date.today().strftime("%Y-%m-%d")
+                    future_releases = [release for release in all_releases if release.get('date', '0000-00-00') >= today]
+                else:
+                    future_releases = all_releases
+                
+                # Sort by date
+                future_releases.sort(key=lambda x: x.get('date', '0000-00-00'))
+                
+                # Cache the results
+                cache_data = {
+                    "all_releases": all_releases,
+                    "future_releases": future_releases
+                }
+                self.cache_manager(cache_key, cache_data, expiry_hours=12)
+                
+                # Actualizar progreso y terminar
+                update_progress(2, 2, "Generando visualización...")
+                
+                return {
+                    "success": True,
+                    "all_releases": all_releases,
+                    "future_releases": future_releases
+                }
+            
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": f"Connection error with Muspy: {e}"
+                }
+        
+        # Ejecutar con diálogo de progreso
+        result = self.show_progress_operation(
+            fetch_releases,
+            title="Obteniendo Lanzamientos",
+            label_format="{status}"
+        )
+        
+        # Procesar resultados
+        if result:
+            if result.get("success"):
+                all_releases = result.get("all_releases", [])
+                future_releases = result.get("future_releases", [])
+                
+                if not future_releases:
+                    QMessageBox.information(self, "No Releases Found", 
+                        f"No se encontraron{' próximos' if future_only else ''} lanzamientos.\n" +
+                        f"(Total de lanzamientos: {len(all_releases)})")
+                    return
+                
+                # Display releases properly using stacked widget
+                self.display_releases_in_stacked_widget(future_releases)
+            else:
+                error_msg = result.get("error", "Unknown error")
+                QMessageBox.warning(self, "Error", error_msg)
+
+
     def add_artist_to_muspy_silent(self, mbid, artist_name=None):
         """
         Add artist to Muspy without showing dialog boxes

@@ -3588,7 +3588,7 @@ class UrlPlayer(BaseModule):
             # Try multiple config paths
             config_paths = [
                 os.path.join(PROJECT_ROOT, "config", "config.yml"),
-                os.path.join(PROJECT_ROOT, "config", "config.yaml"),
+                os.path.join(PROJECT_ROOT, "config", "config_placeholder.yaml"),
                 os.path.join(PROJECT_ROOT, ".content", "config", "config.yml")
             ]
             

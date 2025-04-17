@@ -80,8 +80,8 @@ class ConfigEditorModule(BaseModule):
             "modules": [], 
             "modulos_desactivados": []
         }
-        
-        self.config_path = config_path
+        default_config_path = PROJECT_ROOT / "config" / "config.yml"
+        self.config_path = default_config_path
         self.fields = {}
         self.module_checkboxes = {}
 
