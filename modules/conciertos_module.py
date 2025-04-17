@@ -89,7 +89,8 @@ class ConciertosModule(BaseModule):
                 "songkick": {"enabled": True, "api_key": ""},
                 "concerts_metal": {"enabled": True},
                 "rapidapi": {"enabled": True, "api_key": ""},
-                "bandsintown": {"enabled": True, "app_id": ""}
+                "bandsintown": {"enabled": True, "app_id": ""},
+                "dicefm": {"enabled": True, "api_key": ""}  # Nueva API
             }
         }
         
@@ -138,16 +139,33 @@ class ConciertosModule(BaseModule):
             try:
                 uic.loadUi(ui_file_path, self)
                 
-                # Configurar conexiones y valores iniciales
+                # Conectar elementos de la interfaz con variables del código
+                self.match_ui_elements()
+                
+                # Configurar valores iniciales
                 self.country_code_input.setText(self.config["country_code"])
-                self.artists_file_input.setText(self.config["artists_file"])
+                
+                # Conectar señales
                 self.select_file_btn.clicked.connect(self.select_artists_file)
                 self.fetch_all_btn.clicked.connect(self.fetch_all_services)
                 self.concerts_list.itemDoubleClicked.connect(self.switch_tab_db)
                 
-                # Crear pestañas para los diferentes servicios
-                self.create_service_tabs()
-                
+                # Conectar botones de búsqueda individual
+                if hasattr(self, 'ticketmaster_enabled') and self.ticketmaster_enabled is not None:
+                    self.ticketmaster_enabled.clicked.connect(lambda: self.fetch_single_service("ticketmaster"))
+                if hasattr(self, 'songkick_enabled') and self.songkick_enabled is not None:
+                    self.songkick_enabled.clicked.connect(lambda: self.fetch_single_service("songkick"))
+                if hasattr(self, 'concerts_metal_enabled') and self.concerts_metal_enabled is not None:
+                    self.concerts_metal_enabled.clicked.connect(lambda: self.fetch_single_service("concerts_metal"))
+                if hasattr(self, 'rapidapi_enabled') and self.rapidapi_enabled is not None:
+                    self.rapidapi_enabled.clicked.connect(lambda: self.fetch_single_service("rapidapi"))
+                if hasattr(self, 'bandsintown_enabled') and self.bandsintown_enabled is not None:
+                    self.bandsintown_enabled.clicked.connect(lambda: self.fetch_single_service("bandsintown"))
+                if hasattr(self, 'dicefm_enabled') and self.dicefm_enabled is not None:
+                    self.dicefm_enabled.clicked.connect(lambda: self.fetch_single_service("dicefm"))
+                # DiceFM
+                if self.config["apis"]["dicefm"].get("enabled", False):
+                    self.launch_dicefm_fetcher()
                 # Mensaje inicial del log
                 self.log("Módulo inicializado. Configure los parámetros y haga clic en 'Buscar en Todos los Servicios'.")
                 
@@ -532,7 +550,11 @@ class ConciertosModule(BaseModule):
         # Bandsintown
         if hasattr(self, 'bandsintown_app_id'):
             self.config["apis"]["bandsintown"]["app_id"] = self.bandsintown_app_id.text().strip()
-    
+            
+        # DiceFM
+        if hasattr(self, 'dicefm_api_key') and self.dicefm_api_key is not None:
+            self.config["apis"]["dicefm"]["api_key"] = self.dicefm_api_key.text().strip()
+
     def launch_ticketmaster_fetcher(self):
         """Inicia el fetcher de Ticketmaster"""
         api_key = self.config["apis"]["ticketmaster"]["api_key"]
@@ -627,6 +649,28 @@ class ConciertosModule(BaseModule):
         self._fetchers.append(fetcher)
     
         fetcher.start()
+
+    def launch_dicefm_fetcher(self):
+        """Inicia el fetcher de DiceFM"""
+        api_key = self.config["apis"]["dicefm"]["api_key"]
+        if not api_key:
+            self.log("Error: No se ha proporcionado API Key para DiceFM")
+            return
+        
+        self.active_fetchers += 1
+        self.log("Buscando conciertos en DiceFM...")
+        
+        fetcher = DiceFMFetcher(api_key, self.config["country_code"], self.config["artists_file"])
+        fetcher.finished.connect(self.on_fetcher_finished)
+        fetcher.error.connect(self.on_fetcher_error)
+        
+        # Asegurarse de que exista la lista _fetchers
+        if not hasattr(self, '_fetchers'):
+            self._fetchers = []
+        
+        self._fetchers.append(fetcher)
+        fetcher.start()
+
     
     def on_fetcher_finished(self, events: List[ConcertEvent], message: str):
         """Gestiona los eventos encontrados por un fetcher"""
@@ -725,7 +769,52 @@ class ConciertosModule(BaseModule):
         # Usamos la señal de error para mostrar mensajes informativos también
         #self.error.emit(f"[INFO] {message}")
 
+    def match_ui_elements(self):
+        """Conecta los elementos de la UI con las variables del código"""
+        # País y archivo de artistas
+        self.country_code_input = self.findChild(QLineEdit, "country_code_input")
+        self.artists_file_input = self.findChild(QLineEdit, "artists_file_input")
+        self.select_file_btn = self.findChild(QPushButton, "select_file_btn")
+        self.artists_source_combo = self.findChild(QComboBox, "comboBox")  # Nuevo elemento
+        
+        # Botón de búsqueda global
+        self.fetch_all_btn = self.findChild(QPushButton, "fetch_all_btn")
+        
+        # Lista de conciertos
+        self.concerts_list = self.findChild(QListWidget, "concerts_list")
+        
+        # Área de log
+        self.log_area = self.findChild(QTextEdit, "log_area")
+        
+        # Pestañas APIs
+        self.tabs = self.findChild(QTabWidget, "tabWidget")
+        
+        # Ticketmaster
+        self.ticketmaster_api_key = self.findChild(QLineEdit, "lineEdit")
+        self.ticketmaster_enabled = self.findChild(QPushButton, "pushButton")
+        
+        # Songkick
+        self.songkick_api_key = self.findChild(QLineEdit, "lineEdit_4")
+        self.songkick_enabled = self.findChild(QPushButton, "pushButton_5")
+        
+        # Concerts-Metal
+        self.concerts_metal_api_key = self.findChild(QLineEdit, "lineEdit_5")
+        self.concerts_metal_enabled = self.findChild(QPushButton, "pushButton_2")
+        
+        # RapidAPI
+        self.rapidapi_api_key = self.findChild(QLineEdit, "lineEdit_6")
+        self.rapidapi_enabled = self.findChild(QPushButton, "pushButton_3")
+        
+        # Bandsintown
+        self.bandsintown_app_id = self.findChild(QLineEdit, "lineEdit_7")
+        self.bandsintown_enabled = self.findChild(QPushButton, "pushButton_4")
+        
+        # DiceFM (nueva API)
+        self.dicefm_api_key = self.findChild(QLineEdit, "dicefm_api_key")
+        self.dicefm_enabled = self.findChild(QPushButton, "dicefm_btn")
 
+
+# CLASES PARA CADA SERVICIO
 
 class BaseAPIFetcher(QThread):
     """Clase base para los fetcheres de API"""
@@ -1150,7 +1239,102 @@ class BandsintownFetcher(BaseAPIFetcher):
             self.error.emit(f"Error durante la obtención de conciertos de Bandsintown: {str(e)}\n{traceback.format_exc()}")
 
 
-
+class DiceFMFetcher(BaseAPIFetcher):
+    def __init__(self, api_key: str, country_code: str, artists_file: str):
+        super().__init__(country_code, artists_file)
+        self.api_key = api_key
+    
+    def run(self):
+        try:
+            artistas_lista = self.get_artists_list()
+            if not artistas_lista:
+                self.error.emit("No se encontraron artistas en el archivo")
+                return
+            
+            eventos_filtrados = []
+            
+            # Obtener fechas para el período de búsqueda (próximos 6 meses)
+            fecha_inicio = datetime.now().strftime('%Y-%m-%d')
+            fecha_fin = (datetime.now() + timedelta(days=180)).strftime('%Y-%m-%d')
+            
+            # Limitar a un número manejable de artistas para no saturar la API
+            for artista in artistas_lista[:30]:  # Limitamos a 30 artistas
+                # Codificar el nombre del artista para la URL
+                encoded_artist = requests.utils.quote(artista)
+                
+                # Construir la URL para buscar eventos por artista
+                url = f"https://api.dice.fm/v1/events/search"
+                headers = {
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json"
+                }
+                
+                # Parámetros de búsqueda
+                params = {
+                    "query": artista,
+                    "country_code": self.country_code,
+                    "date_from": fecha_inicio,
+                    "date_to": fecha_fin,
+                    "type": "concert",
+                    "limit": 10
+                }
+                
+                try:
+                    response = requests.get(url, headers=headers, params=params)
+                    response.raise_for_status()  # Lanzar excepción si hay un error HTTP
+                    
+                    data = response.json()
+                    events = data.get("data", [])
+                    
+                    self.log(f"Obtenidos {len(events)} eventos para {artista}")
+                    
+                    for event in events:
+                        # Extraer datos del evento
+                        event_id = event.get("id", "")
+                        event_name = event.get("name", "Sin nombre")
+                        event_date = event.get("start_date", "Sin fecha")
+                        venue_name = event.get("venue", {}).get("name", "Desconocido")
+                        city = event.get("venue", {}).get("city", "Desconocido")
+                        country = event.get("venue", {}).get("country", {}).get("code", self.country_code)
+                        event_url = event.get("url", "")
+                        image_url = event.get("images", {}).get("large", None)
+                        
+                        # Crear objeto ConcertEvent
+                        concierto = ConcertEvent(
+                            id=event_id,
+                            name=event_name,
+                            artist=artista,
+                            date=event_date,
+                            venue=venue_name,
+                            city=city,
+                            country=country,
+                            url=event_url,
+                            source="DiceFM",
+                            image_url=image_url
+                        )
+                        eventos_filtrados.append(concierto)
+                        
+                except requests.exceptions.RequestException as e:
+                    self.log(f"Error en la solicitud para {artista}: {str(e)}")
+                    continue  # Continuar con el siguiente artista
+                
+                # Añadir un pequeño retraso para no sobrecargar la API
+                import time
+                time.sleep(0.5)
+            
+            self.finished.emit(eventos_filtrados, f"Se encontraron {len(eventos_filtrados)} conciertos en DiceFM")
+            
+        except Exception as e:
+            import traceback
+            error_msg = f"Error durante la obtención de conciertos de DiceFM: {str(e)}\n{traceback.format_exc()}"
+            self.log(error_msg)
+            self.error.emit(error_msg)
+    
+    def log(self, message: str):
+        """Envía mensaje de log desde el fetcher"""
+        print(f"[{self.__class__.__name__}] {message}")
+        # Usamos la señal de error para mostrar mensajes informativos también
+        self.error.emit(f"[INFO] {message}")
 
 
 # Nueva clase para el diálogo de configuración de Radicale
