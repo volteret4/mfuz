@@ -83,6 +83,43 @@ class NumericTableWidgetItem(QTableWidgetItem):
             return super().__lt__(other)
 
 
+class DateTableWidgetItem(QTableWidgetItem):
+    """A QTableWidgetItem that sorts dates chronologically"""
+    
+    def __init__(self, date_text, date_format="%Y-%m-%d"):
+        super().__init__(date_text)
+        self.date_text = date_text
+        self.date_format = date_format
+        
+        # Try to convert to datetime for sorting
+        try:
+            from datetime import datetime
+            self.date_obj = datetime.strptime(date_text, date_format)
+            self.valid_date = True
+        except (ValueError, TypeError):
+            # If conversion fails, store None and fall back to string comparison
+            self.date_obj = None
+            self.valid_date = False
+    
+    def __lt__(self, other):
+        # If both items have valid dates, compare them directly
+        if self.valid_date and hasattr(other, 'valid_date') and other.valid_date:
+            return self.date_obj < other.date_obj
+        
+        # If this item has a valid date but other doesn't, this should come first
+        if self.valid_date and hasattr(other, 'valid_date') and not other.valid_date:
+            return True
+            
+        # If other item has a valid date but this doesn't, other should come first
+        if not self.valid_date and hasattr(other, 'valid_date') and other.valid_date:
+            return False
+            
+        # Fall back to default string comparison if neither are valid dates
+        return super().__lt__(other)
+
+
+        
+
 class ProgressWorker(QObject):
     progress = pyqtSignal(int)
     finished = pyqtSignal(list)
@@ -796,6 +833,8 @@ class MuspyArtistModule(BaseModule):
                         import datetime
                         date_obj = datetime.datetime.fromtimestamp(int(loved_track.date))
                         date_text = date_obj.strftime("%Y-%m-%d")
+                        date_str = release.get(date_text, 'No date')
+                        date_item = DateTableWidgetItem(date_str)
                     except:
                         date_text = str(loved_track.date)
             else:
@@ -828,7 +867,7 @@ class MuspyArtistModule(BaseModule):
             table.setItem(i, 2, album_item)
             
             # Date column
-            date_item = QTableWidgetItem(date_text)
+            date_item = DateTableWidgetItem(date_str)
             date_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             table.setItem(i, 3, date_item)
             
@@ -5352,9 +5391,11 @@ class MuspyArtistModule(BaseModule):
             type_item = QTableWidgetItem(release.get('type', 'Unknown').title())
             table.setItem(row, 2, type_item)
             
-            # Date with color highlighting for upcoming releases
+        
+            # Date column with proper date sorting
             date_str = release.get('date', 'No date')
-            date_item = QTableWidgetItem(date_str)
+            date_item = DateTableWidgetItem(date_str)  # Use our custom class
+            table.setItem(row, 3, date_item)
             
             # Highlight dates that are within the next month  
             try:
@@ -7275,10 +7316,10 @@ class MuspyArtistModule(BaseModule):
                     table.setItem(row, 3, type_item)
                     
                     # Date - con manejo de errores
-                    date_text = release.get('date', '')
+                    date_str = release.get('date', 'No date')
                     if not isinstance(date_text, str):
                         date_text = ""
-                    date_item = QTableWidgetItem(date_text)
+                    date_item = DateTableWidgetItem(date_str) 
                     table.setItem(row, 4, date_item)
                     
                     # Status - con manejo de errores
@@ -8304,6 +8345,89 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Error: {error_msg}")
             QMessageBox.warning(self, "Error", f"Could not load Spotify top {item_type}: {error_msg}")
 
+
+    def display_spotify_artists_in_stacked_widget(self, artists):
+            """
+            Display Spotify artists in the stacked widget
+            
+            Args:
+                artists (list): List of artist dictionaries
+            """
+            # Find the stacked widget
+            stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+            if not stack_widget:
+                self.logger.error("Stacked widget not found in UI")
+                return
+            
+            # Find the spotify_artists_page (assuming it exists in the UI)
+            spotify_page = None
+            for i in range(stack_widget.count()):
+                widget = stack_widget.widget(i)
+                if widget.objectName() == "spotify_artists_page":
+                    spotify_page = widget
+                    break
+            
+            if not spotify_page:
+                self.logger.error("spotify_artists_page not found in stacked widget")
+                # Fallback to text display
+                self._display_spotify_artists_as_text(artists)
+                return
+            
+            # Get the table from the page
+            table = spotify_page.findChild(QTableWidget, "spotify_artists_table")
+            if not table:
+                self.logger.error("spotify_artists_table not found in spotify_artists_page")
+                # Fallback to text display
+                self._display_spotify_artists_as_text(artists)
+                return
+            
+            # Get the count label
+            count_label = spotify_page.findChild(QLabel, "spotify_artists_count_label")
+            if count_label:
+                count_label.setText(f"Showing {len(artists)} artists you follow on Spotify")
+            
+            # Configure table
+            table.setRowCount(len(artists))
+            table.setSortingEnabled(False)  # Disable sorting while updating
+            
+            # Fill the table with data
+            for i, artist in enumerate(artists):
+                # Name column
+                name_item = QTableWidgetItem(artist.get('name', 'Unknown'))
+                table.setItem(i, 0, name_item)
+                
+                # Genres column
+                genres_item = QTableWidgetItem(artist.get('genres', ''))
+                table.setItem(i, 1, genres_item)
+                
+                # Followers column - Usar NumericTableWidgetItem
+                followers = artist.get('followers', 0)
+                followers_item = NumericTableWidgetItem(f"{followers:,}" if followers else "0")
+                followers_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                table.setItem(i, 2, followers_item)
+                
+                # Popularity column - Usar NumericTableWidgetItem
+                popularity = artist.get('popularity', 0)
+                popularity_item = NumericTableWidgetItem(str(popularity))
+                popularity_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                table.setItem(i, 3, popularity_item)
+            
+            # Re-enable sorting
+            table.setSortingEnabled(True)
+        
+            # Resize columns to fit content
+            table.resizeColumnsToContents()
+            
+            # Configure context menu for the table
+            if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+                table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                table.customContextMenuRequested.connect(self.show_spotify_artist_context_menu)
+            
+            # Switch to the Spotify artists page
+            stack_widget.setCurrentWidget(spotify_page)
+
+
+
     def display_spotify_top_items_in_stacked_widget(self, items, item_type):
         """
         Display Spotify top items in the stacked widget
@@ -8890,7 +9014,8 @@ class MuspyArtistModule(BaseModule):
             table.setItem(i, 2, type_item)
             
             # Date column
-            date_item = QTableWidgetItem(release.get('date', ''))
+            date_str = release.get('date', 'No date')
+            date_item = DateTableWidgetItem(date_str)
             table.setItem(i, 3, date_item)
             
             # Tracks column - Usar NumericTableWidgetItem
