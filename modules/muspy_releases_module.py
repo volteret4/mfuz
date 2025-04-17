@@ -715,11 +715,11 @@ class MuspyArtistModule(BaseModule):
             
             table.setCellWidget(i, 4, actions_widget)
         
-        # Re-enable sorting
-        table.setSortingEnabled(True)
+            # Re-enable sorting
+            table.setSortingEnabled(True)
         
-        # Resize columns to fit content
-        table.resizeColumnsToContents()
+            # Resize columns to fit content
+            table.resizeColumnsToContents()
         
         
         # Configure context menu for the table
@@ -847,8 +847,11 @@ class MuspyArtistModule(BaseModule):
             
             table.setCellWidget(i, 4, actions_widget)
         
-        # Re-enable sorting
-        table.setSortingEnabled(True)
+            # Re-enable sorting
+            table.setSortingEnabled(True)
+            
+            # Resize columns to fit content
+            table.resizeColumnsToContents()
         
         # Switch to the loved tracks page
         stack_widget.setCurrentWidget(loved_page)
@@ -1009,9 +1012,9 @@ class MuspyArtistModule(BaseModule):
         menu = QMenu(self)
         
         # Add menu options
-        top_artists_action = QAction("Show Top Artists...", self)
-        loved_tracks_action = QAction("Show Loved Tracks", self)
-        refresh_cache_action = QAction("Refresh Cached Data", self)
+        top_artists_action = QAction("Artistas más escuchados", self)
+        loved_tracks_action = QAction("Canciones Favoritas", self)
+        refresh_cache_action = QAction("Limpiar caché LastFM", self)
         
         # Connect actions
         top_artists_action.triggered.connect(self.show_lastfm_top_artists_dialog)
@@ -1282,8 +1285,11 @@ class MuspyArtistModule(BaseModule):
             }
         """)
         
-        # Make the table sortable
+        # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Store reference for later access
         self.artists_table = table
@@ -4846,6 +4852,9 @@ class MuspyArtistModule(BaseModule):
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Switch to the releases page - this will fully hide the text page
         stack_widget.setCurrentWidget(releases_page)
@@ -4953,6 +4962,9 @@ class MuspyArtistModule(BaseModule):
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Switch to the results page
         stack_widget.setCurrentWidget(results_page)
@@ -5254,8 +5266,11 @@ class MuspyArtistModule(BaseModule):
             }
         """)
         
-        # Make the table sortable after data is loaded
+        # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Store reference for later access
         self.releases_table = table
@@ -5296,6 +5311,9 @@ class MuspyArtistModule(BaseModule):
         
         # Make the table sortable
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         table.sortItems(3, Qt.SortOrder.AscendingOrder)
 
         
@@ -5379,9 +5397,9 @@ class MuspyArtistModule(BaseModule):
         menu = QMenu(self)
         
         # Add menu actions
-        muspy_action = QAction("Sincronizar artistas con Muspy", self)
+        muspy_action = QAction("Sincronizar base de datos con Muspy", self)
+        spotify_action = QAction("Sincronizar base de datos con Spotify", self)
         lastfm_action = QAction("Sincronizar Last.fm con Muspy", self)
-        spotify_action = QAction("Sincronizar con Spotify", self)
         
         # Connect actions to their respective functions
         muspy_action.triggered.connect(self.sync_artists_with_muspy)
@@ -5390,8 +5408,8 @@ class MuspyArtistModule(BaseModule):
         
         # Add actions to menu
         menu.addAction(muspy_action)
-        menu.addAction(lastfm_action)
         menu.addAction(spotify_action)
+        menu.addAction(lastfm_action)
         
         # Get the button position
         pos = self.sync_artists_button.mapToGlobal(QPoint(0, self.sync_artists_button.height()))
@@ -7291,6 +7309,9 @@ class MuspyArtistModule(BaseModule):
             
             # Re-enable sorting
             table.setSortingEnabled(True)
+        
+            # Resize columns to fit content
+            table.resizeColumnsToContents()
             
             # Configure context menu for the table if not already configured
             if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
@@ -7417,6 +7438,14 @@ class MuspyArtistModule(BaseModule):
 
     def follow_artist_from_name(self, artist_name):
         """Follow artist by searching for their MBID first"""
+        if not artist_name or isinstance(artist_name, dict):
+            # Si es un diccionario, intentamos extraer el nombre
+            if isinstance(artist_name, dict) and 'artist_name' in artist_name:
+                artist_name = artist_name['artist_name']
+            else:
+                QMessageBox.warning(self, "Error", "No se pudo obtener el nombre del artista")
+                return
+        
         # First get the MBID
         mbid = self.get_mbid_artist_searched(artist_name)
         
@@ -7602,7 +7631,7 @@ class MuspyArtistModule(BaseModule):
 
     def show_spotify_menu(self):
         """
-        Display a menu with Spotify options when get_releases_spotify button is clicked
+        Display a menu with Spotify options when get_releases_spotify_button is clicked
         """
         if not self.ensure_spotify_auth():
             QMessageBox.warning(self, "Error", "Spotify credentials not configured")
@@ -7614,14 +7643,20 @@ class MuspyArtistModule(BaseModule):
         # Add menu actions
         show_artists_action = QAction("Mostrar artistas seguidos", self)
         show_releases_action = QAction("Nuevos álbumes de artistas seguidos", self)
+        show_saved_tracks_action = QAction("Canciones Guardadas", self)
+        show_top_items_action = QAction("Top Items", self)
         
         # Connect actions to their respective functions
         show_artists_action.triggered.connect(self.show_spotify_followed_artists)
         show_releases_action.triggered.connect(self.show_spotify_new_releases)
+        show_saved_tracks_action.triggered.connect(self.show_spotify_saved_tracks)
+        show_top_items_action.triggered.connect(self.show_spotify_top_items_dialog)
         
         # Add actions to menu
         menu.addAction(show_artists_action)
         menu.addAction(show_releases_action)
+        menu.addAction(show_saved_tracks_action)
+        menu.addAction(show_top_items_action)
         
         # Add separator and cache management option
         menu.addSeparator()
@@ -7924,12 +7959,358 @@ class MuspyArtistModule(BaseModule):
 
 
 
-    def display_spotify_artists_in_stacked_widget(self, artists):
+    def show_spotify_saved_tracks(self):
         """
-        Display Spotify artists in the stacked widget
+        Show the user's saved tracks on Spotify with caching
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify credentials not configured")
+            return
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        
+        # Try to get from cache first
+        cache_key = "saved_tracks"
+        cached_data = self.spotify_cache_manager(cache_key, expiry_hours=6)  # Short expiry as saved tracks change frequently
+        if cached_data:
+            self.results_text.append("Showing cached saved tracks data...")
+            self.display_spotify_saved_tracks_in_stacked_widget(cached_data)
+            return
+        
+        self.results_text.append("Retrieving your saved tracks from Spotify...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to get Spotify client. Please check authentication.")
+            return
+        
+        # Function to fetch saved tracks with progress dialog
+        def fetch_spotify_saved_tracks(update_progress):
+            try:
+                update_progress(0, 100, "Connecting to Spotify API...")
+                
+                all_tracks = []
+                offset = 0
+                limit = 50  # Spotify's maximum for this endpoint
+                total = 1  # Will be updated after first request
+                
+                # Paginate through all saved tracks
+                while offset < total:
+                    # Update progress
+                    progress_percent = min(95, int((offset / max(1, total)) * 100))
+                    update_progress(progress_percent, 100, f"Fetching tracks ({offset}/{total})...")
+                    
+                    # Fetch current page of tracks
+                    results = spotify_client.current_user_saved_tracks(limit=limit, offset=offset)
+                    
+                    if 'items' in results:
+                        # Get tracks from this page
+                        tracks_page = results['items']
+                        
+                        # Process each track item
+                        for item in tracks_page:
+                            track = item.get('track', {})
+                            added_at = item.get('added_at', '')
+                            
+                            # Get album info
+                            album = track.get('album', {})
+                            album_name = album.get('name', 'Unknown Album')
+                            
+                            # Get artists info (there might be multiple)
+                            artists = track.get('artists', [])
+                            artist_names = [artist.get('name', 'Unknown Artist') for artist in artists]
+                            artist_name = ', '.join(artist_names)
+                            
+                            # Create processed track object
+                            processed_track = {
+                                'id': track.get('id', ''),
+                                'name': track.get('name', 'Unknown Track'),
+                                'artist': artist_name,
+                                'album': album_name,
+                                'duration_ms': track.get('duration_ms', 0),
+                                'popularity': track.get('popularity', 0),
+                                'added_at': added_at,
+                                'uri': track.get('uri', ''),
+                                'external_urls': track.get('external_urls', {})
+                            }
+                            
+                            all_tracks.append(processed_track)
+                        
+                        # Update total count
+                        total = results['total']
+                        
+                        # If we got fewer than requested, we're done
+                        if len(tracks_page) < limit:
+                            break
+                            
+                        # Update offset for next page
+                        offset += len(tracks_page)
+                    else:
+                        # No more results or error
+                        break
+                
+                # Process the final results
+                update_progress(98, 100, "Processing track data...")
+                
+                # Cache the processed tracks
+                self.spotify_cache_manager(cache_key, all_tracks)
+                
+                update_progress(100, 100, "Complete!")
+                
+                return {
+                    "success": True,
+                    "tracks": all_tracks,
+                    "total": len(all_tracks)
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error fetching Spotify saved tracks: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": str(e)
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_spotify_saved_tracks,
+            title="Loading Spotify Saved Tracks",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            tracks = result.get("tracks", [])
+            
+            if not tracks:
+                self.results_text.append("You don't have any saved tracks on Spotify.")
+                return
+            
+            # Display tracks in the stack widget table
+            self.display_spotify_saved_tracks_in_stacked_widget(tracks)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
+            QMessageBox.warning(self, "Error", f"Could not load Spotify saved tracks: {error_msg}")
+
+
+    def show_spotify_top_items_dialog(self):
+        """
+        Show dialog to select parameters for fetching user's top items from Spotify
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify credentials not configured")
+            return
+        
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Spotify Top Items Options")
+        dialog.setMinimumWidth(350)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Type selection
+        type_layout = QHBoxLayout()
+        type_label = QLabel("Item Type:")
+        type_combo = QComboBox()
+        type_combo.addItem("Artists", "artists")
+        type_combo.addItem("Tracks", "tracks")
+        type_layout.addWidget(type_label)
+        type_layout.addWidget(type_combo)
+        layout.addLayout(type_layout)
+        
+        # Time range selection
+        time_layout = QHBoxLayout()
+        time_label = QLabel("Time Range:")
+        time_combo = QComboBox()
+        time_combo.addItem("Last 4 Weeks", "short_term")
+        time_combo.addItem("Last 6 Months", "medium_term")
+        time_combo.addItem("All Time", "long_term")
+        time_layout.addWidget(time_label)
+        time_layout.addWidget(time_combo)
+        layout.addLayout(time_layout)
+        
+        # Limit selection
+        limit_layout = QHBoxLayout()
+        limit_label = QLabel("Number of Items:")
+        limit_spin = QSpinBox()
+        limit_spin.setRange(1, 50)
+        limit_spin.setValue(20)
+        limit_layout.addWidget(limit_label)
+        limit_layout.addWidget(limit_spin)
+        layout.addLayout(limit_layout)
+        
+        # Cache checkbox
+        cache_check = QCheckBox("Use cached data if available")
+        cache_check.setChecked(True)
+        layout.addWidget(cache_check)
+        
+        # Create buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            # Get values
+            item_type = type_combo.currentData()
+            time_range = time_combo.currentData()
+            limit = limit_spin.value()
+            use_cache = cache_check.isChecked()
+            
+            # Call function with selected parameters
+            self.fetch_spotify_top_items(item_type, time_range, limit, use_cache)
+
+
+    def fetch_spotify_top_items(self, item_type, time_range, limit, use_cache=True):
+        """
+        Fetch and display user's top items from Spotify
         
         Args:
-            artists (list): List of artist dictionaries
+            item_type (str): Type of items to fetch ('artists' or 'tracks')
+            time_range (str): Time range ('short_term', 'medium_term', or 'long_term')
+            limit (int): Number of items to fetch
+            use_cache (bool): Whether to use cached data when available
+        """
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        
+        # Try to get from cache first
+        cache_key = f"top_{item_type}_{time_range}_{limit}"
+        if use_cache:
+            cached_data = self.spotify_cache_manager(cache_key, expiry_hours=24)
+            if cached_data:
+                self.results_text.append(f"Showing cached top {item_type} data...")
+                self.display_spotify_top_items_in_stacked_widget(cached_data, item_type)
+                return
+        
+        self.results_text.append(f"Retrieving your top {item_type} from Spotify...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Failed to get Spotify client. Please check authentication.")
+            return
+        
+        # Function to fetch top items with progress dialog
+        def fetch_top_items(update_progress):
+            try:
+                update_progress(0, 100, "Connecting to Spotify API...")
+                
+                # Get top items
+                update_progress(30, 100, f"Fetching top {item_type}...")
+                
+                if item_type == "artists":
+                    results = spotify_client.current_user_top_artists(
+                        limit=limit,
+                        offset=0,
+                        time_range=time_range
+                    )
+                    items = results.get("items", [])
+                    
+                    # Process artists
+                    update_progress(70, 100, "Processing artist data...")
+                    processed_items = []
+                    
+                    for artist in items:
+                        processed_items.append({
+                            'id': artist.get('id', ''),
+                            'name': artist.get('name', 'Unknown'),
+                            'popularity': artist.get('popularity', 0),
+                            'followers': artist.get('followers', {}).get('total', 0) if 'followers' in artist else 0,
+                            'genres': ', '.join(artist.get('genres', [])),
+                            'image_url': artist.get('images', [{}])[0].get('url', '') if artist.get('images') else '',
+                            'type': 'artist'
+                        })
+                
+                elif item_type == "tracks":
+                    results = spotify_client.current_user_top_tracks(
+                        limit=limit,
+                        offset=0,
+                        time_range=time_range
+                    )
+                    items = results.get("items", [])
+                    
+                    # Process tracks
+                    update_progress(70, 100, "Processing track data...")
+                    processed_items = []
+                    
+                    for track in items:
+                        # Get album info
+                        album = track.get('album', {})
+                        album_name = album.get('name', 'Unknown Album')
+                        
+                        # Get artists info
+                        artists = track.get('artists', [])
+                        artist_names = [artist.get('name', 'Unknown Artist') for artist in artists]
+                        artist_name = ', '.join(artist_names)
+                        
+                        processed_items.append({
+                            'id': track.get('id', ''),
+                            'name': track.get('name', 'Unknown'),
+                            'artist': artist_name,
+                            'album': album_name,
+                            'duration_ms': track.get('duration_ms', 0),
+                            'popularity': track.get('popularity', 0),
+                            'uri': track.get('uri', ''),
+                            'type': 'track'
+                        })
+                
+                # Cache the processed items
+                self.spotify_cache_manager(cache_key, processed_items)
+                
+                update_progress(100, 100, "Complete!")
+                
+                return {
+                    "success": True,
+                    "items": processed_items,
+                    "type": item_type,
+                    "total": len(processed_items)
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error fetching Spotify top {item_type}: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": str(e)
+                }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            fetch_top_items,
+            title=f"Loading Spotify Top {item_type.title()}",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            items = result.get("items", [])
+            
+            if not items:
+                self.results_text.append(f"No top {item_type} found for your Spotify account.")
+                return
+            
+            # Display items in the stack widget table
+            self.display_spotify_top_items_in_stacked_widget(items, item_type)
+        else:
+            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
+            self.results_text.append(f"Error: {error_msg}")
+            QMessageBox.warning(self, "Error", f"Could not load Spotify top {item_type}: {error_msg}")
+
+    def display_spotify_top_items_in_stacked_widget(self, items, item_type):
+        """
+        Display Spotify top items in the stacked widget
+        
+        Args:
+            items (list): List of item dictionaries
+            item_type (str): Type of items ('artists' or 'tracks')
         """
         # Find the stacked widget
         stack_widget = self.findChild(QStackedWidget, "stackedWidget")
@@ -7937,69 +8318,518 @@ class MuspyArtistModule(BaseModule):
             self.logger.error("Stacked widget not found in UI")
             return
         
-        # Find the spotify_artists_page (assuming it exists in the UI)
-        spotify_page = None
+        # Find the spotify_top_items_page
+        top_items_page = None
         for i in range(stack_widget.count()):
             widget = stack_widget.widget(i)
-            if widget.objectName() == "spotify_artists_page":
-                spotify_page = widget
+            if widget.objectName() == "spotify_top_items_page":
+                top_items_page = widget
                 break
         
-        if not spotify_page:
-            self.logger.error("spotify_artists_page not found in stacked widget")
+        if not top_items_page:
+            self.logger.error("spotify_top_items_page not found in stacked widget")
             # Fallback to text display
-            self._display_spotify_artists_as_text(artists)
+            self._display_spotify_top_items_as_text(items, item_type)
             return
         
         # Get the table from the page
-        table = spotify_page.findChild(QTableWidget, "spotify_artists_table")
+        table = top_items_page.findChild(QTableWidget, "spotify_top_items_table")
         if not table:
-            self.logger.error("spotify_artists_table not found in spotify_artists_page")
+            self.logger.error("spotify_top_items_table not found in spotify_top_items_page")
             # Fallback to text display
-            self._display_spotify_artists_as_text(artists)
+            self._display_spotify_top_items_as_text(items, item_type)
             return
         
         # Get the count label
-        count_label = spotify_page.findChild(QLabel, "spotify_artists_count_label")
+        count_label = top_items_page.findChild(QLabel, "spotify_top_items_count_label")
         if count_label:
-            count_label.setText(f"Showing {len(artists)} artists you follow on Spotify")
+            count_label.setText(f"Showing your top {len(items)} {item_type}")
+        
+        # Configure columns based on item type
+        if item_type == "artists":
+            table.setColumnCount(4)
+            table.setHorizontalHeaderLabels(["Rank", "Artist", "Genres", "Popularity"])
+        else:  # tracks
+            table.setColumnCount(5)
+            table.setHorizontalHeaderLabels(["Rank", "Track", "Artist", "Album", "Popularity"])
         
         # Configure table
-        table.setRowCount(len(artists))
+        table.setRowCount(len(items))
         table.setSortingEnabled(False)  # Disable sorting while updating
         
         # Fill the table with data
-        for i, artist in enumerate(artists):
-            # Name column
-            name_item = QTableWidgetItem(artist.get('name', 'Unknown'))
-            table.setItem(i, 0, name_item)
+        for i, item in enumerate(items):
+            # Rank column (1-based)
+            rank_item = QTableWidgetItem(str(i + 1))
+            rank_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            table.setItem(i, 0, rank_item)
             
-            # Genres column
-            genres_item = QTableWidgetItem(artist.get('genres', ''))
-            table.setItem(i, 1, genres_item)
-            
-            # Followers column - Usar NumericTableWidgetItem
-            followers = artist.get('followers', 0)
-            followers_item = NumericTableWidgetItem(f"{followers:,}" if followers else "0")
-            followers_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-            table.setItem(i, 2, followers_item)
-            
-            # Popularity column - Usar NumericTableWidgetItem
-            popularity = artist.get('popularity', 0)
-            popularity_item = NumericTableWidgetItem(str(popularity))
-            popularity_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-            table.setItem(i, 3, popularity_item)
+            if item_type == "artists":
+                # Artist name column
+                name_item = QTableWidgetItem(item.get('name', 'Unknown'))
+                table.setItem(i, 1, name_item)
+                
+                # Genres column
+                genres_item = QTableWidgetItem(item.get('genres', ''))
+                table.setItem(i, 2, genres_item)
+                
+                # Popularity column
+                popularity = item.get('popularity', 0)
+                popularity_item = NumericTableWidgetItem(str(popularity))
+                popularity_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                table.setItem(i, 3, popularity_item)
+                
+                # Store artist ID for context menu actions
+                for col in range(table.columnCount()):
+                    if table.item(i, col):
+                        table.item(i, col).setData(Qt.ItemDataRole.UserRole, {
+                            'spotify_artist_id': item.get('id', ''),
+                            'artist_name': item.get('name', '')
+                        })
+            else:  # tracks
+                # Track name column
+                name_item = QTableWidgetItem(item.get('name', 'Unknown'))
+                table.setItem(i, 1, name_item)
+                
+                # Artist column
+                artist_item = QTableWidgetItem(item.get('artist', 'Unknown'))
+                table.setItem(i, 2, artist_item)
+                
+                # Album column
+                album_item = QTableWidgetItem(item.get('album', 'Unknown'))
+                table.setItem(i, 3, album_item)
+                
+                # Popularity column
+                popularity = item.get('popularity', 0)
+                popularity_item = NumericTableWidgetItem(str(popularity))
+                popularity_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                table.setItem(i, 4, popularity_item)
+                
+                # Store track data for context menu actions
+                for col in range(table.columnCount()):
+                    if table.item(i, col):
+                        table.item(i, col).setData(Qt.ItemDataRole.UserRole, {
+                            'track_id': item.get('id', ''),
+                            'track_uri': item.get('uri', ''),
+                            'track_name': item.get('name', ''),
+                            'artist_name': item.get('artist', '')
+                        })
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Configure context menu for the table
         if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
             table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-            table.customContextMenuRequested.connect(self.show_spotify_artist_context_menu)
+            # Connect to either artist or track context menu based on type
+            if item_type == "artists":
+                table.customContextMenuRequested.connect(self.show_spotify_artist_context_menu)
+            else:
+                table.customContextMenuRequested.connect(self.show_spotify_track_context_menu)
         
-        # Switch to the Spotify artists page
-        stack_widget.setCurrentWidget(spotify_page)
+        # Switch to the Spotify top items page
+        stack_widget.setCurrentWidget(top_items_page)
+            
+    def _display_spotify_top_items_as_text(self, items, item_type):
+        """
+        Display Spotify top items as text in the results area
+        
+        Args:
+            items (list): List of item dictionaries
+            item_type (str): Type of items ('artists' or 'tracks')
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Your Top {len(items)} {item_type.title()} on Spotify")
+        self.results_text.append("-" * 50)
+        
+        for i, item in enumerate(items):
+            if item_type == "artists":
+                name = item.get('name', 'Unknown')
+                genres = item.get('genres', '')
+                popularity = item.get('popularity', 0)
+                followers = item.get('followers', 0)
+                
+                self.results_text.append(f"{i+1}. {name}")
+                if genres:
+                    self.results_text.append(f"   Genres: {genres}")
+                self.results_text.append(f"   Popularity: {popularity}/100")
+                self.results_text.append(f"   Followers: {followers:,}")
+            else:  # tracks
+                name = item.get('name', 'Unknown')
+                artist = item.get('artist', 'Unknown')
+                album = item.get('album', 'Unknown')
+                popularity = item.get('popularity', 0)
+                
+                # Format duration
+                duration_ms = item.get('duration_ms', 0)
+                minutes, seconds = divmod(duration_ms // 1000, 60)
+                duration_str = f"{minutes}:{seconds:02d}"
+                
+                self.results_text.append(f"{i+1}. {name} - {artist}")
+                self.results_text.append(f"   Album: {album}")
+                if duration_ms > 0:
+                    self.results_text.append(f"   Duration: {duration_str}")
+                self.results_text.append(f"   Popularity: {popularity}/100")
+            
+            self.results_text.append("")
+        
+        self.results_text.append("-" * 50)
+
+
+
+    def display_spotify_saved_tracks_in_stacked_widget(self, tracks):
+        """
+        Display Spotify saved tracks in the stacked widget
+        
+        Args:
+            tracks (list): List of track dictionaries
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the spotify_saved_tracks_page
+        saved_tracks_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "spotify_saved_tracks_page":
+                saved_tracks_page = widget
+                break
+        
+        if not saved_tracks_page:
+            self.logger.error("spotify_saved_tracks_page not found in stacked widget")
+            # Fallback to text display
+            self._display_spotify_saved_tracks_as_text(tracks)
+            return
+        
+        # Get the table from the page
+        table = saved_tracks_page.findChild(QTableWidget, "spotify_saved_tracks_table")
+        if not table:
+            self.logger.error("spotify_saved_tracks_table not found in spotify_saved_tracks_page")
+            # Fallback to text display
+            self._display_spotify_saved_tracks_as_text(tracks)
+            return
+        
+        # Get the count label
+        count_label = saved_tracks_page.findChild(QLabel, "spotify_saved_tracks_count_label")
+        if count_label:
+            count_label.setText(f"Showing {len(tracks)} saved tracks on Spotify")
+        
+        # Configure table - NO AÑADIMOS COLUMNAS, USAMOS LAS EXISTENTES
+        # Asumimos que la tabla ya tiene las columnas configuradas según el UI
+        table.setRowCount(len(tracks))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table with data
+        # Asumimos el orden: Canción(0), Artista(1), Álbum(2), Duración(3), Fecha(4)
+        for i, track in enumerate(tracks):
+            # Track name column (Canción)
+            name_item = QTableWidgetItem(track.get('name', 'Unknown'))
+            table.setItem(i, 0, name_item)
+            
+            # Artist column (Artista)
+            artist_item = QTableWidgetItem(track.get('artist', 'Unknown'))
+            table.setItem(i, 1, artist_item)
+            
+            # Album column (Álbum)
+            album_item = QTableWidgetItem(track.get('album', 'Unknown'))
+            table.setItem(i, 2, album_item)
+            
+            # Duration column (Duración) - convert ms to min:sec format
+            duration_ms = track.get('duration_ms', 0)
+            minutes, seconds = divmod(duration_ms // 1000, 60)
+            duration_str = f"{minutes}:{seconds:02d}"
+            duration_item = QTableWidgetItem(duration_str)
+            duration_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 3, duration_item)
+            
+            # Added date column (Fecha)
+            added_at = track.get('added_at', '')
+            if added_at:
+                # Convert ISO 8601 date to more readable format
+                try:
+                    import datetime
+                    date_obj = datetime.datetime.fromisoformat(added_at.replace('Z', '+00:00'))
+                    added_date = date_obj.strftime("%Y-%m-%d")
+                except:
+                    added_date = added_at
+            else:
+                added_date = ''
+            
+            date_item = QTableWidgetItem(added_date)
+            table.setItem(i, 4, date_item)
+            
+            # Store track data for context menu actions - para todos los ítems de la fila
+            for col in range(table.columnCount()):
+                if table.item(i, col):
+                    table.item(i, col).setData(Qt.ItemDataRole.UserRole, {
+                        'track_id': track.get('id', ''),
+                        'track_uri': track.get('uri', ''),
+                        'track_name': track.get('name', ''),
+                        'artist_name': track.get('artist', '')
+                    })
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_spotify_track_context_menu)
+        
+        # Switch to the Spotify saved tracks page
+        stack_widget.setCurrentWidget(saved_tracks_page)
+
+    def show_spotify_track_context_menu(self, position):
+        """
+        Show context menu for Spotify tracks in the table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the track data from the item
+        track_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(track_data, dict):
+            return
+        
+        track_id = track_data.get('track_id', '')
+        track_uri = track_data.get('track_uri', '')
+        track_name = track_data.get('track_name', '')
+        artist_name = track_data.get('artist_name', '')
+        
+        if not track_id:
+            return
+        
+        # Create the context menu
+        menu = QMenu(self)
+        
+        # Add actions
+        play_action = QAction(f"Play '{track_name}'", self)
+        play_action.triggered.connect(lambda: self.open_spotify_uri(track_uri))
+        menu.addAction(play_action)
+        
+        view_track_action = QAction(f"View Track on Spotify", self)
+        view_track_action.triggered.connect(lambda: self.open_spotify_track(track_id))
+        menu.addAction(view_track_action)
+        
+        if artist_name:
+            menu.addSeparator()
+            view_artist_action = QAction(f"View Artist '{artist_name}'", self)
+            view_artist_action.triggered.connect(lambda: self.search_and_open_spotify_artist(artist_name))
+            menu.addAction(view_artist_action)
+            
+            follow_artist_action = QAction(f"Follow Artist '{artist_name}'", self)
+            follow_artist_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_name(artist_name))
+            menu.addAction(follow_artist_action)
+            
+            add_to_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
+            add_to_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(artist_name))
+            menu.addAction(add_to_muspy_action)
+        
+        menu.addSeparator()
+        
+        remove_action = QAction("Remove from Saved Tracks", self)
+        remove_action.triggered.connect(lambda: self.remove_track_from_spotify_saved(track_id, track_name))
+        menu.addAction(remove_action)
+        
+        # Show the menu
+        menu.exec(table.mapToGlobal(position))
+
+    def open_spotify_track(self, track_id):
+        """Open Spotify track page in browser without blocking"""
+        if not track_id:
+            return
+            
+        url = f"https://open.spotify.com/track/{track_id}"
+        
+        # Usar el mismo método que en open_spotify_artist
+        try:
+            import subprocess
+            import os
+            import platform
+            
+            system = platform.system()
+            
+            if system == 'Darwin':  # macOS
+                subprocess.Popen(['open', url], start_new_session=True)
+            elif system == 'Windows':
+                os.startfile(url)
+            else:  # Linux y otros
+                subprocess.Popen(['xdg-open', url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, 
+                                start_new_session=True)
+        except Exception as e:
+            self.logger.error(f"Error opening URL: {e}")
+            import webbrowser
+            webbrowser.open_new_tab(url)
+
+    def open_spotify_uri(self, uri):
+        """Open Spotify URI directly in the Spotify app without blocking"""
+        if not uri:
+            return
+        
+        try:
+            import subprocess
+            import os
+            import platform
+            
+            system = platform.system()
+            
+            if system == 'Darwin':  # macOS
+                subprocess.Popen(['open', uri], start_new_session=True)
+            elif system == 'Windows':
+                os.startfile(uri)
+            else:  # Linux y otros
+                subprocess.Popen(['xdg-open', uri], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, 
+                                start_new_session=True)
+        except Exception as e:
+            self.logger.error(f"Error opening URI: {e}")
+            # Para URIs, también podemos intentar abrir la versión web
+            import webbrowser
+            # Convertir URI a URL web si es posible
+            if uri.startswith('spotify:track:'):
+                track_id = uri.split(':')[2]
+                webbrowser.open_new_tab(f"https://open.spotify.com/track/{track_id}")
+            elif uri.startswith('spotify:artist:'):
+                artist_id = uri.split(':')[2]
+                webbrowser.open_new_tab(f"https://open.spotify.com/artist/{artist_id}")
+            elif uri.startswith('spotify:album:'):
+                album_id = uri.split(':')[2]
+                webbrowser.open_new_tab(f"https://open.spotify.com/album/{album_id}")
+
+    def open_spotify_uri(self, uri):
+        """Open Spotify URI directly in the Spotify app"""
+        if not uri:
+            return
+        
+        import webbrowser
+        webbrowser.open(uri)
+
+    def remove_track_from_spotify_saved(self, track_id, track_name):
+        """
+        Remove a track from Spotify saved tracks
+        
+        Args:
+            track_id (str): Spotify ID of the track
+            track_name (str): Name of the track for display
+        """
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify authentication required")
+            return
+        
+        # Confirm with the user
+        reply = QMessageBox.question(
+            self,
+            "Confirm Removal",
+            f"Are you sure you want to remove '{track_name}' from your saved tracks?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+        
+        try:
+            # Get Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                QMessageBox.warning(self, "Error", "Failed to get Spotify client")
+                return
+            
+            # Remove the track
+            spotify_client.current_user_saved_tracks_delete([track_id])
+            
+            # Show success message
+            QMessageBox.information(self, "Success", f"Removed '{track_name}' from your saved tracks")
+            
+            # Ask if user wants to refresh the list
+            refresh_reply = QMessageBox.question(
+                self,
+                "Refresh List",
+                "Do you want to refresh your saved tracks list?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if refresh_reply == QMessageBox.StandardButton.Yes:
+                # Refresh the saved tracks display
+                self.show_spotify_saved_tracks()
+            
+        except Exception as e:
+            self.logger.error(f"Error removing track from saved tracks: {e}", exc_info=True)
+            QMessageBox.warning(self, "Error", f"Failed to remove track: {e}")
+
+
+
+    def _display_spotify_saved_tracks_as_text(self, tracks):
+        """
+        Display Spotify saved tracks as text in the results area
+        
+        Args:
+            tracks (list): List of track dictionaries
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"You have {len(tracks)} saved tracks on Spotify")
+        self.results_text.append("-" * 50)
+        
+        # Sort by added date (newest first)
+        try:
+            sorted_tracks = sorted(tracks, key=lambda x: x.get('added_at', ''), reverse=True)
+        except:
+            sorted_tracks = tracks
+        
+        for i, track in enumerate(sorted_tracks[:100]):  # Limit to 100 tracks for text display
+            name = track.get('name', 'Unknown')
+            artist = track.get('artist', 'Unknown')
+            album = track.get('album', 'Unknown')
+            
+            # Format duration
+            duration_ms = track.get('duration_ms', 0)
+            minutes, seconds = divmod(duration_ms // 1000, 60)
+            duration_str = f"{minutes}:{seconds:02d}"
+            
+            # Format date
+            added_at = track.get('added_at', '')
+            if added_at:
+                try:
+                    import datetime
+                    date_obj = datetime.datetime.fromisoformat(added_at.replace('Z', '+00:00'))
+                    added_date = date_obj.strftime("%Y-%m-%d")
+                except:
+                    added_date = added_at
+            else:
+                added_date = ''
+            
+            self.results_text.append(f"{i+1}. {name} - {artist}")
+            self.results_text.append(f"   Album: {album}")
+            self.results_text.append(f"   Duration: {duration_str}")
+            if added_date:
+                self.results_text.append(f"   Added: {added_date}")
+            self.results_text.append("")
+        
+        if len(tracks) > 100:
+            self.results_text.append(f"(Showing 100 of {len(tracks)} tracks)")
+        
+        self.results_text.append("-" * 50)
+
+
+
+
 
     def display_spotify_releases_in_stacked_widget(self, releases):
         """
@@ -8080,6 +8910,9 @@ class MuspyArtistModule(BaseModule):
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Configure context menu for the table
         if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
@@ -8163,32 +8996,35 @@ class MuspyArtistModule(BaseModule):
         if not item:
             return
         
-        # Get the artist ID from the item
-        artist_id = item.data(Qt.ItemDataRole.UserRole)
-        if not artist_id:
+        # Get the artist data from the item
+        item_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(item_data, dict):
             return
         
-        # Get the artist name from the row
-        row = item.row()
-        artist_name = table.item(row, 0).text() if table.item(row, 0) else "Unknown"
+        # Extract the ID and name directly (don't pass the whole dictionary)
+        artist_id = item_data.get('spotify_artist_id', '')
+        artist_name = item_data.get('artist_name', '')
+        
+        if not artist_id or not artist_name:
+            return
         
         # Create the context menu
         menu = QMenu(self)
         
         # Add actions
         view_spotify_action = QAction(f"View '{artist_name}' on Spotify", self)
+        # Corregido - Pasamos solo el ID, no el diccionario completo
         view_spotify_action.triggered.connect(lambda: self.open_spotify_artist(artist_id))
         menu.addAction(view_spotify_action)
         
-        # Add action to follow on Muspy
-        follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
-        follow_muspy_action.triggered.connect(lambda: self.follow_spotify_artist_on_muspy(artist_id, artist_name))
-        menu.addAction(follow_muspy_action)
+        # Igual para el resto de acciones que usan el ID del artista
+        follow_spotify_action = QAction(f"Follow '{artist_name}' on Spotify", self)
+        follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_id(artist_id))
+        menu.addAction(follow_spotify_action)
         
-        # Add action to get artist's albums
-        get_albums_action = QAction(f"Get '{artist_name}' releases", self)
-        get_albums_action.triggered.connect(lambda: self.get_spotify_artist_albums(artist_id, artist_name))
-        menu.addAction(get_albums_action)
+        add_to_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
+        add_to_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(artist_name))
+        menu.addAction(add_to_muspy_action)
         
         # Show the menu
         menu.exec(table.mapToGlobal(position))
@@ -8246,14 +9082,33 @@ class MuspyArtistModule(BaseModule):
         menu.exec(table.mapToGlobal(position))
 
     def open_spotify_artist(self, artist_id):
-        """Open Spotify artist page in browser"""
+        """Open Spotify artist page in browser without blocking"""
         if not artist_id:
             return
             
         url = f"https://open.spotify.com/artist/{artist_id}"
         
-        import webbrowser
-        webbrowser.open(url)
+        # Usar subprocess para abrir el navegador sin bloquear (aplicación no espera)
+        try:
+            import subprocess
+            import os
+            import platform
+            
+            # Abrir de manera diferente según el sistema operativo
+            system = platform.system()
+            
+            if system == 'Darwin':  # macOS
+                subprocess.Popen(['open', url], start_new_session=True)
+            elif system == 'Windows':
+                os.startfile(url)
+            else:  # Linux y otros
+                subprocess.Popen(['xdg-open', url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, 
+                                start_new_session=True)
+        except Exception as e:
+            self.logger.error(f"Error opening URL: {e}")
+            # Fallback a webbrowser como último recurso
+            import webbrowser
+            webbrowser.open_new_tab(url)
 
     def open_spotify_album(self, album_id):
         """Open Spotify album page in browser"""
@@ -8513,6 +9368,9 @@ class MuspyArtistModule(BaseModule):
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+    
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Configure context menu for the table
         if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:

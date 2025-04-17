@@ -120,6 +120,72 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="spotify_saved_tracks_page">
+      <layout class="QVBoxLayout" name="verticalLayout_12">
+       <item>
+        <widget class="QLabel" name="spotify_saved_tracks_count_label">
+         <property name="text">
+          <string>Spotify Canciones Guardadas</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="spotify_saved_tracks_table">
+         <column>
+          <property name="text">
+           <string>Canción</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Álbum</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Duración</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Fecha</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="spotify_top_items_page">
+      <layout class="QVBoxLayout" name="verticalLayout_13">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="spotify_top_items_count_label">
+         <property name="text">
+          <string>Spotify Top Items</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="spotify_top_items_table"/>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="musicbrainz_collection_page">
       <layout class="QVBoxLayout" name="verticalLayout_7">
        <property name="leftMargin">
@@ -613,6 +679,32 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="get_releases_button">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Mis próximos discos</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/musico</normaloff>:/services/musico</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="get_releases_spotify_button">
         <property name="maximumSize">
          <size>
@@ -681,32 +773,6 @@
         <property name="icon">
          <iconset resource="../images.qrc">
           <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>36</width>
-          <height>36</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="get_releases_button">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Mis próximos discos</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/services/musico</normaloff>:/services/musico</iconset>
         </property>
         <property name="iconSize">
          <size>
