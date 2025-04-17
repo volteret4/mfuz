@@ -715,11 +715,12 @@ class MuspyArtistModule(BaseModule):
             
             table.setCellWidget(i, 4, actions_widget)
         
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
         # Resize columns to fit content
         table.resizeColumnsToContents()
         
-        # Re-enable sorting
-        table.setSortingEnabled(True)
         
         # Configure context menu for the table
         if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
@@ -1063,33 +1064,58 @@ class MuspyArtistModule(BaseModule):
             if response.status_code == 200:
                 data = response.json()
                 
+                # Add debug output to inspect the structure
+                self.logger.debug(f"Last.fm API response structure: {json.dumps(data, indent=2)[:500]}...")
+                
                 if "topartists" in data and "artist" in data["topartists"]:
                     artists = data["topartists"]["artist"]
                     
                     # Process artists
                     result = []
                     for artist in artists:
-                        # Extract data - make sure we're getting url and listeners
+                        # Extraer datos básicos
                         artist_dict = {
                             "name": artist.get("name", ""),
                             "playcount": int(artist.get("playcount", 0)),
-                            "listeners": int(artist.get("listeners", 0)),
                             "mbid": artist.get("mbid", ""),
                             "url": artist.get("url", "")
                         }
+                        
+                        # Intentar obtener listeners
+                        listeners = artist.get("listeners")
+                        if not listeners:
+                            # Si no está disponible, intenta hacer una llamada extra para cada artista
+                            try:
+                                # Solo para los primeros X artistas para no sobrecargar la API
+                                if len(result) < 20:  # Limitar a 20 artistas para no hacer demasiadas llamadas
+                                    artist_info_params = {
+                                        "method": "artist.getInfo",
+                                        "artist": artist_dict["name"],
+                                        "api_key": self.lastfm_api_key,
+                                        "format": "json"
+                                    }
+                                    artist_info_response = requests.get(url, params=artist_info_params)
+                                    if artist_info_response.status_code == 200:
+                                        artist_info = artist_info_response.json()
+                                        if "artist" in artist_info and "stats" in artist_info["artist"]:
+                                            listeners = artist_info["artist"]["stats"].get("listeners", "0")
+                            except Exception as e:
+                                self.logger.debug(f"Error getting listeners for {artist_dict['name']}: {e}")
+                        
+                        # Añadir listeners al diccionario
+                        artist_dict["listeners"] = int(listeners) if listeners else 0
+                        
                         result.append(artist_dict)
                     
                     return result
-                else:
-                    self.logger.error("Unexpected response format from Last.fm API")
-                    return []
-            else:
-                self.logger.error(f"Last.fm API error: {response.status_code} - {response.text}")
-                return []
         
         except Exception as e:
             self.logger.error(f"Error fetching top artists from Last.fm: {e}", exc_info=True)
             return []
+
+
+
+
 
 
     def show_lastfm_top_artists(self, count=50, period="overall", use_cached=True):
