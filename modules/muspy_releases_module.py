@@ -663,9 +663,9 @@ class MuspyArtistModule(BaseModule):
         if count_label:
             count_label.setText(f"Showing {len(artists)} top artists for {self.lastfm_username}")
         
-        # Configure table to include new columns
-        table.setColumnCount(4)  # Increase column count to include listeners and URL
-        table.setHorizontalHeaderLabels(["Artist", "Playcount", "Listeners", "Actions"])
+        # Configure table to include new columns - make sure we have 5 columns now
+        table.setColumnCount(5)  # Update column count to include listeners and URL
+        table.setHorizontalHeaderLabels(["Artist", "Playcount", "Listeners", "URL", "Actions"])
         
         # Configure table
         table.setRowCount(len(artists))
@@ -673,7 +673,7 @@ class MuspyArtistModule(BaseModule):
         
         # Fill table with artist data
         for i, artist in enumerate(artists):
-            artist_name = artist['name']
+            artist_name = artist.get('name', '')
             playcount = str(artist.get('playcount', 'N/A'))
             listeners = str(artist.get('listeners', 'N/A'))
             url = artist.get('url', '')
@@ -692,6 +692,10 @@ class MuspyArtistModule(BaseModule):
             listeners_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             table.setItem(i, 2, listeners_item)
             
+            # URL - add the Last.fm URL
+            url_item = QTableWidgetItem(url)
+            table.setItem(i, 3, url_item)
+            
             # Actions - create a widget with buttons
             actions_widget = QWidget()
             actions_layout = QHBoxLayout(actions_widget)
@@ -709,7 +713,10 @@ class MuspyArtistModule(BaseModule):
             if url:
                 name_item.setData(Qt.ItemDataRole.UserRole, {'url': url, 'mbid': artist.get('mbid', '')})
             
-            table.setCellWidget(i, 3, actions_widget)
+            table.setCellWidget(i, 4, actions_widget)
+        
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
         
         # Re-enable sorting
         table.setSortingEnabled(True)
@@ -1062,7 +1069,7 @@ class MuspyArtistModule(BaseModule):
                     # Process artists
                     result = []
                     for artist in artists:
-                        # Extract data
+                        # Extract data - make sure we're getting url and listeners
                         artist_dict = {
                             "name": artist.get("name", ""),
                             "playcount": int(artist.get("playcount", 0)),

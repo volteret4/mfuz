@@ -111,6 +111,11 @@
            <string>Lastfm url</string>
           </property>
          </column>
+         <column>
+          <property name="text">
+           <string>Acciones</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>
