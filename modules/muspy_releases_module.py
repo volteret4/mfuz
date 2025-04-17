@@ -12,7 +12,7 @@ try:
                                 QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
                                 QTableWidgetItem, QHeaderView, QDialog, QCheckBox, QScrollArea, QDialogButtonBox,
                                 QMenu, QInputDialog, QTreeWidget, QTreeWidgetItem, QProgressDialog, QSizePolicy,
-                                QStackedWidget, QSpinBox, QComboBox)
+                                QStackedWidget, QSpinBox, QComboBox, QAbstractItemView)
     from PyQt6.QtCore import pyqtSignal, Qt, QPoint, QObject, QThread, QSize, QEvent
     from PyQt6.QtGui import QColor, QTextDocument, QAction, QCursor, QTextCursor, QIcon, QShortcut, QKeySequence
     QT_AVAILABLE = True
@@ -25,7 +25,10 @@ logger = logging.getLogger("MuspyArtistModule")
 
 # Configure path for imports
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import BaseModule, THEMES, PROJECT_ROOT
+from base_module import BaseModule, THEMES, PROJECT_ROOT        # BaseModule
+from tools.musicbrainz_login import MusicBrainzAuthManager      # Musicbrainz
+from tools.bluesky_manager import BlueskyManager                # Bluesky
+
 
 # Try to import specific modules that might not be available
 try:
@@ -43,8 +46,9 @@ except ImportError:
     LASTFM_AVAILABLE = False
     logger.warning("LastFM module not available. LastFM features will be disabled.")
 
-# Musicbrainz
-from tools.musicbrainz_login import MusicBrainzAuthManager
+
+
+# CLASES AUXILIARES
 
 # Filter PyQt logs
 class PyQtFilter(logging.Filter):
@@ -372,6 +376,8 @@ class FloatingNavigationButtons(QObject):
                 self.right_active = False
 
 
+# LA MANDANGA
+
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
             muspy_username=None, 
@@ -389,6 +395,7 @@ class MuspyArtistModule(BaseModule):
             spotify_redirect_uri=None,
             musicbrainz_username=None,
             musicbrainz_password=None,
+            bluesky_username=None,
             parent=None, 
             db_path='music_database.db',
             theme='Tokyo Night', 
@@ -420,6 +427,8 @@ class MuspyArtistModule(BaseModule):
         self.lastfm_api_key = lastfm_api_key
         self.lastfm_api_secret = lastfm_api_secret
         self.lastfm_username = lastfm_username
+        
+        self.bluesky_username = bluesky_username
         
         # Set up a basic logger early so it's available before super().__init__()
         self.logger = logging.getLogger(self.module_name)
@@ -537,7 +546,7 @@ class MuspyArtistModule(BaseModule):
         required_widgets = [
             'artist_input', 'search_button', 
             'load_artists_button', 'sync_artists_button', 
-            'get_releases_button', 'get_new_releases_button', 'get_my_releases_button',
+            'get_releases_button', 'get_new_releases_button', 'networks_artists_button',
             'stackedWidget', 'tabla_musicbrainz_collection'  # Added the table to required widgets
         ]
         
@@ -947,8 +956,8 @@ class MuspyArtistModule(BaseModule):
         self.get_new_releases_button = QPushButton("Discos ausentes")
         bottom_layout.addWidget(self.get_new_releases_button)
         
-        self.get_my_releases_button = QPushButton("Obtener todo...")
-        bottom_layout.addWidget(self.get_my_releases_button)
+        self.networks_artists_button = QPushButton("Obtener todo...")
+        bottom_layout.addWidget(self.networks_artists_button)
 
         main_layout.addLayout(bottom_layout)
         
@@ -1013,7 +1022,7 @@ class MuspyArtistModule(BaseModule):
         
         # Connect other action buttons
         self.get_new_releases_button.clicked.connect(lambda: self.get_new_releases(PROJECT_ROOT))
-        self.get_my_releases_button.clicked.connect(self.get_all_my_releases)
+        self.networks_artists_button.clicked.connect(self.show_bluesky_menu)  # Changed to show Bluesky menu
         
         # Enable context menu
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -10463,6 +10472,1125 @@ class MuspyArtistModule(BaseModule):
                     self.logger.error(f"Error pre-fetching collections: {e}")
         else:
             self.logger.warning("Background MusicBrainz authentication failed")
+
+
+# BLUESKY
+    def show_bluesky_menu(self):
+        """
+        Display a menu with Bluesky integration options
+        """
+        # Check if Bluesky username is configured
+        if not self.bluesky_username:
+            # If no username, show a warning but still create the menu
+            # with options disabled
+            warning_shown = False
+            
+        # Create the menu
+        menu = QMenu(self)
+        
+        # Add original functionality
+        original_action = QAction("Obtener todos los lanzamientos", self)
+        original_action.triggered.connect(self.get_all_my_releases)
+        menu.addAction(original_action)
+        
+        menu.addSeparator()
+        
+        # Add Bluesky menu options
+        db_action = QAction("Seguir artistas base de datos en Bluesky", self)
+        spotify_action = QAction("Seguir artistas Spotify en Bluesky", self)
+        lastfm_action = QAction("Seguir top artistas LastFM en Bluesky", self)
+        mb_action = QAction("Seguir artistas de colección de MusicBrainz en Bluesky", self)
+        
+        # Connect actions
+        db_action.triggered.connect(self.search_db_artists_on_bluesky)
+        spotify_action.triggered.connect(self.search_spotify_artists_on_bluesky)
+        lastfm_action.triggered.connect(self.show_lastfm_bluesky_dialog)
+        mb_action.triggered.connect(self.search_mb_collection_on_bluesky)
+        
+        # If no username, disable all Bluesky-related actions
+        if not self.bluesky_username:
+            db_action.setEnabled(False)
+            spotify_action.setEnabled(False)
+            lastfm_action.setEnabled(False)
+            mb_action.setEnabled(False)
+            
+            # Add an action to configure Bluesky
+            config_action = QAction("Configurar usuario de Bluesky...", self)
+            config_action.triggered.connect(self.configure_bluesky_username)
+            menu.addAction(config_action)
+        
+        # Add actions to menu
+        menu.addAction(db_action)
+        menu.addAction(spotify_action)
+        menu.addAction(lastfm_action)
+        menu.addAction(mb_action)
+        
+        # Get button position
+        pos = self.networks_artists_button.mapToGlobal(QPoint(0, self.networks_artists_button.height()))
+        
+        # Show menu
+        menu.exec(pos)
+        
+        # Show warning after menu is closed if needed
+        if not self.bluesky_username and not warning_shown:
+            QMessageBox.warning(self, "Bluesky no configurado", 
+                            "No hay usuario de Bluesky configurado. Algunas funciones no estarán disponibles.")
+
+
+    def configure_bluesky_username(self):
+        """
+        Show dialog to configure Bluesky username
+        """
+        # Get current username or empty string
+        current_username = self.bluesky_username or ""
+        
+        # Show input dialog
+        username, ok = QInputDialog.getText(
+            self,
+            "Configurar Bluesky",
+            "Introduzca su nombre de usuario de Bluesky:",
+            QLineEdit.EchoMode.Normal,
+            current_username
+        )
+        
+        if ok and username:
+            # Normalize the username
+            username = username.strip().lower()
+            
+            # Remove .bsky.social if present (will be added when needed)
+            if username.endswith('.bsky.social'):
+                username = username.replace('.bsky.social', '')
+            
+            # Save the username
+            self.bluesky_username = username
+            
+            # Reinitialize Bluesky manager if it exists
+            if hasattr(self, 'bluesky_manager'):
+                self.bluesky_manager.username = username
+            
+            QMessageBox.information(self, "Bluesky Configurado", 
+                                f"Usuario de Bluesky configurado como: {username}")
+
+
+
+    def _init_bluesky_manager(self):
+        """
+        Initialize the Bluesky manager if not already initialized
+        """
+        if not hasattr(self, 'bluesky_manager'):
+            self.bluesky_manager = BlueskyManager(
+                parent=self, 
+                project_root=PROJECT_ROOT,
+                username=self.bluesky_username  # Pasar el nombre de usuario de Bluesky
+            )
+            
+        return self.bluesky_manager
+
+    def search_spotify_artists_on_bluesky(self):
+        """
+        Search for Spotify followed artists on Bluesky
+        """
+        # Check if Spotify is enabled
+        if not self.ensure_spotify_auth():
+            QMessageBox.warning(self, "Error", "Spotify no está configurado o la autenticación falló")
+            return
+        
+        # Initialize Bluesky manager
+        self._init_bluesky_manager()
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append("Obteniendo artistas seguidos en Spotify...")
+        QApplication.processEvents()
+        
+        # Get Spotify client
+        spotify_client = self.spotify_auth.get_client()
+        if not spotify_client:
+            self.results_text.append("Error al obtener cliente Spotify. Verifique su autenticación.")
+            return
+        
+        # Define function for progress dialog
+        def search_spotify_artists_on_bluesky(update_progress):
+            try:
+                # Get followed artists from Spotify
+                update_progress(0, 100, "Obteniendo artistas seguidos en Spotify...")
+                
+                all_artists = []
+                offset = 0
+                limit = 50  # Spotify's maximum limit
+                total = 1  # Will be updated after first request
+                
+                # Paginate through results
+                while offset < total:
+                    # Fetch current page of artists
+                    results = spotify_client.current_user_followed_artists(limit=limit, after=None if offset == 0 else all_artists[-1]['id'])
+                    
+                    if 'artists' in results and 'items' in results['artists']:
+                        # Get artists from this page
+                        artists_page = results['artists']['items']
+                        all_artists.extend(artists_page)
+                        
+                        # Update total count
+                        total = results['artists']['total']
+                        
+                        # If we got fewer items than requested, we're done
+                        if len(artists_page) < limit:
+                            break
+                            
+                        # Update offset
+                        offset += len(artists_page)
+                    else:
+                        # No more results or error
+                        break
+                
+                # Now search for each artist on Bluesky
+                found_artists = []
+                total_artists = len(all_artists)
+                
+                update_progress(20, 100, f"Buscando {total_artists} artistas en Bluesky...")
+                
+                for i, artist in enumerate(all_artists):
+                    artist_name = artist.get('name', '')
+                    
+                    # Update progress (scale from 20-95%)
+                    progress_value = 20 + int((i / total_artists) * 75)
+                    update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
+                    
+                    # Check if user canceled
+                    if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
+                        return {"success": False, "message": "Búsqueda cancelada por el usuario"}
+                    
+                    # Search for artist on Bluesky
+                    user_info = self.bluesky_manager.check_bluesky_user(artist_name)
+                    
+                    if user_info:
+                        # Get profile and recent posts
+                        profile = self.bluesky_manager.get_user_profile(user_info['did'])
+                        posts = self.bluesky_manager.get_recent_posts(user_info['did'])
+                        
+                        # Create artist entry
+                        artist_entry = {
+                            'name': artist_name,
+                            'handle': user_info['handle'],
+                            'did': user_info['did'],
+                            'profile': profile,
+                            'posts': posts
+                        }
+                        
+                        found_artists.append(artist_entry)
+                
+                update_progress(100, 100, "Búsqueda completada")
+                
+                return {
+                    "success": True,
+                    "artists": found_artists,
+                    "total_searched": total_artists
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error searching Spotify artists on Bluesky: {e}", exc_info=True)
+                return {"success": False, "message": f"Error: {str(e)}"}
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            search_spotify_artists_on_bluesky,
+            title="Buscando Artistas de Spotify en Bluesky",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            artists = result.get("artists", [])
+            total_searched = result.get("total_searched", 0)
+            
+            if not artists:
+                self.results_text.append(f"No se encontró ninguno de los {total_searched} artistas de Spotify en Bluesky.")
+                return
+            
+            # Display artists in the stacked widget table
+            self.display_bluesky_artists_in_table(artists)
+        else:
+            error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
+            self.results_text.append(f"Error: {error_msg}")
+
+
+    def search_db_artists_on_bluesky(self):
+        """
+        Search for database artists on Bluesky
+        """
+        # Initialize Bluesky manager
+        self._init_bluesky_manager()
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append("Buscando artistas de la base de datos en Bluesky...")
+        QApplication.processEvents()
+        
+        # Path to the artists JSON file
+        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+        
+        # Check if file exists
+        if not os.path.exists(json_path):
+            QMessageBox.warning(self, "Error", "No hay artistas seleccionados. Por favor, carga artistas primero.")
+            return
+        
+        # Load artists from JSON
+        try:
+            with open(json_path, 'r', encoding='utf-8') as f:
+                artists_data = json.load(f)
+                
+            if not artists_data:
+                QMessageBox.warning(self, "Error", "No hay artistas en el archivo seleccionado.")
+                return
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al cargar artistas: {str(e)}")
+            return
+        
+        # Define function for progress dialog
+        def search_artists_on_bluesky(update_progress):
+            found_artists = []
+            total_artists = len(artists_data)
+            
+            for i, artist in enumerate(artists_data):
+                # Get artist name
+                artist_name = artist.get('nombre', '')
+                if not artist_name:
+                    continue
+                    
+                # Update progress
+                progress_value = int((i / total_artists) * 100)
+                update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
+                
+                # Check if user canceled
+                if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
+                    return {"success": False, "message": "Búsqueda cancelada por el usuario"}
+                
+                # Search for artist on Bluesky
+                user_info = self.bluesky_manager.check_bluesky_user(artist_name)
+                
+                if user_info:
+                    # Get profile and recent posts
+                    profile = self.bluesky_manager.get_user_profile(user_info['did'])
+                    posts = self.bluesky_manager.get_recent_posts(user_info['did'])
+                    
+                    # Create artist entry
+                    artist_entry = {
+                        'name': artist_name,
+                        'handle': user_info['handle'],
+                        'did': user_info['did'],
+                        'profile': profile,
+                        'posts': posts
+                    }
+                    
+                    found_artists.append(artist_entry)
+            
+            return {
+                "success": True,
+                "artists": found_artists,
+                "total_searched": total_artists
+            }
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            search_artists_on_bluesky,
+            title="Buscando en Bluesky",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            artists = result.get("artists", [])
+            
+            if not artists:
+                self.results_text.append("No se encontró ningún artista en Bluesky.")
+                return
+            
+            # Display artists in the stacked widget table
+            self.display_bluesky_artists_in_table(artists)
+        else:
+            error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
+            self.results_text.append(f"Error: {error_msg}")
+
+
+    def show_lastfm_bluesky_dialog(self):
+        """
+        Show dialog to select period and number of top artists from LastFM to search on Bluesky
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "LastFM no está configurado")
+            return
+        
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Buscar Top Artistas de LastFM en Bluesky")
+        dialog.setMinimumWidth(350)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Period selection
+        period_layout = QHBoxLayout()
+        period_label = QLabel("Período de tiempo:")
+        period_combo = QComboBox()
+        period_combo.addItem("7 días", "7day")
+        period_combo.addItem("1 mes", "1month")
+        period_combo.addItem("3 meses", "3month")
+        period_combo.addItem("6 meses", "6month")
+        period_combo.addItem("12 meses", "12month")
+        period_combo.addItem("Todo el tiempo", "overall")
+        period_combo.setCurrentIndex(5)  # Default to "Todo el tiempo"
+        period_layout.addWidget(period_label)
+        period_layout.addWidget(period_combo)
+        layout.addLayout(period_layout)
+        
+        # Count selection
+        count_layout = QHBoxLayout()
+        count_label = QLabel("Número de artistas:")
+        count_spin = QSpinBox()
+        count_spin.setRange(5, 200)
+        count_spin.setValue(50)
+        count_spin.setSingleStep(5)
+        count_layout.addWidget(count_label)
+        count_layout.addWidget(count_spin)
+        layout.addLayout(count_layout)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            # Get selected values
+            period = period_combo.currentData()
+            count = count_spin.value()
+            
+            # Search for LastFM artists on Bluesky
+            self.search_lastfm_artists_on_bluesky(period, count)
+
+
+    def search_lastfm_artists_on_bluesky(self, period, count):
+        """
+        Search for LastFM top artists on Bluesky
+        
+        Args:
+            period (str): Period for LastFM top artists
+            count (int): Number of artists to fetch
+        """
+        if not self.lastfm_enabled:
+            QMessageBox.warning(self, "Error", "LastFM no está configurado")
+            return
+        
+        # Initialize Bluesky manager
+        self._init_bluesky_manager()
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Obteniendo top {count} artistas de LastFM para el período {period}...")
+        QApplication.processEvents()
+        
+        # Define function for progress dialog
+        def search_lastfm_artists_on_bluesky(update_progress):
+            try:
+                # First get top artists from LastFM
+                update_progress(0, 100, "Obteniendo top artistas de LastFM...")
+                
+                top_artists = self.get_lastfm_top_artists_direct(count, period)
+                
+                if not top_artists:
+                    return {"success": False, "message": "No se pudieron obtener artistas de LastFM"}
+                
+                # Now search for each artist on Bluesky
+                found_artists = []
+                total_artists = len(top_artists)
+                
+                update_progress(20, 100, f"Buscando {total_artists} artistas en Bluesky...")
+                
+                for i, artist in enumerate(top_artists):
+                    artist_name = artist.get('name', '')
+                    
+                    # Update progress (scale from 20-95%)
+                    progress_value = 20 + int((i / total_artists) * 75)
+                    update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
+                    
+                    # Check if user canceled
+                    if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
+                        return {"success": False, "message": "Búsqueda cancelada por el usuario"}
+                    
+                    # Search for artist on Bluesky
+                    user_info = self.bluesky_manager.check_bluesky_user(artist_name)
+                    
+                    if user_info:
+                        # Get profile and recent posts
+                        profile = self.bluesky_manager.get_user_profile(user_info['did'])
+                        posts = self.bluesky_manager.get_recent_posts(user_info['did'])
+                        
+                        # Create artist entry
+                        artist_entry = {
+                            'name': artist_name,
+                            'handle': user_info['handle'],
+                            'did': user_info['did'],
+                            'profile': profile,
+                            'posts': posts,
+                            'lastfm_playcount': artist.get('playcount', 0)
+                        }
+                        
+                        found_artists.append(artist_entry)
+                
+                update_progress(100, 100, "Búsqueda completada")
+                
+                return {
+                    "success": True,
+                    "artists": found_artists,
+                    "total_searched": total_artists
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error searching LastFM artists on Bluesky: {e}", exc_info=True)
+                return {"success": False, "message": f"Error: {str(e)}"}
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            search_lastfm_artists_on_bluesky,
+            title="Buscando Artistas de LastFM en Bluesky",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            artists = result.get("artists", [])
+            total_searched = result.get("total_searched", 0)
+            
+            if not artists:
+                self.results_text.append(f"No se encontró ninguno de los {total_searched} artistas de LastFM en Bluesky.")
+                return
+            
+            # Display artists in the stacked widget table
+            self.display_bluesky_artists_in_table(artists)
+        else:
+            error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
+            self.results_text.append(f"Error: {error_msg}")
+
+
+    def search_mb_collection_on_bluesky(self):
+        """
+        Search for MusicBrainz collection artists on Bluesky
+        """
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
+            QMessageBox.warning(self, "Error", "MusicBrainz no está configurado o la autenticación falló")
+            return
+        
+        # Check if authenticated
+        is_auth = self.musicbrainz_auth.is_authenticated()
+        
+        if not is_auth:
+            # Prompt for login if not authenticated
+            reply = QMessageBox.question(
+                self, 
+                "Autenticación Requerida", 
+                "Necesita iniciar sesión en MusicBrainz para acceder a sus colecciones. ¿Iniciar sesión ahora?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                if not self.authenticate_musicbrainz_silently():
+                    QMessageBox.warning(self, "Error", "Falló la autenticación. Por favor, intente de nuevo.")
+                    return
+            else:
+                return
+        
+        # Get collections list if we haven't done so yet
+        if not hasattr(self, '_mb_collections') or not self._mb_collections:
+            self._mb_collections = self.fetch_all_musicbrainz_collections()
+        
+        if not self._mb_collections:
+            QMessageBox.warning(self, "Error", "No se encontraron colecciones de MusicBrainz")
+            return
+        
+        # Show collection selection dialog
+        collection = self._select_musicbrainz_collection()
+        
+        if not collection:
+            return  # User canceled
+        
+        # Initialize Bluesky manager
+        self._init_bluesky_manager()
+        
+        # Make sure we're showing the text page during loading
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Obteniendo artistas de la colección '{collection['name']}'...")
+        QApplication.processEvents()
+        
+        # Define function for progress dialog
+        def search_mb_collection_on_bluesky(update_progress):
+            try:
+                # First get artists from the collection
+                update_progress(0, 100, "Obteniendo artistas de la colección...")
+                
+                # Get collection contents
+                collection_data = self.get_collection_contents(collection['id'], 'artist')
+                if not collection_data:
+                    return {"success": False, "message": "No se pudieron obtener los artistas de la colección"}
+                
+                # Extract artists from collection
+                artists = []
+                for item in collection_data:
+                    if 'name' in item:
+                        artists.append({
+                            'name': item['name'],
+                            'mbid': item.get('id', '')
+                        })
+                
+                if not artists:
+                    return {"success": False, "message": "No se encontraron artistas en la colección"}
+                
+                # Now search for each artist on Bluesky
+                found_artists = []
+                total_artists = len(artists)
+                
+                update_progress(20, 100, f"Buscando {total_artists} artistas en Bluesky...")
+                
+                for i, artist in enumerate(artists):
+                    artist_name = artist.get('name', '')
+                    
+                    # Update progress (scale from 20-95%)
+                    progress_value = 20 + int((i / total_artists) * 75)
+                    update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
+                    
+                    # Check if user canceled
+                    if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
+                        return {"success": False, "message": "Búsqueda cancelada por el usuario"}
+                    
+                    # Search for artist on Bluesky
+                    user_info = self.bluesky_manager.check_bluesky_user(artist_name)
+                    
+                    if user_info:
+                        # Get profile and recent posts
+                        profile = self.bluesky_manager.get_user_profile(user_info['did'])
+                        posts = self.bluesky_manager.get_recent_posts(user_info['did'])
+                        
+                        # Create artist entry
+                        artist_entry = {
+                            'name': artist_name,
+                            'handle': user_info['handle'],
+                            'did': user_info['did'],
+                            'profile': profile,
+                            'posts': posts,
+                            'mbid': artist.get('mbid', '')
+                        }
+                        
+                        found_artists.append(artist_entry)
+                
+                update_progress(100, 100, "Búsqueda completada")
+                
+                return {
+                    "success": True,
+                    "artists": found_artists,
+                    "total_searched": total_artists
+                }
+                
+            except Exception as e:
+                self.logger.error(f"Error searching MB collection on Bluesky: {e}", exc_info=True)
+                return {"success": False, "message": f"Error: {str(e)}"}
+        
+        # Execute with progress dialog
+        result = self.show_progress_operation(
+            search_mb_collection_on_bluesky,
+            title=f"Buscando Artistas de '{collection['name']}' en Bluesky",
+            label_format="{status}"
+        )
+        
+        # Process results
+        if result and result.get("success"):
+            artists = result.get("artists", [])
+            total_searched = result.get("total_searched", 0)
+            
+            if not artists:
+                self.results_text.append(f"No se encontró ninguno de los {total_searched} artistas de MusicBrainz en Bluesky.")
+                return
+            
+            # Display artists in the stacked widget table
+            self.display_bluesky_artists_in_table(artists)
+        else:
+            error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
+            self.results_text.append(f"Error: {error_msg}")
+
+
+
+    def _select_musicbrainz_collection(self):
+        """
+        Show dialog to select a MusicBrainz collection
+        
+        Returns:
+            dict or None: Selected collection dict or None if canceled
+        """
+        # Create dialog
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Seleccionar Colección de MusicBrainz")
+        dialog.setMinimumWidth(400)
+        
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Collection selection
+        collections_combo = QComboBox()
+        
+        # Add collections to combo box
+        if hasattr(self, '_mb_collections') and self._mb_collections:
+            for collection in self._mb_collections:
+                name = collection.get('name', 'Colección sin nombre')
+                count = collection.get('entity_count', 0)
+                collections_combo.addItem(f"{name} ({count} elementos)", collection)
+        else:
+            collections_combo.addItem("No hay colecciones disponibles")
+            collections_combo.setEnabled(False)
+        
+        layout.addWidget(QLabel("Seleccione una colección:"))
+        layout.addWidget(collections_combo)
+        
+        # Buttons
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        layout.addWidget(button_box)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            # Get selected collection
+            return collections_combo.currentData()
+        else:
+            return None
+
+
+    def display_bluesky_artists_in_table(self, artists):
+        """
+        Display Bluesky artists in the stacked widget table
+        
+        Args:
+            artists (list): List of artist dictionaries with Bluesky info
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            # Fallback to text display
+            self._display_bluesky_artists_as_text(artists)
+            return
+        
+        # Find the bluesky_page
+        bluesky_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "bluesky_page":
+                bluesky_page = widget
+                break
+        
+        if not bluesky_page:
+            self.logger.error("bluesky_page not found in stacked widget")
+            # Fallback to text display
+            self._display_bluesky_artists_as_text(artists)
+            return
+        
+        # Get the table from the page
+        table = bluesky_page.findChild(QTableWidget, "bluesky_artists_table")
+        if not table:
+            self.logger.error("bluesky_artists_table not found in bluesky_page")
+            # Fallback to text display
+            self._display_bluesky_artists_as_text(artists)
+            return
+        
+        # Get count label if exists
+        count_label = bluesky_page.findChild(QLabel, "bluesky_count_label")
+        if count_label:
+            count_label.setText(f"Encontrados {len(artists)} artistas en Bluesky")
+        
+        # Configure table - Ahora con MENOS columnas, ya que no mostramos los mensajes en la tabla
+        table.setRowCount(len(artists))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Find sidebar elements
+        image_label = bluesky_page.findChild(QLabel, "bluesky_selected_artist_foto")
+        messages_text = bluesky_page.findChild(QTextEdit, "bluesky_selected_artist_mensajes")
+        sidebar_panel = bluesky_page.findChild(QWidget, "bluesky_selected_artist_panel")
+        
+        # Hide sidebar panel initially
+        if sidebar_panel:
+            sidebar_panel.setVisible(len(artists) > 0)
+        
+        # Clear messages panel
+        if messages_text:
+            messages_text.clear()
+        
+        # Store artists data for selection handling
+        self._bluesky_artists = artists
+        
+        # Fill the table with data
+        for i, artist in enumerate(artists):
+            # Artist name column
+            name_item = QTableWidgetItem(artist.get('name', 'Unknown'))
+            table.setItem(i, 0, name_item)
+            
+            # Bluesky ID column (handle)
+            handle_item = QTableWidgetItem(artist.get('handle', ''))
+            table.setItem(i, 1, handle_item)
+            
+            # Bluesky URL column
+            url = f"https://bsky.app/profile/{artist.get('handle', '')}"
+            url_item = QTableWidgetItem(url)
+            table.setItem(i, 2, url_item)
+            
+            # Profile description
+            description = ""
+            if 'profile' in artist and isinstance(artist['profile'], dict):
+                description = artist['profile'].get('description', '')
+            desc_item = QTableWidgetItem(description)
+            table.setItem(i, 3, desc_item)
+            
+            # Store artist data in items for context menu and selection handling
+            for col in range(table.columnCount()):
+                if table.item(i, col):
+                    artist_data = {
+                        'name': artist.get('name', ''),
+                        'handle': artist.get('handle', ''),
+                        'did': artist.get('did', ''),
+                        'url': url,
+                        'posts': artist.get('posts', []),
+                        'profile': artist.get('profile', {})
+                    }
+                    table.item(i, col).setData(Qt.ItemDataRole.UserRole, artist_data)
+        
+        # Connect selection signal if not already connected
+        if table.selectionBehavior() != QAbstractItemView.SelectionBehavior.SelectRows:
+            table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        
+        # Disconnect existing signals to avoid multiple connections
+        try:
+            table.itemSelectionChanged.disconnect()
+        except:
+            pass
+        
+        # Connect new signal
+        table.itemSelectionChanged.connect(lambda: self.handle_bluesky_artist_selection(table))
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Resize columns to fit content
+        table.resizeColumnsToContents()
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_bluesky_context_menu)
+        
+        # Switch to the Bluesky page
+        stack_widget.setCurrentWidget(bluesky_page)
+        
+        # Select first artist if available
+        if len(artists) > 0:
+            table.selectRow(0)
+
+    def handle_bluesky_artist_selection(self, table):
+        """
+        Handle selection of a Bluesky artist in the table
+        
+        Args:
+            table (QTableWidget): Table with selected artist
+        """
+        # Get the selected row
+        selected_rows = table.selectedIndexes()
+        if not selected_rows:
+            return
+        
+        # Get the row of the first selected item
+        row = selected_rows[0].row()
+        
+        # Get artist data from the first column
+        item = table.item(row, 0)
+        if not item:
+            return
+        
+        artist_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(artist_data, dict):
+            return
+        
+        # Find sidebar elements in the bluesky_page
+        bluesky_page = None
+        for i in range(self.stackedWidget.count()):
+            widget = self.stackedWidget.widget(i)
+            if widget.objectName() == "bluesky_page":
+                bluesky_page = widget
+                break
+        
+        if not bluesky_page:
+            return
+        
+        image_label = bluesky_page.findChild(QLabel, "bluesky_selected_artist_foto")
+        messages_text = bluesky_page.findChild(QTextEdit, "bluesky_selected_artist_mensajes")
+        sidebar_panel = bluesky_page.findChild(QWidget, "bluesky_selected_artist_panel")
+        
+        # Make sure panel is visible
+        if sidebar_panel:
+            sidebar_panel.setVisible(True)
+        
+        # Update image if available
+        if image_label:
+            # Try to get the avatar URL from profile
+            avatar_url = None
+            if 'profile' in artist_data and isinstance(artist_data['profile'], dict):
+                avatar = artist_data['profile'].get('avatar')
+                if avatar:
+                    avatar_url = avatar
+            
+            if avatar_url:
+                # Download and display the image
+                self.load_image_for_label(image_label, avatar_url)
+            else:
+                # Clear image if no avatar available
+                image_label.clear()
+                image_label.setText("No image available")
+        
+        # Update messages panel
+        if messages_text:
+            messages_text.clear()
+            posts = artist_data.get('posts', [])
+            
+            if posts:
+                messages_text.setHtml("<h3>Recent Posts</h3>")
+                
+                for i, post in enumerate(posts):
+                    text = post.get('text', '')
+                    created_at = post.get('created_at', '')
+                    
+                    # Format date if available
+                    date_str = ""
+                    if created_at:
+                        try:
+                            # Convert ISO 8601 format to readable date
+                            from datetime import datetime
+                            date_obj = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                            date_str = date_obj.strftime("%Y-%m-%d %H:%M")
+                        except:
+                            date_str = created_at
+                    
+                    # Add formatted post to text edit
+                    messages_text.append(f"<p><b>{date_str}</b></p>")
+                    messages_text.append(f"<p>{text}</p>")
+                    
+                    # Add separator between posts
+                    if i < len(posts) - 1:
+                        messages_text.append("<hr>")
+            else:
+                messages_text.setPlainText("No recent posts available")
+
+    def load_image_for_label(self, label, url):
+        """
+        Load an image from URL and display it in a QLabel
+        
+        Args:
+            label (QLabel): Label to display the image in
+            url (str): URL of the image to load
+        """
+        try:
+            # Import Qt modules
+            from PyQt6.QtCore import QByteArray, QBuffer
+            from PyQt6.QtGui import QPixmap, QImage
+            
+            # Create request
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                # Load image data into QPixmap
+                img_data = QByteArray(response.content)
+                buffer = QBuffer(img_data)
+                buffer.open(QBuffer.OpenModeFlag.ReadOnly)
+                
+                # Load image
+                image = QImage()
+                image.load(buffer, "")
+                
+                # Create pixmap and scale to fit label while maintaining aspect ratio
+                pixmap = QPixmap.fromImage(image)
+                label_size = label.size()
+                scaled_pixmap = pixmap.scaled(
+                    label_size.width(), label_size.height(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                
+                # Set pixmap to label
+                label.setPixmap(scaled_pixmap)
+            else:
+                label.clear()
+                label.setText(f"Failed to load image: {response.status_code}")
+                
+        except Exception as e:
+            self.logger.error(f"Error loading image from {url}: {e}")
+            label.clear()
+            label.setText("Error loading image")
+
+    def _display_bluesky_artists_as_text(self, artists):
+        """
+        Fallback method to display Bluesky artists as text
+        
+        Args:
+            artists (list): List of artist dictionaries with Bluesky info
+        """
+        self.show_text_page()
+        self.results_text.clear()
+        self.results_text.append(f"Encontrados {len(artists)} artistas en Bluesky:")
+        self.results_text.append("-" * 50)
+        
+        for i, artist in enumerate(artists):
+            name = artist.get('name', 'Unknown')
+            handle = artist.get('handle', '')
+            url = f"https://bsky.app/profile/{handle}"
+            
+            # Get description if available
+            description = ""
+            if 'profile' in artist and isinstance(artist['profile'], dict):
+                description = artist['profile'].get('description', '')
+            
+            # Recent posts
+            posts = artist.get('posts', [])
+            
+            self.results_text.append(f"{i+1}. {name} (@{handle})")
+            self.results_text.append(f"   URL: {url}")
+            
+            if description:
+                self.results_text.append(f"   Descripción: {description}")
+            
+            if posts:
+                self.results_text.append("   Posts recientes:")
+                for j, post in enumerate(posts):
+                    self.results_text.append(f"     - {post.get('text', '')}")
+            
+            self.results_text.append("")
+        
+        self.results_text.append("-" * 50)
+
+    def show_bluesky_context_menu(self, position):
+        """
+        Show context menu for Bluesky artists in the table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the artist data from the item
+        artist_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(artist_data, dict):
+            return
+        
+        name = artist_data.get('name', '')
+        handle = artist_data.get('handle', '')
+        did = artist_data.get('did', '')
+        url = artist_data.get('url', '')
+        
+        if not handle or not url:
+            return
+        
+        # Create context menu
+        menu = QMenu(self)
+        
+        # Add actions
+        open_profile_action = QAction(f"Abrir perfil de {name} en Bluesky", self)
+        open_profile_action.triggered.connect(lambda: self.open_url(url))
+        menu.addAction(open_profile_action)
+        
+        # Add follow action if we have a DID and username
+        if did and self.bluesky_username:
+            follow_action = QAction(f"Seguir a {name} en Bluesky", self)
+            follow_action.triggered.connect(lambda: self.follow_artist_on_bluesky(did, name))
+            menu.addAction(follow_action)
+        
+        copy_url_action = QAction("Copiar URL", self)
+        copy_url_action.triggered.connect(lambda: self.copy_to_clipboard(url))
+        menu.addAction(copy_url_action)
+        
+        copy_handle_action = QAction("Copiar handle", self)
+        copy_handle_action.triggered.connect(lambda: self.copy_to_clipboard(handle))
+        menu.addAction(copy_handle_action)
+        
+        # If we have artist name, add related actions
+        if name:
+            menu.addSeparator()
+            
+            # Add Muspy actions if configured
+            if hasattr(self, 'muspy_username') and self.muspy_username:
+                follow_muspy_action = QAction(f"Seguir a {name} en Muspy", self)
+                follow_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(name))
+                menu.addAction(follow_muspy_action)
+            
+            # Add Spotify actions if enabled
+            if self.spotify_enabled:
+                follow_spotify_action = QAction(f"Seguir a {name} en Spotify", self)
+                follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_name(name))
+                menu.addAction(follow_spotify_action)
+        
+        # Show menu
+        menu.exec(table.mapToGlobal(position))
+
+
+    def follow_artist_on_bluesky(self, did, name):
+        """
+        Follow an artist on Bluesky
+        
+        Args:
+            did (str): DID of the artist
+            name (str): Name of the artist for display
+        """
+        if not did or not self.bluesky_username:
+            QMessageBox.warning(self, "Error", "Bluesky no está configurado correctamente")
+            return
+        
+        # Initialize Bluesky manager if needed
+        bluesky_manager = self._init_bluesky_manager()
+        
+        try:
+            # Follow the artist
+            success = bluesky_manager.follow_user(did)
+            
+            if success:
+                QMessageBox.information(self, "Éxito", f"Ahora sigues a {name} en Bluesky")
+            else:
+                QMessageBox.warning(self, "Error", f"No se pudo seguir a {name} en Bluesky. Comprueba tus credenciales.")
+        except Exception as e:
+            self.logger.error(f"Error following artist on Bluesky: {e}")
+            QMessageBox.warning(self, "Error", f"Error al seguir al artista: {str(e)}")
+
+
+    def open_url(self, url):
+        """
+        Open a URL in the default browser
+        
+        Args:
+            url (str): URL to open
+        """
+        import webbrowser
+        webbrowser.open(url)
+
+    def copy_to_clipboard(self, text):
+        """
+        Copy text to clipboard
+        
+        Args:
+            text (str): Text to copy
+        """
+        from PyQt6.QtWidgets import QApplication
+        QApplication.clipboard().setText(text)    
 
 
 def main():
