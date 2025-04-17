@@ -587,14 +587,9 @@ class MuspyArtistModule(BaseModule):
                 # Intentar autenticación silenciosa con MusicBrainz al iniciar
                 if hasattr(self, 'musicbrainz_username') and self.musicbrainz_username and hasattr(self, 'musicbrainz_password') and self.musicbrainz_password:
                     self.logger.info("Intentando autenticación automática con MusicBrainz...")
-                    try:
-                        # Autenticar silenciosamente
-                        self.authenticate_musicbrainz_silently()
-                    except Exception as e:
-                        self.logger.error(f"Error en autenticación inicial: {e}", exc_info=True)
+                    self._start_background_auth()
+                   
                 
-                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
-
                 print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
                 print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
@@ -6204,18 +6199,10 @@ class MuspyArtistModule(BaseModule):
 
 # Musicbrainz
     def show_musicbrainz_collection_menu(self):
-        """
-        Display a menu with MusicBrainz collection options when get_releases_musicbrainz button is clicked
-        """
+        """Display a menu with MusicBrainz collection options"""
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
             QMessageBox.warning(self, "Error", "MusicBrainz credentials not configured")
             return
-        
-        # Show loading message
-        self.results_text.clear()
-        self.results_text.show()
-        self.results_text.append("Loading MusicBrainz collections...")
-        QApplication.processEvents()
         
         # Check if authenticated
         is_auth = self.musicbrainz_auth.is_authenticated()
@@ -6235,17 +6222,22 @@ class MuspyArtistModule(BaseModule):
             login_action.triggered.connect(self.authenticate_musicbrainz_silently)
             menu.addAction(login_action)
         else:
-            # We're authenticated, fetch collections BEFORE showing the menu
-            # Try API method first
+            # We're authenticated, fetch collections
+            # Use cached collections if available
             collections = []
-            if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
-                self.logger.info("Getting collections using API...")
-                collections = self.musicbrainz_auth.get_collections_by_api()
-            
-            # Fallback to HTML parsing if API method failed or doesn't exist
-            if not collections and hasattr(self.musicbrainz_auth, 'get_user_collections'):
-                self.logger.info("API failed, trying HTML parsing...")
-                collections = self.musicbrainz_auth.get_user_collections()
+            if hasattr(self, '_mb_collections') and self._mb_collections:
+                collections = self._mb_collections
+            else:
+                # Try API method first
+                if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
+                    collections = self.musicbrainz_auth.get_collections_by_api()
+                
+                # Fallback to HTML parsing if API method failed or doesn't exist
+                if not collections and hasattr(self.musicbrainz_auth, 'get_user_collections'):
+                    collections = self.musicbrainz_auth.get_user_collections()
+                
+                # Cache collections for later use
+                self._mb_collections = collections
             
             # Add "Show Collections" submenu
             collections_menu = QMenu("Show Collection", self)
@@ -6285,22 +6277,32 @@ class MuspyArtistModule(BaseModule):
                 no_albums_action.setEnabled(False)
                 add_menu.addAction(no_albums_action)
             else:
-                # We have albums, populate the collections
-                if collections:
-                    for collection in collections:
-                        collection_name = collection.get('name', 'Unnamed Collection')
-                        collection_id = collection.get('id')
-                        
-                        if collection_id:
-                            add_action = QAction(f"Add to: {collection_name}", self)
-                            add_action.setProperty("collection_id", collection_id)
-                            add_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
-                                                    self.add_selected_albums_to_collection(cid, cname))
-                            add_menu.addAction(add_action)
-                else:
-                    no_collections_action = QAction("No collections found", self)
-                    no_collections_action.setEnabled(False)
-                    add_menu.addAction(no_collections_action)
+                # Try to load and count the albums
+                try:
+                    with open(albums_json_path, 'r', encoding='utf-8') as f:
+                        selected_albums = json.load(f)
+                        album_count = len(selected_albums)
+                    
+                    # We have albums, populate the collections
+                    if collections:
+                        for collection in collections:
+                            collection_name = collection.get('name', 'Unnamed Collection')
+                            collection_id = collection.get('id')
+                            
+                            if collection_id:
+                                add_action = QAction(f"Add {album_count} albums to: {collection_name}", self)
+                                add_action.setProperty("collection_id", collection_id)
+                                add_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
+                                                        self.add_selected_albums_to_collection(cid, cname))
+                                add_menu.addAction(add_action)
+                    else:
+                        no_collections_action = QAction("No collections found", self)
+                        no_collections_action.setEnabled(False)
+                        add_menu.addAction(no_collections_action)
+                except Exception as e:
+                    error_action = QAction(f"Error reading albums: {str(e)}", self)
+                    error_action.setEnabled(False)
+                    add_menu.addAction(error_action)
             
             menu.addMenu(add_menu)
             
@@ -6314,12 +6316,6 @@ class MuspyArtistModule(BaseModule):
             logout_action = QAction("Logout from MusicBrainz", self)
             logout_action.triggered.connect(self.logout_musicbrainz)
             menu.addAction(logout_action)
-        
-        # Update status text with feedback
-        if is_auth:
-            self.results_text.append(f"Logged in as {self.musicbrainz_username}")
-        else:
-            self.results_text.append("Not logged in to MusicBrainz")
         
         # Show the menu at the button position
         if hasattr(self, 'get_releases_musicbrainz'):
@@ -6435,12 +6431,20 @@ class MuspyArtistModule(BaseModule):
             return False
         
         try:
-            # Configurar la sesión con las credenciales
+            # Log authentication attempt for debugging
+            self.logger.info(f"Attempting silent authentication for user: {self.musicbrainz_username}")
+            
+            # Explicitly configure the session with the credentials
             self.musicbrainz_auth.username = self.musicbrainz_username
             self.musicbrainz_auth.password = self.musicbrainz_password
             
+            # Clear and rebuild the session to ensure fresh state
+            self.musicbrainz_auth.session = requests.Session()
+            self.musicbrainz_auth.session.headers.update({
+                "User-Agent": "MuspyReleasesModule/1.0"
+            })
+            
             # Iniciar autenticación
-            self.logger.info(f"Attempting silent authentication for user: {self.musicbrainz_username}")
             result = self.musicbrainz_auth.authenticate(silent=True)
             
             if result:
@@ -7293,15 +7297,18 @@ class MuspyArtistModule(BaseModule):
 
     def add_selected_albums_to_collection(self, collection_id, collection_name):
         """
-        Add albums from albums_selected.json to a MusicBrainz collection
+        Add albums from albums_selected.json to a MusicBrainz collection with improved authentication
         
         Args:
             collection_id (str): ID of the collection to add albums to
             collection_name (str): Name of the collection for display
         """
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
-            return
+            # Attempt to authenticate first
+            self.logger.info("Not authenticated with MusicBrainz, attempting authentication...")
+            if not self.authenticate_musicbrainz_silently():
+                QMessageBox.warning(self, "Error", "MusicBrainz authentication required to add albums to collections")
+                return
         
         # Path to the JSON file
         json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
@@ -7346,58 +7353,64 @@ class MuspyArtistModule(BaseModule):
             
             update_progress(1, 3, f"Adding {len(album_mbids)} albums to collection...", indeterminate=True)
             
-            # Use API method if available
-            if hasattr(self.musicbrainz_auth, 'add_releases_to_collection'):
-                result = self.musicbrainz_auth.add_releases_to_collection(collection_id, album_mbids)
+            # Log authentication status for debugging
+            self.logger.info(f"MusicBrainz auth status before adding albums: {self.musicbrainz_auth.is_authenticated()}")
+            
+            # Re-authenticate to ensure fresh session
+            self.musicbrainz_auth.authenticate(silent=True)
+            
+            # Process in smaller batches to avoid overwhelming the API
+            batch_size = 20  # MusicBrainz recommends smaller batches
+            total_batches = (len(album_mbids) + batch_size - 1) // batch_size
+            
+            success_count = 0
+            failed_batches = []
+            
+            for batch_idx in range(total_batches):
+                batch_start = batch_idx * batch_size
+                batch_end = min(batch_start + batch_size, len(album_mbids))
+                current_batch = album_mbids[batch_start:batch_end]
                 
-                update_progress(2, 3, "Finalizing...", indeterminate=True)
+                # Calculate progress as integer (0-100 range)
+                progress_value = int(1 + (batch_idx / total_batches) * 100)
+                update_progress(progress_value, 100, 
+                            f"Processing batch {batch_idx+1}/{total_batches} ({batch_end}/{len(album_mbids)} albums)...", 
+                            indeterminate=False)
                 
-                if result:
-                    update_progress(3, 3, "Successfully added albums to collection")
-                    return {
-                        "success": True,
-                        "count": len(album_mbids),
-                        "albums": valid_albums
-                    }
-                else:
-                    return {
-                        "success": False,
-                        "error": "Failed to add albums to collection"
-                    }
-            else:
-                # Fallback to manual API call
                 try:
-                    # Add albums to collection using direct API call
                     # Join MBIDs with semicolons as per API spec
-                    mbids_param = ";".join(album_mbids)
+                    mbids_param = ";".join(current_batch)
                     
-                    # Call MusicBrainz API
+                    # Construct URL for this batch
                     url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{mbids_param}"
+                    
+                    # Add necessary headers
                     headers = {
-                        "User-Agent": "MuspyReleasesModule/1.0"
+                        "User-Agent": "MuspyReleasesModule/1.0",
+                        "Content-Type": "application/json"
                     }
                     
+                    # Make the request with all cookies from the session
                     response = self.musicbrainz_auth.session.put(url, headers=headers)
                     
-                    update_progress(2, 3, "Finalizing...", indeterminate=True)
-                    
                     if response.status_code in [200, 201]:
-                        update_progress(3, 3, "Successfully added albums to collection")
-                        return {
-                            "success": True,
-                            "count": len(album_mbids),
-                            "albums": valid_albums
-                        }
+                        success_count += len(current_batch)
+                        self.logger.info(f"Successfully added batch {batch_idx+1} to collection")
                     else:
-                        return {
-                            "success": False,
-                            "error": f"Error adding albums: {response.status_code} - {response.text}"
-                        }
+                        failed_batches.append(batch_idx + 1)
+                        self.logger.error(f"Failed to add batch {batch_idx+1}: {response.status_code} - {response.text}")
                 except Exception as e:
-                    return {
-                        "success": False,
-                        "error": f"Error adding albums: {str(e)}"
-                    }
+                    failed_batches.append(batch_idx + 1)
+                    self.logger.error(f"Error processing batch {batch_idx+1}: {str(e)}")
+            
+            update_progress(3, 3, "Finalizing...", indeterminate=True)
+            
+            return {
+                "success": success_count > 0,
+                "total": len(album_mbids),
+                "success_count": success_count,
+                "failed_batches": failed_batches
+            }
         
         # Execute with progress dialog
         result = self.show_progress_operation(
@@ -7408,12 +7421,21 @@ class MuspyArtistModule(BaseModule):
         
         # Process results
         if result and result.get("success"):
-            count = result.get("count", 0)
-            QMessageBox.information(
-                self, 
-                "Success", 
-                f"Successfully added {count} albums to collection '{collection_name}'"
-            )
+            success_count = result.get("success_count", 0)
+            total = result.get("total", 0)
+            failed_batches = result.get("failed_batches", [])
+            
+            if failed_batches:
+                message = (f"Added {success_count} of {total} albums to collection '{collection_name}'.\n\n"
+                        f"Some batches failed: {', '.join(map(str, failed_batches))}.\n"
+                        "This might be due to permission issues or some albums already being in the collection.")
+                QMessageBox.warning(self, "Partial Success", message)
+            else:
+                QMessageBox.information(
+                    self, 
+                    "Success", 
+                    f"Successfully added {success_count} albums to collection '{collection_name}'"
+                )
             
             # Offer to show the collection
             reply = QMessageBox.question(
@@ -7830,93 +7852,93 @@ class MuspyArtistModule(BaseModule):
         # Switch to the Spotify artists page
         stack_widget.setCurrentWidget(spotify_page)
 
-        def display_spotify_releases_in_stacked_widget(self, releases):
-            """
-            Display Spotify releases in the stacked widget
+    def display_spotify_releases_in_stacked_widget(self, releases):
+        """
+        Display Spotify releases in the stacked widget
+        
+        Args:
+            releases (list): List of release dictionaries
+        """
+        # Find the stacked widget
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        if not stack_widget:
+            self.logger.error("Stacked widget not found in UI")
+            return
+        
+        # Find the spotify_releases_page (assuming it exists in the UI)
+        spotify_page = None
+        for i in range(stack_widget.count()):
+            widget = stack_widget.widget(i)
+            if widget.objectName() == "spotify_releases_page":
+                spotify_page = widget
+                break
+        
+        if not spotify_page:
+            self.logger.error("spotify_releases_page not found in stacked widget")
+            # Fallback to text display
+            self._display_spotify_releases_as_text(releases)
+            return
+        
+        # Get the table from the page
+        table = spotify_page.findChild(QTableWidget, "spotify_releases_table")
+        if not table:
+            self.logger.error("spotify_releases_table not found in spotify_releases_page")
+            # Fallback to text display
+            self._display_spotify_releases_as_text(releases)
+            return
+        
+        # Get the count label
+        count_label = spotify_page.findChild(QLabel, "spotify_releases_count_label")
+        if count_label:
+            count_label.setText(f"Showing {len(releases)} new releases from artists you follow on Spotify")
+        
+        # Configure table
+        table.setRowCount(len(releases))
+        table.setSortingEnabled(False)  # Disable sorting while updating
+        
+        # Fill the table with data
+        for i, release in enumerate(releases):
+            # Artist column
+            artist_item = QTableWidgetItem(release.get('artist', 'Unknown'))
+            table.setItem(i, 0, artist_item)
             
-            Args:
-                releases (list): List of release dictionaries
-            """
-            # Find the stacked widget
-            stack_widget = self.findChild(QStackedWidget, "stackedWidget")
-            if not stack_widget:
-                self.logger.error("Stacked widget not found in UI")
-                return
+            # Title column
+            title_item = QTableWidgetItem(release.get('title', 'Unknown'))
+            table.setItem(i, 1, title_item)
             
-            # Find the spotify_releases_page (assuming it exists in the UI)
-            spotify_page = None
-            for i in range(stack_widget.count()):
-                widget = stack_widget.widget(i)
-                if widget.objectName() == "spotify_releases_page":
-                    spotify_page = widget
-                    break
+            # Type column
+            type_item = QTableWidgetItem(release.get('type', ''))
+            table.setItem(i, 2, type_item)
             
-            if not spotify_page:
-                self.logger.error("spotify_releases_page not found in stacked widget")
-                # Fallback to text display
-                self._display_spotify_releases_as_text(releases)
-                return
+            # Date column
+            date_item = QTableWidgetItem(release.get('date', ''))
+            table.setItem(i, 3, date_item)
             
-            # Get the table from the page
-            table = spotify_page.findChild(QTableWidget, "spotify_releases_table")
-            if not table:
-                self.logger.error("spotify_releases_table not found in spotify_releases_page")
-                # Fallback to text display
-                self._display_spotify_releases_as_text(releases)
-                return
+            # Tracks column - Usar NumericTableWidgetItem
+            tracks_item = NumericTableWidgetItem(str(release.get('total_tracks', 0)))
+            tracks_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 4, tracks_item)
             
-            # Get the count label
-            count_label = spotify_page.findChild(QLabel, "spotify_releases_count_label")
-            if count_label:
-                count_label.setText(f"Showing {len(releases)} new releases from artists you follow on Spotify")
-            
-            # Configure table
-            table.setRowCount(len(releases))
-            table.setSortingEnabled(False)  # Disable sorting while updating
-            
-            # Fill the table with data
-            for i, release in enumerate(releases):
-                # Artist column
-                artist_item = QTableWidgetItem(release.get('artist', 'Unknown'))
-                table.setItem(i, 0, artist_item)
-                
-                # Title column
-                title_item = QTableWidgetItem(release.get('title', 'Unknown'))
-                table.setItem(i, 1, title_item)
-                
-                # Type column
-                type_item = QTableWidgetItem(release.get('type', ''))
-                table.setItem(i, 2, type_item)
-                
-                # Date column
-                date_item = QTableWidgetItem(release.get('date', ''))
-                table.setItem(i, 3, date_item)
-                
-                # Tracks column - Usar NumericTableWidgetItem
-                tracks_item = NumericTableWidgetItem(str(release.get('total_tracks', 0)))
-                tracks_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-                table.setItem(i, 4, tracks_item)
-                
-                # Store the Spotify IDs for context menu actions
-                for col in range(table.columnCount()):
-                    if table.item(i, col):
-                        # Store both release ID and artist ID
-                        item_data = {
-                            'release_id': release.get('id', ''),
-                            'artist_id': release.get('artist_id', '')
-                        }
-                        table.item(i, col).setData(Qt.ItemDataRole.UserRole, item_data)
-            
-            # Re-enable sorting
-            table.setSortingEnabled(True)
-            
-            # Configure context menu for the table
-            if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
-                table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-                table.customContextMenuRequested.connect(self.show_spotify_release_context_menu)
-            
-            # Switch to the Spotify releases page
-            stack_widget.setCurrentWidget(spotify_page)
+            # Store the Spotify IDs for context menu actions
+            for col in range(table.columnCount()):
+                if table.item(i, col):
+                    # Store both release ID and artist ID
+                    item_data = {
+                        'release_id': release.get('id', ''),
+                        'artist_id': release.get('artist_id', '')
+                    }
+                    table.item(i, col).setData(Qt.ItemDataRole.UserRole, item_data)
+        
+        # Re-enable sorting
+        table.setSortingEnabled(True)
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_spotify_release_context_menu)
+        
+        # Switch to the Spotify releases page
+        stack_widget.setCurrentWidget(spotify_page)
 
 
     def _display_spotify_artists_as_text(self, artists):
@@ -8981,105 +9003,58 @@ class MuspyArtistModule(BaseModule):
                 self.logger.debug(f"Set up context menu for table: {table_name}")
 
 
-    def test_muspy_auth(self):
-        """
-        Test Muspy authentication and API endpoint access
-        """
-        if not self.muspy_username or not self.muspy_api_key:
-            self.results_text.append("Error: Configuración de Muspy no disponible")
+   
+
+  
+
+
+
+    def _start_background_auth(self):
+        """Start MusicBrainz authentication in a background thread"""
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
             return
             
-        self.results_text.clear()
-        self.results_text.show()
-        self.results_text.append("Testing Muspy authentication...")
-        QApplication.processEvents()
+        # Create a QThread
+        self.auth_thread = QThread()
         
-        try:
-            # Test the user endpoint
-            url = f"{self.base_url}/user"
-            auth = (self.muspy_username, self.muspy_api_key)
-            
-            self.results_text.append(f"Testing endpoint: {url}")
-            self.results_text.append(f"Using username: {self.muspy_username}")
-            self.results_text.append(f"Using API key: {self.muspy_api_key[:4]}..." if self.muspy_api_key else "No API key")
-            QApplication.processEvents()
-            
-            response = requests.get(url, auth=auth)
-            
-            self.results_text.append(f"Response status: {response.status_code}")
-            
-            if response.status_code == 200:
-                user_data = response.json()
-                self.results_text.append(f"Authentication successful!")
-                self.results_text.append(f"User ID: {user_data.get('userid')}")
-            else:
-                self.results_text.append(f"Authentication failed: {response.text}")
-                
-        except Exception as e:
-            self.results_text.append(f"Error in test: {str(e)}")
+        # Create the worker
+        self.auth_worker = AuthWorker(
+            self.musicbrainz_auth, 
+            self.musicbrainz_username, 
+            self.musicbrainz_password
+        )
+        
+        # Move worker to thread
+        self.auth_worker.moveToThread(self.auth_thread)
+        
+        # Connect signals
+        self.auth_thread.started.connect(self.auth_worker.authenticate)
+        self.auth_worker.finished.connect(self.auth_thread.quit)
+        self.auth_worker.finished.connect(self.handle_background_auth_result)
+        
+        # Clean up connections
+        self.auth_thread.finished.connect(self.auth_worker.deleteLater)
+        self.auth_thread.finished.connect(self.auth_thread.deleteLater)
+        
+        # Start the thread
+        self.auth_thread.start()
 
-    def call_muspy_api(self, endpoint, method="GET", data=None, params=None):
-        """
-        Make a call to the Muspy API with consistent authentication
-        
-        Args:
-            endpoint (str): API endpoint (without base URL)
-            method (str): HTTP method (GET, POST, PUT, DELETE)
-            data (dict, optional): Data to send in the request body
-            params (dict, optional): Query parameters
-            
-        Returns:
-            tuple: (success, response_data or error_message)
-        """
-        if not self.muspy_username or not self.muspy_api_key:
-            return False, "Muspy credentials not configured"
-            
-        # Ensure we have the user ID if needed
-        if "/artists/" in endpoint and not self.muspy_id:
-            self.get_muspy_id()
-            if not self.muspy_id:
-                return False, "Could not get Muspy ID"
-                
-        # Build the full URL
-        url = f"{self.base_url}/{endpoint.lstrip('/')}"
-        
-        # Set up authentication
-        auth = (self.muspy_username, self.muspy_api_key)
-        
-        # Add debug logging
-        self.logger.debug(f"Muspy API call: {method} {url}")
-        
-        try:
-            # Make the request
-            if method.upper() == "GET":
-                response = requests.get(url, auth=auth, params=params)
-            elif method.upper() == "POST":
-                response = requests.post(url, auth=auth, json=data, params=params)
-            elif method.upper() == "PUT":
-                response = requests.put(url, auth=auth, data=data or {}, params=params)
-            elif method.upper() == "DELETE":
-                response = requests.delete(url, auth=auth, params=params)
-            else:
-                return False, f"Unsupported method: {method}"
-                
-            # Check response
-            if response.status_code in [200, 201]:
-                # Try to parse as JSON, but handle text responses too
+    def handle_background_auth_result(self, success):
+        """Handle the result of background authentication"""
+        if success:
+            self.logger.info("Background MusicBrainz authentication successful")
+            # Pre-fetch collections to make menu faster later
+            if hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated():
                 try:
-                    return True, response.json()
-                except:
-                    return True, response.text
-            else:
-                self.logger.error(f"API error: {response.status_code} - {response.text}")
-                return False, f"API error: {response.status_code} - {response.text}"
-                
-        except Exception as e:
-            self.logger.error(f"Request error: {e}", exc_info=True)
-            return False, f"Request error: {str(e)}"
-
-
-
-
+                    # Fetch collections in a non-blocking way (just store for later use)
+                    if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
+                        self._mb_collections = self.musicbrainz_auth.get_collections_by_api()
+                    elif hasattr(self.musicbrainz_auth, 'get_user_collections'):
+                        self._mb_collections = self.musicbrainz_auth.get_user_collections()
+                except Exception as e:
+                    self.logger.error(f"Error pre-fetching collections: {e}")
+        else:
+            self.logger.warning("Background MusicBrainz authentication failed")
 
 
 def main():

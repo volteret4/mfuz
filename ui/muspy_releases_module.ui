@@ -17,8 +17,26 @@
    <item>
     <widget class="QFrame" name="search_layout_2">
      <layout class="QHBoxLayout" name="search_layout">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QLineEdit" name="artist_input">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
         <property name="placeholderText">
          <string>Introduce el nombre de un artista para buscar discos anunciados</string>
         </property>
@@ -27,7 +45,17 @@
       <item>
        <widget class="QPushButton" name="search_button">
         <property name="text">
-         <string>Voy a tener suerte</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/search_music</normaloff>:/services/search_music</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>30</width>
+          <height>30</height>
+         </size>
         </property>
        </widget>
       </item>
@@ -37,34 +65,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <widget class="QWidget" name="artists_page">
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QTableWidget" name="artists_table">
-         <column>
-          <property name="text">
-           <string>Artista</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Play Count</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="musicbrainz_collection_page">
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -78,10 +79,62 @@
         <number>0</number>
        </property>
        <item>
+        <widget class="QLabel" name="top_artists_label">
+         <property name="text">
+          <string>Top Artistas Lastfm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="artists_table">
+         <column>
+          <property name="text">
+           <string>Artista</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images.qrc">
+            <normaloff>:/services/lastfm_h</normaloff>:/services/lastfm_h</iconset>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Play Count</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="musicbrainz_collection_page">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="mb_label">
+         <property name="text">
+          <string>Colecciones de musicbrainz</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTableWidget" name="tabla_musicbrainz_collection">
          <column>
           <property name="text">
            <string>Artista</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images.qrc">
+            <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
           </property>
          </column>
          <column>
@@ -120,13 +173,32 @@
      </widget>
      <widget class="QWidget" name="_create_releases_page">
       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="create_label">
+         <property name="text">
+          <string>Crear publicación?</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QTableWidget" name="tabla_crear_collection"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="muspy_results_widget">
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -157,7 +229,7 @@
           <item>
            <widget class="QLabel" name="label_result_count">
             <property name="text">
-             <string>Resultados</string>
+             <string>Resultados de la búsqueda</string>
             </property>
            </widget>
           </item>
@@ -208,7 +280,7 @@
              <item>
               <widget class="QPushButton" name="follow_artist_button">
                <property name="text">
-                <string>PushButton</string>
+                <string>Seguir Artista</string>
                </property>
               </widget>
              </item>
@@ -221,7 +293,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="releases_page">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -234,6 +306,13 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QLabel" name="releases_label">
+         <property name="text">
+          <string>Futuros álbumes</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QTableWidget" name="releases_table">
          <column>
@@ -266,7 +345,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="loved_tracks_page">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -280,10 +359,21 @@
         <number>0</number>
        </property>
        <item>
+        <widget class="QLabel" name="loved_songs_label">
+         <property name="text">
+          <string>Canciones destacadas en LastFm</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTableWidget" name="loved_tracks_table">
          <column>
           <property name="text">
            <string>Canción</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images.qrc">
+            <normaloff>:/services/lastfm_h</normaloff>:/services/lastfm_h</iconset>
           </property>
          </column>
          <column>
@@ -306,7 +396,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="text_page">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_11">
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -320,16 +410,35 @@
         <number>0</number>
        </property>
        <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Log</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QTextEdit" name="results_text"/>
        </item>
       </layout>
      </widget>
      <widget class="QWidget" name="spotify_artists_page">
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLabel" name="spotify_artists_count_label">
          <property name="text">
-          <string>TextLabel</string>
+          <string>Artistas seguidos en Spotify</string>
          </property>
         </widget>
        </item>
@@ -338,6 +447,10 @@
          <column>
           <property name="text">
            <string>Artista</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images.qrc">
+            <normaloff>:/services/spotify_ol</normaloff>:/services/spotify_ol</iconset>
           </property>
          </column>
          <column>
@@ -361,10 +474,22 @@
      </widget>
      <widget class="QWidget" name="spotify_releases_page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QLabel" name="spotify_releases_count_label">
          <property name="text">
-          <string>Nuevos álbumes</string>
+          <string>Nuevos álbumes según Spotify</string>
          </property>
         </widget>
        </item>
@@ -373,6 +498,10 @@
          <column>
           <property name="text">
            <string>New Column</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images.qrc">
+            <normaloff>:/services/spotify_ol</normaloff>:/services/spotify_ol</iconset>
           </property>
          </column>
          <column>
@@ -432,7 +561,7 @@
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/dbsearch</normaloff>:/services/dbsearch</iconset>
+          <normaloff>:/services/db_ol</normaloff>:/services/db_ol</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -458,7 +587,33 @@
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/b_link</normaloff>:/services/b_link</iconset>
+          <normaloff>:/services/links_ol</normaloff>:/services/links_ol</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="get_releases_spotify_button">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Spotify</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/spotify_ol</normaloff>:/services/spotify_ol</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -484,33 +639,7 @@
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>36</width>
-          <height>36</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="get_releases_button">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Mis próximos discos</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/services/vinyl</normaloff>:/services/vinyl</iconset>
+          <normaloff>:/services/lastfm_ol</normaloff>:/services/lastfm_ol</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -547,7 +676,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="get_releases_spotify_button">
+       <widget class="QPushButton" name="get_releases_button">
         <property name="maximumSize">
          <size>
           <width>40</width>
@@ -555,40 +684,14 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Spotify</string>
+         <string>Mis próximos discos</string>
         </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>36</width>
-          <height>36</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="get_new_releases_button">
-        <property name="maximumSize">
-         <size>
-          <width>40</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Discos ausentes</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset resource="../images.qrc">
-          <normaloff>:/services/pls</normaloff>:/services/pls</iconset>
+          <normaloff>:/services/musico</normaloff>:/services/musico</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -617,7 +720,33 @@
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/b_download</normaloff>:/services/b_download</iconset>
+          <normaloff>:/services/networks_ol</normaloff>:/services/networks_ol</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="get_new_releases_button">
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Discos ausentes</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../images.qrc">
+          <normaloff>:/services/save_ol</normaloff>:/services/save_ol</iconset>
         </property>
         <property name="iconSize">
          <size>

@@ -111,13 +111,14 @@ class MusicBrainzAuthManager:
             self.logger.error(f"Error checking authentication: {e}")
             return False
     
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, username=None, password=None, silent=False):
         """
-        Authenticate with MusicBrainz
+        Authenticate with MusicBrainz with improved token handling
         
         Args:
             username (str, optional): MusicBrainz username (overrides instance attribute)
             password (str, optional): MusicBrainz password (overrides instance attribute)
+            silent (bool): Whether to suppress UI interactions
             
         Returns:
             bool: Whether authentication was successful
@@ -146,15 +147,36 @@ class MusicBrainzAuthManager:
                 self.logger.error(f"Failed to get login page: {response.status_code}")
                 return False
             
-            # Extract CSRF token from the page
+            # Extract CSRF token using more robust methods
+            csrf_token = None
             soup = BeautifulSoup(response.text, 'html.parser')
-            csrf_input = soup.find('input', {'name': 'csrf'})
             
-            if not csrf_input or not csrf_input.get('value'):
-                self.logger.error("Could not find CSRF token on login page")
-                return False
+            # Method 1: Look for input with name="csrf"
+            csrf_input = soup.find('input', {'name': 'csrf'})
+            if csrf_input and csrf_input.get('value'):
+                csrf_token = csrf_input.get('value')
                 
-            csrf_token = csrf_input.get('value')
+            # Method 2: If not found, look for a meta tag with name="csrf-token"
+            if not csrf_token:
+                meta_csrf = soup.find('meta', {'name': 'csrf-token'})
+                if meta_csrf and meta_csrf.get('content'):
+                    csrf_token = meta_csrf.get('content')
+                    
+            # Method 3: Try to find it in any form
+            if not csrf_token:
+                for form in soup.find_all('form'):
+                    csrf_input = form.find('input', {'name': 'csrf'})
+                    if csrf_input and csrf_input.get('value'):
+                        csrf_token = csrf_input.get('value')
+                        break
+            
+            # Log HTML for debugging if token not found
+            if not csrf_token:
+                self.logger.error("Could not find CSRF token on login page")
+                self.logger.debug(f"HTML content (first 500 chars): {response.text[:500]}...")
+                
+                # Try to continue without CSRF - might still work for some operations
+                csrf_token = ""
             
             # Submit login form
             login_data = {
@@ -165,20 +187,26 @@ class MusicBrainzAuthManager:
             }
             
             # Make the login request
-            response = self.session.post(login_url, data=login_data)
+            response = self.session.post(login_url, data=login_data, allow_redirects=True)
             
-            # Check if login was successful
-            if "/login" in response.url:
-                # Still on login page - probably failed
-                self.logger.error("Login failed - redirected back to login page")
+            # Check if login was successful - look for common success indicators
+            success_indicators = [
+                "/login" not in response.url,  # Not redirected back to login
+                "logged-in" in response.text,  # Page indicates logged in
+                self.session.cookies.get('musicbrainz_server_session')  # Session cookie exists
+            ]
+            
+            # Consider logged in if any success indicator is present
+            if any(success_indicators):
+                self.logger.info("Login appears successful")
+                self._save_cookies()
+                
+                # Do a final check by trying to access a protected page
+                return self.is_authenticated()
+            else:
+                self.logger.error("Login failed - no success indicators found")
                 return False
                 
-            # Save cookies for future sessions
-            self._save_cookies()
-            
-            # Verify we're actually logged in
-            return self.is_authenticated()
-            
         except Exception as e:
             self.logger.error(f"Authentication error: {e}")
             return False
