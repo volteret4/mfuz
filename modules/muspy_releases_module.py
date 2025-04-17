@@ -663,6 +663,10 @@ class MuspyArtistModule(BaseModule):
         if count_label:
             count_label.setText(f"Showing {len(artists)} top artists for {self.lastfm_username}")
         
+        # Configure table to include new columns
+        table.setColumnCount(4)  # Increase column count to include listeners and URL
+        table.setHorizontalHeaderLabels(["Artist", "Playcount", "Listeners", "Actions"])
+        
         # Configure table
         table.setRowCount(len(artists))
         table.setSortingEnabled(False)  # Disable sorting while updating
@@ -671,15 +675,22 @@ class MuspyArtistModule(BaseModule):
         for i, artist in enumerate(artists):
             artist_name = artist['name']
             playcount = str(artist.get('playcount', 'N/A'))
+            listeners = str(artist.get('listeners', 'N/A'))
+            url = artist.get('url', '')
             
             # Artist name
             name_item = QTableWidgetItem(artist_name)
             table.setItem(i, 0, name_item)
             
-            # Playcount
-            playcount_item = QTableWidgetItem(playcount)
+            # Playcount - with numeric sorting capability
+            playcount_item = NumericTableWidgetItem(playcount)
             playcount_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
             table.setItem(i, 1, playcount_item)
+            
+            # Listeners - with numeric sorting capability
+            listeners_item = NumericTableWidgetItem(listeners)
+            listeners_item.setTextAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+            table.setItem(i, 2, listeners_item)
             
             # Actions - create a widget with buttons
             actions_widget = QWidget()
@@ -694,10 +705,19 @@ class MuspyArtistModule(BaseModule):
             follow_button.clicked.connect(lambda checked, a=artist_name: self.add_lastfm_artist_to_muspy(a))
             actions_layout.addWidget(follow_button)
             
-            table.setCellWidget(i, 2, actions_widget)
+            # Store URL and MBID in the item data for context menu use
+            if url:
+                name_item.setData(Qt.ItemDataRole.UserRole, {'url': url, 'mbid': artist.get('mbid', '')})
+            
+            table.setCellWidget(i, 3, actions_widget)
         
         # Re-enable sorting
         table.setSortingEnabled(True)
+        
+        # Configure context menu for the table
+        if table.contextMenuPolicy() != Qt.ContextMenuPolicy.CustomContextMenu:
+            table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            table.customContextMenuRequested.connect(self.show_unified_context_menu)
         
         # Switch to the artists page
         stack_widget.setCurrentWidget(artists_page)
@@ -1003,7 +1023,66 @@ class MuspyArtistModule(BaseModule):
         menu.exec(pos)
 
 
-
+    def get_lastfm_top_artists_direct(self, count=50, period="overall"):
+        """
+        Get top artists directly from Last.fm API to ensure we get all data fields
+        
+        Args:
+            count (int): Number of top artists to fetch
+            period (str): Time period (overall, 7day, 1month, 3month, 6month, 12month)
+            
+        Returns:
+            list: List of artist dictionaries or empty list on error
+        """
+        if not self.lastfm_api_key or not self.lastfm_username:
+            self.logger.error("Last.fm API key or username not configured")
+            return []
+        
+        try:
+            # Build API URL
+            url = "http://ws.audioscrobbler.com/2.0/"
+            params = {
+                "method": "user.gettopartists",
+                "user": self.lastfm_username,
+                "api_key": self.lastfm_api_key,
+                "format": "json",
+                "limit": count,
+                "period": period
+            }
+            
+            # Make the request
+            response = requests.get(url, params=params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if "topartists" in data and "artist" in data["topartists"]:
+                    artists = data["topartists"]["artist"]
+                    
+                    # Process artists
+                    result = []
+                    for artist in artists:
+                        # Extract data
+                        artist_dict = {
+                            "name": artist.get("name", ""),
+                            "playcount": int(artist.get("playcount", 0)),
+                            "listeners": int(artist.get("listeners", 0)),
+                            "mbid": artist.get("mbid", ""),
+                            "url": artist.get("url", "")
+                        }
+                        result.append(artist_dict)
+                    
+                    return result
+                else:
+                    self.logger.error("Unexpected response format from Last.fm API")
+                    return []
+            else:
+                self.logger.error(f"Last.fm API error: {response.status_code} - {response.text}")
+                return []
+        
+        except Exception as e:
+            self.logger.error(f"Error fetching top artists from Last.fm: {e}", exc_info=True)
+            return []
 
 
     def show_lastfm_top_artists(self, count=50, period="overall", use_cached=True):
@@ -1038,73 +1117,34 @@ class MuspyArtistModule(BaseModule):
         progress.show()
         
         try:
-            # Import pylast here to handle potential import error gracefully
-            import pylast
-            
             # Update progress
             progress.setValue(20)
             QApplication.processEvents()
             
-            # Convert period string to pylast constants if needed
-            pylast_period = period
-            if period == "7day":
-                pylast_period = pylast.PERIOD_7DAYS
-            elif period == "1month":
-                pylast_period = pylast.PERIOD_1MONTH
-            elif period == "3month":
-                pylast_period = pylast.PERIOD_3MONTHS
-            elif period == "6month":
-                pylast_period = pylast.PERIOD_6MONTHS
-            elif period == "12month":
-                pylast_period = pylast.PERIOD_12MONTHS
-            else:
-                pylast_period = pylast.PERIOD_OVERALL
-            
-            # Network setup
-            network = pylast.LastFMNetwork(
-                api_key=self.lastfm_api_key,
-                api_secret=self.lastfm_api_secret
-            )
-            
-            # Update progress
-            progress.setValue(40)
-            QApplication.processEvents()
-            
-            # Get user and top artists
-            user = network.get_user(self.lastfm_username)
-            pylast_artists = user.get_top_artists(limit=count, period=pylast_period)
+            # Get artists using direct API call
+            artists = self.get_lastfm_top_artists_direct(count, period)
             
             # Update progress
             progress.setValue(60)
             QApplication.processEvents()
             
-            if not pylast_artists:
+            if not artists:
                 QMessageBox.warning(self, "Error", "No artists found on Last.fm account")
                 progress.close()
                 return
             
-            # Convert pylast objects to the format your table display function expects
-            top_artists = []
-            for artist_item in pylast_artists:
-                artist_dict = {
-                    'name': artist_item.item.name,
-                    'playcount': artist_item.weight,
-                    'mbid': artist_item.item.get_mbid() if hasattr(artist_item.item, 'get_mbid') else ''
-                }
-                top_artists.append(artist_dict)
-            
             # Log what we found
-            self.logger.info(f"Found {len(top_artists)} artists on Last.fm")
+            self.logger.info(f"Found {len(artists)} artists on Last.fm")
             
             # Cache the results
-            self.cache_manager(cache_key, top_artists)
+            self.cache_manager(cache_key, artists)
             
             # Update progress
             progress.setValue(80)
             QApplication.processEvents()
             
             # Display artists in stacked widget table
-            self.display_lastfm_artists_in_stacked_widget(top_artists)
+            self.display_lastfm_artists_in_stacked_widget(artists)
             
             # Final progress
             progress.setValue(100)
@@ -4538,7 +4578,83 @@ class MuspyArtistModule(BaseModule):
             return self.sync_top_artists_from_lastfm()
 
 
-   
+    def unfollow_artist_from_muspy(self, mbid, artist_name=None):
+        """
+        Unfollow an artist from Muspy using the DELETE API endpoint
+        
+        Args:
+            mbid (str): MusicBrainz ID of the artist to unfollow
+            artist_name (str, optional): Artist name for display purposes
+        
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        if not self.muspy_username or not self.muspy_api_key or not self.muspy_id:
+            self.logger.error("Muspy credentials not configured")
+            return False
+
+        try:
+            # Use the DELETE endpoint as specified in the API docs
+            url = f"{self.base_url}/artists/{self.muspy_id}/{mbid}"
+            auth = (self.muspy_username, self.muspy_api_key)
+            
+            # Make the DELETE request
+            response = requests.delete(url, auth=auth)
+            
+            # Log response details for debugging
+            self.logger.debug(f"DELETE request to {url}")
+            self.logger.debug(f"Response status: {response.status_code}")
+            self.logger.debug(f"Response text: {response.text}")
+            
+            if response.status_code in [200, 204]:
+                artist_display = artist_name or mbid
+                self.logger.info(f"Successfully unfollowed {artist_display} from Muspy")
+                return True
+            else:
+                self.logger.error(f"Error unfollowing artist from Muspy: {response.status_code} - {response.text}")
+                return False
+        except Exception as e:
+            self.logger.error(f"Exception unfollowing artist from Muspy: {e}", exc_info=True)
+            return False
+
+    def unfollow_artist_from_spotify(self, artist_id, artist_name=None):
+        """
+        Unfollow an artist from Spotify
+        
+        Args:
+            artist_id (str): Spotify ID of the artist to unfollow
+            artist_name (str, optional): Artist name for display purposes
+        
+        Returns:
+            bool: True if successful, False otherwise
+        """
+        if not self.ensure_spotify_auth():
+            self.logger.error("Spotify authentication required")
+            return False
+        
+        try:
+            # Get Spotify client
+            spotify_client = self.spotify_auth.get_client()
+            if not spotify_client:
+                self.logger.error("Failed to get Spotify client")
+                return False
+            
+            # Check if actually following this artist before trying to unfollow
+            is_following = spotify_client.current_user_following_artists([artist_id])
+            if not is_following or not is_following[0]:
+                artist_display = artist_name or artist_id
+                self.logger.info(f"Not following {artist_display} on Spotify")
+                return False
+            
+            # Unfollow the artist
+            spotify_client.user_unfollow_artists([artist_id])
+            
+            artist_display = artist_name or artist_id
+            self.logger.info(f"Successfully unfollowed {artist_display} from Spotify")
+            return True
+        except Exception as e:
+            self.logger.error(f"Error unfollowing artist from Spotify: {e}", exc_info=True)
+            return False
 
 
 
@@ -8714,26 +8830,36 @@ class MuspyArtistModule(BaseModule):
         
         # Add artist-related actions if we have an artist name
         if artist_name:
-            # Follow on Muspy
+            # Muspy follow/unfollow actions
             if self.muspy_username and self.muspy_api_key:
                 if artist_mbid:
                     # Follow using MBID (more reliable)
                     follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy", self)
                     follow_muspy_action.triggered.connect(lambda: self.add_artist_to_muspy(artist_mbid, artist_name))
                     menu.addAction(follow_muspy_action)
+                    
+                    # Add unfollow option too
+                    unfollow_muspy_action = QAction(f"Unfollow '{artist_name}' from Muspy", self)
+                    unfollow_muspy_action.triggered.connect(lambda: self.unfollow_artist_from_muspy_with_confirm(artist_mbid, artist_name))
+                    menu.addAction(unfollow_muspy_action)
                 else:
                     # Search for MBID first
                     follow_muspy_action = QAction(f"Follow '{artist_name}' on Muspy (search by name)", self)
                     follow_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(artist_name))
                     menu.addAction(follow_muspy_action)
             
-            # Follow on Spotify
+            # Spotify follow/unfollow actions
             if self.spotify_enabled:
                 if spotify_artist_id:
                     # Follow using Spotify ID
                     follow_spotify_action = QAction(f"Follow '{artist_name}' on Spotify", self)
                     follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_id(spotify_artist_id))
                     menu.addAction(follow_spotify_action)
+                    
+                    # Add unfollow option
+                    unfollow_spotify_action = QAction(f"Unfollow '{artist_name}' from Spotify", self)
+                    unfollow_spotify_action.triggered.connect(lambda: self.unfollow_artist_from_spotify_with_confirm(spotify_artist_id, artist_name))
+                    menu.addAction(unfollow_spotify_action)
                 else:
                     # Search by name
                     follow_spotify_action = QAction(f"Follow '{artist_name}' on Spotify (search by name)", self)
@@ -8759,6 +8885,12 @@ class MuspyArtistModule(BaseModule):
                 search_spotify_action = QAction(f"Search '{artist_name}' on Spotify", self)
                 search_spotify_action.triggered.connect(lambda: self.search_and_open_spotify_artist(artist_name))
                 menu.addAction(search_spotify_action)
+            
+            # Add Last.fm actions if applicable
+            if self.lastfm_enabled and artist_name:
+                view_lastfm_action = QAction(f"View '{artist_name}' on Last.fm", self)
+                view_lastfm_action.triggered.connect(lambda: self.open_lastfm_artist(artist_name))
+                menu.addAction(view_lastfm_action)
         
         # Add release-related actions if we have a release title
         if release_title:
@@ -8795,6 +8927,54 @@ class MuspyArtistModule(BaseModule):
                 view_release_mb_action.triggered.connect(lambda: self.open_musicbrainz_release(release_mbid))
                 menu.addAction(view_release_mb_action)
 
+
+    def unfollow_artist_from_muspy_with_confirm(self, mbid, artist_name):
+        """Show confirmation dialog before unfollowing an artist from Muspy"""
+        reply = QMessageBox.question(
+            self,
+            "Confirm Unfollow",
+            f"Are you sure you want to unfollow '{artist_name}' from Muspy?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            success = self.unfollow_artist_from_muspy(mbid, artist_name)
+            
+            if success:
+                QMessageBox.information(self, "Success", f"Successfully unfollowed {artist_name} from Muspy")
+            else:
+                QMessageBox.warning(self, "Error", f"Failed to unfollow {artist_name} from Muspy")
+
+    def unfollow_artist_from_spotify_with_confirm(self, artist_id, artist_name):
+        """Show confirmation dialog before unfollowing an artist from Spotify"""
+        reply = QMessageBox.question(
+            self,
+            "Confirm Unfollow",
+            f"Are you sure you want to unfollow '{artist_name}' from Spotify?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            success = self.unfollow_artist_from_spotify(artist_id, artist_name)
+            
+            if success:
+                QMessageBox.information(self, "Success", f"Successfully unfollowed {artist_name} from Spotify")
+            else:
+                QMessageBox.warning(self, "Error", f"Failed to unfollow {artist_name} from Spotify or not currently following")
+
+    def open_lastfm_artist(self, artist_name):
+        """Open Last.fm artist page in browser"""
+        if not artist_name:
+            return
+            
+        # URL encode the artist name for the URL
+        import urllib.parse
+        encoded_name = urllib.parse.quote(artist_name)
+        
+        url = f"https://www.last.fm/music/{encoded_name}"
+        
+        import webbrowser
+        webbrowser.open(url)
 
 
     def follow_artist_on_spotify_by_id(self, artist_id):

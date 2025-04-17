@@ -101,6 +101,16 @@
            <string>Play Count</string>
           </property>
          </column>
+         <column>
+          <property name="text">
+           <string>Usuarios</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Lastfm url</string>
+          </property>
+         </column>
         </widget>
        </item>
       </layout>
