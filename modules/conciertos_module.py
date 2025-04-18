@@ -105,6 +105,23 @@ class ConciertosModule(BaseModule):
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
+        # Initialize authentication managers
+        self.lastfm_auth = None
+        self.spotify_auth = None
+        self.musicbrainz_auth = None
+        
+        # Initialize flags for APIs
+        self.lastfm_enabled = False
+        self.spotify_enabled = False
+        self.musicbrainz_enabled = False
+        
+        # Setup authentication managers if config provided
+        if config:
+            self.setup_authentication_managers(config)
+            
+        # Current list of artists (from whatever source)
+        self.current_artists = []
+
         # Llamamos al inicializador de la clase base
         super().__init__(parent, theme)
     
@@ -147,7 +164,7 @@ class ConciertosModule(BaseModule):
                 
                 # Conectar señales
                 self.select_file_btn.clicked.connect(self.select_artists_file)
-                self.fetch_all_btn.clicked.connect(self.fetch_all_services)
+                self.fetch_all_btn.clicked.connect(self.search_concerts)
                 self.concerts_list.itemDoubleClicked.connect(self.switch_tab_db)
                 
                 # Conectar botones de búsqueda individual
@@ -169,6 +186,33 @@ class ConciertosModule(BaseModule):
                 # Mensaje inicial del log
                 self.log("Módulo inicializado. Configure los parámetros y haga clic en 'Buscar en Todos los Servicios'.")
                 
+                # Connect the source combo box to function
+                if hasattr(self, 'source_combo'):
+                    self.source_combo.currentIndexChanged.connect(self.on_source_changed)
+                    
+                    # Add sources to the combo box
+                    self.source_combo.addItem("Archivo de artistas", "file")
+                    
+                    # Add LastFM if enabled
+                    if hasattr(self, 'lastfm_enabled') and self.lastfm_enabled:
+                        self.source_combo.addItem("Top artistas LastFM", "lastfm")
+                        
+                    # Add Spotify if enabled
+                    if hasattr(self, 'spotify_enabled') and self.spotify_enabled:
+                        self.source_combo.addItem("Artistas seguidos en Spotify", "spotify")
+                        
+                    # Add MusicBrainz if enabled
+                    if hasattr(self, 'musicbrainz_enabled') and self.musicbrainz_enabled:
+                        self.source_combo.addItem("Colección de MusicBrainz", "musicbrainz")
+                        
+                    # Add database option if directory exists
+                    cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+                    json_path = os.path.join(cache_dir, "artists_selected.json")
+                    if os.path.exists(json_path):
+                        self.source_combo.addItem("Artistas de base de datos", "database")
+
+
+
                 return True
             except Exception as e:
                 print(f"Error cargando UI desde archivo: {e}")
@@ -179,6 +223,32 @@ class ConciertosModule(BaseModule):
         self._fallback_init_ui()
         return False
 
+
+
+
+
+    def on_source_changed(self):
+        """Handle change in the artist source selection"""
+        if not hasattr(self, 'source_combo'):
+            return
+        
+        # Get the currently selected source data
+        source_type = self.source_combo.currentData()
+        if not source_type:
+            return
+        
+        # Update the artists list
+        artists = self.get_artists_from_source(source_type)
+        
+        # Update the UI to show the number of artists loaded
+        if hasattr(self, 'artists_count_label'):
+            self.artists_count_label.setText(f"Artistas cargados: {len(artists)}")
+            
+        # Store the artists list for use in searches
+        self.current_artists = artists
+
+
+        
     def _fallback_init_ui(self):
         """Crea la interfaz de forma manual si no se puede cargar el archivo UI"""
         main_layout = QVBoxLayout(self)
@@ -261,7 +331,70 @@ class ConciertosModule(BaseModule):
         
         if self.config["apis"]["bandsintown"].get("enabled", False):
             self.create_bandsintown_tab()
-    
+
+
+    def setup_authentication_managers(self, config: Dict):
+        """Setup authentication managers for various music services"""
+        # LastFM Authentication
+        if config.get("lastfm", {}).get("enabled", False):
+            try:
+                from tools.lastfm_login import LastFMAuthManager
+                
+                lastfm_config = config.get("lastfm", {})
+                self.lastfm_auth = LastFMAuthManager(
+                    api_key=lastfm_config.get("api_key"),
+                    api_secret=lastfm_config.get("api_secret"),
+                    username=lastfm_config.get("username"),
+                    password=lastfm_config.get("password"),
+                    parent_widget=self
+                )
+                
+                # Check if LastFM is authenticated
+                self.lastfm_enabled = self.lastfm_auth.is_authenticated() if self.lastfm_auth else False
+                self.log(f"LastFM authentication {'enabled' if self.lastfm_enabled else 'disabled'}")
+                self.lastfm_username = lastfm_config.get("username")
+                self.lastfm_api_key = lastfm_config.get("api_key")
+            except Exception as e:
+                self.log(f"Error setting up LastFM authentication: {e}")
+        
+        # Spotify Authentication
+        if config.get("spotify", {}).get("enabled", False):
+            try:
+                from tools.spotify_login import SpotifyAuthManager
+                
+                spotify_config = config.get("spotify", {})
+                self.spotify_auth = SpotifyAuthManager(
+                    client_id=spotify_config.get("client_id"),
+                    client_secret=spotify_config.get("client_secret"),
+                    parent_widget=self
+                )
+                
+                # Check if Spotify is authenticated
+                self.spotify_enabled = self.spotify_auth.is_authenticated() if self.spotify_auth else False
+                self.log(f"Spotify authentication {'enabled' if self.spotify_enabled else 'disabled'}")
+            except Exception as e:
+                self.log(f"Error setting up Spotify authentication: {e}")
+        
+        # MusicBrainz Authentication
+        if config.get("musicbrainz", {}).get("enabled", False):
+            try:
+                from tools.musicbrainz_login import MusicBrainzAuthManager
+                
+                mb_config = config.get("musicbrainz", {})
+                self.musicbrainz_auth = MusicBrainzAuthManager(
+                    username=mb_config.get("username"),
+                    password=mb_config.get("password"),
+                    app_name="MuspyModule",
+                    parent_widget=self
+                )
+                
+                # Check if MusicBrainz is authenticated
+                self.musicbrainz_enabled = self.musicbrainz_auth.is_authenticated() if self.musicbrainz_auth else False
+                self.log(f"MusicBrainz authentication {'enabled' if self.musicbrainz_enabled else 'disabled'}")
+            except Exception as e:
+                self.log(f"Error setting up MusicBrainz authentication: {e}")
+
+
     def switch_tab_db(self):
         # Obtener el elemento seleccionado
         selected_item = self.concerts_list.currentItem()
@@ -492,6 +625,151 @@ class ConciertosModule(BaseModule):
         if self.active_fetchers == 0:
             self.log("No hay servicios habilitados para buscar")
             self.fetch_all_btn.setEnabled(True)
+
+
+    def get_lastfm_top_artists_direct(self, count=50, period="overall"):
+        """
+        Get top artists directly from Last.fm API to ensure we get all data fields
+        
+        Args:
+            count (int): Number of top artists to fetch
+            period (str): Time period (overall, 7day, 1month, 3month, 6month, 12month)
+            
+        Returns:
+            list: List of artist dictionaries or empty list on error
+        """
+        if not hasattr(self, 'lastfm_api_key') or not hasattr(self, 'lastfm_username') or not self.lastfm_api_key or not self.lastfm_username:
+            self.log("Last.fm API key or username not configured")
+            return []
+        
+        try:
+            # Build API URL
+            url = "http://ws.audioscrobbler.com/2.0/"
+            params = {
+                "method": "user.gettopartists",
+                "user": self.lastfm_username,
+                "api_key": self.lastfm_api_key,
+                "format": "json",
+                "limit": count,
+                "period": period
+            }
+            
+            # Make the request
+            response = requests.get(url, params=params)
+            
+            if response.status_code == 200:
+                data = response.json()
+                
+                if "topartists" in data and "artist" in data["topartists"]:
+                    artists = data["topartists"]["artist"]
+                    
+                    # Process artists
+                    result = []
+                    for artist in artists:
+                        # Extraer datos básicos
+                        artist_dict = {
+                            "name": artist.get("name", ""),
+                            "playcount": int(artist.get("playcount", 0)),
+                            "mbid": artist.get("mbid", ""),
+                            "url": artist.get("url", "")
+                        }
+                        
+                        # Intentar obtener listeners
+                        listeners = artist.get("listeners")
+                        if not listeners:
+                            # Si no está disponible, intenta hacer una llamada extra para cada artista
+                            try:
+                                # Solo para los primeros X artistas para no sobrecargar la API
+                                if len(result) < 20:  # Limitar a 20 artistas para no hacer demasiadas llamadas
+                                    artist_info_params = {
+                                        "method": "artist.getInfo",
+                                        "artist": artist_dict["name"],
+                                        "api_key": self.lastfm_api_key,
+                                        "format": "json"
+                                    }
+                                    artist_info_response = requests.get(url, params=artist_info_params)
+                                    if artist_info_response.status_code == 200:
+                                        artist_info = artist_info_response.json()
+                                        if "artist" in artist_info and "stats" in artist_info["artist"]:
+                                            listeners = artist_info["artist"]["stats"].get("listeners", "0")
+                            except Exception as e:
+                                self.log(f"Error getting listeners for {artist_dict['name']}: {e}")
+                        
+                        # Añadir listeners al diccionario
+                        artist_dict["listeners"] = int(listeners) if listeners else 0
+                        
+                        result.append(artist_dict)
+                    
+                    return result
+        
+        except Exception as e:
+            self.log(f"Error fetching top artists from Last.fm: {e}")
+            return []
+
+
+
+    def search_concerts(self):
+        """Search for concerts for the loaded artists"""
+        if not hasattr(self, 'current_artists') or not self.current_artists:
+            QMessageBox.warning(self, "Error", "No hay artistas cargados. Seleccione una fuente primero.")
+            return
+        
+        # Resetear eventos y desactivar botones
+        self.all_events = []
+        self.concerts_list.clear()
+        self.fetch_all_btn.setEnabled(False)
+        self.active_fetchers = 0
+        
+        # Inicializar lista de fetchers
+        self._fetchers = []
+        
+        # Actualizar configuración (solo API keys y App IDs)
+        self.update_service_configs()
+        
+        # Save current artists to a temporary file
+        temp_artists_file = os.path.join(PROJECT_ROOT, ".content", "cache", "temp_artists.txt")
+        os.makedirs(os.path.dirname(temp_artists_file), exist_ok=True)
+        
+        try:
+            with open(temp_artists_file, 'w', encoding='utf-8') as f:
+                for artist in self.current_artists:
+                    f.write(f"{artist}\n")
+            
+            # Temporarily use this file
+            original_file = self.config["artists_file"]
+            self.config["artists_file"] = temp_artists_file
+            
+            # Now launch fetchers with our temp file
+            if self.config["apis"]["ticketmaster"].get("enabled", False):
+                self.launch_ticketmaster_fetcher()
+            
+            if self.config["apis"]["songkick"].get("enabled", False):
+                self.launch_songkick_fetcher()
+            
+            if self.config["apis"]["concerts_metal"].get("enabled", False):
+                self.launch_concerts_metal_fetcher()
+            
+            if self.config["apis"]["rapidapi"].get("enabled", False):
+                self.launch_rapidapi_fetcher()
+            
+            if self.config["apis"]["bandsintown"].get("enabled", False):
+                self.launch_bandsintown_fetcher()
+                
+            if self.config["apis"]["dicefm"].get("enabled", False):
+                self.launch_dicefm_fetcher()
+            
+            # Restore original file path
+            self.config["artists_file"] = original_file
+            
+            if self.active_fetchers == 0:
+                self.log("No hay servicios habilitados para buscar")
+                self.fetch_all_btn.setEnabled(True)
+        
+        except Exception as e:
+            self.log(f"Error en la búsqueda: {e}")
+            self.fetch_all_btn.setEnabled(True)
+
+
     def fetch_single_service(self, service_name: str):
         """Inicia la búsqueda en un servicio específico"""
         # Actualizar la configuración global
@@ -812,6 +1090,121 @@ class ConciertosModule(BaseModule):
         # DiceFM (nueva API)
         self.dicefm_api_key = self.findChild(QLineEdit, "dicefm_api_key")
         self.dicefm_enabled = self.findChild(QPushButton, "dicefm_btn")
+
+        # Artist source selection
+        self.source_combo = self.findChild(QComboBox, "source_combo")
+        self.artists_count_label = self.findChild(QLabel, "artists_count_label")
+        
+        # Connect search button to the new search method
+        search_btn = self.findChild(QPushButton, "search_btn")
+        if search_btn:
+            search_btn.clicked.connect(self.search_concerts)
+        else:
+            # If there's no dedicated search button, connect to fetch_all_btn
+            self.fetch_all_btn.clicked.connect(self.search_concerts)
+
+
+    def get_artists_from_source(self, source_type):
+        """
+        Get artists list from the selected source
+        
+        Args:
+            source_type (str): The source type ('lastfm', 'spotify', 'database', 'file', 'musicbrainz')
+            
+        Returns:
+            list: List of artist names
+        """
+        artists = []
+        
+        if source_type == 'lastfm':
+            # Get from LastFM
+            if hasattr(self, 'lastfm_enabled') and self.lastfm_enabled:
+                try:
+                    top_artists = self.get_lastfm_top_artists_direct(count=50, period="overall")
+                    artists = [artist.get('name', '') for artist in top_artists if artist.get('name')]
+                    self.log(f"Loaded {len(artists)} artists from LastFM")
+                except Exception as e:
+                    self.log(f"Error loading LastFM artists: {e}")
+                    
+        elif source_type == 'spotify':
+            # Get from Spotify
+            if hasattr(self, 'spotify_enabled') and self.spotify_enabled:
+                try:
+                    spotify_client = self.spotify_auth.get_client()
+                    if spotify_client:
+                        results = spotify_client.current_user_followed_artists(limit=50)
+                        if 'artists' in results and 'items' in results['artists']:
+                            artists = [artist.get('name', '') for artist in results['artists']['items'] if artist.get('name')]
+                            self.log(f"Loaded {len(artists)} artists from Spotify")
+                except Exception as e:
+                    self.log(f"Error loading Spotify artists: {e}")
+        
+        elif source_type == 'database':
+            # Get from database JSON
+            try:
+                json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+                if os.path.exists(json_path):
+                    with open(json_path, 'r', encoding='utf-8') as f:
+                        artists_data = json.load(f)
+                        artists = [artist.get('nombre', '') for artist in artists_data if artist.get('nombre')]
+                        self.log(f"Loaded {len(artists)} artists from database")
+                else:
+                    self.log(f"Selected artists file not found: {json_path}")
+            except Exception as e:
+                self.log(f"Error loading database artists: {e}")
+        
+        elif source_type == 'musicbrainz':
+            # Get from MusicBrainz collections
+            if hasattr(self, 'musicbrainz_enabled') and self.musicbrainz_enabled:
+                try:
+                    if self.musicbrainz_auth:
+                        # Get user collections
+                        collections = self.musicbrainz_auth.get_collections_by_api()
+                        if collections:
+                            # Find a release collection (first one or one named "Artists")
+                            collection_id = None
+                            for collection in collections:
+                                if collection.get('type') == 'release':
+                                    collection_id = collection.get('id')
+                                    if collection.get('name') == 'Artists':
+                                        break  # Prefer one named "Artists"
+                            
+                            if collection_id:
+                                # Get releases in collection
+                                releases = self.musicbrainz_auth.get_collection_contents(collection_id)
+                                
+                                # Extract artists from releases
+                                for release in releases:
+                                    if 'artist-credit' in release:
+                                        for artist_credit in release['artist-credit']:
+                                            if isinstance(artist_credit, dict) and 'artist' in artist_credit:
+                                                artist_name = artist_credit['artist'].get('name')
+                                                if artist_name and artist_name not in artists:
+                                                    artists.append(artist_name)
+                                    
+                                self.log(f"Loaded {len(artists)} artists from MusicBrainz collection")
+                except Exception as e:
+                    self.log(f"Error loading MusicBrainz artists: {e}")
+        
+        elif source_type == 'file':
+            # Original functionality - read from artists.txt file
+            try:
+                if self.config["artists_file"] and os.path.isfile(self.config["artists_file"]):
+                    with open(self.config["artists_file"], 'r', encoding='utf-8') as f:
+                        artists = [line.strip() for line in f if line.strip()]
+                    self.log(f"Loaded {len(artists)} artists from file")
+                else:
+                    self.log("No valid artists file selected")
+            except Exception as e:
+                self.log(f"Error loading artists from file: {e}")
+        
+        return artists
+
+
+
+
+
+
 
 
 # CLASES PARA CADA SERVICIO
