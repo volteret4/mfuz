@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 import requests
 from PyQt6 import uic
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QTextEdit,
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton, QTextEdit, QComboBox,
                             QLabel, QLineEdit, QFileDialog, QMessageBox,
                             QHBoxLayout, QListWidget, QListWidgetItem, QTabWidget,
                             QFormLayout, QGroupBox, QScrollArea, QFrame, QSplitter, QDialog)
