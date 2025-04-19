@@ -754,7 +754,8 @@ class MusicBrainzAuthManager:
         
         Args:
             name (str): Name for the new collection
-            entity_type (str): Type of entities in the collection (default: "release")
+            entity_type (str): Type of entities in the collection (default: "release").
+                            Valid types: release, artist, event, label, place, recording, release-group, work, area
                 
         Returns:
             dict: Result with success status and collection info
@@ -763,11 +764,20 @@ class MusicBrainzAuthManager:
             self.logger.error("Not authenticated with MusicBrainz")
             return {"success": False, "error": "Not authenticated"}
         
+        # Validate entity type
+        valid_types = ["release", "artist", "event", "label", "place", "recording", "release-group", "work", "area"]
+        if entity_type not in valid_types:
+            self.logger.warning(f"Invalid entity_type '{entity_type}' provided, defaulting to 'release'")
+            entity_type = "release"  # Default to release if invalid
+        
         try:
             # Make sure we're fully authenticated before trying to create
             if not self.authenticate(silent=True):
                 self.logger.error("Failed to re-authenticate before creating collection")
                 return {"success": False, "error": "Authentication refresh failed"}
+            
+            # Apply rate limiting
+            time.sleep(1)  # Simple rate limiting
             
             # Prepare the API endpoint and data
             url = "https://musicbrainz.org/ws/2/collection"
@@ -946,9 +956,10 @@ class MusicBrainzAuthManager:
             return []
 
 
+   
     def get_collection_contents_ngs(self, collection_id, entity_type="release"):
         """
-        Obtener el contenido de una colección de MusicBrainz usando musicbrainzngs
+        Obtener el contenido de una colección de MusicBrainz usando musicbrainzngs con paginación adecuada
         
         Args:
             collection_id (str): ID de la colección
@@ -957,61 +968,121 @@ class MusicBrainzAuthManager:
         Returns:
             list: Lista de entidades en la colección
         """
-        if not hasattr(self, 'mb_ngs'):
-            if not self.authenticate_with_musicbrainzngs(silent=True):
+        if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
+            if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
                 self.logger.error("No autenticado con MusicBrainz")
                 return []
         
         try:
-            # Obtener contenido de colección directamente
-            result = self.mb_ngs.get_releases_in_collection(collection_id)
-            
-            # Procesar resultados
+            # Obtener contenido de colección con paginación
             releases = []
-            release_list = result.get('collection', {}).get('release-list', [])
+            offset = 0
+            limit = 100  # Tamaño máximo de página para MusicBrainz
+            total_items = None
             
-            for release in release_list:
-                processed_release = {
-                    'mbid': release.get('id', ''),
-                    'title': release.get('title', 'Título Desconocido'),
-                    'artist': "",
-                    'artist_mbid': "",
-                    'type': "",
-                    'date': release.get('date', ''),
-                    'status': release.get('status', ''),
-                    'country': release.get('country', '')
-                }
-                
-                # Extraer tipo del grupo de release (si existe)
-                if 'release-group' in release:
-                    processed_release['type'] = release['release-group'].get('primary-type', '')
-                
-                # Procesar información de artistas
-                if 'artist-credit' in release:
-                    artist_credits = release['artist-credit']
-                    
-                    artist_names = []
-                    artist_mbids = []
-                    
-                    for credit in artist_credits:
-                        if 'artist' in credit:
-                            artist = credit['artist']
-                            artist_names.append(artist.get('name', ''))
-                            artist_mbids.append(artist.get('id', ''))
-                        elif 'name' in credit:
-                            artist_names.append(credit['name'])
-                    
-                    processed_release['artist'] = " ".join(filter(None, artist_names))
-                    if artist_mbids:
-                        processed_release['artist_mbid'] = artist_mbids[0]
-                
-                releases.append(processed_release)
+            # Actualizamos la UI para mostrar estado de paginación
+            if hasattr(self, 'ui_callback'):
+                self.ui_callback.append(f"Obteniendo colección con paginación (tamaño de página: {limit})...")
+                QApplication.processEvents()
             
+            # Bucle de paginación
+            while True:
+                # Aplicamos rate limiting
+                self.rate_limiter.wait_if_needed()
+                
+                # Mensaje de progreso
+                if hasattr(self, 'ui_callback'):
+                    self.ui_callback.append(f"Obteniendo página {offset//limit + 1} (offset: {offset})...")
+                    QApplication.processEvents()
+                
+                # Obtener una página de resultados
+                try:
+                    # Usar la API de musicbrainzngs para obtener la página
+                    result = self.musicbrainz_auth.mb_ngs.get_releases_in_collection(
+                        collection_id,
+                        limit=limit,
+                        offset=offset
+                    )
+                    
+                    # Extraer la lista de releases de esta página
+                    page_releases = result.get('collection', {}).get('release-list', [])
+                    
+                    # Si no conocemos el total, calcularlo del primer resultado
+                    if total_items is None and 'release-count' in result.get('collection', {}):
+                        total_items = int(result['collection']['release-count'])
+                        
+                        if hasattr(self, 'ui_callback'):
+                            self.ui_callback.append(f"Total de items a recuperar: {total_items}")
+                            QApplication.processEvents()
+                    
+                    # Procesar cada release de esta página
+                    for release in page_releases:
+                        processed_release = {
+                            'mbid': release.get('id', ''),
+                            'title': release.get('title', 'Título Desconocido'),
+                            'artist': "",
+                            'artist_mbid': "",
+                            'type': "",
+                            'date': release.get('date', ''),
+                            'status': release.get('status', ''),
+                            'country': release.get('country', '')
+                        }
+                        
+                        # Extraer tipo del grupo de release (si existe)
+                        if 'release-group' in release:
+                            processed_release['type'] = release['release-group'].get('primary-type', '')
+                        
+                        # Procesar información de artistas
+                        if 'artist-credit' in release:
+                            artist_credits = release['artist-credit']
+                            
+                            artist_names = []
+                            artist_mbids = []
+                            
+                            for credit in artist_credits:
+                                if 'artist' in credit:
+                                    artist = credit['artist']
+                                    artist_names.append(artist.get('name', ''))
+                                    artist_mbids.append(artist.get('id', ''))
+                                elif 'name' in credit:
+                                    artist_names.append(credit['name'])
+                            
+                            processed_release['artist'] = " ".join(filter(None, artist_names))
+                            if artist_mbids:
+                                processed_release['artist_mbid'] = artist_mbids[0]
+                        
+                        releases.append(processed_release)
+                    
+                    # Verificar si hemos terminado
+                    if len(page_releases) < limit:
+                        break  # No hay más resultados
+                    
+                    # Si conocemos el total y ya lo hemos superado, terminar
+                    if total_items is not None and offset + len(page_releases) >= total_items:
+                        break
+                    
+                    # Incrementar el offset para la siguiente página
+                    offset += limit
+                    
+                except Exception as e:
+                    self.logger.error(f"Error obteniendo página de colección: {e}", exc_info=True)
+                    if hasattr(self, 'ui_callback'):
+                        self.ui_callback.append(f"Error en página {offset//limit + 1}: {str(e)}")
+                        QApplication.processEvents()
+                    break
+            
+            if hasattr(self, 'ui_callback'):
+                self.ui_callback.append(f"Completado. Se recuperaron {len(releases)} releases.")
+                QApplication.processEvents()
+                
             return releases
                 
         except Exception as e:
-            self.logger.error(f"Error obteniendo contenido de colección: {e}")
+            self.logger.error(f"Error obteniendo contenido de colección: {e}", exc_info=True)
             return []
+
+
+
 
 
     def add_releases_to_collection_ngs(self, collection_id, release_mbids):
@@ -1081,220 +1152,31 @@ class MusicBrainzAuthManager:
             return {"success": False, "error": str(e), "added": 0, "total": len(release_mbids)}
 
 
-    # def add_selected_albums_to_collection(self, collection_id, collection_name):
-    #     """
-    #     Añadir álbumes desde albums_selected.json a una colección de MusicBrainz usando musicbrainzngs
-        
-    #     Args:
-    #         collection_id (str): ID de la colección a la que añadir álbumes
-    #         collection_name (str): Nombre de la colección para mostrar
-    #     """
-    #     import os
-    #     import json
-    #     from PyQt6.QtWidgets import QMessageBox, QApplication
-        
-    #     # Intentar autenticar primero
-    #     if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
-    #         self.logger.info("Autenticando con musicbrainzngs...")
-    #         self.ui_callback.clear()
-    #         self.ui_callback.show()
-    #         self.ui_callback.append("Autenticando con MusicBrainz usando musicbrainzngs...")
-    #         QApplication.processEvents()
-            
-    #         if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
-    #             reply = QMessageBox.question(
-    #                 self.parent,
-    #                 "Se requiere autenticación",
-    #                 "Se requiere autenticación de MusicBrainz para añadir álbumes a colecciones. ¿Desea iniciar sesión ahora?",
-    #                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-    #             )
-                
-    #             if reply == QMessageBox.StandardButton.Yes:
-    #                 username, ok = QInputDialog.getText(
-    #                     self.parent,
-    #                     "Autenticación MusicBrainz",
-    #                     "Introduzca su nombre de usuario MusicBrainz:",
-    #                     QLineEdit.EchoMode.Normal,
-    #                     self.musicbrainz_username or ""
-    #                 )
-                    
-    #                 if not ok or not username:
-    #                     return
-                    
-    #                 password, ok = QInputDialog.getText(
-    #                     self.parent,
-    #                     "Autenticación MusicBrainz",
-    #                     f"Introduzca contraseña para el usuario MusicBrainz {username}:",
-    #                     QLineEdit.EchoMode.Password
-    #                 )
-                    
-    #                 if not ok or not password:
-    #                     return
-                    
-    #                 self.musicbrainz_username = username
-    #                 self.musicbrainz_password = password
-                    
-    #                 if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(username, password):
-    #                     QMessageBox.warning(self.parent, "Error", "No se pudo autenticar con MusicBrainz")
-    #                     return
-    #             else:
-    #                 return
-        
-    #     # Ruta al archivo JSON
-    #     json_path = os.path.join(self.project_root, ".content", "cache", "albums_selected.json")
-        
-    #     # Verificar si existe el archivo
-    #     if not os.path.exists(json_path):
-    #         QMessageBox.warning(self.parent, "Error", "No se encontró el archivo de álbumes seleccionados. Por favor, cargue álbumes primero.")
-    #         return
-        
-    #     # Cargar álbumes desde JSON
-    #     try:
-    #         with open(json_path, 'r', encoding='utf-8') as f:
-    #             albums_data = json.load(f)
-                
-    #         if not albums_data:
-    #             QMessageBox.warning(self.parent, "Error", "No se encontraron álbumes en el archivo de selección.")
-    #             return
-    #     except Exception as e:
-    #         QMessageBox.warning(self.parent, "Error", f"Error al cargar álbumes seleccionados: {str(e)}")
-    #         return
-        
-    #     # Función para añadir álbumes con diálogo de progreso
-    #     def add_albums_to_collection(update_progress):
-    #         # Preparar lista de MBIDs
-    #         album_mbids = []
-    #         valid_albums = []
-            
-    #         update_progress(0, 3, "Preparando datos de álbumes...", indeterminate=True)
-            
-    #         # Extraer MBIDs de los datos de álbumes
-    #         for album in albums_data:
-    #             mbid = album.get('mbid')
-    #             if mbid and len(mbid) == 36 and mbid.count('-') == 4:
-    #                 album_mbids.append(mbid)
-    #                 valid_albums.append(album)
-            
-    #         if not album_mbids:
-    #             return {
-    #                 "success": False,
-    #                 "error": "No se encontraron IDs de MusicBrainz válidos en los álbumes seleccionados"
-    #             }
-            
-    #         update_progress(1, 3, f"Añadiendo {len(album_mbids)} álbumes a la colección...", indeterminate=True)
-            
-    #         # Usar el método add_releases_to_collection_ngs mejorado
-    #         result = self.musicbrainz_auth.add_releases_to_collection_ngs(collection_id, album_mbids)
-            
-    #         update_progress(3, 3, "Finalizando...", indeterminate=True)
-            
-    #         return result
-        
-    #     # Ejecutar con diálogo de progreso
-    #     result = self.parent.show_progress_operation(
-    #         add_albums_to_collection,
-    #         title=f"Añadiendo a Colección: {collection_name}",
-    #         label_format="{status}"
-    #     )
-        
-    #     # Procesar resultados
-    #     if result and result.get("success"):
-    #         success_count = result.get("added", 0)
-    #         total = result.get("total", 0)
-    #         failed_batches = result.get("failed_batches", [])
-            
-    #         if failed_batches:
-    #             message = (f"Se añadieron {success_count} de {total} álbumes a la colección '{collection_name}'.\n\n"
-    #                     f"Algunos lotes fallaron: {', '.join(map(str, failed_batches))}.\n"
-    #                     "Esto puede deberse a problemas de permisos o a que algunos álbumes ya estén en la colección.")
-    #             QMessageBox.warning(self.parent, "Éxito Parcial", message)
-    #         else:
-    #             QMessageBox.information(
-    #                 self.parent, 
-    #                 "Éxito", 
-    #                 f"Se añadieron con éxito {success_count} álbumes a la colección '{collection_name}'"
-    #             )
-            
-    #         # Ofrecer mostrar la colección
-    #         reply = QMessageBox.question(
-    #             self.parent,
-    #             "Ver Colección",
-    #             f"¿Desea ver la colección actualizada '{collection_name}'?",
-    #             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-    #         )
-            
-    #         if reply == QMessageBox.StandardButton.Yes:
-    #             self.show_musicbrainz_collection(collection_id, collection_name)
-    #     else:
-    #         error_msg = result.get("error", "Error desconocido") if result else "La operación falló"
-    #         QMessageBox.warning(self.parent, "Error", f"No se pudieron añadir álbumes a la colección: {error_msg}")
-
-
-    def get_collection_contents_ngs(self, collection_id, entity_type="release"):
+    def rate_limited(min_interval=1.0):
         """
-        Obtener el contenido de una colección de MusicBrainz usando musicbrainzngs
+        Decorator to rate limit method calls
         
         Args:
-            collection_id (str): ID de la colección
-            entity_type (str): Tipo de entidad en la colección (release, artist, etc.)
-                
-        Returns:
-            list: Lista de entidades en la colección
+            min_interval (float): Minimum time between calls in seconds
         """
-        if not hasattr(self, 'mb_ngs'):
-            if not self.authenticate_with_musicbrainzngs(silent=True):
-                self.logger.error("No autenticado con MusicBrainz")
-                return []
-        
-        try:
-            # Obtener contenido de colección directamente
-            result = self.mb_ngs.get_releases_in_collection(collection_id)
+        def decorator(func):
+            last_time_called = [0.0]  # Mutable object to store state
             
-            # Procesar resultados
-            releases = []
-            release_list = result.get('collection', {}).get('release-list', [])
-            
-            for release in release_list:
-                processed_release = {
-                    'mbid': release.get('id', ''),
-                    'title': release.get('title', 'Título Desconocido'),
-                    'artist': "",
-                    'artist_mbid': "",
-                    'type': "",
-                    'date': release.get('date', ''),
-                    'status': release.get('status', ''),
-                    'country': release.get('country', '')
-                }
+            def wrapper(*args, **kwargs):
+                current_time = time.time()
+                elapsed = current_time - last_time_called[0]
                 
-                # Extraer tipo del grupo de release (si existe)
-                if 'release-group' in release:
-                    processed_release['type'] = release['release-group'].get('primary-type', '')
-                
-                # Procesar información de artistas
-                if 'artist-credit' in release:
-                    artist_credits = release['artist-credit']
+                # If not enough time has passed, sleep
+                if elapsed < min_interval:
+                    time.sleep(min_interval - elapsed)
                     
-                    artist_names = []
-                    artist_mbids = []
-                    
-                    for credit in artist_credits:
-                        if 'artist' in credit:
-                            artist = credit['artist']
-                            artist_names.append(artist.get('name', ''))
-                            artist_mbids.append(artist.get('id', ''))
-                        elif 'name' in credit:
-                            artist_names.append(credit['name'])
-                    
-                    processed_release['artist'] = " ".join(filter(None, artist_names))
-                    if artist_mbids:
-                        processed_release['artist_mbid'] = artist_mbids[0]
+                # Update the last called time
+                last_time_called[0] = time.time()
                 
-                releases.append(processed_release)
-            
-            return releases
+                # Call the function
+                return func(*args, **kwargs)
                 
-        except Exception as e:
-            self.logger.error(f"Error obteniendo contenido de colección: {e}")
-            return []
+            return wrapper
+        return decorator
 
 

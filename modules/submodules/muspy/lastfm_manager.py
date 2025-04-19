@@ -9,7 +9,7 @@ from datetime import datetime
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QProgressDialog, QApplication, QDialog,
                             QHBoxLayout, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView,
                             QDialogButtonBox, QSpinBox, QComboBox, QLabel, QCheckBox, QMenu)
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThread
 from PyQt6.QtGui import QAction, QCursor
 #from modules.submodules.muspy import cache_manager
 

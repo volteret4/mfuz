@@ -216,7 +216,7 @@ class MuspyArtistModule(BaseModule):
         # Initialize MusicBrainz credentials & manager
         self.musicbrainz_username = kwargs.get('musicbrainz_username', musicbrainz_username)
         self.musicbrainz_password = kwargs.get('musicbrainz_password', musicbrainz_password)
-        
+        self.musicbrainz_enabled = bool(self.musicbrainz_username and self.musicbrainz_password)
         # Check global theme config for credentials if not already set
         global_config = kwargs.get('global_theme_config', {})
         if global_config:
@@ -225,8 +225,9 @@ class MuspyArtistModule(BaseModule):
             if not self.musicbrainz_password and 'musicbrainz_password' in global_config:
                 self.musicbrainz_password = global_config['musicbrainz_password']
         
-        self.musicbrainz_enabled = bool(self.musicbrainz_username)
-        
+
+
+
         # Initialize LastFM credentials & manager
         self.lastfm_api_key = lastfm_api_key
         self.lastfm_api_secret = lastfm_api_secret
@@ -437,12 +438,15 @@ class MuspyArtistModule(BaseModule):
                 self._connect_signals()
                 
                 # Intentar autenticación silenciosa con MusicBrainz al iniciar
-                if hasattr(self, 'musicbrainz_username') and self.musicbrainz_username and hasattr(self, 'musicbrainz_password') and self.musicbrainz_password:
-                    self.logger.info("Intentando autenticación automática con MusicBrainz...")
-                    self._start_background_auth()
+                if self.musicbrainz_enabled:
+                    self.logger.info("Iniciando autenticación automática con MusicBrainz...")
+                    # Crear un QTimer para iniciar la autenticación después de que la interfaz esté lista
+                    from PyQt6.QtCore import QTimer
+                    QTimer.singleShot(1000, self._start_background_auth)
+
+                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
                    
                 
-                print(f"UI MuspyArtistModule cargada desde {ui_file_path}")
             except Exception as e:
                 print(f"Error cargando UI MuspyArtistModule desde archivo: {e}")
                 import traceback
@@ -856,26 +860,19 @@ class MuspyArtistModule(BaseModule):
             QMessageBox.warning(self, "Error", "MusicBrainz credentials not configured")
             return
         
-        # Check if authenticated
+        # Verificar si ya estamos autenticados - SIN INTENTAR AUTENTICARSE
         is_auth = self.musicbrainz_manager.musicbrainz_auth.is_authenticated()
         
-        if not is_auth:
-            # Prompt for login if not authenticated
-            self.authenticate_musicbrainz_silently()
-            # Recheck authentication status after login attempt
-            is_auth = hasattr(self.musicbrainz_manager, 'musicbrainz_auth') and self.musicbrainz_manager.musicbrainz_auth.is_authenticated()
-        
-        # Create menu
+        # Crear menu
         menu = QMenu(self)
         
         if not is_auth:
-            # Add login action if still not authenticated
+            # Add login action if not authenticated
             login_action = QAction("Login to MusicBrainz...", self)
             login_action.triggered.connect(self.authenticate_musicbrainz_silently)
             menu.addAction(login_action)
         else:
-            # We're authenticated, fetch collections
-            # Use cached collections if available
+            # Ya estamos autenticados, usar colecciones en caché si disponibles
             collections = []
             if hasattr(self, '_mb_collections') and self._mb_collections:
                 collections = self._mb_collections
@@ -963,17 +960,16 @@ class MuspyArtistModule(BaseModule):
             create_action.triggered.connect(self.create_new_collection)
             menu.addAction(create_action)
             
-            # Add separator and logout option
+            # Add separator and cache clearing option instead of logout
             menu.addSeparator()
-            logout_action = QAction("Logout from MusicBrainz", self)
-            logout_action.triggered.connect(self.musicbrainz_manager.logout_musicbrainz)
-            menu.addAction(logout_action)
+            clear_cache_action = QAction("Clear MusicBrainz Cache", self)
+            clear_cache_action.triggered.connect(lambda: self.musicbrainz_manager._invalidate_collection_cache())
+            menu.addAction(clear_cache_action)
         
         # Show the menu at the button position
         if hasattr(self, 'get_releases_musicbrainz'):
             pos = self.get_releases_musicbrainz.mapToGlobal(QPoint(0, self.get_releases_musicbrainz.height()))
             menu.exec(pos)
-
 
 
     def show_lastfm_sync_dialog(self):
@@ -1199,35 +1195,98 @@ class MuspyArtistModule(BaseModule):
 
 # Métodos de contexto de tabla:
 
+    
     def setup_table_context_menus(self):
         """
         Set up context menus for all tables in the application
+        with improved search for nested widgets and debugging logs
         """
-        # List of table object names to configure
+        # Lista de tablas a configurar
         table_names = [
             "tabla_musicbrainz_collection",
-            "spotify_artists_table",
+            "spotify_artists_table", 
             "artists_table",
             "loved_songs_table",
-            "releases_table",
+            "releases_table", 
             "tableWidget_muspy_results"
         ]
         
-        # Find and configure each table
-        for table_name in table_names:
-            table = self.findChild(QTableWidget, table_name)
+        # Lista de nombres de widgets padres donde buscar las tablas
+        parent_names = [
+            "musicbrainz_collection_page",
+            "spotify_artists_page",
+            "artists_page",
+            "loved_tracks_page",
+            "releases_page",
+            "muspy_results_widget"
+        ]
+        
+        # Buscar tablas en toda la jerarquía
+        for table_name, parent_name in zip(table_names, parent_names):
+            # Intentar encontrar primero el padre
+            parent_widget = self.findChild(QWidget, parent_name)
+            
+            if parent_widget:
+                # Buscar la tabla dentro del padre
+                table = parent_widget.findChild(QTableWidget, table_name)
+                if table:
+                    self.logger.debug(f"Found table {table_name} in parent {parent_name}")
+                else:
+                    self.logger.debug(f"Table {table_name} not found in parent {parent_name}")
+                    # Buscar en stackedWidget como último recurso
+                    stackedWidget = self.findChild(QStackedWidget, "stackedWidget")
+                    if stackedWidget:
+                        # Buscar en todas las páginas del stackedWidget
+                        for i in range(stackedWidget.count()):
+                            page = stackedWidget.widget(i)
+                            if page.objectName() == parent_name:
+                                table = page.findChild(QTableWidget, table_name)
+                                if table:
+                                    self.logger.debug(f"Found table {table_name} in stackedWidget page {parent_name}")
+                                    break
+            else:
+                # Buscar la tabla directamente en el widget principal
+                table = self.findChild(QTableWidget, table_name)
+                if table:
+                    self.logger.debug(f"Found table {table_name} directly in main widget")
+            
             if table:
                 # Set context menu policy
                 table.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
                 
-                # Connect signal to unified handler
-                table.customContextMenuRequested.disconnect() if table.receivers(table.customContextMenuRequested) > 0 else None
-                table.customContextMenuRequested.connect(self.show_unified_context_menu)
+                # Desconectar cualquier conexión previa para evitar duplicados
+                try:
+                    # Guardar la cantidad de receptores antes de desconectar
+                    receivers_before = table.receivers(table.customContextMenuRequested)
+                    self.logger.debug(f"Table {table_name} has {receivers_before} receivers before disconnect")
+                    
+                    if receivers_before > 0:
+                        table.customContextMenuRequested.disconnect()
+                        self.logger.debug(f"Disconnected signals from table {table_name}")
+                except Exception as e:
+                    self.logger.debug(f"Error disconnecting signals from {table_name}: {e}")
                 
-                self.logger.debug(f"Set up context menu for table: {table_name}")
-
+                # Conectar señal a nuestro manejador unificado
+                try:
+                    # Asegurarse de que la conexión se hace correctamente
+                    connected = table.customContextMenuRequested.connect(self.show_unified_context_menu)
+                    receivers_after = table.receivers(table.customContextMenuRequested)
+                    self.logger.debug(f"Table {table_name} connected to unified menu handler. Receivers: {receivers_after}")
+                except Exception as e:
+                    self.logger.error(f"Failed to connect context menu for {table_name}: {e}")
+                
+                # Guardar la referencia a la tabla para uso posterior
+                setattr(self, f"_{table_name}_ref", table)
+                
+                # Loguear éxito
+                self.logger.info(f"Successfully set up context menu for table: {table_name}")
+            else:
+                self.logger.warning(f"Could not find table {table_name} anywhere")
 
    
+  # Modificación para muspy_releases_module.py
+
+
     def show_unified_context_menu(self, position):
         """
         Unified context menu handler for all tables in the application
@@ -1262,12 +1321,94 @@ class MuspyArtistModule(BaseModule):
         # Add actions based on available information
         self._build_context_menu(menu, info, table_name)
         
+        # Add specific actions for MusicBrainz collection table
+        if table_name == "tabla_musicbrainz_collection":
+            # Get collection information from table properties
+            collection_id = table.property("collection_id")
+            collection_name = table.property("collection_name")
+            release_mbid = info.get('release_mbid')
+            release_title = info.get('release_title')
+            
+            if collection_id and release_mbid and release_title:
+                menu.addSeparator()
+                remove_action = QAction(f"Eliminar '{release_title}' de la colección", self)
+                remove_action.triggered.connect(
+                    lambda: self.musicbrainz_manager.remove_release_from_collection_with_confirm(
+                        collection_id, collection_name, release_mbid, release_title)
+                )
+                menu.addAction(remove_action)
+        
         # Show the menu
         menu.exec(table.mapToGlobal(position))
 
+
+    def _extract_item_info_mb_collection(self, table, row):
+        """
+        Método especializado para extraer información de una tabla de colección MusicBrainz
+        
+        Args:
+            table (QTableWidget): Tabla de colección MusicBrainz
+            row (int): Índice de fila seleccionada
+            
+        Returns:
+            dict: Diccionario con información extraída
+        """
+        info = {
+            'artist_name': None,
+            'artist_mbid': None,
+            'release_title': None,
+            'release_mbid': None
+        }
+        
+        # Extraer información básica de las columnas
+        if table.item(row, 0):
+            info['artist_name'] = table.item(row, 0).text()
+        
+        if table.columnCount() > 1 and table.item(row, 1):
+            info['artist_mbid'] = table.item(row, 1).text()
+            
+        if table.columnCount() > 2 and table.item(row, 2):
+            info['release_title'] = table.item(row, 2).text()
+        
+        # INTENTO 1: Obtener release_mbid del dato UserRole
+        release_mbid = None
+        for col in range(min(7, table.columnCount())):
+            if table.item(row, col):
+                mbid = table.item(row, col).data(Qt.ItemDataRole.UserRole)
+                if mbid and isinstance(mbid, str) and len(mbid) == 36 and mbid.count('-') == 4:
+                    release_mbid = mbid
+                    break
+        
+        # INTENTO 2: Obtener del diccionario guardado en UserRole+1
+        if not release_mbid and table.item(row, 0):
+            data_dict = table.item(row, 0).data(Qt.ItemDataRole.UserRole + 1)
+            if isinstance(data_dict, dict) and 'release_mbid' in data_dict:
+                release_mbid = data_dict['release_mbid']
+        
+        # INTENTO 3: Buscar en el texto de la fila si es un MBID válido
+        if not release_mbid:
+            for col in range(min(7, table.columnCount())):
+                if table.item(row, col):
+                    text = table.item(row, col).text()
+                    if text and len(text) == 36 and text.count('-') == 4:
+                        # Parece un MBID válido
+                        release_mbid = text
+                        break
+        
+        # Guardar el MBID encontrado
+        info['release_mbid'] = release_mbid
+        
+        # Log para depuración
+        self.logger.debug(f"Extracted MusicBrainz info: {info}")
+        
+        return info
+
+
+    # Modificación mejorada del método _extract_item_info para usar la función especializada
+
     def _extract_item_info(self, table, row, table_name):
         """
-        Extract item information based on the table type
+        Extract item information based on the table type with improved MBID extraction
         
         Args:
             table (QTableWidget): The table widget
@@ -1277,36 +1418,23 @@ class MuspyArtistModule(BaseModule):
         Returns:
             dict: Dictionary with extracted information or None if extraction failed
         """
-        info = {
-            'artist_name': None,
-            'artist_mbid': None,
-            'release_title': None,
-            'release_mbid': None,
-            'spotify_artist_id': None,
-            'spotify_release_id': None
-        }
-        
         try:
-            # MusicBrainz collection table
+            # MusicBrainz collection table - usar método especializado
             if table_name == "tabla_musicbrainz_collection":
-                # Artist name is in column 0
-                if table.item(row, 0):
-                    info['artist_name'] = table.item(row, 0).text()
+                return self._extract_item_info_mb_collection(table, row)
                 
-                # Artist MBID is in column 1
-                if table.columnCount() > 1 and table.item(row, 1):
-                    info['artist_mbid'] = table.item(row, 1).text()
-                    
-                # Release title is in column 2
-                if table.columnCount() > 2 and table.item(row, 2):
-                    info['release_title'] = table.item(row, 2).text()
-                    
-                # Release MBID might be stored in the item data
-                if table.item(row, 0):
-                    info['release_mbid'] = table.item(row, 0).data(Qt.ItemDataRole.UserRole)
-                    
+            # Para otras tablas, usar el método general
+            info = {
+                'artist_name': None,
+                'artist_mbid': None,
+                'release_title': None,
+                'release_mbid': None,
+                'spotify_artist_id': None,
+                'spotify_release_id': None
+            }
+            
             # Spotify artists table
-            elif table_name == "spotify_artists_table":
+            if table_name == "spotify_artists_table":
                 # Artist name is in column 0
                 if table.item(row, 0):
                     info['artist_name'] = table.item(row, 0).text()
@@ -1373,7 +1501,7 @@ class MuspyArtistModule(BaseModule):
                         
                         if 'release_mbid' in data:
                             info['release_mbid'] = data['release_mbid']
-                    
+                        
             # For any other table, try some common patterns
             else:
                 # Try to find artist name in first 2 columns
@@ -3656,11 +3784,11 @@ class MuspyArtistModule(BaseModule):
 
     def open_musicbrainz_artist(self, artist_mbid):
         """Delegación al método implementado en mb_manager"""
-        return self.musicbrainz_manager.open_musicbrainz_artist(artist_mbid)
+        return self.utils.open_musicbrainz_artist(artist_mbid)
 
     def open_musicbrainz_release(self, release_mbid):
         """Delegación al método implementado en mb_manager"""
-        return self.musicbrainz_manager.open_musicbrainz_release(release_mbid)
+        return self.utils.open_musicbrainz_release(release_mbid)
 
     # --- Métodos de delegación para BlueskyManager ---
     # def show_bluesky_menu(self):

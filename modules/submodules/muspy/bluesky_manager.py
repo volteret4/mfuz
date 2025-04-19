@@ -6,7 +6,7 @@ import logging
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
                           QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
                           QDialogButtonBox, QComboBox, QProgressDialog,
-                          QApplication, QMenu)
+                          QApplication, QMenu, QSpinBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
 from base_module import PROJECT_ROOT
@@ -32,21 +32,19 @@ class BlueskyManager:
         self.lastfm_manager = lastfm_manager
         self.musicbrainz_manager = musicbrainz_manager
         self.utils = utils
-        
+
     def _init_bluesky_manager(self):
         """
         Initialize the Bluesky manager if not already initialized
         """
-        if not hasattr(self, 'bluesky_manager'):
-            from tools.bluesky_manager import BlueskyManager
-            self.bluesky_manager = BlueskyManager(
-                parent=self.parent, 
-                project_root=self.project_root,
-                username=self.bluesky_username
-            )
-            
-        return self.bluesky_manager
+        # Verificamos si tenemos un usuario de Bluesky configurado
+        if not self.bluesky_username:
+            self.logger.warning("No hay usuario de Bluesky configurado")
+            return False
 
+        self.logger.info(f"Inicializando manejador para usuario de Bluesky: {self.bluesky_username}")
+            
+        return True
 
 
     def configure_bluesky_username(self):
@@ -80,7 +78,7 @@ class BlueskyManager:
             if hasattr(self, 'bluesky_manager'):
                 self.username = username
             
-            QMessageBox.information(self, "Bluesky Configurado", 
+            QMessageBox.information(self.parent, "Bluesky Configurado", 
                                 f"Usuario de Bluesky configurado como: {username}")
 
 
@@ -91,7 +89,7 @@ class BlueskyManager:
         """
         # Check if Spotify is enabled
         if not self.spotify_manager.ensure_spotify_auth():
-            QMessageBox.warning(self, "Error", "Spotify no está configurado o la autenticación falló")
+            QMessageBox.warning(self.parent, "Error", "Spotify no está configurado o la autenticación falló")
             return
         
         # Initialize Bluesky manager
@@ -232,7 +230,7 @@ class BlueskyManager:
         
         # Check if file exists
         if not os.path.exists(json_path):
-            QMessageBox.warning(self, "Error", "No hay artistas seleccionados. Por favor, carga artistas primero.")
+            QMessageBox.warning(self.parent, "Error", "No hay artistas seleccionados. Por favor, carga artistas primero.")
             return
         
         # Load artists from JSON
@@ -241,10 +239,10 @@ class BlueskyManager:
                 artists_data = json.load(f)
                 
             if not artists_data:
-                QMessageBox.warning(self, "Error", "No hay artistas en el archivo seleccionado.")
+                QMessageBox.warning(self.parent, "Error", "No hay artistas en el archivo seleccionado.")
                 return
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Error al cargar artistas: {str(e)}")
+            QMessageBox.warning(self.parent, "Error", f"Error al cargar artistas: {str(e)}")
             return
         
         # Define function for progress dialog
@@ -318,7 +316,7 @@ class BlueskyManager:
         Show dialog to select period and number of top artists from LastFM to search on Bluesky
         """
         if not self.lastfm_manager.lastfm_enabled:
-            QMessageBox.warning(self, "Error", "LastFM no está configurado")
+            QMessageBox.warning(self.parent, "Error", "LastFM no está configurado")
             return
         
         # Create dialog
@@ -379,8 +377,8 @@ class BlueskyManager:
             period (str): Period for LastFM top artists
             count (int): Number of artists to fetch
         """
-        if not self.lastfm_enabled:
-            QMessageBox.warning(self, "Error", "LastFM no está configurado")
+        if not self.lastfm_manager.lastfm_enabled:
+            QMessageBox.warning(self.parent, "Error", "LastFM no está configurado")
             return
         
         # Initialize Bluesky manager
@@ -398,7 +396,7 @@ class BlueskyManager:
                 # First get top artists from LastFM
                 update_progress(0, 100, "Obteniendo top artistas de LastFM...")
                 
-                top_artists = self.get_lastfm_top_artists_direct(count, period)
+                top_artists = self.lastfm_manager.get_lastfm_top_artists_direct(count, period)
                 
                 if not top_artists:
                     return {"success": False, "message": "No se pudieron obtener artistas de LastFM"}
@@ -480,7 +478,7 @@ class BlueskyManager:
         Search for MusicBrainz collection artists on Bluesky
         """
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_manager.musicbrainz_enabled:
-            QMessageBox.warning(self, "Error", "MusicBrainz no está configurado o la autenticación falló")
+            QMessageBox.warning(self.parent, "Error", "MusicBrainz no está configurado o la autenticación falló")
             return
         
         # Check if authenticated
@@ -489,7 +487,7 @@ class BlueskyManager:
         if not is_auth:
             # Prompt for login if not authenticated
             reply = QMessageBox.question(
-                self, 
+                self.parent, 
                 "Autenticación Requerida", 
                 "Necesita iniciar sesión en MusicBrainz para acceder a sus colecciones. ¿Iniciar sesión ahora?",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
@@ -497,7 +495,7 @@ class BlueskyManager:
             
             if reply == QMessageBox.StandardButton.Yes:
                 if not self.authenticate_musicbrainz_silently():
-                    QMessageBox.warning(self, "Error", "Falló la autenticación. Por favor, intente de nuevo.")
+                    QMessageBox.warning(self.parent, "Error", "Falló la autenticación. Por favor, intente de nuevo.")
                     return
             else:
                 return
@@ -507,7 +505,7 @@ class BlueskyManager:
             self._mb_collections = self.fetch_all_musicbrainz_collections()
         
         if not self._mb_collections:
-            QMessageBox.warning(self, "Error", "No se encontraron colecciones de MusicBrainz")
+            QMessageBox.warning(self.parent, "Error", "No se encontraron colecciones de MusicBrainz")
             return
         
         # Show collection selection dialog
@@ -843,7 +841,7 @@ class BlueskyManager:
             name (str): Name of the artist for display
         """
         if not did or not self.bluesky_username:
-            QMessageBox.warning(self, "Error", "Bluesky no está configurado correctamente")
+            QMessageBox.warning(self.parent, "Error", "Bluesky no está configurado correctamente")
             return
         
         # Initialize Bluesky manager if needed
@@ -854,13 +852,169 @@ class BlueskyManager:
             success = follow_user(did)
             
             if success:
-                QMessageBox.information(self, "Éxito", f"Ahora sigues a {name} en Bluesky")
+                QMessageBox.information(self.parent, "Éxito", f"Ahora sigues a {name} en Bluesky")
             else:
-                QMessageBox.warning(self, "Error", f"No se pudo seguir a {name} en Bluesky. Comprueba tus credenciales.")
+                QMessageBox.warning(self.parent, "Error", f"No se pudo seguir a {name} en Bluesky. Comprueba tus credenciales.")
         except Exception as e:
             self.logger.error(f"Error following artist on Bluesky: {e}")
-            QMessageBox.warning(self, "Error", f"Error al seguir al artista: {str(e)}")
+            QMessageBox.warning(self.parent, "Error", f"Error al seguir al artista: {str(e)}")
 
+
+
+
+
+    def check_bluesky_user(self, artist_name):
+        """
+        Check if an artist exists on Bluesky by name
+        
+        Args:
+            artist_name (str): Name of the artist to check
+            
+        Returns:
+            dict or None: User info if found, None otherwise
+        """
+        if not self.bluesky_username:
+            self.logger.error("No Bluesky username configured")
+            return None
+        
+        try:
+            # Normalize the artist name for search
+            search_name = artist_name.strip().lower()
+            
+            # Construct search URL
+            url = f"https://bsky.social/xrpc/app.bsky.actor.searchActors"
+            params = {
+                "q": search_name,
+                "limit": 5  # Limit to top results
+            }
+            
+            # Make the request
+            headers = {
+                "User-Agent": "MuspyModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            response = requests.get(url, params=params, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                actors = data.get("actors", [])
+                
+                # Look for exact or close matches
+                for actor in actors:
+                    actor_name = actor.get("displayName", "").lower()
+                    handle = actor.get("handle", "")
+                    did = actor.get("did", "")
+                    
+                    # Check if this is a good match
+                    if (search_name in actor_name or 
+                        search_name.replace(" ", "") in actor_name.replace(" ", "") or
+                        search_name in handle.lower()):
+                        
+                        return {
+                            "handle": handle,
+                            "did": did,
+                            "name": actor.get("displayName", artist_name)
+                        }
+                
+                return None
+            else:
+                self.logger.error(f"Error searching Bluesky for {artist_name}: {response.status_code}")
+                return None
+        
+        except Exception as e:
+            self.logger.error(f"Error checking Bluesky for {artist_name}: {e}")
+            return None
+
+    def get_user_profile(self, did):
+        """
+        Get the profile of a Bluesky user by DID
+        
+        Args:
+            did (str): Decentralized ID of the user
+            
+        Returns:
+            dict or None: Profile info if found, None otherwise
+        """
+        if not did:
+            return None
+        
+        try:
+            # Construct API URL
+            url = "https://bsky.social/xrpc/app.bsky.actor.getProfile"
+            params = {"actor": did}
+            
+            # Make the request
+            headers = {
+                "User-Agent": "MuspyModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            response = requests.get(url, params=params, headers=headers)
+            
+            if response.status_code == 200:
+                return response.json()
+            else:
+                self.logger.error(f"Error fetching profile for {did}: {response.status_code}")
+                return None
+        
+        except Exception as e:
+            self.logger.error(f"Error getting user profile: {e}")
+            return None
+
+    def get_recent_posts(self, did, limit=5):
+        """
+        Get recent posts from a Bluesky user
+        
+        Args:
+            did (str): Decentralized ID of the user
+            limit (int): Maximum number of posts to retrieve
+            
+        Returns:
+            list: List of recent posts or empty list on error
+        """
+        if not did:
+            return []
+        
+        try:
+            # Construct API URL
+            url = "https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed"
+            params = {
+                "actor": did,
+                "limit": limit
+            }
+            
+            # Make the request
+            headers = {
+                "User-Agent": "MuspyModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            response = requests.get(url, params=params, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                posts = []
+                
+                # Extract feed items
+                for feed_item in data.get("feed", []):
+                    post = feed_item.get("post", {})
+                    post_record = post.get("record", {})
+                    
+                    if post_record:
+                        posts.append({
+                            "text": post_record.get("text", ""),
+                            "created_at": post_record.get("createdAt", "")
+                        })
+                
+                return posts
+            else:
+                self.logger.error(f"Error fetching posts for {did}: {response.status_code}")
+                return []
+        
+        except Exception as e:
+            self.logger.error(f"Error getting recent posts: {e}")
+            return []
 
 
 

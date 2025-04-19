@@ -140,3 +140,27 @@ class MuspyUtils:
         """
         import webbrowser
         webbrowser.open(url)
+
+
+# Musicbrainz
+
+    def open_musicbrainz_artist(self, artist_mbid):
+        """Open MusicBrainz artist page in browser"""
+        if not artist_mbid:
+            return
+            
+        url = f"https://musicbrainz.org/artist/{artist_mbid}"
+        
+        import webbrowser
+        webbrowser.open(url)
+
+
+    def open_musicbrainz_release(self, artist_mbid):
+        """Open MusicBrainz artist page in browser"""
+        if not artist_mbid:
+            return
+            
+        url = f"https://musicbrainz.org/release/{artist_mbid}"
+        
+        import webbrowser
+        webbrowser.open(url)
