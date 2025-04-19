@@ -3,7 +3,7 @@ import sys
 import os
 from PyQt6.QtWidgets import (QProgressDialog, QApplication, QVBoxLayout, QHBoxLayout, 
                            QPushButton, QWidget, QSizePolicy, QMessageBox, QDialog)
-from PyQt6.QtCore import pyqtSignal, Qt, QObject, QSize, QEvent, QPoint
+from PyQt6.QtCore import pyqtSignal, Qt, QObject, QSize, QEvent, QPoint, QTimer
 from PyQt6.QtGui import QColor, QIcon
 
 class ProgressWorker(QObject):
@@ -54,8 +54,6 @@ class AuthWorker(QObject):
         
         # Emitir señal cuando termine
         self.finished.emit(success)
-
-
 class FloatingNavigationButtons(QObject):
     """
     Class to manage floating navigation buttons for a stacked widget.
@@ -87,6 +85,13 @@ class FloatingNavigationButtons(QObject):
         # Track active areas
         self.left_active = False
         self.right_active = False
+        
+        # Anti-flicker debounce timer
+        self.hover_timer = QTimer()
+        self.hover_timer.setSingleShot(True)
+        self.hover_timer.timeout.connect(self.update_button_visibility)
+        self.last_pos = None
+        self.current_state = {'left': False, 'right': False}
         
     def setup_buttons(self):
         """Set up button appearance and positioning"""
@@ -179,6 +184,8 @@ class FloatingNavigationButtons(QObject):
         
         # Connect to parent resize for repositioning
         if self.parent_widget:
+            # Store original resize event handler
+            self.original_resize = self.parent_widget.resizeEvent
             self.parent_widget.resizeEvent = self.handle_parent_resize
         
     def handle_parent_resize(self, event):
@@ -186,9 +193,8 @@ class FloatingNavigationButtons(QObject):
         self.update_button_positions()
         
         # Call original resize event if it exists
-        original_resize = getattr(self.parent_widget.__class__, "resizeEvent", None)
-        if original_resize and original_resize != self.handle_parent_resize:
-            original_resize(self.parent_widget, event)
+        if self.original_resize:
+            self.original_resize(event)
     
     def go_to_previous_page(self):
         """Navigate to the previous page in the stacked widget"""
@@ -208,54 +214,52 @@ class FloatingNavigationButtons(QObject):
             # Wrap around to the first page
             self.stacked_widget.setCurrentIndex(0)
     
-    def eventFilter(self, obj, event):
-        """Filter events to detect mouse hover on edges"""
-        if obj == self.stacked_widget:
-            if event.type() == QEvent.Type.Enter:
-                # Mouse entered widget, show buttons if near edges
-                # Fix: QEnterEvent uses position() not pos()
-                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
-                self.check_mouse_position(pos)
-                
-            elif event.type() == QEvent.Type.Leave:
-                # Mouse left widget, hide buttons
-                self.prev_button.hide()
-                self.next_button.hide()
-                self.left_active = False
-                self.right_active = False
-                
-            elif event.type() == QEvent.Type.MouseMove:
-                # Mouse moved inside widget, check position
-                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
-                self.check_mouse_position(pos)
+    def update_button_visibility(self):
+        """Update the visibility of buttons based on current state"""
+        self.prev_button.setVisible(self.current_state['left'])
+        self.next_button.setVisible(self.current_state['right'])
         
-        # Let the event continue to be processed
-        return super().eventFilter(obj, event)
-    
     def check_mouse_position(self, pos):
-        """Check if mouse is near left or right edge and show appropriate button"""
+        """Check if mouse is near left or right edge and queue update to visibility"""
         # Define edge sensitivity (px from edge)
         edge_sensitivity = 50
         
         # Check left edge
-        if pos.x() <= edge_sensitivity:
-            if not self.left_active:
-                self.prev_button.show()
-                self.left_active = True
-        else:
-            if self.left_active:
-                self.prev_button.hide()
-                self.left_active = False
+        near_left = pos.x() <= edge_sensitivity
+        near_right = pos.x() >= (self.stacked_widget.width() - edge_sensitivity)
         
-        # Check right edge
-        if pos.x() >= (self.stacked_widget.width() - edge_sensitivity):
-            if not self.right_active:
-                self.next_button.show()
-                self.right_active = True
-        else:
-            if self.right_active:
-                self.next_button.hide()
-                self.right_active = False
+        if near_left != self.current_state['left'] or near_right != self.current_state['right']:
+            self.current_state['left'] = near_left
+            self.current_state['right'] = near_right
+            
+            # Update immediately instead of using timer for more responsive UI
+            self.update_button_visibility()
+    
+    def eventFilter(self, obj, event):
+        """Filter events to detect mouse hover on edges with debounce protection"""
+        if obj == self.stacked_widget:
+            if event.type() == QEvent.Type.Enter:
+                # Mouse entered widget
+                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+                self.last_pos = pos
+                self.check_mouse_position(pos)
+                
+            elif event.type() == QEvent.Type.Leave:
+                # Mouse left widget, hide buttons
+                self.current_state['left'] = False
+                self.current_state['right'] = False
+                self.update_button_visibility()
+                
+            elif event.type() == QEvent.Type.MouseMove:
+                # Mouse moved inside widget, check position
+                pos = event.position().toPoint() if hasattr(event, 'position') else event.pos()
+                self.last_pos = pos
+                self.check_mouse_position(pos)
+        
+        # Let the event continue to be processed
+        return super().eventFilter(obj, event)
+
+
 
 def show_progress_operation(self, operation_function, operation_args=None, title="Operación en progreso", 
                             label_format="{current}/{total} - {status}", 

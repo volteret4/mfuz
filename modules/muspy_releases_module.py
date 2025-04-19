@@ -262,6 +262,8 @@ class MuspyArtistModule(BaseModule):
             
         self.utils = MuspyUtils(self)            
         self.ui_callback = UICallback(self.results_text)
+        self.ui_callback.append(f"MusicBrainz Username: {self.musicbrainz_username}")
+
         self.progress_utils = FloatingNavigationButtons(self)
         # Initialize managers (AFTER super init)
         self.display_manager = DisplayManager(
@@ -291,7 +293,10 @@ class MuspyArtistModule(BaseModule):
             parent=self,
             project_root=PROJECT_ROOT,
             musicbrainz_username=self.musicbrainz_username,
-            musicbrainz_password=self.musicbrainz_password
+            musicbrainz_password=self.musicbrainz_password,
+            display_manager=self.display_manager,
+            ui_callback=self.ui_callback,
+            progress_utils=self.progress_utils
         )
         
         self.lastfm_manager = LastFMManager(
@@ -328,11 +333,16 @@ class MuspyArtistModule(BaseModule):
             ui_callback=self.ui_callback,
             spotify_manager = self.spotify_manager,
             lastfm_manager = self.lastfm_manager,
-            musicbrainz_manager = self.musicbrainz_manager
+            musicbrainz_manager = self.musicbrainz_manager,
+            utils=self.utils
         )
         self.display_manager.set_muspy_manager(self.muspy_manager)
         self.display_manager.set_spotify_manager(self.spotify_manager)
         self.display_manager.set_lastfm_manager(self.lastfm_manager)
+
+        if hasattr(self, 'stackedWidget'):
+            # Asegúrate de crear solo una instancia, almacenada en un atributo
+            self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
 
 
 
@@ -591,6 +601,10 @@ class MuspyArtistModule(BaseModule):
 
         self.get_releases_button.clicked.connect(self.show_releases_menu)
 
+        # Solo crear si no existe ya
+        if hasattr(self, 'stackedWidget') and not hasattr(self, 'floating_nav'):
+            self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
+
     def go_to_previous_page(self):
         """Navigate to the previous page in the stacked widget"""
         if hasattr(self, 'stackedWidget'):  # Cambiado de stacked_widget a stackedWidget
@@ -838,18 +852,18 @@ class MuspyArtistModule(BaseModule):
 
     def show_musicbrainz_collection_menu(self):
         """Display a menu with MusicBrainz collection options"""
-        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
+        if not self.musicbrainz_enabled:
             QMessageBox.warning(self, "Error", "MusicBrainz credentials not configured")
             return
         
         # Check if authenticated
-        is_auth = self.musicbrainz_auth.is_authenticated()
+        is_auth = self.musicbrainz_manager.musicbrainz_auth.is_authenticated()
         
         if not is_auth:
             # Prompt for login if not authenticated
             self.authenticate_musicbrainz_silently()
             # Recheck authentication status after login attempt
-            is_auth = hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated()
+            is_auth = hasattr(self.musicbrainz_manager, 'musicbrainz_auth') and self.musicbrainz_manager.musicbrainz_auth.is_authenticated()
         
         # Create menu
         menu = QMenu(self)
@@ -867,12 +881,12 @@ class MuspyArtistModule(BaseModule):
                 collections = self._mb_collections
             else:
                 # Try API method first
-                if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
-                    collections = self.musicbrainz_auth.get_collections_by_api()
+                if hasattr(self.musicbrainz_manager.musicbrainz_auth, 'get_collections_by_api'):
+                    collections = self.musicbrainz_manager.musicbrainz_auth.get_collections_by_api()
                 
                 # Fallback to HTML parsing if API method failed or doesn't exist
-                if not collections and hasattr(self.musicbrainz_auth, 'get_user_collections'):
-                    collections = self.musicbrainz_auth.get_user_collections()
+                if not collections and hasattr(self.musicbrainz_manager.musicbrainz_auth, 'get_user_collections'):
+                    collections = self.musicbrainz_manager.musicbrainz_auth.get_user_collections()
                 
                 # Cache collections for later use
                 self._mb_collections = collections
@@ -952,7 +966,7 @@ class MuspyArtistModule(BaseModule):
             # Add separator and logout option
             menu.addSeparator()
             logout_action = QAction("Logout from MusicBrainz", self)
-            logout_action.triggered.connect(self.logout_musicbrainz)
+            logout_action.triggered.connect(self.musicbrainz_manager.logout_musicbrainz)
             menu.addAction(logout_action)
         
         # Show the menu at the button position
@@ -1498,7 +1512,7 @@ class MuspyArtistModule(BaseModule):
             # View release info
             if release_mbid:
                 view_release_mb_action = QAction(f"View '{release_title}' on MusicBrainz", self)
-                view_release_mb_action.triggered.connect(lambda: self.open_musicbrainz_release(release_mbid))
+                view_release_mb_action.triggered.connect(lambda: self.musicbrainz_manager.open_musicbrainz_release(release_mbid))
                 menu.addAction(view_release_mb_action)
 
 

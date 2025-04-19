@@ -12,7 +12,16 @@ from PyQt6.QtGui import QAction
 from base_module import PROJECT_ROOT
 
 class BlueskyManager:
-    def __init__(self, parent, project_root, bluesky_username=None, ui_callback=None, spotify_manager=None, lastfm_manager=None, musicbrainz_manager=None):
+    def __init__(self, 
+                parent, 
+                project_root, 
+                bluesky_username=None, 
+                ui_callback=None, 
+                spotify_manager=None, 
+                lastfm_manager=None, 
+                musicbrainz_manager=None,
+                utils=None
+                ):
         self.parent = parent
         self.project_root = project_root
         self.bluesky_username = bluesky_username
@@ -22,6 +31,7 @@ class BlueskyManager:
         self.spotify_manager = spotify_manager
         self.lastfm_manager = lastfm_manager
         self.musicbrainz_manager = musicbrainz_manager
+        self.utils = utils
         
     def _init_bluesky_manager(self):
         """
@@ -312,7 +322,7 @@ class BlueskyManager:
             return
         
         # Create dialog
-        dialog = QDialog(self)
+        dialog = QDialog(self.parent)
         dialog.setWindowTitle("Buscar Top Artistas de LastFM en Bluesky")
         dialog.setMinimumWidth(350)
         
@@ -783,24 +793,24 @@ class BlueskyManager:
             return
         
         # Create context menu
-        menu = QMenu(self)
+        menu = QMenu(self.parent)
         
         # Add actions
-        open_profile_action = QAction(f"Abrir perfil de {name} en Bluesky", self)
-        open_profile_action.triggered.connect(lambda: self.open_url(url))
+        open_profile_action = QAction(f"Abrir perfil de {name} en Bluesky", self.parent)
+        open_profile_action.triggered.connect(lambda: self.utils.open_url(url))
         menu.addAction(open_profile_action)
         
         # Add follow action if we have a DID and username
         if did and self.bluesky_username:
-            follow_action = QAction(f"Seguir a {name} en Bluesky", self)
+            follow_action = QAction(f"Seguir a {name} en Bluesky", self.parent)
             follow_action.triggered.connect(lambda: self.follow_artist_on_bluesky(did, name))
             menu.addAction(follow_action)
         
-        copy_url_action = QAction("Copiar URL", self)
+        copy_url_action = QAction("Copiar URL", self.parent)
         copy_url_action.triggered.connect(lambda: self.copy_to_clipboard(url))
         menu.addAction(copy_url_action)
         
-        copy_handle_action = QAction("Copiar handle", self)
+        copy_handle_action = QAction("Copiar handle", self.parent)
         copy_handle_action.triggered.connect(lambda: self.copy_to_clipboard(handle))
         menu.addAction(copy_handle_action)
         
@@ -811,13 +821,13 @@ class BlueskyManager:
             # Add Muspy actions if configured
             if hasattr(self, 'muspy_username') and self.muspy_username:
                 follow_muspy_action = QAction(f"Seguir a {name} en Muspy", self)
-                follow_muspy_action.triggered.connect(lambda: self.follow_artist_from_name(name))
+                follow_muspy_action.triggered.connect(lambda: self.muspy_manager.follow_artist_from_name(name))
                 menu.addAction(follow_muspy_action)
             
             # Add Spotify actions if enabled
             if self.spotify_enabled:
                 follow_spotify_action = QAction(f"Seguir a {name} en Spotify", self)
-                follow_spotify_action.triggered.connect(lambda: self.follow_artist_on_spotify_by_name(name))
+                follow_spotify_action.triggered.connect(lambda: self.spotify_manager.follow_artist_on_spotify_by_name(name))
                 menu.addAction(follow_spotify_action)
         
         # Show menu
@@ -853,15 +863,7 @@ class BlueskyManager:
 
 
 
-    def open_url(self, url):
-        """
-        Open a URL in the default browser
-        
-        Args:
-            url (str): URL to open
-        """
-        import webbrowser
-        webbrowser.open(url)
+
 
     def copy_to_clipboard(self, text):
         """

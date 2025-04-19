@@ -1,15 +1,20 @@
 # submodules/musicbrainz/mb_manager.py
+import sys
 import os
 import json
 import requests
 import logging
-from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
-                          QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
-                          QDialogButtonBox, QComboBox, QProgressDialog)
+from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog, QTableWidget, QTableWidgetItem,
+                          QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QStackedWidget,
+                          QDialogButtonBox, QComboBox, QProgressDialog, QApplication)
 from PyQt6.QtCore import Qt, QThread
 
+from base_module import PROJECT_ROOT
+from modules.submodules.muspy import progress_utils
+from modules.submodules.muspy.table_widgets import NumericTableWidgetItem, DateTableWidgetItem
+
 class MusicBrainzManager:
-    def __init__(self, parent, project_root, musicbrainz_username=None, musicbrainz_password=None):
+    def __init__(self, parent, project_root, musicbrainz_username=None, musicbrainz_password=None, display_manager=None, ui_callback=None, progress_utils=None):
         self.parent = parent
         self.project_root = project_root
         self.musicbrainz_username = musicbrainz_username
@@ -18,11 +23,35 @@ class MusicBrainzManager:
         self.musicbrainz_auth = None
         self.musicbrainz_enabled = bool(self.musicbrainz_username)
         self._mb_collections = None
-        
+        self.display_manager = display_manager
+        self.ui_callback = ui_callback
+        self.progress_utils = progress_utils
+        PROJECT_ROOT = self.project_root
+
         # Initialize MusicBrainz auth manager
         if self.musicbrainz_enabled:
             try:
-                from tools.musicbrainz_login import MusicBrainzAuthManager
+                # Intenta importar desde diferentes ubicaciones posibles
+                try:
+                    # Ruta original
+                    from tools.musicbrainz_login import MusicBrainzAuthManager
+                except ImportError:
+                    try:
+                        # Ruta relativa (PROJECT_ROOT/tools)
+                        sys.path.append(os.path.join(self.project_root, "tools"))
+                        from musicbrainz_login import MusicBrainzAuthManager
+                    except ImportError:
+                        # Ruta absoluta
+                        mb_login_path = os.path.join(self.project_root, "tools", "musicbrainz_login.py") 
+                        if os.path.exists(mb_login_path):
+                            import importlib.util
+                            spec = importlib.util.spec_from_file_location("musicbrainz_login", mb_login_path)
+                            mb_login = importlib.util.module_from_spec(spec)
+                            spec.loader.exec_module(mb_login)
+                            MusicBrainzAuthManager = mb_login.MusicBrainzAuthManager
+                        else:
+                            raise ImportError(f"MusicBrainzAuthManager not found at {mb_login_path}")
+                
                 self.musicbrainz_auth = MusicBrainzAuthManager(
                     username=self.musicbrainz_username,
                     password=self.musicbrainz_password,
@@ -35,142 +64,120 @@ class MusicBrainzManager:
                 self.musicbrainz_enabled = False
 
 
-
-    def show_musicbrainz_collection_menu(self):
-        """Display a menu with MusicBrainz collection options"""
-        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_enabled:
-            QMessageBox.warning(self, "Error", "MusicBrainz credentials not configured")
-            return
+    def show_musicbrainz_collection(self, collection_id, collection_name):
+        """
+        Mostrar el contenido de una colección de MusicBrainz en la tabla
         
-        # Check if authenticated
-        is_auth = self.musicbrainz_auth.is_authenticated()
+        Args:
+            collection_id (str): ID de la colección a mostrar
+            collection_name (str): Nombre de la colección para mostrar
+        """
+        # Asegurarnos de que estamos mostrando la página de texto durante la carga
+        self.display_manager.show_text_page()
+        self.ui_callback.clear()
+        self.ui_callback.append(f"Cargando colección: {collection_name}...")
+        self.ui_callback.append("Por favor espere mientras se recuperan los datos...")
+        QApplication.processEvents()
         
-        if not is_auth:
-            # Prompt for login if not authenticated
-            self.authenticate_musicbrainz_silently()
-            # Recheck authentication status after login attempt
-            is_auth = hasattr(self, 'musicbrainz_auth') and self.musicbrainz_auth.is_authenticated()
+        # Crear función para obtener datos de colección con barra de progreso
+        def fetch_collection_data(update_progress):
+            update_progress(0, 3, "Conectando con MusicBrainz...", indeterminate=True)
+            
+            try:
+                # Mostrar progreso mientras trabajamos
+                update_progress(1, 3, "Recuperando datos de colección...", indeterminate=True)
+                
+                # Usar nuestra función mejorada con musicbrainzngs
+                if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
+                    auth_result = self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True)
+                    if not auth_result:
+                        return {
+                            "success": False,
+                            "error": "No se pudo autenticar con musicbrainzngs"
+                        }
+                
+                releases = self.musicbrainz_auth.get_collection_contents_ngs(collection_id)
+                
+                if releases:
+                    update_progress(2, 3, f"Procesando {len(releases)} releases...")
+                    update_progress(3, 3, "Datos procesados con éxito")
+                    
+                    return {
+                        "success": True,
+                        "releases": releases
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": "No se encontraron releases en la colección o error al obtener datos"
+                    }
+            
+            except Exception as e:
+                self.logger.error(f"Error obteniendo colección: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": f"Error obteniendo colección: {str(e)}"
+                }
         
-        # Create menu
-        menu = QMenu(self)
+        # Ejecutar con diálogo de progreso
+        result = self.parent.show_progress_operation(
+            fetch_collection_data,
+            title=f"Cargando Colección: {collection_name}",
+            label_format="{status}"
+        )
         
-        if not is_auth:
-            # Add login action if still not authenticated
-            login_action = QAction("Login to MusicBrainz...", self)
-            login_action.triggered.connect(self.authenticate_musicbrainz_silently)
-            menu.addAction(login_action)
+        # Procesar resultados
+        if result and result.get("success"):
+            releases = result.get("releases", [])
+            
+            if not releases:
+                # Seguir mostrando texto en lugar de tabla vacía
+                self.display_manager.show_text_page()
+                self.ui_callback.append(f"La colección '{collection_name}' está vacía.")
+                QMessageBox.information(self.parent, "Colección Vacía", f"La colección '{collection_name}' está vacía.")
+                return
+            
+            # Mostrar todo el texto de procesamiento antes de intentar cambiar a vista de tabla
+            self.display_manager.show_text_page()
+            self.ui_callback.append(f"Se recuperaron con éxito {len(releases)} releases.")
+            self.ui_callback.append("Preparando visualización de tabla...")
+            QApplication.processEvents()
+            
+            # Mostrar releases en la tabla
+            self.display_musicbrainz_collection_table(releases, collection_name)
         else:
-            # We're authenticated, fetch collections
-            # Use cached collections if available
-            collections = []
-            if hasattr(self, '_mb_collections') and self._mb_collections:
-                collections = self._mb_collections
-            else:
-                # Try API method first
-                if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
-                    collections = self.musicbrainz_auth.get_collections_by_api()
-                
-                # Fallback to HTML parsing if API method failed or doesn't exist
-                if not collections and hasattr(self.musicbrainz_auth, 'get_user_collections'):
-                    collections = self.musicbrainz_auth.get_user_collections()
-                
-                # Cache collections for later use
-                self._mb_collections = collections
-            
-            # Add "Show Collections" submenu
-            collections_menu = QMenu("Show Collection", self)
-            
-            if collections:
-                for collection in collections:
-                    collection_name = collection.get('name', 'Unnamed Collection')
-                    collection_id = collection.get('id')
-                    collection_count = collection.get('entity_count', 0)
-                    
-                    if collection_id:
-                        collection_action = QAction(f"{collection_name} ({collection_count} releases)", self)
-                        collection_action.setProperty("collection_id", collection_id)
-                        collection_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
-                                                        self.show_musicbrainz_collection(cid, cname))
-                        collections_menu.addAction(collection_action)
-            else:
-                no_collections_action = QAction("No collections found", self)
-                no_collections_action.setEnabled(False)
-                collections_menu.addAction(no_collections_action)
-                
-                # Add refresh action
-                refresh_action = QAction("Refresh Collections", self)
-                refresh_action.triggered.connect(self.fetch_all_musicbrainz_collections)
-                collections_menu.addAction(refresh_action)
-                
-            menu.addMenu(collections_menu)
-            
-            # Add "Add Albums to Collection" submenu
-            add_menu = QMenu("Add Albums to Collection", self)
-            
-            # First check if we have the albums_selected.json file
-            albums_json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
-            
-            if not os.path.exists(albums_json_path):
-                no_albums_action = QAction("No albums selected (load albums first)", self)
-                no_albums_action.setEnabled(False)
-                add_menu.addAction(no_albums_action)
-            else:
-                # Try to load and count the albums
-                try:
-                    with open(albums_json_path, 'r', encoding='utf-8') as f:
-                        selected_albums = json.load(f)
-                        album_count = len(selected_albums)
-                    
-                    # We have albums, populate the collections
-                    if collections:
-                        for collection in collections:
-                            collection_name = collection.get('name', 'Unnamed Collection')
-                            collection_id = collection.get('id')
-                            
-                            if collection_id:
-                                add_action = QAction(f"Add {album_count} albums to: {collection_name}", self)
-                                add_action.setProperty("collection_id", collection_id)
-                                add_action.triggered.connect(lambda checked, cid=collection_id, cname=collection_name: 
-                                                        self.add_selected_albums_to_collection(cid, cname))
-                                add_menu.addAction(add_action)
-                    else:
-                        no_collections_action = QAction("No collections found", self)
-                        no_collections_action.setEnabled(False)
-                        add_menu.addAction(no_collections_action)
-                except Exception as e:
-                    error_action = QAction(f"Error reading albums: {str(e)}", self)
-                    error_action.setEnabled(False)
-                    add_menu.addAction(error_action)
-            
-            menu.addMenu(add_menu)
-            
-            # Add "Create New Collection" action
-            create_action = QAction("Create New Collection...", self)
-            create_action.triggered.connect(self.create_new_collection)
-            menu.addAction(create_action)
-            
-            # Add separator and logout option
-            menu.addSeparator()
-            logout_action = QAction("Logout from MusicBrainz", self)
-            logout_action.triggered.connect(self.logout_musicbrainz)
-            menu.addAction(logout_action)
-        
-        # Show the menu at the button position
-        if hasattr(self, 'get_releases_musicbrainz'):
-            pos = self.get_releases_musicbrainz.mapToGlobal(QPoint(0, self.get_releases_musicbrainz.height()))
-            menu.exec(pos)
+            # Seguir mostrando texto para caso de error
+            self.display_manager.show_text_page()
+            error_msg = result.get("error", "Error desconocido") if result else "La operación falló"
+            self.ui_callback.append(f"Error: {error_msg}")
+            QMessageBox.warning(self.parent, "Error", f"No se pudo cargar la colección: {error_msg}")
 
+  
     def create_new_collection(self):
         """
-        Create a new MusicBrainz collection
+        Create a new MusicBrainz collection with improved authentication
         """
+
+        
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
-            return
+            # Try to authenticate first
+            if not self.authenticate_musicbrainz_silently():
+                reply = QMessageBox.question(
+                    self.parent,
+                    "Authentication Required",
+                    "You need to be logged in to create collections. Would you like to log in now?",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                )
+                
+                if reply == QMessageBox.StandardButton.Yes:
+                    if not self.authenticate_musicbrainz_dialog():
+                        return
+                else:
+                    return
         
         # Prompt for collection name
         collection_name, ok = QInputDialog.getText(
-            self,
+            self.parent,
             "Create Collection",
             "Enter name for new collection:",
             QLineEdit.EchoMode.Normal
@@ -182,7 +189,7 @@ class MusicBrainzManager:
         # Prompt for collection type
         collection_types = ["release", "artist", "label", "recording", "work"]
         collection_type, ok = QInputDialog.getItem(
-            self,
+            self.parent,
             "Collection Type",
             "Select collection type:",
             collection_types,
@@ -194,28 +201,33 @@ class MusicBrainzManager:
             return
         
         # Show progress dialog
-        progress = QProgressDialog("Creating collection...", "Cancel", 0, 100, self)
+        progress = QProgressDialog("Creating collection...", "Cancel", 0, 100, self.parent)
         progress.setWindowTitle("Creating Collection")
         progress.setWindowModality(Qt.WindowModality.WindowModal)
         progress.setValue(20)
         
         try:
-            # Call MusicBrainz API to create collection
+            # Re-authenticate to ensure the session is fresh
+            self.musicbrainz_auth.authenticate(silent=True)
+            
+            # Call MusicBrainz API to create collection - using the correct endpoint
             url = "https://musicbrainz.org/ws/2/collection"
             headers = {
                 "User-Agent": "MuspyReleasesModule/1.0",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             }
             
+            # Prepare the request data
             data = {
                 "name": collection_name,
-                "entity_type": collection_type,
-                "editor": self.musicbrainz_username
+                "entity_type": collection_type
             }
             
             progress.setValue(50)
             QApplication.processEvents()
             
+            # Make a POST request to create collection
             response = self.musicbrainz_auth.session.post(url, json=data, headers=headers)
             
             progress.setValue(80)
@@ -235,7 +247,7 @@ class MusicBrainzManager:
                 if collection_id:
                     success_msg += f"\nCollection ID: {collection_id}"
                     
-                QMessageBox.information(self, "Success", success_msg)
+                QMessageBox.information(self.parent, "Success", success_msg)
                 
                 # Update collections - just fetch them again
                 self.fetch_all_musicbrainz_collections()
@@ -247,11 +259,26 @@ class MusicBrainzManager:
                         error_msg += f"\n{error_data['error']}"
                 except:
                     error_msg += f"\n{response.text}"
+                
+                # Check for authentication errors
+                if response.status_code == 401:
+                    reply = QMessageBox.question(
+                        self.parent,
+                        "Authentication Error",
+                        "Authentication error. Would you like to re-login to MusicBrainz?",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                    )
                     
-                QMessageBox.warning(self, "Error", error_msg)
+                    if reply == QMessageBox.StandardButton.Yes:
+                        if self.authenticate_musicbrainz_dialog():
+                            # Try again after re-authentication
+                            progress.close()
+                            return self.create_new_collection()
+                
+                QMessageBox.warning(self.parent, "Error", error_msg)
         
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Error creating collection: {str(e)}")
+            QMessageBox.warning(self.parent, "Error", f"Error creating collection: {str(e)}")
         
         finally:
             progress.close()
@@ -298,15 +325,18 @@ class MusicBrainzManager:
 
 
 
+  
     def authenticate_musicbrainz_dialog(self):
         """
-        Authenticate with MusicBrainz by getting username/password from user
+        Authenticate with MusicBrainz by getting username/password from user with improved error handling
         
         Returns:
             bool: Whether authentication was successful
         """
+        from PyQt6.QtWidgets import QInputDialog, QLineEdit, QMessageBox, QApplication
+        
         if not hasattr(self, 'musicbrainz_auth'):
-            QMessageBox.warning(self, "Error", "MusicBrainz configuration not available")
+            QMessageBox.warning(self.parent, "Error", "MusicBrainz configuration not available")
             return False
         
         # If we already have a username, use it as default
@@ -319,7 +349,7 @@ class MusicBrainzManager:
         # Prompt for username if not already set
         if not default_username:
             username, ok = QInputDialog.getText(
-                self,
+                self.parent,
                 "MusicBrainz Authentication",
                 "Enter your MusicBrainz username:",
                 QLineEdit.EchoMode.Normal,
@@ -327,7 +357,7 @@ class MusicBrainzManager:
             )
             
             if not ok or not username:
-                self.results_text.append("Authentication canceled.")
+                self.ui_callback.append("Authentication canceled.")
                 return False
             
             self.musicbrainz_username = username
@@ -336,14 +366,14 @@ class MusicBrainzManager:
         # Use existing password if available, otherwise prompt
         if not self.musicbrainz_password:
             password, ok = QInputDialog.getText(
-                self,
+                self.parent,
                 "MusicBrainz Authentication",
                 f"Enter password for MusicBrainz user {self.musicbrainz_username}:",
                 QLineEdit.EchoMode.Password
             )
             
             if not ok or not password:
-                self.results_text.append("Authentication canceled.")
+                self.ui_callback.append("Authentication canceled.")
                 return False
                 
             self.musicbrainz_password = password
@@ -352,25 +382,29 @@ class MusicBrainzManager:
         self.musicbrainz_auth.password = self.musicbrainz_password
         
         # Try to authenticate
-        self.results_text.clear()
-        self.results_text.show()
-        self.results_text.append("Authenticating with MusicBrainz...")
+        self.ui_callback.clear()
+        self.ui_callback.show()
+        self.ui_callback.append("Authenticating with MusicBrainz...")
         QApplication.processEvents()
         
         # More detailed logging
         self.logger.debug("Attempting to authenticate with MusicBrainz...")
         
+        # Force a new session to be created
+        self.musicbrainz_auth.session = requests.Session()
+        self.musicbrainz_auth.session.headers.update({"User-Agent": "MuspyReleasesModule/1.0"})
+        
         if self.musicbrainz_auth.authenticate():
-            self.results_text.append("Authentication successful!")
+            self.ui_callback.append("Authentication successful!")
             self.musicbrainz_enabled = True
             
             # Show success message
-            QMessageBox.information(self, "Success", "Successfully logged in to MusicBrainz")
+            QMessageBox.information(self.parent, "Success", "Successfully logged in to MusicBrainz")
             return True
         else:
             error_msg = "Authentication failed. Please check your username and password."
-            self.results_text.append(error_msg)
-            QMessageBox.warning(self, "Authentication Failed", error_msg)
+            self.ui_callback.append(error_msg)
+            QMessageBox.warning(self.parent, "Authentication Failed", error_msg)
             
             # Clear password on failure
             self.musicbrainz_password = None
@@ -382,10 +416,10 @@ class MusicBrainzManager:
         """
         if hasattr(self, 'musicbrainz_auth'):
             self.musicbrainz_auth.clear_session()
-            self.results_text.clear()
-            self.results_text.show()
-            self.results_text.append("MusicBrainz authentication data cleared.")
-            QMessageBox.information(self, "Authentication Cleared", "MusicBrainz authentication data has been cleared.")
+            self.ui_callback.clear()
+            self.ui_callback.show()
+            self.ui_callback.append("MusicBrainz authentication data cleared.")
+            QMessageBox.information(self.parent, "Authentication Cleared", "MusicBrainz authentication data has been cleared.")
 
 
   
@@ -395,26 +429,26 @@ class MusicBrainzManager:
         Fetch all MusicBrainz collections with enhanced debugging
         """
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            QMessageBox.warning(self.parent, "Error", "Not authenticated with MusicBrainz")
             return
         
-        self.results_text.clear()
-        self.results_text.show()
-        self.results_text.append(f"Fetching collections for {self.musicbrainz_username}...")
+        self.ui_callback.clear()
+        self.ui_callback.show()
+        self.ui_callback.append(f"Fetching collections for {self.musicbrainz_username}...")
         QApplication.processEvents()
         
         try:
             # Try to get collections using HTML parsing
             html_collections = self.musicbrainz_auth.get_user_collections()
-            self.results_text.append(f"Found {len(html_collections)} collections via HTML parsing")
+            self.ui_callback.append(f"Found {len(html_collections)} collections via HTML parsing")
             
             # Try to get collections using API if the method exists
             api_collections = []
             if hasattr(self.musicbrainz_auth, 'get_collections_by_api'):
                 api_collections = self.musicbrainz_auth.get_collections_by_api()
-                self.results_text.append(f"Found {len(api_collections)} collections via API")
+                self.ui_callback.append(f"Found {len(api_collections)} collections via API")
             else:
-                self.results_text.append("API method not available - update MusicBrainzAuthManager class")
+                self.ui_callback.append("API method not available - update MusicBrainzAuthManager class")
             
             # Combine both approaches, removing duplicates
             all_collections = []
@@ -453,23 +487,23 @@ class MusicBrainzManager:
             
             # Check which collections we've found with various methods
             if direct_collections:
-                self.results_text.append(f"Found {len(direct_collections)} collections via direct lookup:")
+                self.ui_callback.append(f"Found {len(direct_collections)} collections via direct lookup:")
                 for coll in direct_collections:
-                    self.results_text.append(f"• {coll['name']} (ID: {coll['id']})")
+                    self.ui_callback.append(f"• {coll['name']} (ID: {coll['id']})")
             
             if all_collections:
-                self.results_text.append(f"Found {len(all_collections)} unique collections in total:")
+                self.ui_callback.append(f"Found {len(all_collections)} unique collections in total:")
                 for coll in all_collections:
-                    self.results_text.append(f"• {coll['name']} (ID: {coll['id']})")
+                    self.ui_callback.append(f"• {coll['name']} (ID: {coll['id']})")
             else:
-                self.results_text.append("No collections found with any method.")
+                self.ui_callback.append("No collections found with any method.")
                 
             return all_collections
             
         except Exception as e:
             error_msg = f"Error fetching collections: {str(e)}"
             self.logger.error(error_msg, exc_info=True)
-            self.results_text.append(error_msg)
+            self.ui_callback.append(error_msg)
             return []
 
 
@@ -530,21 +564,21 @@ class MusicBrainzManager:
             collection_name (str): Name of the collection for display
         """
         # Make sure we're showing the text page during loading
-        self.show_text_page()
-        self.results_text.clear()
-        self.results_text.append(f"Loading collection: {collection_name}...")
-        self.results_text.append("Please wait while data is being retrieved...")
+        self.display_manager.show_text_page()
+        self.ui_callback.clear()
+        self.ui_callback.append(f"Loading collection: {collection_name}...")
+        self.ui_callback.append("Please wait while data is being retrieved...")
         QApplication.processEvents()
         
         # Verificar autenticación una sola vez en esta sesión
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
             # Si no hay autenticación explícita previa, informar y salir
-            self.results_text.append("Not authenticated with MusicBrainz. Please log in first.")
+            self.ui_callback.append("Not authenticated with MusicBrainz. Please log in first.")
             QApplication.processEvents()
             
             # Ofrecer opción de iniciar sesión
             reply = QMessageBox.question(
-                self, 
+                self.parent, 
                 "Authentication Required", 
                 "You need to be logged in to MusicBrainz to view collections. Log in now?",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
@@ -552,7 +586,7 @@ class MusicBrainzManager:
             
             if reply == QMessageBox.StandardButton.Yes:
                 if not self.authenticate_musicbrainz_silently():
-                    QMessageBox.warning(self, "Error", "Authentication failed. Please try again.")
+                    QMessageBox.warning(self.parent, "Error", "Authentication failed. Please try again.")
                     return
             else:
                 return
@@ -594,7 +628,7 @@ class MusicBrainzManager:
                 }
         
         # Execute with progress dialog
-        result = self.show_progress_operation(
+        result = self.parent.show_progress_operation(
             fetch_collection_data,
             title=f"Loading Collection: {collection_name}",
             label_format="{status}"
@@ -606,25 +640,25 @@ class MusicBrainzManager:
             
             if not releases:
                 # Keep showing text instead of empty table
-                self.show_text_page()
-                self.results_text.append(f"The collection '{collection_name}' is empty.")
-                QMessageBox.information(self, "Empty Collection", f"The collection '{collection_name}' is empty.")
+                self.display_manager.show_text_page()
+                self.ui_callback.append(f"The collection '{collection_name}' is empty.")
+                QMessageBox.information(self.parent, "Empty Collection", f"The collection '{collection_name}' is empty.")
                 return
             
             # Show all processing text before attempting to switch to table view
-            self.show_text_page()
-            self.results_text.append(f"Successfully retrieved {len(releases)} releases.")
-            self.results_text.append("Preparing table display...")
+            self.display_manager.show_text_page()
+            self.ui_callback.append(f"Successfully retrieved {len(releases)} releases.")
+            self.ui_callback.append("Preparing table display...")
             QApplication.processEvents()
             
             # Display releases in the table
             self.display_musicbrainz_collection_table(releases, collection_name)
         else:
             # Keep showing text for error case
-            self.show_text_page()
+            self.display_manager.show_text_page()
             error_msg = result.get("error", "Unknown error") if result else "Operation failed"
-            self.results_text.append(f"Error: {error_msg}")
-            QMessageBox.warning(self, "Error", f"Could not load collection: {error_msg}")
+            self.ui_callback.append(f"Error: {error_msg}")
+            QMessageBox.warning(self.parent, "Error", f"Could not load collection: {error_msg}")
 
 
 
@@ -657,8 +691,8 @@ class MusicBrainzManager:
             more_pages = True
             
             # Update text display
-            if hasattr(self, 'results_text'):
-                self.results_text.append(f"Fetching collection data (page size: {page_size})...")
+            if hasattr(self, 'ui_callback'):
+                self.ui_callback.append(f"Fetching collection data (page size: {page_size})...")
                 QApplication.processEvents()
             
             # Paginate through results
@@ -672,8 +706,8 @@ class MusicBrainzManager:
                 }
                 
                 # Update text display for pagination
-                if hasattr(self, 'results_text'):
-                    self.results_text.append(f"Fetching page at offset {offset}...")
+                if hasattr(self, 'ui_callback'):
+                    self.ui_callback.append(f"Fetching page at offset {offset}...")
                     QApplication.processEvents()
                 
                 response = self.musicbrainz_auth.session.get(url, params=params, headers=headers)
@@ -700,8 +734,8 @@ class MusicBrainzManager:
                     total_count = data.get(f"{entity_type}-count", data.get("count", 0))
                 
                 # Update text display for progress
-                if hasattr(self, 'results_text'):
-                    self.results_text.append(f"Retrieved {len(items)} items (total expected: {total_count})")
+                if hasattr(self, 'ui_callback'):
+                    self.ui_callback.append(f"Retrieved {len(items)} items (total expected: {total_count})")
                     QApplication.processEvents()
                 
                 self.logger.info(f"Got {len(items)} items at offset {offset} of {total_count} total")
@@ -745,7 +779,7 @@ class MusicBrainzManager:
             return {"success": False, "error": "Not authenticated with MusicBrainz"}
         
         try:
-            self.results_text.append(f"Fetching collection data with pagination (page size: {page_size}, max pages: {max_pages})...")
+            self.ui_callback.append(f"Fetching collection data with pagination (page size: {page_size}, max pages: {max_pages})...")
             QApplication.processEvents()
             
             # API URL para colecciones
@@ -768,7 +802,7 @@ class MusicBrainzManager:
                 }
                 
                 # Actualizar status
-                self.results_text.append(f"Fetching page {page} (offset: {offset})...")
+                self.ui_callback.append(f"Fetching page {page} (offset: {offset})...")
                 QApplication.processEvents()
                 
                 # Hacer la petición
@@ -776,7 +810,7 @@ class MusicBrainzManager:
                 
                 if response.status_code != 200:
                     self.logger.error(f"API error on page {page}: {response.status_code} - {response.text}")
-                    self.results_text.append(f"Error fetching page {page}: {response.status_code}")
+                    self.ui_callback.append(f"Error fetching page {page}: {response.status_code}")
                     break
                 
                 # Procesar los datos
@@ -788,7 +822,7 @@ class MusicBrainzManager:
                     total_count = data.get("release-count", -1)
                     
                     # Actualizar status
-                    self.results_text.append(f"Retrieved {len(releases)} releases on page {page} (total: {total_count if total_count >= 0 else 'unknown'})")
+                    self.ui_callback.append(f"Retrieved {len(releases)} releases on page {page} (total: {total_count if total_count >= 0 else 'unknown'})")
                     QApplication.processEvents()
                     
                     # Procesar cada release
@@ -842,17 +876,17 @@ class MusicBrainzManager:
                     # Verificar si hay más páginas
                     # 1. Si no obtuvimos resultados o menos de los solicitados
                     if len(releases) < page_size:
-                        self.results_text.append(f"Fetched less than {page_size} items, pagination complete.")
+                        self.ui_callback.append(f"Fetched less than {page_size} items, pagination complete.")
                         continue_pagination = False
                     
                     # 2. Si sabemos el total y ya lo alcanzamos o superamos
                     elif total_count >= 0 and offset + len(releases) >= total_count:
-                        self.results_text.append(f"Reached end of collection ({total_count} items).")
+                        self.ui_callback.append(f"Reached end of collection ({total_count} items).")
                         continue_pagination = False
                     
                     # 3. Si alcanzamos el número máximo de páginas
                     elif page >= max_pages:
-                        self.results_text.append(f"Reached max pages limit ({max_pages}).")
+                        self.ui_callback.append(f"Reached max pages limit ({max_pages}).")
                         continue_pagination = False
                     
                     # Preparar para la siguiente página
@@ -861,11 +895,11 @@ class MusicBrainzManager:
                 
                 except json.JSONDecodeError:
                     self.logger.error(f"Invalid JSON response on page {page}")
-                    self.results_text.append(f"Error processing page {page}: invalid response format")
+                    self.ui_callback.append(f"Error processing page {page}: invalid response format")
                     continue_pagination = False
                     
             # Resumen final
-            self.results_text.append(f"Pagination complete: retrieved {len(all_releases)} releases from {page-1} pages")
+            self.ui_callback.append(f"Pagination complete: retrieved {len(all_releases)} releases from {page-1} pages")
             QApplication.processEvents()
             
             return {
@@ -875,7 +909,7 @@ class MusicBrainzManager:
             
         except Exception as e:
             self.logger.error(f"Error in pagination: {e}", exc_info=True)
-            self.results_text.append(f"Error retrieving data: {str(e)}")
+            self.ui_callback.append(f"Error retrieving data: {str(e)}")
             return {
                 "success": False,
                 "error": f"Error: {str(e)}"
@@ -895,15 +929,15 @@ class MusicBrainzManager:
             collection_name (str): Name of the collection for display
         """
         # First make sure we have the text displayed while we work
-        self.show_text_page()
-        self.results_text.clear()
-        self.results_text.append(f"Collection: {collection_name}")
-        self.results_text.append(f"Found {len(releases)} releases")
-        self.results_text.append("Preparing display...")
+        self.display_manager.show_text_page()
+        self.ui_callback.clear()
+        self.ui_callback.append(f"Collection: {collection_name}")
+        self.ui_callback.append(f"Found {len(releases)} releases")
+        self.ui_callback.append("Preparing display...")
         QApplication.processEvents()
         
         # Find the stacked widget
-        stack_widget = self.findChild(QStackedWidget, "stackedWidget")
+        stack_widget = self.parent.findChild(QStackedWidget, "stackedWidget")
         if not stack_widget:
             self.logger.error("Could not find stackedWidget")
             # Continue with text display only
@@ -998,8 +1032,8 @@ class MusicBrainzManager:
                     
                     # Date - con manejo de errores
                     date_str = release.get('date', 'No date')
-                    if not isinstance(date_text, str):
-                        date_text = ""
+                    if not isinstance(date_str, str):
+                        date_str = ""
                     date_item = DateTableWidgetItem(date_str) 
                     table.setItem(row, 4, date_item)
                     
@@ -1059,11 +1093,11 @@ class MusicBrainzManager:
             collection_name (str): Nombre de la colección
             limit (int): Número máximo de lanzamientos a mostrar
         """
-        self.show_text_page()
-        self.results_text.clear()
-        self.results_text.append(f"Collection: {collection_name}")
-        self.results_text.append(f"Found {len(releases)} releases")
-        self.results_text.append("-" * 50)
+        self.display_manager.show_text_page()
+        self.ui_callback.clear()
+        self.ui_callback.append(f"Collection: {collection_name}")
+        self.ui_callback.append(f"Found {len(releases)} releases")
+        self.ui_callback.append("-" * 50)
         QApplication.processEvents()
         
         # Mostrar solo hasta el límite
@@ -1094,24 +1128,24 @@ class MusicBrainzManager:
                 if date:
                     line += f" ({date})"
                     
-                self.results_text.append(line)
+                self.ui_callback.append(line)
             except Exception as e:
                 self.logger.error(f"Error displaying release {i}: {e}")
-                self.results_text.append(f"{i+1}. [Error displaying release]")
+                self.ui_callback.append(f"{i+1}. [Error displaying release]")
         
         # Si hay más releases que el límite
         if len(releases) > limit:
-            self.results_text.append(f"... and {len(releases)-limit} more releases.")
+            self.ui_callback.append(f"... and {len(releases)-limit} more releases.")
         
-        self.results_text.append("-" * 50)
-        self.results_text.append("Switch to the table view for a better display experience (if available).")
+        self.ui_callback.append("-" * 50)
+        self.ui_callback.append("Switch to the table view for a better display experience (if available).")
 
 
 
 
     def add_release_to_collection(self, collection_id, collection_name, release_mbid):
         """
-        Add a single release to a MusicBrainz collection
+        Add a single release to a MusicBrainz collection with improved authentication
         
         Args:
             collection_id (str): ID of the collection
@@ -1119,80 +1153,150 @@ class MusicBrainzManager:
             release_mbid (str): MusicBrainz ID of the release
         """
         if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            QMessageBox.warning(self, "Error", "Not authenticated with MusicBrainz")
+            QMessageBox.warning(self.parent, "Error", "Not authenticated with MusicBrainz")
             return
             
         try:
+            # Re-authenticate to ensure the session is fresh
+            self.musicbrainz_auth.authenticate(silent=True)
+            
             # Call MusicBrainz API to add the release
             url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{release_mbid}"
             headers = {
-                "User-Agent": "MuspyReleasesModule/1.0"
+                "User-Agent": "MuspyReleasesModule/1.0",
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             }
             
+            # Use PUT method as required by MusicBrainz API
             response = self.musicbrainz_auth.session.put(url, headers=headers)
             
             if response.status_code in [200, 201]:
-                QMessageBox.information(self, "Success", f"Successfully added release to collection '{collection_name}'")
+                QMessageBox.information(self.parent, "Success", f"Successfully added release to collection '{collection_name}'")
             else:
                 error_msg = f"Error adding release to collection: {response.status_code}"
                 try:
+                    # Try to parse response as JSON
                     error_data = response.json()
                     if 'error' in error_data:
                         error_msg += f"\n{error_data['error']}"
                 except:
+                    # If not JSON, use text response
                     error_msg += f"\n{response.text}"
                     
-                QMessageBox.warning(self, "Error", error_msg)
+                # Log the complete error for debugging
+                self.logger.error(f"API Error: {error_msg}")
                 
+                # Check for auth errors and offer to re-authenticate
+                if response.status_code == 401:
+                    reply = QMessageBox.question(
+                        self.parent, 
+                        "Authentication Error", 
+                        "Authentication error. Would you like to re-login to MusicBrainz?",
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                    )
+                    
+                    if reply == QMessageBox.StandardButton.Yes:
+                        if self.authenticate_musicbrainz_dialog():
+                            # Try again after re-authentication
+                            return self.add_release_to_collection(collection_id, collection_name, release_mbid)
+                else:
+                    QMessageBox.warning(self.parent, "Error", error_msg)
+                    
         except Exception as e:
             self.logger.error(f"Error adding release to collection: {e}", exc_info=True)
-            QMessageBox.warning(self, "Error", f"Failed to add release to collection: {e}")
+            QMessageBox.warning(self.parent, "Error", f"Failed to add release to collection: {e}")
 
 
+   
     def add_selected_albums_to_collection(self, collection_id, collection_name):
         """
-        Add albums from albums_selected.json to a MusicBrainz collection with improved authentication
+        Añadir álbumes desde albums_selected.json a una colección de MusicBrainz usando musicbrainzngs
         
         Args:
-            collection_id (str): ID of the collection to add albums to
-            collection_name (str): Name of the collection for display
+            collection_id (str): ID de la colección a la que añadir álbumes
+            collection_name (str): Nombre de la colección para mostrar
         """
-        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            # Attempt to authenticate first
-            self.logger.info("Not authenticated with MusicBrainz, attempting authentication...")
-            if not self.authenticate_musicbrainz_silently():
-                QMessageBox.warning(self, "Error", "MusicBrainz authentication required to add albums to collections")
-                return
+        import os
+        import json
+        from PyQt6.QtWidgets import QMessageBox, QApplication
         
-        # Path to the JSON file
-        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
+        # Intentar autenticar primero
+        if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
+            self.logger.info("Autenticando con musicbrainzngs...")
+            self.ui_callback.clear()
+            self.ui_callback.show()
+            self.ui_callback.append("Autenticando con MusicBrainz usando musicbrainzngs...")
+            QApplication.processEvents()
+            
+            if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
+                reply = QMessageBox.question(
+                    self.parent,
+                    "Se requiere autenticación",
+                    "Se requiere autenticación de MusicBrainz para añadir álbumes a colecciones. ¿Desea iniciar sesión ahora?",
+                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+                )
+                
+                if reply == QMessageBox.StandardButton.Yes:
+                    username, ok = QInputDialog.getText(
+                        self.parent,
+                        "Autenticación MusicBrainz",
+                        "Introduzca su nombre de usuario MusicBrainz:",
+                        QLineEdit.EchoMode.Normal,
+                        self.musicbrainz_username or ""
+                    )
+                    
+                    if not ok or not username:
+                        return
+                    
+                    password, ok = QInputDialog.getText(
+                        self.parent,
+                        "Autenticación MusicBrainz",
+                        f"Introduzca contraseña para el usuario MusicBrainz {username}:",
+                        QLineEdit.EchoMode.Password
+                    )
+                    
+                    if not ok or not password:
+                        return
+                    
+                    self.musicbrainz_username = username
+                    self.musicbrainz_password = password
+                    
+                    if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(username, password):
+                        QMessageBox.warning(self.parent, "Error", "No se pudo autenticar con MusicBrainz")
+                        return
+                else:
+                    return
         
-        # Check if file exists
+        # Ruta al archivo JSON
+        json_path = os.path.join(self.project_root, ".content", "cache", "albums_selected.json")
+        
+        # Verificar si existe el archivo
         if not os.path.exists(json_path):
-            QMessageBox.warning(self, "Error", "No selected albums file found. Please load albums first.")
+            QMessageBox.warning(self.parent, "Error", "No se encontró el archivo de álbumes seleccionados. Por favor, cargue álbumes primero.")
             return
         
-        # Load albums from JSON
+        # Cargar álbumes desde JSON
         try:
             with open(json_path, 'r', encoding='utf-8') as f:
                 albums_data = json.load(f)
                 
             if not albums_data:
-                QMessageBox.warning(self, "Error", "No albums found in the selection file.")
+                QMessageBox.warning(self.parent, "Error", "No se encontraron álbumes en el archivo de selección.")
                 return
         except Exception as e:
-            QMessageBox.warning(self, "Error", f"Error loading selected albums: {str(e)}")
+            QMessageBox.warning(self.parent, "Error", f"Error al cargar álbumes seleccionados: {str(e)}")
             return
         
-        # Function to add albums with progress dialog
+        # Función para añadir álbumes con diálogo de progreso
         def add_albums_to_collection(update_progress):
-            # Prepare list of MBIDs
+            # Preparar lista de MBIDs
             album_mbids = []
             valid_albums = []
             
-            update_progress(0, 3, "Preparing album data...", indeterminate=True)
+            update_progress(0, 3, "Preparando datos de álbumes...", indeterminate=True)
             
-            # Extract MBIDs from albums data
+            # Extraer MBIDs de los datos de álbumes
             for album in albums_data:
                 mbid = album.get('mbid')
                 if mbid and len(mbid) == 36 and mbid.count('-') == 4:
@@ -1202,111 +1306,56 @@ class MusicBrainzManager:
             if not album_mbids:
                 return {
                     "success": False,
-                    "error": "No valid MusicBrainz IDs found in selected albums"
+                    "error": "No se encontraron IDs de MusicBrainz válidos en los álbumes seleccionados"
                 }
             
-            update_progress(1, 3, f"Adding {len(album_mbids)} albums to collection...", indeterminate=True)
+            update_progress(1, 3, f"Añadiendo {len(album_mbids)} álbumes a la colección...", indeterminate=True)
             
-            # Log authentication status for debugging
-            self.logger.info(f"MusicBrainz auth status before adding albums: {self.musicbrainz_auth.is_authenticated()}")
+            # Usar el método add_releases_to_collection_ngs mejorado
+            result = self.musicbrainz_auth.add_releases_to_collection_ngs(collection_id, album_mbids)
             
-            # Re-authenticate to ensure fresh session
-            self.musicbrainz_auth.authenticate(silent=True)
+            update_progress(3, 3, "Finalizando...", indeterminate=True)
             
-            # Process in smaller batches to avoid overwhelming the API
-            batch_size = 20  # MusicBrainz recommends smaller batches
-            total_batches = (len(album_mbids) + batch_size - 1) // batch_size
-            
-            success_count = 0
-            failed_batches = []
-            
-            for batch_idx in range(total_batches):
-                batch_start = batch_idx * batch_size
-                batch_end = min(batch_start + batch_size, len(album_mbids))
-                current_batch = album_mbids[batch_start:batch_end]
-                
-                # Calculate progress as integer (0-100 range)
-                progress_value = int(1 + (batch_idx / total_batches) * 100)
-                update_progress(progress_value, 100, 
-                            f"Processing batch {batch_idx+1}/{total_batches} ({batch_end}/{len(album_mbids)} albums)...", 
-                            indeterminate=False)
-                
-                try:
-                    # Join MBIDs with semicolons as per API spec
-                    mbids_param = ";".join(current_batch)
-                    
-                    # Construct URL for this batch
-                    url = f"https://musicbrainz.org/ws/2/collection/{collection_id}/releases/{mbids_param}"
-                    
-                    # Add necessary headers
-                    headers = {
-                        "User-Agent": "MuspyReleasesModule/1.0",
-                        "Content-Type": "application/json"
-                    }
-                    
-                    # Make the request with all cookies from the session
-                    response = self.musicbrainz_auth.session.put(url, headers=headers)
-                    
-                    if response.status_code in [200, 201]:
-                        success_count += len(current_batch)
-                        self.logger.info(f"Successfully added batch {batch_idx+1} to collection")
-                    else:
-                        failed_batches.append(batch_idx + 1)
-                        self.logger.error(f"Failed to add batch {batch_idx+1}: {response.status_code} - {response.text}")
-                except Exception as e:
-                    failed_batches.append(batch_idx + 1)
-                    self.logger.error(f"Error processing batch {batch_idx+1}: {str(e)}")
-            
-            update_progress(3, 3, "Finalizing...", indeterminate=True)
-            
-            return {
-                "success": success_count > 0,
-                "total": len(album_mbids),
-                "success_count": success_count,
-                "failed_batches": failed_batches
-            }
+            return result
         
-        # Execute with progress dialog
-        result = self.show_progress_operation(
+        # Ejecutar con diálogo de progreso
+        result = self.parent.show_progress_operation(
             add_albums_to_collection,
-            title=f"Adding to Collection: {collection_name}",
+            title=f"Añadiendo a Colección: {collection_name}",
             label_format="{status}"
         )
         
-        # Process results
+        # Procesar resultados
         if result and result.get("success"):
-            success_count = result.get("success_count", 0)
+            success_count = result.get("added", 0)
             total = result.get("total", 0)
             failed_batches = result.get("failed_batches", [])
             
             if failed_batches:
-                message = (f"Added {success_count} of {total} albums to collection '{collection_name}'.\n\n"
-                        f"Some batches failed: {', '.join(map(str, failed_batches))}.\n"
-                        "This might be due to permission issues or some albums already being in the collection.")
-                QMessageBox.warning(self, "Partial Success", message)
+                message = (f"Se añadieron {success_count} de {total} álbumes a la colección '{collection_name}'.\n\n"
+                        f"Algunos lotes fallaron: {', '.join(map(str, failed_batches))}.\n"
+                        "Esto puede deberse a problemas de permisos o a que algunos álbumes ya estén en la colección.")
+                QMessageBox.warning(self.parent, "Éxito Parcial", message)
             else:
                 QMessageBox.information(
-                    self, 
-                    "Success", 
-                    f"Successfully added {success_count} albums to collection '{collection_name}'"
+                    self.parent, 
+                    "Éxito", 
+                    f"Se añadieron con éxito {success_count} álbumes a la colección '{collection_name}'"
                 )
             
-            # Offer to show the collection
+            # Ofrecer mostrar la colección
             reply = QMessageBox.question(
-                self,
-                "View Collection",
-                f"Would you like to view the updated collection '{collection_name}'?",
+                self.parent,
+                "Ver Colección",
+                f"¿Desea ver la colección actualizada '{collection_name}'?",
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
             )
             
             if reply == QMessageBox.StandardButton.Yes:
                 self.show_musicbrainz_collection(collection_id, collection_name)
         else:
-            error_msg = result.get("error", "Unknown error") if result else "Operation failed"
-            QMessageBox.warning(self, "Error", f"Could not add albums to collection: {error_msg}")
-
-    
-
+            error_msg = result.get("error", "Error desconocido") if result else "La operación falló"
+            QMessageBox.warning(self.parent, "Error", f"No se pudieron añadir álbumes a la colección: {error_msg}")
 
     def show_musicbrainz_table_context_menu(self, position):
         """

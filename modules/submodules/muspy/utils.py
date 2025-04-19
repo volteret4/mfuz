@@ -129,3 +129,14 @@ class MuspyUtils:
         import webbrowser
         webbrowser.open(url)
         
+
+# Bluesky
+    def open_url(self, url):
+        """
+        Open a URL in the default browser
+        
+        Args:
+            url (str): URL to open
+        """
+        import webbrowser
+        webbrowser.open(url)
