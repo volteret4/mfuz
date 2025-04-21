@@ -125,6 +125,7 @@
         "main.py",
         "base_module.py",
         "images.qrc",
+        "ui/stats/stats_module.ui",
         "ui/tab_manager.ui",
         "ui/url_player.ui",
         "ui/music_fuzzy_module.ui",
