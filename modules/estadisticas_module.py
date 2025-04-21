@@ -56,10 +56,23 @@ class StatsModule(BaseModule):
                 
                 # Configuramos las conexiones después de cargar
                 self.setup_connections()
+                
+                # Inicializar la base de datos
                 self.init_database()
+                
+                # Verificar la conexión a la base de datos antes de cargar datos
+                if not self.ensure_db_connection():
+                    self.show_connection_error()
+                    return True
+                    
+                # Carga de datos iniciales
+                self.load_initial_data()
+                
                 return True
             except Exception as e:
                 logging.error(f"Error al cargar el archivo UI: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
         else:
             logging.error(f"No se encontró el archivo UI en: {ui_path}")
         
@@ -69,6 +82,7 @@ class StatsModule(BaseModule):
         error_label.setStyleSheet("color: red; font-weight: bold;")
         error_layout.addWidget(error_label)
         return False
+
 
     def init_ui_elements(self):
         """Inicializa referencias a elementos de la UI para acceso más directo."""
@@ -169,12 +183,17 @@ class StatsModule(BaseModule):
         # Conectar la selección de la tabla de géneros
         table_genres = self.findChild(QTableWidget, "table_genres")
         if table_genres:
+            try:
+                table_genres.itemClicked.disconnect()  # Desconectar conexiones previas
+            except:
+                pass
             table_genres.itemClicked.connect(self.on_genre_selected)
             logging.info("Tabla de géneros conectada correctamente")
         else:
             logging.warning("No se encontró la tabla de géneros para conectar")
-
-
+        
+        # Configurar navegación entre vistas de géneros
+        self.setup_genre_chart_navigation()
 
         
     def init_database(self):
@@ -183,35 +202,94 @@ class StatsModule(BaseModule):
             # Intentar encontrar la base de datos en ubicaciones típicas
             possible_paths = [
                 os.path.join(os.path.dirname(__file__), "data", "music.db"),
+                os.path.join(PROJECT_ROOT, "data", "music.db"),
                 os.path.join(os.path.expanduser("~"), ".config", "musicapp", "music.db")
             ]
             
             for path in possible_paths:
                 if os.path.exists(path):
                     self.db_path = path
+                    logging.info(f"Base de datos encontrada en: {path}")
                     break
         
         if self.db_path and os.path.exists(self.db_path):
             try:
+                if self.conn:
+                    try:
+                        self.conn.close()
+                    except:
+                        pass
+                        
                 self.conn = sqlite3.connect(self.db_path)
                 self.conn.row_factory = sqlite3.Row
-                logging.info(f"Conectado a la base de datos: {self.db_path}")
                 
-                # Cargar los datos iniciales
-                self.load_initial_data()
+                # Verificar conexión con una consulta simple
+                cursor = self.conn.cursor()
+                cursor.execute("SELECT 1")
+                cursor.fetchone()
+                
+                logging.info(f"Conectado a la base de datos: {self.db_path}")
+                return True
             except Exception as e:
                 logging.error(f"Error al conectar a la base de datos: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
+                return False
         else:
-            logging.error("No se encontró la base de datos")
+            logging.error(f"No se encontró la base de datos. Path actual: {self.db_path}")
+            return False
             
     def load_initial_data(self):
         """Carga los datos iniciales para la vista actual."""
         # Cargamos los datos para la primera categoría por defecto
         self.change_category(0)
         
+
+    def show_connection_error(self):
+        """Muestra un mensaje de error de conexión en la interfaz."""
+        # Encuentra un widget adecuado para mostrar el error
+        content_widget = self.findChild(QWidget, "stats_content")
+        if not content_widget:
+            content_widget = self
+        
+        # Limpia el layout existente
+        if content_widget.layout():
+            self.clear_layout(content_widget.layout())
+        else:
+            content_widget.setLayout(QVBoxLayout())
+        
+        # Crear mensaje de error
+        error_label = QLabel("No se pudo conectar a la base de datos. Por favor verifica la conexión.")
+        error_label.setStyleSheet("color: red; font-size: 16px; padding: 20px;")
+        error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        # Añade botón para reintentar
+        retry_button = QPushButton("Reintentar conexión")
+        retry_button.clicked.connect(self.retry_connection)
+        
+        # Añade widgets al layout
+        content_widget.layout().addWidget(error_label)
+        content_widget.layout().addWidget(retry_button)
+        content_widget.layout().setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def retry_connection(self):
+        """Intenta reconectarse a la base de datos."""
+        if self.ensure_db_connection():
+            # Volver a cargar los datos
+            self.load_initial_data()
+        else:
+            # Mostrar mensaje de error actualizado
+            self.show_connection_error()
+
+
     def change_category(self, index):
         """Cambia la categoría de estadísticas mostrada."""
         try:
+            # Verificar conexión antes de proceder
+            if not self.ensure_db_connection():
+                self.show_connection_error()
+                return
+                
             self.current_category = self.category_combo.currentText()
             self.stacked_widget.setCurrentIndex(index)
             
@@ -663,24 +741,25 @@ class StatsModule(BaseModule):
 
     def load_genre_stats(self):
         """Carga estadísticas de géneros musicales."""
-        if not self.conn:
-            logging.error("No hay conexión a la base de datos")
+        if not self.ensure_db_connection():
+            self.show_connection_error()
             return
-        
+
         try:
             # Obtener referencias a los widgets desde el UI
             table = self.findChild(QTableWidget, "table_genres")
             chart_container = self.findChild(QWidget, "chart_container_genres")
             
-            if not table:
-                logging.error("No se encontró el widget table_genres")
-                return
-            if not chart_container:
-                logging.error("No se encontró el widget chart_container_genres")
+            if not table or not chart_container:
+                logging.error("No se encontraron los widgets necesarios para la estadística de géneros")
                 return
                     
             # Limpiar tabla
             table.setRowCount(0)
+            
+            # Configuración de la tabla
+            table.setColumnCount(5)
+            table.setHorizontalHeaderLabels(["Género", "Canciones", "Porcentaje", "Álbumes", "Artistas"])
             
             # Consultar la distribución de géneros
             cursor = self.conn.cursor()
@@ -689,72 +768,104 @@ class StatsModule(BaseModule):
             cursor.execute("SELECT COUNT(*) FROM songs WHERE genre IS NOT NULL AND genre != '';")
             total_songs_with_genre = cursor.fetchone()[0]
             
-            # Luego contar por género
+            if total_songs_with_genre == 0:
+                logging.warning("No hay canciones con géneros en la base de datos")
+                no_data = QLabel("No hay datos de géneros disponibles")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.clear_layout(chart_container.layout())
+                chart_container.layout().addWidget(no_data)
+                return
+            
+            # Obtener estadísticas detalladas por género
             cursor.execute("""
-                SELECT genre, COUNT(*) as count
+                SELECT 
+                    genre, 
+                    COUNT(*) as song_count,
+                    COUNT(DISTINCT album) as album_count,
+                    COUNT(DISTINCT artist) as artist_count
                 FROM songs
                 WHERE genre IS NOT NULL AND genre != ''
                 GROUP BY genre
-                ORDER BY count DESC;
+                ORDER BY song_count DESC;
             """)
             
-            genres = cursor.fetchall()
+            # Fetch results ONCE and store them
+            genre_results = cursor.fetchall()
+            logging.info(f"Found {len(genre_results)} genres in database")
+            
+            if not genre_results:
+                logging.warning("La consulta no devolvió géneros")
+                no_data = QLabel("No hay datos de géneros disponibles")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.clear_layout(chart_container.layout())
+                chart_container.layout().addWidget(no_data)
+                return
             
             # Mostrar resultados en la tabla
-            table.setRowCount(len(genres))
+            table.setRowCount(len(genre_results))
             
-            for i, (genre, count) in enumerate(genres):
-                percentage = (count / total_songs_with_genre) * 100 if total_songs_with_genre > 0 else 0
-                
-                table.setItem(i, 0, QTableWidgetItem(genre))
-                table.setItem(i, 1, QTableWidgetItem(str(count)))
-                
-                # Usar barra de progreso para el porcentaje
-                progress = QProgressBar()
-                progress.setValue(int(percentage))
-                progress.setTextVisible(True)
-                progress.setFormat(f"{percentage:.1f}%")
-                
-                table.setCellWidget(i, 2, progress)
+            for i, row in enumerate(genre_results):
+                if len(row) >= 4:  # Make sure we have all expected columns
+                    genre, song_count, album_count, artist_count = row
+                    percentage = (song_count / total_songs_with_genre) * 100
+                    
+                    # Preparar texto del género con posible recorte
+                    display_genre = genre
+                    if len(genre) > 20:
+                        display_genre = genre[:17] + "..."
+                    
+                    # Crear item para el género
+                    genre_item = QTableWidgetItem(display_genre)
+                    if len(genre) > 20:
+                        genre_item.setToolTip(genre)
+                    
+                    # Agregar los items a la tabla
+                    table.setItem(i, 0, genre_item)
+                    table.setItem(i, 1, QTableWidgetItem(str(song_count)))
+                    
+                    # Usar barra de progreso para el porcentaje
+                    progress = QProgressBar()
+                    progress.setValue(int(percentage))
+                    progress.setTextVisible(True)
+                    progress.setFormat(f"{percentage:.1f}%")
+                    
+                    table.setCellWidget(i, 2, progress)
+                    
+                    # Agregar columnas de álbumes y artistas
+                    table.setItem(i, 3, QTableWidgetItem(str(album_count)))
+                    table.setItem(i, 4, QTableWidgetItem(str(artist_count)))
             
             table.resizeColumnsToContents()
             
-            # Verificar y crear layout si es necesario
-            if chart_container.layout() is None:
-                logging.warning(f"chart_container_genres no tiene layout, creando uno nuevo")
-                chart_layout = QVBoxLayout(chart_container)
-            else:
-                chart_layout = chart_container.layout()
-                logging.info(f"Usando layout existente para chart_container_genres: {type(chart_layout).__name__}")
-                
-            # Limpiar el contenedor de gráficos
-            self.clear_layout(chart_layout)
+            # Ensure chart container has a layout
+            layout = self.ensure_widget_has_layout(chart_container)
+            self.clear_layout(layout)
             
-            # Create chart with proper error handling
+            # Create chart with proper chart data format
             try:
-                if len(genres) > 0:
-                    chart_view = ChartFactory.create_pie_chart(
-                        genres[:15] if len(genres) > 15 else genres,  # Limit to 15 for better visualization
-                        "Distribución de Géneros"
-                    )
-                    
-                    if chart_view:
-                        # Añadir el gráfico al contenedor
-                        chart_layout.addWidget(chart_view)
-                        logging.info(f"Gráfico de géneros añadido correctamente")
-                    else:
-                        error_label = QLabel("No se pudo crear el gráfico de géneros")
-                        error_label.setStyleSheet("color: red;")
-                        chart_layout.addWidget(error_label)
-                        logging.error("ChartFactory.create_pie_chart devolvió None")
+                # Prepare chart data in the correct format
+                chart_data = [(str(row[0]), row[1]) for row in genre_results[:15]] if len(genre_results) > 15 else [(str(row[0]), row[1]) for row in genre_results]
+                
+                # Log the chart data format
+                logging.info(f"Chart data format: {chart_data[:3]} ...")
+                
+                chart_view = ChartFactory.create_pie_chart(
+                    chart_data,
+                    "Distribución de Géneros"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info("Gráfico de géneros creado correctamente")
                 else:
-                    no_data = QLabel("No hay datos de géneros disponibles")
-                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                    chart_layout.addWidget(no_data)
+                    error_label = QLabel("No se pudo crear el gráfico de géneros")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    logging.error("ChartFactory.create_pie_chart devolvió None")
             except Exception as e:
                 error_label = QLabel(f"Error al crear el gráfico: {str(e)}")
                 error_label.setStyleSheet("color: red;")
-                chart_layout.addWidget(error_label)
+                layout.addWidget(error_label)
                 logging.error(f"Error creando gráfico de géneros: {e}")
                 import traceback
                 logging.error(traceback.format_exc())
@@ -762,6 +873,32 @@ class StatsModule(BaseModule):
             logging.error(f"Error general en load_genre_stats: {e}")
             import traceback
             logging.error(traceback.format_exc())
+
+
+
+    def check_data_format(self, data, description):
+        """Check if data has the correct format for chart visualization."""
+        if not data:
+            logging.error(f"Datos de {description} está vacío")
+            return False
+        
+        try:
+            # Check a sample of the data
+            sample = data[:min(3, len(data))]
+            logging.info(f"Muestra de datos para {description}: {sample}")
+            
+            # Verify format
+            all_valid = True
+            for item in sample:
+                if not isinstance(item, tuple) or len(item) != 2:
+                    logging.error(f"Error de formato: {item} no es una tupla de 2 elementos")
+                    all_valid = False
+                    break
+            
+            return all_valid
+        except Exception as e:
+            logging.error(f"Error verificando formato de datos para {description}: {e}")
+            return False
 
     def highlight_selected_genre_row(self, row):
         """Resalta la fila del género seleccionado."""
@@ -785,8 +922,28 @@ class StatsModule(BaseModule):
         # Obtener el género seleccionado (siempre está en la primera columna)
         row = item.row()
         genre = self.table_genres.item(row, 0).text()
+        # Si el género está truncado, obtenemos el texto completo del tooltip
+        if self.table_genres.item(row, 0).toolTip():
+            genre = self.table_genres.item(row, 0).toolTip()
+        
         logging.info(f"Género seleccionado: {genre}")
         
+        # Actualizar título si existe
+        genre_title_label = self.findChild(QLabel, "label_selected_genre_title")
+        if genre_title_label:
+            genre_title_label.setText(f"Género: {genre}")
+        
+        # Cargar ambas visualizaciones
+        self.load_artists_by_genre(genre)
+        self.load_genre_by_decade(genre)
+        
+        # Mostrar el stacked widget si está oculto
+        stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
+        if stacked_genre_charts:
+            stacked_genre_charts.setVisible(True)
+
+    def load_artists_by_genre(self, genre):
+        """Carga la gráfica de artistas para un género específico."""
         # Buscar el contenedor para la gráfica
         chart_container = self.findChild(QWidget, "chart_container_artists_by_genre")
         if not chart_container:
@@ -818,7 +975,8 @@ class StatsModule(BaseModule):
                 LIMIT 15;
             """, (genre,))
             
-            results = cursor.fetchall()
+            # Asegurarse de que solo obtenemos dos valores por fila
+            results = [(row[0], row[1]) for row in cursor.fetchall()]
             
             if results:
                 # Crear gráfico de barras con los artistas
@@ -843,16 +1001,211 @@ class StatsModule(BaseModule):
                 no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 no_data.setStyleSheet("color: gray; font-size: 14px;")
                 layout.addWidget(no_data)
-            
-            genre_title_label = self.findChild(QLabel, "label_selected_genre_title")
-            if genre_title_label:
-                genre_title_label.setText(f"Artistas con Género: {genre}")
-
+                
         except Exception as e:
             logging.error(f"Error al consultar artistas por género: {e}")
             error_label = QLabel(f"Error: {str(e)}")
             error_label.setStyleSheet("color: red;")
             layout.addWidget(error_label)
+
+    def load_genre_by_decade(self, genre):
+        """Muestra la evolución del género a lo largo de las décadas."""
+        # Buscar el contenedor para la gráfica
+        chart_container = self.findChild(QWidget, "chart_container_genres_year")
+        if not chart_container:
+            logging.error("No se encontró el contenedor para la gráfica de géneros por década")
+            return
+        
+        # Asegurar que tiene layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar el contenedor
+        self.clear_layout(layout)
+        
+        # Consultar datos por década
+        cursor = self.conn.cursor()
+        try:
+            # Consulta para obtener la distribución del género por década
+            cursor.execute("""
+                SELECT 
+                    CASE
+                        WHEN s.date IS NULL OR s.date = '' THEN 'Desconocido'
+                        WHEN CAST(SUBSTR(s.date, 1, 4) AS INTEGER) <= 1950 THEN 'Pre-1950'
+                        ELSE CAST(CAST(SUBSTR(s.date, 1, 4) AS INTEGER) / 10 * 10 AS TEXT) || 's'
+                    END as decade,
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                WHERE 
+                    s.genre = ?
+                GROUP BY 
+                    decade
+                ORDER BY 
+                    decade != 'Desconocido', decade != 'Pre-1950', decade;
+            """, (genre,))
+            
+            # Obtener resultados como una lista de tuplas de 2 elementos
+            results = cursor.fetchall()
+            decade_results = []
+            
+            for row in results:
+                # Nos aseguramos de solo tomar dos elementos
+                if isinstance(row, sqlite3.Row):
+                    decade_results.append((row['decade'], row['song_count']))
+                elif isinstance(row, tuple) and len(row) >= 2:
+                    decade_results.append((row[0], row[1]))
+                else:
+                    logging.error(f"Formato de fila inesperado: {row}, tipo: {type(row)}")
+            
+            # Verificar formato de datos
+            self.check_data_format(decade_results, "géneros por década")
+            
+            # Verificar si hay datos para mostrar el gráfico
+            if decade_results and len(decade_results) > 1:  # Más de una década o categoría
+                # Preparar datos para el gráfico
+                # Si hay una categoría "Desconocido", moverla al final para mejor visualización
+                chart_data = []
+                unknown_data = None
+                
+                for decade, count in decade_results:
+                    if decade == "Desconocido":
+                        unknown_data = (decade, count)
+                    else:
+                        chart_data.append((decade, count))
+                
+                if unknown_data:
+                    chart_data.append(unknown_data)
+                
+                # Verificar formato final
+                if not self.check_data_format(chart_data, "gráfico final por década"):
+                    error_label = QLabel("Error en formato de datos para gráfico por década")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    return
+                
+                # Crear gráfico de barras por década
+                chart_view = ChartFactory.create_bar_chart(
+                    chart_data,
+                    f"Evolución del Género '{genre}' por Década",
+                    x_label="Década",
+                    y_label="Canciones"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Gráfico de evolución por década para género '{genre}' creado correctamente")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de evolución por década")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    
+            elif decade_results:  # Solo una década o categoría
+                # Mostrar mensaje informativo
+                info_label = QLabel(f"El género '{genre}' solo aparece en una década: {decade_results[0][0]}")
+                info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                info_label.setStyleSheet("color: #333; font-size: 14px; margin: 20px;")
+                layout.addWidget(info_label)
+                
+                # Crear un gráfico simple que muestre la única década
+                chart_view = ChartFactory.create_bar_chart(
+                    decade_results,
+                    f"Distribución del Género '{genre}'",
+                    x_label="Década",
+                    y_label="Canciones"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    
+            else:
+                # No hay datos de fecha para este género
+                no_data = QLabel(f"No hay información de fechas para el género '{genre}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error al consultar la evolución del género por década: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def setup_genre_chart_navigation(self):
+        """Configura los botones de navegación entre las vistas de género."""
+        stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
+        btn_artists_view = self.findChild(QPushButton, "btn_artists_view")
+        btn_decades_view = self.findChild(QPushButton, "btn_decades_view")
+        
+        if not stacked_genre_charts:
+            logging.error("No se encontró el QStackedWidget 'stacked_genre_charts'")
+            return
+            
+        if not btn_artists_view:
+            logging.error("No se encontró el botón 'btn_artists_view'")
+        
+        if not btn_decades_view:
+            logging.error("No se encontró el botón 'btn_decades_view'")
+        
+        # Si no se encontraron los botones, intentar buscarlos por otras propiedades
+        if not btn_artists_view or not btn_decades_view:
+            # Buscar botones por texto
+            for button in self.findChildren(QPushButton):
+                if button.text() == "Ver Artistas":
+                    btn_artists_view = button
+                    logging.info("Botón 'Ver Artistas' encontrado por texto")
+                elif button.text() == "Ver por Décadas":
+                    btn_decades_view = button
+                    logging.info("Botón 'Ver por Décadas' encontrado por texto")
+        
+        # Verificar si ahora tenemos los botones
+        if not btn_artists_view or not btn_decades_view:
+            logging.error("No se pudieron encontrar los botones de navegación")
+            return
+        
+        # Mostrar información sobre los objetos encontrados
+        logging.info(f"stacked_genre_charts: {stacked_genre_charts}")
+        logging.info(f"btn_artists_view: {btn_artists_view}")
+        logging.info(f"btn_decades_view: {btn_decades_view}")
+        
+        # Desconectar cualquier conexión previa para evitar duplicados
+        try:
+            btn_artists_view.clicked.disconnect()
+        except:
+            pass
+        
+        try:
+            btn_decades_view.clicked.disconnect()
+        except:
+            pass
+        
+        # Verificar el número de páginas en el stacked widget
+        page_count = stacked_genre_charts.count()
+        logging.info(f"Número de páginas en stacked_genre_charts: {page_count}")
+        
+        if page_count < 2:
+            logging.error("El QStackedWidget no tiene suficientes páginas")
+            return
+        
+        # Conectar botones para cambiar entre vistas utilizando lambdas explícitas
+        btn_artists_view.clicked.connect(lambda: self.change_genre_chart_page(0))
+        btn_decades_view.clicked.connect(lambda: self.change_genre_chart_page(1))
+        
+        # Inicialmente mostrar la vista de artistas
+        stacked_genre_charts.setCurrentIndex(0)
+        logging.info("Navegación de vistas de género configurada correctamente")
+
+    def change_genre_chart_page(self, index):
+        """Cambia la página del stacked widget de gráficos de género."""
+        stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
+        if stacked_genre_charts:
+            if 0 <= index < stacked_genre_charts.count():
+                logging.info(f"Cambiando a la página {index} del stacked_genre_charts")
+                stacked_genre_charts.setCurrentIndex(index)
+            else:
+                logging.error(f"Índice de página inválido: {index}, máximo: {stacked_genre_charts.count()-1}")
 
 
     def setup_genre_combo(self):
@@ -1775,104 +2128,6 @@ class StatsModule(BaseModule):
         chart_container_countries.layout().addWidget(chart_view)
 
 
-    def create_pie_chart(self, data, title, limit=15):
-        """
-        Crea un gráfico de pastel.
-        :param data: Lista de tuplas (nombre, valor)
-        :param title: Título del gráfico
-        :param limit: Límite de elementos a mostrar (los demás se agrupan como "Otros")
-        :return: QWidget con el gráfico
-        """
-        try:
-            if not data:
-                logging.warning("No hay datos para crear el gráfico de pastel")
-                label = QLabel("No hay datos disponibles")
-                label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                return label
-            
-            if self.is_charts_available():
-                # Crear serie de datos para el gráfico
-                series = QPieSeries()
-                
-                # Si hay demasiados datos, agrupar los menos frecuentes como "Otros"
-                if len(data) > limit:
-                    # Ordenar y tomar los top N
-                    sorted_data = sorted(data, key=lambda x: x[1], reverse=True)
-                    top_items = sorted_data[:limit-1]
-                    
-                    # Calcular la suma de los restantes
-                    other_sum = sum(count for _, count in sorted_data[limit-1:])
-                    
-                    # Añadir los elementos principales
-                    for name, value in top_items:
-                        series.append(str(name), value)
-                    
-                    # Añadir la categoría "Otros"
-                    if other_sum > 0:
-                        series.append("Otros", other_sum)
-                else:
-                    # Añadir todos los elementos
-                    for name, value in data:
-                        series.append(str(name), value)
-                
-                # Destacar las porciones al hacer hover
-                for slice_index in range(series.count()):
-                    slice = series.slices()[slice_index]
-                    slice.setExploded(True)
-                    slice.setExplodeDistanceFactor(0.05)
-                    slice.setLabelVisible(True)
-                    slice.setLabelPosition(QPieSlice.LabelPosition.LabelOutside)
-                    slice.setLabelArmLengthFactor(0.2)
-                    
-                    # Calcular porcentaje para la etiqueta
-                    percent = (slice.percentage() * 100)
-                    slice.setLabel(f"{slice.label()}: {percent:.1f}%")
-                
-                # Crear el chart y configurarlo
-                chart = QChart()
-                chart.addSeries(series)
-                chart.setTitle(title)
-                chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
-                chart.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
-                
-                # Crear el widget con el chart
-                chart_view = QChartView(chart)
-                chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
-                
-                return chart_view
-            else:
-                # Alternativa de texto si no hay gráficos disponibles
-                text_widget = QWidget()
-                layout = QVBoxLayout(text_widget)
-                
-                label_title = QLabel(title)
-                label_title.setStyleSheet("font-weight: bold; font-size: 14px;")
-                layout.addWidget(label_title)
-                
-                # Mostrar datos como texto
-                for name, value in data[:limit]:
-                    label = QLabel(f"{name}: {value}")
-                    layout.addWidget(label)
-                
-                if len(data) > limit:
-                    label = QLabel(f"... y {len(data) - limit} más")
-                    layout.addWidget(label)
-                    
-                return text_widget
-        except Exception as e:
-            logging.error(f"Error al crear gráfico de pastel: {e}")
-            import traceback
-            logging.error(traceback.format_exc())
-            
-            # Devolver un widget con mensaje de error
-            error_widget = QWidget()
-            error_layout = QVBoxLayout(error_widget)
-            error_label = QLabel(f"Error al crear gráfico: {str(e)}")
-            error_label.setStyleSheet("color: red;")
-            error_layout.addWidget(error_label)
-            return error_widget
-
-
 
     def load_feed_stats(self):
         """Carga estadísticas de feeds."""
@@ -1995,15 +2250,62 @@ class StatsModule(BaseModule):
 
     def ensure_db_connection(self):
         """Asegura que hay una conexión activa a la base de datos."""
-        if self.db_path and (self.conn is None or not hasattr(self.conn, 'execute')):
+        if self.conn is None or not self.is_connection_valid():
             try:
-                self.conn = sqlite3.connect(self.db_path)
-                self.conn.row_factory = sqlite3.Row
-                return True
+                logging.info(f"Reconectando a la base de datos: {self.db_path}")
+                if self.conn:
+                    try:
+                        self.conn.close()
+                    except:
+                        pass
+                
+                if not self.db_path or not os.path.exists(self.db_path):
+                    # Buscar la base de datos en ubicaciones comunes
+                    possible_paths = [
+                        os.path.join(os.path.dirname(__file__), "data", "music.db"),
+                        os.path.join(PROJECT_ROOT, "data", "music.db"),
+                        os.path.join(os.path.expanduser("~"), ".config", "musicapp", "music.db")
+                    ]
+                    
+                    for path in possible_paths:
+                        if os.path.exists(path):
+                            self.db_path = path
+                            logging.info(f"Base de datos encontrada en: {path}")
+                            break
+                
+                if self.db_path and os.path.exists(self.db_path):
+                    self.conn = sqlite3.connect(self.db_path)
+                    self.conn.row_factory = sqlite3.Row
+                    # Ejecutar una consulta simple para verificar la conexión
+                    cursor = self.conn.cursor()
+                    cursor.execute("SELECT 1")
+                    cursor.fetchone()
+                    logging.info(f"Conexión a base de datos establecida correctamente: {self.db_path}")
+                    return True
+                else:
+                    logging.error(f"No se encontró la base de datos. Path actual: {self.db_path}")
+                    return False
             except Exception as e:
-                logging.error(f"Error reconectando a la base de datos: {e}")
+                logging.error(f"Error al conectar a la base de datos: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
                 return False
-        return self.conn is not None
+        return True
+
+    def is_connection_valid(self):
+        """Verifica si la conexión a la base de datos es válida."""
+        if not self.conn:
+            return False
+        
+        try:
+            # Ejecutar una consulta simple para verificar la conexión
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+            return True
+        except Exception as e:
+            logging.error(f"Error validando conexión DB: {e}")
+            return False
 
     def cleanup(self):
         """Limpieza antes de cerrar el módulo."""
@@ -2014,24 +2316,41 @@ class StatsModule(BaseModule):
                 logging.error(f"Error al cerrar la conexión DB: {e}")
 
     def ensure_widget_has_layout(self, widget, layout_type=QVBoxLayout):
-        """Asegura que un widget tenga un layout asignado, creándolo si es necesario."""
+        """Ensures a widget has a layout without creating duplicates."""
         if widget is None:
             logging.error("Widget es None en ensure_widget_has_layout")
             return None
         
         try:
-            # Si el widget no tiene layout, crearle uno
+            # Check if widget has a layout
             layout = widget.layout()
             if layout is None:
+                # Create a new layout if there isn't one
                 logging.info(f"Creando nuevo layout para widget {widget.objectName()}")
                 layout = layout_type(widget)
             else:
+                # Use existing layout but verify it's working
                 logging.info(f"Usando layout existente para widget {widget.objectName()}")
+                # Check that layout has essential methods
+                if not hasattr(layout, 'addWidget') or not callable(layout.addWidget):
+                    logging.warning(f"Layout existente no tiene método addWidget, creando uno nuevo")
+                    # Delete old layout
+                    while widget.layout().count():
+                        item = widget.layout().takeAt(0)
+                        widget = item.widget()
+                        if widget:
+                            widget.deleteLater()
+                    # Create new layout
+                    layout = layout_type(widget)
+            
             return layout
         except Exception as e:
             logging.error(f"Error en ensure_widget_has_layout: {e}")
-            return None
-
+            # Last resort - create a new layout
+            try:
+                return layout_type(widget)
+            except:
+                return None
 
     def get_layout_safely(self, widget):
         """
