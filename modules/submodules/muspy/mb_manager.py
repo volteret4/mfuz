@@ -1477,6 +1477,9 @@ class MusicBrainzManager:
         # Log authentication attempt
         self.logger.info("Started background authentication for MusicBrainz")
 
+   
+
+
     def handle_background_auth_result(self, success):
         """Handle the result of background authentication"""
         if success:
@@ -1493,9 +1496,6 @@ class MusicBrainzManager:
                     self.logger.error(f"Error pre-fetching collections: {e}")
         else:
             self.logger.warning("Background MusicBrainz authentication failed")
-
-
-
 
        
 

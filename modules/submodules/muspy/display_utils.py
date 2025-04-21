@@ -2,7 +2,8 @@
 import os
 import logging
 import datetime
-from PyQt6.QtWidgets import (QTableWidget, QTableWidgetItem, QLabel, QTextEdit, QPushButton,
+import requests
+from PyQt6.QtWidgets import (QTableWidget, QTableWidgetItem, QLabel, QTextEdit, QPushButton, QCheckBox,
                           QApplication, QStackedWidget, QWidget, QMenu, QHBoxLayout, QAbstractItemView)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QAction
@@ -11,13 +12,14 @@ from modules.submodules.muspy import lastfm_manager
 from modules.submodules.muspy.table_widgets import NumericTableWidgetItem, DateTableWidgetItem
 
 class DisplayManager:
-    def __init__(self, parent, spotify_manager=None, muspy_manager=None, utils=None, lastfm_manager=None):
+    def __init__(self, parent, spotify_manager=None, muspy_manager=None, utils=None, lastfm_manager=None, bluesky_manager=None):
         self.parent = parent
         self.logger = logging.getLogger(__name__)
         self.spotify_manager = spotify_manager
         self.muspy_manager = muspy_manager
         self.lastfm_manager = lastfm_manager
         self.utils = utils
+        self.bluesky_manager = bluesky_manager
     
     def show_text_page(self, html_content=None):
         """
@@ -999,8 +1001,6 @@ class DisplayManager:
         # Switch to the Spotify top items page
         stack_widget.setCurrentWidget(top_items_page)
      
-
-
     def display_bluesky_artists_in_table(self, artists):
         """
         Display Bluesky artists in the stacked widget table
@@ -1043,7 +1043,11 @@ class DisplayManager:
         if count_label:
             count_label.setText(f"Encontrados {len(artists)} artistas en Bluesky")
         
-        # Configure table - Ahora con MENOS columnas, ya que no mostramos los mensajes en la tabla
+        # Configure table - Asegurar que tenemos la columna de checkbox primero
+        table.setColumnCount(4)  # Reducido a 4 columnas: Checkbox, Artista, Handle, URL
+        headers = ["Seguir", "Artista", "Handle", "URL"]
+        table.setHorizontalHeaderLabels(headers)
+        
         table.setRowCount(len(artists))
         table.setSortingEnabled(False)  # Disable sorting while updating
         
@@ -1051,6 +1055,18 @@ class DisplayManager:
         image_label = bluesky_page.findChild(QLabel, "bluesky_selected_artist_foto")
         messages_text = bluesky_page.findChild(QTextEdit, "bluesky_selected_artist_mensajes")
         sidebar_panel = bluesky_page.findChild(QWidget, "bluesky_selected_artist_panel")
+        profile_panel = bluesky_page.findChild(QTextEdit, "bluesky_profile_panel")
+
+        # Find the follow button
+        follow_button = bluesky_page.findChild(QPushButton, "bluesky_follow")
+        if follow_button:
+            # Desconectar posibles conexiones anteriores
+            try:
+                follow_button.clicked.disconnect()
+            except:
+                pass
+            # Conectar a la nueva función de seguimiento masivo
+            follow_button.clicked.connect(lambda: self.bluesky_manager.follow_selected_bluesky_artists(table))
         
         # Hide sidebar panel initially
         if sidebar_panel:
@@ -1060,33 +1076,50 @@ class DisplayManager:
         if messages_text:
             messages_text.clear()
         
+        # Clear profile panel
+        if profile_panel:
+            profile_panel.clear()
+        
         # Store artists data for selection handling
         self._bluesky_artists = artists
         
         # Fill the table with data
         for i, artist in enumerate(artists):
-            # Artist name column
+            # Checkbox para seguir - creamos un widget contenedor con un checkbox (primera columna)
+            checkbox_widget = QWidget()
+            checkbox_layout = QHBoxLayout(checkbox_widget)
+            checkbox_layout.setContentsMargins(4, 4, 4, 4)
+            checkbox_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            
+            checkbox = QCheckBox()
+            checkbox.setChecked(False)  # Por defecto no está marcado
+            
+            # Almacenar los datos del artista en el checkbox
+            checkbox.setProperty("artist_data", {
+                'name': artist.get('name', ''),
+                'handle': artist.get('handle', ''),
+                'did': artist.get('did', ''),
+                'url': f"https://bsky.app/profile/{artist.get('handle', '')}",
+            })
+            
+            checkbox_layout.addWidget(checkbox)
+            table.setCellWidget(i, 0, checkbox_widget)
+            
+            # Artist name column (segunda columna)
             name_item = QTableWidgetItem(artist.get('name', 'Unknown'))
-            table.setItem(i, 0, name_item)
+            table.setItem(i, 1, name_item)
             
-            # Bluesky ID column (handle)
+            # Bluesky ID column (handle) (tercera columna)
             handle_item = QTableWidgetItem(artist.get('handle', ''))
-            table.setItem(i, 1, handle_item)
+            table.setItem(i, 2, handle_item)
             
-            # Bluesky URL column
+            # Bluesky URL column (cuarta columna)
             url = f"https://bsky.app/profile/{artist.get('handle', '')}"
             url_item = QTableWidgetItem(url)
-            table.setItem(i, 2, url_item)
-            
-            # Profile description
-            description = ""
-            if 'profile' in artist and isinstance(artist['profile'], dict):
-                description = artist['profile'].get('description', '')
-            desc_item = QTableWidgetItem(description)
-            table.setItem(i, 3, desc_item)
+            table.setItem(i, 3, url_item)
             
             # Store artist data in items for context menu and selection handling
-            for col in range(table.columnCount()):
+            for col in range(1, 4):  # Solo en las columnas de datos (no en la del checkbox)
                 if table.item(i, col):
                     artist_data = {
                         'name': artist.get('name', ''),
@@ -1128,6 +1161,167 @@ class DisplayManager:
         # Select first artist if available
         if len(artists) > 0:
             table.selectRow(0)
+
+
+
+    def handle_bluesky_artist_selection(self, table):
+        """
+        Handle selection of a Bluesky artist in the table
+        
+        Args:
+            table (QTableWidget): Table with selected artist
+        """
+        # Get the selected row
+        selected_rows = table.selectedIndexes()
+        if not selected_rows:
+            return
+        
+        # Get the row of the first selected item
+        row = selected_rows[0].row()
+        
+        # Get artist data from item in column 1 (name column), not column 0 (checkbox)
+        item = table.item(row, 1)
+        if not item:
+            return
+        
+        artist_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(artist_data, dict):
+            return
+        
+        # Find sidebar elements in the bluesky_page
+        bluesky_page = None
+        for i in range(self.parent.stackedWidget.count()):
+            widget = self.parent.stackedWidget.widget(i)
+            if widget.objectName() == "bluesky_page":
+                bluesky_page = widget
+                break
+        
+        if not bluesky_page:
+            return
+        
+        # Find all the required UI elements
+        image_label = bluesky_page.findChild(QLabel, "bluesky_selected_artist_foto")
+        messages_text = bluesky_page.findChild(QTextEdit, "bluesky_selected_artist_mensajes")
+        sidebar_panel = bluesky_page.findChild(QWidget, "bluesky_selected_artist_panel")
+        profile_panel = bluesky_page.findChild(QTextEdit, "bluesky_profile_panel")  # Ahora buscamos un QTextEdit
+
+        # Make sure panel is visible
+        if sidebar_panel:
+            sidebar_panel.setVisible(True)
+        
+        # Update profile panel if available
+        if profile_panel:
+            description = ""
+            if 'profile' in artist_data and isinstance(artist_data['profile'], dict):
+                description = artist_data['profile'].get('description', '')
+            
+            # Clear the profile panel and set the description
+            profile_panel.clear()
+            if description:
+                profile_panel.setPlainText(f"Perfil de {artist_data['name']}: \n\n {description}" if description else description)
+            else:
+                profile_panel.setPlainText("No hay descripción disponible")
+
+        # Update image if available
+        if image_label:
+            # Try to get the avatar URL from profile
+            avatar_url = None
+            if 'profile' in artist_data and isinstance(artist_data['profile'], dict):
+                avatar = artist_data['profile'].get('avatar')
+                if avatar:
+                    avatar_url = avatar
+            
+            if avatar_url:
+                # Download and display the image
+                self.load_image_for_label(image_label, avatar_url)
+            else:
+                # Clear image if no avatar available
+                image_label.clear()
+                image_label.setText("No image available")
+        
+        # Update messages panel
+        if messages_text:
+            messages_text.clear()
+            posts = artist_data.get('posts', [])
+            
+            if posts:
+                messages_text.setHtml("<h3>Recent Posts</h3>")
+                
+                for i, post in enumerate(posts):
+                    text = post.get('text', '')
+                    created_at = post.get('created_at', '')
+                    
+                    # Format date if available
+                    date_str = ""
+                    if created_at:
+                        try:
+                            # Convert ISO 8601 format to readable date
+                            from datetime import datetime
+                            date_obj = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                            date_str = date_obj.strftime("%Y-%m-%d %H:%M")
+                        except:
+                            date_str = created_at
+                    
+                    # Add formatted post to text edit
+                    messages_text.append(f"<p><b>{date_str}</b></p>")
+                    messages_text.append(f"<p>{text}</p>")
+                    
+                    # Add separator between posts
+                    if i < len(posts) - 1:
+                        messages_text.append("<hr>")
+            else:
+                messages_text.setPlainText("No recent posts available")
+
+
+
+    def load_image_for_label(self, label, url):                     # label de qtdesigner, no sello discografico
+        """
+        Load an image from URL and display it in a QLabel
+        
+        Args:
+            label (QLabel): Label to display the image in
+            url (str): URL of the image to load
+        """
+        try:
+            # Import Qt modules
+            from PyQt6.QtCore import QByteArray, QBuffer
+            from PyQt6.QtGui import QPixmap, QImage
+            
+            # Create request
+            response = requests.get(url)
+            
+            if response.status_code == 200:
+                # Load image data into QPixmap
+                img_data = QByteArray(response.content)
+                buffer = QBuffer(img_data)
+                buffer.open(QBuffer.OpenModeFlag.ReadOnly)
+                
+                # Load image
+                image = QImage()
+                image.load(buffer, "")
+                
+                # Create pixmap and scale to fit label while maintaining aspect ratio
+                pixmap = QPixmap.fromImage(image)
+                label_size = label.size()
+                scaled_pixmap = pixmap.scaled(
+                    label_size.width(), label_size.height(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                
+                # Set pixmap to label
+                label.setPixmap(scaled_pixmap)
+            else:
+                label.clear()
+                label.setText(f"Failed to load image: {response.status_code}")
+                
+        except Exception as e:
+            self.logger.error(f"Error loading image from {url}: {e}")
+            label.clear()
+            label.setText("Error loading image")
+
+
+# spotify
 
 
     def _display_spotify_artists_as_text(self, artists):
@@ -1335,6 +1529,75 @@ class DisplayManager:
         self.results_text.append("-" * 50)
 
    
+    def show_bluesky_context_menu(self, position):
+        """
+        Show context menu for Bluesky artists in the table
+        
+        Args:
+            position (QPoint): Position where the context menu was requested
+        """
+        table = self.parent.sender()
+        if not table:
+            return
+        
+        item = table.itemAt(position)
+        if not item:
+            return
+        
+        # Get the artist data from the item
+        artist_data = item.data(Qt.ItemDataRole.UserRole)
+        if not isinstance(artist_data, dict):
+            return
+        
+        name = artist_data.get('name', '')
+        handle = artist_data.get('handle', '')
+        did = artist_data.get('did', '')
+        url = artist_data.get('url', '')
+        
+        if not handle or not url:
+            return
+        
+        # Create context menu
+        menu = QMenu(self.parent)
+        
+        # Add actions
+        open_profile_action = QAction(f"Abrir perfil de {name} en Bluesky", self.parent)
+        open_profile_action.triggered.connect(lambda: self.utils.open_url(url))
+        menu.addAction(open_profile_action)
+        
+        # Add follow action if we have a DID and username
+        if did and self.bluesky_manager.bluesky_username:
+            follow_action = QAction(f"Seguir a {name} en Bluesky", self.parent)
+            follow_action.triggered.connect(lambda: self.bluesky_manager.follow_artist_on_bluesky(did, name))
+            menu.addAction(follow_action)
+        
+        copy_url_action = QAction("Copiar URL", self.parent)
+        copy_url_action.triggered.connect(lambda: self.utils.copy_to_clipboard(url))
+        menu.addAction(copy_url_action)
+        
+        copy_handle_action = QAction("Copiar handle", self.parent)
+        copy_handle_action.triggered.connect(lambda: self.utils.copy_to_clipboard(handle))
+        menu.addAction(copy_handle_action)
+        
+        # If we have artist name, add related actions
+        if name:
+            menu.addSeparator()
+            
+            # Add Muspy actions if configured
+            if hasattr(self, 'muspy_username') and self.muspy_username:
+                follow_muspy_action = QAction(f"Seguir a {name} en Muspy", self.parent)
+                follow_muspy_action.triggered.connect(lambda: self.muspy_manager.follow_artist_from_name(name))
+                menu.addAction(follow_muspy_action)
+            
+            # Add Spotify actions if enabled
+            if self.spotify_manager.spotify_enabled:
+                follow_spotify_action = QAction(f"Seguir a {name} en Spotify", self.parent)
+                follow_spotify_action.triggered.connect(lambda: self.spotify_manager.follow_artist_on_spotify_by_name(name))
+                menu.addAction(follow_spotify_action)
+        
+        # Show menu
+        menu.exec(table.mapToGlobal(position))
+
 
     def add_follow_button_to_results_page(self, artist_name):
         """
@@ -1766,3 +2029,6 @@ class DisplayManager:
     
     def set_lastfm_manager(self, lastfm_manager):
         self.lastfm_manager = lastfm_manager
+
+    def set_bluesky_manager(self, bluesky_manager):
+        self.bluesky_manager = bluesky_manager

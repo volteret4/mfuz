@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QProgressDial
 from PyQt6.QtCore import Qt, QThread
 from PyQt6.QtGui import QAction, QCursor
 #from modules.submodules.muspy import cache_manager
+from modules.submodules.muspy.progress_utils import AuthWorker
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import PROJECT_ROOT
@@ -28,7 +29,9 @@ class LastFMManager:
                 muspy_username=None,
                 muspy_manager=None,
                 display_manager=None,
-                cache_manager=None
+                progress_utils=None,
+                cache_manager=None,
+                musicbrainz_manager=None
                 ):
 
         self.parent = parent
@@ -47,6 +50,8 @@ class LastFMManager:
         self.muspy_manager = muspy_manager
         self.display_manager = display_manager
         self.cache_manager = cache_manager
+        self.progress_utils = progress_utils
+        self.musicbrainz_manager = musicbrainz_manager
 
         # Initialize LastFM auth if enabled
         if self.lastfm_enabled:
@@ -752,7 +757,7 @@ class LastFMManager:
         # Connect signals
         self.auth_thread.started.connect(self.auth_worker.authenticate)
         self.auth_worker.finished.connect(self.auth_thread.quit)
-        self.auth_worker.finished.connect(self.handle_background_auth_result)
+        self.auth_worker.finished.connect(self.musicbrainz_manager.handle_background_auth_result)
         
         # Clean up connections
         self.auth_thread.finished.connect(self.auth_worker.deleteLater)

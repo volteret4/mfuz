@@ -8,11 +8,7 @@ from pathlib import Path
 import subprocess
 import requests
 from PyQt6 import uic
-
-
-from modules.submodules.muspy import progress_utils
-from modules.submodules.muspy import cache_manager
-from modules.submodules.muspy import spotify_manager
+from modules.submodules.muspy import progress_utils, cache_manager, spotify_manager
 try:
     from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTextEdit, QPushButton, 
                                 QLabel, QLineEdit, QMessageBox, QApplication, QFileDialog, QTableWidget, 
@@ -43,6 +39,7 @@ from modules.submodules.muspy.mb_manager import MusicBrainzManager
 from modules.submodules.muspy.bluesky_manager import BlueskyManager
 
 from modules.submodules.muspy.utils import MuspyUtils
+from modules.submodules.muspy.twitter_manager import TwitterManager
 
 
 # Intentar importar módulos específicos que podrían no estar disponibles
@@ -164,6 +161,35 @@ class UICallback:
     def add_artist_to_muspy_silent(self, mbid, artist_name):
         return self.add_artist_to_muspy_silent(mbid, artist_name)
 
+
+class TwitterAuthWorker(QThread):
+    """Worker para autenticación de Twitter en segundo plano"""
+    auth_completed = pyqtSignal(bool)
+    
+    def __init__(self, twitter_auth=None):
+        """
+        Inicializa el worker de autenticación
+        
+        Args:
+            twitter_auth: Gestor de autenticación de Twitter
+        """
+        super().__init__()
+        self.twitter_auth = twitter_auth
+        
+    def run(self):
+        """Ejecuta la autenticación en segundo plano"""
+        if not self.twitter_auth:
+            self.auth_completed.emit(False)
+            return
+            
+        try:
+            result = self.twitter_auth.authenticate(silent=True)
+            self.auth_completed.emit(result)
+        except Exception as e:
+            self.logger.error(f"Error en worker de autenticación Twitter: {e}", exc_info=True)
+            self.auth_completed.emit(False)
+
+
 class MuspyArtistModule(BaseModule):
     def __init__(self, 
             muspy_username=None, 
@@ -182,6 +208,11 @@ class MuspyArtistModule(BaseModule):
             musicbrainz_username=None,
             musicbrainz_password=None,
             bluesky_username=None,
+            bluesky_password=None,
+            twitter_username=None,
+            twitter_client_id=None,
+            twitter_client_secret=None,
+            twitter_redirect_uri=None,
             parent=None, 
             db_path='music_database.db',
             theme='Tokyo Night', 
@@ -197,15 +228,30 @@ class MuspyArtistModule(BaseModule):
         self.log_types = self.log_config.get('log_types', ['ERROR', 'INFO'])
         
         # Basic properties
+
+        # Muspy
         self.muspy_username = muspy_username
         self.muspy_password = muspy_password
         self.muspy_api_key = muspy_api_key
         self.muspy_id = muspy_id
         self.muspy_base_url = "https://muspy.com/api/1"
         self.artists_file = artists_file
+        
+        # Rutas
         self.query_db_script_path = query_db_script_path
         self.db_path = db_path
+        
+        # Bluesky
         self.bluesky_username = bluesky_username
+        self.bluesky_password = bluesky_password
+
+        # Twitter
+        self.twitter_username = twitter_username
+        self.twitter_client_id = twitter_client_id
+        self.twitter_client_secret = twitter_client_secret
+        self.twitter_redirect_uri = twitter_redirect_uri
+        
+
         
         # Inicializar managers
         self.cache_manager = CacheManager(PROJECT_ROOT)
@@ -217,7 +263,8 @@ class MuspyArtistModule(BaseModule):
         self.musicbrainz_username = kwargs.get('musicbrainz_username', musicbrainz_username)
         self.musicbrainz_password = kwargs.get('musicbrainz_password', musicbrainz_password)
         self.musicbrainz_enabled = bool(self.musicbrainz_username and self.musicbrainz_password)
-        # Check global theme config for credentials if not already set
+        
+        # Check global theme config for credentials for mb if not already set
         global_config = kwargs.get('global_theme_config', {})
         if global_config:
             if not self.musicbrainz_username and 'musicbrainz_username' in global_config:
@@ -225,8 +272,21 @@ class MuspyArtistModule(BaseModule):
             if not self.musicbrainz_password and 'musicbrainz_password' in global_config:
                 self.musicbrainz_password = global_config['musicbrainz_password']
         
-
-
+        # Twitter credentials
+        global_config = kwargs.get('global_theme_config', {})
+        if global_config:
+            if not self.twitter_client_id and 'twitter_client_id' in global_config:
+                self.twitter_client_id = global_config['twitter_client_id']
+            if not self.twitter_client_secret and 'twitter_client_secret' in global_config:
+                self.twitter_client_secret = global_config['twitter_client_secret']
+            if not self.twitter_redirect_uri and 'twitter_redirect_uri' in global_config:
+                self.twitter_redirect_uri = global_config.get('twitter_redirect_uri', "http://localhost:8080/callback")
+        
+        # Actualizar estado de habilitación de Twitter
+        self.twitter_enabled = bool(self.twitter_client_id and self.twitter_client_secret)
+        self.logger.info(f"Twitter enabled: {self.twitter_enabled}")
+        if self.twitter_enabled:
+            self.logger.info(f"Twitter client ID: {self.twitter_client_id[:5]}... (truncated)")
 
         # Initialize LastFM credentials & manager
         self.lastfm_api_key = lastfm_api_key
@@ -310,7 +370,9 @@ class MuspyArtistModule(BaseModule):
             ui_callback=self.ui_callback,
             muspy_manager=self.muspy_manager,
             cache_manager=self.cache_manager,
-            display_manager=self.display_manager
+            display_manager=self.display_manager,
+            progress_utils=self.progress_utils,
+            musicbrainz_manager=self.musicbrainz_manager
         )
         
         self.spotify_manager = SpotifyManager(
@@ -331,19 +393,85 @@ class MuspyArtistModule(BaseModule):
             parent=self,
             project_root=PROJECT_ROOT,
             bluesky_username=self.bluesky_username,
+            bluesky_password=self.bluesky_password,
             ui_callback=self.ui_callback,
             spotify_manager = self.spotify_manager,
             lastfm_manager = self.lastfm_manager,
             musicbrainz_manager = self.musicbrainz_manager,
+            display_manager=self.display_manager,
             utils=self.utils
         )
+        self.twitter_manager = TwitterManager(
+            parent=self,
+            project_root=PROJECT_ROOT,
+            twitter_client_id=self.twitter_client_id,
+            twitter_client_secret=self.twitter_client_secret,
+            twitter_redirect_uri=self.twitter_redirect_uri,
+            ui_callback=self.ui_callback,
+            spotify_manager=self.spotify_manager,
+            lastfm_manager=self.lastfm_manager,
+            musicbrainz_manager=self.musicbrainz_manager,
+            utils=self.utils,
+            display_manager=self.display_manager,
+            cache_manager=self.cache_manager,
+            muspy_manager=self.muspy_manager
+        )
+
         self.display_manager.set_muspy_manager(self.muspy_manager)
         self.display_manager.set_spotify_manager(self.spotify_manager)
         self.display_manager.set_lastfm_manager(self.lastfm_manager)
+        self.display_manager.set_bluesky_manager(self.bluesky_manager)
 
         if hasattr(self, 'stackedWidget'):
             # Asegúrate de crear solo una instancia, almacenada en un atributo
             self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
+
+    def _start_background_twitter_auth(self):
+        """Inicia la autenticación de Twitter en segundo plano"""
+        if not self.twitter_auth:
+            self.logger.warning("No se puede iniciar la autenticación sin twitter_auth inicializado")
+            return
+            
+        try:
+            # Crear e iniciar worker de autenticación
+            from PyQt6.QtCore import QThread, pyqtSignal
+            
+            class TwitterAuthWorker(QThread):
+                """Worker para autenticación de Twitter en segundo plano"""
+                auth_completed = pyqtSignal(bool)
+                
+                def __init__(self, twitter_auth=None, logger=None):
+                    super().__init__()
+                    self.twitter_auth = twitter_auth
+                    self.logger = logger
+                    
+                def run(self):
+                    if not self.twitter_auth:
+                        self.auth_completed.emit(False)
+                        return
+                        
+                    try:
+                        result = self.twitter_auth.authenticate(silent=True)
+                        self.auth_completed.emit(result)
+                    except Exception as e:
+                        if self.logger:
+                            self.logger.error(f"Error en worker de autenticación Twitter: {e}", exc_info=True)
+                        self.auth_completed.emit(False)
+            
+            # Crear y conectar worker
+            self.twitter_auth_worker = TwitterAuthWorker(self.twitter_auth, self.logger)
+            self.twitter_auth_worker.auth_completed.connect(self._on_twitter_auth_completed)
+            self.twitter_auth_worker.start()
+            self.logger.info("Iniciada autenticación en segundo plano de Twitter")
+        except Exception as e:
+            self.logger.error(f"Error iniciando autenticación en segundo plano de Twitter: {e}", exc_info=True)
+
+    def _on_twitter_auth_completed(self, success):
+        """Maneja la finalización de la autenticación de Twitter"""
+        if success:
+            self.logger.info("Autenticación de Twitter completada con éxito")
+        else:
+            self.logger.warning("Autenticación de Twitter no completada")
 
 
 
@@ -405,7 +533,7 @@ class MuspyArtistModule(BaseModule):
                 self._setup_stacked_widget(respect_existing=True)
                 
                 # Add floating navigation to stacked widget
-                self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
+                #self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
                 
                 # Set initial welcome text
                 self.results_text.setHtml("""
@@ -578,7 +706,8 @@ class MuspyArtistModule(BaseModule):
         
         # Connect other action buttons
         self.get_new_releases_button.clicked.connect(lambda: self.get_new_releases(PROJECT_ROOT))
-        self.networks_artists_button.clicked.connect(self.show_bluesky_menu)  # Changed to show Bluesky menu
+        self.networks_artists_button.clicked.connect(self.show_networks_menu)
+
         
         # Enable context menu
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -609,6 +738,9 @@ class MuspyArtistModule(BaseModule):
         if hasattr(self, 'stackedWidget') and not hasattr(self, 'floating_nav'):
             self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
 
+
+
+
     def go_to_previous_page(self):
         """Navigate to the previous page in the stacked widget"""
         if hasattr(self, 'stackedWidget'):  # Cambiado de stacked_widget a stackedWidget
@@ -630,7 +762,7 @@ class MuspyArtistModule(BaseModule):
                 self.stackedWidget.setCurrentIndex(0)  # Cambiado de stacked_widget a stackedWidget
 
 
-# Manejadores de menús:
+# Manejadores de menús y contextuales:
 
 
     def show_load_menu(self):
@@ -792,66 +924,184 @@ class MuspyArtistModule(BaseModule):
         context_menu.exec(self.mapToGlobal(position))
 
 
-    def show_bluesky_menu(self):
+    def show_twitter_config_info(self):
         """
-        Display a menu with Bluesky integration options
+        Muestra información sobre cómo configurar Twitter
         """
-        # Check if Bluesky username is configured
-        if not self.bluesky_username:
-            # If no username, show a warning but still create the menu
-            # with options disabled
-            warning_shown = False
-            
-        # Create the menu
+        QMessageBox.information(
+            self,
+            "Configurar Twitter",
+            "Para habilitar la integración con Twitter, necesitas configurar las siguientes variables:\n\n"
+            "- twitter_client_id: ID de cliente de la API de Twitter\n"
+            "- twitter_client_secret: Secret de cliente de la API de Twitter\n"
+            "- twitter_redirect_uri: URI de redirección (opcional)\n\n"
+            "Puedes configurar estas variables en el archivo de configuración."
+        )
+
+
+
+
+
+    def show_networks_menu(self):
+        """
+        Muestra un menú con opciones de integración de redes sociales
+        """
+        # Crear menú
         menu = QMenu(self)
         
-        # Add original functionality
+        # Añadir funcionalidad original
         original_action = QAction("Obtener todos los lanzamientos", self)
         original_action.triggered.connect(self.get_all_my_releases)
         menu.addAction(original_action)
         
         menu.addSeparator()
         
-        # Add Bluesky menu options
-        db_action = QAction("Seguir artistas base de datos en Bluesky", self)
-        spotify_action = QAction("Seguir artistas Spotify en Bluesky", self)
-        lastfm_action = QAction("Seguir top artistas LastFM en Bluesky", self)
-        mb_action = QAction("Seguir artistas de colección de MusicBrainz en Bluesky", self)
-        
-        # Connect actions
-        db_action.triggered.connect(self.bluesky_manager.search_db_artists_on_bluesky)
-        spotify_action.triggered.connect(self.bluesky_manager.search_spotify_artists_on_bluesky)
-        lastfm_action.triggered.connect(self.bluesky_manager.show_lastfm_bluesky_dialog)
-        mb_action.triggered.connect(self.bluesky_manager.search_mb_collection_on_bluesky)
-        
-        # If no username, disable all Bluesky-related actions
-        if not self.bluesky_username:
-            db_action.setEnabled(False)
-            spotify_action.setEnabled(False)
-            lastfm_action.setEnabled(False)
-            mb_action.setEnabled(False)
+        # Opciones de menú para Twitter
+        if self.twitter_enabled:
+            twitter_menu = QMenu("Twitter / X", self)
             
-            # Add an action to configure Bluesky
-            config_action = QAction("Configurar usuario de Bluesky...", self)
+            # Submenú para sincronización de artistas con Twitter
+            sync_twitter_menu = QMenu("Sincronizar artistas con Twitter", self)
+            
+            # Opciones de sincronización
+            spotify_twitter_action = QAction("Sincronizar artistas de Spotify", self)
+            spotify_twitter_action.triggered.connect(self.twitter_manager.sync_spotify_artists_with_twitter)
+            sync_twitter_menu.addAction(spotify_twitter_action)
+            
+            # Modificación aquí para usar nuestra nueva función selección-sincronización
+            db_twitter_action = QAction("Seleccionar y sincronizar artistas de base de datos", self)
+            db_twitter_action.triggered.connect(lambda: self.twitter_manager.show_artist_selection_for_twitter())
+            sync_twitter_menu.addAction(db_twitter_action)
+            
+            mb_twitter_action = QAction("Sincronizar artistas de MusicBrainz", self)
+            mb_twitter_action.triggered.connect(self.twitter_manager.sync_mb_artists_with_twitter)
+            sync_twitter_menu.addAction(mb_twitter_action)
+            
+            lastfm_twitter_action = QAction("Sincronizar artistas de LastFM", self)
+            lastfm_twitter_action.triggered.connect(self.twitter_manager.show_lastfm_twitter_dialog)
+            sync_twitter_menu.addAction(lastfm_twitter_action)
+            
+            # Añadir submenú de sincronización a menú de Twitter
+            twitter_menu.addMenu(sync_twitter_menu)
+            
+            # Otras opciones de Twitter
+            twitter_users_action = QAction("Mostrar usuarios seguidos", self)
+            twitter_users_action.triggered.connect(self.twitter_manager.show_twitter_followed_users)
+            twitter_menu.addAction(twitter_users_action)
+            
+            twitter_search_action = QAction("Buscar usuarios", self)
+            twitter_search_action.triggered.connect(self.twitter_manager.show_twitter_search_dialog)
+            twitter_menu.addAction(twitter_search_action)
+            
+            twitter_tweets_action = QAction("Ver tweets recientes de artistas", self)
+            twitter_tweets_action.triggered.connect(self.twitter_manager.show_twitter_artist_tweets)
+            twitter_menu.addAction(twitter_tweets_action)
+            
+            # Añadir menú de Twitter al menú principal
+            menu.addMenu(twitter_menu)
+        else:
+            # Añadir opción deshabilitada de Twitter con información de configuración
+            twitter_config_action = QAction("Configurar Twitter...", self)
+            twitter_config_action.triggered.connect(self.show_twitter_config_info)
+            menu.addAction(twitter_config_action)
+        
+        # Opciones de menú para Bluesky
+        if self.bluesky_username:
+            bluesky_menu = QMenu("Bluesky", self)
+            
+            db_action = QAction("Seguir artistas base de datos en Bluesky", self)
+            spotify_action = QAction("Seguir artistas Spotify en Bluesky", self)
+            lastfm_action = QAction("Seguir top artistas LastFM en Bluesky", self)
+            mb_action = QAction("Seguir artistas de colección de MusicBrainz en Bluesky", self)
+            
+            # Conectar acciones
+            db_action.triggered.connect(self.bluesky_manager.search_db_artists_on_bluesky)
+            spotify_action.triggered.connect(self.bluesky_manager.search_spotify_artists_on_bluesky)
+            lastfm_action.triggered.connect(self.bluesky_manager.show_lastfm_bluesky_dialog)
+            mb_action.triggered.connect(self.bluesky_manager.search_mb_collection_on_bluesky)
+            
+            bluesky_menu.addAction(db_action)
+            bluesky_menu.addAction(spotify_action)
+            bluesky_menu.addAction(lastfm_action)
+            bluesky_menu.addAction(mb_action)
+            
+            menu.addMenu(bluesky_menu)
+        else:
+            # Añadir opción para configurar Bluesky
+            config_action = QAction("Configurar Bluesky...", self)
             config_action.triggered.connect(self.bluesky_manager.configure_bluesky_username)
             menu.addAction(config_action)
         
-        # Add actions to menu
-        menu.addAction(db_action)
-        menu.addAction(spotify_action)
-        menu.addAction(lastfm_action)
-        menu.addAction(mb_action)
-        
-        # Get button position
+        # Obtener posición del botón
         pos = self.networks_artists_button.mapToGlobal(QPoint(0, self.networks_artists_button.height()))
         
-        # Show menu
+        # Mostrar menú
         menu.exec(pos)
+
+
+
+
+
+    # def show_bluesky_menu(self):
+    #     """
+    #     Display a menu with Bluesky integration options
+    #     """
+    #     # Check if Bluesky username is configured
+    #     if not self.bluesky_username:
+    #         # If no username, show a warning but still create the menu
+    #         # with options disabled
+    #         warning_shown = False
+            
+    #     # Create the menu
+    #     menu = QMenu(self)
         
-        # Show warning after menu is closed if needed
-        if not self.bluesky_username and not warning_shown:
-            QMessageBox.warning(self, "Bluesky no configurado", 
-                            "No hay usuario de Bluesky configurado. Algunas funciones no estarán disponibles.")
+    #     # Add original functionality
+    #     original_action = QAction("Obtener todos los lanzamientos", self)
+    #     original_action.triggered.connect(self.get_all_my_releases)
+    #     menu.addAction(original_action)
+        
+    #     menu.addSeparator()
+        
+    #     # Add Bluesky menu options
+    #     db_action = QAction("Seguir artistas base de datos en Bluesky", self)
+    #     spotify_action = QAction("Seguir artistas Spotify en Bluesky", self)
+    #     lastfm_action = QAction("Seguir top artistas LastFM en Bluesky", self)
+    #     mb_action = QAction("Seguir artistas de colección de MusicBrainz en Bluesky", self)
+        
+    #     # Connect actions
+    #     db_action.triggered.connect(self.bluesky_manager.search_db_artists_on_bluesky)
+    #     spotify_action.triggered.connect(self.bluesky_manager.search_spotify_artists_on_bluesky)
+    #     lastfm_action.triggered.connect(self.bluesky_manager.show_lastfm_bluesky_dialog)
+    #     mb_action.triggered.connect(self.bluesky_manager.search_mb_collection_on_bluesky)
+        
+    #     # If no username, disable all Bluesky-related actions
+    #     if not self.bluesky_username:
+    #         db_action.setEnabled(False)
+    #         spotify_action.setEnabled(False)
+    #         lastfm_action.setEnabled(False)
+    #         mb_action.setEnabled(False)
+            
+    #         # Add an action to configure Bluesky
+    #         config_action = QAction("Configurar usuario de Bluesky...", self)
+    #         config_action.triggered.connect(self.bluesky_manager.configure_bluesky_username)
+    #         menu.addAction(config_action)
+        
+    #     # Add actions to menu
+    #     menu.addAction(db_action)
+    #     menu.addAction(spotify_action)
+    #     menu.addAction(lastfm_action)
+    #     menu.addAction(mb_action)
+        
+    #     # Get button position
+    #     pos = self.networks_artists_button.mapToGlobal(QPoint(0, self.networks_artists_button.height()))
+        
+    #     # Show menu
+    #     menu.exec(pos)
+        
+    #     # Show warning after menu is closed if needed
+    #     if not self.bluesky_username and not warning_shown:
+    #         QMessageBox.warning(self, "Bluesky no configurado", 
+    #                         "No hay usuario de Bluesky configurado. Algunas funciones no estarán disponibles.")
 
 
     def show_musicbrainz_collection_menu(self):
@@ -1191,6 +1441,55 @@ class MuspyArtistModule(BaseModule):
             
             # Search for LastFM artists on Bluesky
             self.search_lastfm_artists_on_bluesky(period, count)
+
+
+    def show_twitter_menu(self):
+        """
+        Muestra un menú con opciones de Twitter cuando se hace clic en el botón de Twitter
+        """
+        if not self.twitter_enabled:
+            QMessageBox.warning(self, "Error", "Las credenciales de Twitter no están configuradas")
+            return
+        
+        # Crear menú
+        menu = QMenu(self)
+        
+        # Añadir opciones de menú
+        show_users_action = QAction("Mostrar usuarios seguidos", self)
+        show_search_action = QAction("Buscar usuarios", self)
+        show_tweets_action = QAction("Ver tweets recientes de artistas", self)
+        
+        # Conectar acciones a sus respectivas funciones
+        show_users_action.triggered.connect(self.twitter_manager.show_twitter_followed_users)
+        show_search_action.triggered.connect(self.twitter_manager.show_twitter_search_dialog)
+        show_tweets_action.triggered.connect(self.twitter_manager.show_twitter_artist_tweets)
+        
+        # Añadir acciones al menú
+        menu.addAction(show_users_action)
+        menu.addAction(show_search_action)
+        menu.addAction(show_tweets_action)
+        
+        # Añadir separador y opciones extra
+        menu.addSeparator()
+        
+        sync_action = QAction("Sincronizar artistas con Twitter", self)
+        sync_action.triggered.connect(self.twitter_manager.sync_artists_with_twitter)
+        menu.addAction(sync_action)
+        
+        # Añadir separador y opción de gestión de caché
+        menu.addSeparator()
+        clear_cache_action = QAction("Limpiar caché de Twitter", self)
+        clear_cache_action.triggered.connect(self.twitter_manager.clear_twitter_cache)
+        menu.addAction(clear_cache_action)
+        
+        # Obtener la posición del botón (asumiendo que existe un botón de Twitter)
+        if hasattr(self, 'twitter_button'):
+            pos = self.twitter_button.mapToGlobal(QPoint(0, self.twitter_button.height()))
+            menu.exec(pos)
+        else:
+            # Si no hay botón específico, mostrar en la posición actual del cursor
+            menu.exec(QCursor.pos())
+
 
 
 # Métodos de contexto de tabla:
@@ -3831,7 +4130,7 @@ class MuspyArtistModule(BaseModule):
 
 
     def _start_background_auth(self):
-        """Start background authentication for both MusicBrainz and LastFM managers"""
+        """Start background authentication for MusicBrainz, LastFM and Twitter managers"""
         # Start MusicBrainz authentication if credentials are available
         if hasattr(self, 'musicbrainz_manager') and self.musicbrainz_enabled:
             self.logger.info("Iniciando autenticación en segundo plano con MusicBrainz...")
@@ -3847,9 +4146,58 @@ class MuspyArtistModule(BaseModule):
                 self.lastfm_manager._start_background_auth()
             except Exception as e:
                 self.logger.error(f"Error iniciando autenticación de LastFM: {e}", exc_info=True)
+        
+        # Start Twitter authentication if credentials are available
+        if hasattr(self, 'twitter_manager') and self.twitter_manager.twitter_enabled:
+            self.logger.info("Iniciando autenticación en segundo plano con Twitter...")
+            try:
+                # Create and start auth worker
+                from PyQt6.QtCore import QThread, pyqtSignal
+                
+                class TwitterAuthWorker(QThread):
+                    """Worker for Twitter background authentication"""
+                    auth_completed = pyqtSignal(bool)
+                    
+                    def __init__(self, twitter_auth=None, logger=None):
+                        super().__init__()
+                        self.twitter_auth = twitter_auth
+                        self.logger = logger
+                        
+                    def run(self):
+                        if not self.twitter_auth:
+                            self.auth_completed.emit(False)
+                            return
+                            
+                        try:
+                            result = self.twitter_auth.authenticate(silent=True)
+                            self.auth_completed.emit(result)
+                        except Exception as e:
+                            if self.logger:
+                                self.logger.error(f"Error en worker de autenticación Twitter: {e}", exc_info=True)
+                            self.auth_completed.emit(False)
+                
+                # Create and connect worker
+                self.twitter_auth_worker = TwitterAuthWorker(
+                    self.twitter_manager.twitter_auth, 
+                    self.logger
+                )
+                self.twitter_auth_worker.auth_completed.connect(self._on_twitter_auth_completed)
+                self.twitter_auth_worker.start()
+                
+            except Exception as e:
+                self.logger.error(f"Error iniciando autenticación de Twitter: {e}", exc_info=True)
+
+    def _on_twitter_auth_completed(self, success):
+        """Handle Twitter authentication completion"""
+        if success:
+            self.logger.info("Autenticación de Twitter completada con éxito")
+        else:
+            self.logger.info("Autenticación silenciosa de Twitter no completada")
 
 
-
+    def set_twitter_manager(self, twitter_manager):
+        """Establece el gestor de Twitter"""
+        self.twitter_manager = twitter_manager
 
 # MAIN
 

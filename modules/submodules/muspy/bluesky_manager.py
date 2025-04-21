@@ -3,35 +3,43 @@ import os
 import json
 import requests
 import logging
+import datetime
+from PyQt6 import uic
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
                           QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
                           QDialogButtonBox, QComboBox, QProgressDialog,
-                          QApplication, QMenu, QSpinBox)
+                          QApplication, QMenu, QSpinBox, QCheckBox)
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
 from base_module import PROJECT_ROOT
 
 class BlueskyManager:
     def __init__(self, 
-                parent, 
-                project_root, 
-                bluesky_username=None, 
-                ui_callback=None, 
-                spotify_manager=None, 
-                lastfm_manager=None, 
-                musicbrainz_manager=None,
-                utils=None
-                ):
+                    parent, 
+                    project_root, 
+                    bluesky_username=None,
+                    bluesky_password=None, 
+                    ui_callback=None, 
+                    spotify_manager=None, 
+                    lastfm_manager=None, 
+                    musicbrainz_manager=None,
+                    display_manager=None,
+                    utils=None
+                    ):
         self.parent = parent
         self.project_root = project_root
         self.bluesky_username = bluesky_username
+        self.bluesky_password = bluesky_password
         self.logger = logging.getLogger(__name__)
         self.bluesky_manager = None
         self.ui_callback = ui_callback
         self.spotify_manager = spotify_manager
         self.lastfm_manager = lastfm_manager
         self.musicbrainz_manager = musicbrainz_manager
+        self.display_manager = display_manager
         self.utils = utils
+        self._auth_token = None
+        self._auth_refresh_token = None
 
     def _init_bluesky_manager(self):
         """
@@ -49,37 +57,243 @@ class BlueskyManager:
 
     def configure_bluesky_username(self):
         """
-        Show dialog to configure Bluesky username
+        Show dialog to configure Bluesky username and password
         """
-        # Get current username or empty string
-        current_username = self.bluesky_username or ""
+        # Create dialog
+        dialog = QDialog(self.parent)
+        dialog.setWindowTitle("Configurar Bluesky")
+        dialog.setMinimumWidth(400)
         
-        # Show input dialog
-        username, ok = QInputDialog.getText(
-            self,
-            "Configurar Bluesky",
-            "Introduzca su nombre de usuario de Bluesky:",
-            QLineEdit.EchoMode.Normal,
-            current_username
+        # Create layout
+        layout = QVBoxLayout(dialog)
+        
+        # Username field
+        username_layout = QHBoxLayout()
+        username_label = QLabel("Nombre de usuario:")
+        username_input = QLineEdit()
+        if self.bluesky_username:
+            username_input.setText(self.bluesky_username)
+        username_layout.addWidget(username_label)
+        username_layout.addWidget(username_input)
+        layout.addLayout(username_layout)
+        
+        # Password field
+        password_layout = QHBoxLayout()
+        password_label = QLabel("Contraseña de App:")
+        password_input = QLineEdit()
+        password_input.setEchoMode(QLineEdit.EchoMode.Password)
+        if self.bluesky_password:
+            password_input.setText(self.bluesky_password)
+        password_layout.addWidget(password_label)
+        password_layout.addWidget(password_input)
+        layout.addLayout(password_layout)
+        
+        # Help text with more detailed instructions
+        help_label = QLabel(
+            "<b>Instrucciones:</b><br>"
+            "1. Para el nombre de usuario, puedes usar:<br>"
+            "   - Solo tu nombre (ej: usuario)<br>"
+            "   - Tu nombre completo (ej: usuario.bsky.social)<br>"
+            "   - Con @ (ej: @usuario)<br>"
+            "2. Para la contraseña, debes usar una 'App Password':<br>"
+            "   - Ve a Configuración > App Passwords en Bluesky<br>"
+            "   - Crea una nueva contraseña para esta aplicación<br>"
+            "   - Copia y pega la contraseña aquí<br>"
+            "3. <b>NO</b> uses tu contraseña normal de Bluesky"
         )
+        help_label.setWordWrap(True)
+        layout.addWidget(help_label)
         
-        if ok and username:
+        # Error label (initially hidden)
+        error_label = QLabel("")
+        error_label.setStyleSheet("color: red;")
+        error_label.setWordWrap(True)
+        error_label.setVisible(False)
+        layout.addWidget(error_label)
+        
+        # Buttons
+        button_layout = QHBoxLayout()
+        test_button = QPushButton("Probar Conexión")
+        button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        button_layout.addWidget(test_button)
+        button_layout.addWidget(button_box)
+        layout.addLayout(button_layout)
+        
+        # Function to test connection
+        def test_connection():
+            username = username_input.text().strip()
+            password = password_input.text().strip()
+            
+            if not username or not password:
+                error_label.setText("El nombre de usuario y la contraseña son obligatorios")
+                error_label.setVisible(True)
+                return
+            
+            # Normalize username format
+            if not '@' in username and not '.' in username:
+                username = f"{username}.bsky.social"
+            elif not '.' in username and username.startswith('@'):
+                username = f"{username[1:]}.bsky.social"
+            
+            # Test authentication
+            url = "https://bsky.social/xrpc/com.atproto.server.createSession"
+            payload = {
+                "identifier": username,
+                "password": password
+            }
+            headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "MuspyModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            try:
+                error_label.setText("Probando conexión...")
+                error_label.setVisible(True)
+                QApplication.processEvents()
+                
+                response = requests.post(url, json=payload, headers=headers)
+                
+                if response.status_code == 200:
+                    error_label.setStyleSheet("color: green;")
+                    error_label.setText("¡Conexión exitosa! Credenciales verificadas.")
+                else:
+                    try:
+                        error_data = response.json()
+                        error_msg = error_data.get('message', 'Error desconocido')
+                        error_label.setText(f"Error: {error_msg}")
+                    except:
+                        error_label.setText(f"Error: Código {response.status_code}")
+                    error_label.setStyleSheet("color: red;")
+            except Exception as e:
+                error_label.setText(f"Error de conexión: {str(e)}")
+                error_label.setStyleSheet("color: red;")
+        
+        # Connect signals
+        test_button.clicked.connect(test_connection)
+        button_box.accepted.connect(dialog.accept)
+        button_box.rejected.connect(dialog.reject)
+        
+        # Show dialog
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            # Get values
+            username = username_input.text().strip()
+            password = password_input.text().strip()
+            
+            if not username or not password:
+                QMessageBox.warning(self.parent, "Error", "El nombre de usuario y la contraseña son obligatorios")
+                return False
+            
             # Normalize the username
-            username = username.strip().lower()
+            if not '@' in username and not '.' in username:
+                username = f"{username}.bsky.social"
+            elif not '.' in username and username.startswith('@'):
+                username = f"{username[1:]}.bsky.social"
             
-            # Remove .bsky.social if present (will be added when needed)
-            if username.endswith('.bsky.social'):
-                username = username.replace('.bsky.social', '')
-            
-            # Save the username
+            # Save the credentials
             self.bluesky_username = username
+            self.bluesky_password = password
             
-            # Reinitialize Bluesky manager if it exists
-            if hasattr(self, 'bluesky_manager'):
-                self.username = username
+            # Clear existing auth token
+            self._auth_token = None
             
             QMessageBox.information(self.parent, "Bluesky Configurado", 
-                                f"Usuario de Bluesky configurado como: {username}")
+                f"Usuario de Bluesky configurado como: {username}")
+            
+            return True
+        
+        return False
+
+
+    def authenticate_bluesky(self):
+        """
+        Authenticate with Bluesky and get access token
+        
+        Returns:
+            bool: True if authentication was successful, False otherwise
+        """
+        if not self.bluesky_username or not self.bluesky_password:
+            self.logger.warning("Faltan credenciales de Bluesky")
+            return False
+        
+        try:
+            # Construct auth URL
+            url = "https://bsky.social/xrpc/com.atproto.server.createSession"
+            
+            # Ensure the username has the correct format
+            # If it doesn't include .bsky.social and it doesn't have an @ prefix, add it
+            identifier = self.bluesky_username
+            if not '@' in identifier and not '.' in identifier:
+                identifier = f"{identifier}.bsky.social"
+            elif not '.' in identifier and identifier.startswith('@'):
+                identifier = f"{identifier[1:]}.bsky.social"
+            
+            self.logger.debug(f"Attempting Bluesky authentication with identifier: {identifier}")
+            
+            # Prepare payload
+            payload = {
+                "identifier": identifier,
+                "password": self.bluesky_password
+            }
+            
+            # Set headers
+            headers = {
+                "Content-Type": "application/json",
+                "User-Agent": "MuspyModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            # Make request
+            response = requests.post(url, json=payload, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                self._auth_token = data.get("accessJwt")
+                self._auth_refresh_token = data.get("refreshJwt")
+                self.logger.info("Autenticación con Bluesky exitosa")
+                return True
+            else:
+                # Log detailed error information
+                error_message = f"Error de autenticación con Bluesky: {response.status_code}"
+                try:
+                    error_data = response.json()
+                    error_message += f" - {error_data.get('message', response.text)}"
+                    self.logger.error(error_message)
+                    # Show error to user
+                    if hasattr(self, 'parent') and self.parent:
+                        QMessageBox.warning(self.parent, "Error de Autenticación", 
+                                        f"No se pudo autenticar: {error_data.get('message', 'Error desconocido')}")
+                except:
+                    self.logger.error(f"{error_message} - {response.text}")
+                    if hasattr(self, 'parent') and self.parent:
+                        QMessageBox.warning(self.parent, "Error de Autenticación", 
+                                        f"No se pudo autenticar. Código: {response.status_code}")
+                return False
+        
+        except Exception as e:
+            self.logger.error(f"Error en autenticación con Bluesky: {e}", exc_info=True)
+            if hasattr(self, 'parent') and self.parent:
+                QMessageBox.warning(self.parent, "Error de Conexión", 
+                                f"Error conectando con Bluesky: {str(e)}")
+            return False
+
+    def get_auth_headers(self):
+        """
+        Get authentication headers for Bluesky API requests
+        
+        Returns:
+            dict: Headers with authentication token if available
+        """
+        headers = {
+            "User-Agent": "MuspyModule/1.0",
+            "Accept": "application/json"
+        }
+        
+        # Add auth token if available
+        if self._auth_token:
+            headers["Authorization"] = f"Bearer {self._auth_token}"
+        
+        return headers
 
 
 
@@ -206,7 +420,7 @@ class BlueskyManager:
                 return
             
             # Display artists in the stacked widget table
-            self.display_bluesky_artists_in_table(artists)
+            self.display_manager.display_bluesky_artists_in_table(artists)
         else:
             error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
             self.ui_callback.append(f"Error: {error_msg}")
@@ -218,6 +432,16 @@ class BlueskyManager:
         """
         # Initialize Bluesky manager
         self._init_bluesky_manager()
+        
+        # Ensure we have credentials
+        if not self.bluesky_username:
+            if not self.configure_bluesky_username():
+                return
+        
+        # Try authentication if needed
+        if not self._auth_token and not self.authenticate_bluesky():
+            self.ui_callback.append("Error de autenticación con Bluesky. Verifique sus credenciales.")
+            return
         
         # Make sure we're showing the text page during loading
         self.parent.show_text_page()
@@ -305,7 +529,7 @@ class BlueskyManager:
                 return
             
             # Display artists in the stacked widget table
-            self.display_bluesky_artists_in_table(artists)
+            self.display_manager.display_bluesky_artists_in_table(artists)
         else:
             error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
             self.ui_callback.append(f"Error: {error_msg}")
@@ -319,12 +543,53 @@ class BlueskyManager:
             QMessageBox.warning(self.parent, "Error", "LastFM no está configurado")
             return
         
-        # Create dialog
+        # Intentar cargar desde archivo UI primero
+        ui_file_path = os.path.join(self.project_root, "ui", "muspy", "lastfm_bluesky_dialog.ui")
         dialog = QDialog(self.parent)
         dialog.setWindowTitle("Buscar Top Artistas de LastFM en Bluesky")
+        
+        # Cargar UI si existe, sino crear manualmente
+        if os.path.exists(ui_file_path):
+            try:
+                uic.loadUi(ui_file_path, dialog)
+                # Asegurar las conexiones de botones
+                dialog.buttonBox.accepted.connect(dialog.accept)
+                dialog.buttonBox.rejected.connect(dialog.reject)
+            except Exception as e:
+                self.logger.error(f"Error loading UI: {e}")
+                self._create_fallback_lastfm_dialog(dialog)
+        else:
+            self._create_fallback_lastfm_dialog(dialog)
+        
+        # Usar open() en vez de exec() para no bloquear
+        if not hasattr(self, '_dialog_ref'):
+            self._dialog_ref = []
+        self._dialog_ref.append(dialog)
+        
+        # Conectar señal para procesar la selección
+        dialog.accepted.connect(lambda: self._process_lastfm_dialog_selection(dialog))
+        
+        # Mostrar de forma no bloqueante
+        dialog.open()
+
+    def _process_lastfm_dialog_selection(self, dialog):
+        """Procesa la selección del diálogo de LastFM Bluesky"""
+        # Obtener los valores seleccionados
+        period = dialog.period_combo.currentData()
+        count = dialog.count_spin.value()
+        
+        # Buscar artistas de LastFM en Bluesky
+        self.search_lastfm_artists_on_bluesky(period, count)
+        
+        # Limpiar referencia
+        if hasattr(self, '_dialog_ref') and dialog in self._dialog_ref:
+            self._dialog_ref.remove(dialog)
+
+    def _create_fallback_lastfm_dialog(self, dialog):
+        """Crea un diálogo de fallback si no se puede cargar el UI"""
         dialog.setMinimumWidth(350)
         
-        # Create layout
+        # Crear layout
         layout = QVBoxLayout(dialog)
         
         # Period selection
@@ -346,7 +611,7 @@ class BlueskyManager:
         count_layout = QHBoxLayout()
         count_label = QLabel("Número de artistas:")
         count_spin = QSpinBox()
-        count_spin.setRange(5, 200)
+        count_spin.setRange(5, 5000)
         count_spin.setValue(50)
         count_spin.setSingleStep(5)
         count_layout.addWidget(count_label)
@@ -359,15 +624,10 @@ class BlueskyManager:
         button_box.rejected.connect(dialog.reject)
         layout.addWidget(button_box)
         
-        # Show dialog
-        if dialog.exec() == QDialog.DialogCode.Accepted:
-            # Get selected values
-            period = period_combo.currentData()
-            count = count_spin.value()
-            
-            # Search for LastFM artists on Bluesky
-            self.search_lastfm_artists_on_bluesky(period, count)
-
+        # Guardar referencias para acceder después
+        dialog.period_combo = period_combo
+        dialog.count_spin = count_spin
+        dialog.buttonBox = button_box
 
     def search_lastfm_artists_on_bluesky(self, period, count):
         """
@@ -391,10 +651,11 @@ class BlueskyManager:
         QApplication.processEvents()
         
         # Define function for progress dialog
-        def search_lastfm_artists_on_bluesky(update_progress):
+        def search_lastfm_artists_on_bluesky_worker(progress_callback, status_callback, **kwargs):
             try:
                 # First get top artists from LastFM
-                update_progress(0, 100, "Obteniendo top artistas de LastFM...")
+                progress_callback(0)
+                status_callback("Obteniendo top artistas de LastFM...")
                 
                 top_artists = self.lastfm_manager.get_lastfm_top_artists_direct(count, period)
                 
@@ -405,18 +666,16 @@ class BlueskyManager:
                 found_artists = []
                 total_artists = len(top_artists)
                 
-                update_progress(20, 100, f"Buscando {total_artists} artistas en Bluesky...")
+                progress_callback(20)
+                status_callback(f"Buscando {total_artists} artistas en Bluesky...")
                 
                 for i, artist in enumerate(top_artists):
                     artist_name = artist.get('name', '')
                     
                     # Update progress (scale from 20-95%)
                     progress_value = 20 + int((i / total_artists) * 75)
-                    update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
-                    
-                    # Check if user canceled
-                    if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
-                        return {"success": False, "message": "Búsqueda cancelada por el usuario"}
+                    progress_callback(progress_value)
+                    status_callback(f"Buscando {artist_name} ({i+1}/{total_artists})...")
                     
                     # Search for artist on Bluesky
                     user_info = self.check_bluesky_user(artist_name)
@@ -438,7 +697,8 @@ class BlueskyManager:
                         
                         found_artists.append(artist_entry)
                 
-                update_progress(100, 100, "Búsqueda completada")
+                progress_callback(100)
+                status_callback("Búsqueda completada")
                 
                 return {
                     "success": True,
@@ -452,7 +712,7 @@ class BlueskyManager:
         
         # Execute with progress dialog
         result = self.parent.show_progress_operation(
-            search_lastfm_artists_on_bluesky,
+            search_lastfm_artists_on_bluesky_worker,
             title="Buscando Artistas de LastFM en Bluesky",
             label_format="{status}"
         )
@@ -467,11 +727,10 @@ class BlueskyManager:
                 return
             
             # Display artists in the stacked widget table
-            self.display_bluesky_artists_in_table(artists)
+            self.display_manager.display_bluesky_artists_in_table(artists)
         else:
             error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
             self.ui_callback.append(f"Error: {error_msg}")
-
 
     def search_mb_collection_on_bluesky(self):
         """
@@ -612,256 +871,197 @@ class BlueskyManager:
                 return
             
             # Display artists in the stacked widget table
-            self.display_bluesky_artists_in_table(artists)
+            self.display_manager.display_bluesky_artists_in_table(artists)
         else:
             error_msg = result.get("message", "Error desconocido") if result else "Operación cancelada"
             self.ui_callback.append(f"Error: {error_msg}")
 
 
-
-
-    def handle_bluesky_artist_selection(self, table):
-        """
-        Handle selection of a Bluesky artist in the table
-        
-        Args:
-            table (QTableWidget): Table with selected artist
-        """
-        # Get the selected row
-        selected_rows = table.selectedIndexes()
-        if not selected_rows:
-            return
-        
-        # Get the row of the first selected item
-        row = selected_rows[0].row()
-        
-        # Get artist data from the first column
-        item = table.item(row, 0)
-        if not item:
-            return
-        
-        artist_data = item.data(Qt.ItemDataRole.UserRole)
-        if not isinstance(artist_data, dict):
-            return
-        
-        # Find sidebar elements in the bluesky_page
-        bluesky_page = None
-        for i in range(self.stackedWidget.count()):
-            widget = self.stackedWidget.widget(i)
-            if widget.objectName() == "bluesky_page":
-                bluesky_page = widget
-                break
-        
-        if not bluesky_page:
-            return
-        
-        image_label = bluesky_page.findChild(QLabel, "bluesky_selected_artist_foto")
-        messages_text = bluesky_page.findChild(QTextEdit, "bluesky_selected_artist_mensajes")
-        sidebar_panel = bluesky_page.findChild(QWidget, "bluesky_selected_artist_panel")
-        
-        # Make sure panel is visible
-        if sidebar_panel:
-            sidebar_panel.setVisible(True)
-        
-        # Update image if available
-        if image_label:
-            # Try to get the avatar URL from profile
-            avatar_url = None
-            if 'profile' in artist_data and isinstance(artist_data['profile'], dict):
-                avatar = artist_data['profile'].get('avatar')
-                if avatar:
-                    avatar_url = avatar
-            
-            if avatar_url:
-                # Download and display the image
-                self.load_image_for_label(image_label, avatar_url)
-            else:
-                # Clear image if no avatar available
-                image_label.clear()
-                image_label.setText("No image available")
-        
-        # Update messages panel
-        if messages_text:
-            messages_text.clear()
-            posts = artist_data.get('posts', [])
-            
-            if posts:
-                messages_text.setHtml("<h3>Recent Posts</h3>")
-                
-                for i, post in enumerate(posts):
-                    text = post.get('text', '')
-                    created_at = post.get('created_at', '')
-                    
-                    # Format date if available
-                    date_str = ""
-                    if created_at:
-                        try:
-                            # Convert ISO 8601 format to readable date
-                            from datetime import datetime
-                            date_obj = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
-                            date_str = date_obj.strftime("%Y-%m-%d %H:%M")
-                        except:
-                            date_str = created_at
-                    
-                    # Add formatted post to text edit
-                    messages_text.append(f"<p><b>{date_str}</b></p>")
-                    messages_text.append(f"<p>{text}</p>")
-                    
-                    # Add separator between posts
-                    if i < len(posts) - 1:
-                        messages_text.append("<hr>")
-            else:
-                messages_text.setPlainText("No recent posts available")
-
-
-
-    def load_image_for_label(self, label, url):
-        """
-        Load an image from URL and display it in a QLabel
-        
-        Args:
-            label (QLabel): Label to display the image in
-            url (str): URL of the image to load
-        """
-        try:
-            # Import Qt modules
-            from PyQt6.QtCore import QByteArray, QBuffer
-            from PyQt6.QtGui import QPixmap, QImage
-            
-            # Create request
-            response = requests.get(url)
-            
-            if response.status_code == 200:
-                # Load image data into QPixmap
-                img_data = QByteArray(response.content)
-                buffer = QBuffer(img_data)
-                buffer.open(QBuffer.OpenModeFlag.ReadOnly)
-                
-                # Load image
-                image = QImage()
-                image.load(buffer, "")
-                
-                # Create pixmap and scale to fit label while maintaining aspect ratio
-                pixmap = QPixmap.fromImage(image)
-                label_size = label.size()
-                scaled_pixmap = pixmap.scaled(
-                    label_size.width(), label_size.height(),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation
-                )
-                
-                # Set pixmap to label
-                label.setPixmap(scaled_pixmap)
-            else:
-                label.clear()
-                label.setText(f"Failed to load image: {response.status_code}")
-                
-        except Exception as e:
-            self.logger.error(f"Error loading image from {url}: {e}")
-            label.clear()
-            label.setText("Error loading image")
-
-
-    def show_bluesky_context_menu(self, position):
-        """
-        Show context menu for Bluesky artists in the table
-        
-        Args:
-            position (QPoint): Position where the context menu was requested
-        """
-        table = self.sender()
-        if not table:
-            return
-        
-        item = table.itemAt(position)
-        if not item:
-            return
-        
-        # Get the artist data from the item
-        artist_data = item.data(Qt.ItemDataRole.UserRole)
-        if not isinstance(artist_data, dict):
-            return
-        
-        name = artist_data.get('name', '')
-        handle = artist_data.get('handle', '')
-        did = artist_data.get('did', '')
-        url = artist_data.get('url', '')
-        
-        if not handle or not url:
-            return
-        
-        # Create context menu
-        menu = QMenu(self.parent)
-        
-        # Add actions
-        open_profile_action = QAction(f"Abrir perfil de {name} en Bluesky", self.parent)
-        open_profile_action.triggered.connect(lambda: self.utils.open_url(url))
-        menu.addAction(open_profile_action)
-        
-        # Add follow action if we have a DID and username
-        if did and self.bluesky_username:
-            follow_action = QAction(f"Seguir a {name} en Bluesky", self.parent)
-            follow_action.triggered.connect(lambda: self.follow_artist_on_bluesky(did, name))
-            menu.addAction(follow_action)
-        
-        copy_url_action = QAction("Copiar URL", self.parent)
-        copy_url_action.triggered.connect(lambda: self.copy_to_clipboard(url))
-        menu.addAction(copy_url_action)
-        
-        copy_handle_action = QAction("Copiar handle", self.parent)
-        copy_handle_action.triggered.connect(lambda: self.copy_to_clipboard(handle))
-        menu.addAction(copy_handle_action)
-        
-        # If we have artist name, add related actions
-        if name:
-            menu.addSeparator()
-            
-            # Add Muspy actions if configured
-            if hasattr(self, 'muspy_username') and self.muspy_username:
-                follow_muspy_action = QAction(f"Seguir a {name} en Muspy", self)
-                follow_muspy_action.triggered.connect(lambda: self.muspy_manager.follow_artist_from_name(name))
-                menu.addAction(follow_muspy_action)
-            
-            # Add Spotify actions if enabled
-            if self.spotify_enabled:
-                follow_spotify_action = QAction(f"Seguir a {name} en Spotify", self)
-                follow_spotify_action.triggered.connect(lambda: self.spotify_manager.follow_artist_on_spotify_by_name(name))
-                menu.addAction(follow_spotify_action)
-        
-        # Show menu
-        menu.exec(table.mapToGlobal(position))
-
-
-    def follow_artist_on_bluesky(self, did, name):
+    def follow_artist_on_bluesky(self, did, name, show_messages=True):
         """
         Follow an artist on Bluesky
         
         Args:
             did (str): DID of the artist
             name (str): Name of the artist for display
+            show_messages (bool): Whether to show success/error messages
+            
+        Returns:
+            bool: True if successful, False otherwise
         """
         if not did or not self.bluesky_username:
+            if show_messages:
+                QMessageBox.warning(self.parent, "Error", "Bluesky no está configurado correctamente")
+            return False
+        
+        # Ensure we're authenticated
+        if not self._auth_token and not self.authenticate_bluesky():
+            if show_messages and not self.configure_bluesky_username():
+                return False
+            if not self.authenticate_bluesky():
+                if show_messages:
+                    QMessageBox.warning(self.parent, "Error", "No se pudo autenticar con Bluesky. Verifique sus credenciales.")
+                return False
+        
+        try:
+            # Correct API URL for creating records (including follows)
+            url = "https://bsky.social/xrpc/com.atproto.repo.createRecord"
+            
+            # Get our own DID from auth session
+            if not hasattr(self, '_user_did') or not self._user_did:
+                # We need to get our own DID from the session data
+                session_url = "https://bsky.social/xrpc/com.atproto.server.getSession"
+                session_response = requests.get(session_url, headers=self.get_auth_headers())
+                
+                if session_response.status_code == 200:
+                    session_data = session_response.json()
+                    self._user_did = session_data.get('did')
+                else:
+                    if show_messages:
+                        QMessageBox.warning(self.parent, "Error", f"No se pudo obtener información de sesión: {session_response.status_code}")
+                    return False
+            
+            # Prepare payload according to API specification
+            payload = {
+                "repo": self._user_did,
+                "collection": "app.bsky.graph.follow",
+                "record": {
+                    "subject": did,
+                    "createdAt": datetime.datetime.utcnow().isoformat() + "Z"
+                }
+            }
+            
+            # Make the request with auth headers
+            headers = self.get_auth_headers()
+            headers["Content-Type"] = "application/json"
+            
+            self.logger.debug(f"Follow request payload: {payload}")
+            response = requests.post(url, json=payload, headers=headers)
+            
+            if response.status_code == 200:
+                if show_messages:
+                    QMessageBox.information(self.parent, "Éxito", f"Ahora sigues a {name} en Bluesky")
+                return True
+            elif response.status_code == 401:
+                # Token expired, try to re-authenticate
+                if self.authenticate_bluesky():
+                    # Retry the request recursively
+                    return self.follow_artist_on_bluesky(did, name, show_messages)
+                else:
+                    if show_messages:
+                        QMessageBox.warning(self.parent, "Error", "Error de autenticación con Bluesky. Verifique sus credenciales.")
+                    return False
+            else:
+                error_message = f"No se pudo seguir a {name} en Bluesky: {response.status_code}"
+                try:
+                    error_data = response.json()
+                    error_message += f" - {error_data.get('message', '')}"
+                except:
+                    pass
+                    
+                self.logger.error(f"Follow error: {error_message}")
+                self.logger.error(f"Response content: {response.text}")
+                if show_messages:
+                    QMessageBox.warning(self.parent, "Error", error_message)
+                return False
+        
+        except Exception as e:
+            self.logger.error(f"Error following artist on Bluesky: {e}")
+            if show_messages:
+                QMessageBox.warning(self.parent, "Error", f"Error al seguir al artista: {str(e)}")
+            return False
+
+    def follow_selected_bluesky_artists(self, table):
+        """
+        Follow multiple artists selected via checkboxes in the Bluesky table
+        
+        Args:
+            table (QTableWidget): The table containing artist checkboxes
+        """
+        if not self.bluesky_username:
             QMessageBox.warning(self.parent, "Error", "Bluesky no está configurado correctamente")
             return
         
-        # Initialize Bluesky manager if needed
-        bluesky_manager = self._init_bluesky_manager()
+        # Ensure we're authenticated
+        if not self._auth_token and not self.authenticate_bluesky():
+            if not self.configure_bluesky_username():
+                return
+            if not self.authenticate_bluesky():
+                QMessageBox.warning(self.parent, "Error", "No se pudo autenticar con Bluesky. Verifique sus credenciales.")
+                return
+                
+        # Recolectar artistas seleccionados
+        artists_to_follow = []
         
-        try:
-            # Follow the artist
-            success = follow_user(did)
+        for row in range(table.rowCount()):
+            # Obtener el widget de la columna checkbox (primera columna)
+            checkbox_widget = table.cellWidget(row, 0)
+            if not checkbox_widget:
+                continue
+                
+            # Buscar el checkbox dentro del widget
+            checkbox = None
+            for child in checkbox_widget.children():
+                if isinstance(child, QCheckBox):
+                    checkbox = child
+                    break
+                    
+            if checkbox and checkbox.isChecked():
+                # Obtener datos del artista desde el checkbox
+                artist_data = checkbox.property("artist_data")
+                if artist_data and 'did' in artist_data and artist_data['did']:
+                    artists_to_follow.append(artist_data)
+        
+        if not artists_to_follow:
+            QMessageBox.warning(self.parent, "Aviso", "No hay artistas seleccionados para seguir")
+            return
             
-            if success:
-                QMessageBox.information(self.parent, "Éxito", f"Ahora sigues a {name} en Bluesky")
+        # Preguntar confirmación
+        reply = QMessageBox.question(
+            self.parent,
+            "Confirmar seguimiento masivo",
+            f"¿Estás seguro de que quieres seguir a {len(artists_to_follow)} artistas en Bluesky?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        
+        if reply != QMessageBox.StandardButton.Yes:
+            return
+            
+        # Crear diálogo de progreso
+        progress = QProgressDialog("Siguiendo artistas en Bluesky...", "Cancelar", 0, len(artists_to_follow), self.parent)
+        progress.setWindowTitle("Seguimiento masivo")
+        progress.setWindowModality(Qt.WindowModality.WindowModal)
+        progress.show()
+        
+        # Seguir a cada artista
+        success_count = 0
+        fail_count = 0
+        
+        for i, artist in enumerate(artists_to_follow):
+            # Actualizar progreso
+            progress.setValue(i)
+            progress.setLabelText(f"Siguiendo a {artist['name']} ({i+1}/{len(artists_to_follow)})...")
+            QApplication.processEvents()
+            
+            # Verificar si se canceló
+            if progress.wasCanceled():
+                break
+                
+            # Seguir al artista
+            if self.follow_artist_on_bluesky(artist['did'], artist['name'], show_messages=False):
+                success_count += 1
             else:
-                QMessageBox.warning(self.parent, "Error", f"No se pudo seguir a {name} en Bluesky. Comprueba tus credenciales.")
-        except Exception as e:
-            self.logger.error(f"Error following artist on Bluesky: {e}")
-            QMessageBox.warning(self.parent, "Error", f"Error al seguir al artista: {str(e)}")
-
-
-
-
+                fail_count += 1
+                
+        # Cerrar diálogo de progreso
+        progress.setValue(len(artists_to_follow))
+        
+        # Mostrar resultados
+        result_message = f"Proceso completado:\n" \
+                        f"- Artistas seguidos con éxito: {success_count}\n" \
+                        f"- Errores: {fail_count}"
+        
+        QMessageBox.information(self.parent, "Resultado del seguimiento masivo", result_message)
 
     def check_bluesky_user(self, artist_name):
         """
@@ -877,22 +1077,26 @@ class BlueskyManager:
             self.logger.error("No Bluesky username configured")
             return None
         
+        # Ensure we're authenticated
+        if not self._auth_token and not self.authenticate_bluesky():
+            if not self.configure_bluesky_username():
+                return None
+            if not self.authenticate_bluesky():
+                return None
+        
         try:
             # Normalize the artist name for search
             search_name = artist_name.strip().lower()
             
             # Construct search URL
-            url = f"https://bsky.social/xrpc/app.bsky.actor.searchActors"
+            url = "https://bsky.social/xrpc/app.bsky.actor.searchActors"
             params = {
                 "q": search_name,
                 "limit": 5  # Limit to top results
             }
             
-            # Make the request
-            headers = {
-                "User-Agent": "MuspyModule/1.0",
-                "Accept": "application/json"
-            }
+            # Make the request with auth headers
+            headers = self.get_auth_headers()
             
             response = requests.get(url, params=params, headers=headers)
             
@@ -911,13 +1115,25 @@ class BlueskyManager:
                         search_name.replace(" ", "") in actor_name.replace(" ", "") or
                         search_name in handle.lower()):
                         
+                        # Create URL for profile
+                        profile_url = f"https://bsky.app/profile/{handle}"
+                        
                         return {
                             "handle": handle,
                             "did": did,
-                            "name": actor.get("displayName", artist_name)
+                            "name": actor.get("displayName", artist_name),
+                            "url": profile_url
                         }
                 
                 return None
+            elif response.status_code == 401:
+                # Token expired, try to re-authenticate
+                self.logger.warning("Token expirado, reintentando autenticación")
+                if self.authenticate_bluesky():
+                    # Retry the request recursively
+                    return self.check_bluesky_user(artist_name)
+                else:
+                    return None
             else:
                 self.logger.error(f"Error searching Bluesky for {artist_name}: {response.status_code}")
                 return None
@@ -926,6 +1142,7 @@ class BlueskyManager:
             self.logger.error(f"Error checking Bluesky for {artist_name}: {e}")
             return None
 
+       
     def get_user_profile(self, did):
         """
         Get the profile of a Bluesky user by DID
@@ -939,21 +1156,29 @@ class BlueskyManager:
         if not did:
             return None
         
+        # Ensure we're authenticated
+        if not self._auth_token and not self.authenticate_bluesky():
+            return None
+        
         try:
             # Construct API URL
             url = "https://bsky.social/xrpc/app.bsky.actor.getProfile"
             params = {"actor": did}
             
-            # Make the request
-            headers = {
-                "User-Agent": "MuspyModule/1.0",
-                "Accept": "application/json"
-            }
+            # Make the request with auth headers
+            headers = self.get_auth_headers()
             
             response = requests.get(url, params=params, headers=headers)
             
             if response.status_code == 200:
                 return response.json()
+            elif response.status_code == 401:
+                # Token expired, try to re-authenticate
+                if self.authenticate_bluesky():
+                    # Retry the request recursively
+                    return self.get_user_profile(did)
+                else:
+                    return None
             else:
                 self.logger.error(f"Error fetching profile for {did}: {response.status_code}")
                 return None
@@ -976,6 +1201,10 @@ class BlueskyManager:
         if not did:
             return []
         
+        # Ensure we're authenticated
+        if not self._auth_token and not self.authenticate_bluesky():
+            return []
+        
         try:
             # Construct API URL
             url = "https://bsky.social/xrpc/app.bsky.feed.getAuthorFeed"
@@ -984,11 +1213,8 @@ class BlueskyManager:
                 "limit": limit
             }
             
-            # Make the request
-            headers = {
-                "User-Agent": "MuspyModule/1.0",
-                "Accept": "application/json"
-            }
+            # Make the request with auth headers
+            headers = self.get_auth_headers()
             
             response = requests.get(url, params=params, headers=headers)
             
@@ -1008,6 +1234,13 @@ class BlueskyManager:
                         })
                 
                 return posts
+            elif response.status_code == 401:
+                # Token expired, try to re-authenticate
+                if self.authenticate_bluesky():
+                    # Retry the request recursively
+                    return self.get_recent_posts(did, limit)
+                else:
+                    return []
             else:
                 self.logger.error(f"Error fetching posts for {did}: {response.status_code}")
                 return []
@@ -1016,15 +1249,3 @@ class BlueskyManager:
             self.logger.error(f"Error getting recent posts: {e}")
             return []
 
-
-
-
-    def copy_to_clipboard(self, text):
-        """
-        Copy text to clipboard
-        
-        Args:
-            text (str): Text to copy
-        """
-        from PyQt6.QtWidgets import QApplication
-        QApplication.clipboard().setText(text)    

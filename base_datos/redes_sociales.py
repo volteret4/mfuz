@@ -28,7 +28,7 @@ logging.basicConfig(
     ]
 )
 
-class RedesSocialesArtistas():
+class RedesSocialesArtistas:
     """
     Módulo para obtener y almacenar las redes sociales de los artistas desde Discogs.
     """
@@ -40,7 +40,7 @@ class RedesSocialesArtistas():
         Args:
             config (dict, optional): Configuración del módulo.
         """
-        super().__init__(config)
+        #super().__init__(config)
         self.logger = logging.getLogger("redes_sociales_artistas")
         self.config = config or {}
         
@@ -80,7 +80,10 @@ class RedesSocialesArtistas():
         
         # Lista de redes sociales conocidas
         self.known_networks = {
+            'AllMusic.com': 'allmusic',
+            'allmusic.com': 'allmusic',
             'bandcamp.com': 'bandcamp',
+            'boomkat.com': 'boomkat',
             'facebook.com': 'facebook',
             'twitter.com': 'twitter',
             'x.com': 'twitter',
@@ -100,6 +103,7 @@ class RedesSocialesArtistas():
             'youtube.com': 'youtube',
             'youtu.be': 'youtube',
             'imdb.com': 'imdb',
+            'ProgArchives.com': 'progarchives',
             'progarchives.com': 'progarchives',
             'setlist.fm': 'setlist.fm',
             'whosampled.com': 'who_sampled',
@@ -108,6 +112,8 @@ class RedesSocialesArtistas():
             'myspace.com': 'myspace',
             'tumblr.com': 'tumblr',
             'ra.co': 'resident_advisor',
+            'rateyourmusic.com': 'rateyourmusic',
+            'RateYourMusic.com': 'rateyourmusic',
             'residentadvisor.net': 'resident_advisor'
         }
     
@@ -144,7 +150,9 @@ class RedesSocialesArtistas():
             CREATE TABLE IF NOT EXISTS artists_networks (
                 id INTEGER PRIMARY KEY,
                 artist_id INTEGER NOT NULL,
+                allmusic TEXT,
                 bandcamp TEXT,
+                boomkat TEXT,
                 facebook TEXT,
                 twitter TEXT,
                 mastodon TEXT,
@@ -165,6 +173,7 @@ class RedesSocialesArtistas():
                 myspace TEXT,
                 tumblr TEXT,
                 resident_advisor TEXT,
+                rateyourmusic TEXT,
                 enlaces TEXT,
                 last_updated TIMESTAMP,
                 FOREIGN KEY (artist_id) REFERENCES artists(id)
@@ -237,7 +246,9 @@ class RedesSocialesArtistas():
             dict: Diccionario con las redes sociales encontradas.
         """
         networks = {
+            'allmusic': None,
             'bandcamp': None,
+            'boomkat': None,
             'facebook': None,
             'twitter': None,
             'mastodon': None,
@@ -258,6 +269,7 @@ class RedesSocialesArtistas():
             'myspace': None,
             'tumblr': None,
             'resident_advisor': None,
+            'rateyourmusic': None,
             'enlaces': []
         }
         
@@ -362,7 +374,11 @@ class RedesSocialesArtistas():
         """
         artist_id = artist['id']
         artist_name = artist['name']
-        discogs_url = artist.get('discogs_url')
+        
+        # Verificar si existe la columna discogs_url antes de intentar acceder
+        discogs_url = None
+        if 'discogs_url' in artist.keys():
+            discogs_url = artist['discogs_url']
         
         self.logger.info(f"Procesando artista: {artist_name} (ID: {artist_id})")
         
@@ -414,41 +430,45 @@ class RedesSocialesArtistas():
                 # Actualizar registro existente
                 query = '''
                 UPDATE artists_networks SET 
-                bandcamp = ?, facebook = ?, twitter = ?, mastodon = ?, bluesky = ?,
+                allmusic = ?, bandcamp = ?, boomkat = ?, facebook = ?, twitter = ?, mastodon = ?, bluesky = ?,
                 instagram = ?, spotify = ?, lastfm = ?, wikipedia = ?, juno = ?,
                 soundcloud = ?, youtube = ?, imdb = ?, progarchives = ?, setlist_fm = ?,
                 who_sampled = ?, vimeo = ?, genius = ?, myspace = ?, tumblr = ?,
-                resident_advisor = ?, enlaces = ?, last_updated = ?
+                resident_advisor = ?, rateyourmusic = ?, enlaces = ?, last_updated = ?
                 WHERE artist_id = ?
                 '''
                 params = (
-                    networks['bandcamp'], networks['facebook'], networks['twitter'],
+                    networks['allmusic'], networks['bandcamp'], networks['boomkat'],
+                    networks['facebook'], networks['twitter'],
                     networks['mastodon'], networks['bluesky'], networks['instagram'],
                     networks['spotify'], networks['lastfm'], networks['wikipedia'],
                     networks['juno'], networks['soundcloud'], networks['youtube'],
                     networks['imdb'], networks['progarchives'], networks['setlist_fm'],
                     networks['who_sampled'], networks['vimeo'], networks['genius'],
                     networks['myspace'], networks['tumblr'], networks['resident_advisor'],
+                    networks['rateyourmusic'],
                     networks['enlaces'], datetime.now(), artist_id
                 )
             else:
                 # Insertar nuevo registro
                 query = '''
                 INSERT INTO artists_networks 
-                (artist_id, bandcamp, facebook, twitter, mastodon, bluesky,
+                (artist_id, allmusic, bandcamp, boomkat, facebook, twitter, mastodon, bluesky,
                 instagram, spotify, lastfm, wikipedia, juno, soundcloud,
                 youtube, imdb, progarchives, setlist_fm, who_sampled, vimeo,
-                genius, myspace, tumblr, resident_advisor, enlaces, last_updated)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                genius, myspace, tumblr, resident_advisor, rateyourmusic, enlaces, last_updated)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 '''
                 params = (
-                    artist_id, networks['bandcamp'], networks['facebook'], networks['twitter'],
+                    artist_id, networks['allmusic'], networks['bandcamp'], networks['boomkat'],
+                    networks['facebook'], networks['twitter'],
                     networks['mastodon'], networks['bluesky'], networks['instagram'],
                     networks['spotify'], networks['lastfm'], networks['wikipedia'],
                     networks['juno'], networks['soundcloud'], networks['youtube'],
                     networks['imdb'], networks['progarchives'], networks['setlist_fm'],
                     networks['who_sampled'], networks['vimeo'], networks['genius'],
                     networks['myspace'], networks['tumblr'], networks['resident_advisor'],
+                    networks['rateyourmusic'],
                     networks['enlaces'], datetime.now()
                 )
             

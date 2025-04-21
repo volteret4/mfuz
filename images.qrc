@@ -138,5 +138,15 @@
         <file alias="spotify_ol_black">ui/svg/spotify-svgrepo-com.svg</file>
         <file alias="yt_ol">ui/svg/youtube-svgrepo-com(1).svg</file>
         <file alias="yt_ol2">ui/svg/youtube-168-svgrepo-com.svg</file>
+        <file alias="allmusic">ui/svg/allmusic.svg</file>
+        <file alias="facebook1">ui/svg/facebook-svgrepo-com(1).svg</file>
+        <file alias="facebook2">ui/svg/facebook-svgrepo-com.svg</file>
+        <file alias="instagram_ol">ui/svg/instagram-svgrepo-com.svg</file>
+        <file alias="isntagram">ui/svg/instagram-1-svgrepo-com.svg</file>
+        <file alias="facebook">ui/svg/facebook-color-svgrepo-com.svg</file>
+        <file alias="boomkat">ui/svg/boomkat.svg</file>
+        <file alias="record">ui/svg/record-circle-1-svgrepo-com.svg</file>
+        <file alias="rym_svg">ui/svg/rym(1).svg</file>
+        <file alias="rym_png">ui/svg/rym.png</file>
     </qresource>
 </RCC>

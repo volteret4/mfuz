@@ -1,34 +1,37 @@
 # submodules/muspy/progress_utils.py
 import sys
 import os
+
 from PyQt6.QtWidgets import (QProgressDialog, QApplication, QVBoxLayout, QHBoxLayout, 
                            QPushButton, QWidget, QSizePolicy, QMessageBox, QDialog)
-from PyQt6.QtCore import pyqtSignal, Qt, QObject, QSize, QEvent, QPoint, QTimer
+from PyQt6.QtCore import pyqtSignal, Qt, QObject, QSize, QEvent, QPoint, QTimer, QThread
 from PyQt6.QtGui import QColor, QIcon
 
 class ProgressWorker(QObject):
     progress = pyqtSignal(int)
-    finished = pyqtSignal(list)
+    finished = pyqtSignal(object)
     status_update = pyqtSignal(str)
-    
-    def __init__(self, function, *args, **kwargs):
+    error = pyqtSignal(object) 
+
+    def __init__(self, function, args=None):
         super().__init__()
         self.function = function
-        self.args = args
-        self.kwargs = kwargs
+        self.args = args or {}
         
     def run(self):
         try:
-            result = self.function(
-                progress_callback=self.progress.emit, 
-                status_callback=self.status_update.emit,
-                *self.args, 
-                **self.kwargs
-            )
+            result = self.function(self.progress_callback, self.status_callback, **self.args)
             self.finished.emit(result)
         except Exception as e:
+            self.error.emit(e)
             self.status_update.emit(f"Error: {str(e)}")
-            self.finished.emit([])
+            self.finished.emit(None)
+    
+    def progress_callback(self, value):
+        self.progress.emit(value)
+        
+    def status_callback(self, text):
+        self.status_update.emit(text)
 
 
 class AuthWorker(QObject):
@@ -54,6 +57,8 @@ class AuthWorker(QObject):
         
         # Emitir señal cuando termine
         self.finished.emit(success)
+
+
 class FloatingNavigationButtons(QObject):
     """
     Class to manage floating navigation buttons for a stacked widget.
@@ -261,94 +266,106 @@ class FloatingNavigationButtons(QObject):
 
 
 
-def show_progress_operation(self, operation_function, operation_args=None, title="Operación en progreso", 
-                            label_format="{current}/{total} - {status}", 
-                            cancel_button_text="Cancelar", 
-                            finish_message=None):
+
+
+
+def show_progress_operation(parent, operation_function, operation_args=None, title="Operación en progreso", 
+                         label_format="{current}/{total} - {status}", 
+                         cancel_button_text="Cancelar", 
+                         finish_message=None):
     """
-    Ejecuta una operación con una barra de progreso, permitiendo cancelación.
+    Muestra un diálogo de progreso para operaciones largas
     
     Args:
-        operation_function (callable): Función a ejecutar que debe aceptar un objeto QProgressDialog
-                                    como su primer argumento
-        operation_args (dict, optional): Argumentos para pasar a la función de operación
-        title (str): Título de la ventana de progreso
-        label_format (str): Formato del texto de progreso, con placeholders {current}, {total}, {status}
-        cancel_button_text (str): Texto del botón cancelar
-        finish_message (str, optional): Mensaje a mostrar cuando la operación termina con éxito
-                                    (None para no mostrar ningún mensaje)
-    
+        parent: Widget padre
+        operation_function: Función a ejecutar (debe aceptar una función update_progress)
+        operation_args: Argumentos adicionales para la función
+        title: Título del diálogo
+        label_format: Formato para la etiqueta de progreso
+        cancel_button_text: Texto del botón de cancelar
+        finish_message: Mensaje a mostrar al terminar (opcional)
+        
     Returns:
-        Any: El valor devuelto por la función de operación
+        Resultado de la operación o None si se canceló
     """
-    # Crear el diálogo de progreso
-    progress = QProgressDialog(self)
-    progress.setWindowTitle(title)
-    progress.setCancelButtonText(cancel_button_text)
-    progress.setMinimumDuration(0)  # Mostrar inmediatamente
-    progress.setWindowModality(Qt.WindowModality.WindowModal)
+    # Crear worker y thread para la operación
+    thread = QThread()
+    worker = ProgressWorker(operation_function, operation_args)
+    worker.moveToThread(thread)
     
-    # Configuramos la progress bar para que permita rastreo indeterminado si es necesario
-    progress.setMinimum(0)
-    progress.setMaximum(100)  # Se puede cambiar desde la operación
-    progress.setValue(0)
+    # Crear diálogo de progreso
+    progress_dialog = QProgressDialog(title, cancel_button_text, 0, 100, parent)
+    progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+    progress_dialog.setMinimumDuration(0)  # Mostrar inmediatamente
+    progress_dialog.setValue(0)
+    progress_dialog.setAutoClose(False)
+    progress_dialog.setAutoReset(False)
     
-    # Configurar el status label inicial
-    initial_status = label_format.format(current=0, total=0, status="Iniciando...")
-    progress.setLabelText(initial_status)
+    # Variable para almacenar el resultado
+    result = [None]
+    canceled = [False]
     
-    # Crear una función de actualización que la operación pueda utilizar
-    def update_progress(current, total, status="Procesando...", indeterminate=False):
-        if progress.wasCanceled():
+    # Función para actualizar el progreso
+    def update_progress(current, total, status="", indeterminate=False):
+        # Verificar si se canceló
+        if progress_dialog.wasCanceled() or canceled[0]:
+            canceled[0] = True
             return False
         
+        # Actualizar la barra de progreso
         if indeterminate:
-            # Modo indeterminado: 0 indica progreso indeterminado en Qt
-            progress.setMinimum(0)
-            progress.setMaximum(0)
+            progress_dialog.setRange(0, 0)  # Modo indeterminado
         else:
-            # Modo normal con porcentaje
-            progress.setMinimum(0)
-            progress.setMaximum(total)
-            progress.setValue(current)
-            
-        # Actualizar el texto
-        progress_text = label_format.format(current=current, total=total, status=status)
-        progress.setLabelText(progress_text)
+            progress_dialog.setRange(0, total)
+            progress_dialog.setValue(current)
         
-        # Procesar eventos para mantener la UI responsiva
+        # Actualizar etiqueta
+        progress_dialog.setLabelText(label_format.format(
+            current=current,
+            total=total,
+            status=status
+        ))
+        
+        # Mantener la UI responsiva
         QApplication.processEvents()
         return True
     
-    # Preparar argumentos
-    if operation_args is None:
-        operation_args = {}
+    # Conectar señales
+    worker.progress.connect(lambda value: progress_dialog.setValue(value))
+    worker.status_update.connect(lambda text: progress_dialog.setLabelText(text))
+    thread.started.connect(worker.run)
+    worker.finished.connect(lambda res: handle_finished(res))
+    worker.error.connect(lambda err: handle_error(err))
+    progress_dialog.canceled.connect(lambda: set_canceled())
     
-    # Ejecutar la operación con la función de progreso
-    try:
-        result = operation_function(update_progress, **operation_args)
-        
-        # Mostrar mensaje de finalización si se proporciona
-        if finish_message and not progress.wasCanceled():
-            QMessageBox.information(self, "Operación completa", finish_message)
-            
-        return result
-    except Exception as e:
-        # Capturar cualquier excepción para no dejar el diálogo colgado
-        import logging
-        logging.error(f"Error en la operación: {e}", exc_info=True)
-        
-        # Solo mostrar error si no fue cancelado
-        if not progress.wasCanceled():
-            QMessageBox.critical(self, "Error", f"Se produjo un error durante la operación: {str(e)}")
-        
-        return None
-    finally:
-        # Asegurarse de que el diálogo se cierre
-        progress.close()
+    def set_canceled():
+        canceled[0] = True
+        thread.quit()
+    
+    def handle_finished(res):
+        result[0] = res
+        thread.quit()
+        progress_dialog.close()
+        if finish_message and not canceled[0]:
+            QMessageBox.information(parent, "Operación completada", finish_message)
+    
+    def handle_error(err):
+        thread.quit()
+        progress_dialog.close()
+        QMessageBox.critical(parent, "Error", f"Error en la operación: {str(err)}")
+    
+    # Iniciar thread y mostrar diálogo
+    thread.start()
+    progress_dialog.exec()
+    
+    # Esperar a que termine el hilo si no se ha cancelado
+    if not canceled[0] and thread.isRunning():
+        thread.wait(5000)  # Esperar hasta 5 segundos
+    
+    return result[0]
 
 
-def _sync_artists_with_progress(self, progress_callback, status_callback, count):
+def _sync_artists_with_progress(progress_callback, status_callback, count):
     """
     Background worker function to sync artists with progress updates
     
@@ -361,6 +378,7 @@ def _sync_artists_with_progress(self, progress_callback, status_callback, count)
         dict: Sync results summary
     """
     try:
+        import requests
         # First try direct API import
         import_url = f"{self.base_url}/import/{self.muspy_id}"
         auth = (self.muspy_username, self.muspy_api_key)

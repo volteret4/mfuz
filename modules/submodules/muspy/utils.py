@@ -164,3 +164,15 @@ class MuspyUtils:
         
         import webbrowser
         webbrowser.open(url)
+
+# Bluesky manager
+
+    def copy_to_clipboard(self, text):
+        """
+        Copy text to clipboard
+        
+        Args:
+            text (str): Text to copy
+        """
+        from PyQt6.QtWidgets import QApplication
+        QApplication.clipboard().setText(text)    

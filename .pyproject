@@ -1,5 +1,15 @@
 {
     "files": [
+        "ui/svg/rym(1).svg",
+        "ui/svg/rym.png",
+        "ui/svg/allmusic.svg",
+        "ui/svg/facebook-svgrepo-com(1).svg",
+        "ui/svg/facebook-svgrepo-com.svg",
+        "ui/svg/instagram-svgrepo-com.svg",
+        "ui/svg/instagram-1-svgrepo-com.svg",
+        "ui/svg/facebook-color-svgrepo-com.svg",
+        "ui/svg/boomkat.svg",
+        "ui/svg/record-circle-1-svgrepo-com.svg",
         "ui/svg/youtube-svgrepo-com(1).svg",
         "ui/svg/youtube-168-svgrepo-com.svg",
         "ui/svg/database-thin-svgrepo-com.svg",
@@ -154,6 +164,10 @@
         "modules/muspy_releases_module.py",
         "modules/scripts_module.py",
         "modules/widget_player_module.py",
-        "modules/url_playlist.py"
+        "modules/url_playlist.py",
+        "ui/base_datos/db_creator_base.ui",
+        "ui/muspy/lastfm_bluesky_dialog.ui",
+        "ui/muspy/muspy_credentials.ui",
+        "ui/stats/estadisticas_module.ui"
     ]
 }

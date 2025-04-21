@@ -1,0 +1,172 @@
+{
+    // ============================
+    // 1) Ámbito de archivos
+    // ============================
+    // Archivos/carpetas a incluir en el análisis
+    "include": [
+      "config",
+      "base_datos",
+      "tools",
+      "scripts",
+      "modules"
+      
+    ],
+    // Archivos/carpetas a excluir totalmente
+    "exclude": [
+      "venv",          // entornos virtuales
+      "build",         // artefactos compilados
+      "node_modules",
+      "ui"
+    ],
+    // Archivos/carpetas cuyos diagnósticos (errores/warnings) se suprimen
+    "ignore": [
+      ".TODO",        // código legado que no quieres tocar aún
+      "tests/helpers"  // utilidades de testing
+    ],
+  
+    // ============================
+    // 2) Rutas y entornos
+    // ============================
+    // Directorios de tipos stub personalizados o de typeshed
+    "typeshedPath": "./typings/typeshed",     // :contentReference[oaicite:0]{index=0}
+    "typingsPath": "./typings",               // :contentReference[oaicite:1]{index=1}
+  
+    // Virtualenvs
+    "venvPath": "/home/usuario/.virtualenvs", // :contentReference[oaicite:2]{index=2}
+    "venv": ".venv",                          // usa el .venv de tu proyecto
+  
+    // Versión y plataforma Python objetivo
+    "pythonVersion": "3.10",                  // :contentReference[oaicite:3]{index=3}
+    "pythonPlatform": "Linux",                // :contentReference[oaicite:4]{index=4}
+  
+    // Nivel de chequeo de tipos global
+    // Opciones: "off" → "basic" → "standard" → "strict"
+    "typeCheckingMode": "basic",              // :contentReference[oaicite:5]{index=5}
+  
+    // Entornos de ejecución (para distintos subárboles)
+    "executionEnvironments": [
+      {
+        "root": ".",                          // aplica al proyecto entero
+        "extraPaths": [
+          "src",
+          "scripts",
+          "modules"
+        ]
+      }
+    ],                                         // :contentReference[oaicite:6]{index=6}
+  
+    // ============================
+    // 3) Diagnósticos (report…)
+    // ============================
+    // Listado exhaustivo de reglas que puedes controlar con "none", "warning" o "error"
+    // Basado en la documentación oficial de Pyright :contentReference[oaicite:7]{index=7}
+  
+    // – Errores generales de tipos y stubs
+    "reportTypeshedErrors":     "none",
+    "reportMissingImports":     "none",
+    "reportMissingTypeStubs":   "none",
+    "reportImportCycles":       "none",
+  
+    // – Reporte de importaciones/clases/funciones/variables sin usar
+    "reportUnusedImport":            "none",
+    "reportUnusedClass":             "none",
+    "reportUnusedFunction":          "none",
+    "reportUnusedVariable":          "none",
+    "reportDuplicateImport":         "none",
+    "reportWildcardImportFromLibrary":"warning",
+  
+    // – Uso de clases abstractas, overloads e índices
+    "reportAbstractUsage":           "error",
+    "reportArgumentType":            "error",
+    "reportInconsistentOverload":    "error",
+    "reportOverlappingOverload":     "error",
+    "reportNoOverloadImplementation":"error",
+    "reportIndexIssue":              "error",
+    "reportOperatorIssue":           "error",
+  
+    // – Accesos/calls/iterables/context managers con Optional[…]
+    "reportOptionalSubscript":        "none",
+    "reportOptionalMemberAccess":     "none",
+    "reportOptionalCall":             "none",
+    "reportOptionalIterable":         "none",
+    "reportOptionalContextManager":   "none",
+    "reportOptionalOperand":          "none",
+  
+    // – Decorators y herencias sin tipado
+    "reportUntypedFunctionDecorator":"none",
+    "reportUntypedClassDecorator":   "none",
+    "reportUntypedBaseClass":         "none",
+    "reportUntypedNamedTuple":        "none",
+  
+    // – Accesos privados y reimportaciones
+    "reportPrivateUsage":             "none",
+    "reportPrivateImportUsage":       "error",
+    "reportRedeclaration":            "error",
+  
+    // – Compatibilidad de overrides y constructores
+    "reportIncompatibleMethodOverride":    "error",
+    "reportIncompatibleVariableOverride":  "error",
+    "reportInconsistentConstructor":       "none",
+  
+    // – Variables posiblemente no enlazadas y retornos
+    "reportPossiblyUnboundVariable": "error",
+    "reportReturnType":              "error",
+  
+    // – Inicialización en default args y superllamadas
+    "reportCallInDefaultInitializer":"none",
+    "reportMissingSuperCall":        "none",
+    "reportUninitializedInstanceVariable":"none",
+  
+    // – Cadenas, escape sequences y patterns
+    "reportInvalidStringEscapeSequence": "warning",
+    "reportImplicitStringConcatenation":"none",
+    "reportUnsupportedDunderAll":        "warning",
+  
+    // – Tipos desconocidos/faltantes
+    "reportUnknownParameterType":    "none",
+    "reportUnknownArgumentType":     "none",
+    "reportUnknownLambdaType":       "none",
+    "reportUnknownVariableType":     "none",
+    "reportUnknownMemberType":       "none",
+    "reportMissingParameterType":    "none",
+    "reportMissingTypeArgument":     "none",
+    "reportInvalidTypeVarUse":       "warning",
+  
+    // – Usos innecesarios de isinstance/comparaciones/contains
+    "reportUnnecessaryIsInstance":   "none",
+    "reportUnnecessaryComparison":   "none",
+    "reportUnnecessaryContains":     "none",
+  
+    // – Asserts y nombres de self/cls
+    "reportAssertAlwaysTrue":        "warning",
+    "reportSelfClsParameterName":    "warning",
+  
+    // – Variables indefinidas/desenlazadas/hashables
+    "reportUndefinedVariable":       "warning",
+    "reportUnboundVariable":         "warning",
+    "reportUnhashable":              "error",
+  
+    // – Stubs incompletos y declaraciones inválidas
+    "reportInvalidStubStatement":    "none",
+    "reportIncompleteStub":          "none",
+  
+    // – Corrutinas y excepciones sobrantes
+    "reportUnusedCoroutine":         "error",
+    "reportUnusedExcept":            "error",
+  
+    // – Errores de sintaxis
+    "reportSyntaxError":             "error",
+    "reportSyntaxWarning":           "warning",
+  
+    // – Errores de tipado
+    "reportTypeCommentUsage":        "none",
+    "reportTypeCommentSyntaxError":  "none",
+    "reportTypeCommentSyntaxWarning":"none",
+  
+    // – Errores de documentación
+    "reportDocstringTypeMismatch":   "warning",
+
+    "reportMissingModuleSource": true,
+
+  }
+  
