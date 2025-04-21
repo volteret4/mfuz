@@ -20,6 +20,7 @@
 #                   - carpeta con musica en flac, m4a, mp3
 #   Ha tardado 43 minutos para una carpeta en NFS con 84 GB, 600 carpetas con 
 
+import sys
 import os
 import json
 import logging
@@ -32,6 +33,9 @@ import pylast
 import sqlite3
 from datetime import datetime, timedelta
 import argparse
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import PROJECT_ROOT
 
 
 class MusicLibraryManager:
@@ -953,7 +957,11 @@ class MusicLibraryManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
-        error_log_path = PROJECT_ROOT / '.content' / 'log' / 'db' / 'db_musica_path_error.log'
+        error_log_path = PROJECT_ROOT / '.content' / 'logs' / 'db' / 'db_musica_path_error.log'
+        if not error_log_path.exists():
+            error_log_path.parent.mkdir(parents=True, exist_ok=True)
+            with error_log_path.open('w', encoding='utf-8') as f:
+                f.write('')
         error_logger = logging.getLogger('error_log')
         error_logger.setLevel(logging.ERROR)
         error_handler = logging.FileHandler(error_log_path, encoding='utf-8')

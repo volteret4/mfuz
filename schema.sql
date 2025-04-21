@@ -27,6 +27,7 @@ Estructura de la tabla: songs
 (24, 'replay_gain_album_peak', 'REAL', 0, None, 0)
 (25, 'album_art_path_denorm', 'TEXT', 0, None, 0)
 (26, 'has_lyrics', 'INTEGER', 0, '0', 0)
+(27, 'origen', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: artists
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -52,6 +53,8 @@ Estructura de la tabla: artists
 (20, 'member_of', 'TEXT', 0, None, 0)
 (21, 'aliases', 'TEXT', 0, None, 0)
 (22, 'lastfm_url', 'TEXT', 0, None, 0)
+(23, 'origen', 'TEXT', 0, None, 0)
+(24, 'website', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: albums
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -82,6 +85,7 @@ Estructura de la tabla: albums
 (25, 'mastering_engineers', 'TEXT', 0, None, 0)
 (26, 'credits', 'TEXT', 0, None, 0)
 (27, 'lastfm_url', 'TEXT', 0, None, 0)
+(28, 'origen', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: genres
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -392,3 +396,33 @@ Estructura de la tabla: mb_wikidata
 (9, 'last_updated', 'TIMESTAMP', 0, None, 0)
 (10, 'value_type', 'TEXT', 0, None, 0)
 (11, 'is_link', 'INTEGER', 0, '0', 0)
+
+Estructura de la tabla: artists_networks
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'artist_id', 'INTEGER', 1, None, 0)
+(2, 'allmusic', 'TEXT', 0, None, 0)
+(3, 'bandcamp', 'TEXT', 0, None, 0)
+(4, 'boomkat', 'TEXT', 0, None, 0)
+(5, 'facebook', 'TEXT', 0, None, 0)
+(6, 'twitter', 'TEXT', 0, None, 0)
+(7, 'mastodon', 'TEXT', 0, None, 0)
+(8, 'bluesky', 'TEXT', 0, None, 0)
+(9, 'instagram', 'TEXT', 0, None, 0)
+(10, 'spotify', 'TEXT', 0, None, 0)
+(11, 'lastfm', 'TEXT', 0, None, 0)
+(12, 'wikipedia', 'TEXT', 0, None, 0)
+(13, 'juno', 'TEXT', 0, None, 0)
+(14, 'soundcloud', 'TEXT', 0, None, 0)
+(15, 'youtube', 'TEXT', 0, None, 0)
+(16, 'imdb', 'TEXT', 0, None, 0)
+(17, 'progarchives', 'TEXT', 0, None, 0)
+(18, 'setlist_fm', 'TEXT', 0, None, 0)
+(19, 'who_sampled', 'TEXT', 0, None, 0)
+(20, 'vimeo', 'TEXT', 0, None, 0)
+(21, 'genius', 'TEXT', 0, None, 0)
+(22, 'myspace', 'TEXT', 0, None, 0)
+(23, 'tumblr', 'TEXT', 0, None, 0)
+(24, 'resident_advisor', 'TEXT', 0, None, 0)
+(25, 'rateyourmusic', 'TEXT', 0, None, 0)
+(26, 'enlaces', 'TEXT', 0, None, 0)
+(27, 'last_updated', 'TIMESTAMP', 0, None, 0)

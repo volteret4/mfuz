@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QStackedWidget,
                             QComboBox, QLabel, QTableWidget, QTableWidgetItem,
                             QProgressBar, QSplitter)
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor
 from PyQt6 import uic
 import sqlite3
 import os
@@ -161,6 +160,22 @@ class StatsModule(BaseModule):
             logging.info("Combo de décadas conectado correctamente")
         else:
             logging.warning("No se encontró el combo de décadas para conectar")
+
+        # Conexión del combo de categorías
+        ausentes_combo = self.findChild(QComboBox, "ausentes_tabla_combo")
+        if ausentes_combo:
+            ausentes_combo.currentIndexChanged.connect(lambda: self.load_missing_data_stats())
+
+        # Conectar la selección de la tabla de géneros
+        table_genres = self.findChild(QTableWidget, "table_genres")
+        if table_genres:
+            table_genres.itemClicked.connect(self.on_genre_selected)
+            logging.info("Tabla de géneros conectada correctamente")
+        else:
+            logging.warning("No se encontró la tabla de géneros para conectar")
+
+
+
         
     def init_database(self):
         """Inicializa la conexión a la base de datos."""
@@ -221,7 +236,7 @@ class StatsModule(BaseModule):
             logging.error(traceback.format_exc())
     
     def load_missing_data_stats(self):
-        """Carga estadísticas sobre datos ausentes en la BD."""
+        """Carga estadísticas sobre datos ausentes en la BD según el tipo seleccionado."""
         if not self.conn:
             return
         
@@ -229,11 +244,32 @@ class StatsModule(BaseModule):
         table = self.findChild(QTableWidget, "table_missing_data")
         summary_label = self.findChild(QLabel, "label_summary")
         chart_container = self.findChild(QWidget, "widget_chart_container_missing")
+        ausentes_combo = self.findChild(QComboBox, "ausentes_tabla_combo")
+        
+        # Si el combo no existe, mostramos todas las tablas (comportamiento anterior)
+        selected_type = ausentes_combo.currentText() if ausentes_combo else "TODAS"
         
         # Limpiar tabla
         table.setRowCount(0)
         
-        # Obtener las tablas de la base de datos
+        # Según el tipo seleccionado, determinar las tablas a analizar
+        if selected_type == "ARTISTAS":
+            results = self.analyze_missing_artist_data()
+        elif selected_type == "ALBUMS":
+            results = self.analyze_missing_album_data()
+        elif selected_type == "CANCIONES":
+            results = self.analyze_missing_song_data()
+        elif selected_type == "SELLOS":
+            results = self.analyze_missing_label_data()
+        else:
+            # Comportamiento original: analizar todas las tablas
+            results = self.analyze_all_missing_data()
+        
+        # Mostrar resultados en la tabla
+        self.display_missing_data_results(results, table, summary_label, chart_container)
+
+    def analyze_all_missing_data(self):
+        """Analiza datos ausentes en todas las tablas (comportamiento original)."""
         cursor = self.conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = [row[0] for row in cursor.fetchall()]
@@ -272,6 +308,305 @@ class StatsModule(BaseModule):
                     
                     results.append((table_name, col_name, completeness))
         
+        return results
+
+    def analyze_missing_artist_data(self):
+        """Analiza datos ausentes relacionados con artistas."""
+        cursor = self.conn.cursor()
+        results = []
+        
+        # Primero analizar columnas de la tabla artistas
+        cursor.execute("PRAGMA table_info(artists);")
+        columns = cursor.fetchall()
+        
+        # Contar artistas totales
+        cursor.execute("SELECT COUNT(*) FROM artists;")
+        total_artists = cursor.fetchone()[0]
+        
+        # Analizar cada columna de artistas
+        for col in columns:
+            col_name = col[1]
+            
+            # Excluir columnas de ID y timestamps automáticos
+            if col_name.lower() == 'id' or col_name.endswith('_id') or \
+            col_name.endswith('_timestamp') or col_name == 'last_updated':
+                continue
+            
+            # Contar valores no nulos
+            cursor.execute(f"SELECT COUNT(*) FROM artists WHERE {col_name} IS NOT NULL AND {col_name} != '';")
+            filled = cursor.fetchone()[0]
+            
+            # Calcular porcentaje de completitud
+            completeness = (filled / total_artists) * 100 if total_artists > 0 else 100
+            
+            results.append(("artists", col_name, completeness))
+        
+        # Ahora analizar relaciones con otras tablas
+        # Artistas sin redes sociales
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM artists a
+            LEFT JOIN artists_networks n ON a.id = n.artist_id
+            WHERE n.artist_id IS NULL;
+        """)
+        missing_networks = cursor.fetchone()[0]
+        completeness = 100 - ((missing_networks / total_artists) * 100) if total_artists > 0 else 100
+        results.append(("artists_networks", "vínculos a redes", completeness))
+        
+        # Artistas sin feeds
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM artists a
+            LEFT JOIN (SELECT DISTINCT entity_id FROM feeds WHERE entity_type='artist') f 
+            ON a.id = f.entity_id
+            WHERE f.entity_id IS NULL;
+        """)
+        missing_feeds = cursor.fetchone()[0]
+        completeness = 100 - ((missing_feeds / total_artists) * 100) if total_artists > 0 else 100
+        results.append(("feeds", "noticias del artista", completeness))
+        
+        # Artistas sin escuchas (lastfm)
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM artists a
+            LEFT JOIN (SELECT DISTINCT artist_id FROM scrobbles) s 
+            ON a.id = s.artist_id
+            WHERE s.artist_id IS NULL;
+        """)
+        missing_scrobbles = cursor.fetchone()[0]
+        completeness = 100 - ((missing_scrobbles / total_artists) * 100) if total_artists > 0 else 100
+        results.append(("scrobbles", "escuchas lastfm", completeness))
+        
+        # Artistas sin escuchas (listenbrainz)
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM artists a
+            LEFT JOIN (SELECT DISTINCT artist_id FROM listens) l 
+            ON a.id = l.artist_id
+            WHERE l.artist_id IS NULL;
+        """)
+        missing_listens = cursor.fetchone()[0]
+        completeness = 100 - ((missing_listens / total_artists) * 100) if total_artists > 0 else 100
+        results.append(("listens", "escuchas listenbrainz", completeness))
+        
+        return results
+
+    def analyze_missing_album_data(self):
+        """Analiza datos ausentes relacionados con álbumes."""
+        cursor = self.conn.cursor()
+        results = []
+        
+        # Primero analizar columnas de la tabla albums
+        cursor.execute("PRAGMA table_info(albums);")
+        columns = cursor.fetchall()
+        
+        # Contar álbumes totales
+        cursor.execute("SELECT COUNT(*) FROM albums;")
+        total_albums = cursor.fetchone()[0]
+        
+        # Analizar cada columna de albums
+        for col in columns:
+            col_name = col[1]
+            
+            # Excluir columnas de ID y timestamps automáticos
+            if col_name.lower() == 'id' or col_name.endswith('_id') or \
+            col_name.endswith('_timestamp') or col_name == 'last_updated':
+                continue
+            
+            # Contar valores no nulos
+            cursor.execute(f"SELECT COUNT(*) FROM albums WHERE {col_name} IS NOT NULL AND {col_name} != '';")
+            filled = cursor.fetchone()[0]
+            
+            # Calcular porcentaje de completitud
+            completeness = (filled / total_albums) * 100 if total_albums > 0 else 100
+            
+            results.append(("albums", col_name, completeness))
+        
+        # Álbumes sin datos MusicBrainz
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM albums a
+            LEFT JOIN mb_release_group mb ON a.id = mb.album_id
+            WHERE mb.album_id IS NULL;
+        """)
+        missing_mb = cursor.fetchone()[0]
+        completeness = 100 - ((missing_mb / total_albums) * 100) if total_albums > 0 else 100
+        results.append(("mb_release_group", "datos musicbrainz", completeness))
+        
+        # Álbumes sin feeds
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM albums a
+            LEFT JOIN (SELECT DISTINCT entity_id FROM feeds WHERE entity_type='album') f 
+            ON a.id = f.entity_id
+            WHERE f.entity_id IS NULL;
+        """)
+        missing_feeds = cursor.fetchone()[0]
+        completeness = 100 - ((missing_feeds / total_albums) * 100) if total_albums > 0 else 100
+        results.append(("feeds", "noticias del álbum", completeness))
+        
+        # Álbumes sin datos wikidata
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM albums a
+            LEFT JOIN mb_wikidata w ON a.id = w.album_id
+            WHERE w.album_id IS NULL;
+        """)
+        missing_wikidata = cursor.fetchone()[0]
+        completeness = 100 - ((missing_wikidata / total_albums) * 100) if total_albums > 0 else 100
+        results.append(("mb_wikidata", "datos wikidata", completeness))
+        
+        return results
+
+    def analyze_missing_song_data(self):
+        """Analiza datos ausentes relacionados con canciones."""
+        cursor = self.conn.cursor()
+        results = []
+        
+        # Primero analizar columnas de la tabla songs
+        cursor.execute("PRAGMA table_info(songs);")
+        columns = cursor.fetchall()
+        
+        # Contar canciones totales
+        cursor.execute("SELECT COUNT(*) FROM songs;")
+        total_songs = cursor.fetchone()[0]
+        
+        # Analizar cada columna de songs
+        for col in columns:
+            col_name = col[1]
+            
+            # Excluir columnas de ID y timestamps automáticos
+            if col_name.lower() == 'id' or col_name.endswith('_id') or \
+            col_name.endswith('_timestamp') or col_name == 'last_updated':
+                continue
+            
+            # Contar valores no nulos
+            cursor.execute(f"SELECT COUNT(*) FROM songs WHERE {col_name} IS NOT NULL AND {col_name} != '';")
+            filled = cursor.fetchone()[0]
+            
+            # Calcular porcentaje de completitud
+            completeness = (filled / total_songs) * 100 if total_songs > 0 else 100
+            
+            results.append(("songs", col_name, completeness))
+        
+        # Canciones sin letras
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM songs s
+            LEFT JOIN lyrics l ON s.id = l.track_id
+            WHERE l.track_id IS NULL;
+        """)
+        missing_lyrics = cursor.fetchone()[0]
+        completeness = 100 - ((missing_lyrics / total_songs) * 100) if total_songs > 0 else 100
+        results.append(("lyrics", "letras", completeness))
+        
+        # Canciones sin enlaces
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM songs s
+            LEFT JOIN song_links sl ON s.id = sl.song_id
+            WHERE sl.song_id IS NULL;
+        """)
+        missing_links = cursor.fetchone()[0]
+        completeness = 100 - ((missing_links / total_songs) * 100) if total_songs > 0 else 100
+        results.append(("song_links", "enlaces", completeness))
+        
+        # Canciones sin escuchas (lastfm)
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM songs s
+            LEFT JOIN (SELECT DISTINCT song_id FROM scrobbles) sc ON s.id = sc.song_id
+            WHERE sc.song_id IS NULL;
+        """)
+        missing_scrobbles = cursor.fetchone()[0]
+        completeness = 100 - ((missing_scrobbles / total_songs) * 100) if total_songs > 0 else 100
+        results.append(("scrobbles", "escuchas lastfm", completeness))
+        
+        # Canciones sin escuchas (listenbrainz)
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM songs s
+            LEFT JOIN (SELECT DISTINCT song_id FROM listens) l ON s.id = l.song_id
+            WHERE l.song_id IS NULL;
+        """)
+        missing_listens = cursor.fetchone()[0]
+        completeness = 100 - ((missing_listens / total_songs) * 100) if total_songs > 0 else 100
+        results.append(("listens", "escuchas listenbrainz", completeness))
+        
+        return results
+
+    def analyze_missing_label_data(self):
+        """Analiza datos ausentes relacionados con sellos discográficos."""
+        cursor = self.conn.cursor()
+        results = []
+        
+        # Primero analizar columnas de la tabla labels
+        cursor.execute("PRAGMA table_info(labels);")
+        columns = cursor.fetchall()
+        
+        # Contar sellos totales
+        cursor.execute("SELECT COUNT(*) FROM labels;")
+        total_labels = cursor.fetchone()[0]
+        
+        # Analizar cada columna de labels
+        for col in columns:
+            col_name = col[1]
+            
+            # Excluir columnas de ID y timestamps automáticos
+            if col_name.lower() == 'id' or col_name.endswith('_id') or \
+            col_name.endswith('_timestamp') or col_name == 'last_updated':
+                continue
+            
+            # Contar valores no nulos
+            cursor.execute(f"SELECT COUNT(*) FROM labels WHERE {col_name} IS NOT NULL AND {col_name} != '';")
+            filled = cursor.fetchone()[0]
+            
+            # Calcular porcentaje de completitud
+            completeness = (filled / total_labels) * 100 if total_labels > 0 else 100
+            
+            results.append(("labels", col_name, completeness))
+        
+        # Sellos sin relaciones con otros sellos
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM labels l
+            LEFT JOIN (
+                SELECT DISTINCT source_label_id AS label_id FROM label_relationships
+                UNION
+                SELECT DISTINCT target_label_id AS label_id FROM label_relationships
+            ) r ON l.id = r.label_id
+            WHERE r.label_id IS NULL;
+        """)
+        missing_relationships = cursor.fetchone()[0]
+        completeness = 100 - ((missing_relationships / total_labels) * 100) if total_labels > 0 else 100
+        results.append(("label_relationships", "relaciones entre sellos", completeness))
+        
+        # Sellos sin álbumes asociados
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM labels l
+            LEFT JOIN label_release_relationships lrr ON l.id = lrr.label_id
+            WHERE lrr.label_id IS NULL;
+        """)
+        missing_releases = cursor.fetchone()[0]
+        completeness = 100 - ((missing_releases / total_labels) * 100) if total_labels > 0 else 100
+        results.append(("label_release_relationships", "relaciones con álbumes", completeness))
+        
+        # Sellos sin datos wikidata
+        cursor.execute("""
+            SELECT COUNT(*) 
+            FROM labels l
+            LEFT JOIN mb_wikidata w ON l.id = w.label_id
+            WHERE w.label_id IS NULL;
+        """)
+        missing_wikidata = cursor.fetchone()[0]
+        completeness = 100 - ((missing_wikidata / total_labels) * 100) if total_labels > 0 else 100
+        results.append(("mb_wikidata", "datos wikidata", completeness))
+        
+        return results
+
+    def display_missing_data_results(self, results, table, summary_label, chart_container):
+        """Muestra los resultados del análisis de datos ausentes en la UI."""
         # Ordenar por completitud (ascendente para ver los más incompletos primero)
         results.sort(key=lambda x: x[2])
         
@@ -322,6 +657,9 @@ class StatsModule(BaseModule):
             
             # Añadir el gráfico al contenedor
             chart_container.layout().addWidget(chart_view)
+
+
+
 
     def load_genre_stats(self):
         """Carga estadísticas de géneros musicales."""
@@ -425,6 +763,168 @@ class StatsModule(BaseModule):
             import traceback
             logging.error(traceback.format_exc())
 
+    def highlight_selected_genre_row(self, row):
+        """Resalta la fila del género seleccionado."""
+        for i in range(self.table_genres.rowCount()):
+            for j in range(self.table_genres.columnCount()):
+                item = self.table_genres.item(i, j)
+                if item:
+                    if i == row:
+                        item.setBackground(QBrush(QColor("#e0f2f1")))  # Color claro para la fila seleccionada
+                    else:
+                        item.setBackground(QBrush(QColor("#ffffff")))  # Color normal para las demás filas
+
+
+
+    def on_genre_selected(self, item):
+        """Maneja la selección de un género en la tabla."""
+        if not self.conn:
+            logging.error("No hay conexión a la base de datos")
+            return
+        
+        # Obtener el género seleccionado (siempre está en la primera columna)
+        row = item.row()
+        genre = self.table_genres.item(row, 0).text()
+        logging.info(f"Género seleccionado: {genre}")
+        
+        # Buscar el contenedor para la gráfica
+        chart_container = self.findChild(QWidget, "chart_container_artists_by_genre")
+        if not chart_container:
+            logging.error("No se encontró el contenedor para la gráfica de artistas por género")
+            return
+        
+        # Asegurar que tiene layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar el contenedor
+        self.clear_layout(layout)
+        
+        # Consultar artistas por género
+        cursor = self.conn.cursor()
+        try:
+            # Consulta para obtener los artistas que tienen canciones del género seleccionado
+            cursor.execute("""
+                SELECT 
+                    artist, COUNT(*) as song_count
+                FROM 
+                    songs
+                WHERE 
+                    genre = ? AND
+                    artist IS NOT NULL AND artist != ''
+                GROUP BY 
+                    artist
+                ORDER BY 
+                    song_count DESC
+                LIMIT 15;
+            """, (genre,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Crear gráfico de barras con los artistas
+                chart_view = ChartFactory.create_bar_chart(
+                    results,
+                    f"Top Artistas con Género: {genre}",
+                    x_label="Artista",
+                    y_label="Canciones"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Gráfico de artistas para género '{genre}' creado correctamente")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de artistas")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    
+            else:
+                # No hay datos
+                no_data = QLabel(f"No hay artistas con canciones del género '{genre}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+            
+            genre_title_label = self.findChild(QLabel, "label_selected_genre_title")
+            if genre_title_label:
+                genre_title_label.setText(f"Artistas con Género: {genre}")
+
+        except Exception as e:
+            logging.error(f"Error al consultar artistas por género: {e}")
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def setup_genre_combo(self):
+        """Configura el combo de selección de géneros."""
+        combo_genres = self.findChild(QComboBox, "combo_genre_selection")
+        if not combo_genres:
+            return
+            
+        # Limpiar combo
+        combo_genres.clear()
+        
+        # Consultar todos los géneros
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT DISTINCT genre
+            FROM songs
+            WHERE genre IS NOT NULL AND genre != ''
+            ORDER BY genre;
+        """)
+        
+        genres = [row[0] for row in cursor.fetchall()]
+        
+        # Añadir al combo
+        for genre in genres:
+            combo_genres.addItem(genre)
+            
+        # Conectar evento
+        combo_genres.currentIndexChanged.connect(lambda: self.on_genre_combo_changed())
+
+
+    def show_genre_details(self, genre):
+        """Muestra estadísticas detalladas del género seleccionado."""
+        details_widget = self.findChild(QWidget, "genre_details_widget")
+        if not details_widget:
+            return
+            
+        # Limpiar widgets previos
+        self.clear_layout(details_widget.layout())
+        
+        # Consultar información adicional
+        cursor = self.conn.cursor()
+        
+        # Número total de canciones del género
+        cursor.execute("SELECT COUNT(*) FROM songs WHERE genre = ?", (genre,))
+        total_songs = cursor.fetchone()[0]
+        
+        # Número de artistas distintos
+        cursor.execute("SELECT COUNT(DISTINCT artist) FROM songs WHERE genre = ?", (genre,))
+        total_artists = cursor.fetchone()[0]
+        
+        # Duración total
+        cursor.execute("SELECT SUM(duration) FROM songs WHERE genre = ?", (genre,))
+        total_duration = cursor.fetchone()[0] or 0
+        hours = int(total_duration / 3600)
+        minutes = int((total_duration % 3600) / 60)
+        
+        # Mostrar detalles
+        layout = QVBoxLayout()
+        
+        info = QLabel(f"""
+            <h3>Detalles del género: {genre}</h3>
+            <p><b>Total de canciones:</b> {total_songs}</p>
+            <p><b>Artistas distintos:</b> {total_artists}</p>
+            <p><b>Duración total:</b> {hours}h {minutes}m</p>
+        """)
+        info.setTextFormat(Qt.TextFormat.RichText)
+        
+        layout.addWidget(info)
+        details_widget.setLayout(layout)
+
+
+# ESCUCHAS
 
                 
     def load_listening_stats(self):

@@ -1,6 +1,7 @@
 # chart_utils.py
 from PyQt6.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QLabel
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QColor, QBrush, QPen
 import logging
 from PyQt6.QtCharts import QChart
 
@@ -74,6 +75,8 @@ class ChartFactory:
             chart_view = QChartView(chart)
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
             
+            ChartFactory.apply_dark_theme(chart)
+            
             return chart_view
             
         except Exception as e:
@@ -143,6 +146,9 @@ class ChartFactory:
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
             
             logging.info(f"Pie chart '{title}' created successfully")
+            
+            ChartFactory.apply_dark_theme(chart)
+            
             return chart_view
             
         except Exception as e:
@@ -258,7 +264,9 @@ class ChartFactory:
             # Crear la vista del gráfico
             chart_view = QChartView(chart)
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
-            
+           
+            ChartFactory.apply_dark_theme(chart)
+
             return chart_view
             
         except Exception as e:
@@ -298,6 +306,8 @@ class ChartFactory:
         text_area.setText(text)
         layout.addWidget(text_area)
         
+        ChartFactory.apply_dark_theme(chart)
+
         return widget
     
     @staticmethod
@@ -307,3 +317,30 @@ class ChartFactory:
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label.setStyleSheet("background-color: #f0f0f0; padding: 20px; color: red;")
         return label
+
+
+    @staticmethod
+    def apply_dark_theme(chart, text_color="#cba6f7", background_color="#1a1b26"):
+        """Apply a dark theme to a chart"""
+        if not isinstance(chart, QChart):
+            return
+            
+        # Set background
+        chart.setBackgroundBrush(QBrush(QColor(background_color)))
+        
+        # Set text colors
+        chart.setTitleBrush(QBrush(QColor(text_color)))
+        
+        # Axes text
+        for axis in chart.axes():
+            axis.setLabelsBrush(QBrush(QColor(text_color)))
+            axis.setTitleBrush(QBrush(QColor(text_color)))
+            
+            # Set grid color to a slightly lighter color 
+            gridline_color = QColor(text_color)
+            gridline_color.setAlphaF(0.2)  # More transparent
+            axis.setGridLinePen(QPen(gridline_color, 0.5))
+            
+        # Legend
+        chart.legend().setLabelBrush(QBrush(QColor(text_color)))
+        chart.legend().setBrush(QBrush(QColor(background_color)))
