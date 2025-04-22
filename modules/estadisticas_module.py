@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QStackedWidget, 
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QStackedWidget, QTextEdit,
                             QComboBox, QLabel, QTableWidget, QTableWidgetItem,
-                            QProgressBar, QSplitter)
+                            QProgressBar, QSplitter, QMessageBox, QPushButton)
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
 import sqlite3
@@ -195,6 +195,18 @@ class StatsModule(BaseModule):
         # Configurar navegación entre vistas de géneros
         self.setup_genre_chart_navigation()
 
+        self.table_labels.itemClicked.connect(self.on_label_selected)
+        logging.info("Tabla de sellos conectada correctamente")
+        
+        # Conectar el botón de desglose por género
+        try:
+            self.sellos_artistas_button.clicked.disconnect()
+        except:
+            pass
+        self.sellos_artistas_button.clicked.connect(self.on_show_label_genres)
+        logging.info("Botón de géneros por sello conectado correctamente")
+
+
         
     def init_database(self):
         """Inicializa la conexión a la base de datos."""
@@ -291,7 +303,16 @@ class StatsModule(BaseModule):
                 return
                 
             self.current_category = self.category_combo.currentText()
+            logging.info(f"Cambiando a categoría: {self.current_category} (índice {index})")
+            
+            # Antes del cambio
+            logging.info(f"Índice actual del stacked_widget: {self.stacked_widget.currentIndex()}")
+            
+            # Establecer el índice correcto
             self.stacked_widget.setCurrentIndex(index)
+            
+            # Después del cambio
+            logging.info(f"Nuevo índice del stacked_widget: {self.stacked_widget.currentIndex()}")
             
             # Cargar los datos para la categoría seleccionada
             if self.current_category == "Datos Ausentes":
@@ -301,6 +322,8 @@ class StatsModule(BaseModule):
             elif self.current_category == "Escuchas":
                 self.load_listening_stats()
             elif self.current_category == "Sellos":
+                # Verificar si estamos realmente en la página de sellos
+                logging.info(f"Después de cambiar a sellos, página actual: {self.stacked_widget.currentWidget().objectName()}")
                 self.load_label_stats()
             elif self.current_category == "Tiempo":
                 self.load_time_stats()
@@ -683,6 +706,545 @@ class StatsModule(BaseModule):
         
         return results
 
+    def on_genre_label_selected(self, item):
+        """Maneja la selección de un sello en la tabla de géneros por sello."""
+        if not self.conn:
+            logging.error("No hay conexión a la base de datos")
+            return
+        
+        # Obtener el sello seleccionado (siempre en la primera columna)
+        row = item.row()
+        label = self.table_labels_genres.item(row, 0).text()
+        logging.info(f"Sello seleccionado en tabla de géneros: {label}")
+        
+        # Almacenar el sello seleccionado
+        self.selected_label = label
+        
+        # Importante: No limpiar todo el layout de la página, solo actualizar el gráfico
+        if hasattr(self, 'chart_container_genres'):
+            # Asegurar que el widget tiene layout
+            chart_layout = self.ensure_widget_has_layout(self.chart_container_genres)
+            
+            # Limpiar SOLO el contenedor del gráfico, no toda la página
+            self.clear_layout(chart_layout)
+            
+            # Cargar los géneros para este sello
+            self.load_genres_by_label_chart(label, chart_layout)
+
+    def on_album_label_selected(self, item):
+        """Maneja la selección de un sello en la tabla de álbumes por sello."""
+        if not self.conn:
+            logging.error("No hay conexión a la base de datos")
+            return
+        
+        # Obtener el sello seleccionado (siempre en la primera columna)
+        row = item.row()
+        label = self.sellos_tabla_albumes.item(row, 0).text()
+        logging.info(f"Sello seleccionado en tabla de álbumes: {label}")
+        
+        # Almacenar el sello seleccionado
+        self.selected_label = label
+        
+        # Cargar los álbumes para este sello
+        self.load_albums_by_label(label)
+
+
+
+    def on_label_selected(self, item):
+        """Maneja la selección de un sello en la tabla de sellos."""
+        if not self.conn:
+            logging.error("No hay conexión a la base de datos")
+            return
+        
+        # Obtener el sello seleccionado (siempre en la primera columna)
+        row = item.row()
+        label = self.table_labels.item(row, 0).text()
+        logging.info(f"Sello seleccionado: {label}")
+        
+        # Almacenar el sello seleccionado para usarlo con otras funciones
+        self.selected_label = label
+        
+        # Cargar el gráfico de artistas para este sello
+        self.load_artists_by_label(label)
+        
+        # Cambiar a la vista de artistas en el stacked widget
+        if hasattr(self, 'chart_sello_stacked'):
+            self.chart_sello_stacked.setCurrentIndex(1)  # Establecer a la página chart_sello_artistas
+
+    def load_genres_by_label_chart(self, label, layout):
+        """
+        Carga y muestra un gráfico de géneros para un sello específico en el layout proporcionado.
+        Esta versión NO afecta a la tabla - solo actualiza el gráfico.
+        """
+        # Añadir título para el gráfico
+        title_label = QLabel(f"Géneros en álbumes del sello: {label}")
+        title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+        layout.addWidget(title_label)
+        
+        # Consultar géneros por sello
+        cursor = self.conn.cursor()
+        try:
+            # Consulta para géneros en canciones de álbumes del sello seleccionado
+            cursor.execute("""
+                SELECT 
+                    s.genre, 
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                WHERE 
+                    a.label = ? AND
+                    s.genre IS NOT NULL AND s.genre != ''
+                GROUP BY 
+                    s.genre
+                ORDER BY 
+                    song_count DESC;
+            """, (label,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Crear gráfico circular con géneros
+                chart_view = ChartFactory.create_pie_chart(
+                    results,
+                    f"Distribución de Géneros en {label}"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Gráfico de géneros para sello '{label}' creado correctamente")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de géneros")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    
+            else:
+                # No hay datos
+                no_data = QLabel(f"No hay datos de géneros para el sello '{label}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error al consultar géneros por sello: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def load_artists_by_label(self, label):
+        """Carga y muestra un gráfico de artistas para un sello específico."""
+        # Asegurarse de que chart_sello_artistas tenga un layout
+        chart_container = self.chart_sello_artistas
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar el contenedor
+        self.clear_layout(layout)
+        
+        # Consultar artistas por sello
+        cursor = self.conn.cursor()
+        try:
+            # Consulta para artistas con álbumes del sello seleccionado
+            cursor.execute("""
+                SELECT 
+                    ar.name as artist_name, 
+                    COUNT(a.id) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    a.label = ? AND
+                    ar.name IS NOT NULL AND ar.name != ''
+                GROUP BY 
+                    ar.name
+                ORDER BY 
+                    album_count DESC
+                LIMIT 15;
+            """, (label,))
+            
+            results = cursor.fetchall()
+            
+            # Si la primera consulta no devuelve resultados (quizás debido a relaciones artist_id faltantes),
+            # intentar una consulta alternativa
+            if not results:
+                cursor.execute("""
+                    SELECT 
+                        s.artist as artist_name, 
+                        COUNT(DISTINCT s.album) as album_count
+                    FROM 
+                        songs s
+                    JOIN 
+                        albums a ON s.album = a.name
+                    WHERE 
+                        a.label = ? AND
+                        s.artist IS NOT NULL AND s.artist != ''
+                    GROUP BY 
+                        s.artist
+                    ORDER BY 
+                        album_count DESC
+                    LIMIT 15;
+                """, (label,))
+                
+                results = cursor.fetchall()
+            
+            if results:
+                # Crear gráfico de barras con artistas
+                chart_view = ChartFactory.create_bar_chart(
+                    results,
+                    f"Artistas con Álbumes en {label}",
+                    x_label="Artista",
+                    y_label="Álbumes"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Gráfico de artistas para sello '{label}' creado correctamente")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de artistas")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+                    
+            else:
+                # No hay datos
+                no_data = QLabel(f"No hay artistas con álbumes del sello '{label}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error al consultar artistas por sello: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def load_genres_by_label(self, label):
+        """Carga y muestra un gráfico de géneros para un sello específico."""
+        # Verificamos si existe el contenedor del gráfico
+        if hasattr(self, 'chart_container_genres'):
+            # Obtenemos el layout
+            chart_layout = self.ensure_widget_has_layout(self.chart_container_genres)
+            
+            # Limpiamos SOLO el contenedor del gráfico
+            self.clear_layout(chart_layout)
+            
+            # Cargamos el gráfico en el contenedor
+            self.load_genres_by_label_chart(label, chart_layout)
+        else:
+            logging.error("No existe el atributo chart_container_genres")
+
+    def on_show_label_genres(self):
+        """Maneja el clic en el botón 'géneros por sello'."""
+        # Verificar si tenemos un sello seleccionado
+        if not hasattr(self, 'selected_label'):
+            # Si no hay sello seleccionado, mostrar un error o advertencia
+            QMessageBox.warning(self, "Selección requerida", 
+                            "Por favor, selecciona primero un sello de la tabla.")
+            return
+        
+        # Mantener en la misma página (verticalLayout_labels_top)
+        verticalLayout_labels_top = self.findChild(QWidget, "verticalLayout_labels_top")
+        if verticalLayout_labels_top:
+            self.stackedWidget.setCurrentWidget(verticalLayout_labels_top)
+        
+        # Cambiar a la vista de géneros en el stacked widget interno
+        if hasattr(self, 'chart_sello_stacked'):
+            self.chart_sello_stacked.setCurrentIndex(1)  # Índice para chart_sello_artistas
+            logging.info("Cambiando a vista de géneros por sello")
+        
+        # Cargar el desglose por género para el sello seleccionado
+        self.load_genres_by_label(self.selected_label)
+
+    def on_show_label_percentages(self):
+        """Maneja el clic en el botón 'porcentajes de sellos'."""
+        # Mantener en la misma página (verticalLayout_labels_top)
+        verticalLayout_labels_top = self.findChild(QWidget, "verticalLayout_labels_top")
+        if verticalLayout_labels_top:
+            self.stackedWidget.setCurrentWidget(verticalLayout_labels_top)
+        
+        # Cambiar a la vista de porcentajes en el stacked widget interno
+        if hasattr(self, 'chart_sello_stacked'):
+            self.chart_sello_stacked.setCurrentIndex(0)  # Índice para chart_sellos_porcentaje
+            logging.info("Cambiando a vista de porcentajes de sellos")
+        
+        # Recargar el gráfico de porcentajes
+        self.load_label_chart()
+
+    def load_albums_by_label(self, label):
+        """Carga y muestra un gráfico y tabla de álbumes para un sello específico."""
+        logging.info(f"Cargando álbumes para el sello: {label}")
+        
+        # Asegurarse de que chart_sellos_albumes tenga un layout
+        chart_layout = self.ensure_widget_has_layout(self.chart_sellos_albumes)
+        
+        # Limpiar el contenedor de gráficos
+        self.clear_layout(chart_layout)
+        
+        # Consultar álbumes por sello
+        cursor = self.conn.cursor()
+        try:
+            # Consulta para álbumes del sello seleccionado
+            cursor.execute("""
+                SELECT 
+                    name as album_name, 
+                    (SELECT name FROM artists WHERE id = albums.artist_id) as artist_name,
+                    year,
+                    CASE 
+                        WHEN total_tracks IS NULL OR total_tracks = 0 THEN (
+                            SELECT COUNT(*) FROM songs 
+                            WHERE album = albums.name AND artist = (
+                                SELECT name FROM artists WHERE id = albums.artist_id
+                            )
+                        ) 
+                        ELSE total_tracks 
+                    END as tracks_count
+                FROM 
+                    albums
+                WHERE 
+                    label = ?
+                ORDER BY 
+                    year DESC, name
+                LIMIT 50;
+            """, (label,))
+            
+            results = cursor.fetchall()
+            logging.info(f"Consulta de álbumes retornó {len(results)} resultados")
+            
+            # Llenar la tabla de álbumes
+            if hasattr(self, 'sellos_tabla_albumes'):
+                self.sellos_tabla_albumes.setRowCount(len(results))
+                
+                for i, row in enumerate(results):
+                    album_name = row[0] if row[0] else "Desconocido"
+                    artist_name = row[1] if row[1] else "Desconocido"
+                    year = row[2] if row[2] else ""
+                    tracks = str(row[3]) if row[3] else "0"
+                    
+                    self.sellos_tabla_albumes.setItem(i, 0, QTableWidgetItem(album_name))
+                    self.sellos_tabla_albumes.setItem(i, 1, QTableWidgetItem(artist_name))
+                    self.sellos_tabla_albumes.setItem(i, 2, QTableWidgetItem(str(year)))
+                    self.sellos_tabla_albumes.setItem(i, 3, QTableWidgetItem(tracks))
+                
+                self.sellos_tabla_albumes.resizeColumnsToContents()
+                logging.info(f"Tabla de álbumes actualizada con {len(results)} filas")
+            
+            # También crear un gráfico de barras para algunos álbumes
+            if results:
+                # Formatear los datos para el chart (usar solo los primeros 15 álbumes)
+                chart_data = [(f"{row[0]} ({row[2]})" if row[2] else row[0], row[3]) for row in results[:15]]
+                
+                # Crear gráfico de barras con álbumes
+                chart_view = ChartFactory.create_bar_chart(
+                    chart_data,
+                    f"Álbumes del sello {label}",
+                    x_label="Álbum",
+                    y_label="Canciones"
+                )
+                
+                if chart_view:
+                    chart_layout.addWidget(chart_view)
+                    logging.info(f"Gráfico de álbumes para sello '{label}' creado correctamente")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de álbumes")
+                    error_label.setStyleSheet("color: red;")
+                    chart_layout.addWidget(error_label)
+            else:
+                # No hay datos
+                no_data = QLabel(f"No hay álbumes del sello '{label}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                chart_layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error al consultar álbumes por sello: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            chart_layout.addWidget(error_label)
+
+    def load_label_tables(self):
+        """Carga las tablas de sellos en las diferentes páginas."""
+        if not self.conn:
+            return
+            
+        try:
+            cursor = self.conn.cursor()
+            
+            # Obtener los datos de sellos
+            cursor.execute("""
+                SELECT label, COUNT(*) as album_count
+                FROM albums
+                WHERE label IS NOT NULL AND label != ''
+                GROUP BY label
+                ORDER BY album_count DESC
+                LIMIT 50;
+            """)
+            
+            label_results = cursor.fetchall()
+            
+            # Verificar que tenemos datos
+            if not label_results:
+                logging.warning("No se encontraron datos de sellos para las tablas")
+                return
+                
+            # Cargar la tabla de géneros si existe
+            if hasattr(self, 'table_labels_genres'):
+                self.table_labels_genres.setRowCount(len(label_results))
+                for i, (label, count) in enumerate(label_results):
+                    self.table_labels_genres.setItem(i, 0, QTableWidgetItem(label))
+                    self.table_labels_genres.setItem(i, 1, QTableWidgetItem(str(count)))
+                self.table_labels_genres.resizeColumnsToContents()
+                logging.info("Tabla de sellos por géneros cargada correctamente")
+            
+            # Cargar la tabla de álbumes si existe
+            if hasattr(self, 'sellos_tabla_albumes'):
+                self.sellos_tabla_albumes.setRowCount(len(label_results))
+                for i, (label, count) in enumerate(label_results):
+                    self.sellos_tabla_albumes.setItem(i, 0, QTableWidgetItem(label))
+                    self.sellos_tabla_albumes.setItem(i, 1, QTableWidgetItem(str(count)))
+                self.sellos_tabla_albumes.resizeColumnsToContents()
+                logging.info("Tabla de sellos por álbumes cargada correctamente")
+                
+        except Exception as e:
+            logging.error(f"Error al cargar tablas de sellos: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
+    def setup_label_connections(self):
+        """Configura las conexiones específicas para la pestaña de sellos."""
+        try:
+            # Conectar selección de tabla de sellos principal
+            if hasattr(self, 'table_labels') and self.table_labels is not None:
+                try:
+                    self.table_labels.itemClicked.disconnect()
+                except:
+                    pass
+                self.table_labels.itemClicked.connect(self.on_label_selected)
+                logging.info("Tabla de sellos principal conectada correctamente")
+            
+            # Conectar tabla de géneros por sello si existe y es válida
+            table_labels_genres = self.findChild(QTableWidget, "table_labels_genres")
+            if table_labels_genres is not None:
+                # Verificar que el objeto es válido antes de conectarlo
+                try:
+                    # Tratar de acceder a alguna propiedad para verificar si es válido
+                    _ = table_labels_genres.rowCount()
+                    
+                    try:
+                        table_labels_genres.itemClicked.disconnect()
+                    except:
+                        pass
+                    table_labels_genres.itemClicked.connect(self.on_genre_label_selected)
+                    logging.info("Tabla de sellos por género conectada correctamente")
+                    
+                    # Guardar referencia para uso futuro
+                    self.table_labels_genres = table_labels_genres
+                except RuntimeError as e:
+                    logging.error(f"Widget table_labels_genres no es válido: {e}")
+            
+            # Conectar tabla de álbumes por sello si existe
+            sellos_tabla_albumes = self.findChild(QTableWidget, "sellos_tabla_albumes")
+            if sellos_tabla_albumes is not None:
+                try:
+                    # Verificar que el objeto es válido
+                    _ = sellos_tabla_albumes.rowCount()
+                    
+                    try:
+                        sellos_tabla_albumes.itemClicked.disconnect()
+                    except:
+                        pass
+                    sellos_tabla_albumes.itemClicked.connect(self.on_album_label_selected)
+                    logging.info("Tabla de sellos por álbumes conectada correctamente")
+                    
+                    # Guardar referencia
+                    self.sellos_tabla_albumes = sellos_tabla_albumes
+                except RuntimeError as e:
+                    logging.error(f"Widget sellos_tabla_albumes no es válido: {e}")
+            
+            # Conectar botones con verificación de existencia
+            self.connect_button_safely('sellos_artistas_button', self.on_show_label_genres)
+            self.connect_button_safely('sellos_albumes_button', self.on_show_label_albums)
+            self.connect_button_safely('sellos_info_button', self.on_show_label_info)
+            self.connect_button_safely('sellos_decade_button', self.on_show_label_decades)
+            self.connect_button_safely('sellos_porcentajes_button', self.on_show_label_percentages)
+            self.connect_button_safely('sellos_por_genero_button', self.on_show_sellos_generos)
+        except Exception as e:
+            logging.error(f"Error al configurar conexiones de sellos: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
+
+    def on_show_sellos_generos(self):
+        """Maneja el clic en el botón 'sellos_por_genero_button' para mostrar la página de sellos por género."""
+        # Acceso directo a la página mediante el atributo creado por uic
+        if hasattr(self, 'sellos_por_genero'):
+            # Cambiar a la página sellos_por_genero mediante el índice del widget
+            self.stackedWidget.setCurrentWidget(self.sellos_por_genero)
+            logging.info("Cambiando a vista de sellos_por_genero mediante botón sellos_por_genero_button")
+        else:
+            logging.error("No se encontró el atributo sellos_por_genero")
+
+
+    def on_show_label_decades(self):
+        """Maneja el clic en el botón de décadas usando atributos directos."""
+        # Cambiar a la página de décadas si existe como atributo
+        if hasattr(self, 'verticalLayout_labels_bottom'):
+            self.stackedWidget.setCurrentWidget(self.verticalLayout_labels_bottom)
+            logging.info("Cambiando a vista de décadas")
+        else:
+            logging.error("No existe el atributo verticalLayout_labels_bottom")
+
+
+    def connect_button_safely(self, button_name, handler):
+        """Conecta un botón a su manejador de forma segura, verificando su existencia."""
+        button = self.findChild(QPushButton, button_name)
+        
+        if button is not None:
+            try:
+                # Verificar si el botón es válido
+                _ = button.text()
+                
+                try:
+                    button.clicked.disconnect()
+                except:
+                    pass
+                button.clicked.connect(handler)
+                logging.info(f"Botón {button_name} conectado correctamente")
+                
+                # Guardar referencia
+                setattr(self, button_name, button)
+            except RuntimeError as e:
+                logging.error(f"Widget {button_name} no es válido: {e}")
+        else:
+            logging.warning(f"No se encontró el botón {button_name}")
+
+    def on_show_label_albums(self):
+        """Maneja el clic en el botón 'álbumes por sello'."""
+        # Verificar si tenemos un sello seleccionado
+        if not hasattr(self, 'selected_label'):
+            # Si no hay sello seleccionado, mostrar un error o advertencia
+            QMessageBox.warning(self, "Selección requerida", 
+                            "Por favor, selecciona primero un sello de la tabla.")
+            return
+        
+        # Cambiar a la página de álbumes por sello
+        self.stackedWidget.setCurrentWidget(self.sellos_albumes)
+        
+        # Asegurarnos que la tabla existe y tiene columnas configuradas
+        if hasattr(self, 'sellos_tabla_albumes'):
+            if self.sellos_tabla_albumes.columnCount() == 0:
+                self.sellos_tabla_albumes.setColumnCount(4)
+                self.sellos_tabla_albumes.setHorizontalHeaderLabels(["Álbum", "Artista", "Año", "Pistas"])
+        
+        # Cargar los álbumes para el sello seleccionado
+        self.load_albums_by_label(self.selected_label)
+
     def display_missing_data_results(self, results, table, summary_label, chart_container):
         """Muestra los resultados del análisis de datos ausentes en la UI."""
         # Ordenar por completitud (ascendente para ver los más incompletos primero)
@@ -921,26 +1483,40 @@ class StatsModule(BaseModule):
         
         # Obtener el género seleccionado (siempre está en la primera columna)
         row = item.row()
-        genre = self.table_genres.item(row, 0).text()
+        
+        # Acceso directo al widget de tabla
+        table_genres = self.table_genres
+        genre = table_genres.item(row, 0).text()
+        
         # Si el género está truncado, obtenemos el texto completo del tooltip
-        if self.table_genres.item(row, 0).toolTip():
-            genre = self.table_genres.item(row, 0).toolTip()
+        if table_genres.item(row, 0).toolTip():
+            genre = table_genres.item(row, 0).toolTip()
         
         logging.info(f"Género seleccionado: {genre}")
         
-        # Actualizar título si existe
-        genre_title_label = self.findChild(QLabel, "label_selected_genre_title")
-        if genre_title_label:
-            genre_title_label.setText(f"Género: {genre}")
+        # Actualizar título usando acceso directo
+        try:
+            self.label_selected_genre_title.setText(f"Género: {genre}")
+        except AttributeError:
+            # Fallback si el acceso directo falla
+            genre_title_label = self.findChild(QLabel, "label_selected_genre_title")
+            if genre_title_label:
+                genre_title_label.setText(f"Género: {genre}")
         
         # Cargar ambas visualizaciones
         self.load_artists_by_genre(genre)
         self.load_genre_by_decade(genre)
         
-        # Mostrar el stacked widget si está oculto
-        stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
-        if stacked_genre_charts:
-            stacked_genre_charts.setVisible(True)
+        # Asegurar que el stacked widget está visible usando acceso directo
+        try:
+            self.stacked_genre_charts.setVisible(True)
+            self.stacked_genre_charts.setCurrentIndex(0)  # Establecer página por defecto
+        except AttributeError:
+            # Fallback
+            stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
+            if stacked_genre_charts:
+                stacked_genre_charts.setVisible(True)
+                stacked_genre_charts.setCurrentIndex(0)
 
     def load_artists_by_genre(self, genre):
         """Carga la gráfica de artistas para un género específico."""
@@ -1135,77 +1711,97 @@ class StatsModule(BaseModule):
 
     def setup_genre_chart_navigation(self):
         """Configura los botones de navegación entre las vistas de género."""
+        try:
+            # Acceso directo a los widgets
+            # Esto funcionará si uic.loadUi creó estos atributos
+            stacked_genre_charts = self.stacked_genre_charts
+            btn_artists_view = self.btn_artists_view
+            btn_decades_view = self.btn_decades_view
+            
+            if not all([stacked_genre_charts, btn_artists_view, btn_decades_view]):
+                logging.error("No se pudieron acceder a todos los widgets de navegación de géneros")
+                return
+            
+            logging.info(f"stacked_genre_charts: tiene {stacked_genre_charts.count()} páginas")
+            
+            # Clear existing connections to avoid duplicates
+            try:
+                btn_artists_view.clicked.disconnect()
+            except Exception:
+                pass
+            
+            try:
+                btn_decades_view.clicked.disconnect()
+            except Exception:
+                pass
+            
+            # Direct connections to specific pages
+            btn_artists_view.clicked.connect(lambda: stacked_genre_charts.setCurrentIndex(0))
+            btn_decades_view.clicked.connect(lambda: stacked_genre_charts.setCurrentIndex(1))
+            
+            logging.info("Botones de navegación conectados directamente")
+        except Exception as e:
+            logging.error(f"Error al configurar navegación: {e}")
+            # Fallback al método anterior si hay algún problema
+            self._setup_genre_chart_navigation_fallback()
+
+    def _setup_genre_chart_navigation_fallback(self):
+        """Método alternativo para configurar la navegación si el acceso directo falla."""
         stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
         btn_artists_view = self.findChild(QPushButton, "btn_artists_view")
         btn_decades_view = self.findChild(QPushButton, "btn_decades_view")
         
-        if not stacked_genre_charts:
-            logging.error("No se encontró el QStackedWidget 'stacked_genre_charts'")
+        if not all([stacked_genre_charts, btn_artists_view, btn_decades_view]):
+            logging.error("No se encontraron los widgets necesarios para la navegación")
             return
             
-        if not btn_artists_view:
-            logging.error("No se encontró el botón 'btn_artists_view'")
+        # Conectar directamente
+        btn_artists_view.clicked.connect(lambda: stacked_genre_charts.setCurrentIndex(0))
+        btn_decades_view.clicked.connect(lambda: stacked_genre_charts.setCurrentIndex(1))
+        logging.info("Botones conectados por método fallback")
+
+
+
+    def debug_button_click(self, button_name):
+        """Debug function to verify button clicks."""
+        stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
+        logging.info(f"Botón {button_name} ha sido clickeado!")
         
-        if not btn_decades_view:
-            logging.error("No se encontró el botón 'btn_decades_view'")
-        
-        # Si no se encontraron los botones, intentar buscarlos por otras propiedades
-        if not btn_artists_view or not btn_decades_view:
-            # Buscar botones por texto
-            for button in self.findChildren(QPushButton):
-                if button.text() == "Ver Artistas":
-                    btn_artists_view = button
-                    logging.info("Botón 'Ver Artistas' encontrado por texto")
-                elif button.text() == "Ver por Décadas":
-                    btn_decades_view = button
-                    logging.info("Botón 'Ver por Décadas' encontrado por texto")
-        
-        # Verificar si ahora tenemos los botones
-        if not btn_artists_view or not btn_decades_view:
-            logging.error("No se pudieron encontrar los botones de navegación")
-            return
-        
-        # Mostrar información sobre los objetos encontrados
-        logging.info(f"stacked_genre_charts: {stacked_genre_charts}")
-        logging.info(f"btn_artists_view: {btn_artists_view}")
-        logging.info(f"btn_decades_view: {btn_decades_view}")
-        
-        # Desconectar cualquier conexión previa para evitar duplicados
-        try:
-            btn_artists_view.clicked.disconnect()
-        except:
-            pass
-        
-        try:
-            btn_decades_view.clicked.disconnect()
-        except:
-            pass
-        
-        # Verificar el número de páginas en el stacked widget
-        page_count = stacked_genre_charts.count()
-        logging.info(f"Número de páginas en stacked_genre_charts: {page_count}")
-        
-        if page_count < 2:
-            logging.error("El QStackedWidget no tiene suficientes páginas")
-            return
-        
-        # Conectar botones para cambiar entre vistas utilizando lambdas explícitas
-        btn_artists_view.clicked.connect(lambda: self.change_genre_chart_page(0))
-        btn_decades_view.clicked.connect(lambda: self.change_genre_chart_page(1))
-        
-        # Inicialmente mostrar la vista de artistas
-        stacked_genre_charts.setCurrentIndex(0)
-        logging.info("Navegación de vistas de género configurada correctamente")
+        if stacked_genre_charts:
+            current = stacked_genre_charts.currentIndex()
+            count = stacked_genre_charts.count()
+            logging.info(f"Estado actual del stacked widget: página {current} de {count}")
+            
+            # Force direct page change
+            if button_name == "artists":
+                new_index = 0
+            else:
+                new_index = 1
+                
+            if 0 <= new_index < count:
+                logging.info(f"Cambiando a página {new_index}")
+                stacked_genre_charts.setCurrentIndex(new_index)
+                logging.info(f"Página actual después del cambio: {stacked_genre_charts.currentIndex()}")
+            else:
+                logging.error(f"Índice inválido: {new_index}, máximo: {count-1}")
+        else:
+            logging.error("No se encontró el stacked widget para cambiar páginas")
+
 
     def change_genre_chart_page(self, index):
         """Cambia la página del stacked widget de gráficos de género."""
         stacked_genre_charts = self.findChild(QStackedWidget, "stacked_genre_charts")
         if stacked_genre_charts:
-            if 0 <= index < stacked_genre_charts.count():
-                logging.info(f"Cambiando a la página {index} del stacked_genre_charts")
+            current_index = stacked_genre_charts.currentIndex()
+            if index != current_index and 0 <= index < stacked_genre_charts.count():
+                logging.info(f"Cambiando vista de género de página {current_index} a {index}")
                 stacked_genre_charts.setCurrentIndex(index)
+                return True
             else:
-                logging.error(f"Índice de página inválido: {index}, máximo: {stacked_genre_charts.count()-1}")
+                logging.warning(f"Índice de página inválido: {index}, actual: {current_index}, máximo: {stacked_genre_charts.count()-1}")
+        else:
+            logging.error("No se encontró el stacked widget de gráficos de género")
+        return False
 
 
     def setup_genre_combo(self):
@@ -1783,7 +2379,6 @@ class StatsModule(BaseModule):
         # ya que los widgets ya están en el UI
         self.update_time_chart()
 
- 
     def load_label_stats(self):
         """Carga estadísticas sobre sellos discográficos."""
         logging.info("Iniciando carga de estadísticas de sellos")
@@ -1792,8 +2387,24 @@ class StatsModule(BaseModule):
             logging.error("No hay conexión a la base de datos")
             return
         
-        # Cargar la tabla de sellos
+        # Primero, asegurarnos de que tenemos referencias a todos los widgets necesarios
+        # Esto puede ayudar a depurar problemas de widgets inexistentes o inválidos
+        self.chart_sello_stacked = self.findChild(QStackedWidget, "chart_sello_stacked")
+        self.chart_container_labels = self.findChild(QWidget, "chart_container_labels")
+        self.chart_sello_artistas = self.findChild(QWidget, "chart_sello_artistas")
+        
+        if not self.chart_sello_stacked:
+            logging.error("No se encontró el widget chart_sello_stacked")
+        if not self.chart_container_labels:
+            logging.error("No se encontró el widget chart_container_labels")
+        if not self.chart_sello_artistas:
+            logging.error("No se encontró el widget chart_sello_artistas")
+        
+        # Cargar la tabla de sellos principal
         self.load_label_table()
+        
+        # Cargar las tablas en las otras páginas
+        self.load_label_tables()
         
         # Cargar gráfico principal de sellos
         self.load_label_chart()
@@ -1801,10 +2412,37 @@ class StatsModule(BaseModule):
         # Cargar combo de décadas y preparar datos
         self.load_decade_data()
         
+        # Asegurar que las conexiones estén configuradas
+        self.setup_label_connections()
+        
+        # Configurar la página de información detallada del sello
+        self.setup_label_info_page()
+        
+        # Asegurar que estamos en la primera página y que el gráfico de porcentajes es visible
+        self.stackedWidget.setCurrentIndex(0)  # Primera página del stackedWidget principal
+        
+        if self.chart_sello_stacked:
+            self.chart_sello_stacked.setCurrentIndex(0)  # Índice para chart_sellos_porcentaje
+            logging.info(f"Estableciendo chart_sello_stacked a índice 0")
+        
         logging.info("Finalizada carga de estadísticas de sellos")
+
+
 
     def load_label_table(self):
         """Carga la tabla de sellos discográficos."""
+        logging.info("Iniciando carga de tabla de sellos")
+        
+        # Verificar que la tabla existe
+        if not hasattr(self, 'table_labels'):
+            logging.error("No se encontró el widget table_labels")
+            return
+        
+        # Información sobre el estado actual de la tabla
+        logging.info(f"Estado inicial de table_labels: filas={self.table_labels.rowCount()}, "
+                    f"columnas={self.table_labels.columnCount()}, "
+                    f"visible={self.table_labels.isVisible()}")
+        
         # Limpiar tabla
         self.table_labels.setRowCount(0)
         
@@ -1822,45 +2460,426 @@ class StatsModule(BaseModule):
         label_results = cursor.fetchall()
         logging.info(f"Número de sellos encontrados: {len(label_results)}")
         
+        if len(label_results) == 0:
+            logging.warning("No se encontraron sellos en la base de datos")
+            return
+        
         # Llenar la tabla
+        self.table_labels.setColumnCount(4)  # Asegurar que tenemos 4 columnas
+        self.table_labels.setHorizontalHeaderLabels(["Sello", "Álbumes", "Artistas", "Canciones"])
+        
+        # Configurar la tabla para una mejor visualización
+        self.table_labels.setAlternatingRowColors(True)
+        self.table_labels.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        self.table_labels.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        
+        # Mostrar los primeros 5 resultados para debug
+        sample_data = label_results[:5]
+        logging.info(f"Muestra de datos: {sample_data}")
+        
         self.table_labels.setRowCount(len(label_results))
         for i, (label, count) in enumerate(label_results):
+            # Verificar el formato de los valores
+            logging.debug(f"Fila {i}: Sello={label}, Álbumes={count}")
+            
             self.table_labels.setItem(i, 0, QTableWidgetItem(label))
             self.table_labels.setItem(i, 1, QTableWidgetItem(str(count)))
+            
+            # Obtener número de artistas para este sello
+            cursor.execute("""
+                SELECT COUNT(DISTINCT artist_id) 
+                FROM albums 
+                WHERE label = ?
+            """, (label,))
+            artist_count = cursor.fetchone()[0] or 0
+            self.table_labels.setItem(i, 2, QTableWidgetItem(str(artist_count)))
+            
+            # Obtener número de canciones para este sello
+            cursor.execute("""
+                SELECT COUNT(*) 
+                FROM songs s
+                JOIN albums a ON s.album = a.name
+                WHERE a.label = ?
+            """, (label,))
+            song_count = cursor.fetchone()[0] or 0
+            self.table_labels.setItem(i, 3, QTableWidgetItem(str(song_count)))
         
         self.table_labels.resizeColumnsToContents()
         
+        # Estado final de la tabla
+        logging.info(f"Estado final de table_labels: filas={self.table_labels.rowCount()}, "
+                    f"columnas={self.table_labels.columnCount()}")
+        
         # Guardar los resultados para usarlos en los gráficos
         self.label_results = label_results
+        logging.info("Finalizada carga de tabla de sellos")
 
     def load_label_chart(self):
-        """Carga el gráfico principal de sellos."""
-        # Asegurar que tiene layout sin duplicarlo
-        layout = self.ensure_layout(self.chart_container_labels)
+        """Carga el gráfico principal de sellos usando atributos directos."""
+        logging.info("Iniciando carga de gráfico de sellos")
         
-        # Limpiar el contenedor
-        self.clear_layout(layout)
+        # Verificar que el contenedor existe como atributo directo
+        if hasattr(self, 'chart_container_labels'):
+            # Información sobre el estado actual del contenedor
+            logging.info(f"Estado de chart_container_labels: "
+                        f"visible={self.chart_container_labels.isVisible()}, "
+                        f"tiene layout={self.chart_container_labels.layout() is not None}")
+            
+            # Asegurar que tiene layout
+            layout = self.ensure_widget_has_layout(self.chart_container_labels)
+            
+            # Limpiar el contenedor
+            self.clear_layout(layout)
+            
+            # Obtener datos para el gráfico (si no los tenemos ya)
+            if not hasattr(self, 'label_results') or not self.label_results:
+                cursor = self.conn.cursor()
+                cursor.execute("""
+                    SELECT label, COUNT(*) as album_count
+                    FROM albums
+                    WHERE label IS NOT NULL AND label != ''
+                    GROUP BY label
+                    ORDER BY album_count DESC
+                    LIMIT 50;
+                """)
+                
+                self.label_results = cursor.fetchall()
+                logging.info(f"Datos para gráfico: {len(self.label_results)} sellos")
+            
+            # Comprobar si tenemos datos para mostrar
+            if not self.label_results:
+                logging.warning("No hay datos de sellos para mostrar en el gráfico")
+                no_data = QLabel("No hay datos de sellos disponibles")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                layout.addWidget(no_data)
+                return
+            
+            # Crear gráfico
+            logging.info("Creando gráfico de pie para sellos")
+            chart_data = self.label_results[:15] if len(self.label_results) > 15 else self.label_results
+            
+            chart_view = ChartFactory.create_pie_chart(
+                chart_data,
+                "Distribución de Álbumes por Sello"
+            )
+            
+            if chart_view:
+                # Añadir el gráfico al layout
+                layout.addWidget(chart_view)
+                logging.info("Gráfico de sellos añadido al layout correctamente")
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                layout.addWidget(error_label)
+                logging.error("Falló la creación del gráfico de sellos")
+        else:
+            logging.error("No existe el atributo chart_container_labels")
         
-        # Comprobar si tenemos datos para mostrar
-        if not hasattr(self, 'label_results') or not self.label_results:
-            no_data = QLabel("No hay datos de sellos disponibles")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            layout.addWidget(no_data)
+        logging.info("Finalizada carga de gráfico de sellos")
+
+
+    def setup_label_info_page(self):
+        """Configura la página de información detallada de sellos."""
+        # Configurar la tabla para que muestre todos los sellos
+        if hasattr(self, 'labels_info_table'):
+            # Configurar columnas
+            self.labels_info_table.setColumnCount(3)
+            self.labels_info_table.setHorizontalHeaderLabels(["Sello", "País", "Fundación"])
+            
+            # Cargar datos de todos los sellos
+            self.load_all_labels_info()
+        
+        # Establecer conexiones para la página de información
+        self.sellos_info_button = self.findChild(QPushButton, "sellos_info_button")
+        if self.sellos_info_button:
+            try:
+                self.sellos_info_button.clicked.disconnect()
+            except:
+                pass
+            self.sellos_info_button.clicked.connect(self.on_show_label_info)
+
+    def load_all_labels_info(self):
+        """Carga información de todos los sellos en la tabla de información."""
+        if not self.conn or not hasattr(self, 'labels_info_table'):
+            return
+            
+        cursor = self.conn.cursor()
+        try:
+            # Obtener todos los sellos con información básica
+            cursor.execute("""
+                SELECT name, country, founded_year
+                FROM labels
+                WHERE name IS NOT NULL AND name != ''
+                ORDER BY name
+            """)
+            
+            results = cursor.fetchall()
+            
+            # Configurar la tabla
+            self.labels_info_table.setRowCount(len(results))
+            
+            # Llenar la tabla
+            for i, (name, country, founded_year) in enumerate(results):
+                self.labels_info_table.setItem(i, 0, QTableWidgetItem(name or ""))
+                self.labels_info_table.setItem(i, 1, QTableWidgetItem(country or ""))
+                self.labels_info_table.setItem(i, 2, QTableWidgetItem(str(founded_year) if founded_year else ""))
+            
+            # Ajustar ancho de columnas
+            self.labels_info_table.resizeColumnsToContents()
+            
+            # Conectar evento de clic
+            try:
+                self.labels_info_table.itemClicked.disconnect()
+            except:
+                pass
+            self.labels_info_table.itemClicked.connect(self.on_label_info_selected)
+            
+            logging.info(f"Tabla de información de sellos cargada con {len(results)} filas")
+        except Exception as e:
+            logging.error(f"Error al cargar información de sellos: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
+    def on_label_info_selected(self, item):
+        """Maneja la selección de un sello en la tabla de información."""
+        # Obtener el sello seleccionado (primera columna)
+        row = item.row()
+        label_name = self.labels_info_table.item(row, 0).text()
+        
+        # Almacenar como sello seleccionado
+        self.selected_label = label_name
+        
+        # Cargar información detallada en el panel de gráficos
+        self.load_label_detailed_info(label_name)
+
+  
+
+    def on_show_label_info(self):
+        """Maneja el clic en el botón 'Información del sello'."""
+        # Verificar si tenemos un sello seleccionado
+        if not hasattr(self, 'selected_label'):
+            QMessageBox.warning(self, "Selección requerida", 
+                            "Por favor, selecciona primero un sello de la tabla.")
             return
         
-        # Crear gráfico
-        chart_view = ChartFactory.create_pie_chart(
-            self.label_results[:15] if len(self.label_results) > 15 else self.label_results,
-            "Distribución de Álbumes por Sello"
-        )
+        # Cambiar a la página de información del sello
+        self.stackedWidget.setCurrentWidget(self.labels_info)
         
-        if chart_view:
-            layout.addWidget(chart_view)
-            logging.info("Gráfico de sellos creado correctamente")
-        else:
-            error_label = QLabel("No se pudo crear el gráfico")
+        # Cargar información detallada para el sello seleccionado
+        self.load_label_detailed_info(self.selected_label)
+
+
+    def load_label_detailed_info(self, label_name):
+        """Carga información detallada para un sello específico."""
+        if not self.conn:
+            logging.error("No hay conexión a la base de datos")
+            return
+        
+        cursor = self.conn.cursor()
+        
+        # Obtener información básica del sello
+        cursor.execute("""
+            SELECT id, name, mbid, founded_year, country, description, 
+                official_website, wikipedia_url, mb_type, mb_code
+            FROM labels
+            WHERE name = ?
+        """, (label_name,))
+        
+        label_info = cursor.fetchone()
+        
+        if not label_info:
+            error_label = QLabel(f"No se encontró información para el sello: {label_name}")
+            error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             error_label.setStyleSheet("color: red;")
-            layout.addWidget(error_label)
+            
+            # Limpiar ambos contenedores
+            self.clear_layout(self.labels_info_chart.layout())
+            self.labels_info_chart.layout().addWidget(error_label)
+            
+            # Limpiar la tabla
+            if hasattr(self, 'labels_info_table'):
+                self.labels_info_table.setRowCount(0)
+            
+            return
+        
+        # Configurar la tabla de información
+        if hasattr(self, 'labels_info_table'):
+            # Configurar columnas si no las tiene
+            if self.labels_info_table.columnCount() == 0:
+                self.labels_info_table.setColumnCount(2)
+                self.labels_info_table.setHorizontalHeaderLabels(["Propiedad", "Valor"])
+            
+            # Limpiar tabla
+            self.labels_info_table.setRowCount(0)
+            
+            # Datos básicos para mostrar en la tabla
+            table_data = [
+                ("Nombre", label_info['name']),
+                ("País", label_info['country'] if label_info['country'] else "Desconocido"),
+                ("Año fundación", str(label_info['founded_year']) if label_info['founded_year'] else "Desconocido"),
+                ("Tipo", label_info['mb_type'] if label_info['mb_type'] else ""),
+                ("Código", label_info['mb_code'] if label_info['mb_code'] else ""),
+                ("MusicBrainz ID", label_info['mbid'] if label_info['mbid'] else ""),
+                ("Web oficial", label_info['official_website'] if label_info['official_website'] else ""),
+                ("Wikipedia", label_info['wikipedia_url'] if label_info['wikipedia_url'] else "")
+            ]
+            
+            # Llenar la tabla
+            self.labels_info_table.setRowCount(len(table_data))
+            for i, (prop, value) in enumerate(table_data):
+                self.labels_info_table.setItem(i, 0, QTableWidgetItem(prop))
+                self.labels_info_table.setItem(i, 1, QTableWidgetItem(value))
+            
+            self.labels_info_table.resizeColumnsToContents()
+        
+        # Widget para mostrar la información markdown
+        markdown_widget = QTextEdit()
+        markdown_widget.setReadOnly(True)
+        markdown_widget.setStyleSheet("""
+            QTextEdit {
+                background-color: #1a1b26;
+                color: #a9b1d6;
+                border: none;
+                padding: 10px;
+                font-family: 'Noto Sans', sans-serif;
+            }
+        """)
+        
+        # Obtener información básica del sello
+        cursor.execute("""
+            SELECT id, name, mbid, founded_year, country, description, 
+                official_website, wikipedia_url, mb_type, mb_code
+            FROM labels
+            WHERE name = ?
+        """, (label_name,))
+        
+        label_info = cursor.fetchone()
+        
+        if not label_info:
+            markdown_widget.setText(f"# No se encontró información para el sello: {label_name}")
+            self.labels_info_chart.layout().addWidget(markdown_widget)
+            return
+        
+        # Construir el contenido markdown
+        markdown_content = f"# Información del Sello: {label_name}\n\n"
+        
+        # Información básica
+        markdown_content += "## Datos básicos\n\n"
+        
+        if label_info['founded_year']:
+            markdown_content += f"**Año de fundación:** {label_info['founded_year']}\n\n"
+        
+        if label_info['country']:
+            markdown_content += f"**País:** {label_info['country']}\n\n"
+        
+        if label_info['description']:
+            markdown_content += f"**Descripción:** {label_info['description']}\n\n"
+        
+        if label_info['mb_type']:
+            markdown_content += f"**Tipo:** {label_info['mb_type']}\n\n"
+        
+        # Enlaces
+        markdown_content += "## Enlaces\n\n"
+        
+        if label_info['official_website']:
+            markdown_content += f"**Sitio oficial:** {label_info['official_website']}\n\n"
+        
+        if label_info['wikipedia_url']:
+            markdown_content += f"**Wikipedia:** {label_info['wikipedia_url']}\n\n"
+        
+        if label_info['mbid']:
+            markdown_content += f"**MusicBrainz ID:** {label_info['mbid']}\n\n"
+        
+        # Obtener relaciones con otros sellos
+        label_id = label_info['id']
+        cursor.execute("""
+            SELECT lr.relationship_type, l.name, lr.begin_date, lr.end_date
+            FROM label_relationships lr
+            JOIN labels l ON lr.target_label_id = l.id
+            WHERE lr.source_label_id = ?
+            UNION
+            SELECT lr.relationship_type, l.name, lr.begin_date, lr.end_date
+            FROM label_relationships lr
+            JOIN labels l ON lr.source_label_id = l.id
+            WHERE lr.target_label_id = ?
+        """, (label_id, label_id))
+        
+        label_relations = cursor.fetchall()
+        
+        if label_relations:
+            markdown_content += "## Relaciones con otros sellos\n\n"
+            for relation in label_relations:
+                rel_type, rel_label, begin_date, end_date = relation
+                date_info = ""
+                if begin_date and end_date:
+                    date_info = f" ({begin_date} - {end_date})"
+                elif begin_date:
+                    date_info = f" (desde {begin_date})"
+                elif end_date:
+                    date_info = f" (hasta {end_date})"
+                
+                markdown_content += f"**{rel_type}** con {rel_label}{date_info}\n\n"
+        
+        # Obtener álbumes publicados por este sello
+        cursor.execute("""
+            SELECT a.name as album_name, ar.name as artist_name, a.year, 
+                lrr.catalog_number, lrr.relationship_type
+            FROM label_release_relationships lrr
+            JOIN albums a ON lrr.album_id = a.id
+            JOIN artists ar ON a.artist_id = ar.id
+            WHERE lrr.label_id = ?
+            ORDER BY a.year DESC, a.name
+            LIMIT 30
+        """, (label_id,))
+        
+        albums = cursor.fetchall()
+        
+        if albums:
+            markdown_content += "## Álbumes publicados\n\n"
+            markdown_content += "| Álbum | Artista | Año | № Catálogo | Tipo |\n"
+            markdown_content += "|-------|---------|-----|------------|------|\n"
+            
+            for album in albums:
+                album_name, artist_name, year, catalog, rel_type = album
+                year_str = year if year else ""
+                catalog_str = catalog if catalog else ""
+                rel_type_str = rel_type if rel_type else "publicado"
+                
+                markdown_content += f"| {album_name} | {artist_name} | {year_str} | {catalog_str} | {rel_type_str} |\n"
+        
+        # Obtener artistas asociados a este sello
+        cursor.execute("""
+            SELECT DISTINCT ar.name, COUNT(DISTINCT a.id) as album_count
+            FROM artists ar
+            JOIN albums a ON ar.id = a.artist_id
+            WHERE a.label = ?
+            GROUP BY ar.name
+            ORDER BY album_count DESC
+            LIMIT 20
+        """, (label_name,))
+        
+        artists = cursor.fetchall()
+        
+        if artists:
+            markdown_content += "\n## Artistas del sello\n\n"
+            markdown_content += "| Artista | Álbumes |\n"
+            markdown_content += "|---------|--------|\n"
+            
+            for artist in artists:
+                artist_name, album_count = artist
+                markdown_content += f"| {artist_name} | {album_count} |\n"
+        
+        # Mostrar la información en el widget
+        markdown_widget.setMarkdown(markdown_content)
+        
+        # Limpiar el layout y añadir el widget
+        self.clear_layout(self.labels_info_chart.layout())
+        self.labels_info_chart.layout().addWidget(markdown_widget)
+
+
+
+
+
 
     def load_decade_data(self):
         """Carga los datos de décadas y popula el combo."""
@@ -1941,6 +2960,13 @@ class StatsModule(BaseModule):
             no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
             layout.addWidget(no_data)
             logging.warning("No hay décadas disponibles")
+
+
+
+
+
+
+
 
     def update_decade_chart(self):
         """Actualiza el gráfico por década seleccionada."""
@@ -2321,36 +3347,19 @@ class StatsModule(BaseModule):
             logging.error("Widget es None en ensure_widget_has_layout")
             return None
         
-        try:
-            # Check if widget has a layout
-            layout = widget.layout()
-            if layout is None:
-                # Create a new layout if there isn't one
-                logging.info(f"Creando nuevo layout para widget {widget.objectName()}")
-                layout = layout_type(widget)
-            else:
-                # Use existing layout but verify it's working
-                logging.info(f"Usando layout existente para widget {widget.objectName()}")
-                # Check that layout has essential methods
-                if not hasattr(layout, 'addWidget') or not callable(layout.addWidget):
-                    logging.warning(f"Layout existente no tiene método addWidget, creando uno nuevo")
-                    # Delete old layout
-                    while widget.layout().count():
-                        item = widget.layout().takeAt(0)
-                        widget = item.widget()
-                        if widget:
-                            widget.deleteLater()
-                    # Create new layout
-                    layout = layout_type(widget)
-            
-            return layout
-        except Exception as e:
-            logging.error(f"Error en ensure_widget_has_layout: {e}")
-            # Last resort - create a new layout
-            try:
-                return layout_type(widget)
-            except:
-                return None
+        # Check if widget has a layout
+        layout = widget.layout()
+        
+        if layout is None:
+            # Create a new layout if there isn't one
+            logging.info(f"Creando nuevo layout para widget {widget.objectName()}")
+            layout = layout_type()
+            widget.setLayout(layout)
+        else:
+            # Use existing layout
+            logging.info(f"Usando layout existente para widget {widget.objectName()}")
+        
+        return layout
 
     def get_layout_safely(self, widget):
         """
@@ -2487,3 +3496,56 @@ class StatsModule(BaseModule):
         logging.info("--- UI WIDGET HIERARCHY ---")
         print_widget_tree(parent_widget)
         logging.info("---------------------------")
+
+
+    def create_splitter_with_widgets(self, left_widget, right_widget, orientation=Qt.Orientation.Horizontal, sizes=None):
+        """
+        Crea un splitter y coloca dos widgets en él.
+        
+        Args:
+            left_widget (QWidget): Widget para colocar en la parte izquierda/superior
+            right_widget (QWidget): Widget para colocar en la parte derecha/inferior
+            orientation (Qt.Orientation): Orientación del splitter (Horizontal o Vertical)
+            sizes (list, optional): Lista de dos enteros para establecer el tamaño inicial de cada sección
+
+        Returns:
+            QSplitter: El splitter configurado con los widgets
+        """
+        # Verificar que los widgets sean válidos
+        if not isinstance(left_widget, QWidget) or not isinstance(right_widget, QWidget):
+            logging.error("Los argumentos deben ser widgets válidos")
+            return None
+        
+        try:
+            # Crear un splitter con la orientación especificada
+            splitter = QSplitter(orientation)
+            
+            # Añadir los widgets directamente al splitter
+            splitter.addWidget(left_widget)
+            splitter.addWidget(right_widget)
+            
+            # Configurar tamaños iniciales si se proporcionan
+            if sizes and isinstance(sizes, list) and len(sizes) == 2:
+                splitter.setSizes(sizes)
+            elif orientation == Qt.Orientation.Horizontal:
+                # Valores predeterminados: 40% izquierda, 60% derecha
+                splitter.setSizes([400, 600])
+            else:
+                # Valores predeterminados para orientación vertical: 50% cada uno
+                splitter.setSizes([500, 500])
+                
+            # Permitir colapsar cuando se mueve la divisoria al extremo
+            splitter.setChildrenCollapsible(True)
+            
+            # Configurar para expandir cuando se redimensiona el contenedor padre
+            splitter.setStretchFactor(0, 1)
+            splitter.setStretchFactor(1, 1)
+            
+            logging.info(f"Splitter creado exitosamente con widgets {left_widget.objectName()} y {right_widget.objectName()}")
+            return splitter
+            
+        except Exception as e:
+            logging.error(f"Error al crear splitter: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            return None

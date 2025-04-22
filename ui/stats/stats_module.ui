@@ -21,51 +21,12 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QComboBox" name="category_combo">
-     <item>
-      <property name="text">
-       <string>Datos Ausentes</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Géneros</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Escuchas</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sellos</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tiempo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Países</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Feeds</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="stats_content" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
        <widget class="QStackedWidget" name="stacked_widget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>3</number>
         </property>
         <widget class="QWidget" name="page_missing_data">
          <layout class="QVBoxLayout" name="verticalLayout_missing_data">
@@ -234,8 +195,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>862</width>
-               <height>616</height>
+               <width>405</width>
+               <height>440</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -387,9 +348,9 @@
                     <item>
                      <widget class="QStackedWidget" name="stacked_genre_charts">
                       <property name="currentIndex">
-                       <number>1</number>
+                       <number>0</number>
                       </property>
-                      <widget class="QWidget" name="page">
+                      <widget class="QWidget" name="genres_table_page">
                        <layout class="QVBoxLayout" name="verticalLayout_25">
                         <item>
                          <widget class="QWidget" name="chart_container_artists_by_genre" native="true">
@@ -398,7 +359,7 @@
                         </item>
                        </layout>
                       </widget>
-                      <widget class="QWidget" name="page_2">
+                      <widget class="QWidget" name="genres_charts_page">
                        <layout class="QVBoxLayout" name="verticalLayout_26">
                         <item>
                          <widget class="QLabel" name="label_selected_genre_title">
@@ -754,8 +715,11 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QWidget" name="verticalLayout_labels_top" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <widget class="QWidget" name="widget_labels" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_22">
+             <property name="spacing">
+              <number>6</number>
+             </property>
              <property name="leftMargin">
               <number>0</number>
              </property>
@@ -769,105 +733,337 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QWidget" name="widget_7" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_23">
-                <item>
-                 <widget class="QLabel" name="label_labels_title">
-                  <property name="styleSheet">
-                   <string>font-size: 16px; font-weight: bold;</string>
-                  </property>
-                  <property name="text">
-                   <string>Distribución de Álbumes por Sello</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QTableWidget" name="table_labels">
-                  <column>
-                   <property name="text">
-                    <string>Sello</string>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Álbumes</string>
-                   </property>
-                  </column>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="widget_6" native="true">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
+              <widget class="QStackedWidget" name="stackedWidget">
+               <property name="currentIndex">
+                <number>1</number>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_22">
-                <item>
-                 <widget class="QWidget" name="chart_container_labels" native="true">
-                  <layout class="QVBoxLayout" name="verticalLayout_8">
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
+               <widget class="QWidget" name="verticalLayout_labels_top">
+                <layout class="QVBoxLayout" name="verticalLayout_28">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="widget_7" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QWidget" name="widget_10" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_30">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                       <item>
+                        <widget class="QLabel" name="label_labels_title">
+                         <property name="styleSheet">
+                          <string>font-size: 16px; font-weight: bold;</string>
+                         </property>
+                         <property name="text">
+                          <string>Distribución de Álbumes por Sello</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QTableWidget" name="table_labels">
+                         <property name="sizePolicy">
+                          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                           <horstretch>0</horstretch>
+                           <verstretch>0</verstretch>
+                          </sizepolicy>
+                         </property>
+                         <column>
+                          <property name="text">
+                           <string>Sello</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>Álbumes</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>Artistas</string>
+                          </property>
+                         </column>
+                         <column>
+                          <property name="text">
+                           <string>Canciones</string>
+                          </property>
+                         </column>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="widget_12" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_23">
+                       <item>
+                        <widget class="QStackedWidget" name="chart_sello_stacked">
+                         <widget class="QWidget" name="chart_sellos_porcentaje">
+                          <layout class="QVBoxLayout" name="verticalLayout_8">
+                           <item>
+                            <widget class="QWidget" name="chart_container_labels" native="true">
+                             <layout class="QVBoxLayout" name="verticalLayout_31">
+                              <property name="leftMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="topMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="rightMargin">
+                               <number>0</number>
+                              </property>
+                              <property name="bottomMargin">
+                               <number>0</number>
+                              </property>
+                             </layout>
+                            </widget>
+                           </item>
+                          </layout>
+                         </widget>
+                         <widget class="QWidget" name="chart_sello_artistas">
+                          <layout class="QVBoxLayout" name="verticalLayout_32"/>
+                         </widget>
+                        </widget>
+                       </item>
+                      </layout>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="verticalLayout_labels_bottom">
+                <layout class="QVBoxLayout" name="verticalLayout_29">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="widget_9" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_20">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QWidget" name="decade_chart_container" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_7">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                      </layout>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_decade_title">
+                      <property name="styleSheet">
+                       <string>font-size: 16px; font-weight: bold;</string>
+                      </property>
+                      <property name="text">
+                       <string>Sellos por Década</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QComboBox" name="combo_decade"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="sellos_por_genero">
+                <layout class="QVBoxLayout" name="verticalLayout_33">
+                 <item>
+                  <widget class="QWidget" name="widget_13" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <item>
+                     <widget class="QTableWidget" name="table_labels_genres">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <column>
+                       <property name="text">
+                        <string>Sello</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Álbumes</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Artistas</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Canciones</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="chart_label_genres" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_37"/>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="sellos_albumes">
+                <layout class="QHBoxLayout" name="horizontalLayout_8">
+                 <item>
+                  <widget class="QWidget" name="widget_6" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                    <item>
+                     <widget class="QTableWidget" name="sellos_tabla_albumes">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <column>
+                       <property name="text">
+                        <string>Álbumes</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Artistas</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Fecha</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Canciones</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="chart_sellos_albumes" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_34"/>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+               <widget class="QWidget" name="labels_info">
+                <layout class="QVBoxLayout" name="verticalLayout_35">
+                 <item>
+                  <widget class="QWidget" name="labels_info_widget" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <item>
+                     <widget class="QTableWidget" name="labels_info_table">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <column>
+                       <property name="text">
+                        <string>Sello</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>País</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Fundación</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QWidget" name="labels_info_chart" native="true">
+                      <layout class="QVBoxLayout" name="verticalLayout_36"/>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="verticalLayout_labels_bottom" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
              <item>
-              <widget class="QWidget" name="widget_9" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_20">
-                <item>
-                 <widget class="QLabel" name="label_decade_title">
-                  <property name="styleSheet">
-                   <string>font-size: 16px; font-weight: bold;</string>
-                  </property>
-                  <property name="text">
-                   <string>Sellos por Década</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QComboBox" name="combo_decade"/>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QWidget" name="decade_chart_container" native="true">
-               <layout class="QVBoxLayout" name="verticalLayout_7">
+              <widget class="QWidget" name="widget_botones_labels" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <property name="leftMargin">
                  <number>0</number>
                 </property>
@@ -880,6 +1076,48 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <widget class="QPushButton" name="sellos_decade_button">
+                  <property name="text">
+                   <string>década</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="sellos_porcentajes_button">
+                  <property name="text">
+                   <string>porcentajes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="sellos_artistas_button">
+                  <property name="text">
+                   <string>artistas</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="sellos_albumes_button">
+                  <property name="text">
+                   <string>albumes</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="sellos_por_genero_button">
+                  <property name="text">
+                   <string>géneros</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="sellos_info_button">
+                  <property name="text">
+                   <string>info</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
@@ -1105,6 +1343,45 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QComboBox" name="category_combo">
+     <item>
+      <property name="text">
+       <string>Datos Ausentes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Géneros</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Escuchas</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Sellos</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Tiempo</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Países</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Feeds</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

@@ -1,9 +1,26 @@
 # chart_utils.py
-from PyQt6.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QLabel
+from PyQt6.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QLabel, QSizePolicy
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QColor, QBrush, QPen
 import logging
 from PyQt6.QtCharts import QChart
+
+
+CHART_COLORS = [
+    "#cba6f7",  # Purple
+    "#f5c2e7",  # Pink
+    "#89dceb",  # Cyan
+    "#a6e3a1",  # Green
+    "#f9e2af",  # Yellow
+    "#fab387",  # Peach
+    "#eba0ac",  # Red
+    "#89b4fa",  # Blue
+]
+
+# # Then use these colors in charts
+# for i, color in enumerate(ChartFactory.CHART_COLORS):
+#     if i < bar_set.count():
+#         bar_set.setColor(QColor(color))
 
 class ChartFactory:
     """Factory class for creating charts with proper fallbacks"""
@@ -26,13 +43,17 @@ class ChartFactory:
         try:
             from PyQt6.QtCharts import QChart, QChartView, QBarSeries, QBarSet, QValueAxis, QBarCategoryAxis
             from PyQt6.QtCore import Qt
-            from PyQt6.QtGui import QPainter
+            from PyQt6.QtGui import QPainter, QPen, QColor
             
             # Limitar a los primeros N elementos
             limited_data = data[:limit]
             
             # Crear el conjunto de barras
             bar_set = QBarSet("Valores")
+            
+            # Eliminar el borde de las barras estableciendo un pen transparente
+            transparent_pen = QPen(QColor(0, 0, 0, 0))  # Color totalmente transparente
+            bar_set.setPen(transparent_pen)
             
             # Nombres de categorías para el eje X
             categories = []
@@ -70,11 +91,12 @@ class ChartFactory:
             
             # Configurar leyenda
             chart.legend().setVisible(False)
-            
+                        
             # Crear la vista del gráfico
             chart_view = QChartView(chart)
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
-            
+            chart_view.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
             ChartFactory.apply_dark_theme(chart)
             
             return chart_view
@@ -83,6 +105,7 @@ class ChartFactory:
             logging.error(f"Error creating bar chart: {e}")
             return ChartFactory.create_error_widget(str(e))
     
+
     @staticmethod
     def create_pie_chart(data, title, limit=15):
         """Creates a pie chart with the given data."""
@@ -93,61 +116,90 @@ class ChartFactory:
             logging.warning("Charts not available, returning text representation")
             return ChartFactory.create_text_chart(data, title)
         
-        # Charts are available, try to create one
         try:
             from PyQt6.QtCharts import QChart, QChartView, QPieSeries, QPieSlice
             from PyQt6.QtCore import Qt
-            from PyQt6.QtGui import QPainter
+            from PyQt6.QtGui import QPainter, QFont, QPen, QColor, QBrush
             
             # Create pie series
             series = QPieSeries()
             
-            # Limit items if needed
+            # Prepare data for the chart
+            chart_data = []
             if len(data) > limit:
+                # Get top items and calculate "Others"
                 top_items = sorted(data, key=lambda x: x[1], reverse=True)[:limit-1]
                 other_sum = sum(count for _, count in sorted(data, key=lambda x: x[1], reverse=True)[limit-1:])
                 
-                # Add top items
-                for label, value in top_items:
-                    series.append(str(label), value)
-                
-                # Add "Others" category
+                chart_data = top_items.copy()
                 if other_sum > 0:
-                    series.append("Otros", other_sum)
+                    chart_data.append(("Otros", other_sum))
             else:
-                # Add all items
-                for label, value in data:
-                    series.append(str(label), value)
+                chart_data = data.copy()
             
             # Calculate total for percentages
-            total = sum(count for _, count in data)
+            total = sum(count for _, count in chart_data)
             
-            # Style the slices
-            for slice_index in range(series.count()):
-                slice = series.slices()[slice_index]
+            # Add items to the series
+            for label, value in chart_data:
+                # Preserve the full name in the series for legend display
+                slice = series.append(str(label), value)
+            
+            # Get the background color to match slice borders
+            background_color = "#1a1b26"  # Default dark theme background
+            
+            # Define text color for labels and legend
+            text_color = "#a2a6ba"  # As requested
+            
+            # Style the slices - focus on correct legend display
+            for i in range(series.count()):
+                slice = series.slices()[i]
                 percent = (slice.value() / total) * 100 if total > 0 else 0
-                slice.setLabel(f"{slice.label()}: {percent:.1f}%")
+                label = str(slice.label())
+                
+                # Set percentage label and name on the slice
+                slice.setLabel(f"{label}: {percent:.1f}%")
                 slice.setLabelVisible(True)
+                
+                # Set the label color to the requested color
+                slice.setLabelColor(QColor(text_color))
+                
+                # Remove the white border by setting the pen color to match background
+                slice.setPen(QPen(QColor(background_color), 0))
                 
                 # Explode slightly on hover
                 slice.setExploded(True)
                 slice.setExplodeDistanceFactor(0.05)
-                
+            
             # Create chart
             chart = QChart()
             chart.addSeries(series)
             chart.setTitle(title)
             chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
+            
+            # Configure legend to show the full names
             chart.legend().setVisible(True)
             chart.legend().setAlignment(Qt.AlignmentFlag.AlignRight)
+            
+            # Make legend text more readable and set the color
+            legend_font = QFont()
+            legend_font.setPointSize(8)  # Smaller font size
+            chart.legend().setFont(legend_font)
+            
+            # Set the legend text color
+            chart.legend().setLabelBrush(QBrush(QColor(text_color)))
             
             # Create chart view
             chart_view = QChartView(chart)
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
             
+            # Set minimum size to ensure chart is visible
+            chart_view.setMinimumSize(400, 300)
+            
             logging.info(f"Pie chart '{title}' created successfully")
             
-            ChartFactory.apply_dark_theme(chart)
+            # Apply dark theme with improved legend text
+            ChartFactory.apply_dark_theme(chart, text_color=text_color, background_color=background_color)
             
             return chart_view
             
@@ -158,6 +210,8 @@ class ChartFactory:
             
             # Return error widget
             return ChartFactory.create_error_widget(str(e))
+
+
     
     @staticmethod
     def create_line_chart(data, title, x_label="X", y_label="Y", date_axis=False):
@@ -264,7 +318,9 @@ class ChartFactory:
             # Crear la vista del gráfico
             chart_view = QChartView(chart)
             chart_view.setRenderHint(QPainter.RenderHint.Antialiasing)
-           
+            
+            chart_view.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
             ChartFactory.apply_dark_theme(chart)
 
             return chart_view
@@ -318,15 +374,17 @@ class ChartFactory:
         label.setStyleSheet("background-color: #f0f0f0; padding: 20px; color: red;")
         return label
 
-
     @staticmethod
-    def apply_dark_theme(chart, text_color="#cba6f7", background_color="#1a1b26"):
+    def apply_dark_theme(chart, text_color="#a2a6ba", background_color="#1a1b26"):
         """Apply a dark theme to a chart"""
         if not isinstance(chart, QChart):
             return
             
         # Set background
         chart.setBackgroundBrush(QBrush(QColor(background_color)))
+        
+        # Remove chart border by setting a zero-width pen in background color
+        chart.setBackgroundPen(QPen(QColor(background_color), 0))
         
         # Set text colors
         chart.setTitleBrush(QBrush(QColor(text_color)))
@@ -341,6 +399,15 @@ class ChartFactory:
             gridline_color.setAlphaF(0.2)  # More transparent
             axis.setGridLinePen(QPen(gridline_color, 0.5))
             
-        # Legend
+        # Legend - use the specified color for better visibility
         chart.legend().setLabelBrush(QBrush(QColor(text_color)))
         chart.legend().setBrush(QBrush(QColor(background_color)))
+        
+        # PyQt6 may not have these properties, so wrap in try/except
+        try:
+            # Make legend background transparent
+            chart.legend().setBackgroundVisible(False)
+            # Remove legend border
+            chart.legend().setColor(QColor(background_color))
+        except:
+            pass
