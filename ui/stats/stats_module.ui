@@ -26,7 +26,7 @@
       <item>
        <widget class="QStackedWidget" name="stacked_widget">
         <property name="currentIndex">
-         <number>3</number>
+         <number>5</number>
         </property>
         <widget class="QWidget" name="page_missing_data">
          <layout class="QVBoxLayout" name="verticalLayout_missing_data">
@@ -1218,37 +1218,100 @@
            </widget>
           </item>
           <item>
-           <widget class="QSplitter" name="splitter_countries">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <widget class="QWidget" name="widget_countries_table">
-             <layout class="QVBoxLayout" name="verticalLayout_countries_table">
-              <item>
-               <widget class="QTableWidget" name="table_countries">
-                <column>
-                 <property name="text">
-                  <string>País</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Artistas</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="widget_countries_chart">
-             <layout class="QVBoxLayout" name="verticalLayout_countries_chart">
-              <item>
-               <widget class="QWidget" name="chart_container_countries" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_3"/>
-               </widget>
-              </item>
-             </layout>
-            </widget>
+           <widget class="QWidget" name="widget_11" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <widget class="QWidget" name="verticalLayout_countries_table" native="true">
+               <layout class="QVBoxLayout" name="verticalLayout_38">
+                <item>
+                 <widget class="QTableWidget" name="table_countries">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>País</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Artistas</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_countries">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Orientation::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_15" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <item>
+                 <widget class="QStackedWidget" name="stackedWidget_countries">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <widget class="QWidget" name="verticalLayout_countries_chart">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_40">
+                    <item>
+                     <widget class="QWidget" name="chart_container_countries" native="true">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <layout class="QVBoxLayout" name="verticalLayout_3"/>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                  <widget class="QWidget" name="chart_countries_artists">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_39"/>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>

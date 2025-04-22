@@ -67,7 +67,13 @@ class StatsModule(BaseModule):
                     
                 # Carga de datos iniciales
                 self.load_initial_data()
-                
+                            
+                # Setup country navigation if we have the stacked widget
+                if hasattr(self, 'stackedWidget_countries'):
+                    self.setup_country_navigation()
+
+
+
                 return True
             except Exception as e:
                 logging.error(f"Error al cargar el archivo UI: {e}")
@@ -120,10 +126,11 @@ class StatsModule(BaseModule):
                 "decade_chart_container",
                 "chart_container_years",
                 "chart_container_decades",
-                "chart_container_countries",
                 "chart_container_entity",
                 "chart_container_feeds",
-                "chart_container_temporal"
+                "chart_container_temporal",
+                "chart_container_countries",
+                "chart_countries_artists", 
             ]
             
             # Inicializar cada contenedor
@@ -3154,6 +3161,176 @@ class StatsModule(BaseModule):
         chart_container_countries.layout().addWidget(chart_view)
 
 
+    def on_country_selected(self, item):
+        """Handles selection of a country in the table_countries widget."""
+        if not self.conn:
+            logging.error("No database connection available")
+            return
+        
+        # Get the selected country (always in the first column)
+        row = item.row()
+        country = self.table_countries.item(row, 0).text()
+        logging.info(f"Selected country: {country}")
+        
+        # Store the selected country for potential future use
+        self.selected_country = country
+        
+        # Change to the artists page in the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Load the chart showing artists from this country
+        self.load_artists_by_country(country)
+
+    def load_artists_by_country(self, country):
+        """Loads and displays a pie chart of artists from a specific country."""
+        # Find the chart container
+        chart_container = self.chart_countries_artists
+        
+        # Ensure the container has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear the container
+        self.clear_layout(layout)
+        
+        # Query for artists from this country
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT name, COUNT(*) as album_count
+                FROM artists
+                WHERE origin = ?
+                GROUP BY name
+                ORDER BY album_count DESC, name
+                LIMIT 15;
+            """, (country,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Create a pie chart with the artists
+                chart_view = ChartFactory.create_pie_chart(
+                    results,
+                    f"Artistas de {country}",
+                    limit=15  # Limit to top 15 artists
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Artist chart for country '{country}' created successfully")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de artistas")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+            else:
+                # No data
+                no_data = QLabel(f"No hay artistas registrados para el país '{country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error querying artists by country: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def load_country_stats(self):
+        """Loads country statistics."""
+        if not self.conn:
+            return
+        
+        # Get widget references directly (without findChild)
+        table_countries = self.table_countries
+        chart_container_countries = self.chart_container_countries
+        
+        if not table_countries or not chart_container_countries:
+            logging.error("Required widgets not found")
+            return
+                
+        # Clear table
+        table_countries.setRowCount(0)
+        
+        # Query data
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT origin, COUNT(*) as artist_count
+            FROM artists
+            WHERE origin IS NOT NULL AND origin != ''
+            GROUP BY origin
+            ORDER BY artist_count DESC;
+        """)
+        
+        results = cursor.fetchall()
+        
+        # Fill the table
+        table_countries.setRowCount(len(results))
+        for i, (country, count) in enumerate(results):
+            table_countries.setItem(i, 0, QTableWidgetItem(country))
+            table_countries.setItem(i, 1, QTableWidgetItem(str(count)))
+        
+        table_countries.resizeColumnsToContents()
+        
+        # Create chart for countries
+        layout = self.ensure_widget_has_layout(chart_container_countries)
+        self.clear_layout(layout)
+        
+        chart_view = ChartFactory.create_pie_chart(
+            results,
+            "Distribución por País de Origen"
+        )
+        layout.addWidget(chart_view)
+        
+        # Connect the table selection event
+        try:
+            table_countries.itemClicked.disconnect()
+        except:
+            pass
+        table_countries.itemClicked.connect(self.on_country_selected)
+        
+        # Make sure we start in the first page of the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(0)
+
+
+
+
+    def setup_country_navigation(self):
+        """Sets up navigation buttons for the country views."""
+        # Connect buttons if they exist in the UI
+        try:
+            # Button to go back to overview from artist view
+            if hasattr(self, 'btn_countries_overview'):
+                self.btn_countries_overview.clicked.connect(
+                    lambda: self.stackedWidget_countries.setCurrentIndex(0)
+                )
+            
+            # Button to see artists (shown in the overview page)
+            if hasattr(self, 'btn_countries_artists'):
+                self.btn_countries_artists.clicked.connect(
+                    lambda: self.show_country_artists_selection()
+                )
+        except Exception as e:
+            logging.error(f"Error setting up country navigation: {e}")
+
+    def show_country_artists_selection(self):
+        """Shows a dialog to select a country if none is selected yet."""
+        if not hasattr(self, 'selected_country'):
+            # If no country is selected, show a message
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # If a country is already selected, go to the artists view
+        self.stackedWidget_countries.setCurrentIndex(1)
+        # Make sure the chart is up to date
+        self.load_artists_by_country(self.selected_country)
+
+# FEEDS 
 
     def load_feed_stats(self):
         """Carga estadísticas de feeds."""
