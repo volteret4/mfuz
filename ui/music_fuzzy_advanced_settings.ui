@@ -60,6 +60,23 @@ QPushButton:hover {
        <widget class="QWidget" name="fechas_widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <widget class="QCheckBox" name="show_time_unit_check">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../images.qrc">
+             <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="time_unit_groupBox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -86,23 +103,6 @@ QPushButton:hover {
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QCheckBox" name="checkBox_11">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../images.qrc">
-                <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QSpinBox" name="time_value">
               <property name="minimum">
@@ -156,6 +156,23 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="show_month_year_check">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../images.qrc">
+             <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QFrame" name="month_year_frame">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -182,23 +199,6 @@ QPushButton:hover {
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QCheckBox" name="checkBox_10">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../images.qrc">
-                <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QComboBox" name="month_combo"/>
             </item>
@@ -239,6 +239,23 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="show_year_check">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../images.qrc">
+             <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QFrame" name="year_frame">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -265,23 +282,6 @@ QPushButton:hover {
             <property name="bottomMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QCheckBox" name="checkBox_9">
-              <property name="text">
-               <string/>
-              </property>
-              <property name="icon">
-               <iconset resource="../images.qrc">
-                <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
-              </property>
-              <property name="iconSize">
-               <size>
-                <width>32</width>
-                <height>32</height>
-               </size>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QSpinBox" name="year_only_spin">
               <property name="minimum">
@@ -322,7 +322,7 @@ QPushButton:hover {
           </spacer>
          </item>
          <item>
-          <widget class="QCheckBox" name="playing_check">
+          <widget class="QCheckBox" name="show_playing_check">
            <property name="text">
             <string/>
            </property>
@@ -346,7 +346,7 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="script_1_check">
+          <widget class="QCheckBox" name="show_script_1_check">
            <property name="text">
             <string/>
            </property>
@@ -370,7 +370,7 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="script_2_check">
+          <widget class="QCheckBox" name="show_script_2_check">
            <property name="text">
             <string/>
            </property>

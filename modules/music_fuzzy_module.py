@@ -1143,7 +1143,7 @@ class MusicBrowser(BaseModule):
         Carga el UI la primera vez que se activa.
         """
         # Verificar el estado del checkbox
-        is_visible = (state == 2)  # 2 es Qt.Checked
+        is_visible = (state == Qt.CheckState.Checked.value)  # 2 is Qt.Checked
 
         # Mostrar/ocultar botones avanzados
         for button in self.advanced_buttons:
@@ -1157,11 +1157,11 @@ class MusicBrowser(BaseModule):
         # Mostrar/ocultar el contenedor de ajustes avanzados
         self.advanced_settings_container.setVisible(is_visible)
 
-        # Ajustar la altura del contenedor según corresponda
+        # No need to adjust container height, just set proper margin
         if is_visible:
-            self.top_container.setMaximumHeight(90)
+            self.top_container.setContentsMargins(5, 5, 5, 5)
         else:
-            self.top_container.setMaximumHeight(50)
+            self.top_container.setContentsMargins(5, 5, 5, 5)
 
         # Forzar actualización
         self.repaint()
@@ -2339,7 +2339,7 @@ class MusicBrowser(BaseModule):
                     })
                 
                 # Ordenar los álbumes por año de forma descendente (más reciente primero)
-                album_list.sort(key=lambda x: x['numeric_year'], reverse=True)
+                album_list.sort(key=lambda x: x['numeric_year'], reverse=False)
 
                 # Añadir álbumes como hijos del artista (ya ordenados por año)
                 for album_data in album_list:
@@ -2446,15 +2446,19 @@ class MusicBrowser(BaseModule):
 
         # Limpiar información detallada (panel inferior)
         if hasattr(self, 'links_label') and self.links_label:
+            self.links_label.setVisible(False)
             self.links_label.setText("")
 
         if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+            self.wikipedia_artist_label.setVisible(False)
             self.wikipedia_artist_label.setText("")
 
         if hasattr(self, 'lastfm_label') and self.lastfm_label:
+            self.lastfm_label.setVisible(False)
             self.lastfm_label.setText("")
 
         if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
+            self.wikipedia_album_label.setVisible(False)
             self.wikipedia_album_label.setText("")
 
         # Forzar actualización visual
@@ -3341,6 +3345,47 @@ class MusicBrowser(BaseModule):
                 self.lastfm_label.setText(info_text)
 
 
+            # Mostrar info de Wikipedia del artista
+            wikipedia_content = None
+            if artist_db_info and artist_db_info.get('wikipedia_content'):
+                wikipedia_content = artist_db_info['wikipedia_content']
+            elif len(data) > 27:
+                wikipedia_content = data[27] if data[27] else None
+
+            if wikipedia_content:
+                info_text += f"<h3>Wikipedia - {artist}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
+
+            # Asignar el contenido actualizado y gestionar visibilidad
+            if self.lastfm_label:
+                if info_text:
+                    self.lastfm_label.setText(info_text)
+                    self.lastfm_label.setVisible(True)
+                else:
+                    self.lastfm_label.setVisible(False)
+                    
+            # Similar approach for other labels...
+            
+            # For wikipedia_artist_label
+            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+                if wikipedia_content:
+                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
+                    self.wikipedia_artist_label.setVisible(True)
+                else:
+                    self.wikipedia_artist_label.setVisible(False)
+                    
+            # For wikipedia_album_label
+            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
+                album_wiki_content = None
+                if album_db_info and album_db_info.get('wikipedia_content'):
+                    album_wiki_content = album_db_info['wikipedia_content']
+
+                if album_wiki_content:
+                    self.wikipedia_album_label.setText(f"<h3>Wikipedia - {album}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
+                    self.wikipedia_album_label.setVisible(True)
+                else:
+                    self.wikipedia_album_label.setVisible(False)
+
+
             # Actualizar otros labels si existen
             if hasattr(self, 'links_label') and self.links_label:
                 # Construir enlaces
@@ -3349,11 +3394,11 @@ class MusicBrowser(BaseModule):
                     links_text += f"<p><b>Artista {artist_name}:</b> {' | '.join(artist_links)}</p>"
                 self.links_label.setText(links_text)
 
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                if wikipedia_content:
-                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
-                else:
-                    self.wikipedia_artist_label.setText("")
+            # if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+            #     if wikipedia_content:
+            #         self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
+            #     else:
+            #         self.wikipedia_artist_label.setText("")
         except Exception as e:
             print(f"Error al mostrar información del artista: {e}")
             traceback.print_exc()
@@ -3365,7 +3410,34 @@ class MusicBrowser(BaseModule):
                 self.metadata_label.setText(f"<b>Artista:</b> {artist_name}<br><b>Error:</b> No se pudo cargar información adicional.")
 
 
-
+    def setup_visibility_controls(self):
+        """Configura los controles de visibilidad para los botones del search_frame."""
+        # Find all checkboxes in the UI that control visibility
+        visibility_checkboxes = {}
+        
+        # Map checkboxes to their target widgets based on naming convention
+        # e.g., "show_play_button_check" controls "play_button"
+        for checkbox in self.findChildren(QCheckBox, QRegExp("show_.*_check")):
+            # Extract the target widget name from the checkbox name
+            # "show_play_button_check" -> "play_button"
+            target_name = checkbox.objectName().replace("show_", "").replace("_check", "")
+            
+            # Find the target widget
+            target_widget = self.findChild(QWidget, target_name)
+            if target_widget:
+                visibility_checkboxes[checkbox] = target_widget
+        
+        # Connect each checkbox's signal to update visibility of its target widget
+        for checkbox, widget in visibility_checkboxes.items():
+            # Save initial state of visibility for the widget
+            widget.setProperty("initialVisibility", widget.isVisible())
+            
+            # Connect state change signal to update visibility
+            checkbox.stateChanged.connect(
+                lambda state, w=widget: w.setVisible(state == Qt.CheckState.Checked.value))
+            
+            # Initialize checkbox state based on widget's current visibility
+            checkbox.setChecked(widget.isVisible())
 
 if __name__ == '__main__':
     import argparse
