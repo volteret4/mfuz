@@ -38,3 +38,4 @@ db/musica.sqlite_backup_1745340022
 db/musica.sqlite_backup_1745340080
 db/__pycache__/
 db/musica.sqlite*
+db/sqlite/**
