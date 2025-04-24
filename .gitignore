@@ -36,3 +36,4 @@ db/config_database_creator.json
 db/node_modules/
 db/musica.sqlite_backup_1745340022
 db/musica.sqlite_backup_1745340080
+db/__pycache__/
