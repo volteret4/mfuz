@@ -1633,9 +1633,6 @@ class MusicBrowser(BaseModule):
         minutes = int((total_duration % 3600) // 60)
         seconds = int(total_duration % 60)
 
-        # Buscar la carátula usando la ruta del primer track
-        self.clear_details()  # Limpiar imágenes primero
-
         # Verificar que los widgets necesarios estén disponibles
         if not all([hasattr(self, 'lastfm_label'), hasattr(self, 'metadata_label')]):
             print("Error: Widgets de información no disponibles, reconfigurando...")
@@ -1649,6 +1646,12 @@ class MusicBrowser(BaseModule):
         if not hasattr(self, 'metadata_label') or not self.metadata_label:
             print("Error crítico: metadata_label no disponible después de reconfigurar")
             return
+
+        # Limpiar detalles anteriores
+        self.clear_details()
+
+        # Buscar información del artista también para mostrar su bio y enlaces
+        artist_db_info = self.get_artist_info_from_db(artist_name)
 
         if first_track_data and len(first_track_data) > 1:
             # Mostrar la carátula del álbum
@@ -1734,135 +1737,163 @@ class MusicBrowser(BaseModule):
                     metadata += f"<b>Pistas:</b> {total_tracks}<br>"
                     metadata += f"<b>Duración:</b> {hours:02d}:{minutes:02d}:{seconds:02d}<br>"
 
+                # Establecer metadata y asegurarse de que sea visible
                 self.metadata_label.setText(metadata)
+                self.metadata_label.setVisible(True)
 
             # 2. LINKS LABEL (Enlaces del artista y del álbum)
+            # Preparar enlaces
+            album_links = []
+            artist_links = []
+            has_links = False
+
+            # Enlaces del álbum
+            if album_db_info:
+                if album_db_info.get('spotify_url'):
+                    album_links.append(f"<a href='{album_db_info['spotify_url']}'>Spotify</a>")
+                if album_db_info.get('youtube_url'):
+                    album_links.append(f"<a href='{album_db_info['youtube_url']}'>YouTube</a>")
+                if album_db_info.get('musicbrainz_url'):
+                    album_links.append(f"<a href='{album_db_info['musicbrainz_url']}'>MusicBrainz</a>")
+                if album_db_info.get('discogs_url'):
+                    album_links.append(f"<a href='{album_db_info['discogs_url']}'>Discogs</a>")
+                if album_db_info.get('rateyourmusic_url'):
+                    album_links.append(f"<a href='{album_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
+                if album_db_info.get('wikipedia_url'):
+                    album_links.append(f"<a href='{album_db_info['wikipedia_url']}'>Wikipedia</a>")
+                if album_db_info.get('bandcamp_url'):
+                    album_links.append(f"<a href='{album_db_info['bandcamp_url']}'>Bandcamp</a>")
+                if album_db_info.get('lastfm_url'):
+                    album_links.append(f"<a href='{album_db_info['lastfm_url']}'>Last.fm</a>")
+            # Usar enlaces del track como respaldo
+            elif len(first_track_data) > 21:
+                if first_track_data[21]:  # album_spotify
+                    album_links.append(f"<a href='{first_track_data[21]}'>Spotify</a>")
+                if first_track_data[22]:  # album_youtube
+                    album_links.append(f"<a href='{first_track_data[22]}'>YouTube</a>")
+                if first_track_data[23]:  # album_musicbrainz
+                    album_links.append(f"<a href='{first_track_data[23]}'>MusicBrainz</a>")
+                if first_track_data[24]:  # album_discogs
+                    album_links.append(f"<a href='{first_track_data[24]}'>Discogs</a>")
+                if first_track_data[25]:  # album_rateyourmusic
+                    album_links.append(f"<a href='{first_track_data[25]}'>RateYourMusic</a>")
+                if first_track_data[28]:  # album_wikipedia_url
+                    album_links.append(f"<a href='{first_track_data[28]}'>Wikipedia</a>")
+
+            # Enlaces del artista
+            if artist_db_info:
+                if artist_db_info.get('spotify_url'):
+                    artist_links.append(f"<a href='{artist_db_info['spotify_url']}'>Spotify</a>")
+                if artist_db_info.get('youtube_url'):
+                    artist_links.append(f"<a href='{artist_db_info['youtube_url']}'>YouTube</a>")
+                if artist_db_info.get('musicbrainz_url'):
+                    artist_links.append(f"<a href='{artist_db_info['musicbrainz_url']}'>MusicBrainz</a>")
+                if artist_db_info.get('discogs_url'):
+                    artist_links.append(f"<a href='{artist_db_info['discogs_url']}'>Discogs</a>")
+                if artist_db_info.get('rateyourmusic_url'):
+                    artist_links.append(f"<a href='{artist_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
+                if artist_db_info.get('wikipedia_url'):
+                    artist_links.append(f"<a href='{artist_db_info['wikipedia_url']}'>Wikipedia</a>")
+                if artist_db_info.get('bandcamp_url'):
+                    artist_links.append(f"<a href='{artist_db_info['bandcamp_url']}'>Bandcamp</a>")
+                if artist_db_info.get('lastfm_url'):
+                    artist_links.append(f"<a href='{artist_db_info['lastfm_url']}'>Last.fm</a>")
+            # Usar enlaces del track como respaldo
+            elif len(first_track_data) > 16:
+                if first_track_data[16]:  # artist_spotify
+                    artist_links.append(f"<a href='{first_track_data[16]}'>Spotify</a>")
+                if first_track_data[17]:  # artist_youtube
+                    artist_links.append(f"<a href='{first_track_data[17]}'>YouTube</a>")
+                if first_track_data[18]:  # artist_musicbrainz
+                    artist_links.append(f"<a href='{first_track_data[18]}'>MusicBrainz</a>")
+                if first_track_data[19]:  # artist_discogs
+                    artist_links.append(f"<a href='{first_track_data[19]}'>Discogs</a>")
+                if first_track_data[20]:  # artist_rateyourmusic
+                    artist_links.append(f"<a href='{first_track_data[20]}'>RateYourMusic</a>")
+                if first_track_data[26]:  # artist_wikipedia_url
+                    artist_links.append(f"<a href='{first_track_data[26]}'>Wikipedia</a>")
+
+            # Mostrar enlaces organizados en el panel de enlaces
             if hasattr(self, 'links_label') and self.links_label:
                 links_text = "<h3>Enlaces:</h3>"
+                has_any_links = False
 
-                # Enlaces del álbum
-                album_links = []
-
-                # Priorizar enlaces de la base de datos
-                if album_db_info:
-                    if album_db_info.get('spotify_url'):
-                        album_links.append(f"<a href='{album_db_info['spotify_url']}'>Spotify</a>")
-                    if album_db_info.get('youtube_url'):
-                        album_links.append(f"<a href='{album_db_info['youtube_url']}'>YouTube</a>")
-                    if album_db_info.get('musicbrainz_url'):
-                        album_links.append(f"<a href='{album_db_info['musicbrainz_url']}'>MusicBrainz</a>")
-                    if album_db_info.get('discogs_url'):
-                        album_links.append(f"<a href='{album_db_info['discogs_url']}'>Discogs</a>")
-                    if album_db_info.get('rateyourmusic_url'):
-                        album_links.append(f"<a href='{album_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
-                    if album_db_info.get('wikipedia_url'):
-                        album_links.append(f"<a href='{album_db_info['wikipedia_url']}'>Wikipedia</a>")
-                    if album_db_info.get('bandcamp_url'):
-                        album_links.append(f"<a href='{album_db_info['bandcamp_url']}'>Bandcamp</a>")
-                    if album_db_info.get('lastfm_url'):
-                        album_links.append(f"<a href='{album_db_info['lastfm_url']}'>Last.fm</a>")
-                # Usar enlaces del track como respaldo
-                elif len(first_track_data) > 21:
-                    if first_track_data[21]:  # album_spotify
-                        album_links.append(f"<a href='{first_track_data[21]}'>Spotify</a>")
-                    if first_track_data[22]:  # album_youtube
-                        album_links.append(f"<a href='{first_track_data[22]}'>YouTube</a>")
-                    if first_track_data[23]:  # album_musicbrainz
-                        album_links.append(f"<a href='{first_track_data[23]}'>MusicBrainz</a>")
-                    if first_track_data[24]:  # album_discogs
-                        album_links.append(f"<a href='{first_track_data[24]}'>Discogs</a>")
-                    if first_track_data[25]:  # album_rateyourmusic
-                        album_links.append(f"<a href='{first_track_data[25]}'>RateYourMusic</a>")
-                    if first_track_data[28]:  # album_wikipedia_url
-                        album_links.append(f"<a href='{first_track_data[28]}'>Wikipedia</a>")
-
-                # Enlaces del artista
-                # Buscar información del artista en la base de datos
-                artist_db_info = self.get_artist_info_from_db(artist_name)
-
-                artist_links = []
-
-                # Priorizar enlaces de la base de datos
-                if artist_db_info:
-                    if artist_db_info.get('spotify_url'):
-                        artist_links.append(f"<a href='{artist_db_info['spotify_url']}'>Spotify</a>")
-                    if artist_db_info.get('youtube_url'):
-                        artist_links.append(f"<a href='{artist_db_info['youtube_url']}'>YouTube</a>")
-                    if artist_db_info.get('musicbrainz_url'):
-                        artist_links.append(f"<a href='{artist_db_info['musicbrainz_url']}'>MusicBrainz</a>")
-                    if artist_db_info.get('discogs_url'):
-                        artist_links.append(f"<a href='{artist_db_info['discogs_url']}'>Discogs</a>")
-                    if artist_db_info.get('rateyourmusic_url'):
-                        artist_links.append(f"<a href='{artist_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
-                    if artist_db_info.get('wikipedia_url'):
-                        artist_links.append(f"<a href='{artist_db_info['wikipedia_url']}'>Wikipedia</a>")
-                    if artist_db_info.get('bandcamp_url'):
-                        artist_links.append(f"<a href='{artist_db_info['bandcamp_url']}'>Bandcamp</a>")
-                    if artist_db_info.get('lastfm_url'):
-                        artist_links.append(f"<a href='{artist_db_info['lastfm_url']}'>Last.fm</a>")
-                # Usar enlaces del track como respaldo
-                elif len(first_track_data) > 16:
-                    if first_track_data[16]:  # artist_spotify
-                        artist_links.append(f"<a href='{first_track_data[16]}'>Spotify</a>")
-                    if first_track_data[17]:  # artist_youtube
-                        artist_links.append(f"<a href='{first_track_data[17]}'>YouTube</a>")
-                    if first_track_data[18]:  # artist_musicbrainz
-                        artist_links.append(f"<a href='{first_track_data[18]}'>MusicBrainz</a>")
-                    if first_track_data[19]:  # artist_discogs
-                        artist_links.append(f"<a href='{first_track_data[19]}'>Discogs</a>")
-                    if first_track_data[20]:  # artist_rateyourmusic
-                        artist_links.append(f"<a href='{first_track_data[20]}'>RateYourMusic</a>")
-                    if first_track_data[26]:  # artist_wikipedia_url
-                        artist_links.append(f"<a href='{first_track_data[26]}'>Wikipedia</a>")
-
-                # Añadir enlaces organizados
+                # Añadir enlaces del álbum si existen
                 if album_links:
                     links_text += f"<p><b>Álbum {album_name}:</b> {' | '.join(album_links)}</p>"
+                    has_any_links = True
+
+                # Añadir enlaces del artista si existen
                 if artist_links:
                     links_text += f"<p><b>Artista {artist_name}:</b> {' | '.join(artist_links)}</p>"
+                    has_any_links = True
 
-                self.links_label.setText(links_text)
+                # Mostrar/ocultar el panel según haya enlaces
+                if has_any_links:
+                    self.links_label.setText(links_text)
+                    self.links_label.setVisible(True)
+                else:
+                    self.links_label.setVisible(False)
 
             # 3. WIKIPEDIA ARTIST LABEL
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                # Priorizar contenido de Wikipedia de la base de datos del artista
-                artist_wiki_content = None
-                if artist_db_info and artist_db_info.get('wikipedia_content'):
-                    artist_wiki_content = artist_db_info['wikipedia_content']
-                elif len(first_track_data) > 27 and first_track_data[27]:
-                    artist_wiki_content = first_track_data[27]
+            # Variables para controlar si mostrar cada panel
+            has_artist_wiki = False
+            has_album_wiki = False
+            has_artist_bio = False
 
+            # Priorizar contenido de Wikipedia de la base de datos del artista
+            artist_wiki_content = None
+            if artist_db_info and artist_db_info.get('wikipedia_content'):
+                artist_wiki_content = artist_db_info['wikipedia_content']
+                has_artist_wiki = True
+            elif first_track_data and len(first_track_data) > 27 and first_track_data[27]:
+                artist_wiki_content = first_track_data[27]
+                has_artist_wiki = True
+
+            # Mostrar/ocultar panel de Wikipedia del artista
+            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
                 if artist_wiki_content:
                     self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{artist_wiki_content}</div>")
+                    self.wikipedia_artist_label.setVisible(True)
                 else:
-                    self.wikipedia_artist_label.setText("")
+                    self.wikipedia_artist_label.setVisible(False)
 
             # 4. LASTFM LABEL
-            if self.lastfm_label:
-                # Obtener bio del artista
-                artist_bio = None
-                if artist_db_info and artist_db_info.get('bio'):
-                    artist_bio = artist_db_info['bio']
-                elif len(first_track_data) > 15 and first_track_data[15]:
-                    artist_bio = first_track_data[15]
-                else:
-                    artist_bio = "No hay información del artista disponible"
+            # Obtener bio del artista
+            artist_bio = None
+            if artist_db_info and artist_db_info.get('bio'):
+                artist_bio = artist_db_info['bio']
+                has_artist_bio = True
+            elif first_track_data and len(first_track_data) > 15 and first_track_data[15]:
+                artist_bio = first_track_data[15]
+                has_artist_bio = True
 
-                self.lastfm_label.setText(f"<h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div>")
+            # Mostrar/ocultar panel de información del artista
+            if self.lastfm_label:
+                if artist_bio and artist_bio != "No hay información del artista disponible":
+                    self.lastfm_label.setText(f"<h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div>")
+                    self.lastfm_label.setVisible(True)
+                else:
+                    self.lastfm_label.setVisible(False)
 
             # 5. WIKIPEDIA ALBUM LABEL
-            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                # Priorizar contenido de Wikipedia de la base de datos del álbum
-                album_wiki_content = None
-                if album_db_info and album_db_info.get('wikipedia_content'):
-                    album_wiki_content = album_db_info['wikipedia_content']
-                elif len(first_track_data) > 29 and first_track_data[29]:
-                    album_wiki_content = first_track_data[29]
+            # Priorizar contenido de Wikipedia de la base de datos del álbum
+            album_wiki_content = None
+            if album_db_info and album_db_info.get('wikipedia_content'):
+                album_wiki_content = album_db_info['wikipedia_content']
+                has_album_wiki = True
+            elif first_track_data and len(first_track_data) > 29 and first_track_data[29]:
+                album_wiki_content = first_track_data[29]
+                has_album_wiki = True
 
+            # Mostrar/ocultar panel de Wikipedia del álbum
+            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
                 if album_wiki_content:
                     self.wikipedia_album_label.setText(f"<h3>Wikipedia - Álbum:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
+                    self.wikipedia_album_label.setVisible(True)
                 else:
-                    self.wikipedia_album_label.setText("")
+                    self.wikipedia_album_label.setVisible(False)
+
         except Exception as e:
             print(f"Error mostrando detalles del álbum: {e}")
             traceback.print_exc()
@@ -1870,8 +1901,17 @@ class MusicBrowser(BaseModule):
             # En caso de error, mostrar información básica
             if self.metadata_label:
                 self.metadata_label.setText(f"<b>Álbum:</b> {album_name}<br><b>Artista:</b> {artist_name}<br><b>Error:</b> {str(e)}")
-
-
+                self.metadata_label.setVisible(True)
+                
+            # Ocultar otros paneles en caso de error
+            if hasattr(self, 'lastfm_label') and self.lastfm_label:
+                self.lastfm_label.setVisible(False)
+            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+                self.wikipedia_artist_label.setVisible(False)
+            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
+                self.wikipedia_album_label.setVisible(False)
+            if hasattr(self, 'links_label') and self.links_label:
+                self.links_label.setVisible(False)
     def apply_theme(self, theme_name=None):
         """
         Aplica el tema al módulo utilizando el sistema centralizado.
@@ -2020,8 +2060,9 @@ class MusicBrowser(BaseModule):
                 if hasattr(self, 'artist_image_label') and self.artist_image_label:
                     self.artist_image_label.setText("No imagen de artista")
 
-            # Mostrar información en el widget scrollable
+            # Inicializar variables para contenido de información
             info_text = ""
+            has_info_content = False
 
             # Mostrar letra de la canción si está disponible
             lyrics = data[30] if len(data) > 30 and data[30] else None
@@ -2030,6 +2071,7 @@ class MusicBrowser(BaseModule):
             if lyrics:
                 info_text += f"<h3>Letra</h3><div style='white-space: pre-wrap;'>{lyrics}</div>"
                 info_text += f"<p><i>Fuente: {lyrics_source}</i></p><hr>"
+                has_info_content = True
 
             # Mostrar info de LastFM (bio del artista)
             artist_bio = None
@@ -2040,7 +2082,9 @@ class MusicBrowser(BaseModule):
             else:
                 artist_bio = "No hay información del artista disponible"
 
-            info_text += f"<h3>Lastfm {artist}:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div><br><br>"
+            if artist_bio and artist_bio != "No hay información del artista disponible":
+                info_text += f"<h3>Lastfm {artist}:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div><br><br>"
+                has_info_content = True
 
             # Mostrar info de Wikipedia del artista
             wikipedia_content = None
@@ -2051,13 +2095,18 @@ class MusicBrowser(BaseModule):
 
             if wikipedia_content:
                 info_text += f"<h3>Wikipedia - {artist}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
+                has_info_content = True
 
-            # Asignar el contenido actualizado
+            # Asignar el contenido actualizado y mostrar/ocultar según corresponda
             if self.lastfm_label:
-                self.lastfm_label.setText(info_text)
+                if has_info_content:
+                    self.lastfm_label.setText(info_text)
+                    self.lastfm_label.setVisible(True)
+                else:
+                    self.lastfm_label.setVisible(False)
 
-            # Mostrar metadata
-            if len(data) >= 15 and self.metadata_label:  # Aseguramos que tengamos todos los campos necesarios
+            # Mostrar metadata siempre que tengamos datos suficientes
+            if len(data) >= 15 and self.metadata_label:
                 track_num = data[14] if data[14] else "N/A"  # track_number está en el índice 14
 
                 # Construir la sección de metadata básica
@@ -2074,10 +2123,14 @@ class MusicBrowser(BaseModule):
                     <b>Frecuencia:</b> {data[12] or 'N/A'} Hz<br>
                 """
 
+                # Inicializar variables para enlaces
+                has_artist_links = False
+                has_album_links = False
+                artist_links = []
+                album_links = []
+
                 # Añadir enlaces externos del artista si existen
                 metadata += "<br><b>Enlaces del Artista:</b><br>"
-
-                artist_links = []
 
                 # Priorizar enlaces de la base de datos
                 if artist_db_info:
@@ -2097,6 +2150,7 @@ class MusicBrowser(BaseModule):
                         artist_links.append(f"<a href='{artist_db_info['bandcamp_url']}'>Bandcamp</a>")
                     if artist_db_info.get('lastfm_url'):
                         artist_links.append(f"<a href='{artist_db_info['lastfm_url']}'>Last.fm</a>")
+                    has_artist_links = len(artist_links) > 0
                 # Usar enlaces del track como respaldo
                 elif len(data) > 16:
                     if data[16]:  # spotify_url
@@ -2111,6 +2165,7 @@ class MusicBrowser(BaseModule):
                         artist_links.append(f"<a href='{data[20]}'>RateYourMusic</a>")
                     if data[26]:  # artist_wikipedia_url (nuevo campo)
                         artist_links.append(f"<a href='{data[26]}'>Wikipedia</a>")
+                    has_artist_links = len(artist_links) > 0
 
                 if artist_links:
                     metadata += " | ".join(artist_links)
@@ -2120,8 +2175,6 @@ class MusicBrowser(BaseModule):
                 # Añadir enlaces del álbum si los hay
                 if album_db_info:
                     metadata += "<br><br><b>Enlaces del Álbum:</b><br>"
-                    album_links = []
-
                     if album_db_info.get('spotify_url'):
                         album_links.append(f"<a href='{album_db_info['spotify_url']}'>Spotify</a>")
                     if album_db_info.get('youtube_url'):
@@ -2134,48 +2187,47 @@ class MusicBrowser(BaseModule):
                         album_links.append(f"<a href='{album_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
                     if album_db_info.get('wikipedia_url'):
                         album_links.append(f"<a href='{album_db_info['wikipedia_url']}'>Wikipedia</a>")
+                    has_album_links = len(album_links) > 0
 
                     if album_links:
                         metadata += " | ".join(album_links)
                     else:
                         metadata += "No hay enlaces disponibles."
 
+                # Siempre mostramos metadata porque contiene información básica
                 self.metadata_label.setText(metadata)
+                self.metadata_label.setVisible(True)
                 self.metadata_label.setOpenExternalLinks(True)
 
-                # Actualizar otros labels si existen
+                # Actualizar panel de enlaces si existe
                 if hasattr(self, 'links_label') and self.links_label:
                     links_text = "<h3>Enlaces:</h3>"
+                    has_any_links = False
 
                     # Añadir enlaces del artista
                     if artist_links:
                         links_text += f"<p><b>Artista {artist}:</b> {' | '.join(artist_links)}</p>"
+                        has_any_links = True
 
                     # Añadir enlaces del álbum
-                    if album_db_info:
-                        album_links = []
+                    if album_db_info and album_links:
+                        links_text += f"<p><b>Álbum {album}:</b> {' | '.join(album_links)}</p>"
+                        has_any_links = True
 
-                        if album_db_info.get('spotify_url'):
-                            album_links.append(f"<a href='{album_db_info['spotify_url']}'>Spotify</a>")
-                        if album_db_info.get('youtube_url'):
-                            album_links.append(f"<a href='{album_db_info['youtube_url']}'>YouTube</a>")
-                        if album_db_info.get('musicbrainz_url'):
-                            album_links.append(f"<a href='{album_db_info['musicbrainz_url']}'>MusicBrainz</a>")
-                        if album_db_info.get('discogs_url'):
-                            album_links.append(f"<a href='{album_db_info['discogs_url']}'>Discogs</a>")
-                        if album_db_info.get('rateyourmusic_url'):
-                            album_links.append(f"<a href='{album_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
-                        if album_db_info.get('wikipedia_url'):
-                            album_links.append(f"<a href='{album_db_info['wikipedia_url']}'>Wikipedia</a>")
-
-                        if album_links:
-                            links_text += f"<p><b>Álbum {album}:</b> {' | '.join(album_links)}</p>"
-
-                    self.links_label.setText(links_text)
+                    # Mostrar/ocultar según tengamos enlaces
+                    if has_any_links:
+                        self.links_label.setText(links_text)
+                        self.links_label.setVisible(True)
+                    else:
+                        self.links_label.setVisible(False)
 
                 # Mostrar Wikipedia del artista si está disponible
-                if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label and wikipedia_content:
-                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
+                if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+                    if wikipedia_content:
+                        self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
+                        self.wikipedia_artist_label.setVisible(True)
+                    else:
+                        self.wikipedia_artist_label.setVisible(False)
 
                 # Mostrar Wikipedia del álbum si está disponible
                 if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
@@ -2185,8 +2237,12 @@ class MusicBrowser(BaseModule):
 
                     if album_wiki_content:
                         self.wikipedia_album_label.setText(f"<h3>Wikipedia - {album}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
+                        self.wikipedia_album_label.setVisible(True)
+                    else:
+                        self.wikipedia_album_label.setVisible(False)
             elif self.metadata_label:
                 self.metadata_label.setText("No hay suficientes datos de metadata")
+                self.metadata_label.setVisible(True)
 
         except Exception as e:
             # manejar la excepción
@@ -2196,10 +2252,11 @@ class MusicBrowser(BaseModule):
             # Intento de recuperación mostrando información básica
             if hasattr(self, 'metadata_label') and self.metadata_label and len(data) > 2:
                 self.metadata_label.setText(f"<b>Título:</b> {data[2] or 'N/A'}<br><b>Error:</b> No se pudo cargar información completa.")
+                self.metadata_label.setVisible(True)
 
             if hasattr(self, 'lastfm_label') and self.lastfm_label and len(data) > 3:
                 self.lastfm_label.setText(f"<h3>Error</h3><p>No se pudo cargar la información detallada para {data[3] or 'este elemento'}.</p>")
-
+                self.lastfm_label.setVisible(True) 
 
     def search(self):
         """Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto."""
@@ -2444,37 +2501,28 @@ class MusicBrowser(BaseModule):
         # Limpiar información de metadatos (panel central)
         if hasattr(self, 'metadata_label') and self.metadata_label:
             self.metadata_label.setText("")
+            self.metadata_label.setVisible(True)  # Siempre visible, aunque esté vacío
 
         # Limpiar información detallada (panel inferior)
+        # Inicialmente ocultamos todos los paneles
         if hasattr(self, 'links_label') and self.links_label:
-            self.links_label.setVisible(False)
             self.links_label.setText("")
+            self.links_label.setVisible(False)  # Ocultar hasta que tenga contenido
 
         if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-            self.wikipedia_artist_label.setVisible(False)
             self.wikipedia_artist_label.setText("")
+            self.wikipedia_artist_label.setVisible(False)  # Ocultar hasta que tenga contenido
 
         if hasattr(self, 'lastfm_label') and self.lastfm_label:
-            self.lastfm_label.setVisible(False)
             self.lastfm_label.setText("")
+            self.lastfm_label.setVisible(False)  # Ocultar hasta que tenga contenido
 
         if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-            self.wikipedia_album_label.setVisible(False)
             self.wikipedia_album_label.setText("")
+            self.wikipedia_album_label.setVisible(False)  # Ocultar hasta que tenga contenido
 
         # Forzar actualización visual
-        if hasattr(self, 'cover_label') and self.cover_label:
-            self.cover_label.update()
-
-        if hasattr(self, 'artist_image_label') and self.artist_image_label:
-            self.artist_image_label.update()
-
-        # Actualizar scroll areas si existen
-        if hasattr(self, 'info_scroll') and self.info_scroll:
-            self.info_scroll.update()
-
-        if hasattr(self, 'metadata_scroll') and self.metadata_scroll:
-            self.metadata_scroll.update()
+        QApplication.processEvents()
 
     def handle_spotify_button(self):
         """Manejador para el botón de Spotify que decide qué argumento pasar a enviar_spoti"""
@@ -3210,6 +3258,7 @@ class MusicBrowser(BaseModule):
         try:
             # Crear el contenido para el panel de información (LastFM + Wikipedia)
             info_text = ""
+            has_artist_info = False
 
             # Mostrar info de LastFM si está disponible
             artist_bio = None
@@ -3223,6 +3272,7 @@ class MusicBrowser(BaseModule):
 
             if artist_bio:
                 info_text += f"<h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div><br><br>"
+                has_artist_info = True
             else:
                 info_text += "<h3>Información del Artista:</h3><p>No hay información disponible</p><br>"
 
@@ -3235,14 +3285,19 @@ class MusicBrowser(BaseModule):
 
             if wikipedia_content:
                 info_text += f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
+                has_artist_info = True
 
-            # Establecer texto en lastfm_label
+            # Establecer texto en lastfm_label y mostrar/ocultar según corresponda
             if self.lastfm_label:
-                self.lastfm_label.setText(info_text)
+                if has_artist_info:
+                    self.lastfm_label.setText(info_text)
+                    self.lastfm_label.setVisible(True)
+                else:
+                    self.lastfm_label.setVisible(False)
 
             # Construir la metadata básica del artista
             metadata = f"<b>Artista:</b> {artist_name}<br>"
-
+            
             # Añadir información adicional si está disponible
             if artist_db_info:
                 if artist_db_info.get('origin'):
@@ -3262,9 +3317,8 @@ class MusicBrowser(BaseModule):
             metadata += "<br>"
 
             # Añadir enlaces externos del artista
-            metadata += "<b>Enlaces del Artista:</b><br>"
-
             artist_links = []
+            has_links = False
 
             # Priorizar enlaces de la base de datos
             if artist_db_info:
@@ -3284,6 +3338,7 @@ class MusicBrowser(BaseModule):
                     artist_links.append(f"<a href='{artist_db_info['bandcamp_url']}'>Bandcamp</a>")
                 if artist_db_info.get('lastfm_url'):
                     artist_links.append(f"<a href='{artist_db_info['lastfm_url']}'>Last.fm</a>")
+                has_links = len(artist_links) > 0
             # Usar enlaces del track como respaldo
             elif first_track_data and len(first_track_data) > 16:
                 if first_track_data[16]:  # spotify_url
@@ -3298,122 +3353,44 @@ class MusicBrowser(BaseModule):
                     artist_links.append(f"<a href='{first_track_data[20]}'>RateYourMusic</a>")
                 if first_track_data[26]:  # artist_wikipedia_url
                     artist_links.append(f"<a href='{first_track_data[26]}'>Wikipedia</a>")
+                has_links = len(artist_links) > 0
 
+            # Añadir enlaces a metadata
+            metadata += "<b>Enlaces del Artista:</b><br>"
             if artist_links:
                 metadata += " | ".join(artist_links)
             else:
                 metadata += "No hay enlaces disponibles."
 
-            # Configurar metadata con estilos específicos según tipo de información
+            # Mostrar metadata
             if self.metadata_label:
-                metadata = f"""
-                    <div class="metadata-container">
-                        <h2>{artist_name or 'N/A'}</h2>
-                        <div class="metadata-row"><span class="metadata-label">Artista:</span> {artist_name or 'N/A'}</div>
-                """
-                
-                # Añadir información adicional si está disponible
-                if artist_db_info:
-                    if artist_db_info.get('origin'):
-                        metadata += f'<div class="metadata-row"><span class="metadata-label">Origen:</span> {artist_db_info["origin"] or "N/A"}</div>'
-                    if artist_db_info.get('formed_year'):
-                        metadata += f'<div class="metadata-row"><span class="metadata-label">Año de formación:</span> {artist_db_info["formed_year"] or "N/A"}</div>'
-                    if artist_db_info.get('total_albums'):
-                        metadata += f'<div class="metadata-row"><span class="metadata-label">Total de álbumes:</span> {artist_db_info["total_albums"] or "N/A"}</div>'
-                    if artist_db_info.get('tags'):
-                        metadata += f'<div class="metadata-row"><span class="metadata-label">Etiquetas:</span> {artist_db_info["tags"] or "N/A"}</div>'
-                
-                # Contar álbumes desde el árbol
-                albums_count = artist_item.childCount()
-                if not artist_db_info or not artist_db_info.get('total_albums'):
-                    metadata += f'<div class="metadata-row"><span class="metadata-label">Álbumes encontrados:</span> {albums_count}</div>'
-                
-                metadata += "</div>"  # Close metadata-container
-                
-                # Añadir enlaces con estilo visual
-                metadata += "<div class='links-section'>"
-                metadata += "<h3>Enlaces del Artista:</h3>"
-                
-                # Añadir enlaces del artista
-                if artist_links:
-                    metadata += '<div class="links-container">' + ' | '.join(artist_links) + '</div>'
-                else:
-                    metadata += '<div class="links-container">No hay enlaces disponibles.</div>'
-                
-                metadata += "</div>"
-                
                 self.metadata_label.setText(metadata)
                 self.metadata_label.setVisible(True)
-            
-            # Mostrar información del artista con estilo
-            if self.lastfm_label:
-                info_text = f"""
-                    <div class="bio-container">
-                        <h3>Información del Artista:</h3>
-                        <div class="bio-text">{artist_bio}</div>
-                    </div>
-                """
-                self.lastfm_label.setText(info_text)
+                self.metadata_label.setOpenExternalLinks(True)
 
+            # Actualizar otros labels si existen
+            if hasattr(self, 'links_label') and self.links_label:
+                if has_links:
+                    links_text = "<h3>Enlaces:</h3>"
+                    if artist_links:
+                        links_text += f"<p><b>Artista {artist_name}:</b> {' | '.join(artist_links)}</p>"
+                    self.links_label.setText(links_text)
+                    self.links_label.setVisible(True)
+                else:
+                    self.links_label.setVisible(False)
 
-            # Mostrar info de Wikipedia del artista
-            wikipedia_content = None
-            if artist_db_info and artist_db_info.get('wikipedia_content'):
-                wikipedia_content = artist_db_info['wikipedia_content']
-            elif len(data) > 27:
-                wikipedia_content = data[27] if data[27] else None
-
-            if wikipedia_content:
-                info_text += f"<h3>Wikipedia - {artist}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
-
-            # Asignar el contenido actualizado y gestionar visibilidad
-            # if self.lastfm_label:
-            #     if info_text:
-            #         self.lastfm_label.setText(info_text)
-            #         self.lastfm_label.setVisible(True)
-            #     else:
-            #         self.lastfm_label.setVisible(False)
-                    
-            if hasattr(self, 'lastfm_label') and self.lastfm_label:
-                self.lastfm_label.setVisible(True)
-            
-            # For wikipedia_artist_label
+            # Mostrar Wikipedia del artista si existe
             if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
                 if wikipedia_content:
                     self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
                     self.wikipedia_artist_label.setVisible(True)
                 else:
-                    self.wikipedia_artist_label.setText("")
                     self.wikipedia_artist_label.setVisible(False)
                     
-            # For wikipedia_album_label
+            # Ocultar panel de Wikipedia de álbum ya que estamos mostrando un artista
             if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                album_wiki_content = None
-                if album_db_info and album_db_info.get('wikipedia_content'):
-                    album_wiki_content = album_db_info['wikipedia_content']
-
-                if album_wiki_content:
-                    self.wikipedia_album_label.setText(f"<h3>Wikipedia - {album}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
-                    self.wikipedia_album_label.setVisible(True)
-                else:
-                    self.wikipedia_album_label.setText("")
-                    self.wikipedia_album_label.setVisible(False)
-
-
-            # Actualizar otros labels si existen
-            if hasattr(self, 'links_label') and self.links_label:
-                self.links_label.setVisible(True)
-                # Construir enlaces
-                links_text = "<h3>Enlaces:</h3>"
-                if artist_links:
-                    links_text += f"<p><b>Artista {artist_name}:</b> {' | '.join(artist_links)}</p>"
-                self.links_label.setText(links_text)
-
-            # if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-            #     if wikipedia_content:
-            #         self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
-            #     else:
-            #         self.wikipedia_artist_label.setText("")
+                self.wikipedia_album_label.setVisible(False)
+                
         except Exception as e:
             print(f"Error al mostrar información del artista: {e}")
             traceback.print_exc()
@@ -3421,8 +3398,10 @@ class MusicBrowser(BaseModule):
             # En caso de error, mostrar información básica
             if self.lastfm_label:
                 self.lastfm_label.setText(f"<h3>Artista: {artist_name}</h3><p>Error al cargar información detallada: {str(e)}</p>")
+                self.lastfm_label.setVisible(True)
             if self.metadata_label:
                 self.metadata_label.setText(f"<b>Artista:</b> {artist_name}<br><b>Error:</b> No se pudo cargar información adicional.")
+                self.metadata_label.setVisible(True)
 
 
     def setup_visibility_controls(self):
