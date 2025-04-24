@@ -803,8 +803,8 @@ QPushButton:hover {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
                </property>
                <property name="flat">

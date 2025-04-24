@@ -7,10 +7,10 @@ import sqlite3
 import json
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
-                           QLabel, QScrollArea, QSplitter, QTextEdit, QTableWidget,
-                           QHeaderView, QTreeWidget, QTreeWidgetItem, QAbstractItemView,
+                           QLabel, QScrollArea, QSplitter, QSpinBox, QComboBox, 
+                           QTreeWidget, QTreeWidgetItem, QAbstractItemView,
                            QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
-                           QTabWidget, QSpinBox)
+                           )
 from PyQt6.QtCore import Qt, QDate
 from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence
 import subprocess
@@ -287,6 +287,14 @@ class MusicBrowser(BaseModule):
             print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}")
             self._fallback_init_ui()
 
+        # Establecer objectName para este módulo principal
+        self.setObjectName("music_fuzzy_module")
+        
+        # Después de cargar la UI principal, también establecer su objectName
+        if hasattr(self, 'main_ui'):
+            self.main_ui.setObjectName("music_browser_main")
+
+
         # Cargar otros componentes de la UI
         self._load_results_tree()
 
@@ -307,8 +315,19 @@ class MusicBrowser(BaseModule):
             self._fallback_setup_info_widget()
 
         # Configuración común
+        # Una vez configuradas todas las referencias
+        self._setup_references()
+        
+        # Cargar otros componentes UI
+        
+        # Conectar señales después de tener todos los widgets
         self.connect_signals()
-        self.apply_theme()
+        
+        # Aplicar el tema después de toda la inicialización
+        self.apply_theme(self.selected_theme)
+        
+        # Aplicar ajustes específicos que no pueden manejarse solo con CSS
+        self._apply_music_specific_styles()
 
         # Inicializar el estado de los ajustes avanzados
         self._advanced_settings_loaded = False
@@ -685,7 +704,7 @@ class MusicBrowser(BaseModule):
         self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
 
-        # Añadir al layout existente
+        # Añadir al layout existentedef _setup_references(self):
         container_layout.addWidget(self.results_tree)
         print("Árbol de resultados fallback creado y añadido al layout")
 
@@ -697,68 +716,54 @@ class MusicBrowser(BaseModule):
 
     def _setup_references(self):
         """Configura las referencias a los widgets cargados desde la UI principal."""
-        # Botones y controles principales
-        self.search_box = self.main_ui.findChild(QLineEdit, "search_box")
-        self.play_button = self.main_ui.findChild(QPushButton, "play_button")
-        self.folder_button = self.main_ui.findChild(QPushButton, "folder_button")
-        self.spotify_button = self.main_ui.findChild(QPushButton, "spotify_button")
-        self.advanced_settings_check = self.main_ui.findChild(QCheckBox, "advanced_settings_check")
+        try:
+            # Botones y controles principales - usar findChild con objectName exacto
+            self.search_box = self.main_ui.findChild(QLineEdit, "search_box")
+            if not self.search_box:
+                print("ADVERTENCIA: No se pudo encontrar search_box")
+                return False
+                
+            # Buscar por los objectName exactos como están en el archivo .ui
+            self.play_button = self.main_ui.findChild(QPushButton, "play_button")
+            self.folder_button = self.main_ui.findChild(QPushButton, "folder_button")
+            self.spotify_button = self.main_ui.findChild(QPushButton, "spotify_button")
+            self.advanced_settings_check = self.main_ui.findChild(QCheckBox, "advanced_settings_check")
+            self.custom_button1 = self.main_ui.findChild(QPushButton, "custom_button1")
+            self.custom_button2 = self.main_ui.findChild(QPushButton, "custom_button2")
+            self.custom_button3 = self.main_ui.findChild(QPushButton, "custom_button3")
+            
+            # Lista de botones para gestión en grupo
+            self.advanced_buttons = []
+            # Solo añadir botones que existen
+            for btn in [self.custom_button1, self.custom_button2, self.custom_button3]:
+                if btn:
+                    self.advanced_buttons.append(btn)
 
-        # Botones avanzados
-        self.custom_button1 = self.main_ui.findChild(QPushButton, "custom_button1")
-        self.custom_button2 = self.main_ui.findChild(QPushButton, "custom_button2")
-        self.custom_button3 = self.main_ui.findChild(QPushButton, "custom_button3")
-        self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
+            # Contenedores - buscar con los nombres exactos del archivo .ui
+            self.top_container = self.main_ui.findChild(QFrame, "top_container")
+            self.advanced_settings_container = self.main_ui.findChild(QFrame, "advanced_settings_container")
+            self.results_tree_container = self.main_ui.findChild(QFrame, "results_tree_container")
+            self.main_splitter = self.main_ui.findChild(QSplitter, "main_splitter")
+            
+            # Etiquetas de imágenes
+            self.cover_label = self.main_ui.findChild(QLabel, "cover_label")
+            self.artist_image_label = self.main_ui.findChild(QLabel, "artist_image_label")
 
-        # Contenedores
-        self.top_container = self.main_ui.findChild(QFrame, "top_container")
-        self.advanced_settings_container = self.main_ui.findChild(QFrame, "advanced_settings_container")
-        self.results_tree_container = self.main_ui.findChild(QFrame, "results_tree_container")
-
-        # Splitters
-        self.main_splitter = self.main_ui.findChild(QSplitter, "main_splitter")
-        self.details_splitter = self.main_ui.findChild(QSplitter, "details_splitter")
-
-        # Etiquetas de imágenes
-        self.cover_label = self.main_ui.findChild(QLabel, "cover_label")
-        self.artist_image_label = self.main_ui.findChild(QLabel, "artist_image_label")
-
-        # Scroll de información
-        self.info_scroll = self.main_ui.findChild(QScrollArea, "info_scroll")
-        self.metadata_scroll = self.main_ui.findChild(QScrollArea, "metadata_scroll")
-
-        # Verificar que los scrolls existen, si no, crearlos manualmente
-        if not self.info_scroll:
-            print("info_scroll no encontrado, creando uno manualmente")
-            # Buscar un contenedor adecuado para añadir el scroll
-            container = self.main_ui.findChild(QFrame, "info_container")
-            if container:
-                self.info_scroll = QScrollArea(container)
-                self.info_scroll.setWidgetResizable(True)
-                self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-                self.info_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-
-                # Añadir al layout del contenedor
-                if container.layout():
-                    container.layout().addWidget(self.info_scroll)
-                else:
-                    layout = QVBoxLayout(container)
-                    layout.addWidget(self.info_scroll)
-
-        if not self.metadata_scroll:
-            print("metadata_scroll no encontrado, creando uno manualmente")
-            # Buscar un contenedor adecuado para añadir el scroll
-            container = self.main_ui.findChild(QFrame, "images_container")
-            if container:
-                self.metadata_scroll = QScrollArea(container)
-                self.metadata_scroll.setWidgetResizable(True)
-                self.metadata_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-                self.metadata_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-
-                # Añadir al layout del contenedor
-                if container.layout():
-                    container.layout().addWidget(self.metadata_scroll)
-
+            # Scroll de información - buscar en el main_ui, no en widgets anidados aún
+            self.info_scroll = self.main_ui.findChild(QScrollArea, "info_scroll")
+            
+            # Scroll de metadatos - IMPORTANTE: está en un stackedWidget
+            stackedWidget = self.main_ui.findChild(QStackedWidget, "stackedWidget")
+            if stackedWidget:
+                page = stackedWidget.widget(0)  # Obtener la primera página
+                if page:
+                    self.metadata_scroll = page.findChild(QScrollArea, "metadata_scroll")
+            
+            return True
+        except Exception as e:
+            print(f"Error configurando referencias: {e}")
+            traceback.print_exc()
+            return False
 
 
     def _load_results_tree(self):
@@ -876,99 +881,69 @@ class MusicBrowser(BaseModule):
             if not hasattr(self, 'info_scroll') or not self.info_scroll:
                 print("Error: info_scroll no existe")
                 self._fallback_setup_info_widget()
-                return
+                return False
 
-            # 1. Cargar el panel de información principal (enlaces, wikipedia, lastfm, etc.)
-            info_ui_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
-            if os.path.exists(info_ui_path):
-                try:
-                    self.info_widget = QWidget()
-                    uic.loadUi(info_ui_path, self.info_widget)
-
-                    # Obtener referencias a los labels
-                    self.links_label = self.info_widget.findChild(QLabel, "links_label")
-                    self.wikipedia_artist_label = self.info_widget.findChild(QLabel, "wikipedia_artist_label")
-                    self.lastfm_label = self.info_widget.findChild(QLabel, "lastfm_label")
-                    self.wikipedia_album_label = self.info_widget.findChild(QLabel, "wikipedia_album_label")
-
-                    # Verificar que se obtuvieron todas las referencias
-                    if not all([self.links_label, self.wikipedia_artist_label, self.lastfm_label, self.wikipedia_album_label]):
-                        print("No se pudieron obtener todas las referencias a los labels de información")
-                        for name, widget in [("links_label", self.links_label),
-                                            ("wikipedia_artist_label", self.wikipedia_artist_label),
-                                            ("lastfm_label", self.lastfm_label),
-                                            ("wikipedia_album_label", self.wikipedia_album_label)]:
-                            if widget is None:
-                                print(f"  - {name} es None")
-                        self._fallback_setup_info_widget()
-                        return
-
-                    # Establecer el widget en el ScrollArea
-                    self.info_scroll.setWidget(self.info_widget)
-                    print("Panel de información cargado desde UI")
-                except Exception as e:
-                    print(f"Error al cargar el panel de información: {e}")
-                    traceback.print_exc()
-                    self._fallback_setup_info_widget()
-                    return
-            else:
-                print(f"Archivo UI del panel de información no encontrado: {info_ui_path}")
-                self._fallback_setup_info_widget()
-                return
-
-            # 2. Cargar el panel de metadatos solo si metadata_scroll existe
+            # Crear los widgets contenedores para los ScrollAreas
+            self.info_widget = QWidget()
+            self.metadata_widget = QWidget()
+            
+            # Layouts para los widgets
+            info_layout = QVBoxLayout(self.info_widget)
+            metadata_layout = QVBoxLayout(self.metadata_widget)
+            
+            # Crear las etiquetas con objectNames apropiados
+            self.links_label = QLabel()
+            self.links_label.setObjectName("info_label")
+            self.links_label.setWordWrap(True)
+            self.links_label.setTextFormat(Qt.TextFormat.RichText)
+            self.links_label.setOpenExternalLinks(True)
+            
+            self.wikipedia_artist_label = QLabel()
+            self.wikipedia_artist_label.setObjectName("info_label")
+            self.wikipedia_artist_label.setWordWrap(True)
+            self.wikipedia_artist_label.setTextFormat(Qt.TextFormat.RichText)
+            
+            self.lastfm_label = QLabel()
+            self.lastfm_label.setObjectName("info_label")
+            self.lastfm_label.setWordWrap(True)
+            self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
+            
+            self.wikipedia_album_label = QLabel()
+            self.wikipedia_album_label.setObjectName("info_label")
+            self.wikipedia_album_label.setWordWrap(True)
+            self.wikipedia_album_label.setTextFormat(Qt.TextFormat.RichText)
+            
+            self.metadata_label = QLabel()
+            self.metadata_label.setObjectName("metadata_details_label")
+            self.metadata_label.setWordWrap(True)
+            self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
+            self.metadata_label.setOpenExternalLinks(True)
+            
+            # Agregar las etiquetas a los layouts
+            info_layout.addWidget(self.links_label)
+            info_layout.addWidget(self.wikipedia_artist_label)
+            info_layout.addWidget(self.lastfm_label)
+            info_layout.addWidget(self.wikipedia_album_label)
+            info_layout.addStretch()
+            
+            metadata_layout.addWidget(self.metadata_label)
+            metadata_layout.addStretch()
+            
+            # Establecer los widgets en los ScrollAreas
+            if self.info_scroll:
+                self.info_scroll.setWidget(self.info_widget)
+            
             if hasattr(self, 'metadata_scroll') and self.metadata_scroll:
-                metadata_ui_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_metadata_panel.ui")
-                if os.path.exists(metadata_ui_path):
-                    try:
-                        self.metadata_widget = QWidget()
-                        uic.loadUi(metadata_ui_path, self.metadata_widget)
-
-                        # Obtener referencia al label de metadatos
-                        self.metadata_label = self.metadata_widget.findChild(QLabel, "metadata_label")
-                        if not self.metadata_label:
-                            print("No se pudo obtener la referencia al label de metadatos")
-                            # Crear manualmente
-                            self.metadata_label = QLabel(self.metadata_widget)
-                            self.metadata_label.setWordWrap(True)
-                            self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-                            self.metadata_label.setOpenExternalLinks(True)
-                            layout = QVBoxLayout(self.metadata_widget)
-                            layout.addWidget(self.metadata_label)
-
-                        # Establecer el widget en el ScrollArea
-                        self.metadata_scroll.setWidget(self.metadata_widget)
-                        print("Panel de metadatos cargado desde UI")
-                    except Exception as e:
-                        print(f"Error al cargar el panel de metadatos: {e}")
-                        traceback.print_exc()
-                        # Crear un widget básico para mostrar metadatos
-                        self.metadata_widget = QWidget()
-                        self.metadata_label = QLabel(self.metadata_widget)
-                        self.metadata_label.setWordWrap(True)
-                        self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-                        self.metadata_label.setOpenExternalLinks(True)
-                        layout = QVBoxLayout(self.metadata_widget)
-                        layout.addWidget(self.metadata_label)
-                        self.metadata_scroll.setWidget(self.metadata_widget)
-                else:
-                    print(f"Archivo UI del panel de metadatos no encontrado: {metadata_ui_path}")
-                    # Crear un widget básico para mostrar metadatos
-                    self.metadata_widget = QWidget()
-                    self.metadata_label = QLabel(self.metadata_widget)
-                    self.metadata_label.setWordWrap(True)
-                    self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-                    self.metadata_label.setOpenExternalLinks(True)
-                    layout = QVBoxLayout(self.metadata_widget)
-                    layout.addWidget(self.metadata_label)
-                    self.metadata_scroll.setWidget(self.metadata_widget)
-
+                self.metadata_scroll.setWidget(self.metadata_widget)
+            
             self.ui_components_loaded['info'] = True
-            print("Widgets de información configurados correctamente")
+            print("Widgets de información configurados manualmente (optimizado)")
+            return True
         except Exception as e:
             print(f"Error general al configurar los widgets de información: {e}")
             traceback.print_exc()
             self._fallback_setup_info_widget()
+            return False
 
     def _fallback_setup_info_widget(self):
         """Método de respaldo para crear el widget de información manualmente."""
@@ -1133,6 +1108,22 @@ class MusicBrowser(BaseModule):
         # Botón de Spotify
         self.spotify_button.clicked.connect(self.handle_spotify_button)
 
+        # Aplicar animaciones a botones importantes
+        try:
+            from themes.themes import ThemeEffects
+            
+            # Añadir animación al botón de reproducción
+            ThemeEffects.apply_button_hover_animation(self.play_button)
+            
+            # Añadir animación al botón de Spotify
+            ThemeEffects.apply_button_hover_animation(self.spotify_button)
+            
+            # También se puede hacer en botones personalizados
+            self.custom_button1.setObjectName("animated_button_playing")
+            ThemeEffects.apply_button_hover_animation(self.custom_button1)
+        except ImportError:
+            # Si no está disponible el módulo de temas, ignorar silenciosamente
+            pass
 
 
     def setup_space_key(self):
@@ -1881,115 +1872,76 @@ class MusicBrowser(BaseModule):
                 self.metadata_label.setText(f"<b>Álbum:</b> {album_name}<br><b>Artista:</b> {artist_name}<br><b>Error:</b> {str(e)}")
 
 
+    def apply_theme(self, theme_name=None):
+        """
+        Aplica el tema al módulo utilizando el sistema centralizado.
+        
+        Args:
+            theme_name (str, optional): Nombre del tema a aplicar. Si es None, usa el tema actual.
+        """
+        # Verificar si existe el módulo themes.py
+        try:
+            # Importar dinámicamente
+            from themes.themes import apply_theme as apply_central_theme, ThemeEffects
+            
+            # Asegurarse de que tenemos objectName
+            if not self.objectName():
+                self.setObjectName("music_fuzzy_module")
+                
+            # Si hay un cambio de tema, guardarlo
+            if theme_name:
+                self.current_theme = theme_name
+                
+            # Usar el sistema centralizado
+            apply_central_theme(self, self.current_theme)
+            
+            # Aplicar efectos especiales a botones específicos
+            if hasattr(self, 'play_button') and self.play_button:
+                ThemeEffects.apply_ripple_effect(self.play_button)
+            if hasattr(self, 'spotify_button') and self.spotify_button:
+                ThemeEffects.apply_ripple_effect(self.spotify_button)
+                
+            # Configurar objectNames adicionales si es necesario
+            if hasattr(self, 'results_tree') and self.results_tree:
+                self.results_tree.setObjectName("results_tree")
+            
+            # Aplicar ajustes específicos para este módulo
+            self._apply_music_specific_styles()
+            
+            return
+        except ImportError:
+            # Fallback al método de la clase base
+            super().apply_theme(theme_name)
 
-    # def apply_theme(self):
-    #     """Aplica el tema específico del módulo."""
-
-    #     print(f"Aplicando tema con fuente: {self.font_family}")
-
-    #     # Verificar que los labels existen antes de intentar modificarlos
-    #     if not hasattr(self, 'lastfm_label') or self.lastfm_label is None:
-    #         print("lastfm_label no está disponible para aplicar el tema")
-    #         return
-
-    #     if not hasattr(self, 'metadata_label') or self.metadata_label is None:
-    #         print("metadata_label no está disponible para aplicar el tema")
-    #         return
-
-    #     # Obtener el tema actual
-    #     theme = self.themes.get(self.current_theme, self.themes['Tokyo Night'])
-
-    #     # Aplicar estilos globales
-    #     self.setStyleSheet(f"""
-    #         QLabel {{
-    #             font-size: 12px;
-
-    #         }}
-    #         QLineEdit {{
-    #             font-size: 13px;
-    #             border: 1px solid {theme['border']};
-    #             border-radius: 3px;
-    #             padding: 5px;
-    #             background-color: {theme['secondary_bg']};
-    #             color: {theme['fg']};
-    #         }}
-
-    #         QTreeWidget {{
-    #             border: none;
-    #             background-color: {theme['bg']};
-    #             alternate-background-color: {theme['bg']};
-    #             show-decoration-selected: 1;
-    #         }}
-    #         QTreeWidget::item {{
-    #             padding: 6px;
-    #             border-bottom: 1px solid rgba(65, 72, 104, 0.1);
-    #         }}
-    #         QTreeWidget::item:selected {{
-    #             background-color: {theme['selection']};
-    #             color: {theme['fg']};
-    #         }}
-    #         QTreeWidget::item:hover {{
-    #             background-color: rgba(65, 72, 104, 0.1);
-    #         }}
-    #         QHeaderView::section {{
-    #             background-color: {theme['bg']};
-    #             padding: 6px;
-    #             border: none;
-    #             border-bottom: 1px solid {theme['border']};
-    #             font-weight: bold;
-    #         }}
-    #         QHeaderView::section {{
-    #             background-color: transparent;
-    #             padding: 5px;
-    #             border: none;
-    #             border-radius: 3px;
-    #             border-bottom: 1px solid {theme['border']};
-    #         }}
-    #         QTableWidget {{
-    #             border: none;
-    #         }}
-    #         QScrollArea {{
-    #             border: none;
-    #         }}
-
-    #     """)
-
-    #     # Set object names for the labels so the CSS can target them
-    #     self.lastfm_label.setObjectName("lastfm_label")
-    #     self.metadata_label.setObjectName("metadata_label")
-
-    #     # También aplicar el tema a widgets específicos si lo necesitan
-    #     if hasattr(self, 'results_tree') and self.results_tree:
-    #         self.results_tree.setStyleSheet(f"""
-    #             QTreeWidget {{
-    #                 border: none;
-    #                 background-color: {theme['bg']};
-    #             }}
-    #             QTreeWidget::item {{
-    #                 padding: 4px;
-    #                 border-bottom: 1px solid rgba(65, 72, 104, 0.2);
-    #             }}
-    #             QTreeWidget::item:selected {{
-    #                 background-color: {theme['selection']};
-    #                 color: {theme['fg']};
-    #             }}
-    #         """)
-
-    #     if hasattr(self, 'advanced_settings_container') and self.advanced_settings_container:
-    #         self.advanced_settings_container.setStyleSheet(f"""
-    #             QSpinBox, QComboBox {{
-    #                 border: 1px solid {theme['border']};
-    #                 border-radius: 3px;
-    #                 padding: 3px;
-    #                 background-color: {theme['secondary_bg']};
-    #             }}
-    #             QPushButton {{
-    #                 background-color: {theme['button_hover']};
-    #                 color: {theme['fg']};
-    #                 border-radius: 3px;
-    #                 padding: 5px;
-    #             }}
-    #         """)
+    def _apply_music_specific_styles(self):
+        """
+        Aplica estilos específicos que no pueden manejarse solo con CSS
+        """
+        # Asegurar que las etiquetas muestren enlaces externos correctamente
+        for label in [self.metadata_label, self.links_label, self.lastfm_label, 
+                    self.wikipedia_artist_label, self.wikipedia_album_label]:
+            if label:
+                label.setOpenExternalLinks(True)
+                label.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
+        
+        # Configurar los marcos de las imágenes
+        for image_label in [self.cover_label, self.artist_image_label]:
+            if image_label:
+                image_label.setFrameShape(QFrame.Shape.Box)
+                image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        # Configuración específica para el árbol de resultados
+        if self.results_tree:
+            self.results_tree.setAlternatingRowColors(True)
+            self.results_tree.setHeaderHidden(False)
+            
+            # Ajustar tamaños de columnas
+            self.results_tree.setColumnWidth(0, 300)
+            self.results_tree.setColumnWidth(1, 70)
+            self.results_tree.setColumnWidth(2, 100)
+            
+            # Mantener selección visible
+            self.results_tree.setExpandsOnDoubleClick(True)
 
 
     def show_details(self, current, previous):
@@ -2304,7 +2256,7 @@ class MusicBrowser(BaseModule):
         if conditions:
             sql += " WHERE " + " AND ".join(conditions)
 
-        # Ordenamiento
+        # Ordenamiento - primero por artista para agrupar correctamente
         sql += " ORDER BY s.artist, s.album, CAST(s.track_number AS INTEGER)"
 
         # Añadir un límite razonable
@@ -2325,7 +2277,6 @@ class MusicBrowser(BaseModule):
             # Organizar los resultados por artista > álbum > canción
             artists = {}
 
-
             for row in results:
                 # Usar album_artist (índice 4) en lugar de artist (índice 3)
                 album_artist = row[4] if row[4] else row[3] if row[3] else "Sin artista"
@@ -2343,7 +2294,17 @@ class MusicBrowser(BaseModule):
 
                 album_key = f"{album}"
                 if album_key not in artists[album_artist]:
-                    artists[album_artist][album_key] = []
+                    artists[album_artist][album_key] = {
+                        'year': year,
+                        'genre': genre,
+                        'tracks': []
+                    }
+
+                # Extraer año numérico para ordenación
+                try:
+                    numeric_year = int(year) if year and year.isdigit() else 0
+                except (ValueError, TypeError):
+                    numeric_year = 0
 
                 # Añadir la canción con su número de pista
                 track_info = {
@@ -2352,9 +2313,11 @@ class MusicBrowser(BaseModule):
                     'data': row,
                     'year': year,
                     'genre': genre,
+                    'numeric_year': numeric_year,
                     'paths': [row[1]]  # Añadir path al track info
                 }
-                artists[album_artist][album_key].append(track_info)
+                artists[album_artist][album_key]['tracks'].append(track_info)
+                artists[album_artist][album_key]['numeric_year'] = numeric_year
 
             # Añadir elementos al árbol
             for artist_name, albums in artists.items():
@@ -2364,11 +2327,26 @@ class MusicBrowser(BaseModule):
                 artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
                 artist_item.is_header = True  # Marcar como header para compatibilidad
 
-                # Añadir álbumes como hijos del artista
-                for album_name, tracks in albums.items():
-                    # Obtener información del álbum del primer track
-                    album_year = tracks[0]['year'] if tracks else ""
-                    album_genre = tracks[0]['genre'] if tracks else ""
+                # Convertir diccionario de álbumes a lista y ordenar por año (más reciente primero)
+                album_list = []
+                for album_name, album_data in albums.items():
+                    album_list.append({
+                        'name': album_name,
+                        'year': album_data['year'],
+                        'genre': album_data['genre'],
+                        'numeric_year': album_data['numeric_year'],
+                        'tracks': album_data['tracks']
+                    })
+                
+                # Ordenar los álbumes por año de forma descendente (más reciente primero)
+                album_list.sort(key=lambda x: x['numeric_year'], reverse=True)
+
+                # Añadir álbumes como hijos del artista (ya ordenados por año)
+                for album_data in album_list:
+                    album_name = album_data['name']
+                    album_year = album_data['year']
+                    album_genre = album_data['genre']
+                    tracks = album_data['tracks']
 
                     # Crear elemento de álbum
                     album_item = QTreeWidgetItem(artist_item)
@@ -2387,29 +2365,35 @@ class MusicBrowser(BaseModule):
                     # Obtener todas las rutas para este álbum
                     album_paths = []
 
-                    # Ordenar las pistas por número
-                    try:
-                        def track_sort_key(track):
-                            number = track['number']
-                            # Manejar diferentes tipos de 'number'
-                            if isinstance(number, str):
-                                if number.isdigit():
-                                    return int(number)
-                                else:
-                                    return float('inf')  # No es un número, ponerlo al final
-                            elif isinstance(number, (int, float)):
-                                return number
-                            else:
-                                return float('inf')  # Otro tipo, ponerlo al final
+                    # Ordenar las pistas por número de track de forma ascendente
+                    def track_sort_key(track):
+                        number = track['number']
+                        # Para manejar casos donde el número de track no es un número
+                        if isinstance(number, str):
+                            # Manejar formatos como "01/12"
+                            if '/' in number:
+                                number = number.split('/')[0]
+                            # Eliminar letras y otros caracteres no numéricos
+                            number = ''.join(c for c in number if c.isdigit())
+                            
+                            if number.isdigit():
+                                return int(number)
+                            return float('inf')  # Si no es un número, ponerlo al final
+                        elif isinstance(number, (int, float)):
+                            return number
+                        return float('inf')
 
-                        tracks.sort(key=track_sort_key)
-                    except Exception as e:
-                        print(f"Error al ordenar pistas: {e}")
+                    # Ordenar pistas por número de track
+                    tracks.sort(key=track_sort_key)
 
-                    # Añadir canciones como hijos del álbum
+                    # Añadir canciones como hijos del álbum (ordenadas por número de track)
                     for track in tracks:
                         try:
-                            track_num = int(track['number'])
+                            track_num_str = track['number']
+                            if isinstance(track_num_str, str) and '/' in track_num_str:
+                                track_num_str = track_num_str.split('/')[0]
+                            
+                            track_num = int(track_num_str) if str(track_num_str).isdigit() else 0
                             display_text = f"{track_num:02d}. {track['title']}"
                         except (ValueError, TypeError):
                             display_text = f"--. {track['title']}"
@@ -2429,9 +2413,9 @@ class MusicBrowser(BaseModule):
                     # Guardar rutas en el item del álbum
                     album_item.paths = album_paths
 
-            # Expandir los artistas para mostrar los álbumes
-            for i in range(self.results_tree.topLevelItemCount()):
-                self.results_tree.topLevelItem(i).setExpanded(True)
+                # Expandir los artistas para mostrar los álbumes
+                for i in range(self.results_tree.topLevelItemCount()):
+                    self.results_tree.topLevelItem(i).setExpanded(True)
 
         except Exception as e:
             print(f"Error en la búsqueda: {e}")
@@ -3316,9 +3300,46 @@ class MusicBrowser(BaseModule):
                 metadata += "No hay enlaces disponibles."
 
             # Establecer texto en metadata_label
+            # if self.metadata_label:
+            #     self.metadata_label.setText(metadata)
+            #     self.metadata_label.setOpenExternalLinks(True)
+            
+            # Configurar metadata con estilos específicos según tipo de información
             if self.metadata_label:
+                metadata = f"""
+                                <div class="metadata-container">
+                                    <h2>{artist_name or 'N/A'}</h2>
+                                    <div class="metadata-row"><span class="metadata-label">Artista:</span> {artist_name or 'N/A'}</div>                                    <div class="metadata-row"><span class="metadata-label">Album Artist:</span> {data[4] or 'N/A'}</div>
+                                    <div class="metadata-row"><span class="metadata-label">Álbum:</span> {album or 'N/A'}</div>
+                                    <div class="metadata-row"><span class="metadata-label">Fecha:</span> {data[6] or 'N/A'}</div>
+                                    <div class="metadata-row"><span class="metadata-label">Género:</span> {data[7] or 'N/A'}</div>
+                                    <div class="metadata-row"><span class="metadata-label">Sello:</span> {data[8] or 'N/A'}</div>
+                                    <div class="metadata-row"><span class="metadata-label">Bitrate:</span> {data[10] or 'N/A'} kbps</div>
+                                    <div class="metadata-row"><span class="metadata-label">Profundidad:</span> {data[11] or 'N/A'} bits</div>
+                                    <div class="metadata-row"><span class="metadata-label">Frecuencia:</span> {data[12] or 'N/A'} Hz</div>
+                                </div>
+                            """
+                # Crear metadata más elegante usando las clases CSS del tema
+                # Añadir enlaces con estilo visual
+                metadata += "<div class='links-section'>"
+                metadata += "<h3>Enlaces del Artista:</h3>"
+                
+                # ... código existente para añadir enlaces ...
+                
+                metadata += "</div>"
+                
                 self.metadata_label.setText(metadata)
-                self.metadata_label.setOpenExternalLinks(True)
+            
+            # Mostrar información del artista con estilo
+            if self.lastfm_label:
+                info_text = f"""
+                    <div class="bio-container">
+                        <h3>Información del Artista:</h3>
+                        <div class="bio-text">{artist_bio}</div>
+                    </div>
+                """
+                self.lastfm_label.setText(info_text)
+
 
             # Actualizar otros labels si existen
             if hasattr(self, 'links_label') and self.links_label:

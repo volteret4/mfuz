@@ -15,13 +15,6 @@ import sys
 import argparse
 import logging
 
-# class PyQtFilter(logging.Filter):
-#     def filter(self, record):
-#         # Filtrar mensajes de PyQt y uic
-#         if record.name.startswith('PyQt6') or 'uic' in record.name.lower():
-#             return False
-#         return True
-
 def load_config_file(file_path):
     """Carga un archivo de configuración en formato JSON o YAML."""
     file_path = Path(file_path)
@@ -184,9 +177,28 @@ class TabManager(QMainWindow):
         try:
             config = load_config_file(config_path)
         
-            self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
-            self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
+            #self.available_themes = config.get('temas', ['Tokyo Night', 'Solarized Dark', 'Monokai'])
+            #self.current_theme = config.get('tema_seleccionado', 'Tokyo Night')
             
+
+
+            # Cargar el sistema de temas centralizado
+            try:
+                from themes.themes import THEMES, init_theme_system
+                self.available_themes = list(THEMES.keys())
+                
+                # Obtener tema seleccionado de la configuración
+                self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
+                if self.current_theme not in self.available_themes:
+                    self.current_theme = self.available_themes[0]  # Usar el primer tema si no es válido
+                    
+            except ImportError:
+                # Fallback a los temas definidos en base_module
+                from base_module import THEMES
+                self.available_themes = list(THEMES.keys())
+                self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
+
+
             # Convertir el nivel de string a constante de logging
             level_map = {
                 'DEBUG': logging.DEBUG,
@@ -200,8 +212,8 @@ class TabManager(QMainWindow):
             logging_level = level_map.get(logging_level_str, logging.INFO)
         except Exception as e:
             # En caso de error, usar un valor predeterminado
-            self.available_themes = ['Tokyo Night', 'Solarized Dark', 'Monokai']
-            self.current_theme = 'Tokyo Night'
+            #self.available_themes = ['Tokyo Night', 'Solarized Dark', 'Monokai']
+            #self.current_theme = 'Tokyo Night'
             logging_level = logging.INFO
             config = {}
             print(f"Error al cargar la configuración: {e}")
@@ -392,12 +404,44 @@ class TabManager(QMainWindow):
             self.tabs[module_name].apply_theme(new_theme)
 
 
-    def apply_theme(self, font_size="14px"):
-        """Applies theme to the entire application."""
+    def apply_theme(self, theme_name=None):
+        """
+        Aplica el tema especificado a toda la aplicación.
+        
+        Args:
+            theme_name (str, optional): Nombre del tema a aplicar.
+                                    Si es None, usa self.current_theme.
+        """
+        # Actualizar el tema actual si se proporciona uno nuevo
+        if theme_name is not None:
+            self.current_theme = theme_name
+        
+        # Asegurar que el tema existe, usar el primero por defecto si no
+        if self.current_theme not in self.available_themes:
+            self.current_theme = self.available_themes[0]
+        
+        # Intentar usar el sistema centralizado de temas
+        try:
+            from themes.themes import init_theme_system
+            
+            # Establecer el objectName de la ventana principal para poder aplicar estilos específicos
+            if not self.objectName():
+                self.setObjectName("main_window")
+            
+            # Aplicar el tema a nivel de aplicación
+            init_theme_system(QApplication.instance(), self.current_theme)
+            
+            # No es necesario hacer más, ya que init_theme_system aplica el tema a toda la aplicación
+            return
+        except (ImportError, AttributeError) as e:
+            print(f"No se pudo cargar el sistema centralizado de temas: {e}")
+        
+        # Fallback: Usar el método antiguo
         theme = THEMES.get(self.current_theme, THEMES['Tokyo Night'])
         
+        # Aplicar estilos básicos
         self.setStyleSheet(f"""
-            /* Base Styles */
+            /* Estilos base */
             QWidget {{
                 background-color: {theme['bg']};
                 color: {theme['fg']};
@@ -405,13 +449,13 @@ class TabManager(QMainWindow):
                 font-size: 10pt;
             }}
 
-            /* Remove borders from all frames */
+            /* Quitar bordes de todos los frames */
             QFrame, QGroupBox {{
                 border: none;
                 border-radius: 4px;
             }}
 
-            /* Text input fields */
+            /* Campos de entrada de texto */
             QLineEdit, QTextEdit {{
                 border: 1px solid;
                 border-radius: 4px;
@@ -419,13 +463,12 @@ class TabManager(QMainWindow):
                 background-color: {theme['bg']};
             }}
 
-            /* Buttons */
+            /* Botones */
             QPushButton {{
                 background-color: {theme['bg']};
                 border: 2px;
                 border-radius: 19px;
             }}
-            
             
             QPushButton:hover {{
                 background-color: {theme['button_hover']};
@@ -439,28 +482,14 @@ class TabManager(QMainWindow):
                 border: none;
             }}
 
-            /* Lists and Trees */
+            /* Listas y árboles */
             QTreeWidget, QListWidget {{
                 background-color: {theme['bg']};
                 border: none;
                 border-radius: 4px;
             }}
 
-            QTreeWidget::treeWidget {{
-                background-color: {theme['bg']};
-                border: 1px;
-                border-radius: 4px;
-            }}
-
-            QTreeWidget::item, QListWidget::item {{
-                padding: 4px;
-            }}
-
-            QTreeWidget::item:selected, QListWidget::item:selected {{
-                background-color: {theme['accent']};
-            }}
-
-            /* Tab Widget */
+            /* Tabs */
             QTabWidget::pane {{
                 border: none;
                 background-color: {theme['secondary_bg']};
@@ -484,25 +513,6 @@ class TabManager(QMainWindow):
             QTabBar::tab:hover:!selected {{
                 background-color: {theme['secondary_bg']};
             }}
-
-            /* Scroll Areas */
-            QScrollArea {{
-                border: none;
-            }}
-
-            /* Progress Bar */
-            QProgressBar {{
-                border: none;
-                background-color: {theme['secondary_bg']};
-                border-radius: 4px;
-                text-align: center;
-            }}
-
-            QProgressBar::chunk {{
-                background-color: {theme['accent']};
-                border-radius: 4px;
-            }}
-
         """)
 
 
