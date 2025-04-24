@@ -92,7 +92,24 @@ class TimeSubmodule:
         self.chart_time_labels_top = getattr(self.stats_module, 'chart_time_labels_top', None)
         self.chart_time_labels_bott = getattr(self.stats_module, 'chart_time_labels_bott', None)
    
-   
+        # Genres page widgets
+        self.widget_time_genres_top = getattr(self.stats_module, 'widget_time_genres_top', None)
+        self.widget_time_genres_bott = getattr(self.stats_module, 'widget_time_genres_bott', None)
+        self.table_time_genres_top = getattr(self.stats_module, 'table_time_genres_top', None)
+        self.table_time_genres_bott = getattr(self.stats_module, 'table_time_genres_bott', None)
+        self.chart_time_genres_top = getattr(self.stats_module, 'chart_time_genres_top', None)
+        self.chart_time_genres_bott = getattr(self.stats_module, 'chart_time_genres_bott', None)
+        
+        # Feeds page widgets
+        self.widget_time_feeds_top = getattr(self.stats_module, 'widget_time_feeds_top', None)
+        self.widget_time_feeds_bott = getattr(self.stats_module, 'widget_time_feeds_bott', None)
+        self.table_time_feeds_top = getattr(self.stats_module, 'table_time_feeds_top', None)
+        self.table_time_feeds_bott = getattr(self.stats_module, 'table_time_feeds_bott', None)
+        self.chart_time_feeds_top = getattr(self.stats_module, 'chart_time_feeds_top', None)
+        self.chart_time_feeds_bott = getattr(self.stats_module, 'chart_time_feeds_bott', None)
+        
+        # Listens page widgets
+
     def _default_clear_layout(self, layout):
         """Default implementation of clear_layout."""
         if layout is None:
@@ -1821,3 +1838,610 @@ def show_feeds_by_decade(self, decade, feed_type):
         error_label = QLabel(f"Error: {str(e)}")
         error_label.setStyleSheet("color: red;")
         layout.addWidget(error_label)
+
+
+    def load_genre_time_data(self):
+        """Loads temporal statistics about genre distribution (by year and decade)."""
+        if not self.conn:
+            return
+            
+        cursor = self.conn.cursor()
+        
+        # Create containers for the data
+        year_chart_container = self.chart_time_genres
+        table_genres = self.table_time_genres
+        
+        # Clear any existing content
+        layout = self.ensure_widget_has_layout(year_chart_container)
+        self.clear_layout(layout)
+        
+        # Configure the table
+        if table_genres:
+            table_genres.setColumnCount(3)
+            table_genres.setHorizontalHeaderLabels(["Año", "Género", "Canciones"])
+            table_genres.setRowCount(0)
+        
+        try:
+            # Query genre distribution by year (limit to recent 20 years for visualization)
+            cursor.execute("""
+                SELECT 
+                    SUBSTR(a.year, 1, 4) as year,
+                    s.genre,
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                WHERE 
+                    s.genre IS NOT NULL 
+                    AND s.genre != ''
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                    AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
+                GROUP BY 
+                    year, s.genre
+                ORDER BY 
+                    year DESC, song_count DESC;
+            """)
+            
+            year_genre_data = cursor.fetchall()
+            
+            # Process data for visualization
+            years_data = {}
+            all_years = set()
+            all_genres = {}
+            
+            for year, genre, count in year_genre_data:
+                all_years.add(year)
+                if year not in years_data:
+                    years_data[year] = {}
+                years_data[year][genre] = count
+                
+                # Track total counts for each genre
+                if genre in all_genres:
+                    all_genres[genre] += count
+                else:
+                    all_genres[genre] = count
+            
+            # Get top genres by total count
+            top_genres = sorted(all_genres.items(), key=lambda x: x[1], reverse=True)[:5]
+            top_genre_names = [genre for genre, _ in top_genres]
+            
+            # Get years in order (limiting to most recent 15)
+            sorted_years = sorted(list(all_years), reverse=True)[:15]
+            sorted_years.reverse()  # Put in ascending order for chart
+            
+            # Prepare data for stacked bar chart
+            # For each year, get counts for top genres
+            year_data_for_chart = []
+            for year in sorted_years:
+                year_counts = []
+                for genre in top_genre_names:
+                    count = years_data.get(year, {}).get(genre, 0)
+                    year_counts.append((genre, count))
+                year_data_for_chart.append((year, year_counts))
+            
+            # Create custom chart here - we'll use a series of bars for each year
+            # Since we can't do stacked bars directly, we'll create a custom layout
+            
+            scroll_area = QScrollArea()
+            scroll_area.setWidgetResizable(True)
+            scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+            scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            
+            chart_widget = QWidget()
+            chart_layout = QHBoxLayout(chart_widget)
+            chart_layout.setSpacing(10)
+            
+            # Create a color map for genres
+            colors = ChartFactory.CHART_COLORS
+            genre_colors = {}
+            for i, genre in enumerate(top_genre_names):
+                genre_colors[genre] = colors[i % len(colors)]
+            
+            # Create a bar for each year with segments for each genre
+            for year, genre_counts in year_data_for_chart:
+                year_widget = QWidget()
+                year_layout = QVBoxLayout(year_widget)
+                year_layout.setSpacing(0)
+                year_layout.setContentsMargins(0, 0, 0, 0)
+                
+                # Year label at bottom
+                year_label = QLabel(year)
+                year_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                
+                # Create bars for each genre
+                bars_widget = QWidget()
+                bars_layout = QVBoxLayout(bars_widget)
+                bars_layout.setSpacing(0)
+                bars_layout.setContentsMargins(0, 0, 0, 0)
+                
+                # Calculate total height
+                total_count = sum(count for _, count in genre_counts)
+                max_height = 300  # Maximum bar height in pixels
+                
+                # Create segments for each genre in reverse order (bottom to top)
+                for genre, count in reversed(genre_counts):
+                    if count > 0:
+                        # Calculate segment height proportional to count
+                        segment_height = int((count / total_count) * max_height)
+                        
+                        # Create a colored segment for this genre
+                        segment = QFrame()
+                        segment.setFixedSize(30, segment_height)
+                        segment.setStyleSheet(f"background-color: {genre_colors.get(genre, '#cccccc')};")
+                        
+                        # Add a small tooltip
+                        segment.setToolTip(f"{genre}: {count} canciones")
+                        
+                        # Add to layout
+                        bars_layout.addWidget(segment)
+                        
+                        # Also add a bit of margin if not the last segment
+                        if genre != genre_counts[-1][0]:
+                            spacer = QFrame()
+                            spacer.setFixedSize(30, 1)
+                            spacer.setStyleSheet("background-color: #ffffff;")
+                            bars_layout.addWidget(spacer)
+                
+                # Add spacer to push bars to the bottom
+                bars_layout.addStretch()
+                
+                # Add to year layout
+                year_layout.addWidget(bars_widget)
+                year_layout.addWidget(year_label)
+                
+                # Make the year widget clickable
+                year_widget.mousePressEvent = lambda event, y=year: self.show_genres_by_year(y)
+                
+                # Add to chart layout
+                chart_layout.addWidget(year_widget)
+            
+            # Add legend
+            legend_widget = QWidget()
+            legend_layout = QVBoxLayout(legend_widget)
+            legend_layout.setSpacing(5)
+            
+            legend_title = QLabel("Géneros:")
+            legend_title.setStyleSheet("font-weight: bold;")
+            legend_layout.addWidget(legend_title)
+            
+            for genre, _ in top_genres:
+                genre_item = QWidget()
+                genre_item_layout = QHBoxLayout(genre_item)
+                genre_item_layout.setSpacing(5)
+                genre_item_layout.setContentsMargins(0, 0, 0, 0)
+                
+                color_box = QFrame()
+                color_box.setFixedSize(15, 15)
+                color_box.setStyleSheet(f"background-color: {genre_colors.get(genre, '#cccccc')};")
+                
+                genre_label = QLabel(genre)
+                
+                genre_item_layout.addWidget(color_box)
+                genre_item_layout.addWidget(genre_label)
+                
+                legend_layout.addWidget(genre_item)
+            
+            legend_layout.addStretch()
+            
+            # Add to main layout with appropriate spacing
+            splitter = QSplitter(Qt.Orientation.Horizontal)
+            splitter.addWidget(chart_widget)
+            splitter.addWidget(legend_widget)
+            splitter.setSizes([700, 200])  # Adjust based on your UI
+            
+            scroll_area.setWidget(splitter)
+            layout.addWidget(scroll_area)
+            
+            # Fill the table with genre data by year
+            if table_genres and year_genre_data:
+                table_genres.setRowCount(len(year_genre_data))
+                
+                for i, (year, genre, count) in enumerate(year_genre_data):
+                    table_genres.setItem(i, 0, QTableWidgetItem(year))
+                    table_genres.setItem(i, 1, QTableWidgetItem(genre))
+                    table_genres.setItem(i, 2, QTableWidgetItem(str(count)))
+                
+                # Resize columns
+                table_genres.resizeColumnsToContents()
+                
+                # Connect table selection
+                try:
+                    table_genres.itemClicked.disconnect()
+                except:
+                    pass
+                table_genres.itemClicked.connect(self.on_genre_year_selected)
+            
+            # Now load the decade data
+            self.load_genre_decade_data()
+            
+        except Exception as e:
+            logging.error(f"Error loading genre time data: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error cargando datos de géneros por tiempo: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def get_top_genres(self, limit=5):
+        """Get the top N genres by total song count."""
+        if not self.conn:
+            return []
+            
+        cursor = self.conn.cursor()
+        cursor.execute("""
+            SELECT 
+                genre, 
+                COUNT(*) as song_count
+            FROM 
+                songs
+            WHERE 
+                genre IS NOT NULL 
+                AND genre != ''
+            GROUP BY 
+                genre
+            ORDER BY 
+                song_count DESC
+            LIMIT ?;
+        """, (limit,))
+        
+        return cursor.fetchall()
+
+    def load_genre_decade_data(self):
+        """Loads decade-based genre statistics."""
+        if not self.conn:
+            return
+            
+        cursor = self.conn.cursor()
+        
+        # Define the containers
+        chart_container = self.chart_time_genres_bott
+        
+        # Clear any existing content
+        layout = self.ensure_widget_has_layout(chart_container)
+        self.clear_layout(layout)
+        
+        try:
+            # Query genre distribution by decade
+            cursor.execute("""
+                SELECT 
+                    (CAST(SUBSTR(a.year, 1, 4) AS INTEGER) / 10) * 10 as decade,
+                    s.genre,
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                WHERE 
+                    s.genre IS NOT NULL 
+                    AND s.genre != ''
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                    AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
+                GROUP BY 
+                    decade, s.genre
+                ORDER BY 
+                    decade, song_count DESC;
+            """)
+            
+            decade_genre_data = cursor.fetchall()
+            
+            # Process data for visualization
+            decades_data = {}
+            all_decades = set()
+            all_genres = {}
+            
+            for decade, genre, count in decade_genre_data:
+                decade_str = f"{decade}s"
+                all_decades.add(decade_str)
+                if decade_str not in decades_data:
+                    decades_data[decade_str] = {}
+                decades_data[decade_str][genre] = count
+                
+                # Track total counts for each genre
+                if genre in all_genres:
+                    all_genres[genre] += count
+                else:
+                    all_genres[genre] = count
+            
+            # Get top genres by total count
+            top_genres = sorted(all_genres.items(), key=lambda x: x[1], reverse=True)[:5]
+            top_genre_names = [genre for genre, _ in top_genres]
+            
+            # Get decades in order
+            sorted_decades = sorted(list(all_decades))
+            
+            # Create title
+            title = QLabel("Distribución de Géneros por Década")
+            title.setStyleSheet("font-weight: bold; font-size: 16px;")
+            layout.addWidget(title)
+            
+            # Create custom chart widget similar to year chart
+            scroll_area = QScrollArea()
+            scroll_area.setWidgetResizable(True)
+            scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+            scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+            
+            chart_widget = QWidget()
+            chart_layout = QHBoxLayout(chart_widget)
+            chart_layout.setSpacing(10)
+            
+            # Create a color map for genres
+            colors = ChartFactory.CHART_COLORS
+            genre_colors = {}
+            for i, genre in enumerate(top_genre_names):
+                genre_colors[genre] = colors[i % len(colors)]
+            
+            # Create a bar for each decade with segments for each genre
+            for decade in sorted_decades:
+                genre_counts = []
+                for genre in top_genre_names:
+                    count = decades_data.get(decade, {}).get(genre, 0)
+                    genre_counts.append((genre, count))
+                
+                decade_widget = QWidget()
+                decade_layout = QVBoxLayout(decade_widget)
+                decade_layout.setSpacing(0)
+                decade_layout.setContentsMargins(0, 0, 0, 0)
+                
+                # Decade label at bottom
+                decade_label = QLabel(decade)
+                decade_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                
+                # Create bars for each genre
+                bars_widget = QWidget()
+                bars_layout = QVBoxLayout(bars_widget)
+                bars_layout.setSpacing(0)
+                bars_layout.setContentsMargins(0, 0, 0, 0)
+                
+                # Calculate total height
+                total_count = sum(count for _, count in genre_counts)
+                max_height = 300  # Maximum bar height in pixels
+                
+                # Create segments for each genre in reverse order (bottom to top)
+                for genre, count in reversed(genre_counts):
+                    if count > 0:
+                        # Calculate segment height proportional to count
+                        segment_height = int((count / total_count) * max_height)
+                        
+                        # Create a colored segment for this genre
+                        segment = QFrame()
+                        segment.setFixedSize(40, segment_height)
+                        segment.setStyleSheet(f"background-color: {genre_colors.get(genre, '#cccccc')};")
+                        
+                        # Add a small tooltip
+                        segment.setToolTip(f"{genre}: {count} canciones")
+                        
+                        # Add to layout
+                        bars_layout.addWidget(segment)
+                        
+                        # Also add a bit of margin if not the last segment
+                        if genre != genre_counts[-1][0]:
+                            spacer = QFrame()
+                            spacer.setFixedSize(40, 1)
+                            spacer.setStyleSheet("background-color: #ffffff;")
+                            bars_layout.addWidget(spacer)
+                
+                # Add spacer to push bars to the bottom
+                bars_layout.addStretch()
+                
+                # Add to decade layout
+                decade_layout.addWidget(bars_widget)
+                decade_layout.addWidget(decade_label)
+                
+                # Make the decade widget clickable
+                decade_widget.mousePressEvent = lambda event, d=decade: self.show_genres_by_decade(d.replace('s', ''))
+                
+                # Add to chart layout
+                chart_layout.addWidget(decade_widget)
+            
+            # Add legend
+            legend_widget = QWidget()
+            legend_layout = QVBoxLayout(legend_widget)
+            legend_layout.setSpacing(5)
+            
+            legend_title = QLabel("Géneros:")
+            legend_title.setStyleSheet("font-weight: bold;")
+            legend_layout.addWidget(legend_title)
+            
+            for genre, _ in top_genres:
+                genre_item = QWidget()
+                genre_item_layout = QHBoxLayout(genre_item)
+                genre_item_layout.setSpacing(5)
+                genre_item_layout.setContentsMargins(0, 0, 0, 0)
+                
+                color_box = QFrame()
+                color_box.setFixedSize(15, 15)
+                color_box.setStyleSheet(f"background-color: {genre_colors.get(genre, '#cccccc')};")
+                
+                genre_label = QLabel(genre)
+                
+                genre_item_layout.addWidget(color_box)
+                genre_item_layout.addWidget(genre_label)
+                
+                legend_layout.addWidget(genre_item)
+            
+            legend_layout.addStretch()
+            
+            # Add to main layout with appropriate spacing
+            splitter = QSplitter(Qt.Orientation.Horizontal)
+            splitter.addWidget(chart_widget)
+            splitter.addWidget(legend_widget)
+            splitter.setSizes([700, 200])  # Adjust based on your UI
+            
+            scroll_area.setWidget(splitter)
+            layout.addWidget(scroll_area)
+            
+        except Exception as e:
+            logging.error(f"Error loading genre decade data: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error cargando datos de géneros por década: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def on_genre_year_selected(self, item):
+        """Handle selection of a year in the genre table."""
+        row = item.row()
+        if self.table_time_genres:
+            year_item = self.table_time_genres.item(row, 0)
+            
+            if year_item:
+                try:
+                    year = year_item.text()
+                    self.show_genres_by_year(year)
+                except Exception as e:
+                    logging.error(f"Error handling genre year selection: {e}")
+                    import traceback
+                    logging.error(traceback.format_exc())
+
+    def show_genres_by_year(self, year):
+        """Show genre distribution for a specific year."""
+        if not self.conn:
+            return
+            
+        # Get the chart container
+        chart_container = self.chart_time_genres
+        
+        # Ensure it has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear the container
+        self.clear_layout(layout)
+        
+        cursor = self.conn.cursor()
+        try:
+            # Query for genres in the specified year
+            cursor.execute("""
+                SELECT 
+                    s.genre, 
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                WHERE 
+                    SUBSTR(a.year, 1, 4) = ?
+                    AND s.genre IS NOT NULL 
+                    AND s.genre != ''
+                GROUP BY 
+                    s.genre
+                ORDER BY 
+                    song_count DESC;
+            """, (year,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Title for the chart
+                title = QLabel(f"Distribución de Géneros en {year}")
+                title.setStyleSheet("font-weight: bold; font-size: 16px;")
+                layout.addWidget(title)
+                
+                # Create pie chart
+                chart_view = ChartFactory.create_pie_chart(
+                    results,
+                    f"Géneros en {year}"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Chart for genres in year {year} created successfully")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para el año {year}")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error showing genres by year: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def show_genres_by_decade(self, decade):
+        """Show genre distribution for a specific decade."""
+        if not self.conn:
+            return
+            
+        # Get the chart container
+        chart_container = self.chart_time_genres_bott
+        
+        # Ensure it has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear the container
+        self.clear_layout(layout)
+        
+        cursor = self.conn.cursor()
+        try:
+            # Convert decade to integer
+            decade_int = int(decade)
+            decade_start = decade_int
+            decade_end = decade_int + 9
+            
+            # Query for genres in the specified decade
+            cursor.execute("""
+                SELECT 
+                    s.genre, 
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                WHERE 
+                    CAST(SUBSTR(a.year, 1, 4) AS INTEGER) >= ? 
+                    AND CAST(SUBSTR(a.year, 1, 4) AS INTEGER) <= ?
+                    AND s.genre IS NOT NULL 
+                    AND s.genre != ''
+                GROUP BY 
+                    s.genre
+                ORDER BY 
+                    song_count DESC;
+            """, (decade_start, decade_end))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Title for the chart
+                title = QLabel(f"Distribución de Géneros en los {decade}s")
+                title.setStyleSheet("font-weight: bold; font-size: 16px;")
+                layout.addWidget(title)
+                
+                # Create pie chart
+                chart_view = ChartFactory.create_pie_chart(
+                    results,
+                    f"Géneros en los {decade}s"
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Chart for genres in decade {decade}s created successfully")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para la década {decade}s")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error showing genres by decade: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)

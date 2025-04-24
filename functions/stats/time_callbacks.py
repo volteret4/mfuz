@@ -128,29 +128,6 @@ class TimeCallbackHandler:
             self.time_submodule.load_time_stats()
     
     # Placeholder methods for other buttons that could be implemented later
-    def on_genres_button_clicked(self):
-        """Handle genres button click."""
-        if (self.time_submodule.stackedWidget_time and 
-            hasattr(self.time_submodule.stats_module, 'time_page_genres') and 
-            self.time_submodule.time_page_genres):
-            self.time_submodule.stackedWidget_time.setCurrentWidget(
-                self.time_submodule.time_page_genres
-            )
-            # Optionally load genre data here
-            if hasattr(self.time_submodule, 'load_genre_time_data'):
-                self.time_submodule.load_genre_time_data()
-
-    def on_feeds_button_clicked(self):
-        """Handle feeds button click."""
-        if (self.time_submodule.stackedWidget_time and 
-            hasattr(self.time_submodule.stats_module, 'time_page_feeds') and 
-            self.time_submodule.time_page_feeds):
-            self.time_submodule.stackedWidget_time.setCurrentWidget(
-                self.time_submodule.time_page_feeds
-            )
-            # Optionally load feeds data here
-            if hasattr(self.time_submodule, 'load_feeds_time_data'):
-                self.time_submodule.load_feeds_time_data()
 
     def on_listens_button_clicked(self):
         """Handle listens button click."""
@@ -175,3 +152,28 @@ class TimeCallbackHandler:
             # Optionally load info data here
             if hasattr(self.time_submodule, 'load_info_time_data'):
                 self.time_submodule.load_info_time_data()
+
+
+    def on_genres_button_clicked(self):
+        """Handle genres button click."""
+        if (self.time_submodule.stackedWidget_time and 
+            hasattr(self.time_submodule.stats_module, 'time_page_genres') and 
+            self.time_submodule.time_page_genres):
+            self.time_submodule.stackedWidget_time.setCurrentWidget(
+                self.time_submodule.time_page_genres
+            )
+            # Load genre data
+            if hasattr(self.time_submodule, 'load_genre_time_data'):
+                self.time_submodule.load_genre_time_data()
+
+    def on_feeds_button_clicked(self):
+        """Handle feeds button click."""
+        if (self.time_submodule.stackedWidget_time and 
+            hasattr(self.time_submodule.stats_module, 'time_page_feeds') and 
+            self.time_submodule.time_page_feeds):
+            self.time_submodule.stackedWidget_time.setCurrentWidget(
+                self.time_submodule.time_page_feeds
+            )
+            # Load feeds data
+            if hasattr(self.time_submodule, 'load_feeds_time_data'):
+                self.time_submodule.load_feeds_time_data()
