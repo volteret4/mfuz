@@ -34,6 +34,7 @@ class ChartFactory:
         except ImportError:
             return False
     
+
     @staticmethod
     def create_bar_chart(data, title, x_label="Category", y_label="Value", limit=10):
         """Create a bar chart or fallback to text representation"""
@@ -80,6 +81,12 @@ class ChartFactory:
             axis_x.append(categories)
             chart.addAxis(axis_x, Qt.AlignmentFlag.AlignBottom)
             series.attachAxis(axis_x)
+            
+            # Rotar las etiquetas del eje X para mejor legibilidad
+            axis_x.setLabelsAngle(-45)  # Ángulo negativo para inclinación hacia abajo
+            # Asegurar que las etiquetas no se superpongan
+            if len(categories) > 5:
+                axis_x.setLabelsVisible(True)
             
             axis_y = QValueAxis()
             max_value = max(value for _, value in limited_data) if limited_data else 0

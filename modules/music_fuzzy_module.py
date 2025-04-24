@@ -485,35 +485,37 @@ class MusicBrowser(BaseModule):
         buttons_container = QFrame()
         buttons_container.setFrameShape(QFrame.Shape.NoFrame)
         buttons_layout = QVBoxLayout(buttons_container)
-        buttons_layout.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {theme['bg']};
-                border-radius: 25px;
-                padding: 8px 16px;
-                border: 2px;
-            }}
+        # buttons_layout.setStyleSheet(f"""
+        #     QPushButton {{
+        #         background-color: {theme['bg']};
+        #         border-radius: 25px;
+        #         padding: 8px 16px;
+        #         border: 2px;
+        #     }}
             
             
-            QPushButton:hover {{
-                background-color: {theme['button_hover']};
-                margin: 1px;
-                margin-top: 0px;
-                margin-bottom: 3px;
-            }}
+        #     QPushButton:hover {{
+        #         background-color: {theme['button_hover']};
+        #         margin: 1px;
+        #         margin-top: 0px;
+        #         margin-bottom: 3px;
+        #     }}
             
-            QPushButton:pressed {{
-                background-color: {theme['selection']};
-                border: none;
-            }}
+        #     QPushButton:pressed {{
+        #         background-color: {theme['selection']};
+        #         border: none;
+        #     }}
             
-        """)
+        # """)
         buttons_layout.setSpacing(10)
         buttons_layout.setContentsMargins(0, 0, 0, 0)
         buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
 
         # Botón para enviar a Spotify
         self.spotify_button = QPushButton("Enviar a Spotify")
-        self.spotify_button.setFixedWidth(120)
+        #self.spotify_button.setFixedWidth(120)
+        self.spotify_button.setFixedHeight(38)
+        self.spotify_button.setFixedWidth(38)
         buttons_layout.addWidget(self.spotify_button)
 
         buttons_layout.addStretch()
@@ -550,36 +552,36 @@ class MusicBrowser(BaseModule):
         # Añadir el splitter vertical al layout del tab de detalles
         details_tab_layout.addWidget(self.details_splitter)
 
-        # Segundo tab (Playlist)
-        playlist_tab = QWidget()
-        playlist_layout = QVBoxLayout(playlist_tab)
-        playlist_layout.setContentsMargins(10, 10, 10, 10)
+        # # Segundo tab (Playlist)
+        # playlist_tab = QWidget()
+        # playlist_layout = QVBoxLayout(playlist_tab)
+        # playlist_layout.setContentsMargins(10, 10, 10, 10)
 
 
 
-        # Contenedor para los botones de la playlist
-        playlist_buttons_container = QFrame()
-        playlist_buttons_container.setFrameShape(QFrame.Shape.NoFrame)
-        playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
-        playlist_buttons_layout.setSpacing(10)
+        # # Contenedor para los botones de la playlist
+        # playlist_buttons_container = QFrame()
+        # playlist_buttons_container.setFrameShape(QFrame.Shape.NoFrame)
+        # playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
+        # playlist_buttons_layout.setSpacing(10)
 
-        # Botones para la playlist
-        self.clear_playlist_button = QPushButton("Vaciar Playlist")
-        playlist_buttons_layout.addWidget(self.clear_playlist_button)
+        # # Botones para la playlist
+        # self.clear_playlist_button = QPushButton("Vaciar Playlist")
+        # playlist_buttons_layout.addWidget(self.clear_playlist_button)
 
-        self.playlist_button1 = QPushButton("Función 1")
-        playlist_buttons_layout.addWidget(self.playlist_button1)
+        # self.playlist_button1 = QPushButton("Función 1")
+        # playlist_buttons_layout.addWidget(self.playlist_button1)
 
-        self.playlist_button2 = QPushButton("Función 2")
-        playlist_buttons_layout.addWidget(self.playlist_button2)
+        # self.playlist_button2 = QPushButton("Función 2")
+        # playlist_buttons_layout.addWidget(self.playlist_button2)
 
-        self.playlist_button3 = QPushButton("Función 3")
-        playlist_buttons_layout.addWidget(self.playlist_button3)
+        # self.playlist_button3 = QPushButton("Función 3")
+        # playlist_buttons_layout.addWidget(self.playlist_button3)
 
-        self.playlist_button4 = QPushButton("Función 4")
-        playlist_buttons_layout.addWidget(self.playlist_button4)
+        # self.playlist_button4 = QPushButton("Función 4")
+        # playlist_buttons_layout.addWidget(self.playlist_button4)
 
-        playlist_layout.addWidget(playlist_buttons_container)
+        # playlist_layout.addWidget(playlist_buttons_container)
 
 
 
@@ -1880,114 +1882,114 @@ class MusicBrowser(BaseModule):
 
 
 
-    def apply_theme(self):
-        """Aplica el tema específico del módulo."""
+    # def apply_theme(self):
+    #     """Aplica el tema específico del módulo."""
 
-        print(f"Aplicando tema con fuente: {self.font_family}")
+    #     print(f"Aplicando tema con fuente: {self.font_family}")
 
-        # Verificar que los labels existen antes de intentar modificarlos
-        if not hasattr(self, 'lastfm_label') or self.lastfm_label is None:
-            print("lastfm_label no está disponible para aplicar el tema")
-            return
+    #     # Verificar que los labels existen antes de intentar modificarlos
+    #     if not hasattr(self, 'lastfm_label') or self.lastfm_label is None:
+    #         print("lastfm_label no está disponible para aplicar el tema")
+    #         return
 
-        if not hasattr(self, 'metadata_label') or self.metadata_label is None:
-            print("metadata_label no está disponible para aplicar el tema")
-            return
+    #     if not hasattr(self, 'metadata_label') or self.metadata_label is None:
+    #         print("metadata_label no está disponible para aplicar el tema")
+    #         return
 
-        # Obtener el tema actual
-        theme = self.themes.get(self.current_theme, self.themes['Tokyo Night'])
+    #     # Obtener el tema actual
+    #     theme = self.themes.get(self.current_theme, self.themes['Tokyo Night'])
 
-        # Aplicar estilos globales
-        self.setStyleSheet(f"""
-            QLabel {{
-                font-size: 12px;
+    #     # Aplicar estilos globales
+    #     self.setStyleSheet(f"""
+    #         QLabel {{
+    #             font-size: 12px;
 
-            }}
-            QLineEdit {{
-                font-size: 13px;
-                border: 1px solid {theme['border']};
-                border-radius: 3px;
-                padding: 5px;
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-            }}
+    #         }}
+    #         QLineEdit {{
+    #             font-size: 13px;
+    #             border: 1px solid {theme['border']};
+    #             border-radius: 3px;
+    #             padding: 5px;
+    #             background-color: {theme['secondary_bg']};
+    #             color: {theme['fg']};
+    #         }}
 
-            QTreeWidget {{
-                border: none;
-                background-color: {theme['bg']};
-                alternate-background-color: {theme['bg']};
-                show-decoration-selected: 1;
-            }}
-            QTreeWidget::item {{
-                padding: 6px;
-                border-bottom: 1px solid rgba(65, 72, 104, 0.1);
-            }}
-            QTreeWidget::item:selected {{
-                background-color: {theme['selection']};
-                color: {theme['fg']};
-            }}
-            QTreeWidget::item:hover {{
-                background-color: rgba(65, 72, 104, 0.1);
-            }}
-            QHeaderView::section {{
-                background-color: {theme['bg']};
-                padding: 6px;
-                border: none;
-                border-bottom: 1px solid {theme['border']};
-                font-weight: bold;
-            }}
-            QHeaderView::section {{
-                background-color: transparent;
-                padding: 5px;
-                border: none;
-                border-radius: 3px;
-                border-bottom: 1px solid {theme['border']};
-            }}
-            QTableWidget {{
-                border: none;
-            }}
-            QScrollArea {{
-                border: none;
-            }}
+    #         QTreeWidget {{
+    #             border: none;
+    #             background-color: {theme['bg']};
+    #             alternate-background-color: {theme['bg']};
+    #             show-decoration-selected: 1;
+    #         }}
+    #         QTreeWidget::item {{
+    #             padding: 6px;
+    #             border-bottom: 1px solid rgba(65, 72, 104, 0.1);
+    #         }}
+    #         QTreeWidget::item:selected {{
+    #             background-color: {theme['selection']};
+    #             color: {theme['fg']};
+    #         }}
+    #         QTreeWidget::item:hover {{
+    #             background-color: rgba(65, 72, 104, 0.1);
+    #         }}
+    #         QHeaderView::section {{
+    #             background-color: {theme['bg']};
+    #             padding: 6px;
+    #             border: none;
+    #             border-bottom: 1px solid {theme['border']};
+    #             font-weight: bold;
+    #         }}
+    #         QHeaderView::section {{
+    #             background-color: transparent;
+    #             padding: 5px;
+    #             border: none;
+    #             border-radius: 3px;
+    #             border-bottom: 1px solid {theme['border']};
+    #         }}
+    #         QTableWidget {{
+    #             border: none;
+    #         }}
+    #         QScrollArea {{
+    #             border: none;
+    #         }}
 
-        """)
+    #     """)
 
-        # Set object names for the labels so the CSS can target them
-        self.lastfm_label.setObjectName("lastfm_label")
-        self.metadata_label.setObjectName("metadata_label")
+    #     # Set object names for the labels so the CSS can target them
+    #     self.lastfm_label.setObjectName("lastfm_label")
+    #     self.metadata_label.setObjectName("metadata_label")
 
-        # También aplicar el tema a widgets específicos si lo necesitan
-        if hasattr(self, 'results_tree') and self.results_tree:
-            self.results_tree.setStyleSheet(f"""
-                QTreeWidget {{
-                    border: none;
-                    background-color: {theme['bg']};
-                }}
-                QTreeWidget::item {{
-                    padding: 4px;
-                    border-bottom: 1px solid rgba(65, 72, 104, 0.2);
-                }}
-                QTreeWidget::item:selected {{
-                    background-color: {theme['selection']};
-                    color: {theme['fg']};
-                }}
-            """)
+    #     # También aplicar el tema a widgets específicos si lo necesitan
+    #     if hasattr(self, 'results_tree') and self.results_tree:
+    #         self.results_tree.setStyleSheet(f"""
+    #             QTreeWidget {{
+    #                 border: none;
+    #                 background-color: {theme['bg']};
+    #             }}
+    #             QTreeWidget::item {{
+    #                 padding: 4px;
+    #                 border-bottom: 1px solid rgba(65, 72, 104, 0.2);
+    #             }}
+    #             QTreeWidget::item:selected {{
+    #                 background-color: {theme['selection']};
+    #                 color: {theme['fg']};
+    #             }}
+    #         """)
 
-        if hasattr(self, 'advanced_settings_container') and self.advanced_settings_container:
-            self.advanced_settings_container.setStyleSheet(f"""
-                QSpinBox, QComboBox {{
-                    border: 1px solid {theme['border']};
-                    border-radius: 3px;
-                    padding: 3px;
-                    background-color: {theme['secondary_bg']};
-                }}
-                QPushButton {{
-                    background-color: {theme['button_hover']};
-                    color: {theme['fg']};
-                    border-radius: 3px;
-                    padding: 5px;
-                }}
-            """)
+    #     if hasattr(self, 'advanced_settings_container') and self.advanced_settings_container:
+    #         self.advanced_settings_container.setStyleSheet(f"""
+    #             QSpinBox, QComboBox {{
+    #                 border: 1px solid {theme['border']};
+    #                 border-radius: 3px;
+    #                 padding: 3px;
+    #                 background-color: {theme['secondary_bg']};
+    #             }}
+    #             QPushButton {{
+    #                 background-color: {theme['button_hover']};
+    #                 color: {theme['fg']};
+    #                 border-radius: 3px;
+    #                 padding: 5px;
+    #             }}
+    #         """)
 
 
     def show_details(self, current, previous):
@@ -2833,54 +2835,6 @@ class MusicBrowser(BaseModule):
             self.results_tree.scrollToItem(new_item, QAbstractItemView.ScrollHint.PositionAtCenter)
 
 
-    # def navigate_headers(self, key):
-    #     """Navega entre los headers de álbumes usando las flechas izquierda/derecha."""
-    #     current_row = self.results_list.currentRow()
-    #     if current_row == -1:
-    #         return
-
-    #     total_items = self.results_list.count()
-    #     header_positions = []
-
-    #     # Encontrar todas las posiciones de los headers
-    #     for i in range(total_items):
-    #         item = self.results_list.item(i)
-    #         if item and getattr(item, 'is_header', False):
-    #             header_positions.append(i)
-
-    #     if not header_positions:
-    #         return
-
-    #     # Encontrar el header actual o el más cercano
-    #     current_header_index = -1
-    #     for i, pos in enumerate(header_positions):
-    #         if key == Qt.Key.Key_Right:
-    #             # Para flecha derecha, buscar el siguiente header
-    #             if pos > current_row:
-    #                 current_header_index = i
-    #                 break
-    #         else:
-    #             # Para flecha izquierda, buscar el header anterior
-    #             if pos >= current_row:
-    #                 current_header_index = i - 1
-    #                 break
-
-    #     # Si no encontramos un header siguiente, ir al primero
-    #     if key == Qt.Key.Key_Right and current_header_index == -1:
-    #         current_header_index = 0
-    #     # Si no encontramos un header anterior, ir al último
-    #     elif key == Qt.Key.Key_Left and current_header_index == -1:
-    #         current_header_index = len(header_positions) - 1
-
-    #     # Asegurarse de que el índice es válido
-    #     if 0 <= current_header_index < len(header_positions):
-    #         # Seleccionar el nuevo header
-    #         new_row = header_positions[current_header_index]
-    #         self.results_list.setCurrentRow(new_row)
-    #         self.results_list.scrollToItem(
-    #             self.results_list.item(new_row),
-    #             QAbstractItemView.ScrollHint.PositionAtCenter
-    #         )
 
 
     def run_custom_script(self, script_num):

@@ -95,7 +95,7 @@ class InfoLoadWorker(QRunnable):
         """
         try:
             # Import the database query class
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             
             # Use the configured database path
             db_path = self.db_path
@@ -305,7 +305,7 @@ class SearchWorker(QRunnable):
             title = parts[1].strip() if len(parts) > 1 else query.strip()
             
             # Import module for external search if needed
-            from base_datos.enlaces_artista_album import MusicLinksManager
+            from db.enlaces_artista_album import MusicLinksManager
             
             config = {
                 'db_path': self.db_path,
@@ -966,7 +966,7 @@ class SearchWorker(QRunnable):
         # Only used when database search fails
         try:
             # Create configuration for external search
-            from base_datos.enlaces_artista_album import MusicLinksManager
+            from db.enlaces_artista_album import MusicLinksManager
             
             config = {
                 'db_path': self.db_path,
@@ -1060,8 +1060,8 @@ class SearchWorker(QRunnable):
             results = []
             
             # Import the necessary modules
-            from base_datos.enlaces_canciones_spot_lastfm import MusicLinkUpdater
-            from base_datos.enlaces_artista_album import MusicLinksManager
+            from db.enlaces_canciones_spot_lastfm import MusicLinkUpdater
+            from db.enlaces_artista_album import MusicLinksManager
                 
             # Use configuration from parent if available
             db_path = self.db_path
@@ -1345,7 +1345,7 @@ class SearchWorker(QRunnable):
             results = []
             
             # Import the existing module
-            from base_datos.enlaces_artista_album import MusicLinksManager
+            from db.enlaces_artista_album import MusicLinksManager
             
             # Get API credentials
             lastfm_api_key = self.lastfm_api_key
@@ -2566,7 +2566,7 @@ class UrlPlayer(BaseModule):
         self.log("Initializing default values for settings")
         
         # Default paths
-        self.db_path = get_app_path("base_datos/musica.sqlite")
+        self.db_path = get_app_path("db/musica.sqlite")
         self.spotify_token_path = get_app_path(".content/cache/spotify_token.txt")
         self.spotify_playlist_path = get_app_path(".content/cache/spotify_playlist_path")
         
@@ -3269,7 +3269,7 @@ class UrlPlayer(BaseModule):
                 self.log(f"Database not found at: {self.db_path}")
                 return None
                 
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             db = MusicDatabaseQuery(self.db_path)
             
             # Use the existing method from consultar_items_db.py
@@ -3568,10 +3568,10 @@ class UrlPlayer(BaseModule):
         if not self.db_path:
             # Try common locations for the database
             common_db_paths = [
-                os.path.join(PROJECT_ROOT, "base_datos", "musica.db"),
-                os.path.join(PROJECT_ROOT, "base_datos", "musica2.sqlite"),
-                os.path.join(PROJECT_ROOT, "base_datos", "musica1.sqlite"),
-                os.path.join(PROJECT_ROOT, "base_datos", "musica1.db"),
+                os.path.join(PROJECT_ROOT, "db", "musica.db"),
+                os.path.join(PROJECT_ROOT, "db", "musica2.sqlite"),
+                os.path.join(PROJECT_ROOT, "db", "musica1.sqlite"),
+                os.path.join(PROJECT_ROOT, "db", "musica1.db"),
                 os.path.join(PROJECT_ROOT, ".content", "db", "musica.sqlite")
             ]
             
@@ -3990,7 +3990,7 @@ class UrlPlayer(BaseModule):
         Busca enlaces en la base de datos con estructura de álbumes y canciones
         """
         try:
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             
             if not self.db_path or not os.path.exists(self.db_path):
                 self.log(f"Database not found at: {self.db_path}")
@@ -4580,7 +4580,7 @@ class UrlPlayer(BaseModule):
         Returns a hierarchical structure of artists/albums/tracks with their links.
         """
         try:
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             
             if not self.db_path or not os.path.exists(self.db_path):
                 self.log(f"Database not found at: {self.db_path}")
@@ -6281,7 +6281,7 @@ class UrlPlayer(BaseModule):
         """
         try:
             # Import the database query class
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             
             # Use the configured database path
             db_path = self.db_path
@@ -10735,7 +10735,7 @@ class UrlPlayer(BaseModule):
                 return None
             
             # Import the database query class
-            from base_datos.tools.consultar_items_db import MusicDatabaseQuery
+            from db.tools.consultar_items_db import MusicDatabaseQuery
             
             db = MusicDatabaseQuery(self.db_path)
             

@@ -5,7 +5,7 @@
     // Archivos/carpetas a incluir en el análisis
     "include": [
       "config",
-      "base_datos",
+      "db",
       "tools",
       "scripts",
       "modules"

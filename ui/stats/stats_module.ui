@@ -23,10 +23,22 @@
    <item>
     <widget class="QWidget" name="stats_content" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QStackedWidget" name="stacked_widget">
         <property name="currentIndex">
-         <number>5</number>
+         <number>4</number>
         </property>
         <widget class="QWidget" name="page_missing_data">
          <layout class="QVBoxLayout" name="verticalLayout_missing_data">
@@ -105,7 +117,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QWidget" name="widget_2" native="true">
+                 <widget class="QWidget" name="widget_chart_container_missing" native="true">
                   <layout class="QVBoxLayout" name="verticalLayout_16">
                    <item>
                     <widget class="QLabel" name="label_worst_fields">
@@ -118,7 +130,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QWidget" name="widget_chart_container_missing" native="true">
+                    <widget class="QWidget" name="chart_container_missing" native="true">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -1139,68 +1151,381 @@
            </widget>
           </item>
           <item>
-           <widget class="QSplitter" name="splitter_time">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
-            </property>
-            <widget class="QWidget" name="widget_time_top">
-             <layout class="QVBoxLayout" name="verticalLayout_time_top">
+           <widget class="QStackedWidget" name="stackedWidget_time">
+            <widget class="QWidget" name="time_page_inicio">
+             <layout class="QVBoxLayout" name="verticalLayout_60">
               <item>
-               <widget class="QLabel" name="label_year_title">
-                <property name="styleSheet">
-                 <string>font-size: 16px; font-weight: bold;</string>
+               <widget class="QSplitter" name="splitter_time">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
-                <property name="text">
-                 <string>Distribución por Año de Lanzamiento</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="chart_container_years" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_13"/>
+                <widget class="QWidget" name="widget_time_top">
+                 <layout class="QVBoxLayout" name="verticalLayout_time_top">
+                  <item>
+                   <widget class="QLabel" name="label_year_title">
+                    <property name="styleSheet">
+                     <string>font-size: 16px; font-weight: bold;</string>
+                    </property>
+                    <property name="text">
+                     <string>Distribución por Año de Lanzamiento</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="chart_container_years" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_13"/>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="widget_time_bottom">
+                 <layout class="QHBoxLayout" name="horizontalLayout_25">
+                  <item>
+                   <widget class="QWidget" name="chart_container_decades" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_12">
+                     <item>
+                      <widget class="QWidget" name="widget_17" native="true">
+                       <layout class="QVBoxLayout" name="verticalLayout_58">
+                        <item>
+                         <widget class="QLabel" name="label_decade_dist_title">
+                          <property name="styleSheet">
+                           <string>font-size: 16px; font-weight: bold;</string>
+                          </property>
+                          <property name="text">
+                           <string>Distribución por Década</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QTableWidget" name="table_decades">
+                          <column>
+                           <property name="text">
+                            <string>Década</string>
+                           </property>
+                          </column>
+                          <column>
+                           <property name="text">
+                            <string>Álbumes</string>
+                           </property>
+                          </column>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="widget_20" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_59"/>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="widget_time_bottom">
-             <layout class="QVBoxLayout" name="verticalLayout_time_bottom">
+            <widget class="QWidget" name="ads">
+             <layout class="QHBoxLayout" name="horizontalLayout_28"/>
+            </widget>
+            <widget class="QWidget" name="time_page_artists">
+             <layout class="QVBoxLayout" name="verticalLayout_65">
               <item>
-               <widget class="QLabel" name="label_decade_dist_title">
-                <property name="styleSheet">
-                 <string>font-size: 16px; font-weight: bold;</string>
-                </property>
-                <property name="text">
-                 <string>Distribución por Década</string>
-                </property>
+               <widget class="QWidget" name="widget_time_artists_top" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_36">
+                 <item>
+                  <widget class="QWidget" name="widget_25" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_77">
+                    <item>
+                     <widget class="QTableWidget" name="table_time_artists_top"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_artists_top" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_80"/>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QTableWidget" name="table_decades">
-                <column>
-                 <property name="text">
-                  <string>Década</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Álbumes</string>
-                 </property>
-                </column>
+               <widget class="QWidget" name="widget_time_artists_bott" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_37">
+                 <item>
+                  <widget class="QWidget" name="widget_27" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_78">
+                    <item>
+                     <widget class="QTableWidget" name="table_time_artists_bott"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_artists_bott" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_79"/>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_info">
+             <layout class="QHBoxLayout" name="horizontalLayout_31">
+              <item>
+               <widget class="QWidget" name="widget_time_info" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_71">
+                 <item>
+                  <widget class="QTableWidget" name="table_time_info"/>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QWidget" name="chart_container_decades" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_12"/>
+               <widget class="QWidget" name="chart_time_info" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_72"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_listens">
+             <layout class="QHBoxLayout" name="horizontalLayout_33">
+              <item>
+               <widget class="QWidget" name="widget_time_listens" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_75">
+                 <item>
+                  <widget class="QTableWidget" name="table_time_listens"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_time_listens" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_76"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_feeds">
+             <layout class="QHBoxLayout" name="horizontalLayout_29">
+              <item>
+               <widget class="QWidget" name="widget_time_feeds" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_67">
+                 <item>
+                  <widget class="QTableWidget" name="table_time_feeds"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_time_feeds" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_68"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_labels">
+             <layout class="QVBoxLayout" name="verticalLayout_61">
+              <item>
+               <widget class="QWidget" name="widget_time_labels_top" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_40">
+                 <item>
+                  <widget class="QWidget" name="widget_29" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_85">
+                    <item>
+                     <widget class="QTableWidget" name="table_time_labels_top"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_labels_top" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_86"/>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_time_labels_bott" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_41">
+                 <item>
+                  <widget class="QWidget" name="widget_30" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_87">
+                    <item>
+                     <widget class="QScrollArea" name="scrollArea_2">
+                      <property name="widgetResizable">
+                       <bool>true</bool>
+                      </property>
+                      <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                       <property name="geometry">
+                        <rect>
+                         <x>0</x>
+                         <y>0</y>
+                         <width>784</width>
+                         <height>218</height>
+                        </rect>
+                       </property>
+                       <layout class="QVBoxLayout" name="verticalLayout_62">
+                        <item>
+                         <widget class="QTableWidget" name="table_time_labels_bott"/>
+                        </item>
+                       </layout>
+                      </widget>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_labels_bott" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_88"/>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_genres">
+             <layout class="QHBoxLayout" name="horizontalLayout_30">
+              <item>
+               <widget class="QWidget" name="widget_time_genres" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_69">
+                 <item>
+                  <widget class="QTableWidget" name="table_time_genres"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_time_genres" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_70"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="time_page_albums">
+             <layout class="QVBoxLayout" name="verticalLayout_66">
+              <item>
+               <widget class="QWidget" name="widget_time_albums_top" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_38">
+                 <item>
+                  <widget class="QWidget" name="widget_26" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_81">
+                    <item>
+                     <widget class="QTableWidget" name="table_time_albums_top"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_albums_top" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_82"/>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_time_albums_bott" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_39">
+                 <item>
+                  <widget class="QWidget" name="widget_28" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_83">
+                    <item>
+                     <widget class="QTableWidget" name="table_time_albums_bott"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_albums_bott" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_84"/>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
            </widget>
           </item>
+          <item>
+           <widget class="QWidget" name="widget_21" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_26">
+             <item>
+              <widget class="QPushButton" name="time_button_artist">
+               <property name="text">
+                <string>artistas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_album">
+               <property name="text">
+                <string>álbums</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_genres">
+               <property name="text">
+                <string>géneros</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_labels">
+               <property name="text">
+                <string>sellos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_feeds">
+               <property name="text">
+                <string>feeds</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_listens">
+               <property name="text">
+                <string>escuchas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="time_button_info">
+               <property name="text">
+                <string>info</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </widget>
         <widget class="QWidget" name="page_countries">
          <layout class="QVBoxLayout" name="verticalLayout_countries">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="label_countries_title">
             <property name="sizePolicy">
@@ -1223,6 +1548,18 @@
              <item>
               <widget class="QWidget" name="verticalLayout_countries_table" native="true">
                <layout class="QVBoxLayout" name="verticalLayout_38">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
                  <widget class="QTableWidget" name="table_countries">
                   <property name="sizePolicy">
@@ -1268,6 +1605,18 @@
                 </sizepolicy>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
                 <item>
                  <widget class="QStackedWidget" name="stackedWidget_countries">
                   <property name="sizePolicy">
@@ -1284,6 +1633,18 @@
                     </sizepolicy>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_40">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QWidget" name="chart_container_countries" native="true">
                       <property name="sizePolicy">
@@ -1292,7 +1653,20 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
-                      <layout class="QVBoxLayout" name="verticalLayout_3"/>
+                      <layout class="QVBoxLayout" name="verticalLayout_3">
+                       <property name="leftMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="topMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="rightMargin">
+                        <number>0</number>
+                       </property>
+                       <property name="bottomMargin">
+                        <number>0</number>
+                       </property>
+                      </layout>
                      </widget>
                     </item>
                    </layout>
@@ -1304,11 +1678,98 @@
                      <verstretch>0</verstretch>
                     </sizepolicy>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_39"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_39">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </widget>
                 </item>
                </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_14" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="countries_artists_button">
+               <property name="text">
+                <string>artistas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_album_button">
+               <property name="text">
+                <string>album</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_labels_button">
+               <property name="text">
+                <string>sellos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_feeds_button">
+               <property name="text">
+                <string>feeds</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_genre_button">
+               <property name="text">
+                <string>genero</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_time_button">
+               <property name="text">
+                <string>tiempo</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_listens_button">
+               <property name="text">
+                <string>escuchas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="countries_info_button">
+               <property name="text">
+                <string>info</string>
+               </property>
               </widget>
              </item>
             </layout>
@@ -1329,76 +1790,394 @@
            </widget>
           </item>
           <item>
-           <widget class="QSplitter" name="splitter_feeds">
-            <property name="orientation">
-             <enum>Qt::Orientation::Vertical</enum>
+           <widget class="QStackedWidget" name="stackedWidget_2">
+            <property name="currentIndex">
+             <number>7</number>
             </property>
-            <widget class="QWidget" name="widget_feeds_top">
-             <layout class="QVBoxLayout" name="verticalLayout_feeds_top">
+            <widget class="QWidget" name="feeds_entitys">
+             <layout class="QVBoxLayout" name="verticalLayout_44">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
-               <widget class="QLabel" name="label_entity_title">
-                <property name="styleSheet">
-                 <string>font-size: 16px; font-weight: bold;</string>
+               <widget class="QSplitter" name="splitter_feeds">
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
                 </property>
-                <property name="text">
-                 <string>Feeds por Tipo de Entidad</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QTableWidget" name="table_entity">
-                <column>
-                 <property name="text">
-                  <string>Tipo de Entidad</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Cantidad</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="chart_container_entity" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_5"/>
+                <widget class="QWidget" name="widget_feeds_top">
+                 <layout class="QHBoxLayout" name="horizontalLayout_14">
+                  <item>
+                   <widget class="QWidget" name="feed_entity_widget" native="true">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_41">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_entity_title">
+                       <property name="styleSheet">
+                        <string>font-size: 16px; font-weight: bold;</string>
+                       </property>
+                       <property name="text">
+                        <string>Feeds por Tipo de Entidad</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QTableWidget" name="table_entity">
+                       <column>
+                        <property name="text">
+                         <string>Tipo de Entidad</string>
+                        </property>
+                       </column>
+                       <column>
+                        <property name="text">
+                         <string>Cantidad</string>
+                        </property>
+                       </column>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="chart_container_entity" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_5">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QWidget" name="widget_feeds_bottom">
+                 <layout class="QHBoxLayout" name="horizontalLayout_15">
+                  <item>
+                   <widget class="QWidget" name="feed_names_widget" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_42">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="label_feeds_names">
+                       <property name="styleSheet">
+                        <string>font-size: 16px; font-weight: bold;</string>
+                       </property>
+                       <property name="text">
+                        <string>Feeds por Nombre</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QTableWidget" name="table_feeds">
+                       <column>
+                        <property name="text">
+                         <string>Nombre del Feed</string>
+                        </property>
+                       </column>
+                       <column>
+                        <property name="text">
+                         <string>Publicaciones</string>
+                        </property>
+                       </column>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QWidget" name="chart_container_feeds" native="true">
+                    <layout class="QVBoxLayout" name="verticalLayout_4">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                    </layout>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                </widget>
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="widget_feeds_bottom">
-             <layout class="QVBoxLayout" name="verticalLayout_feeds_bottom">
+            <widget class="QWidget" name="feeds_page_artists">
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="QLabel" name="label_feed_names">
-                <property name="styleSheet">
-                 <string>font-size: 16px; font-weight: bold;</string>
-                </property>
-                <property name="text">
-                 <string>Feeds por Nombre</string>
-                </property>
+               <widget class="QWidget" name="feeds_artist_widget" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_46">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_artists">
+                   <column>
+                    <property name="text">
+                     <string>Artistas</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Albums</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Reviews</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
               <item>
-               <widget class="QTableWidget" name="table_feeds">
-                <column>
-                 <property name="text">
-                  <string>Nombre del Feed</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Publicaciones</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-              <item>
-               <widget class="QWidget" name="chart_container_feeds" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_4"/>
+               <widget class="QWidget" name="chart_artists_widget" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_45"/>
                </widget>
               </item>
              </layout>
             </widget>
+            <widget class="QWidget" name="feed_page_albums">
+             <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <item>
+               <widget class="QWidget" name="widget_16" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_48">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_albums"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="charts_feeds_albums" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_47"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page_genres">
+             <layout class="QHBoxLayout" name="horizontalLayout_19">
+              <item>
+               <widget class="QWidget" name="widget_feeds_genres" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_50">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_genres"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_feeds_genres" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_49"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page_labels">
+             <layout class="QHBoxLayout" name="horizontalLayout_20">
+              <item>
+               <widget class="QWidget" name="widget_feeds_labels" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_51">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_labels"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_feeds_labels" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_21"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page_time">
+             <layout class="QHBoxLayout" name="horizontalLayout_22">
+              <item>
+               <widget class="QWidget" name="widget_feeds_time" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_53">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_time"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="charts_feeds_time" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_52"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page_info">
+             <layout class="QHBoxLayout" name="horizontalLayout_24">
+              <item>
+               <widget class="QWidget" name="widget_feeds_info" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_57">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_info"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_feeds_info" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_56"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page_listens">
+             <layout class="QHBoxLayout" name="horizontalLayout_23">
+              <item>
+               <widget class="QWidget" name="widget_feeds_listens" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_55">
+                 <item>
+                  <widget class="QTableWidget" name="table_feeds_listens"/>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="chart_feeds_listens" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_54"/>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_19" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayout_16">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="feeds_button_artists">
+               <property name="text">
+                <string>artistas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_albums">
+               <property name="text">
+                <string>albums</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_genres">
+               <property name="text">
+                <string>generos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_labels">
+               <property name="text">
+                <string>sellos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_time">
+               <property name="text">
+                <string>tiempo</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_listens">
+               <property name="text">
+                <string>escuchas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="feeds_button_info">
+               <property name="text">
+                <string>info</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_18" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_43">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+            </layout>
            </widget>
           </item>
          </layout>
@@ -1409,46 +2188,128 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="category_combo">
-     <item>
-      <property name="text">
-       <string>Datos Ausentes</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Géneros</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Escuchas</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Sellos</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Tiempo</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Países</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Feeds</string>
-      </property>
-     </item>
+    <widget class="QWidget" name="widget_22" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_34">
+      <item>
+       <widget class="QComboBox" name="category_combo">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Datos Ausentes</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Géneros</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Escuchas</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Sellos</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Tiempo</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Países</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Feeds</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bitrate</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Letras</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Productores</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Colaboradores</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Artistas</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Álbums</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Canciones</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButton">
+        <property name="text">
+         <string>...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="toolButton_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>38</horstretch>
+          <verstretch>38</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>38</width>
+          <height>38</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../../images.qrc">
+          <normaloff>:/services/b_download</normaloff>:/services/b_download</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>36</width>
+          <height>36</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../images.qrc"/>
+ </resources>
  <connections/>
 </ui>

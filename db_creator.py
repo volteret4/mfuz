@@ -80,7 +80,7 @@ def main():
 
     # Ejecutar cada script
     for script_name in scripts_to_run:
-        script_path = os.path.join(PROJECT_ROOT, "base_datos", f"{script_name}.py")
+        script_path = os.path.join(PROJECT_ROOT, "db", f"{script_name}.py")
         if not os.path.exists(script_path):
             print(f"Error: No se encontró el script: {script_path}")
             continue

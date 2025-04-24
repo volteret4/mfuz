@@ -2089,7 +2089,7 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
 
             # Build path to the script
-            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             
             # Check if script exists
             if not os.path.exists(script_path):
@@ -2287,7 +2287,7 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
 
             # Build path to the script
-            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             
             # Check if script exists
             if not os.path.exists(script_path):
@@ -2612,7 +2612,7 @@ class MuspyArtistModule(BaseModule):
                 
             # Ensure script path is available
             if not self.query_db_script_path or not os.path.exists(self.query_db_script_path):
-                script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+                script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             else:
                 script_path = self.query_db_script_path
                 
@@ -2700,7 +2700,7 @@ class MuspyArtistModule(BaseModule):
                 full_db_path = self.db_path
                 
             # Build the command - search for albums
-            script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             cmd = f"python {script_path} --db {full_db_path} --buscar albums --limite 100"
             
             # Run the command
@@ -3182,7 +3182,7 @@ class MuspyArtistModule(BaseModule):
         else:
             full_db_path = self.db_path
         
-        script_path = os.path.join(PROJECT_ROOT, "base_datos", "tools", "consultar_items_db.py")
+        script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
         
         # Define the operation to run with progress monitoring
         def fetch_new_releases(update_progress):

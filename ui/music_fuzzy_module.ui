@@ -11,7 +11,24 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -458,18 +475,24 @@
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
+             <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::Shape::NoFrame</enum>
@@ -494,32 +517,38 @@ QPushButton:hover {
               <widget class="QPushButton" name="play_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
                <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
+                <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
                </property>
                <property name="text">
                 <string/>
@@ -530,12 +559,15 @@ QPushButton:hover {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
                </property>
                <property name="shortcut">
                 <string>Alt+Shift+R</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -543,14 +575,14 @@ QPushButton:hover {
               <widget class="QPushButton" name="spotify_button">
                <property name="minimumSize">
                 <size>
-                 <width>0</width>
-                 <height>0</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="toolTip">
@@ -584,8 +616,8 @@ QPushButton:pressed {{
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
                </property>
                <property name="flat">
@@ -597,14 +629,14 @@ QPushButton:pressed {{
               <widget class="QPushButton" name="jaangle_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -630,9 +662,12 @@ QPushButton:hover {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -640,14 +675,14 @@ QPushButton:hover {
               <widget class="QPushButton" name="folder_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="focusPolicy">
@@ -676,9 +711,12 @@ QPushButton:hover {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -686,14 +724,14 @@ QPushButton:hover {
               <widget class="QPushButton" name="scrobble_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -719,9 +757,12 @@ QPushButton:hover {
                </property>
                <property name="iconSize">
                 <size>
-                 <width>40</width>
-                 <height>40</height>
+                 <width>36</width>
+                 <height>36</height>
                 </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -729,14 +770,14 @@ QPushButton:hover {
               <widget class="QPushButton" name="extra_button">
                <property name="minimumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
-                 <width>50</width>
-                 <height>50</height>
+                 <width>38</width>
+                 <height>38</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -765,6 +806,9 @@ QPushButton:hover {
                  <width>40</width>
                  <height>40</height>
                 </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>

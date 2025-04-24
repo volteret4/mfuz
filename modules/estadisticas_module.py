@@ -1,6 +1,7 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QStackedWidget, QTextEdit,
+from PyQt6.QtWidgets import (QWidget, QHBoxLayout, QVBoxLayout, QStackedWidget, 
                             QComboBox, QLabel, QTableWidget, QTableWidgetItem,
-                            QProgressBar, QSplitter, QMessageBox, QPushButton)
+                            QProgressBar, QSplitter, QMessageBox, QPushButton,
+                            QScrollArea, QTextEdit, QFrame)
 from PyQt6.QtCore import Qt
 from PyQt6 import uic
 import sqlite3
@@ -12,6 +13,15 @@ import logging
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, PROJECT_ROOT
 from tools.chart_utils import ChartFactory
+from functions.stats.callbacks_submodule import StatsCallbackHandler
+from functions.stats.feeds_callbacks import FeedsCallbackHandler
+from functions.stats.time_callbacks import TimeCallbackHandler
+
+module_path = str(Path(__file__).parent / "submodules" / "stats")
+if module_path not in sys.path:
+    sys.path.append(module_path)
+from feeds_submodule import FeedsSubmodule
+from time_submodule import TimeSubmodule
 
 # Try to import charts, but don't fail if not available
 CHARTS_AVAILABLE = False
@@ -23,6 +33,8 @@ try:
 except ImportError:
     logging.warning("PyQt6.QtCharts not available. Charts will be displayed as text.")
 
+
+
 class StatsModule(BaseModule):
     """Módulo para mostrar estadísticas de la base de datos de música."""
     
@@ -30,13 +42,22 @@ class StatsModule(BaseModule):
         self.db_path = db_path
         self.conn = None
         self.current_category = None
+        
+        # Initialize callback handler before super().__init__
+        # This ensures it's available when needed during initialization
+        self.callback_handler = StatsCallbackHandler(self)
+        self.FeedsSubmodule = FeedsSubmodule
         super().__init__(**kwargs)
 
-        # Verificar disponibilidad de gráficos
+        # Verify charts availability
         self.charts_available = ChartFactory.is_charts_available()
         if not self.charts_available:
             logging.warning("PyQt6.QtCharts no está disponible. Los gráficos se mostrarán como texto.")
         
+        # Initialize submodules after UI is ready
+        self.init_submodules()
+
+
     def init_ui(self):
         """Inicializa la interfaz de usuario utilizando el archivo UI."""
         # Intentamos cargar desde el archivo UI
@@ -88,6 +109,70 @@ class StatsModule(BaseModule):
         error_label.setStyleSheet("color: red; font-weight: bold;")
         error_layout.addWidget(error_label)
         return False
+    
+    
+    
+
+
+    def init_submodules(self):
+        """Initialize the submodules for the stats module."""
+        # Only initialize if UI is ready
+        if not hasattr(self, 'category_combo'):
+            logging.error("Cannot initialize submodules: UI not ready")
+            return
+                
+        try:
+            # Prepare helper functions for the submodules
+            helper_functions = {
+                'load_entity_type_stats': self.load_entity_type_stats,
+                'load_feed_names_stats': self.load_feed_names_stats if hasattr(self, 'load_feed_names_stats') else None,
+                'clear_layout': self.clear_layout,
+                'ensure_widget_has_layout': self.ensure_widget_has_layout
+            }
+            
+            # Initialize time submodule
+            try:
+                # Create TimeSubmodule instance directly
+                time_submodule = TimeSubmodule(self, self.conn, helper_functions=helper_functions)
+                # Register it with the callback handler
+                self.callback_handler.register_submodule('time', time_submodule)
+                logging.info("Registered time submodule successfully")
+                
+                # Setup time callback handler if available
+                if hasattr(time_submodule, 'setup_connections'):
+                    time_submodule.setup_connections()
+                    logging.info("Set up time submodule connections")
+                    
+            except Exception as e:
+                logging.error(f"Error initializing time submodule: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
+            
+            # Initialize feeds submodule
+            try:
+                # Create FeedsSubmodule instance directly
+                feeds_submodule = FeedsSubmodule(self, self.conn, helper_functions=helper_functions)
+                # Register it with the callback handler
+                self.callback_handler.register_submodule('feeds', feeds_submodule)
+                logging.info("Registered feeds submodule successfully")
+                
+                # Setup feeds connections if available
+                if hasattr(feeds_submodule, 'setup_connections'):
+                    feeds_submodule.setup_connections()
+                    logging.info("Set up feeds submodule connections")
+                    
+            except Exception as e:
+                logging.error(f"Error initializing feeds submodule: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
+        except Exception as e:
+            logging.error(f"Error initializing submodules: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
+    def on_category_changed(self, index):
+        """Handler for category change events."""
+        logging.info(f"Category change event received: index={index}")
 
 
     def init_ui_elements(self):
@@ -115,9 +200,9 @@ class StatsModule(BaseModule):
 
 
     def init_chart_containers(self):
-        """Inicializa los layouts de todos los contenedores de gráficos."""
+        """Initializes the layouts of all chart containers safely."""
         try:
-            # Lista de nombres de contenedores de gráficos
+            # List of chart container names
             chart_containers = [
                 "chart_container_missing",
                 "chart_container_genres",
@@ -133,27 +218,25 @@ class StatsModule(BaseModule):
                 "chart_countries_artists", 
             ]
             
-            # Inicializar cada contenedor
+            # Initialize each container
             for container_name in chart_containers:
                 container = self.findChild(QWidget, container_name)
                 if container:
-                    logging.info(f"Inicializando layout para {container_name}")
-                    # Verificamos si ya tiene un layout
+                    logging.info(f"Initializing layout for {container_name}")
+                    # Only create a layout if the widget doesn't already have one
                     if container.layout() is None:
-                        # Si no tiene layout, creamos uno nuevo
                         layout = QVBoxLayout(container)
-                        container.setLayout(layout)  # Explícitamente establecer el layout
-                        logging.info(f"Creado nuevo QVBoxLayout para {container_name}")
+                        logging.info(f"Created new QVBoxLayout for {container_name}")
                     else:
-                        logging.info(f"El contenedor {container_name} ya tiene un layout: {type(container.layout()).__name__}")
+                        logging.info(f"Container {container_name} already has a layout: {type(container.layout()).__name__}")
                 else:
-                    logging.error(f"No se encontró el contenedor: {container_name}")
+                    logging.error(f"Container not found: {container_name}")
         
         except Exception as e:
-            logging.error(f"Error al inicializar contenedores de gráficos: {e}")
+            logging.error(f"Error initializing chart containers: {e}")
             import traceback
             logging.error(traceback.format_exc())
-        
+            
     def setup_connections(self):
         """Configura las señales y slots."""
         # Conexión del combo de categorías
@@ -169,32 +252,29 @@ class StatsModule(BaseModule):
             self.combo_time_unit.currentIndexChanged.connect(self.update_time_chart)
         
         # Si tenemos el combo de década, conectarlo
-        combo_decade = self.findChild(QComboBox, "combo_decade")
-        if combo_decade:
+        if hasattr(self, 'combo_decade'):
             # Desconectar primero (por si ya tenía conexiones)
             try:
-                combo_decade.currentIndexChanged.disconnect()
+                self.combo_decade.currentIndexChanged.disconnect()
             except:
                 pass
             # Conectar de nuevo
-            combo_decade.currentIndexChanged.connect(self.update_decade_chart)
+            self.combo_decade.currentIndexChanged.connect(self.update_decade_chart)
             logging.info("Combo de décadas conectado correctamente")
         else:
             logging.warning("No se encontró el combo de décadas para conectar")
 
-        # Conexión del combo de categorías
-        ausentes_combo = self.findChild(QComboBox, "ausentes_tabla_combo")
-        if ausentes_combo:
-            ausentes_combo.currentIndexChanged.connect(lambda: self.load_missing_data_stats())
+        # Conexión del combo de categorías de datos ausentes
+        if hasattr(self, 'ausentes_tabla_combo'):
+            self.ausentes_tabla_combo.currentIndexChanged.connect(lambda: self.load_missing_data_stats())
 
         # Conectar la selección de la tabla de géneros
-        table_genres = self.findChild(QTableWidget, "table_genres")
-        if table_genres:
+        if hasattr(self, 'table_genres'):
             try:
-                table_genres.itemClicked.disconnect()  # Desconectar conexiones previas
+                self.table_genres.itemClicked.disconnect()  # Desconectar conexiones previas
             except:
                 pass
-            table_genres.itemClicked.connect(self.on_genre_selected)
+            self.table_genres.itemClicked.connect(self.on_genre_selected)
             logging.info("Tabla de géneros conectada correctamente")
         else:
             logging.warning("No se encontró la tabla de géneros para conectar")
@@ -202,16 +282,18 @@ class StatsModule(BaseModule):
         # Configurar navegación entre vistas de géneros
         self.setup_genre_chart_navigation()
 
-        self.table_labels.itemClicked.connect(self.on_label_selected)
-        logging.info("Tabla de sellos conectada correctamente")
+        if hasattr(self, 'table_labels'):
+            self.table_labels.itemClicked.connect(self.on_label_selected)
+            logging.info("Tabla de sellos conectada correctamente")
         
         # Conectar el botón de desglose por género
-        try:
-            self.sellos_artistas_button.clicked.disconnect()
-        except:
-            pass
-        self.sellos_artistas_button.clicked.connect(self.on_show_label_genres)
-        logging.info("Botón de géneros por sello conectado correctamente")
+        if hasattr(self, 'sellos_artistas_button'):
+            try:
+                self.sellos_artistas_button.clicked.disconnect()
+            except:
+                pass
+            self.sellos_artistas_button.clicked.connect(self.on_show_label_genres)
+            logging.info("Botón de géneros por sello conectado correctamente")
 
 
         
@@ -308,18 +390,18 @@ class StatsModule(BaseModule):
             if not self.ensure_db_connection():
                 self.show_connection_error()
                 return
-                
+                    
             self.current_category = self.category_combo.currentText()
             logging.info(f"Cambiando a categoría: {self.current_category} (índice {index})")
             
             # Antes del cambio
-            logging.info(f"Índice actual del stacked_widget: {self.stacked_widget.currentIndex()}")
+            logging.debug(f"Índice actual del stacked_widget: {self.stacked_widget.currentIndex()}")
             
             # Establecer el índice correcto
             self.stacked_widget.setCurrentIndex(index)
             
             # Después del cambio
-            logging.info(f"Nuevo índice del stacked_widget: {self.stacked_widget.currentIndex()}")
+            logging.debug(f"Nuevo índice del stacked_widget: {self.stacked_widget.currentIndex()}")
             
             # Cargar los datos para la categoría seleccionada
             if self.current_category == "Datos Ausentes":
@@ -330,14 +412,24 @@ class StatsModule(BaseModule):
                 self.load_listening_stats()
             elif self.current_category == "Sellos":
                 # Verificar si estamos realmente en la página de sellos
-                logging.info(f"Después de cambiar a sellos, página actual: {self.stacked_widget.currentWidget().objectName()}")
                 self.load_label_stats()
             elif self.current_category == "Tiempo":
                 self.load_time_stats()
             elif self.current_category == "Países":
                 self.load_country_stats()
             elif self.current_category == "Feeds":
-                self.load_feed_stats()
+                # Use the submodule through the callback handler
+                if hasattr(self, 'callback_handler'):
+                    self.callback_handler.redirect_to_submodule('load_feed_stats', 'feeds')
+                else:
+                    logging.error("callback_handler not initialized")
+            
+            # Notify about category change after data is loaded
+            if hasattr(self, 'callback_handler'):
+                self.callback_handler.trigger_event('after_category_changed', index, self.current_category)
+            else:
+                logging.error("callback_handler not initialized")
+                
         except Exception as e:
             logging.error(f"Error en change_category: {e}")
             import traceback
@@ -348,14 +440,23 @@ class StatsModule(BaseModule):
         if not self.conn:
             return
         
-        # Obtener referencias a los widgets desde el UI
-        table = self.findChild(QTableWidget, "table_missing_data")
-        summary_label = self.findChild(QLabel, "label_summary")
-        chart_container = self.findChild(QWidget, "widget_chart_container_missing")
-        ausentes_combo = self.findChild(QComboBox, "ausentes_tabla_combo")
+        # Verificar que tenemos los widgets necesarios
+        required_widgets = ['table_missing_data', 'label_summary', 'widget_chart_container_missing']
+        for widget_name in required_widgets:
+            if not hasattr(self, widget_name):
+                logging.error(f"Widget '{widget_name}' no encontrado en la UI")
+                return
         
-        # Si el combo no existe, mostramos todas las tablas (comportamiento anterior)
-        selected_type = ausentes_combo.currentText() if ausentes_combo else "TODAS"
+        # Obtener referencias directas a los widgets
+        table = self.table_missing_data
+        summary_label = self.label_summary
+        chart_container = self.widget_chart_container_missing
+        
+        # Usar el combo si existe
+        if hasattr(self, 'ausentes_tabla_combo'):
+            selected_type = self.ausentes_tabla_combo.currentText()
+        else:
+            selected_type = "TODAS"
         
         # Limpiar tabla
         table.setRowCount(0)
@@ -3045,120 +3146,12 @@ class StatsModule(BaseModule):
             
     def load_time_stats(self):
         """Carga estadísticas temporales (por año de lanzamiento de discos)."""
-        if not self.conn:
-            return
-        
-        # Obtener referencias a los widgets
-        chart_container_years = self.findChild(QWidget, "chart_container_years")
-        table_decades = self.findChild(QTableWidget, "table_decades")
-        chart_container_decades = self.findChild(QWidget, "chart_container_decades")
-        
-        if not chart_container_years or not table_decades or not chart_container_decades:
-            return
-            
-        # Limpiar tabla
-        table_decades.setRowCount(0)
-        
-        # Consultar distribución por año
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT year, COUNT(*) as album_count
-            FROM albums
-            WHERE year IS NOT NULL AND year != ''
-            GROUP BY year
-            ORDER BY year;
-        """)
-        
-        years_data = cursor.fetchall()
-        
-        # Crear gráfico de línea temporal
-        self.clear_layout(chart_container_years.layout())
-        chart_view = ChartFactory.create_line_chart(
-            years_data,
-            "Distribución de Álbumes por Año",
-            x_label="Año",
-            y_label="Número de Álbumes"
-        )
-        chart_container_years.layout().addWidget(chart_view)
-        
-        # Preparar datos por década
-        decades = {}
-        for year_str, count in years_data:
-            try:
-                year = int(year_str)
-                decade = (year // 10) * 10  # Redondear a la década
-                if decade in decades:
-                    decades[decade] += count
-                else:
-                    decades[decade] = count
-            except (ValueError, TypeError):
-                # Ignorar años no numéricos
-                continue
-        
-        # Ordenar décadas
-        sorted_decades = sorted(decades.items())
-        
-        # Llenar la tabla
-        table_decades.setRowCount(len(sorted_decades))
-        for i, (decade, count) in enumerate(sorted_decades):
-            decade_str = f"{decade}s"
-            table_decades.setItem(i, 0, QTableWidgetItem(decade_str))
-            table_decades.setItem(i, 1, QTableWidgetItem(str(count)))
-        
-        table_decades.resizeColumnsToContents()
-        
-        # Crear gráfico de distribución por década
-        self.clear_layout(chart_container_decades.layout())
-        decade_chart = ChartFactory.create_bar_chart(
-            [(f"{decade}s", count) for decade, count in sorted_decades],
-            "Distribución por Década",
-            x_label="Década",
-            y_label="Número de Álbumes"
-        )
-        chart_container_decades.layout().addWidget(decade_chart)
+        # Use the callback handler to redirect to the time submodule
+        self.callback_handler.redirect_to_submodule('load_time_stats', 'time')
 
-    def load_country_stats(self):
-        """Carga estadísticas por país de origen de artistas."""
-        if not self.conn:
-            return
-        
-        # Obtener referencias a los widgets
-        table_countries = self.findChild(QTableWidget, "table_countries")
-        chart_container_countries = self.findChild(QWidget, "chart_container_countries")
-        
-        if not table_countries or not chart_container_countries:
-            return
-            
-        # Limpiar tabla
-        table_countries.setRowCount(0)
-        
-        # Consultar datos
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            SELECT origin, COUNT(*) as artist_count
-            FROM artists
-            WHERE origin IS NOT NULL AND origin != ''
-            GROUP BY origin
-            ORDER BY artist_count DESC;
-        """)
-        
-        results = cursor.fetchall()
-        
-        # Llenar la tabla
-        table_countries.setRowCount(len(results))
-        for i, (country, count) in enumerate(results):
-            table_countries.setItem(i, 0, QTableWidgetItem(country))
-            table_countries.setItem(i, 1, QTableWidgetItem(str(count)))
-        
-        table_countries.resizeColumnsToContents()
-        
-        # Crear gráfico para países
-        self.clear_layout(chart_container_countries.layout())
-        chart_view = ChartFactory.create_pie_chart(
-            results,
-            "Distribución por País de Origen"
-        )
-        chart_container_countries.layout().addWidget(chart_view)
+
+
+# PAISES
 
 
     def on_country_selected(self, item):
@@ -3294,23 +3287,38 @@ class StatsModule(BaseModule):
         self.stackedWidget_countries.setCurrentIndex(0)
 
 
-
-
     def setup_country_navigation(self):
         """Sets up navigation buttons for the country views."""
-        # Connect buttons if they exist in the UI
         try:
-            # Button to go back to overview from artist view
+            # Connect existing buttons
             if hasattr(self, 'btn_countries_overview'):
                 self.btn_countries_overview.clicked.connect(
                     lambda: self.stackedWidget_countries.setCurrentIndex(0)
                 )
             
-            # Button to see artists (shown in the overview page)
-            if hasattr(self, 'btn_countries_artists'):
-                self.btn_countries_artists.clicked.connect(
-                    lambda: self.show_country_artists_selection()
-                )
+            # Connect all country buttons
+            button_mappings = {
+                'countries_artists_button': self.on_countries_artists_clicked,
+                'countries_album_button': self.on_countries_album_clicked,
+                'countries_feeds_button': self.on_countries_feeds_clicked,
+                'countries_genre_button': self.on_countries_genre_clicked,
+                'countries_time_button': self.on_countries_time_clicked,
+                'countries_listens_button': self.on_countries_listens_clicked,
+                'countries_info_button': self.on_countries_info_clicked
+            }
+            
+            for button_name, handler in button_mappings.items():
+                button = getattr(self, button_name, None)
+                if button:
+                    try:
+                        button.clicked.disconnect()
+                    except:
+                        pass
+                    button.clicked.connect(handler)
+                    logging.info(f"Botón {button_name} conectado correctamente")
+                else:
+                    logging.warning(f"No se encontró el botón {button_name}")
+                
         except Exception as e:
             logging.error(f"Error setting up country navigation: {e}")
 
@@ -3329,6 +3337,1340 @@ class StatsModule(BaseModule):
         self.stackedWidget_countries.setCurrentIndex(1)
         # Make sure the chart is up to date
         self.load_artists_by_country(self.selected_country)
+
+
+    def on_countries_artists_clicked(self):
+        """Handles the countries_artists_button click to show artists from selected country."""
+        # First, check if a country is selected
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Change to the appropriate page in the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Get reference to the chart container
+        chart_container = self.chart_countries_artists
+        
+        # Ensure the chart container has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear any existing content
+        self.clear_layout(layout)
+        
+        # Query for artists from this country
+        cursor = self.conn.cursor()
+        try:
+            # Query artists from the selected country
+            cursor.execute("""
+                SELECT name, COUNT(DISTINCT a.id) as album_count
+                FROM artists ar
+                JOIN albums a ON a.artist_id = ar.id
+                WHERE ar.origin = ?
+                GROUP BY ar.name
+                ORDER BY album_count DESC, ar.name
+                LIMIT 15;
+            """, (self.selected_country,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Create a bar chart with the artists
+                chart_view = ChartFactory.create_bar_chart(
+                    results,
+                    f"Artistas de {self.selected_country}",
+                    x_label="Artista",
+                    y_label="Álbumes",
+                    limit=15  # Limit to top 15 artists
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Artist chart for country '{self.selected_country}' created successfully")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de artistas")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+            else:
+                # No data
+                no_data = QLabel(f"No hay artistas registrados para el país '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error querying artists by country: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def on_countries_album_clicked(self):
+        """Handles the countries_album_button click to show albums from selected country."""
+        # First, check if a country is selected
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Change to the appropriate page in the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Get reference to the chart container
+        chart_container = self.chart_countries_artists  # Reuse the same container
+        
+        # Ensure the chart container has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear any existing content
+        self.clear_layout(layout)
+        
+        # Query for albums from artists of this country
+        cursor = self.conn.cursor()
+        try:
+            # Query albums from artists of the selected country
+            cursor.execute("""
+                SELECT a.name, COUNT(s.id) as song_count
+                FROM albums a
+                JOIN artists ar ON a.artist_id = ar.id
+                LEFT JOIN songs s ON s.album = a.name AND s.artist = ar.name
+                WHERE ar.origin = ?
+                GROUP BY a.name
+                ORDER BY song_count DESC
+                LIMIT 15;
+            """, (self.selected_country,))
+            
+            results = cursor.fetchall()
+            
+            if results:
+                # Create a bar chart with the albums
+                chart_view = ChartFactory.create_bar_chart(
+                    results,
+                    f"Álbumes de Artistas de {self.selected_country}",
+                    x_label="Álbum",
+                    y_label="Canciones",
+                    limit=15  # Limit to top 15 albums
+                )
+                
+                if chart_view:
+                    layout.addWidget(chart_view)
+                    logging.info(f"Album chart for country '{self.selected_country}' created successfully")
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de álbumes")
+                    error_label.setStyleSheet("color: red;")
+                    layout.addWidget(error_label)
+            else:
+                # No data
+                no_data = QLabel(f"No hay álbumes registrados para artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error querying albums by country: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def on_countries_feeds_clicked(self):
+        """Handles the countries_feeds_button click to show feeds for artist and albums from the selected country."""
+        # First, check if a country is selected
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Change to the appropriate page in the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Get reference to the chart container
+        chart_container = self.chart_countries_artists  # Reuse the same container
+        
+        # Ensure the chart container has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear any existing content
+        self.clear_layout(layout)
+        
+        # Create splitter for two charts
+        splitter = QSplitter(Qt.Orientation.Vertical)
+        
+        # Container for artist feeds chart
+        artist_feeds_container = QWidget()
+        artist_feeds_layout = QVBoxLayout(artist_feeds_container)
+        artist_feeds_title = QLabel(f"Feeds de Artistas de {self.selected_country}")
+        artist_feeds_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+        artist_feeds_layout.addWidget(artist_feeds_title)
+        
+        # Container for album feeds chart
+        album_feeds_container = QWidget()
+        album_feeds_layout = QVBoxLayout(album_feeds_container)
+        album_feeds_title = QLabel(f"Feeds de Álbumes de Artistas de {self.selected_country}")
+        album_feeds_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+        album_feeds_layout.addWidget(album_feeds_title)
+        
+        # Query feeds for artists from this country
+        cursor = self.conn.cursor()
+        try:
+            # Artist feeds
+            cursor.execute("""
+                SELECT f.feed_name, COUNT(*) as feed_count
+                FROM feeds f
+                JOIN artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
+                WHERE ar.origin = ?
+                GROUP BY f.feed_name
+                ORDER BY feed_count DESC;
+            """, (self.selected_country,))
+            
+            artist_feeds_results = cursor.fetchall()
+            
+            # Album feeds
+            cursor.execute("""
+                SELECT f.feed_name, COUNT(*) as feed_count
+                FROM feeds f
+                JOIN albums al ON f.entity_id = al.id AND f.entity_type = 'album'
+                JOIN artists ar ON al.artist_id = ar.id
+                WHERE ar.origin = ?
+                GROUP BY f.feed_name
+                ORDER BY feed_count DESC;
+            """, (self.selected_country,))
+            
+            album_feeds_results = cursor.fetchall()
+            
+            # Create charts if we have data
+            if artist_feeds_results:
+                artist_chart = ChartFactory.create_pie_chart(
+                    artist_feeds_results,
+                    f"Feeds de Artistas de {self.selected_country}"
+                )
+                if artist_chart:
+                    artist_feeds_layout.addWidget(artist_chart)
+            else:
+                no_data = QLabel(f"No hay feeds para artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                artist_feeds_layout.addWidget(no_data)
+                
+            if album_feeds_results:
+                album_chart = ChartFactory.create_pie_chart(
+                    album_feeds_results,
+                    f"Feeds de Álbumes de Artistas de {self.selected_country}"
+                )
+                if album_chart:
+                    album_feeds_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel(f"No hay feeds para álbumes de artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                album_feeds_layout.addWidget(no_data)
+            
+            # Add containers to splitter and main layout
+            splitter.addWidget(artist_feeds_container)
+            splitter.addWidget(album_feeds_container)
+            layout.addWidget(splitter)
+                
+        except Exception as e:
+            logging.error(f"Error querying feeds by country: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def get_artist_genres_safely(self, country):
+        """Obtiene los géneros de artistas de forma segura sin depender de JSON válido"""
+        cursor = self.conn.cursor()
+        
+        # Primero, obtén todos los artistas con sus tags
+        cursor.execute("""
+            SELECT id, name, tags 
+            FROM artists 
+            WHERE origin = ? AND tags IS NOT NULL AND tags != ''
+        """, (country,))
+        
+        artists = cursor.fetchall()
+        
+        # Procesamos los tags manualmente
+        genre_counts = {}
+        for artist_id, artist_name, tags in artists:
+            # Convertir tags a lista
+            try:
+                # Intenta varias estrategias de separación
+                if ',' in tags:
+                    # Formato separado por comas (más común)
+                    genres = [g.strip() for g in tags.split(',')]
+                elif ';' in tags:
+                    # Algunos usan punto y coma
+                    genres = [g.strip() for g in tags.split(';')]
+                elif '|' in tags:
+                    # Otros usan pipe
+                    genres = [g.strip() for g in tags.split('|')]
+                elif tags.startswith('[') and tags.endswith(']'):
+                    # Intenta como JSON array
+                    try:
+                        import json
+                        genres = json.loads(tags)
+                    except:
+                        # Si falla, trata como texto regular
+                        genres = [tags[1:-1].strip()]
+                else:
+                    # Si no hay separadores, trátalo como un solo género
+                    genres = [tags.strip()]
+                
+                # Contar cada género
+                for genre in genres:
+                    if genre:  # Ignorar vacíos
+                        if genre in genre_counts:
+                            genre_counts[genre] += 1
+                        else:
+                            genre_counts[genre] = 1
+                            
+            except Exception as e:
+                logging.error(f"Error procesando tags para artista {artist_name}: {e}")
+        
+        # Convertir a formato para gráficos (lista de tuplas)
+        result = [(genre, count) for genre, count in genre_counts.items()]
+        result.sort(key=lambda x: x[1], reverse=True)
+        
+        return result
+
+
+
+    def on_countries_genre_clicked(self):
+        """Handles the countries_genre_button click to show genres for artists from the selected country."""
+        # First, check if a country is selected
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Change to the appropriate page in the stacked widget
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Get reference to the chart container
+        chart_container = self.chart_countries_artists  # Reuse the same container
+        
+        # Ensure the chart container has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear any existing content
+        self.clear_layout(layout)
+        
+        # Query for genres information - use a safer approach
+        cursor = self.conn.cursor()
+        try:
+            # Get artist tags directly - avoid JSON parsing in SQL
+            cursor.execute("""
+                SELECT 
+                    ar.tags
+                FROM 
+                    artists ar
+                WHERE 
+                    ar.origin = ?
+                    AND ar.tags IS NOT NULL
+                    AND ar.tags != ''
+            """, (self.selected_country,))
+            
+            # Process tags in Python instead of SQL
+            artist_tags_rows = cursor.fetchall()
+            genre_counts = {}
+            
+            # Process each artist's tags
+            for row in artist_tags_rows:
+                tags = self.safely_parse_tags(row[0])
+                for tag in tags:
+                    genre_counts[tag] = genre_counts.get(tag, 0) + 1
+            
+            # Convert to format needed for chart
+            artist_genres = [(genre, count) for genre, count in 
+                            sorted(genre_counts.items(), key=lambda x: x[1], reverse=True)[:15]]
+            
+            # Album genres - use a more reliable query
+            cursor.execute("""
+                SELECT 
+                    a.genre, 
+                    COUNT(*) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.genre IS NOT NULL 
+                    AND a.genre != ''
+                GROUP BY 
+                    a.genre
+                ORDER BY 
+                    album_count DESC
+                LIMIT 15;
+            """, (self.selected_country,))
+            
+            album_genres = cursor.fetchall()
+            
+            # Song genres - similar reliable approach
+            cursor.execute("""
+                SELECT 
+                    s.genre, 
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND s.genre IS NOT NULL 
+                    AND s.genre != ''
+                GROUP BY 
+                    s.genre
+                ORDER BY 
+                    song_count DESC
+                LIMIT 15;
+            """, (self.selected_country,))
+            
+            song_genres = cursor.fetchall()
+            
+            # Create splitter for three charts
+            splitter = QSplitter(Qt.Orientation.Vertical)
+            
+            # Artist genres chart
+            artist_container = QWidget()
+            artist_layout = QVBoxLayout(artist_container)
+            artist_title = QLabel(f"Géneros de Artistas de {self.selected_country}")
+            artist_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            artist_layout.addWidget(artist_title)
+            
+            # Album genres chart
+            album_container = QWidget()
+            album_layout = QVBoxLayout(album_container)
+            album_title = QLabel(f"Géneros de Álbumes de {self.selected_country}")
+            album_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            album_layout.addWidget(album_title)
+            
+            # Song genres chart
+            song_container = QWidget()
+            song_layout = QVBoxLayout(song_container)
+            song_title = QLabel(f"Géneros de Canciones de {self.selected_country}")
+            song_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            song_layout.addWidget(song_title)
+            
+            # Create the charts for each section
+            if artist_genres:
+                artist_chart = ChartFactory.create_pie_chart(
+                    artist_genres,
+                    f"Géneros de Artistas de {self.selected_country}"
+                )
+                if artist_chart:
+                    artist_layout.addWidget(artist_chart)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                artist_layout.addWidget(no_data)
+                
+            if album_genres:
+                album_chart = ChartFactory.create_pie_chart(
+                    album_genres,
+                    f"Géneros de Álbumes de Artistas de {self.selected_country}"
+                )
+                if album_chart:
+                    album_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para álbumes de artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                album_layout.addWidget(no_data)
+                
+            if song_genres:
+                song_chart = ChartFactory.create_pie_chart(
+                    song_genres,
+                    f"Géneros de Canciones de Artistas de {self.selected_country}"
+                )
+                if song_chart:
+                    song_layout.addWidget(song_chart)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para canciones de artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                song_layout.addWidget(no_data)
+            
+            # Add containers to splitter
+            splitter.addWidget(artist_container)
+            splitter.addWidget(album_container)
+            splitter.addWidget(song_container)
+            
+            # Add splitter to main layout
+            layout.addWidget(splitter)
+                
+        except Exception as e:
+            logging.error(f"Error querying genres by country: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+                    
+    def on_countries_time_clicked(self):
+        """Muestra distribución temporal de álbumes para el país seleccionado."""
+        # Verificar si hay un país seleccionado
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Cambiar a la página apropiada
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Obtener referencia al contenedor de gráficos
+        chart_container = self.chart_countries_artists  # Reutilizamos el mismo contenedor
+        
+        # Asegurar que tiene layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar cualquier contenido existente
+        self.clear_layout(layout)
+        
+        # Crear contenedor principal con layout vertical
+        main_container = QWidget()
+        main_layout = QVBoxLayout(main_container)
+        
+        # Crear título
+        title_label = QLabel(f"Distribución temporal de álbumes de artistas de {self.selected_country}")
+        title_label.setStyleSheet("font-weight: bold; font-size: 14px;")
+        main_layout.addWidget(title_label)
+        
+        # Consultar datos por año para este país
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute("""
+                SELECT 
+                    a.year, 
+                    COUNT(*) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                GROUP BY 
+                    a.year
+                ORDER BY 
+                    a.year;
+            """, (self.selected_country,))
+            
+            year_results = cursor.fetchall()
+            
+            # Crear gráfico lineal con la distribución por año
+            if year_results:
+                # Contenedor para el gráfico lineal
+                year_chart_container = QWidget()
+                year_layout = QVBoxLayout(year_chart_container)
+                
+                # Crear gráfico lineal
+                year_chart = ChartFactory.create_line_chart(
+                    year_results,
+                    f"Álbumes por año de artistas de {self.selected_country}",
+                    x_label="Año",
+                    y_label="Álbumes"
+                )
+                
+                if year_chart:
+                    year_layout.addWidget(year_chart)
+                    main_layout.addWidget(year_chart_container)
+                else:
+                    error_label = QLabel("No se pudo crear el gráfico de distribución por año")
+                    error_label.setStyleSheet("color: red;")
+                    main_layout.addWidget(error_label)
+            else:
+                no_data = QLabel(f"No hay datos de años para álbumes de artistas de '{self.selected_country}'")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                main_layout.addWidget(no_data)
+                
+            # Contenedor para gráficos de década (estará inicialmente vacío)
+            decade_graph_container = QWidget()
+            decade_graph_layout = QVBoxLayout(decade_graph_container)
+            decade_graph_layout.addWidget(QLabel("Selecciona una década para ver detalles"))
+            main_layout.addWidget(decade_graph_container)
+            
+            # Crear contenedor para los botones de década
+            decades_container = QWidget()
+            decades_layout = QHBoxLayout(decades_container)
+            
+            # Agrupar datos por década
+            decades = {}
+            for year_str, count in year_results:
+                try:
+                    year = int(year_str)
+                    decade = (year // 10) * 10  # Redondear a la década
+                    if decade in decades:
+                        decades[decade] += count
+                    else:
+                        decades[decade] = count
+                except (ValueError, TypeError):
+                    # Ignorar años no numéricos
+                    continue
+            
+            # Crear botones para cada década
+            for decade, count in sorted(decades.items()):
+                decade_str = f"{decade}s ({count})"
+                decade_btn = QPushButton(decade_str)
+                decade_btn.clicked.connect(lambda checked, d=decade: self.show_decade_details(d, decade_graph_layout, self.selected_country))
+                decades_layout.addWidget(decade_btn)
+            
+            # Añadir botones a la vista principal
+            if decades:
+                main_layout.addWidget(decades_container)
+            else:
+                no_decades = QLabel("No se pudieron determinar décadas para este país")
+                no_decades.setStyleSheet("color: gray;")
+                main_layout.addWidget(no_decades)
+            
+            # Añadir el contenedor principal al layout
+            layout.addWidget(main_container)
+            
+        except Exception as e:
+            logging.error(f"Error al consultar datos temporales para el país: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def show_decade_details(self, decade, container_layout, country):
+        """Muestra detalles de álbumes y artistas para una década específica."""
+        # Limpiar el contenedor
+        self.clear_layout(container_layout)
+        
+        # Añadir título
+        title = QLabel(f"Detalles de la década {decade}s para {country}")
+        title.setStyleSheet("font-weight: bold;")
+        container_layout.addWidget(title)
+        
+        # Consultar datos para esta década y país
+        cursor = self.conn.cursor()
+        try:
+            # Artistas con álbumes en esta década
+            cursor.execute("""
+                SELECT 
+                    ar.name, 
+                    COUNT(a.id) as album_count
+                FROM 
+                    artists ar
+                JOIN 
+                    albums a ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                    AND CAST(a.year AS INTEGER) >= ?
+                    AND CAST(a.year AS INTEGER) < ?
+                GROUP BY 
+                    ar.name
+                ORDER BY 
+                    album_count DESC
+                LIMIT 15;
+            """, (country, decade, decade + 10))
+            
+            artist_results = cursor.fetchall()
+            
+            # Álbumes en esta década
+            cursor.execute("""
+                SELECT 
+                    a.name, 
+                    ar.name,
+                    COUNT(s.id) as song_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                LEFT JOIN 
+                    songs s ON s.album = a.name AND s.artist = ar.name
+                WHERE 
+                    ar.origin = ?
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                    AND CAST(a.year AS INTEGER) >= ?
+                    AND CAST(a.year AS INTEGER) < ?
+                GROUP BY 
+                    a.name, ar.name
+                ORDER BY 
+                    song_count DESC
+                LIMIT 15;
+            """, (country, decade, decade + 10))
+            
+            album_results = cursor.fetchall()
+            
+            # Crear splitter horizontal para los dos gráficos
+            splitter = QSplitter(Qt.Orientation.Horizontal)
+            
+            # Añadir gráfico de artistas
+            artist_widget = QWidget()
+            artist_layout = QVBoxLayout(artist_widget)
+            artist_title = QLabel(f"Artistas con álbumes en los {decade}s")
+            artist_title.setStyleSheet("font-weight: bold;")
+            artist_layout.addWidget(artist_title)
+            
+            if artist_results:
+                # Convertir datos para gráfico (artista, álbumes)
+                artist_data = [(name, count) for name, count in artist_results]
+                artist_chart = ChartFactory.create_bar_chart(
+                    artist_data,
+                    f"Artistas con álbumes en los {decade}s",
+                    x_label="Artista",
+                    y_label="Álbumes"
+                )
+                if artist_chart:
+                    artist_layout.addWidget(artist_chart)
+            else:
+                no_data = QLabel(f"No hay artistas con álbumes en los {decade}s")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                artist_layout.addWidget(no_data)
+            
+            # Añadir gráfico de álbumes
+            album_widget = QWidget()
+            album_layout = QVBoxLayout(album_widget)
+            album_title = QLabel(f"Álbumes en los {decade}s")
+            album_title.setStyleSheet("font-weight: bold;")
+            album_layout.addWidget(album_title)
+            
+            if album_results:
+                # Convertir datos para gráfico (álbum - artista, canciones)
+                album_data = [(f"{album} - {artist}", songs) for album, artist, songs in album_results]
+                album_chart = ChartFactory.create_bar_chart(
+                    album_data,
+                    f"Álbumes en los {decade}s",
+                    x_label="Álbum",
+                    y_label="Canciones"
+                )
+                if album_chart:
+                    album_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel(f"No hay álbumes en los {decade}s")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                album_layout.addWidget(no_data)
+            
+            # Añadir widgets al splitter
+            splitter.addWidget(artist_widget)
+            splitter.addWidget(album_widget)
+            
+            # Añadir splitter al contenedor
+            container_layout.addWidget(splitter)
+            
+        except Exception as e:
+            logging.error(f"Error al mostrar detalles de década: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            container_layout.addWidget(error_label)
+
+
+
+    def on_countries_listens_clicked(self):
+        """Muestra estadísticas de escuchas por país."""
+        # Cambiar a la página apropiada
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Obtener referencia al contenedor de gráficos
+        chart_container = self.chart_countries_artists  # Reutilizamos el mismo contenedor
+        
+        # Asegurar que tiene layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar cualquier contenido existente
+        self.clear_layout(layout)
+        
+        # Crear título
+        title_label = QLabel("Distribución de escuchas por país")
+        title_label.setStyleSheet("font-weight: bold; font-size: 16px;")
+        layout.addWidget(title_label)
+        
+        # Crear contenedores para los gráficos
+        total_listens_container = QWidget()
+        total_layout = QVBoxLayout(total_listens_container)
+        
+        artists_listens_container = QWidget()
+        artists_layout = QVBoxLayout(artists_listens_container)
+        
+        # Consultar escuchas por país
+        cursor = self.conn.cursor()
+        try:
+            # Primero verificamos si hay datos de scrobbles o listens
+            cursor.execute("SELECT COUNT(*) FROM scrobbles;")
+            scrobble_count = cursor.fetchone()[0]
+            
+            cursor.execute("SELECT COUNT(*) FROM listens;")
+            listen_count = cursor.fetchone()[0]
+            
+            if scrobble_count == 0 and listen_count == 0:
+                no_data = QLabel("No hay datos de escuchas en la base de datos")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                return
+            
+            # Determinar qué tabla usar
+            listen_table = "scrobbles" if scrobble_count > 0 else "listens"
+            
+            # Consultar distribución por país
+            cursor.execute(f"""
+                SELECT 
+                    ar.origin, 
+                    COUNT(*) as listen_count
+                FROM 
+                    {listen_table} l
+                JOIN 
+                    artists ar ON l.artist_name = ar.name
+                WHERE 
+                    ar.origin IS NOT NULL 
+                    AND ar.origin != ''
+                GROUP BY 
+                    ar.origin
+                ORDER BY 
+                    listen_count DESC;
+            """)
+            
+            country_results = cursor.fetchall()
+            
+            if country_results:
+                # Crear gráfico circular de escuchas por país
+                country_chart = ChartFactory.create_pie_chart(
+                    country_results,
+                    "Escuchas por país de origen de los artistas"
+                )
+                if country_chart:
+                    total_layout.addWidget(country_chart)
+                
+                # Añadir instrucciones para el usuario
+                if hasattr(self, 'selected_country'):
+                    # Si hay un país seleccionado, mostrar artistas para ese país
+                    artists_title = QLabel(f"Artistas más escuchados de {self.selected_country}")
+                    artists_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+                    artists_layout.addWidget(artists_title)
+                    
+                    # Consultar artistas más escuchados para el país seleccionado
+                    cursor.execute(f"""
+                        SELECT 
+                            l.artist_name, 
+                            COUNT(*) as listen_count
+                        FROM 
+                            {listen_table} l
+                        JOIN 
+                            artists ar ON l.artist_name = ar.name
+                        WHERE 
+                            ar.origin = ?
+                        GROUP BY 
+                            l.artist_name
+                        ORDER BY 
+                            listen_count DESC
+                        LIMIT 15;
+                    """, (self.selected_country,))
+                    
+                    artist_results = cursor.fetchall()
+                    
+                    if artist_results:
+                        artist_chart = ChartFactory.create_bar_chart(
+                            artist_results,
+                            f"Artistas más escuchados de {self.selected_country}",
+                            x_label="Artista",
+                            y_label="Escuchas"
+                        )
+                        if artist_chart:
+                            artists_layout.addWidget(artist_chart)
+                    else:
+                        no_artists = QLabel(f"No hay datos de escuchas para artistas de {self.selected_country}")
+                        no_artists.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                        no_artists.setStyleSheet("color: gray;")
+                        artists_layout.addWidget(no_artists)
+                else:
+                    instructions = QLabel("Selecciona un país en la tabla para ver los artistas más escuchados")
+                    instructions.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    instructions.setStyleSheet("color: gray; font-style: italic;")
+                    artists_layout.addWidget(instructions)
+                
+                # Crear splitter vertical para los dos contenedores
+                splitter = QSplitter(Qt.Orientation.Vertical)
+                splitter.addWidget(total_listens_container)
+                splitter.addWidget(artists_listens_container)
+                
+                # Añadir splitter al layout principal
+                layout.addWidget(splitter)
+            else:
+                no_data = QLabel("No hay datos de escuchas con información de país")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+        
+        except Exception as e:
+            logging.error(f"Error al consultar escuchas por país: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def on_countries_info_clicked(self):
+        """Muestra información detallada del país seleccionado."""
+        # Verificar si hay un país seleccionado
+        if not hasattr(self, 'selected_country'):
+            QMessageBox.information(
+                self,
+                "Selección requerida",
+                "Por favor, selecciona primero un país de la tabla."
+            )
+            return
+        
+        # Cambiar a la página apropiada
+        self.stackedWidget_countries.setCurrentIndex(1)
+        
+        # Obtener referencia al contenedor
+        chart_container = self.chart_countries_artists  # Reutilizamos el mismo contenedor
+        
+        # Asegurar que tiene layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Limpiar cualquier contenido existente
+        self.clear_layout(layout)
+        
+        # Crear un scroll area para contener toda la información
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setFrameShape(QFrame.Shape.NoFrame)
+        
+        # Widget principal que irá dentro del scroll area
+        main_widget = QWidget()
+        main_layout = QVBoxLayout(main_widget)
+        
+        # Título principal
+        title = QLabel(f"Información detallada: {self.selected_country}")
+        title.setStyleSheet("font-size: 18px; font-weight: bold;")
+        main_layout.addWidget(title)
+        
+        # Widget para mostrar texto en formato markdown
+        info_text = QTextEdit()
+        info_text.setReadOnly(True)
+        info_text.setStyleSheet("""
+            QTextEdit {
+                background-color: transparent;
+                border: none;
+                font-family: 'Noto Sans', sans-serif;
+            }
+        """)
+        
+        # Recopilar toda la información
+        cursor = self.conn.cursor()
+        try:
+            # Artistas y sus álbumes
+            cursor.execute("""
+                SELECT 
+                    ar.name, 
+                    GROUP_CONCAT(a.name || CASE WHEN a.year IS NULL THEN '' ELSE ' (' || a.year || ')' END, '; ') as albums
+                FROM 
+                    artists ar
+                LEFT JOIN 
+                    albums a ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                GROUP BY 
+                    ar.name
+                ORDER BY 
+                    ar.name;
+            """, (self.selected_country,))
+            
+            artist_albums = cursor.fetchall()
+            
+            # Sellos con artistas o álbumes de este país
+            cursor.execute("""
+                SELECT 
+                    DISTINCT a.label, 
+                    COUNT(DISTINCT ar.id) as artist_count,
+                    COUNT(DISTINCT a.id) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.label IS NOT NULL
+                    AND a.label != ''
+                GROUP BY 
+                    a.label
+                ORDER BY 
+                    artist_count DESC, album_count DESC;
+            """, (self.selected_country,))
+            
+            labels = cursor.fetchall()
+            
+            # Feeds para artistas o álbumes de este país
+            cursor.execute("""
+                SELECT 
+                    f.feed_name, 
+                    f.entity_type,
+                    COUNT(*) as post_count
+                FROM 
+                    feeds f
+                JOIN 
+                    artists ar ON (f.entity_type = 'artist' AND f.entity_id = ar.id)
+                WHERE 
+                    ar.origin = ?
+                GROUP BY 
+                    f.feed_name, f.entity_type
+                UNION ALL
+                SELECT 
+                    f.feed_name, 
+                    f.entity_type,
+                    COUNT(*) as post_count
+                FROM 
+                    feeds f
+                JOIN 
+                    albums alb ON (f.entity_type = 'album' AND f.entity_id = alb.id)
+                JOIN 
+                    artists ar ON alb.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                GROUP BY 
+                    f.feed_name, f.entity_type
+                ORDER BY 
+                    post_count DESC;
+            """, (self.selected_country, self.selected_country))
+            
+            feeds = cursor.fetchall()
+            
+            # Get artist tags directly - avoid JSON parsing in SQL
+            cursor.execute("""
+                SELECT ar.tags
+                FROM artists ar
+                WHERE ar.origin = ?
+                AND ar.tags IS NOT NULL
+                AND ar.tags != ''
+            """, (self.selected_country,))
+            
+            # Process tags in Python instead of SQL
+            artist_tags_rows = cursor.fetchall()
+            artist_genre_counts = {}
+            
+            # Process each artist's tags
+            for row in artist_tags_rows:
+                tags = self.safely_parse_tags(row[0])
+                for tag in tags:
+                    artist_genre_counts[tag] = artist_genre_counts.get(tag, 0) + 1
+            
+            # Convert to format needed for reporting
+            artist_genres = [(genre, count) for genre, count in 
+                            sorted(artist_genre_counts.items(), key=lambda x: x[1], reverse=True)]
+            
+            # Album genres - use a more reliable query
+            cursor.execute("""
+                SELECT 
+                    a.genre, 
+                    COUNT(*) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.genre IS NOT NULL 
+                    AND a.genre != ''
+                GROUP BY 
+                    a.genre
+                ORDER BY 
+                    album_count DESC;
+            """, (self.selected_country,))
+            
+            album_genres = cursor.fetchall()
+            
+            # Song genres - similar reliable approach
+            cursor.execute("""
+                SELECT 
+                    s.genre, 
+                    COUNT(*) as song_count
+                FROM 
+                    songs s
+                JOIN 
+                    albums a ON s.album = a.name
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND s.genre IS NOT NULL 
+                    AND s.genre != ''
+                GROUP BY 
+                    s.genre
+                ORDER BY 
+                    song_count DESC;
+            """, (self.selected_country,))
+            
+            song_genres = cursor.fetchall()
+            
+            # Combine all genres with their sources
+            genres = []
+            genres.extend([('Artistas', genre, count) for genre, count in artist_genres])
+            genres.extend([('Álbumes', genre, count) for genre, count in album_genres])
+            genres.extend([('Canciones', genre, count) for genre, count in song_genres])
+            
+            # Décadas con álbumes
+            cursor.execute("""
+                SELECT 
+                    CAST(SUBSTR(a.year, 1, 3) || '0' AS INTEGER) as decade,
+                    COUNT(*) as album_count
+                FROM 
+                    albums a
+                JOIN 
+                    artists ar ON a.artist_id = ar.id
+                WHERE 
+                    ar.origin = ?
+                    AND a.year IS NOT NULL 
+                    AND a.year != ''
+                    AND LENGTH(a.year) >= 4
+                    AND CAST(SUBSTR(a.year, 1, 4) AS INTEGER) > 1900
+                GROUP BY 
+                    decade
+                ORDER BY 
+                    decade;
+            """, (self.selected_country,))
+            
+            decades = cursor.fetchall()
+            
+            # Escuchas por año
+            cursor.execute("""
+                SELECT 
+                    CASE 
+                        WHEN EXISTS (SELECT 1 FROM scrobbles LIMIT 1) THEN 1
+                        ELSE 0
+                    END as has_scrobbles,
+                    CASE 
+                        WHEN EXISTS (SELECT 1 FROM listens LIMIT 1) THEN 1
+                        ELSE 0
+                    END as has_listens;
+            """)
+            listen_info = cursor.fetchone()
+            has_scrobbles = listen_info[0] == 1
+            has_listens = listen_info[1] == 1
+            
+            listen_years = []
+            if has_scrobbles:
+                cursor.execute("""
+                    SELECT 
+                        strftime('%Y', s.scrobble_date) as year,
+                        COUNT(*) as listen_count
+                    FROM 
+                        scrobbles s
+                    JOIN 
+                        artists ar ON s.artist_name = ar.name
+                    WHERE 
+                        ar.origin = ?
+                    GROUP BY 
+                        year
+                    ORDER BY 
+                        year;
+                """, (self.selected_country,))
+                listen_years.extend(cursor.fetchall())
+            
+            if has_listens:
+                cursor.execute("""
+                    SELECT 
+                        strftime('%Y', l.listen_date) as year,
+                        COUNT(*) as listen_count
+                    FROM 
+                        listens l
+                    JOIN 
+                        artists ar ON l.artist_name = ar.name
+                    WHERE 
+                        ar.origin = ?
+                    GROUP BY 
+                        year
+                    ORDER BY 
+                        year;
+                """, (self.selected_country,))
+                listen_years.extend(cursor.fetchall())
+            
+            # Construir el texto markdown
+            markdown = f"# Información detallada: {self.selected_country}\n\n"
+            
+            # Artistas y álbumes
+            if artist_albums:
+                markdown += "## Artistas y sus álbumes\n\n"
+                for artist, albums in artist_albums:
+                    if albums:
+                        markdown += f"### {artist}\n\n"
+                        albums_list = albums.split(';')
+                        for album in albums_list:
+                            markdown += f"- {album.strip()}\n"
+                        markdown += "\n"
+                    else:
+                        markdown += f"### {artist}\n\n"
+                        markdown += "- No hay álbumes registrados\n\n"
+            else:
+                markdown += "## Artistas y sus álbumes\n\n"
+                markdown += "No hay artistas registrados para este país.\n\n"
+            
+            # Sellos discográficos
+            if labels:
+                markdown += "## Sellos discográficos\n\n"
+                markdown += "| Sello | Artistas | Álbumes |\n"
+                markdown += "|-------|---------|--------|\n"
+                
+                for label, artist_count, album_count in labels:
+                    markdown += f"| {label} | {artist_count} | {album_count} |\n"
+                
+                markdown += "\n"
+            else:
+                markdown += "## Sellos discográficos\n\n"
+                markdown += "No hay sellos registrados para artistas de este país.\n\n"
+            
+            # Feeds
+            if feeds:
+                markdown += "## Feeds\n\n"
+                markdown += "| Nombre | Tipo de entidad | Publicaciones |\n"
+                markdown += "|--------|----------------|---------------|\n"
+                
+                for feed_name, entity_type, post_count in feeds:
+                    markdown += f"| {feed_name} | {entity_type} | {post_count} |\n"
+                
+                markdown += "\n"
+            else:
+                markdown += "## Feeds\n\n"
+                markdown += "No hay feeds registrados para entidades de este país.\n\n"
+            
+            # Géneros
+            if genres:
+                markdown += "## Géneros\n\n"
+                
+                # Agrupar por fuente
+                genre_by_source = {}
+                for source, genre, count in genres:
+                    if source not in genre_by_source:
+                        genre_by_source[source] = []
+                    genre_by_source[source].append((genre, count))
+                
+                for source, genre_data in genre_by_source.items():
+                    markdown += f"### Géneros en {source}\n\n"
+                    markdown += "| Género | Cantidad |\n"
+                    markdown += "|--------|----------|\n"
+                    
+                    for genre, count in genre_data[:10]:  # Mostrar solo los 10 primeros
+                        markdown += f"| {genre} | {count} |\n"
+                    
+                    if len(genre_data) > 10:
+                        markdown += f"| ... y {len(genre_data) - 10} más | - |\n"
+                    
+                    markdown += "\n"
+            else:
+                markdown += "## Géneros\n\n"
+                markdown += "No hay información de géneros para este país.\n\n"
+            
+            # Décadas
+            if decades:
+                markdown += "## Distribución por década\n\n"
+                markdown += "| Década | Álbumes |\n"
+                markdown += "|--------|--------|\n"
+                
+                for decade, count in decades:
+                    markdown += f"| {decade}s | {count} |\n"
+                
+                markdown += "\n"
+            else:
+                markdown += "## Distribución por década\n\n"
+                markdown += "No hay información de décadas para álbumes de este país.\n\n"
+            
+            # Escuchas por año
+            if listen_years:
+                markdown += "## Escuchas por año\n\n"
+                markdown += "| Año | Escuchas |\n"
+                markdown += "|-----|----------|\n"
+                
+                for year, count in listen_years:
+                    markdown += f"| {year} | {count} |\n"
+                
+                markdown += "\n"
+            else:
+                markdown += "## Escuchas por año\n\n"
+                markdown += "No hay información de escuchas para artistas de este país.\n\n"
+            
+            # Establecer el texto markdown
+            info_text.setMarkdown(markdown)
+            
+            # Añadir el widget de texto al layout principal
+            main_layout.addWidget(info_text)
+            
+            # Asignar el widget principal al scroll area
+            scroll_area.setWidget(main_widget)
+            
+            # Añadir el scroll area al layout del contenedor
+            layout.addWidget(scroll_area)
+            
+        except Exception as e:
+            logging.error(f"Error al generar información del país: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+
+    def execute_query_safely(self, query, params=None, default_return=None):
+        """Safely execute a database query with error handling."""
+        if not self.ensure_db_connection():
+            return default_return
+            
+        try:
+            cursor = self.conn.cursor()
+            if params:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+            return cursor.fetchall()
+        except Exception as e:
+            logging.error(f"Error executing query: {e}")
+            logging.error(f"Query: {query}")
+            logging.error(f"Params: {params}")
+            import traceback
+            logging.error(traceback.format_exc())
+            return default_return
+
+    def format_decade_from_year(self, year_str):
+        """Safely convert a year string to a decade string like '1990s'."""
+        try:
+            if not year_str or len(year_str) < 4:
+                return "Desconocido"
+                
+            year = int(year_str[:4])  # Take first 4 chars and convert to int
+            decade = (year // 10) * 10
+            return f"{decade}s"
+        except (ValueError, TypeError):
+            return "Desconocido"
 
 # FEEDS 
 
@@ -3434,7 +4776,7 @@ class StatsModule(BaseModule):
                 self.change_category(index)
 
     def clear_layout(self, layout):
-        """Elimina todos los widgets de un layout de manera segura."""
+        """Safely removes all widgets from a layout."""
         if layout is None:
             return
         
@@ -3449,7 +4791,7 @@ class StatsModule(BaseModule):
                     self.clear_layout(item.layout())
                     item.layout().setParent(None)
         except Exception as e:
-            logging.error(f"Error en clear_layout: {e}")
+            logging.error(f"Error in clear_layout: {e}")
 
     def ensure_db_connection(self):
         """Asegura que hay una conexión activa a la base de datos."""
@@ -3521,20 +4863,20 @@ class StatsModule(BaseModule):
     def ensure_widget_has_layout(self, widget, layout_type=QVBoxLayout):
         """Ensures a widget has a layout without creating duplicates."""
         if widget is None:
-            logging.error("Widget es None en ensure_widget_has_layout")
+            logging.error("Widget is None in ensure_widget_has_layout")
             return None
         
-        # Check if widget has a layout
+        # Check if widget already has a layout
         layout = widget.layout()
         
         if layout is None:
-            # Create a new layout if there isn't one
-            logging.info(f"Creando nuevo layout para widget {widget.objectName()}")
+            # Create a new layout only if one doesn't exist
+            logging.info(f"Creating new layout for widget {widget.objectName()}")
             layout = layout_type()
             widget.setLayout(layout)
         else:
             # Use existing layout
-            logging.info(f"Usando layout existente para widget {widget.objectName()}")
+            logging.debug(f"Widget {widget.objectName()} already has a layout: {type(layout).__name__}")
         
         return layout
 
@@ -3726,3 +5068,27 @@ class StatsModule(BaseModule):
             import traceback
             logging.error(traceback.format_exc())
             return None
+
+
+    def safely_parse_tags(self, tags_string):
+        """Safely parse a tags string into a list of individual tags."""
+        if not tags_string or tags_string.strip() == '':
+            return []
+            
+        # Remove any characters that might cause JSON issues
+        try:
+            # Simple approach: split by comma and clean each tag
+            tags = []
+            for tag in tags_string.split(','):
+                clean_tag = tag.strip()
+                if clean_tag:
+                    tags.append(clean_tag)
+            return tags
+        except Exception as e:
+            logging.error(f"Error parsing tags string: {e}")
+            return []
+
+
+    def load_entity_type_stats(self):
+        """Load statistics about entity types with feeds (for main page)."""
+        self.FeedsSubmodule.load_entity_type_stats()

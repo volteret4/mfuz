@@ -30,3 +30,6 @@ test.mb-shm
 test.mb-wal
 tools/scripts_config.json
 tools/script_runner_settings.json
+.content/antiguo/config/config.yml
+db/FLAC_config_database_creator.json
+db/config_database_creator.json

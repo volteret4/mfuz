@@ -422,9 +422,8 @@ class TabManager(QMainWindow):
             /* Buttons */
             QPushButton {{
                 background-color: {theme['bg']};
-                border-radius: 25px;
-                padding: 8px 16px;
                 border: 2px;
+                border-radius: 19px;
             }}
             
             
@@ -432,7 +431,7 @@ class TabManager(QMainWindow):
                 background-color: {theme['button_hover']};
                 margin: 1px;
                 margin-top: 0px;
-                margin-bottom: 3px;
+                margin-bottom: 2px;
             }}
             
             QPushButton:pressed {{

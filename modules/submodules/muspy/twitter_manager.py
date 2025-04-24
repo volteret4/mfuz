@@ -2121,7 +2121,7 @@ class TwitterManager:
                 full_db_path = os.path.join(self.project_root, full_db_path)
             
             # Construir ruta al script
-            script_path = os.path.join(self.project_root, "base_datos", "tools", "consultar_items_db.py")
+            script_path = os.path.join(self.project_root, "db", "tools", "consultar_items_db.py")
             
             # Verificar si el script existe
             if not os.path.exists(script_path):
