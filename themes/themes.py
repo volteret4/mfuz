@@ -18,7 +18,7 @@ THEMES = {
         'info': '#7dcfff',            # Color informativo
         'disabled': '#565f89',        # Color para elementos deshabilitados
         'header_bg': '#1e2030',       # Color de fondo para encabezados
-        'alternate_row': '#171822',   # Color para filas alternas en tablas
+        'alternate_row': '#262b3f',   # Color para filas alternas en tablas
         'shadow': 'rgba(0, 0, 0, 0.4)', # Color para sombras
         'card_bg': '#24283b',         # Fondo de tarjetas (blanco puro)
         'icon_color': '#757575',      # Color de iconos (gris medio)
@@ -832,6 +832,9 @@ class ThemeEffects:
         """
         from PyQt6.QtCore import QTimer, QPropertyAnimation, QEasingCurve
         
+        # Obtener el tema actual del botón mediante su stylesheet
+        button_style = button.styleSheet()
+        
         # Guardar el estilo original
         original_stylesheet = button.styleSheet()
         
@@ -840,11 +843,25 @@ class ThemeEffects:
             if not hasattr(button, '_original_stylesheet'):
                 button._original_stylesheet = button.styleSheet()
             
+            # Obtener el color de acento del tema actual
+            # Esto extrae el color de acento del estilo del botón, o usa un color predeterminado
+            accent_color = "#7aa2f7"  # Valor predeterminado de Tokyo Night
+            bg_color = "#1a1b26"      # Valor predeterminado de Tokyo Night
+            
+            # Intentar encontrar el color de acento en el estilo o el estilo del padre
+            for stylesheet in [button.styleSheet(), button.parent().styleSheet() if button.parent() else ""]:
+                if "QPushButton:hover" in stylesheet and "background-color:" in stylesheet:
+                    import re
+                    match = re.search(r'background-color:\s*(#[0-9a-fA-F]{6})', stylesheet)
+                    if match:
+                        accent_color = match.group(1)
+                        break
+            
             # Aplicar estilo de presionado (simulando ripple)
             button.setStyleSheet(button._original_stylesheet + """
                 QPushButton {
-                    background-color: """ + theme['accent'] + """ !important;
-                    color: """ + theme['bg'] + """ !important;
+                    background-color: """ + accent_color + """ !important;
+                    color: #ffffff !important;
                 }
             """)
             

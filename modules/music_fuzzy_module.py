@@ -7,7 +7,7 @@ import sqlite3
 import json
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
-                           QLabel, QScrollArea, QSplitter, QSpinBox, QComboBox, 
+                           QLabel, QScrollArea, QSplitter, QSpinBox, QComboBox, QStackedWidget,
                            QTreeWidget, QTreeWidgetItem, QAbstractItemView,
                            QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
                            )
@@ -1923,7 +1923,8 @@ class MusicBrowser(BaseModule):
             if label:
                 label.setOpenExternalLinks(True)
                 label.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
-        
+                label.setVisible(True)  # Make sure labels are visible
+
         # Configurar los marcos de las imágenes
         for image_label in [self.cover_label, self.artist_image_label]:
             if image_label:
@@ -3303,36 +3304,46 @@ class MusicBrowser(BaseModule):
             else:
                 metadata += "No hay enlaces disponibles."
 
-            # Establecer texto en metadata_label
-            # if self.metadata_label:
-            #     self.metadata_label.setText(metadata)
-            #     self.metadata_label.setOpenExternalLinks(True)
-            
             # Configurar metadata con estilos específicos según tipo de información
             if self.metadata_label:
                 metadata = f"""
-                                <div class="metadata-container">
-                                    <h2>{artist_name or 'N/A'}</h2>
-                                    <div class="metadata-row"><span class="metadata-label">Artista:</span> {artist_name or 'N/A'}</div>                                    <div class="metadata-row"><span class="metadata-label">Album Artist:</span> {data[4] or 'N/A'}</div>
-                                    <div class="metadata-row"><span class="metadata-label">Álbum:</span> {album or 'N/A'}</div>
-                                    <div class="metadata-row"><span class="metadata-label">Fecha:</span> {data[6] or 'N/A'}</div>
-                                    <div class="metadata-row"><span class="metadata-label">Género:</span> {data[7] or 'N/A'}</div>
-                                    <div class="metadata-row"><span class="metadata-label">Sello:</span> {data[8] or 'N/A'}</div>
-                                    <div class="metadata-row"><span class="metadata-label">Bitrate:</span> {data[10] or 'N/A'} kbps</div>
-                                    <div class="metadata-row"><span class="metadata-label">Profundidad:</span> {data[11] or 'N/A'} bits</div>
-                                    <div class="metadata-row"><span class="metadata-label">Frecuencia:</span> {data[12] or 'N/A'} Hz</div>
-                                </div>
-                            """
-                # Crear metadata más elegante usando las clases CSS del tema
+                    <div class="metadata-container">
+                        <h2>{artist_name or 'N/A'}</h2>
+                        <div class="metadata-row"><span class="metadata-label">Artista:</span> {artist_name or 'N/A'}</div>
+                """
+                
+                # Añadir información adicional si está disponible
+                if artist_db_info:
+                    if artist_db_info.get('origin'):
+                        metadata += f'<div class="metadata-row"><span class="metadata-label">Origen:</span> {artist_db_info["origin"] or "N/A"}</div>'
+                    if artist_db_info.get('formed_year'):
+                        metadata += f'<div class="metadata-row"><span class="metadata-label">Año de formación:</span> {artist_db_info["formed_year"] or "N/A"}</div>'
+                    if artist_db_info.get('total_albums'):
+                        metadata += f'<div class="metadata-row"><span class="metadata-label">Total de álbumes:</span> {artist_db_info["total_albums"] or "N/A"}</div>'
+                    if artist_db_info.get('tags'):
+                        metadata += f'<div class="metadata-row"><span class="metadata-label">Etiquetas:</span> {artist_db_info["tags"] or "N/A"}</div>'
+                
+                # Contar álbumes desde el árbol
+                albums_count = artist_item.childCount()
+                if not artist_db_info or not artist_db_info.get('total_albums'):
+                    metadata += f'<div class="metadata-row"><span class="metadata-label">Álbumes encontrados:</span> {albums_count}</div>'
+                
+                metadata += "</div>"  # Close metadata-container
+                
                 # Añadir enlaces con estilo visual
                 metadata += "<div class='links-section'>"
                 metadata += "<h3>Enlaces del Artista:</h3>"
                 
-                # ... código existente para añadir enlaces ...
+                # Añadir enlaces del artista
+                if artist_links:
+                    metadata += '<div class="links-container">' + ' | '.join(artist_links) + '</div>'
+                else:
+                    metadata += '<div class="links-container">No hay enlaces disponibles.</div>'
                 
                 metadata += "</div>"
                 
                 self.metadata_label.setText(metadata)
+                self.metadata_label.setVisible(True)
             
             # Mostrar información del artista con estilo
             if self.lastfm_label:
@@ -3356,14 +3367,15 @@ class MusicBrowser(BaseModule):
                 info_text += f"<h3>Wikipedia - {artist}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
 
             # Asignar el contenido actualizado y gestionar visibilidad
-            if self.lastfm_label:
-                if info_text:
-                    self.lastfm_label.setText(info_text)
-                    self.lastfm_label.setVisible(True)
-                else:
-                    self.lastfm_label.setVisible(False)
+            # if self.lastfm_label:
+            #     if info_text:
+            #         self.lastfm_label.setText(info_text)
+            #         self.lastfm_label.setVisible(True)
+            #     else:
+            #         self.lastfm_label.setVisible(False)
                     
-            # Similar approach for other labels...
+            if hasattr(self, 'lastfm_label') and self.lastfm_label:
+                self.lastfm_label.setVisible(True)
             
             # For wikipedia_artist_label
             if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
@@ -3371,6 +3383,7 @@ class MusicBrowser(BaseModule):
                     self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
                     self.wikipedia_artist_label.setVisible(True)
                 else:
+                    self.wikipedia_artist_label.setText("")
                     self.wikipedia_artist_label.setVisible(False)
                     
             # For wikipedia_album_label
@@ -3383,11 +3396,13 @@ class MusicBrowser(BaseModule):
                     self.wikipedia_album_label.setText(f"<h3>Wikipedia - {album}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
                     self.wikipedia_album_label.setVisible(True)
                 else:
+                    self.wikipedia_album_label.setText("")
                     self.wikipedia_album_label.setVisible(False)
 
 
             # Actualizar otros labels si existen
             if hasattr(self, 'links_label') and self.links_label:
+                self.links_label.setVisible(True)
                 # Construir enlaces
                 links_text = "<h3>Enlaces:</h3>"
                 if artist_links:
