@@ -4,72 +4,82 @@ from pathlib import Path
 import os
 import traceback
 
-# Default themes
-THEMES = {
-    "Tokyo Night": {  # Tokyo Night
-        'bg': '#1a1b26',
-        'fg': '#a9b1d6',
-        'accent': '#7aa2f7',
-        'secondary_bg': '#24283b',
-        'border': '#414868',
-        'selection': '#364A82',
-        'button_hover': '#3d59a1'
-    },
-    "Solarized Dark": {  # Solarized Dark
-        'bg': '#002b36',
-        'fg': '#839496',
-        'accent': '#268bd2',
-        'secondary_bg': '#073642',
-        'border': '#586e75',
-        'selection': '#2d4b54',
-        'button_hover': '#4b6e83'
-    },
-    "Monokai": {  # Monokai
-        'bg': '#272822',
-        'fg': '#f8f8f2',
-        'accent': '#a6e22e',
-        'secondary_bg': '#3e3d32',
-        'border': '#75715e',
-        'selection': '#49483e',
-        'button_hover': '#5c6370'
-    },
-    "Catppuccin": {  # Catppuccin Mocha
-        'bg': '#1e1e2e',
-        'fg': '#cdd6f4',
-        'accent': '#89b4fa',
-        'secondary_bg': '#313244',
-        'border': '#6c7086',
-        'selection': '#45475a',
-        'button_hover': '#585b70'
-    },
-    "Dracula": {  # Dracula
-        'bg': '#282a36',
-        'fg': '#f8f8f2',
-        'accent': '#bd93f9',
-        'secondary_bg': '#44475a',
-        'border': '#6272a4',
-        'selection': '#44475a',
-        'button_hover': '#50fa7b'
-    },
-    "Nord": {  # Nord
-        'bg': '#2e3440',
-        'fg': '#eceff4',
-        'accent': '#88c0d0',
-        'secondary_bg': '#3b4252',
-        'border': '#4c566a',
-        'selection': '#434c5e',
-        'button_hover': '#5e81ac'
-    },
-    "Synthwave": {  # Synthwave
-        'bg': '#262335',
-        'fg': '#f8f8f2',
-        'accent': '#ff8adc',
-        'secondary_bg': '#3b315e',
-        'border': '#7d77a9',
-        'selection': '#4b3c83',
-        'button_hover': '#fe5f86'
+# Verificar si existe el módulo themes.py
+themes_path = Path(__file__).parent / "themes" / "themes.py"
+if themes_path.exists():
+    # Importar dinámicamente el módulo themes.py
+    spec = importlib.util.spec_from_file_location("themes", themes_path)
+    themes_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(themes_module)
+    THEMES = themes_module.THEMES
+    apply_theme_function = themes_module.apply_theme
+else:
+    # Definición de temas fallback si no existe themes.py
+    THEMES = {
+        "Tokyo Night": {  # Tokyo Night
+            'bg': '#1a1b26',
+            'fg': '#a9b1d6',
+            'accent': '#7aa2f7',
+            'secondary_bg': '#24283b',
+            'border': '#414868',
+            'selection': '#364A82',
+            'button_hover': '#3d59a1'
+        },
+        "Solarized Dark": {  # Solarized Dark
+            'bg': '#002b36',
+            'fg': '#839496',
+            'accent': '#268bd2',
+            'secondary_bg': '#073642',
+            'border': '#586e75',
+            'selection': '#2d4b54',
+            'button_hover': '#4b6e83'
+        },
+        "Monokai": {  # Monokai
+            'bg': '#272822',
+            'fg': '#f8f8f2',
+            'accent': '#a6e22e',
+            'secondary_bg': '#3e3d32',
+            'border': '#75715e',
+            'selection': '#49483e',
+            'button_hover': '#5c6370'
+        },
+        "Catppuccin": {  # Catppuccin Mocha
+            'bg': '#1e1e2e',
+            'fg': '#cdd6f4',
+            'accent': '#89b4fa',
+            'secondary_bg': '#313244',
+            'border': '#6c7086',
+            'selection': '#45475a',
+            'button_hover': '#585b70'
+        },
+        "Dracula": {  # Dracula
+            'bg': '#282a36',
+            'fg': '#f8f8f2',
+            'accent': '#bd93f9',
+            'secondary_bg': '#44475a',
+            'border': '#6272a4',
+            'selection': '#44475a',
+            'button_hover': '#50fa7b'
+        },
+        "Nord": {  # Nord
+            'bg': '#2e3440',
+            'fg': '#eceff4',
+            'accent': '#88c0d0',
+            'secondary_bg': '#3b4252',
+            'border': '#4c566a',
+            'selection': '#434c5e',
+            'button_hover': '#5e81ac'
+        },
+        "Synthwave": {  # Synthwave
+            'bg': '#262335',
+            'fg': '#f8f8f2',
+            'accent': '#ff8adc',
+            'secondary_bg': '#3b315e',
+            'border': '#7d77a9',
+            'selection': '#4b3c83',
+            'button_hover': '#fe5f86'
+        }
     }
-}
 class BaseModule(QWidget):
     """Clase base para todos los módulos."""
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
@@ -158,112 +168,121 @@ class BaseModule(QWidget):
 
     def apply_theme(self, theme_name: Optional[str] = None):
         """
-        Universal theme application method.
+        Aplica un tema al módulo usando el sistema centralizado de temas.
         
         Args:
-            theme_name (str, optional): Name of the theme to apply. 
-                                        If None, uses the current theme.
+            theme_name (str, optional): Nombre del tema a aplicar. 
+                                        Si es None, usa el tema actual.
         """
-        # Update current theme if a new theme is provided
+        # Actualizar el tema actual si se proporciona uno nuevo
         if theme_name is not None:
             self.current_theme = theme_name
 
-        # Ensure the theme exists, fallback to default if not
+        # Asegurar que el tema existe, usar el primero por defecto si no
         if self.current_theme not in self.themes:
             self.current_theme = list(self.themes.keys())[0]
 
-        # Get the current theme dictionary
+        # Usar el sistema de temas centralizado si está disponible
+        try:
+            # Si estamos en un entorno con themes.py cargado
+            if 'apply_theme_function' in globals():
+                # Añadir objectName al widget si no lo tiene para facilitar estilos específicos
+                if not self.objectName():
+                    self.setObjectName(self.__class__.__name__.lower())
+                    
+                # Usar la función centralizada
+                apply_theme_function(self, self.current_theme)
+                return
+        except Exception as e:
+            print(f"Error al aplicar tema centralizado: {e}")
+            pass
+        
+        # Fallback al método anterior si el sistema centralizado falla
         theme = self.themes[self.current_theme]
-
-        # The base module should have more minimal styling to avoid conflicts
-        # when it's included in TabManager
-        # self.setStyleSheet(f"""
-        #     /* Base styles - kept minimal to avoid conflicts */
-        #     QLabel {{
-        #         color: {theme['fg']};
-        #     }}
+        
+        # Aplicar estilo base reducido
+        self.setStyleSheet(f"""
+            /* Estilos básicos - para compatibilidad */
+            QLabel {{
+                color: {theme['fg']};
+            }}
             
-        #     /* Custom module-specific styling - use class selectors */
-        #     .custom-widget {{
-        #         background-color: {theme['secondary_bg']};
-        #         color: {theme['fg']};
-                
-        #     }}
-        # """)
+            QPushButton {{
+                background-color: {theme['secondary_bg']};
+                color: {theme['fg']};
+                border: 1px solid {theme['border']};
+                border-radius: 4px;
+                padding: 5px;
+            }}
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+            }}
+        """)
 
-        # Recursive theme application to child widgets
+        # Aplicar tema a widgets hijos específicos
         self._apply_theme_to_children(self, theme)
 
     def _apply_theme_to_children(self, parent, theme):
         """
-        Recursively apply theme to child widgets with special handling for specific widget types
+        Aplica recursivamente el tema a los widgets hijos.
+        Este método ahora es de respaldo, el sistema principal está en themes.py.
         
         Args:
-            parent (QWidget): Parent widget to start theme application
-            theme (dict): Theme dictionary
+            parent (QWidget): Widget padre para iniciar la aplicación del tema
+            theme (dict): Diccionario de colores del tema
         """
         for child in parent.findChildren(QWidget):
             try:
-                # First call custom apply_theme if available
+                # Asignar objectName si no lo tiene
+                if not child.objectName() and child.__class__.__name__ in ['QTableWidget', 'QTableView', 'QTreeWidget', 'QPushButton', 'QFrame']:
+                    # Generar un nombre basado en la clase y un contador
+                    child_type = child.__class__.__name__.lower()
+                    child.setObjectName(f"{child_type}_{id(child) % 10000}")
+                
+                # Primero llamar a apply_theme si el widget lo tiene
                 if hasattr(child, 'apply_theme'):
                     child.apply_theme(self.current_theme)
                     continue
                     
-                # Special handling for specific widget types
-                widget_type = child.__class__.__name__
+                # Aplicar estilos específicos solo para ciertos tipos de widgets
+                # como medida de compatibilidad
+                if isinstance(child, (QTableWidget, QTableView)):
+                    child.setStyleSheet(f"""
+                        QTableWidget, QTableView {{
+                            background-color: {theme['secondary_bg']};
+                            color: {theme['fg']};
+                            gridline-color: {theme['border']};
+                            border: none;
+                        }}
+                        
+                        QHeaderView::section {{
+                            background-color: {theme['secondary_bg']};
+                            color: {theme['fg']};
+                            border: 1px solid {theme['border']};
+                        }}
+                    """)
                     
-                # # Apply specific styling for various widget types
-                # if hasattr(child, 'setStyleSheet'):
-                #     # Using direct style application for better specificity
-                #     if isinstance(child, QTableWidget) or isinstance(child, QTableView):
-                #         child.setStyleSheet(f"""
-                #             QTableWidget, QTableView {{
-                #                 background-color: {theme['secondary_bg']};
-                #                 color: {theme['fg']};
-                #                 gridline-color: {theme['border']};
-                #                 border: none;
-                #             }}
-                #         """)
-                #         # Adjust header properties
-                #         if hasattr(child, 'horizontalHeader') and hasattr(child, 'verticalHeader'):
-                #             child.horizontalHeader().setStyleSheet(f"""
-                #                 QHeaderView::section {{
-                #                     background-color: {theme['secondary_bg']};
-                #                     color: {theme['fg']};
-                #                     border: 1px solid {theme['border']};
-                #                 }}
-                #             """)
-                #             child.verticalHeader().setStyleSheet(f"""
-                #                 QHeaderView::section {{
-                #                     background-color: {theme['secondary_bg']};
-                #                     color: {theme['fg']};
-                #                     border: 1px solid {theme['border']};
-                #                 }}
-                #             """)
+                    # Configuración adicional para tablas
+                    if hasattr(child, 'setAlternatingRowColors'):
+                        child.setAlternatingRowColors(True)
                     
-                #     # Progress bars need special handling for chunks
-                #     elif isinstance(child, QProgressBar):
-                #         child.setStyleSheet(f"""
-                #             QProgressBar {{
-                #                 text-align: center;
-                #                 border: 1px solid {theme['border']};
-                #                 border-radius: 3px;
-                #                 background-color: {theme['secondary_bg']};
-                #                 color: {theme['fg']};
-                #             }}
-                #             QProgressBar::chunk {{
-                #                 background-color: {theme['accent']};
-                #             }}
-                #         """)
+                elif isinstance(child, QProgressBar):
+                    child.setStyleSheet(f"""
+                        QProgressBar {{
+                            text-align: center;
+                            border: 1px solid {theme['border']};
+                            border-radius: 3px;
+                            background-color: {theme['secondary_bg']};
+                            color: {theme['fg']};
+                        }}
+                        QProgressBar::chunk {{
+                            background-color: {theme['accent']};
+                        }}
+                    """)
                     
-                #     # Apply theme to frames and containers
-                #     elif isinstance(child, QFrame) or isinstance(child, QGroupBox):
-                #         child.setStyleSheet(f"""
-                #             border: none;
-                #             background-color: {theme['bg']};
-                #         """)
             except Exception as e:
-                print(f"Warning: Could not apply theme to {child}: {e}")
+                print(f"Advertencia: No se pudo aplicar el tema a {child}: {e}")
 
     def set_tab_manager(self, tab_manager):
         """Establece la referencia al gestor de pestañas y actualiza el registro de módulos"""
