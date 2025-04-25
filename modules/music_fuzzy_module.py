@@ -25,6 +25,7 @@ import traceback
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT  # Importar la clase base
 import resources_rc
+from tools.music_fuzzy.collapsible_groupbox import CollapsibleGroupBox
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -246,6 +247,20 @@ class MusicBrowser(BaseModule):
         self.advanced_buttons = []
         self.ui_components_loaded = {'main': False, 'tree': False, 'info': False, 'advanced': False}
 
+        # Initialize additional attributes for collapsible groupboxes
+        self.info_groupboxes = {}
+        self.feeds_button = None
+        self.back_button = None
+        
+        # Initialize references to UI elements that might not exist
+        self.artist_links_group = None
+        self.album_links_group = None
+        self.artist_links_layout = None
+        self.album_links_layout = None
+        self.info_groupboxes = {}
+        self.feeds_button = None
+        self.back_button = None
+        
         # Llamar al constructor de la clase padre con los argumentos restantes
         super().__init__(parent=parent, theme=theme, **kwargs)
 
@@ -2134,6 +2149,68 @@ class MusicBrowser(BaseModule):
                 if hasattr(self, 'album_links_group'):
                     self.album_links_group.hide()
 
+            # Update info groupboxes based on data
+            self.update_info_groupboxes(data)
+            
+            # Get entity type and ID for feeds
+            entity_type = None
+            entity_id = None
+            
+            if isinstance(data, dict):
+                # Is an artist or album
+                if data.get('type') == 'artist':
+                    entity_type = 'artist'
+                    entity_id = self.get_artist_id_from_name(data.get('name'))
+                elif data.get('type') == 'album':
+                    entity_type = 'album'
+                    entity_id = self.get_album_id_from_name(data.get('name'), data.get('artist'))
+            else:
+                # Is a song
+                if len(data) > 0 and data[0]:
+                    entity_type = 'song'
+                    entity_id = data[0]
+                    
+            # Get feeds data if we have entity info
+            if entity_type and entity_id:
+                feeds = self.get_feeds_data(entity_type, entity_id)
+                if feeds:
+                    # Create feed groupboxes in the second page of stacked widget
+                    feeds_container = self.main_ui.info_panel_stacked.widget(1)
+                    self.create_feed_groupboxes(feeds_container, feeds)
+                    
+                    # If we have feeds, add a "Show Feeds" button
+                    if not hasattr(self, 'feeds_button'):
+                        self.feeds_button = QPushButton("Ver Feeds")
+                        self.feeds_button.setObjectName("feeds_button")
+                        self.feeds_button.clicked.connect(lambda: self.switch_info_panel(1))
+                        
+                        # Add button to the first page of stacked widget
+                        info_page = self.main_ui.info_panel_stacked.widget(0)
+                        if info_page.layout():
+                            info_page.layout().addWidget(self.feeds_button)
+                    
+                    self.feeds_button.setVisible(True)
+                else:
+                    # No feeds available, hide button if exists
+                    if hasattr(self, 'feeds_button'):
+                        self.feeds_button.setVisible(False)
+                        
+                # Create "Back to Info" button in feeds page
+                if not hasattr(self, 'back_button'):
+                    self.back_button = QPushButton("Volver a Info")
+                    self.back_button.setObjectName("back_button")
+                    self.back_button.clicked.connect(lambda: self.switch_info_panel(0))
+                    
+                    # Add button to the second page of stacked widget
+                    feeds_page = self.main_ui.info_panel_stacked.widget(1)
+                    if feeds_page.layout():
+                        feeds_page.layout().insertWidget(0, self.back_button)
+                
+            # Ensure we're on the first page initially
+            self.switch_info_panel(0)
+
+
+
         except Exception as e:
             # manejar la excepción
             print(f"Error en show_details: {e}")
@@ -2417,11 +2494,26 @@ class MusicBrowser(BaseModule):
             self.wikipedia_album_label.setText("")
             self.wikipedia_album_label.setVisible(False)  # Ocultar hasta que tenga contenido
 
-        # Ocultar contenedores de botones de enlaces
-        if hasattr(self, 'artist_links_group'):
+        # Ocultar contenedores de botones de enlaces - AÑADIR COMPROBACIONES
+        if hasattr(self, 'artist_links_group') and self.artist_links_group:
             self.artist_links_group.hide()
-        if hasattr(self, 'album_links_group'):
+        
+        if hasattr(self, 'album_links_group') and self.album_links_group:
             self.album_links_group.hide()
+
+        # Si tenemos GroupBoxes colapsables, resetearlos
+        if hasattr(self, 'info_groupboxes'):
+            for groupbox_name, groupbox in self.info_groupboxes.items():
+                if groupbox:
+                    groupbox.setVisible(False)
+
+        # Ocultar botones de feed si existen
+        if hasattr(self, 'feeds_button') and self.feeds_button:
+            self.feeds_button.setVisible(False)
+            
+        # Asegurarnos de estar en el panel principal
+        if hasattr(self, 'main_ui') and hasattr(self.main_ui, 'info_panel_stacked'):
+            self.main_ui.info_panel_stacked.setCurrentIndex(0)
 
         # Forzar actualización visual
         QApplication.processEvents()
@@ -3550,50 +3642,70 @@ class MusicBrowser(BaseModule):
         """Initializes the link button containers."""
         try:
             # Find the group boxes for artist and album links
-            self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
-            self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
+            self.artist_links_group = None
+            self.album_links_group = None
             
+            if hasattr(self, 'main_ui'):
+                self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
+                self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
+            
+            # If the UI doesn't have these elements, we won't use them
             if not self.artist_links_group:
-                print("Warning: artist_links_group not found in UI")
-                return False
+                print("Nota: artist_links_group no encontrado en UI")
                 
             if not self.album_links_group:
-                print("Warning: album_links_group not found in UI")
-                return False
+                print("Nota: album_links_group no encontrado en UI")
             
-            # Create layouts for the group boxes
-            if self.artist_links_group.layout():
-                # Use existing layout if it exists
-                self.artist_links_layout = self.artist_links_group.layout()
+            # Only setup layouts if the groups exist
+            if self.artist_links_group:
+                if self.artist_links_group.layout():
+                    # Use existing layout if it exists
+                    self.artist_links_layout = self.artist_links_group.layout()
+                else:
+                    # Create a new vertical layout (will contain our flow layout)
+                    self.artist_links_layout = QVBoxLayout(self.artist_links_group)
+                    self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
+                    self.artist_links_layout.setSpacing(0)
             else:
-                # Create a new vertical layout (will contain our flow layout)
-                self.artist_links_layout = QVBoxLayout(self.artist_links_group)
-                self.artist_links_layout.setContentsMargins(5, 5, 5, 5)
-                self.artist_links_layout.setSpacing(0)
+                self.artist_links_layout = None
                 
-            if self.album_links_group.layout():
-                # Use existing layout if it exists
-                self.album_links_layout = self.album_links_group.layout()
+            if self.album_links_group:
+                if self.album_links_group.layout():
+                    # Use existing layout if it exists
+                    self.album_links_layout = self.album_links_group.layout()
+                else:
+                    # Create a new vertical layout (will contain our flow layout)
+                    self.album_links_layout = QVBoxLayout(self.album_links_group)
+                    self.album_links_layout.setContentsMargins(5, 25, 5, 5)
+                    self.album_links_layout.setSpacing(0)
             else:
-                # Create a new vertical layout (will contain our flow layout)
-                self.album_links_layout = QVBoxLayout(self.album_links_group)
-                self.album_links_layout.setContentsMargins(5, 5, 5, 5)
-                self.album_links_layout.setSpacing(0)
-                
+                self.album_links_layout = None
+                    
             # Store references to buttons
             self.artist_buttons = {}
             self.album_buttons = {}
             
-            # Hide groups initially
-            self.artist_links_group.hide()
-            self.album_links_group.hide()
+            # Hide groups initially if they exist
+            if self.artist_links_group:
+                self.artist_links_group.hide()
+            if self.album_links_group:
+                self.album_links_group.hide()
             
-            print("Link button containers initialized successfully")
+            print("Inicialización de contenedores de botones de enlaces completada")
             return True
         except Exception as e:
-            print(f"Error setting up link button containers: {e}")
+            print(f"Error en setup_link_buttons_container: {e}")
             import traceback
             traceback.print_exc()
+            
+            # Ensure we have null references instead of uninitialized ones
+            self.artist_links_group = None
+            self.album_links_group = None
+            self.artist_links_layout = None
+            self.album_links_layout = None
+            self.artist_buttons = {}
+            self.album_buttons = {}
+            
             return False
 
     def update_dynamic_link_buttons(self, container, layout, links_dict, button_store, tipo=None):
@@ -3714,6 +3826,9 @@ class MusicBrowser(BaseModule):
         Args:
             artist_links (dict): Dictionary of artist links {service_name: url}
         """
+        if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
+            return False
+            
         tipo = 'artist'
         return self.update_dynamic_link_buttons(
             self.artist_links_group, 
@@ -3730,6 +3845,9 @@ class MusicBrowser(BaseModule):
         Args:
             album_links (dict): Dictionary of album links {service_name: url}
         """
+        if not hasattr(self, 'album_links_group') or not self.album_links_group:
+            return False
+            
         tipo = 'album'
         return self.update_dynamic_link_buttons(
             self.album_links_group, 
@@ -3738,7 +3856,334 @@ class MusicBrowser(BaseModule):
             self.album_buttons,
             tipo
         )
+# FEEDS!!
+
+
+    def create_feed_groupboxes(self, parent_widget, feeds_data):
+        """
+        Creates collapsible groupboxes for each feed
         
+        Args:
+            parent_widget: Widget where to add the groupboxes
+            feeds_data: List of dictionaries with feed data
+        """
+        # Clear existing widgets
+        layout = parent_widget.layout()
+        if layout:
+            while layout.count():
+                item = layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+        else:
+            layout = QVBoxLayout(parent_widget)
+            layout.setContentsMargins(0, 0, 0, 0)
+            layout.setSpacing(8)
+        
+        # Create a groupbox for each feed
+        for feed in feeds_data:
+            feed_title = feed.get('feed_name', 'Unknown Feed')
+            feed_content = feed.get('content', '')
+            
+            if not feed_content.strip():
+                continue  # Skip empty feeds
+            
+            # Create collapsible groupbox
+            groupbox = CollapsibleGroupBox(feed_title)
+            
+            # Create content label
+            from PyQt6.QtWidgets import QLabel
+            content_label = QLabel(feed_content)
+            content_label.setWordWrap(True)
+            content_label.setTextFormat(Qt.TextFormat.RichText)
+            content_label.setOpenExternalLinks(True)
+            
+            # Add label to groupbox
+            groupbox.add_widget(content_label)
+            
+            # Add groupbox to parent layout
+            layout.addWidget(groupbox)
+        
+        # Add stretch at the end to push everything to the top
+        layout.addStretch()
+
+    def update_info_groupboxes(self, item_data):
+        """
+        Updates the visibility and content of all info groupboxes
+        based on available data
+        
+        Args:
+            item_data: Data of the current selected item
+        """
+        # Get references to all groupboxes
+        if not hasattr(self, "info_groupboxes"):
+            # Create dictionary of groupboxes for first-time run
+            from PyQt6.QtWidgets import QGroupBox
+            self.info_groupboxes = {}
+            
+            # Find all QGroupBox objects in the stacked widget's first page
+            info_page = self.main_ui.info_panel_stacked.widget(0)
+            for groupbox in info_page.findChildren(QGroupBox):
+                self.info_groupboxes[groupbox.objectName()] = groupbox
+                
+                # Convert each groupbox to CollapsibleGroupBox
+                self.convert_to_collapsible(groupbox)
+        
+        # Update artist bio groupbox
+        artist_bio = None
+        if isinstance(item_data, dict) and item_data.get('bio'):
+            artist_bio = item_data.get('bio')
+        elif isinstance(item_data, (list, tuple)) and len(item_data) > 15:
+            artist_bio = item_data[15]
+            
+        artist_bio_box = self.info_groupboxes.get('artist_bio_group')
+        if artist_bio_box:
+            self.update_groupbox_content(
+                artist_bio_box, 
+                artist_bio,
+                "lastfm_label"
+            )
+        
+        # Update artist wikipedia groupbox
+        artist_wiki = None
+        if isinstance(item_data, dict) and item_data.get('wikipedia_content'):
+            artist_wiki = item_data.get('wikipedia_content')
+        elif isinstance(item_data, (list, tuple)) and len(item_data) > 27:
+            artist_wiki = item_data[27]
+            
+        artist_wiki_box = self.info_groupboxes.get('artist_wiki_group')
+        if artist_wiki_box:
+            self.update_groupbox_content(
+                artist_wiki_box, 
+                artist_wiki,
+                "wikipedia_artist_label"
+            )
+        
+        # Update album wikipedia groupbox
+        album_wiki = None
+        if isinstance(item_data, dict) and item_data.get('wikipedia_content'):
+            album_wiki = item_data.get('wikipedia_content')
+        elif isinstance(item_data, (list, tuple)) and len(item_data) > 29:
+            album_wiki = item_data[29]
+            
+        album_wiki_box = self.info_groupboxes.get('album_wiki_group')
+        if album_wiki_box:
+            self.update_groupbox_content(
+                album_wiki_box, 
+                album_wiki,
+                "wikipedia_album_label"
+            )
+        
+        # Update lyrics groupbox
+        lyrics = None
+        lyrics_source = "Unknown"
+        if isinstance(item_data, (list, tuple)) and len(item_data) > 30:
+            lyrics = item_data[30]
+            if len(item_data) > 31 and item_data[31]:
+                lyrics_source = item_data[31]
+                
+        lyrics_box = self.info_groupboxes.get('lyrics_group')
+        if lyrics_box:
+            content = lyrics
+            if lyrics and lyrics_source:
+                content = f"{lyrics}\n\nFuente: {lyrics_source}"
+                
+            self.update_groupbox_content(
+                lyrics_box, 
+                content,
+                "lyrics_label"
+            )
+
+    def convert_to_collapsible(self, groupbox):
+        """
+        Converts a standard QGroupBox to a CollapsibleGroupBox
+        preserving its content and properties
+        
+        Args:
+            groupbox: QGroupBox to convert
+        """
+        if isinstance(groupbox, CollapsibleGroupBox):
+            return groupbox  # Already converted
+            
+        # Get properties
+        title = groupbox.title()
+        parent = groupbox.parentWidget()
+        geometry = groupbox.geometry()
+        object_name = groupbox.objectName()
+        stylesheet = groupbox.styleSheet()
+        
+        # Get layout and remove groupbox from parent
+        original_layout = groupbox.layout()
+        layout_items = []
+        
+        if original_layout:
+            # Store all layout items
+            for i in range(original_layout.count()):
+                item = original_layout.itemAt(i)
+                layout_items.append(item)
+        
+        # Create new collapsible groupbox
+        new_groupbox = CollapsibleGroupBox(title, parent)
+        new_groupbox.setObjectName(object_name)
+        new_groupbox.setGeometry(geometry)
+        new_groupbox.setStyleSheet(stylesheet)
+        
+        # Add original widgets to new groupbox
+        for item in layout_items:
+            if item.widget():
+                new_groupbox.add_widget(item.widget())
+            elif item.layout():
+                new_groupbox.add_layout(item.layout())
+        
+        # Remove old groupbox
+        groupbox.setParent(None)
+        groupbox.deleteLater()
+        
+        # Replace reference in dictionary
+        self.info_groupboxes[object_name] = new_groupbox
+        
+        return new_groupbox
+
+    def update_groupbox_content(self, groupbox, content, label_name=None):
+        """
+        Updates the content of a groupbox and shows/hides based on content
+        
+        Args:
+            groupbox: QGroupBox to update
+            content: Content to set
+            label_name: Name of label widget inside groupbox
+        """
+        if not content:
+            groupbox.setVisible(False)
+            return
+            
+        # Find the label inside the groupbox
+        if label_name:
+            label = None
+            # First check if we already have a reference
+            if hasattr(self, label_name):
+                label = getattr(self, label_name)
+            else:
+                # Otherwise, find the label in groupbox children
+                label = groupbox.findChild(QLabel, label_name)
+                if label:
+                    setattr(self, label_name, label)
+            
+            if label:
+                # Set content to label
+                label.setText(content)
+        
+        # Show groupbox
+        groupbox.setVisible(True)
+
+
+    def switch_info_panel(self, panel_index):
+        """
+        Switches the info panel to the specified index
+        
+        Args:
+            panel_index: Index of the panel to switch to (0 for main info, 1 for feeds)
+        """
+        if hasattr(self.main_ui, 'info_panel_stacked'):
+            self.main_ui.info_panel_stacked.setCurrentIndex(panel_index)
+            
+    def get_feeds_data(self, entity_type, entity_id):
+        """
+        Retrieves feeds data for an entity from the database
+        
+        Args:
+            entity_type: Type of entity ('artist', 'album', 'song')
+            entity_id: ID of the entity
+            
+        Returns:
+            list: List of dictionaries with feed data
+        """
+        if not self.db_path or not entity_id:
+            return []
+            
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Query feeds table
+            query = """
+                SELECT id, feed_name, post_title, post_url, post_date, content, added_date
+                FROM feeds
+                WHERE entity_type = ? AND entity_id = ?
+                ORDER BY post_date DESC
+            """
+            
+            cursor.execute(query, (entity_type, entity_id))
+            rows = cursor.fetchall()
+            
+            conn.close()
+            
+            # Convert to list of dictionaries
+            feeds = []
+            for row in rows:
+                feed = {
+                    'id': row[0],
+                    'feed_name': row[1],
+                    'post_title': row[2],
+                    'post_url': row[3],
+                    'post_date': row[4],
+                    'content': row[5],
+                    'added_date': row[6]
+                }
+                feeds.append(feed)
+                
+            return feeds
+            
+        except Exception as e:
+            print(f"Error fetching feeds data: {e}")
+            return []
+
+    def get_artist_id_from_name(self, artist_name):
+        """Get artist ID from the database using artist name"""
+        if not self.db_path or not artist_name:
+            return None
+            
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT id FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
+            result = cursor.fetchone()
+            
+            conn.close()
+            
+            return result[0] if result else None
+        except Exception as e:
+            print(f"Error getting artist ID: {e}")
+            return None
+
+    def get_album_id_from_name(self, album_name, artist_name=None):
+        """Get album ID from the database using album name and artist name"""
+        if not self.db_path or not album_name:
+            return None
+            
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            if artist_name:
+                # Get artist ID first
+                artist_id = self.get_artist_id_from_name(artist_name)
+                if artist_id:
+                    cursor.execute("SELECT id FROM albums WHERE LOWER(name) = LOWER(?) AND artist_id = ?", 
+                                (album_name, artist_id))
+            else:
+                cursor.execute("SELECT id FROM albums WHERE LOWER(name) = LOWER(?)", (album_name,))
+                
+            result = cursor.fetchone()
+            
+            conn.close()
+            
+            return result[0] if result else None
+        except Exception as e:
+            print(f"Error getting album ID: {e}")
+            return None
+
+
 if __name__ == '__main__':
     import argparse
 
