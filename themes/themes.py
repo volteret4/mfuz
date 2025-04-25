@@ -652,8 +652,27 @@ def get_stylesheet(theme_name):
         padding: 0;
     }}
     
+        /* Botones circulares con iconos */
+    #allmusic_link_button, #bc_link_button, #soundcloud_link_button, #yt_link_button, #spot_link_button, #vimeo_link_button
+    #boomkat_link_button, #juno_link_button, #discogs_link_button, #imdb_link_button, #lastfm_link_button, #mb_link_button,
+    #prog_link_button, #rym_link_button, #ra_link_button, #setlist_link_button, #wiki_link_button, #whosampled_link_button,
+    #bluesky_link_button, #fb_link_button, #ig_link_button, #mastodon_link_button, #myspace_link_button, #twitter_link_button, #tumblr_link_button   {{
+        background-color: {theme['secondary_bg']};
+        border: none;
+        border-radius: 17px;
+        min-width: 34px;
+        min-height: 34px;
+        max-width: 34px;
+        max-height: 34px;
+        padding: 0;
+    }}
+
     #play_button:hover, #folder_button:hover, #spotify_button:hover, #scrobble_button:hover, 
-    #jaangle_button:hover, #extra_button:hover {{
+    #jaangle_button:hover, #extra_button:hover,
+    #allmusic_link_button:hover, #bc_link_button:hover, #soundcloud_link_button:hover, #yt_link_button:hover, #spot_link_button:hover, #vimeo_link_button:hover
+    #boomkat_link_button:hover, #juno_link_button:hover, #discogs_link_button:hover, #imdb_link_button:hover, #lastfm_link_button:hover, #mb_link_button:hover,
+    #prog_link_button:hover, #rym_link_button:hover, #ra_link_button:hover, #setlist_link_button:hover, #wiki_link_button:hover, #whosampled_link_button:hover,
+    #bluesky_link_button:hover, #fb_link_button:hover, #ig_link_button:hover, #mastodon_link_button:hover, #myspace_link_button:hover, #twitter_link_button:hover, #tumblr_link_button:hover {{
         background-color: {theme['button_hover']};
         border: 1px solid {theme['accent']};
     }}

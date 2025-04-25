@@ -8,11 +8,11 @@ import json
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
                            QLabel, QScrollArea, QSplitter, QSpinBox, QComboBox, QStackedWidget,
-                           QTreeWidget, QTreeWidgetItem, QAbstractItemView,
+                           QTreeWidget, QTreeWidgetItem, QAbstractItemView, 
                            QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
                            )
-from PyQt6.QtCore import Qt, QDate
-from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence
+from PyQt6.QtCore import Qt, QDate, QSize
+from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence, QIcon
 import subprocess
 import importlib.util
 import glob
@@ -315,11 +315,7 @@ class MusicBrowser(BaseModule):
             self._fallback_setup_info_widget()
 
         # Crear y configurar el frame de enlaces
-        self.links_frame = self.create_links_frame()
-        # Añadirlo al layout principal donde corresponda
-        # Por ejemplo, si info_widget tiene un layout:
-        if hasattr(self, 'info_widget') and self.info_widget:
-            self.info_widget.layout().addWidget(self.links_frame)
+        self.setup_link_buttons_container()
 
         # Configuración común
         # Una vez configuradas todas las referencias
@@ -1734,89 +1730,38 @@ class MusicBrowser(BaseModule):
                 self.metadata_label.setText(metadata)
                 self.metadata_label.setVisible(True)
 
-            # En show_album_info, después de obtener first_track_data (que ya está en tu código)
-
-            # 2. LINKS LABEL (Enlaces del artista y del álbum)
-            # Preparar enlaces
+            # 2. Extracting links for album and artist
             album_links = {}
             artist_links = {}
 
-            # Extraer enlaces del álbum
+            # Extract album links
             if album_db_info:
                 album_links = self.extract_links_from_data(album_db_info, 'album')
             elif first_track_data and len(first_track_data) > 21:
-                # Usar first_track_data como respaldo (ya está definido en tu método)
                 album_links = self.extract_links_from_data(first_track_data, 'album')
 
-            # Extraer enlaces del artista
+            # Extract artist links
             if artist_db_info:
                 artist_links = self.extract_links_from_data(artist_db_info, 'artist')
                 
-                # Añadir enlaces de la tabla artists_networks si existe el ID del artista
+                # Add links from artists_networks if artist ID exists
                 if artist_db_info.get('id'):
                     network_links = self.get_artist_networks(artist_db_info['id'])
                     artist_links.update(network_links)
-                    
             elif first_track_data and len(first_track_data) > 16:
-                # Usar first_track_data como respaldo (ya está definido en tu método)
                 artist_links = self.extract_links_from_data(first_track_data, 'artist')
 
-            # Mostrar enlaces organizados en el panel de enlaces
-            if hasattr(self, 'links_label') and self.links_label:
-                links_text = "<h3>Enlaces:</h3>"
-                has_any_links = False
+            # Update link buttons
+            self.update_artist_link_buttons(artist_links)
+            self.update_album_link_buttons(album_links)
 
-                # Añadir enlaces del álbum si existen
-                if album_links:
-                    links_text += self.get_formatted_links(album_links, 'álbum', album_name)
-                    has_any_links = True
-
-                # Añadir enlaces del artista si existen
-                if artist_links:
-                    links_text += self.get_formatted_links(artist_links, 'artista', artist_name)
-                    has_any_links = True
-
-                # Mostrar/ocultar el panel según haya enlaces
-                if has_any_links:
-                    self.links_label.setText(links_text)
-                    self.links_label.setVisible(True)
-                else:
-                    self.links_label.setVisible(False)
-
-            # 3. WIKIPEDIA ARTIST LABEL
-            # Variables para controlar si mostrar cada panel
-            has_artist_wiki = False
-            has_album_wiki = False
-            has_artist_bio = False
-
-            # Priorizar contenido de Wikipedia de la base de datos del artista
-            artist_wiki_content = None
-            if artist_db_info and artist_db_info.get('wikipedia_content'):
-                artist_wiki_content = artist_db_info['wikipedia_content']
-                has_artist_wiki = True
-            elif first_track_data and len(first_track_data) > 27 and first_track_data[27]:
-                artist_wiki_content = first_track_data[27]
-                has_artist_wiki = True
-
-            # Mostrar/ocultar panel de Wikipedia del artista
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                if artist_wiki_content:
-                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{artist_wiki_content}</div>")
-                    self.wikipedia_artist_label.setVisible(True)
-                else:
-                    self.wikipedia_artist_label.setVisible(False)
-
-            # 4. LASTFM LABEL
-            # Obtener bio del artista
+            # 3. LASTFM LABEL (Bio del artista)
             artist_bio = None
             if artist_db_info and artist_db_info.get('bio'):
                 artist_bio = artist_db_info['bio']
-                has_artist_bio = True
             elif first_track_data and len(first_track_data) > 15 and first_track_data[15]:
                 artist_bio = first_track_data[15]
-                has_artist_bio = True
 
-            # Mostrar/ocultar panel de información del artista
             if self.lastfm_label:
                 if artist_bio and artist_bio != "No hay información del artista disponible":
                     self.lastfm_label.setText(f"<h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div>")
@@ -1824,17 +1769,27 @@ class MusicBrowser(BaseModule):
                 else:
                     self.lastfm_label.setVisible(False)
 
+            # 4. WIKIPEDIA ARTIST LABEL
+            artist_wiki_content = None
+            if artist_db_info and artist_db_info.get('wikipedia_content'):
+                artist_wiki_content = artist_db_info['wikipedia_content']
+            elif first_track_data and len(first_track_data) > 27 and first_track_data[27]:
+                artist_wiki_content = first_track_data[27]
+
+            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+                if artist_wiki_content:
+                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{artist_wiki_content}</div>")
+                    self.wikipedia_artist_label.setVisible(True)
+                else:
+                    self.wikipedia_artist_label.setVisible(False)
+
             # 5. WIKIPEDIA ALBUM LABEL
-            # Priorizar contenido de Wikipedia de la base de datos del álbum
             album_wiki_content = None
             if album_db_info and album_db_info.get('wikipedia_content'):
                 album_wiki_content = album_db_info['wikipedia_content']
-                has_album_wiki = True
             elif first_track_data and len(first_track_data) > 29 and first_track_data[29]:
                 album_wiki_content = first_track_data[29]
-                has_album_wiki = True
 
-            # Mostrar/ocultar panel de Wikipedia del álbum
             if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
                 if album_wiki_content:
                     self.wikipedia_album_label.setText(f"<h3>Wikipedia - Álbum:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div>")
@@ -1858,34 +1813,10 @@ class MusicBrowser(BaseModule):
                 self.wikipedia_artist_label.setVisible(False)
             if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
                 self.wikipedia_album_label.setVisible(False)
-            if hasattr(self, 'links_label') and self.links_label:
-                self.links_label.setVisible(False)
-            # Limpiar contenedor de enlaces
-            if hasattr(self, 'links_container_layout'):
-                # Eliminar widgets antiguos
-                while self.links_container_layout.count():
-                    item = self.links_container_layout.takeAt(0)
-                    if item.widget():
-                        item.widget().deleteLater()
-                
-                # Añadir nuevos widgets de enlaces
-                has_any_links = False
-                
-                # Enlaces del álbum
-                album_links_widget = self.create_entity_links_widget(album_db_info or first_track_data, 'album', album_name)
-                if album_links_widget:
-                    self.links_container_layout.addWidget(album_links_widget)
-                    has_any_links = True
-                
-                # Enlaces del artista
-                artist_links_widget = self.create_entity_links_widget(artist_db_info or first_track_data, 'artist', artist_name)
-                if artist_links_widget:
-                    self.links_container_layout.addWidget(artist_links_widget)
-                    has_any_links = True
-                
-                # Mostrar/ocultar frame de enlaces
-                if hasattr(self, 'links_frame'):
-                    self.links_frame.setVisible(has_any_links)
+            if hasattr(self, 'artist_links_group'):
+                self.artist_links_group.hide()
+            if hasattr(self, 'album_links_group'):
+                self.album_links_group.hide()
 
 
     def apply_theme(self, theme_name=None):
@@ -2099,8 +2030,11 @@ class MusicBrowser(BaseModule):
                     <b>Frecuencia:</b> {data[12] or 'N/A'} Hz<br>
                 """
 
+                # Mostrar metadata
+                self.metadata_label.setText(metadata)
+                self.metadata_label.setVisible(True)
 
-                # Inicializar variables para enlaces
+                # Extraer enlaces del artista y álbum
                 artist_links = {}
                 album_links = {}
 
@@ -2113,37 +2047,17 @@ class MusicBrowser(BaseModule):
                         network_links = self.get_artist_networks(artist_db_info['id'])
                         artist_links.update(network_links)
                 elif len(data) > 16:
-                    # Usar data como respaldo (ya está definido en tu método)
                     artist_links = self.extract_links_from_data(data, 'artist')
 
                 # Extraer enlaces del álbum
                 if album_db_info:
                     album_links = self.extract_links_from_data(album_db_info, 'album')
                 elif len(data) > 21:
-                    # Usar data como respaldo (ya está definido en tu método)
                     album_links = self.extract_links_from_data(data, 'album')
 
-                # Actualizar panel de enlaces si existe
-                if hasattr(self, 'links_label') and self.links_label:
-                    links_text = "<h3>Enlaces:</h3>"
-                    has_any_links = False
-
-                    # Añadir enlaces del artista
-                    if artist_links:
-                        links_text += self.get_formatted_links(artist_links, 'artista', artist)
-                        has_any_links = True
-
-                    # Añadir enlaces del álbum
-                    if album_links:
-                        links_text += self.get_formatted_links(album_links, 'álbum', album)
-                        has_any_links = True
-
-                    # Mostrar/ocultar según tengamos enlaces
-                    if has_any_links:
-                        self.links_label.setText(links_text)
-                        self.links_label.setVisible(True)
-                    else:
-                        self.links_label.setVisible(False)
+                # Actualizar los botones de enlaces
+                self.update_artist_link_buttons(artist_links)
+                self.update_album_link_buttons(album_links)
 
                 # Mostrar Wikipedia del artista si está disponible
                 if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
@@ -2167,6 +2081,12 @@ class MusicBrowser(BaseModule):
             elif self.metadata_label:
                 self.metadata_label.setText("No hay suficientes datos de metadata")
                 self.metadata_label.setVisible(True)
+                
+                # Ocultar botones de enlaces si no hay suficiente información
+                if hasattr(self, 'artist_links_group'):
+                    self.artist_links_group.hide()
+                if hasattr(self, 'album_links_group'):
+                    self.album_links_group.hide()
 
         except Exception as e:
             # manejar la excepción
@@ -2182,35 +2102,11 @@ class MusicBrowser(BaseModule):
                 self.lastfm_label.setText(f"<h3>Error</h3><p>No se pudo cargar la información detallada para {data[3] or 'este elemento'}.</p>")
                 self.lastfm_label.setVisible(True)
 
-
-
-            # Limpiar contenedor de enlaces
-            if hasattr(self, 'links_container_layout'):
-                # Eliminar widgets antiguos
-                while self.links_container_layout.count():
-                    item = self.links_container_layout.takeAt(0)
-                    if item.widget():
-                        item.widget().deleteLater()
-                
-                # Añadir nuevos widgets de enlaces
-                has_any_links = False
-                
-                # Enlaces del artista
-                artist_links_widget = self.create_entity_links_widget(artist_db_info or data, 'artist', artist)
-                if artist_links_widget:
-                    self.links_container_layout.addWidget(artist_links_widget)
-                    has_any_links = True
-                
-                # Enlaces del álbum
-                album_links_widget = self.create_entity_links_widget(album_db_info or data, 'album', album)
-                if album_links_widget:
-                    self.links_container_layout.addWidget(album_links_widget)
-                    has_any_links = True
-                
-                # Mostrar/ocultar frame de enlaces
-                if hasattr(self, 'links_frame'):
-                    self.links_frame.setVisible(has_any_links)
-
+            # Ocultar botones de enlaces en caso de error
+            if hasattr(self, 'artist_links_group'):
+                self.artist_links_group.hide()
+            if hasattr(self, 'album_links_group'):
+                self.album_links_group.hide()
 
     def search(self):
         """Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto."""
@@ -2474,6 +2370,12 @@ class MusicBrowser(BaseModule):
         if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
             self.wikipedia_album_label.setText("")
             self.wikipedia_album_label.setVisible(False)  # Ocultar hasta que tenga contenido
+
+        # Ocultar contenedores de botones de enlaces
+        if hasattr(self, 'artist_links_group'):
+            self.artist_links_group.hide()
+        if hasattr(self, 'album_links_group'):
+            self.album_links_group.hide()
 
         # Forzar actualización visual
         QApplication.processEvents()
@@ -3274,70 +3176,28 @@ class MusicBrowser(BaseModule):
             if not artist_db_info or not artist_db_info.get('total_albums'):
                 metadata += f"<b>Álbumes encontrados:</b> {albums_count}<br>"
 
-            metadata += "<br>"
-
-            # Añadir enlaces externos del artista
-            artist_links = []
-            has_links = False
-
-            # Priorizar enlaces de la base de datos
-            if artist_db_info:
-                if artist_db_info.get('spotify_url'):
-                    artist_links.append(f"<a href='{artist_db_info['spotify_url']}'>Spotify</a>")
-                if artist_db_info.get('youtube_url'):
-                    artist_links.append(f"<a href='{artist_db_info['youtube_url']}'>YouTube</a>")
-                if artist_db_info.get('musicbrainz_url'):
-                    artist_links.append(f"<a href='{artist_db_info['musicbrainz_url']}'>MusicBrainz</a>")
-                if artist_db_info.get('discogs_url'):
-                    artist_links.append(f"<a href='{artist_db_info['discogs_url']}'>Discogs</a>")
-                if artist_db_info.get('rateyourmusic_url'):
-                    artist_links.append(f"<a href='{artist_db_info['rateyourmusic_url']}'>RateYourMusic</a>")
-                if artist_db_info.get('wikipedia_url'):
-                    artist_links.append(f"<a href='{artist_db_info['wikipedia_url']}'>Wikipedia</a>")
-                if artist_db_info.get('bandcamp_url'):
-                    artist_links.append(f"<a href='{artist_db_info['bandcamp_url']}'>Bandcamp</a>")
-                if artist_db_info.get('lastfm_url'):
-                    artist_links.append(f"<a href='{artist_db_info['lastfm_url']}'>Last.fm</a>")
-                has_links = len(artist_links) > 0
-            # Usar enlaces del track como respaldo
-            elif first_track_data and len(first_track_data) > 16:
-                if first_track_data[16]:  # spotify_url
-                    artist_links.append(f"<a href='{first_track_data[16]}'>Spotify</a>")
-                if first_track_data[17]:  # youtube_url
-                    artist_links.append(f"<a href='{first_track_data[17]}'>YouTube</a>")
-                if first_track_data[18]:  # musicbrainz_url
-                    artist_links.append(f"<a href='{first_track_data[18]}'>MusicBrainz</a>")
-                if first_track_data[19]:  # discogs_url
-                    artist_links.append(f"<a href='{first_track_data[19]}'>Discogs</a>")
-                if first_track_data[20]:  # rateyourmusic_url
-                    artist_links.append(f"<a href='{first_track_data[20]}'>RateYourMusic</a>")
-                if first_track_data[26]:  # artist_wikipedia_url
-                    artist_links.append(f"<a href='{first_track_data[26]}'>Wikipedia</a>")
-                has_links = len(artist_links) > 0
-
-            # Añadir enlaces a metadata
-            metadata += "<b>Enlaces del Artista:</b><br>"
-            if artist_links:
-                metadata += " | ".join(artist_links)
-            else:
-                metadata += "No hay enlaces disponibles."
-
             # Mostrar metadata
             if self.metadata_label:
                 self.metadata_label.setText(metadata)
                 self.metadata_label.setVisible(True)
-                self.metadata_label.setOpenExternalLinks(True)
 
-            # Actualizar otros labels si existen
-            if hasattr(self, 'links_label') and self.links_label:
-                if has_links:
-                    links_text = "<h3>Enlaces:</h3>"
-                    if artist_links:
-                        links_text += f"<p><b>Artista {artist_name}:</b></p><div style='display: flex; flex-wrap: wrap;'>{' '.join(artist_links)}</div>"
-                    self.links_label.setText(links_text)
-                    self.links_label.setVisible(True)
-                else:
-                    self.links_label.setVisible(False)
+            # Extraer y mostrar enlaces de artista
+            artist_links = {}
+            if artist_db_info:
+                artist_links = self.extract_links_from_data(artist_db_info, 'artist')
+                
+                # Añadir enlaces de la tabla artists_networks si existe el ID del artista
+                if artist_db_info.get('id'):
+                    network_links = self.get_artist_networks(artist_db_info['id'])
+                    artist_links.update(network_links)
+            elif first_track_data and len(first_track_data) > 16:
+                artist_links = self.extract_links_from_data(first_track_data, 'artist')
+
+            # Actualizar botones de enlaces
+            self.update_artist_link_buttons(artist_links)
+            
+            # Ocultar botones de álbum ya que estamos mostrando solo artista
+            self.update_album_link_buttons({})
 
             # Mostrar Wikipedia del artista si existe
             if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
@@ -3362,7 +3222,12 @@ class MusicBrowser(BaseModule):
             if self.metadata_label:
                 self.metadata_label.setText(f"<b>Artista:</b> {artist_name}<br><b>Error:</b> No se pudo cargar información adicional.")
                 self.metadata_label.setVisible(True)
-
+                
+            # Ocultar grupos de botones en caso de error
+            if hasattr(self, 'artist_links_group'):
+                self.artist_links_group.hide()
+            if hasattr(self, 'album_links_group'):
+                self.album_links_group.hide()
 
     def setup_visibility_controls(self):
         """Configura los controles de visibilidad para los botones del search_frame."""
@@ -3748,6 +3613,165 @@ class MusicBrowser(BaseModule):
         layout.addStretch()
         
         return links_frame
+
+    def setup_link_buttons_container(self):
+        """Inicializa los contenedores de botones de enlaces."""
+        try:
+            # Obtener referencias a los groupboxes para enlaces de artista y álbum
+            self.artist_links_group = self.main_ui.artist_links_group
+            self.album_links_group = self.main_ui.album_links_group
+            
+            # Crear layouts para los groupboxes
+            if self.artist_links_group.layout():
+                # Usar el layout existente si ya existe
+                self.artist_links_layout = self.artist_links_group.layout()
+            else:
+                # Crear un nuevo layout horizontal para los botones
+                self.artist_links_layout = QHBoxLayout(self.artist_links_group)
+                self.artist_links_layout.setContentsMargins(5, 5, 5, 5)
+                self.artist_links_layout.setSpacing(5)
+                # Permitir envoltura estableciendo la política de ajuste de línea
+                self.artist_links_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                
+            if self.album_links_group.layout():
+                # Usar el layout existente si ya existe
+                self.album_links_layout = self.album_links_group.layout()
+            else:
+                # Crear un nuevo layout horizontal para los botones
+                self.album_links_layout = QHBoxLayout(self.album_links_group)
+                self.album_links_layout.setContentsMargins(5, 5, 5, 5)
+                self.album_links_layout.setSpacing(5)
+                # Permitir envoltura estableciendo la política de ajuste de línea
+                self.album_links_layout.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                
+            # Almacenar referencias a botones
+            self.artist_buttons = {}
+            self.album_buttons = {}
+            
+            # Ocultar grupos inicialmente
+            self.artist_links_group.hide()
+            self.album_links_group.hide()
+            
+            print("Contenedores de botones de enlaces inicializados")
+            return True
+        except Exception as e:
+            print(f"Error al configurar contenedores de botones de enlaces: {e}")
+            traceback.print_exc()
+            return False
+
+    def update_dynamic_link_buttons(self, container, layout, links_dict, button_store):
+        """
+        Crea o actualiza dinámicamente botones de enlaces en un contenedor.
+        
+        Args:
+            container (QGroupBox): El contenedor para los botones
+            layout (QLayout): El layout del contenedor
+            links_dict (dict): Diccionario de enlaces {nombre_servicio: url}
+            button_store (dict): Diccionario para almacenar referencias a botones
+        
+        Returns:
+            bool: True si se crearon/mostraron botones, False en caso contrario
+        """
+        if not container or not layout:
+            return False
+            
+        # Limpiar botones existentes primero
+        while layout.count():
+            item = layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        
+        # Limpiar almacén de botones
+        button_store.clear()
+        
+        if not links_dict:
+            container.hide()
+            return False
+            
+        # Crear un widget de flujo para contener los botones
+        flow_widget = QWidget()
+        flow_layout = QHBoxLayout(flow_widget)
+        flow_layout.setContentsMargins(0, 0, 0, 0)
+        flow_layout.setSpacing(5)
+        flow_layout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+        
+        # Agregar botones para cada enlace
+        for service_name, url in links_dict.items():
+            if not url or not isinstance(url, str) or not url.strip():
+                continue
+                
+            # Crear botón
+            button = QPushButton()
+            button.setFixedSize(40, 40)
+            
+            # Obtener icono de recursos
+            icon_name = service_name.lower()
+            icon_path = f":/services/{icon_name}"
+            
+            # Intentar establecer icono
+            icon = QIcon(icon_path)
+            if not icon.isNull():
+                button.setIcon(icon)
+                button.setIconSize(QSize(24, 24))
+            else:
+                # Usar texto como respaldo si no se encuentra el icono
+                button.setText(service_name[:2].upper())
+            
+            # Establecer tooltip con nombre del servicio
+            button.setToolTip(service_name.title())
+            
+            # Establecer URL como propiedad
+            button.setProperty("url", url)
+            
+            # Conectar evento de clic
+            button.clicked.connect(lambda checked=False, u=url: QDesktopServices.openUrl(QUrl(u)))
+            
+            # Agregar al layout de flujo
+            flow_layout.addWidget(button)
+            
+            # Almacenar referencia
+            button_store[service_name] = button
+        
+        # Agregar espaciador para que los botones se alineen a la izquierda
+        flow_layout.addStretch(1)
+        
+        # Agregar el widget de flujo al layout principal
+        layout.addWidget(flow_widget)
+        
+        # Mostrar el contenedor si agregamos botones
+        has_buttons = len(button_store) > 0
+        container.setVisible(has_buttons)
+        
+        return has_buttons
+
+    def update_artist_link_buttons(self, artist_links):
+        """
+        Updates artist link buttons based on available links.
+        
+        Args:
+            artist_links (dict): Dictionary of artist links {service_name: url}
+        """
+        return self.update_dynamic_link_buttons(
+            self.artist_links_group, 
+            self.artist_links_layout,
+            artist_links,
+            self.artist_buttons
+        )
+
+    def update_album_link_buttons(self, album_links):
+        """
+        Updates album link buttons based on available links.
+        
+        Args:
+            album_links (dict): Dictionary of album links {service_name: url}
+        """
+        return self.update_dynamic_link_buttons(
+            self.album_links_group, 
+            self.album_links_layout,
+            album_links,
+            self.album_buttons
+        )
+        
 if __name__ == '__main__':
     import argparse
 
