@@ -3259,58 +3259,7 @@ class MusicBrowser(BaseModule):
             checkbox.setChecked(widget.isVisible())
 
 
-    def get_link_icon_html(self, link_type):
-        """Returns HTML to display an icon as a button for a specific link type."""
-        icon_map = {
-            'spotify': ":/services/spotify",
-            'youtube': ":/services/youtube",
-            'musicbrainz': ":/services/mb",
-            'discogs': ":/services/discogs",
-            'rateyourmusic': ":/services/rym_svg",
-            'wikipedia': ":/services/wiki",
-            'bandcamp': ":/services/bandcamp",
-            'lastfm': ":/services/lastfm",
-            'allmusic': ":/services/allmusic",
-            'facebook': ":/services/facebook",
-            'twitter': ":/services/twitter",
-            'mastodon': ":/services/mastodon",
-            'bluesky': ":/services/bluesky",
-            'instagram': ":/services/instagram",
-            'juno': ":/services/juno",
-            'soundcloud': ":/services/soundcloud",
-            'imdb': ":/services/imdb",
-            'progarchives': ":/services/progarchives",
-            'setlist_fm': ":/services/blue_tape",
-            'who_sampled': ":/services/vinyl",
-            'vimeo': ":/services/vimeo",
-            'genius': ":/services/genius",
-            'myspace': ":/services/myspace",
-            'tumblr': ":/services/tumblr",
-            'resident_advisor': ":/services/ra",
-            'boomkat': ":/services/boomkat"
-        }
-        
-        # Estilo CSS para los botones de iconos
-        button_style = """
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            margin: 3px;
-            border-radius: 50%;
-            text-align: center;
-            vertical-align: middle;
-            transition: background-color 0.2s;
-            line-height: 32px;
-        """
-        
-        hover_style = "onmouseover=\"this.style.backgroundColor='rgba(61, 89, 161, 0.3)'\" onmouseout=\"this.style.backgroundColor='rgba(61, 89, 161, 0.1)'\""
-        
-        if link_type.lower() in icon_map:
-            icon_path = icon_map[link_type.lower()]
-            # Crear un span con estilo de botón y solo el icono
-            return f'<a href="#" style="{button_style}" {hover_style} title="{link_type.title()}"><img src="{icon_path}" width="32" height="32" style="vertical-align: middle;"></a>'
-        return ""
-
+  
     
     def get_artist_networks(self, artist_id):
         """Gets all social media and external links for an artist."""
@@ -3352,70 +3301,7 @@ class MusicBrowser(BaseModule):
             return {}
 
 
-    def get_formatted_links(self, urls_dict, entity_type, entity_name):
-        """
-        Genera HTML para mostrar enlaces como botones de iconos para cualquier entidad (artista, álbum, canción).
-        
-        Args:
-            urls_dict: Diccionario con los enlaces {nombre_servicio: url}
-            entity_type: Tipo de entidad ('artist', 'album', 'song')
-            entity_name: Nombre de la entidad para mostrar en el encabezado
-            
-        Returns:
-            str: HTML con los enlaces formateados como botones de iconos
-        """
-        if not urls_dict:
-            return ""
-            
-        # Estilo para el contenedor de botones
-        container_style = """
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            padding: 5px;
-            border-radius: 5px;
-        """
-        
-        # Estilo para cada botón
-        button_style = """
-            display: inline-block;
-            width: 48px;
-            height: 48px;
-            margin: 3px;
-            border-radius: 50%;
-            text-align: center;
-            vertical-align: middle;
-            transition: all 0.2s ease;
-            line-height: 48px;
-        """
-        
-        # Efectos de hover
-        hover_style = """onmouseover="this.style.transform='scale(1.1)';this.style.backgroundColor='rgba(61, 89, 161, 0.8)'" 
-                        onmouseout="this.style.transform='scale(1)';this.style.backgroundColor='rgba(20, 20, 20, 0.7)'"
-                    """
-        
-        # Iniciar la sección HTML
-        html = f"<p><b>{entity_type.title()} {entity_name}:</b></p>"
-        html += f"<div style='{container_style}'>"
-        
-        # Añadir cada enlace como un botón
-        for service, url in urls_dict.items():
-            if url and isinstance(url, str) and url.strip():
-                # Obtener el nombre del servicio sin prefijos o sufijos
-                service_name = service.split('_')[-1] if '_' in service else service
-                icon_path = f":/services/{service_name.lower()}"
-                
-                # Crear el botón
-                html += f"""
-                    <a href="{url}" style="{button_style}" {hover_style} title="{service_name.title()}">
-                        <img src="{icon_path}" width="24" height="24" style="vertical-align: middle;">
-                    </a>
-                """
-        
-        html += "</div>"
-        return html
-
+  
 
     def extract_links_from_data(self, entity_data, entity_type):
         """
@@ -3659,7 +3545,7 @@ class MusicBrowser(BaseModule):
             traceback.print_exc()
             return False
 
-    def update_dynamic_link_buttons(self, container, layout, links_dict, button_store):
+    def update_dynamic_link_buttons(self, container, layout, links_dict, button_store, tipo=None):
         """
         Crea o actualiza dinámicamente botones de enlaces en un contenedor.
         
@@ -3672,6 +3558,7 @@ class MusicBrowser(BaseModule):
         Returns:
             bool: True si se crearon/mostraron botones, False en caso contrario
         """
+        tipo = tipo
         if not container or not layout:
             return False
             
@@ -3691,8 +3578,8 @@ class MusicBrowser(BaseModule):
         # Crear un widget de flujo para contener los botones
         flow_widget = QWidget()
         flow_layout = QHBoxLayout(flow_widget)
-        flow_layout.setContentsMargins(0, 0, 0, 0)
-        flow_layout.setSpacing(5)
+        #flow_layout.setContentsMargins(0, 0, 0, 3)
+        #flow_layout.setSpacing(5)
         flow_layout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         
         # Agregar botones para cada enlace
@@ -3702,7 +3589,7 @@ class MusicBrowser(BaseModule):
                 
             # Crear botón
             button = QPushButton()
-            button.setFixedSize(40, 40)
+            #button.setFixedSize(34, 34)
             
             # Obtener icono de recursos
             icon_name = service_name.lower()
@@ -3712,7 +3599,7 @@ class MusicBrowser(BaseModule):
             icon = QIcon(icon_path)
             if not icon.isNull():
                 button.setIcon(icon)
-                button.setIconSize(QSize(24, 24))
+            #    button.setIconSize(QSize(32, 32))
             else:
                 # Usar texto como respaldo si no se encuentra el icono
                 button.setText(service_name[:2].upper())
@@ -3723,6 +3610,17 @@ class MusicBrowser(BaseModule):
             # Establecer URL como propiedad
             button.setProperty("url", url)
             
+            button.style().unpolish(button)
+            button.style().polish(button)
+            
+            if tipo == 'artist':
+                button.setObjectName(f"{service_name}_link_button")
+            elif tipo == 'album':
+                button.setObjectName(f"{service_name}_link_album_button")
+                print(f"tipo: {tipo}")
+            
+            print(f"Button object name: {button.objectName()}")
+
             # Conectar evento de clic
             button.clicked.connect(lambda checked=False, u=url: QDesktopServices.openUrl(QUrl(u)))
             
@@ -3751,11 +3649,13 @@ class MusicBrowser(BaseModule):
         Args:
             artist_links (dict): Dictionary of artist links {service_name: url}
         """
+        tipo = 'artist'
         return self.update_dynamic_link_buttons(
             self.artist_links_group, 
             self.artist_links_layout,
             artist_links,
-            self.artist_buttons
+            self.artist_buttons,
+            tipo
         )
 
     def update_album_link_buttons(self, album_links):
@@ -3765,11 +3665,13 @@ class MusicBrowser(BaseModule):
         Args:
             album_links (dict): Dictionary of album links {service_name: url}
         """
+        tipo = 'album'
         return self.update_dynamic_link_buttons(
             self.album_links_group, 
             self.album_links_layout,
             album_links,
-            self.album_buttons
+            self.album_buttons,
+            tipo
         )
         
 if __name__ == '__main__':
