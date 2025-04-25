@@ -343,6 +343,12 @@ class MusicBrowser(BaseModule):
         # Conectar señales después de tener todos los widgets
         self.connect_signals()
         
+
+        self._ensure_link_containers_exist()
+        # Initialize link containers
+        self.init_link_containers()
+
+
         # Aplicar el tema después de toda la inicialización
         try:
             self.apply_theme(self.selected_theme)
@@ -358,6 +364,81 @@ class MusicBrowser(BaseModule):
         
         # Detectar elementos UI para ayudar con la depuración
         self.detect_ui_elements()
+
+
+
+    def _ensure_link_containers_exist(self):
+        """Makes sure link containers exist in the UI."""
+        if not hasattr(self, 'info_scroll') or not self.info_scroll:
+            print("info_scroll not available, cannot create link containers")
+            return
+            
+        # Get the content widget
+        info_widget = self.info_scroll.widget()
+        if not info_widget:
+            # Create content widget if it doesn't exist
+            info_widget = QWidget()
+            info_layout = QVBoxLayout(info_widget)
+            self.info_scroll.setWidget(info_widget)
+            self.info_widget = info_widget
+        
+        # Check for existing containers
+        artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
+        album_links_group = info_widget.findChild(QGroupBox, "album_links_group")
+        lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
+        
+        # Create containers if they don't exist
+        if not artist_links_group:
+            artist_links_group = QGroupBox("Artist Links", info_widget)
+            artist_links_group.setObjectName("artist_links_group")
+            artist_links_layout = QHBoxLayout(artist_links_group)
+            artist_links_layout.setContentsMargins(5, 25, 5, 5)
+            info_widget.layout().addWidget(artist_links_group)
+            
+        if not album_links_group:
+            album_links_group = QGroupBox("Album Links", info_widget)
+            album_links_group.setObjectName("album_links_group")
+            album_links_layout = QHBoxLayout(album_links_group)
+            album_links_layout.setContentsMargins(5, 25, 5, 5)
+            info_widget.layout().addWidget(album_links_group)
+            
+        if not lyrics_group:
+            lyrics_group = QGroupBox("Lyrics", info_widget)
+            lyrics_group.setObjectName("lyrics_group")
+            lyrics_layout = QVBoxLayout(lyrics_group)
+            lyrics_layout.setContentsMargins(5, 25, 5, 5)
+            
+            # Add lyrics label
+            lyrics_label = QLabel(lyrics_group)
+            lyrics_label.setObjectName("lyrics_label")
+            lyrics_label.setWordWrap(True)
+            lyrics_label.setTextFormat(Qt.TextFormat.RichText)
+            lyrics_layout.addWidget(lyrics_label)
+            
+            info_widget.layout().addWidget(lyrics_group)
+        
+        # Store references
+        self.artist_links_group = artist_links_group
+        self.album_links_group = album_links_group
+        self.lyrics_group = lyrics_group
+        
+        # Initialize groupboxes dictionary if it doesn't exist
+        if not hasattr(self, 'info_groupboxes'):
+            self.info_groupboxes = {}
+            
+        # Store references in the dictionary
+        self.info_groupboxes['artist_links_group'] = artist_links_group
+        self.info_groupboxes['album_links_group'] = album_links_group
+        self.info_groupboxes['lyrics_group'] = lyrics_group
+        
+        # Hide containers initially
+        artist_links_group.hide()
+        album_links_group.hide()
+        lyrics_group.hide()
+        
+        print("Link containers created/initialized")
+
+
 
     def load_ui_file(self, ui_file_name, required_widgets=None):
         """
@@ -1929,9 +2010,11 @@ class MusicBrowser(BaseModule):
             # Mantener selección visible
             self.results_tree.setExpandsOnDoubleClick(True)
 
+# MOSTRAR INFO CANCIONES
+
 
     def show_details(self, current, previous):
-        """Muestra los detalles del ítem seleccionado."""
+        """Shows the details of the selected item with better organization."""
         if not current:
             self.clear_details()
             return
@@ -1942,347 +2025,355 @@ class MusicBrowser(BaseModule):
             return
 
         try:
-            # Verificar que los widgets necesarios estén disponibles
-            if not hasattr(self, 'metadata_label') or not self.metadata_label or not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-                print("Error: Widgets de información no disponibles, reconfigurando...")
-                self.setup_info_widget()
-
-                # Si aún no tenemos los widgets después de reconfigurar, salir con gracia
-                if not hasattr(self, 'metadata_label') or not self.metadata_label:
-                    print("Error crítico: metadata_label no disponible después de reconfigurar")
-                    return
-
-                if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-                    print("Error crítico: lastfm_label no disponible después de reconfigurar")
-                    return
-                
-                # Add safe handling for feeds_button
-                if hasattr(self, 'feeds_button') and self.feeds_button:
-                    self.feeds_button.setVisible(False)
-                else:
-                    # Don't create here - it should be created elsewhere
-                    pass
-
-            # Don'
-            # Limpiar detalles anteriores
+            # Ensure required widgets exist
+            self._ensure_info_widgets_exist()
+            
+            # Clear previous details
             self.clear_details()
-
-            # Extraer información básica de los datos
-            artist = data[3] if len(data) > 3 and data[3] else ""
-            album = data[5] if len(data) > 5 and data[5] else ""
-            title = data[2] if len(data) > 2 and data[2] else ""
-
-            # Buscar información adicional en la base de datos
-            artist_db_info = self.get_artist_info_from_db(artist) if artist else None
-            album_db_info = self.get_album_info_from_db(album, artist) if album else None
-
-            # Mostrar carátula
-            if len(data) > 1 and hasattr(self, 'cover_label') and self.cover_label:
-                cover_path = None
-
-                # Priorizar ruta de carátula de la base de datos
-                if album_db_info and album_db_info.get('album_art_path'):
-                    cover_path = album_db_info['album_art_path']
-                    if not os.path.exists(cover_path):
-                        cover_path = None
-
-                # Si no hay ruta en la base de datos o no existe, buscar en la carpeta
-                if not cover_path:
-                    cover_path = self.find_cover_image(data[1])
-
-                if cover_path:
-                    pixmap = QPixmap(cover_path)
-                    pixmap = pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                    self.cover_label.setPixmap(pixmap)
-                else:
-                    self.cover_label.setText("No imagen")
-
-                # Mostrar imagen del artista usando el nombre extraído
-                if artist and hasattr(self, 'artist_image_label') and self.artist_image_label:
-                    artist_image_path = self.find_artist_image(artist)
-                    if artist_image_path:
-                        artist_pixmap = QPixmap(artist_image_path)
-                        artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                        self.artist_image_label.setPixmap(artist_pixmap)
-                    else:
-                        self.artist_image_label.setText("No imagen de artista")
-                elif hasattr(self, 'artist_image_label') and self.artist_image_label:
-                    self.artist_image_label.setText("No imagen de artista")
-            elif hasattr(self, 'cover_label') and self.cover_label:
-                self.cover_label.setText("No imagen")
-                if hasattr(self, 'artist_image_label') and self.artist_image_label:
-                    self.artist_image_label.setText("No imagen de artista")
-
-            # Inicializar variables para contenido de información
-            info_text = ""
-            has_info_content = False
-
-            # Mostrar letra de la canción si está disponible
-            # Lyrics pueden estar en el índice 30/31 o en datos relacionados que debemos buscar
-            lyrics = None
-            lyrics_source = "Desconocida"
             
-            # Buscar letra en los datos directos (si está en los índices esperados)
-            if len(data) > 30 and data[30]:
-                lyrics = data[30]
-                if len(data) > 31 and data[31]:
-                    lyrics_source = data[31]
+            # Extract basic information
+            track_info = self._extract_basic_track_info(data)
             
-            # Si no hay letra directa y tenemos ID de canción, intentar buscar en la base de datos
-            if not lyrics and len(data) > 0 and data[0]:
-                try:
-                    conn = sqlite3.connect(self.db_path)
-                    cursor = conn.cursor()
-                    cursor.execute("SELECT lyrics FROM lyrics WHERE track_id = ?", (data[0],))
-                    lyrics_result = cursor.fetchone()
-                    if lyrics_result and lyrics_result[0]:
-                        lyrics = lyrics_result[0]
-                        
-                        # También intentar obtener la fuente
-                        cursor.execute("SELECT source FROM lyrics WHERE track_id = ?", (data[0],))
-                        source_result = cursor.fetchone()
-                        if source_result and source_result[0]:
-                            lyrics_source = source_result[0]
-                            
-                    conn.close()
-                except Exception as e:
-                    print(f"Error al buscar letra en la base de datos: {e}")
-
-            if lyrics:
-                info_text += f"<div class='info-card'><h3>Letra</h3><div style='white-space: pre-wrap;'>{lyrics}</div>"
-                info_text += f"<p><i>Fuente: {lyrics_source}</i></p></div><br>"
-                has_info_content = True
-
-            # Mostrar info de LastFM (bio del artista)
-            artist_bio = None
-            if artist_db_info and artist_db_info.get('bio'):
-                artist_bio = artist_db_info['bio']
-            elif len(data) > 15 and data[15]:
-                artist_bio = data[15]
-            else:
-                artist_bio = "No hay información del artista disponible"
-
-            if artist_bio and artist_bio != "No hay información del artista disponible":
-                info_text += f"<div class='info-card'><h3>Lastfm {artist}:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div></div><br>"
-                has_info_content = True
-
-            # Mostrar info de Wikipedia del artista
-            wikipedia_content = None
-            if artist_db_info and artist_db_info.get('wikipedia_content'):
-                wikipedia_content = artist_db_info['wikipedia_content']
-            elif len(data) > 27:  # Verificar que los nuevos campos existen
-                wikipedia_content = data[27] if data[27] else None
-
-            if wikipedia_content:
-                info_text += f"<div class='info-card'><h3>Wikipedia - {artist}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div></div><br>"
-                has_info_content = True
-
-            # Asignar el contenido actualizado y mostrar/ocultar según corresponda
-            if self.lastfm_label:
-                if has_info_content:
-                    self.lastfm_label.setText(info_text)
-                    self.lastfm_label.setVisible(True)
-                else:
-                    self.lastfm_label.setVisible(False)
-
-            # Mostrar metadata siempre que tengamos datos suficientes
-            if len(data) >= 15 and self.metadata_label:
-                track_num = data[14] if data[14] else "N/A"  # track_number está en el índice 14
-
-                # Construir la sección de metadata básica
-                metadata = f"""<div class='metadata-card'>
-                    <b>Título:</b> {title or 'N/A'}<br>
-                    <b>Artista:</b> {artist or 'N/A'}<br>
-                    <b>Album Artist:</b> {data[4] or 'N/A'}<br>
-                    <b>Álbum:</b> {album or 'N/A'}<br>
-                    <b>Fecha:</b> {data[6] or 'N/A'}<br>
-                    <b>Género:</b> {data[7] or 'N/A'}<br>
-                    <b>Sello:</b> {data[8] or 'N/A'}<br>
-                    <b>Bitrate:</b> {data[10] or 'N/A'} kbps<br>
-                    <b>Profundidad:</b> {data[11] or 'N/A'} bits<br>
-                    <b>Frecuencia:</b> {data[12] or 'N/A'} Hz<br>
-                </div>"""
-
-                # Mostrar metadata
-                self.metadata_label.setText(metadata)
-                self.metadata_label.setVisible(True)
-
-                # Extraer enlaces del artista y álbum
-                artist_links = {}
-                album_links = {}
-
-                # Extraer enlaces del artista
-                if artist_db_info:
-                    artist_links = self.extract_links_from_data(artist_db_info, 'artist')
-                    
-                    # Añadir enlaces de la tabla artists_networks si existe el ID del artista
-                    if artist_db_info.get('id'):
-                        network_links = self.get_artist_networks(artist_db_info['id'])
-                        artist_links.update(network_links)
-                elif len(data) > 16:
-                    artist_links = self.extract_links_from_data(data, 'artist')
-
-                # Extraer enlaces del álbum
-                if album_db_info:
-                    album_links = self.extract_links_from_data(album_db_info, 'album')
-                elif len(data) > 21:
-                    album_links = self.extract_links_from_data(data, 'album')
-
-                # Actualizar los botones de enlaces - IMPORTANTE: actualizar AMBOS, no solo álbum
-                self.update_artist_link_buttons(artist_links)
-                self.update_album_link_buttons(album_links)
-
-                lyrics = None
-                lyrics_source = "Desconocida"
-                
-                # Buscar letra en los datos directos (si está en los índices esperados)
-                if len(data) > 30 and data[30]:
-                    lyrics = data[30]
-                    if len(data) > 31 and data[31]:
-                        lyrics_source = data[31]
-                
-                # Si no hay letra directa y tenemos ID de canción, intentar buscar en la base de datos
-                if not lyrics and len(data) > 0 and data[0]:
-                    try:
-                        conn = sqlite3.connect(self.db_path)
-                        cursor = conn.cursor()
-                        cursor.execute("SELECT lyrics FROM lyrics WHERE track_id = ?", (data[0],))
-                        lyrics_result = cursor.fetchone()
-                        if lyrics_result and lyrics_result[0]:
-                            lyrics = lyrics_result[0]
-                            
-                            # También intentar obtener la fuente
-                            cursor.execute("SELECT source FROM lyrics WHERE track_id = ?", (data[0],))
-                            source_result = cursor.fetchone()
-                            if source_result and source_result[0]:
-                                lyrics_source = source_result[0]
-                                
-                        conn.close()
-                    except Exception as e:
-                        print(f"Error al buscar letra en la base de datos: {e}")
-
-                # Actualizar lyrics_group si existe
-                if hasattr(self, 'info_groupboxes') and 'lyrics_group' in self.info_groupboxes:
-                    lyrics_box = self.info_groupboxes.get('lyrics_group')
-                    if lyrics_box:
-                        if lyrics:
-                            # Usar método existente para actualizar grupo
-                            self.update_groupbox_content(
-                                lyrics_box, 
-                                f"{lyrics}\n\nFuente: {lyrics_source}",
-                                "lyrics_label"
-                            )
-                            # Asegurar que sea visible
-                            lyrics_box.setVisible(True)
-                            # Mover al inicio (si es posible)
-                            if lyrics_box.parentWidget() and lyrics_box.parentWidget().layout():
-                                layout = lyrics_box.parentWidget().layout()
-                                layout.removeWidget(lyrics_box)
-                                layout.insertWidget(0, lyrics_box)
-                        else:
-                            lyrics_box.setVisible(False)
-
-
-                # Mostrar Wikipedia del artista si está disponible
-                if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                    if wikipedia_content:
-                        self.wikipedia_artist_label.setText(f"<div class='info-card'><h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div></div>")
-                        self.wikipedia_artist_label.setVisible(True)
-                    else:
-                        self.wikipedia_artist_label.setVisible(False)
-
-                # Mostrar Wikipedia del álbum si está disponible
-                if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                    album_wiki_content = None
-                    if album_db_info and album_db_info.get('wikipedia_content'):
-                        album_wiki_content = album_db_info['wikipedia_content']
-
-                    if album_wiki_content:
-                        self.wikipedia_album_label.setText(f"<div class='info-card'><h3>Wikipedia - {album}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div></div>")
-                        self.wikipedia_album_label.setVisible(True)
-                    else:
-                        self.wikipedia_album_label.setVisible(False)
-            elif self.metadata_label:
-                self.metadata_label.setText("<div class='metadata-card'>No hay suficientes datos de metadata</div>")
-                self.metadata_label.setVisible(True)
-                
-                # Ocultar botones de enlaces si no hay suficiente información
-                if hasattr(self, 'artist_links_group'):
-                    self.artist_links_group.hide()
-                if hasattr(self, 'album_links_group'):
-                    self.album_links_group.hide()
-
-            # Update info groupboxes based on data
-            self.update_info_groupboxes(data)
+            # Display images
+            self._display_track_images(track_info)
             
-            # Get entity type and ID for feeds
-            entity_type = None
-            entity_id = None
+            # Show metadata
+            self._display_track_metadata(track_info)
             
-            if isinstance(data, dict):
-                # Is an artist or album
-                if data.get('type') == 'artist':
-                    entity_type = 'artist'
-                    entity_id = self.get_artist_id_from_name(data.get('name'))
-                elif data.get('type') == 'album':
-                    entity_type = 'album'
-                    entity_id = self.get_album_id_from_name(data.get('name'), data.get('artist'))
-            else:
-                # Is a song
-                if len(data) > 0 and data[0]:
-                    entity_type = 'song'
-                    entity_id = data[0]
-                    
-            # Handle feeds safely
-            if entity_type and entity_id:
-                if hasattr(self, 'feeds_button') and self.feeds_button:
-                    # Check if we have feeds before showing the button
-                    feeds = self.get_feeds_data(entity_type, entity_id)
-                    self.feeds_button.setVisible(bool(feeds))
-                    
-                    # Only make visible if it exists
-                    if hasattr(self, 'feeds_button') and self.feeds_button:
-                        self.feeds_button.setVisible(True)
-                else:
-                    # No feeds available, hide button if exists
-                    if hasattr(self, 'feeds_button') and self.feeds_button:
-                        self.feeds_button.setVisible(False)
-                        
-                # Create "Back to Info" button in feeds page
-                if not hasattr(self, 'back_button'):
-                    self.back_button = QPushButton("Volver a Info")
-                    self.back_button.setObjectName("back_button")
-                    self.back_button.clicked.connect(lambda: self.switch_info_panel(0))
-                    
-                    # Add button to the second page of stacked widget
-                    feeds_page = self.main_ui.info_panel_stacked.widget(1)
-                    if feeds_page.layout():
-                        feeds_page.layout().insertWidget(0, self.back_button)
-                
-            # Ensure we're on the first page initially
+            # Get additional information
+            artist_info = self._get_artist_info(track_info['artist'])
+            album_info = self._get_album_info(track_info['album'], track_info['artist'])
+            
+            # Display links
+            self._display_artist_links(artist_info)
+            self._display_album_links(album_info)
+            
+            # Show lyrics
+            self._display_lyrics(data, track_info)
+            
+            # Show artist and album information
+            self._display_artist_info(artist_info, track_info)
+            self._display_album_info(album_info, track_info)
+            
+            # Setup feeds functionality
+            self._setup_feeds_for_entity(data)
+            
+            # Make sure we're on the main info panel
             self.switch_info_panel(0)
-
-
-
+            
         except Exception as e:
-            # manejar la excepción
-            print(f"Error en show_details: {e}")
+            print(f"Error in show_details: {e}")
             traceback.print_exc()
+            self._display_error_info(data, str(e))
 
-            # Intento de recuperación mostrando información básica
-            if hasattr(self, 'metadata_label') and self.metadata_label and len(data) > 2:
-                self.metadata_label.setText(f"<div class='metadata-card'><b>Título:</b> {data[2] or 'N/A'}<br><b>Error:</b> No se pudo cargar información completa.</div>")
-                self.metadata_label.setVisible(True)
 
-            if hasattr(self, 'lastfm_label') and self.lastfm_label and len(data) > 3:
-                self.lastfm_label.setText(f"<div class='info-card'><h3>Error</h3><p>No se pudo cargar la información detallada para {data[3] or 'este elemento'}.</p></div>")
-                self.lastfm_label.setVisible(True)
+    def _ensure_info_widgets_exist(self):
+        """Ensures that all necessary info widgets exist and are set up properly."""
+        # Check if essential widgets are available
+        if not hasattr(self, 'metadata_label') or not self.metadata_label or \
+        not hasattr(self, 'lastfm_label') or not self.lastfm_label:
+            print("Essential info widgets not available, reconfiguring...")
+            self.setup_info_widget()
+            
+            # If still missing, raise exception
+            if not hasattr(self, 'metadata_label') or not self.metadata_label:
+                raise RuntimeError("metadata_label not available after reconfiguration")
+            if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
+                raise RuntimeError("lastfm_label not available after reconfiguration")
+                
+        # Setup link buttons if not already done
+        if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
+            self.setup_link_buttons_container()
+            
+        # Make sure feed button is properly hidden initially
+        if hasattr(self, 'feeds_button') and self.feeds_button:
+            self.feeds_button.setVisible(False)
 
-            # Ocultar botones de enlaces en caso de error
-            if hasattr(self, 'artist_links_group'):
-                self.artist_links_group.hide()
-            if hasattr(self, 'album_links_group'):
-                self.album_links_group.hide()
+
+    def _extract_basic_track_info(self, data):
+        """Extracts basic track information from the data."""
+        track_info = {
+            'id': data[0] if len(data) > 0 else None,
+            'path': data[1] if len(data) > 1 else None,
+            'title': data[2] if len(data) > 2 else "",
+            'artist': data[3] if len(data) > 3 else "",
+            'album_artist': data[4] if len(data) > 4 else "",
+            'album': data[5] if len(data) > 5 else "",
+            'date': data[6] if len(data) > 6 else "",
+            'genre': data[7] if len(data) > 7 else "",
+            'label': data[8] if len(data) > 8 else "",
+            'mbid': data[9] if len(data) > 9 else "",
+            'bitrate': data[10] if len(data) > 10 else "",
+            'bit_depth': data[11] if len(data) > 11 else "",
+            'sample_rate': data[12] if len(data) > 12 else "",
+            'last_modified': data[13] if len(data) > 13 else "",
+            'track_number': data[14] if len(data) > 14 else ""
+        }
+        
+        return track_info
+
+
+    def _display_track_images(self, track_info):
+        """Displays the album cover and artist image."""
+        # Show album cover
+        if track_info['path'] and hasattr(self, 'cover_label') and self.cover_label:
+            # Get album info to try to find cover art path
+            album_info = self._get_album_info(track_info['album'], track_info['artist'])
+            
+            cover_path = None
+            # Try to get cover from album info
+            if album_info and album_info.get('album_art_path'):
+                cover_path = album_info['album_art_path']
+                if not os.path.exists(cover_path):
+                    cover_path = None
+                    
+            # If not found, look in the file's directory
+            if not cover_path:
+                cover_path = self.find_cover_image(track_info['path'])
+                
+            # Display the cover
+            if cover_path:
+                pixmap = QPixmap(cover_path)
+                pixmap = pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+                self.cover_label.setPixmap(pixmap)
+            else:
+                self.cover_label.setText("No imagen")
+        elif hasattr(self, 'cover_label') and self.cover_label:
+            self.cover_label.setText("No imagen")
+            
+        # Show artist image
+        if track_info['artist'] and hasattr(self, 'artist_image_label') and self.artist_image_label:
+            artist_image_path = self.find_artist_image(track_info['artist'])
+            if artist_image_path:
+                artist_pixmap = QPixmap(artist_image_path)
+                artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
+                self.artist_image_label.setPixmap(artist_pixmap)
+            else:
+                self.artist_image_label.setText("No imagen de artista")
+        elif hasattr(self, 'artist_image_label') and self.artist_image_label:
+            self.artist_image_label.setText("No imagen de artista")
+
+
+    def _display_track_metadata(self, track_info):
+        """Displays track metadata in the metadata panel."""
+        if not hasattr(self, 'metadata_label') or not self.metadata_label:
+            return
+            
+        # Build metadata HTML
+        metadata = f"""<div class='metadata-card'>
+            <b>Título:</b> {track_info['title'] or 'N/A'}<br>
+            <b>Artista:</b> {track_info['artist'] or 'N/A'}<br>
+            <b>Album Artist:</b> {track_info['album_artist'] or 'N/A'}<br>
+            <b>Álbum:</b> {track_info['album'] or 'N/A'}<br>
+            <b>Fecha:</b> {track_info['date'] or 'N/A'}<br>
+            <b>Género:</b> {track_info['genre'] or 'N/A'}<br>
+            <b>Sello:</b> {track_info['label'] or 'N/A'}<br>
+        """
+        
+        # Add technical details if available
+        if track_info['bitrate']:
+            metadata += f"<b>Bitrate:</b> {track_info['bitrate']} kbps<br>"
+        if track_info['bit_depth']:
+            metadata += f"<b>Profundidad:</b> {track_info['bit_depth']} bits<br>"
+        if track_info['sample_rate']:
+            metadata += f"<b>Frecuencia:</b> {track_info['sample_rate']} Hz<br>"
+            
+        # Close the div
+        metadata += "</div>"
+        
+        # Set and show the metadata
+        self.metadata_label.setText(metadata)
+        self.metadata_label.setVisible(True)
+
+
+    def _get_artist_info(self, artist_name):
+        """Gets artist information from the database."""
+        if not artist_name:
+            return None
+            
+        return self.get_artist_info_from_db(artist_name)
+
+
+    def _get_album_info(self, album_name, artist_name=None):
+        """Gets album information from the database."""
+        if not album_name:
+            return None
+            
+        return self.get_album_info_from_db(album_name, artist_name)
+
+
+    def _display_artist_links(self, artist_info):
+        """Displays artist links as buttons."""
+        artist_links = {}
+        
+        # Extract links from artist info
+        if artist_info:
+            artist_links = self.extract_links_from_data(artist_info, 'artist')
+            
+            # Add links from networks table if artist ID exists
+            if artist_info.get('id'):
+                network_links = self.get_artist_networks(artist_info['id'])
+                artist_links.update(network_links)
+                
+        # Update the artist link buttons
+        self.update_artist_link_buttons(artist_links)
+
+
+    def _display_album_links(self, album_info):
+        """Displays album links as buttons."""
+        album_links = {}
+        
+        # Extract links from album info
+        if album_info:
+            album_links = self.extract_links_from_data(album_info, 'album')
+                
+        # Update the album link buttons
+        self.update_album_link_buttons(album_links)
+
+
+    def _display_lyrics(self, data, track_info):
+        """Displays lyrics if available."""
+        lyrics = None
+        lyrics_source = "Unknown"
+        
+        # Try to get lyrics from data
+        if len(data) > 30 and data[30]:
+            lyrics = data[30]
+            if len(data) > 31 and data[31]:
+                lyrics_source = data[31]
+        
+        # If not found in data, try to get from database
+        if not lyrics and track_info['id']:
+            try:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                # Get lyrics
+                cursor.execute("SELECT lyrics FROM lyrics WHERE track_id = ?", (track_info['id'],))
+                lyrics_result = cursor.fetchone()
+                if lyrics_result and lyrics_result[0]:
+                    lyrics = lyrics_result[0]
+                    
+                    # Try to get source
+                    cursor.execute("SELECT source FROM lyrics WHERE track_id = ?", (track_info['id'],))
+                    source_result = cursor.fetchone()
+                    if source_result and source_result[0]:
+                        lyrics_source = source_result[0]
+                        
+                conn.close()
+            except Exception as e:
+                print(f"Error getting lyrics from database: {e}")
+        
+        # Update lyrics display
+        if lyrics:
+            self.update_lyrics_display(lyrics, lyrics_source)
+
+
+    def _display_artist_info(self, artist_info, track_info):
+        """Displays artist information."""
+        # Get artist bio
+        artist_bio = None
+        if artist_info and artist_info.get('bio'):
+            artist_bio = artist_info['bio']
+        
+        # Get artist Wikipedia content
+        wikipedia_content = None
+        if artist_info and artist_info.get('wikipedia_content'):
+            wikipedia_content = artist_info['wikipedia_content']
+        
+        # Display artist bio
+        if artist_bio and hasattr(self, 'lastfm_label') and self.lastfm_label:
+            self.lastfm_label.setText(f"<div class='info-card'><h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div></div>")
+            self.lastfm_label.setVisible(True)
+        elif hasattr(self, 'lastfm_label') and self.lastfm_label:
+            self.lastfm_label.setVisible(False)
+        
+        # Display artist Wikipedia
+        if wikipedia_content and hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+            self.wikipedia_artist_label.setText(f"<div class='info-card'><h3>Wikipedia - {track_info['artist']}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div></div>")
+            self.wikipedia_artist_label.setVisible(True)
+        elif hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
+            self.wikipedia_artist_label.setVisible(False)
+
+
+    def _display_album_info(self, album_info, track_info):
+        """Displays album information."""
+        # Get album Wikipedia content
+        album_wiki_content = None
+        if album_info and album_info.get('wikipedia_content'):
+            album_wiki_content = album_info['wikipedia_content']
+        
+        # Display album Wikipedia
+        if album_wiki_content and hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
+            self.wikipedia_album_label.setText(f"<div class='info-card'><h3>Wikipedia - {track_info['album']}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div></div>")
+            self.wikipedia_album_label.setVisible(True)
+        elif hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
+            self.wikipedia_album_label.setVisible(False)
+
+
+    def _setup_feeds_for_entity(self, data):
+        """Sets up feeds functionality for the current entity."""
+        # Determine entity type and ID
+        entity_type = None
+        entity_id = None
+        
+        if isinstance(data, dict):
+            # Is artist or album
+            if data.get('type') == 'artist':
+                entity_type = 'artist'
+                entity_id = self.get_artist_id_from_name(data.get('name'))
+            elif data.get('type') == 'album':
+                entity_type = 'album'
+                entity_id = self.get_album_id_from_name(data.get('name'), data.get('artist'))
+        else:
+            # Is a song
+            if len(data) > 0 and data[0]:
+                entity_type = 'song'
+                entity_id = data[0]
+        
+        # Setup feeds button
+        if entity_type and entity_id and hasattr(self, 'feeds_button') and self.feeds_button:
+            # Check if feeds are available
+            feeds = self.get_feeds_data(entity_type, entity_id)
+            self.feeds_button.setVisible(bool(feeds))
+            
+            # Ensure feeds page is set up
+            if feeds:
+                self.setup_feeds_page()
+                
+                # Update feeds display
+                if hasattr(self, 'feeds_container'):
+                    self.create_feed_groupboxes(self.feeds_container, feeds)
+        elif hasattr(self, 'feeds_button') and self.feeds_button:
+            self.feeds_button.setVisible(False)
+
+
+    def _display_error_info(self, data, error_message):
+        """Displays basic info in case of error."""
+        # Show simple metadata
+        if hasattr(self, 'metadata_label') and self.metadata_label and len(data) > 2:
+            title = data[2] if len(data) > 2 else "Unknown"
+            artist = data[3] if len(data) > 3 else "Unknown"
+            
+            self.metadata_label.setText(f"<div class='metadata-card'><b>Título:</b> {title}<br><b>Artista:</b> {artist}<br><b>Error:</b> {error_message}</div>")
+            self.metadata_label.setVisible(True)
+        
+        # Show error in info panel
+        if hasattr(self, 'lastfm_label') and self.lastfm_label:
+            self.lastfm_label.setText(f"<div class='info-card'><h3>Error</h3><p>Could not load detailed information: {error_message}</p></div>")
+            self.lastfm_label.setVisible(True)
+        
+        # Hide other panels
+        for label in ['wikipedia_artist_label', 'wikipedia_album_label']:
+            if hasattr(self, label) and getattr(self, label):
+                getattr(self, label).setVisible(False)
+        
+        # Hide link groups
+        for group in ['artist_links_group', 'album_links_group']:
+            if hasattr(self, group) and getattr(self, group):
+                getattr(self, group).hide()
+    
+# OTRAS FUNCIONES
 
     def search(self):
         """Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto."""
@@ -3679,75 +3770,114 @@ class MusicBrowser(BaseModule):
         return links_frame
 
     def setup_link_buttons_container(self):
-        """Initializes the link button containers safely."""
+        """Initializes the link button containers with better debugging."""
         try:
-            # Find the group boxes within info_scroll
-            if hasattr(self, 'info_scroll') and self.info_scroll:
-                # Get the content widget of info_scroll
-                content_widget = self.info_scroll.widget()
+            # Store debug info
+            debug_info = {}
+            
+            # Find the group boxes directly from the main UI
+            if hasattr(self, 'main_ui'):
+                # Try to find by direct reference first
+                self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
+                debug_info['artist_direct'] = bool(self.artist_links_group)
                 
-                if content_widget:
-                    # Find groups in content widget
-                    self.artist_links_group = content_widget.findChild(QGroupBox, "artist_links_group")
-                    self.album_links_group = content_widget.findChild(QGroupBox, "album_links_group")
+                self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
+                debug_info['album_direct'] = bool(self.album_links_group)
+                
+                self.lyrics_group = self.main_ui.findChild(QGroupBox, "lyrics_group")
+                debug_info['lyrics_direct'] = bool(self.lyrics_group)
+                
+                # Try looking in info_scroll's widget if they weren't found directly
+                if hasattr(self, 'info_scroll') and self.info_scroll and self.info_scroll.widget():
+                    info_widget = self.info_scroll.widget()
                     
-                    # Also find the feeds button in buttons_container
-                    if hasattr(self, 'buttons_container') and self.buttons_container:
-                        self.feeds_button = self.buttons_container.findChild(QPushButton, "feeds_button")
-                        
-                        # Connect the feeds button if found
-                        if self.feeds_button:
-                            self.feeds_button.clicked.connect(self.handle_feeds_button_click)
-                            print("Botón de feeds encontrado y conectado")
-                else:
-                    print("Widget de contenido no encontrado en info_scroll")
-                    self.artist_links_group = None
-                    self.album_links_group = None
-            else:
-                print("info_scroll no disponible")
-                self.artist_links_group = None
-                self.album_links_group = None
+                    if not self.artist_links_group:
+                        self.artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
+                        debug_info['artist_in_info'] = bool(self.artist_links_group)
+                    
+                    if not self.album_links_group:
+                        self.album_links_group = info_widget.findChild(QGroupBox, "album_links_group")
+                        debug_info['album_in_info'] = bool(self.album_links_group)
+                    
+                    if not self.lyrics_group:
+                        self.lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
+                        debug_info['lyrics_in_info'] = bool(self.lyrics_group)
                 
-            # Create layouts for existing groups
+                # Initialize info_groupboxes if it doesn't exist
+                if not hasattr(self, 'info_groupboxes'):
+                    self.info_groupboxes = {}
+                
+                # Store references in info_groupboxes
+                if self.artist_links_group:
+                    self.info_groupboxes['artist_links_group'] = self.artist_links_group
+                    
+                if self.album_links_group:
+                    self.info_groupboxes['album_links_group'] = self.album_links_group
+                    
+                if self.lyrics_group:
+                    self.info_groupboxes['lyrics_group'] = self.lyrics_group
+            
+            # Log debug info
+            print(f"Link containers debug: {debug_info}")
+            
+            # Get existing layouts or create new ones
             self.artist_links_layout = None
             if self.artist_links_group:
-                print("artist_links_group encontrado")
                 if self.artist_links_group.layout():
                     self.artist_links_layout = self.artist_links_group.layout()
+                    debug_info['artist_layout_existing'] = True
                 else:
                     self.artist_links_layout = QHBoxLayout(self.artist_links_group)
                     self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
                     self.artist_links_layout.setSpacing(5)
+                    debug_info['artist_layout_created'] = True
                     
             self.album_links_layout = None
             if self.album_links_group:
-                print("album_links_group encontrado")
                 if self.album_links_group.layout():
                     self.album_links_layout = self.album_links_group.layout()
+                    debug_info['album_layout_existing'] = True
                 else:
                     self.album_links_layout = QHBoxLayout(self.album_links_group)
                     self.album_links_layout.setContentsMargins(5, 25, 5, 5)
                     self.album_links_layout.setSpacing(5)
-                        
-            # Store references to buttons (always initialize)
+                    debug_info['album_layout_created'] = True
+            
+            # Always initialize button collections
             self.artist_buttons = {}
             self.album_buttons = {}
                 
-            # Hide groups initially if they exist
+            # Hide the groups initially
             if self.artist_links_group:
                 self.artist_links_group.hide()
+                
             if self.album_links_group:
                 self.album_links_group.hide()
                 
-            print("Inicialización de contenedores de botones de enlaces completada")
-            return True
+            if self.lyrics_group:
+                self.lyrics_group.hide()
+                
+            # Log final status
+            debug_info['artist_final'] = bool(self.artist_links_group and self.artist_links_layout)
+            debug_info['album_final'] = bool(self.album_links_group and self.album_links_layout)
+            print(f"Link containers final status: {debug_info}")
+            
+            # Determine success status
+            success = bool(
+                (self.artist_links_group and self.artist_links_layout) or
+                (self.album_links_group and self.album_links_layout)
+            )
+            
+            return success
+            
         except Exception as e:
-            print(f"Error en setup_link_buttons_container: {e}")
+            print(f"Error in setup_link_buttons_container: {e}")
             traceback.print_exc()
                 
             # Ensure we have null references instead of uninitialized ones
             self.artist_links_group = None
             self.album_links_group = None
+            self.lyrics_group = None
             self.artist_links_layout = None
             self.album_links_layout = None
             self.artist_buttons = {}
@@ -3755,13 +3885,13 @@ class MusicBrowser(BaseModule):
                 
             return False
 
-    def update_dynamic_link_buttons(self, container, layout, links_dict, button_store, tipo=None):
+
+    def update_dynamic_link_buttons(self, container, links_dict, button_store, tipo=None):
         """
-        Creates or updates dynamic link buttons in a container with better error handling.
+        Creates or updates dynamic link buttons in a container with improved error handling.
         
         Args:
             container (QGroupBox): The container for the buttons
-            layout (QLayout): The layout of the container
             links_dict (dict): Dictionary of links {service_name: url}
             button_store (dict): Dictionary to store button references
             tipo (str): Type of buttons ('artist' or 'album')
@@ -3769,16 +3899,33 @@ class MusicBrowser(BaseModule):
         Returns:
             bool: True if buttons were created/shown, False otherwise
         """
-        if not container or not layout:
-            print(f"Missing container or layout for {tipo} links")
+        # Validate container
+        if not container:
+            print(f"Missing container for {tipo} links")
             return False
+        
+        # Get existing layout
+        layout = container.layout()
+        if not layout:
+            print(f"Container exists but has no layout for {tipo} links")
+            # Create layout as a last resort
+            layout = QHBoxLayout(container)
+            layout.setContentsMargins(5, 25, 5, 5)
+            layout.setSpacing(5)
+            print(f"Created emergency layout for {tipo} links")
+        
+        # Debug info
+        print(f"Working with {tipo} links layout: {layout}")
                 
         try:
             # Clear existing buttons first
             while layout.count():
                 item = layout.takeAt(0)
                 if item.widget():
-                    item.widget().deleteLater()
+                    widget = item.widget()
+                    layout.removeWidget(widget)
+                    widget.setParent(None)
+                    widget.deleteLater()
             
             # Clear button store
             button_store.clear()
@@ -3788,8 +3935,7 @@ class MusicBrowser(BaseModule):
                 return False
             
             # Debug output    
-            print(f"Creando botones para {len(links_dict)} enlaces de {tipo}")
-            print(f"Enlaces disponibles: {list(links_dict.keys())}")
+            print(f"Creating buttons for {len(links_dict)} {tipo} links")
                 
             # Create buttons for each link
             for service_name, url in links_dict.items():
@@ -3803,7 +3949,7 @@ class MusicBrowser(BaseModule):
                     object_name = f"{normalized_name}_link_album_button"
                 
                 # Create button
-                button = QPushButton()
+                button = QPushButton(container)  # Set parent explicitly
                 button.setFixedSize(34, 34)
                 button.setObjectName(object_name)
                 
@@ -3848,20 +3994,19 @@ class MusicBrowser(BaseModule):
                 
                 # Store reference
                 button_store[service_name] = button
-                
-                print(f"Creado botón para {service_name}")
+            
+            # Add stretch to push buttons to the left
+            layout.addStretch()
                 
             # Show the container if we added buttons
             has_buttons = len(button_store) > 0
             container.setVisible(has_buttons)
             
-            if has_buttons:
-                print(f"Enlaces de {tipo} visibles: {has_buttons}")
-                
+            print(f"Successfully created {len(button_store)} buttons for {tipo}")
             return has_buttons
             
         except Exception as e:
-            print(f"Error creando botones de enlaces para {tipo}: {e}")
+            print(f"Error creating link buttons for {tipo}: {e}")
             traceback.print_exc()
             
             container.hide()
@@ -3875,11 +4020,11 @@ class MusicBrowser(BaseModule):
             artist_links (dict): Dictionary of artist links {service_name: url}
         """
         if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
+            print("Artist links group not found")
             return False
             
         return self.update_dynamic_link_buttons(
-            self.artist_links_group, 
-            self.artist_links_layout,
+            self.artist_links_group,
             artist_links,
             self.artist_buttons,
             'artist'
@@ -3893,16 +4038,17 @@ class MusicBrowser(BaseModule):
             album_links (dict): Dictionary of album links {service_name: url}
         """
         if not hasattr(self, 'album_links_group') or not self.album_links_group:
+            print("Album links group not found")
             return False
             
         return self.update_dynamic_link_buttons(
-            self.album_links_group, 
-            self.album_links_layout,
+            self.album_links_group,
             album_links,
             self.album_buttons,
             'album'
         )
-
+    
+    
     def open_url(self, url):
         """Opens a URL safely using QDesktopServices"""
         try:
@@ -3923,8 +4069,156 @@ class MusicBrowser(BaseModule):
             traceback.print_exc()
 
 
-# FEEDS!!
+    def init_link_containers(self):
+        """
+        Properly initializes link containers after UI is loaded.
+        Should be called from init_ui after the UI is fully loaded.
+        """
+        # Check if info_scroll and its widget exist
+        if not hasattr(self, 'info_scroll') or not self.info_scroll:
+            print("info_scroll not available")
+            return False
+            
+        info_widget = self.info_scroll.widget()
+        if not info_widget:
+            print("info_scroll has no widget")
+            return False
+        
+        # Find the containers
+        self.artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
+        self.album_links_group = info_widget.findChild(QGroupBox, "album_links_group") 
+        self.lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
+        
+        # Debug information
+        print(f"Found containers: artist={bool(self.artist_links_group)}, album={bool(self.album_links_group)}, lyrics={bool(self.lyrics_group)}")
+        
+        # Initialize dictionary if needed
+        if not hasattr(self, 'info_groupboxes'):
+            self.info_groupboxes = {}
+        
+        # Store references and ensure layouts exist
+        if self.artist_links_group:
+            self.info_groupboxes['artist_links_group'] = self.artist_links_group
+            
+            # Force remove any existing layout
+            if self.artist_links_group.layout():
+                print("Removing existing artist links layout")
+                QWidget().setLayout(self.artist_links_group.layout())
+            
+            # Create new layout
+            print("Creating new layout for artist_links_group")
+            self.artist_links_layout = QHBoxLayout(self.artist_links_group)
+            self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
+            self.artist_links_layout.setSpacing(5)
+        
+        if self.album_links_group:
+            self.info_groupboxes['album_links_group'] = self.album_links_group
+            
+            # Force remove any existing layout
+            if self.album_links_group.layout():
+                print("Removing existing album links layout")
+                QWidget().setLayout(self.album_links_group.layout())
+            
+            # Create new layout
+            print("Creating new layout for album_links_group")
+            self.album_links_layout = QHBoxLayout(self.album_links_group)
+            self.album_links_layout.setContentsMargins(5, 25, 5, 5)
+            self.album_links_layout.setSpacing(5)
+        
+        if self.lyrics_group:
+            self.info_groupboxes['lyrics_group'] = self.lyrics_group
+            
+            # Force remove any existing layout
+            if self.lyrics_group.layout():
+                print("Removing existing lyrics layout")
+                QWidget().setLayout(self.lyrics_group.layout())
+            
+            # Create new layout
+            print("Creating new layout for lyrics_group")
+            lyrics_layout = QVBoxLayout(self.lyrics_group)
+            lyrics_layout.setContentsMargins(5, 25, 5, 5)
+            
+            # Add a label for lyrics if it doesn't exist
+            lyrics_label = self.lyrics_group.findChild(QLabel, "lyrics_label")
+            if not lyrics_label:
+                lyrics_label = QLabel(self.lyrics_group)
+                lyrics_label.setObjectName("lyrics_label")
+                lyrics_label.setWordWrap(True)
+                lyrics_label.setTextFormat(Qt.TextFormat.RichText)
+                lyrics_layout.addWidget(lyrics_label)
+            self.lyrics_label = lyrics_label
+        
+        # Store button references
+        self.artist_buttons = {}
+        self.album_buttons = {}
+        
+        # Hide containers initially
+        if self.artist_links_group:
+            self.artist_links_group.hide()
+        if self.album_links_group:
+            self.album_links_group.hide()
+        if self.lyrics_group:
+            self.lyrics_group.hide()
+        
+        # Debug final status
+        print(f"Link containers initialized: artist={bool(self.artist_links_group and self.artist_links_group.layout())}, album={bool(self.album_links_group and self.album_links_group.layout())}")
+        
+        return True
 
+
+    def update_lyrics_display(self, lyrics_text, source="Unknown"):
+        """
+        Updates the lyrics display with proper formatting
+        
+        Args:
+            lyrics_text (str): The lyrics text
+            source (str): Source of the lyrics
+        """
+        if not lyrics_text:
+            if hasattr(self, 'lyrics_group') and self.lyrics_group:
+                self.lyrics_group.hide()
+            return
+        
+        # Format lyrics with source
+        formatted_lyrics = f"{lyrics_text}\n\n<i>Source: {source}</i>"
+        
+        # Find the lyrics label
+        lyrics_label = None
+        if hasattr(self, 'lyrics_label'):
+            lyrics_label = self.lyrics_label
+        elif hasattr(self, 'lyrics_group') and self.lyrics_group:
+            lyrics_label = self.lyrics_group.findChild(QLabel, "lyrics_label")
+            if lyrics_label:
+                self.lyrics_label = lyrics_label
+        
+        # Update label and show group
+        if lyrics_label:
+            lyrics_label.setText(formatted_lyrics)
+            if hasattr(self, 'lyrics_group') and self.lyrics_group:
+                self.lyrics_group.show()
+                
+                # Move to the top if possible
+                if self.lyrics_group.parentWidget() and self.lyrics_group.parentWidget().layout():
+                    layout = self.lyrics_group.parentWidget().layout()
+                    layout.removeWidget(self.lyrics_group)
+                    layout.insertWidget(0, self.lyrics_group)
+
+
+# FEEDS!!
+    def improve_collapsible_groupbox(self):
+        """
+        Make UI-defined group boxes collapsible.
+        Called after UI is loaded.
+        """
+        # Get all group boxes from the info widget
+        if hasattr(self, 'info_widget') and self.info_widget:
+            for groupbox in self.info_widget.findChildren(QGroupBox):
+                # Skip if already a CollapsibleGroupBox
+                if isinstance(groupbox, CollapsibleGroupBox):
+                    continue
+                    
+                # Convert to collapsible
+                self.convert_to_collapsible(groupbox)
 
     def create_feed_groupboxes(self, parent_widget, feeds_data):
         """
@@ -4345,6 +4639,46 @@ class MusicBrowser(BaseModule):
         except Exception as e:
             print(f"Error getting album ID: {e}")
             return None
+
+
+    def setup_feeds_page(self):
+        """Sets up the feeds page in the stacked widget"""
+        if not hasattr(self, 'main_ui') or not hasattr(self.main_ui, 'info_panel_stacked'):
+            return False
+            
+        # Get the second page of the stacked widget
+        feeds_page = self.main_ui.info_panel_stacked.widget(1)
+        if not feeds_page:
+            return False
+            
+        # Check if layout exists
+        if not feeds_page.layout():
+            feeds_layout = QVBoxLayout(feeds_page)
+        else:
+            feeds_layout = feeds_page.layout()
+            
+        # Add back button if it doesn't exist
+        back_button = feeds_page.findChild(QPushButton, "back_button")
+        if not back_button:
+            back_button = QPushButton("Back to Info", feeds_page)
+            back_button.setObjectName("back_button")
+            back_button.clicked.connect(lambda: self.switch_info_panel(0))
+            feeds_layout.insertWidget(0, back_button)
+            
+        # Add container for feeds if it doesn't exist
+        feeds_container = feeds_page.findChild(QWidget, "feeds_container")
+        if not feeds_container:
+            feeds_container = QWidget(feeds_page)
+            feeds_container.setObjectName("feeds_container")
+            feeds_container_layout = QVBoxLayout(feeds_container)
+            feeds_container_layout.setContentsMargins(0, 0, 0, 0)
+            feeds_layout.addWidget(feeds_container)
+            
+        # Store references
+        self.feeds_container = feeds_container
+        self.back_button = back_button
+        
+        return True
 
 
 # DEBUG
