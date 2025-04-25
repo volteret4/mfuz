@@ -235,31 +235,40 @@ class MusicBrowser(BaseModule):
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         self.boton_pulsado = 0  # Estado inicial
 
-        # Inicializar atributos importantes con valores por defecto
+        # Inicializar referencia a main_ui
+        self.main_ui = None
+
+        # Inicializar referencias a widgets que serán accedidos
+        # Este paso es crucial para evitar AttributeError
         self.results_tree = None
         self.results_tree_widget = None
-        self.results_tree_container = None
-        self.lastfm_label = None
-        self.metadata_label = None
-        self.info_widget = None
+        self.results_tree_container = None 
         self.cover_label = None
         self.artist_image_label = None
-        self.advanced_buttons = []
-        self.ui_components_loaded = {'main': False, 'tree': False, 'info': False, 'advanced': False}
-
-        # Initialize additional attributes for collapsible groupboxes
-        self.info_groupboxes = {}
-        self.feeds_button = None
-        self.back_button = None
         
-        # Initialize references to UI elements that might not exist
+        # Labels para mostrar información
+        self.lastfm_label = None
+        self.metadata_label = None
+        self.links_label = None
+        self.wikipedia_artist_label = None
+        self.wikipedia_album_label = None
+        
+        # Botones y grupos
+        self.advanced_buttons = []
         self.artist_links_group = None
         self.album_links_group = None
         self.artist_links_layout = None
         self.album_links_layout = None
-        self.info_groupboxes = {}
         self.feeds_button = None
         self.back_button = None
+        
+        # Estado de carga de UI
+        self.ui_components_loaded = {'main': False, 'tree': False, 'info': False, 'advanced': False}
+        
+        # Colecciones
+        self.info_groupboxes = {}
+        self.artist_buttons = {}
+        self.album_buttons = {}
         
         # Llamar al constructor de la clase padre con los argumentos restantes
         super().__init__(parent=parent, theme=theme, **kwargs)
@@ -269,7 +278,7 @@ class MusicBrowser(BaseModule):
         self.setup_hotkeys(self.hotkeys_config)
 
     def init_ui(self):
-        """Inicializa la interfaz del módulo."""
+        """Inicializa la interfaz del módulo con mejor detección de errores."""
         # Limpiar el layout existente si hay alguno
         if self.layout():
             QWidget().setLayout(self.layout())
@@ -305,20 +314,8 @@ class MusicBrowser(BaseModule):
         # Establecer objectName para este módulo principal
         self.setObjectName("music_fuzzy_module")
         
-        # Después de cargar la UI principal, también establecer su objectName
-        if hasattr(self, 'main_ui'):
-            self.main_ui.setObjectName("music_browser_main")
-
-
         # Cargar otros componentes de la UI
         self._load_results_tree()
-
-        # Inicializar con NULL los widgets de información para evitar errores
-        self.lastfm_label = None
-        self.metadata_label = None
-        self.links_label = None
-        self.wikipedia_artist_label = None
-        self.wikipedia_album_label = None
 
         # Configurar los widgets de información
         self.setup_info_widget()
@@ -329,26 +326,38 @@ class MusicBrowser(BaseModule):
             # Forzar el método fallback
             self._fallback_setup_info_widget()
 
-
         # Configuración común
-        # Una vez configuradas todas las referencias
         self._setup_references()
         
         # Crear y configurar el frame de enlaces
         self.setup_link_buttons_container()
-        # Cargar otros componentes UI
+        
+        # Detectar y conectar el botón de feeds si existe
+        if hasattr(self, 'main_ui'):
+            feeds_button = self.main_ui.findChild(QPushButton, "feeds_button")
+            if feeds_button:
+                self.feeds_button = feeds_button
+                self.feeds_button.clicked.connect(self.handle_feeds_button_click)
+                print("Botón de feeds encontrado y conectado")
         
         # Conectar señales después de tener todos los widgets
         self.connect_signals()
         
         # Aplicar el tema después de toda la inicialización
-        self.apply_theme(self.selected_theme)
+        try:
+            self.apply_theme(self.selected_theme)
+        except Exception as e:
+            print(f"Error aplicando tema: {e}")
+            traceback.print_exc()
         
         # Aplicar ajustes específicos que no pueden manejarse solo con CSS
         self._apply_music_specific_styles()
 
         # Inicializar el estado de los ajustes avanzados
         self._advanced_settings_loaded = False
+        
+        # Detectar elementos UI para ayudar con la depuración
+        self.detect_ui_elements()
 
     def load_ui_file(self, ui_file_name, required_widgets=None):
         """
@@ -1855,15 +1864,14 @@ class MusicBrowser(BaseModule):
 
     def apply_theme(self, theme_name=None):
         """
-        Aplica el tema al módulo utilizando el sistema centralizado.
+        Aplica el tema al módulo con mejor manejo de errores para estilos.
         
         Args:
             theme_name (str, optional): Nombre del tema a aplicar. Si es None, usa el tema actual.
         """
-        # Verificar si existe el módulo themes.py
         try:
             # Importar dinámicamente
-            from themes.themes import apply_theme as apply_central_theme, ThemeEffects
+            from themes.themes import apply_theme as apply_central_theme, THEMES
             
             # Asegurarse de que tenemos objectName
             if not self.objectName():
@@ -1872,27 +1880,23 @@ class MusicBrowser(BaseModule):
             # Si hay un cambio de tema, guardarlo
             if theme_name:
                 self.current_theme = theme_name
+            elif not hasattr(self, 'current_theme'):
+                self.current_theme = 'Tokyo Night'  # Valor por defecto
+                
+            # Verificar que el tema existe
+            if hasattr(THEMES, self.current_theme) and self.current_theme not in THEMES:
+                print(f"Tema {self.current_theme} no encontrado, usando Tokyo Night")
+                self.current_theme = 'Tokyo Night'
                 
             # Usar el sistema centralizado
             apply_central_theme(self, self.current_theme)
             
-            # Aplicar efectos especiales a botones específicos
-            if hasattr(self, 'play_button') and self.play_button:
-                ThemeEffects.apply_ripple_effect(self.play_button)
-            if hasattr(self, 'spotify_button') and self.spotify_button:
-                ThemeEffects.apply_ripple_effect(self.spotify_button)
-                
-            # Configurar objectNames adicionales si es necesario
-            if hasattr(self, 'results_tree') and self.results_tree:
-                self.results_tree.setObjectName("results_tree")
-            
             # Aplicar ajustes específicos para este módulo
             self._apply_music_specific_styles()
-            
-            return
-        except ImportError:
-            # Fallback al método de la clase base
-            super().apply_theme(theme_name)
+        except Exception as e:
+            print(f"Error aplicando tema: {e}")
+            traceback.print_exc()
+            # No fallar completamente si el tema no se aplica
 
     def _apply_music_specific_styles(self):
         """
@@ -1951,7 +1955,15 @@ class MusicBrowser(BaseModule):
                 if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
                     print("Error crítico: lastfm_label no disponible después de reconfigurar")
                     return
+                
+                # Add safe handling for feeds_button
+                if hasattr(self, 'feeds_button') and self.feeds_button:
+                    self.feeds_button.setVisible(False)
+                else:
+                    # Don't create here - it should be created elsewhere
+                    pass
 
+            # Don'
             # Limpiar detalles anteriores
             self.clear_details()
 
@@ -2120,6 +2132,57 @@ class MusicBrowser(BaseModule):
                 self.update_artist_link_buttons(artist_links)
                 self.update_album_link_buttons(album_links)
 
+                lyrics = None
+                lyrics_source = "Desconocida"
+                
+                # Buscar letra en los datos directos (si está en los índices esperados)
+                if len(data) > 30 and data[30]:
+                    lyrics = data[30]
+                    if len(data) > 31 and data[31]:
+                        lyrics_source = data[31]
+                
+                # Si no hay letra directa y tenemos ID de canción, intentar buscar en la base de datos
+                if not lyrics and len(data) > 0 and data[0]:
+                    try:
+                        conn = sqlite3.connect(self.db_path)
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT lyrics FROM lyrics WHERE track_id = ?", (data[0],))
+                        lyrics_result = cursor.fetchone()
+                        if lyrics_result and lyrics_result[0]:
+                            lyrics = lyrics_result[0]
+                            
+                            # También intentar obtener la fuente
+                            cursor.execute("SELECT source FROM lyrics WHERE track_id = ?", (data[0],))
+                            source_result = cursor.fetchone()
+                            if source_result and source_result[0]:
+                                lyrics_source = source_result[0]
+                                
+                        conn.close()
+                    except Exception as e:
+                        print(f"Error al buscar letra en la base de datos: {e}")
+
+                # Actualizar lyrics_group si existe
+                if hasattr(self, 'info_groupboxes') and 'lyrics_group' in self.info_groupboxes:
+                    lyrics_box = self.info_groupboxes.get('lyrics_group')
+                    if lyrics_box:
+                        if lyrics:
+                            # Usar método existente para actualizar grupo
+                            self.update_groupbox_content(
+                                lyrics_box, 
+                                f"{lyrics}\n\nFuente: {lyrics_source}",
+                                "lyrics_label"
+                            )
+                            # Asegurar que sea visible
+                            lyrics_box.setVisible(True)
+                            # Mover al inicio (si es posible)
+                            if lyrics_box.parentWidget() and lyrics_box.parentWidget().layout():
+                                layout = lyrics_box.parentWidget().layout()
+                                layout.removeWidget(lyrics_box)
+                                layout.insertWidget(0, lyrics_box)
+                        else:
+                            lyrics_box.setVisible(False)
+
+
                 # Mostrar Wikipedia del artista si está disponible
                 if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
                     if wikipedia_content:
@@ -2170,29 +2233,19 @@ class MusicBrowser(BaseModule):
                     entity_type = 'song'
                     entity_id = data[0]
                     
-            # Get feeds data if we have entity info
+            # Handle feeds safely
             if entity_type and entity_id:
-                feeds = self.get_feeds_data(entity_type, entity_id)
-                if feeds:
-                    # Create feed groupboxes in the second page of stacked widget
-                    feeds_container = self.main_ui.info_panel_stacked.widget(1)
-                    self.create_feed_groupboxes(feeds_container, feeds)
+                if hasattr(self, 'feeds_button') and self.feeds_button:
+                    # Check if we have feeds before showing the button
+                    feeds = self.get_feeds_data(entity_type, entity_id)
+                    self.feeds_button.setVisible(bool(feeds))
                     
-                    # If we have feeds, add a "Show Feeds" button
-                    if not hasattr(self, 'feeds_button'):
-                        self.feeds_button = QPushButton("Ver Feeds")
-                        self.feeds_button.setObjectName("feeds_button")
-                        self.feeds_button.clicked.connect(lambda: self.switch_info_panel(1))
-                        
-                        # Add button to the first page of stacked widget
-                        info_page = self.main_ui.info_panel_stacked.widget(0)
-                        if info_page.layout():
-                            info_page.layout().addWidget(self.feeds_button)
-                    
-                    self.feeds_button.setVisible(True)
+                    # Only make visible if it exists
+                    if hasattr(self, 'feeds_button') and self.feeds_button:
+                        self.feeds_button.setVisible(True)
                 else:
                     # No feeds available, hide button if exists
-                    if hasattr(self, 'feeds_button'):
+                    if hasattr(self, 'feeds_button') and self.feeds_button:
                         self.feeds_button.setVisible(False)
                         
                 # Create "Back to Info" button in feeds page
@@ -2461,8 +2514,8 @@ class MusicBrowser(BaseModule):
 
 
     def clear_details(self):
-        """Limpia todos los campos de detalles."""
-        # Limpiar imágenes
+        """Limpia todos los campos de detalles con manejo seguro de None."""
+        # Limpiar imágenes de forma segura
         if hasattr(self, 'cover_label') and self.cover_label:
             self.cover_label.clear()
             self.cover_label.setText("No imagen")
@@ -2478,28 +2531,15 @@ class MusicBrowser(BaseModule):
 
         # Limpiar información detallada (panel inferior)
         # Inicialmente ocultamos todos los paneles
-        if hasattr(self, 'links_label') and self.links_label:
-            self.links_label.setText("")
-            self.links_label.setVisible(False)  # Ocultar hasta que tenga contenido
+        for label_attr in ['links_label', 'wikipedia_artist_label', 'lastfm_label', 'wikipedia_album_label']:
+            if hasattr(self, label_attr) and getattr(self, label_attr):
+                getattr(self, label_attr).setText("")
+                getattr(self, label_attr).setVisible(False)
 
-        if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-            self.wikipedia_artist_label.setText("")
-            self.wikipedia_artist_label.setVisible(False)  # Ocultar hasta que tenga contenido
-
-        if hasattr(self, 'lastfm_label') and self.lastfm_label:
-            self.lastfm_label.setText("")
-            self.lastfm_label.setVisible(False)  # Ocultar hasta que tenga contenido
-
-        if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-            self.wikipedia_album_label.setText("")
-            self.wikipedia_album_label.setVisible(False)  # Ocultar hasta que tenga contenido
-
-        # Ocultar contenedores de botones de enlaces - AÑADIR COMPROBACIONES
-        if hasattr(self, 'artist_links_group') and self.artist_links_group:
-            self.artist_links_group.hide()
-        
-        if hasattr(self, 'album_links_group') and self.album_links_group:
-            self.album_links_group.hide()
+        # Ocultar contenedores de botones de enlaces
+        for group_attr in ['artist_links_group', 'album_links_group']:
+            if hasattr(self, group_attr) and getattr(self, group_attr):
+                getattr(self, group_attr).hide()
 
         # Si tenemos GroupBoxes colapsables, resetearlos
         if hasattr(self, 'info_groupboxes'):
@@ -2507,10 +2547,10 @@ class MusicBrowser(BaseModule):
                 if groupbox:
                     groupbox.setVisible(False)
 
-        # Ocultar botones de feed si existen
+        # Ocultar botón de feed si existe
         if hasattr(self, 'feeds_button') and self.feeds_button:
             self.feeds_button.setVisible(False)
-            
+                
         # Asegurarnos de estar en el panel principal
         if hasattr(self, 'main_ui') and hasattr(self.main_ui, 'info_panel_stacked'):
             self.main_ui.info_panel_stacked.setCurrentIndex(0)
@@ -3639,67 +3679,72 @@ class MusicBrowser(BaseModule):
         return links_frame
 
     def setup_link_buttons_container(self):
-        """Initializes the link button containers."""
+        """Initializes the link button containers safely."""
         try:
-            # Find the group boxes for artist and album links
-            self.artist_links_group = None
-            self.album_links_group = None
-            
-            if hasattr(self, 'main_ui'):
-                self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
-                self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
-            
-            # If the UI doesn't have these elements, we'll create them
-            if not self.artist_links_group:
-                print("Nota: artist_links_group no encontrado en UI")
-                # You could create it dynamically here if needed
+            # Find the group boxes within info_scroll
+            if hasattr(self, 'info_scroll') and self.info_scroll:
+                # Get the content widget of info_scroll
+                content_widget = self.info_scroll.widget()
                 
-            if not self.album_links_group:
-                print("Nota: album_links_group no encontrado en UI")
-                # You could create it dynamically here if needed
-            
-            # Only setup layouts if the groups exist
+                if content_widget:
+                    # Find groups in content widget
+                    self.artist_links_group = content_widget.findChild(QGroupBox, "artist_links_group")
+                    self.album_links_group = content_widget.findChild(QGroupBox, "album_links_group")
+                    
+                    # Also find the feeds button in buttons_container
+                    if hasattr(self, 'buttons_container') and self.buttons_container:
+                        self.feeds_button = self.buttons_container.findChild(QPushButton, "feeds_button")
+                        
+                        # Connect the feeds button if found
+                        if self.feeds_button:
+                            self.feeds_button.clicked.connect(self.handle_feeds_button_click)
+                            print("Botón de feeds encontrado y conectado")
+                else:
+                    print("Widget de contenido no encontrado en info_scroll")
+                    self.artist_links_group = None
+                    self.album_links_group = None
+            else:
+                print("info_scroll no disponible")
+                self.artist_links_group = None
+                self.album_links_group = None
+                
+            # Create layouts for existing groups
+            self.artist_links_layout = None
             if self.artist_links_group:
+                print("artist_links_group encontrado")
                 if self.artist_links_group.layout():
-                    # Use existing layout if it exists
                     self.artist_links_layout = self.artist_links_group.layout()
                 else:
-                    # Create a new layout
-                    self.artist_links_layout = QVBoxLayout(self.artist_links_group)
+                    self.artist_links_layout = QHBoxLayout(self.artist_links_group)
                     self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
-                    self.artist_links_layout.setSpacing(0)
-            else:
-                self.artist_links_layout = None
-                
+                    self.artist_links_layout.setSpacing(5)
+                    
+            self.album_links_layout = None
             if self.album_links_group:
+                print("album_links_group encontrado")
                 if self.album_links_group.layout():
-                    # Use existing layout if it exists
                     self.album_links_layout = self.album_links_group.layout()
                 else:
-                    # Create a new layout
-                    self.album_links_layout = QVBoxLayout(self.album_links_group)
+                    self.album_links_layout = QHBoxLayout(self.album_links_group)
                     self.album_links_layout.setContentsMargins(5, 25, 5, 5)
-                    self.album_links_layout.setSpacing(0)
-            else:
-                self.album_links_layout = None
-                    
-            # Store references to buttons
+                    self.album_links_layout.setSpacing(5)
+                        
+            # Store references to buttons (always initialize)
             self.artist_buttons = {}
             self.album_buttons = {}
-            
+                
             # Hide groups initially if they exist
             if self.artist_links_group:
                 self.artist_links_group.hide()
             if self.album_links_group:
                 self.album_links_group.hide()
-            
+                
             print("Inicialización de contenedores de botones de enlaces completada")
             return True
         except Exception as e:
             print(f"Error en setup_link_buttons_container: {e}")
-            import traceback
             traceback.print_exc()
-            
+                
             # Ensure we have null references instead of uninitialized ones
             self.artist_links_group = None
             self.album_links_group = None
@@ -3707,12 +3752,12 @@ class MusicBrowser(BaseModule):
             self.album_links_layout = None
             self.artist_buttons = {}
             self.album_buttons = {}
-            
+                
             return False
 
     def update_dynamic_link_buttons(self, container, layout, links_dict, button_store, tipo=None):
         """
-        Creates or updates dynamic link buttons in a container.
+        Creates or updates dynamic link buttons in a container with better error handling.
         
         Args:
             container (QGroupBox): The container for the buttons
@@ -3727,99 +3772,100 @@ class MusicBrowser(BaseModule):
         if not container or not layout:
             print(f"Missing container or layout for {tipo} links")
             return False
+                
+        try:
+            # Clear existing buttons first
+            while layout.count():
+                item = layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
             
-        # Clear existing buttons first
-        while layout.count():
-            item = layout.takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
-        
-        # Clear button store
-        button_store.clear()
-        
-        if not links_dict:
+            # Clear button store
+            button_store.clear()
+            
+            if not links_dict:
+                container.hide()
+                return False
+            
+            # Debug output    
+            print(f"Creando botones para {len(links_dict)} enlaces de {tipo}")
+            print(f"Enlaces disponibles: {list(links_dict.keys())}")
+                
+            # Create buttons for each link
+            for service_name, url in links_dict.items():
+                if not url or not isinstance(url, str) or not url.strip():
+                    continue
+                    
+                # Normalize service name and create object name
+                normalized_name = service_name.lower().replace('_', '')
+                object_name = f"{normalized_name}_link_button"
+                if tipo == 'album':
+                    object_name = f"{normalized_name}_link_album_button"
+                
+                # Create button
+                button = QPushButton()
+                button.setFixedSize(34, 34)
+                button.setObjectName(object_name)
+                
+                # Get icon from resources
+                icon_path = f":/services/{normalized_name}"
+                icon = QIcon(icon_path)
+                
+                if icon.isNull():
+                    # Try alternative icon names
+                    alternatives = [
+                        f":/services/{service_name.lower()}",
+                        f":/services/{service_name.lower().replace('-', '')}",
+                        f":/services/{service_name.lower().split('_')[0]}",
+                        f":/services/{service_name.lower().split('-')[0]}"
+                    ]
+                    
+                    for alt_path in alternatives:
+                        icon = QIcon(alt_path)
+                        if not icon.isNull():
+                            break
+                
+                # If still no icon, use text fallback
+                if icon.isNull():
+                    # Use text as fallback if no icon is found
+                    button.setText(service_name[:2].upper())
+                    print(f"No icon found for {service_name}, using text fallback")
+                else:
+                    button.setIcon(icon)
+                    button.setIconSize(QSize(28, 28))
+                
+                # Set tooltip with service name
+                button.setToolTip(f"{service_name.title()}: {url}")
+                
+                # Set URL as property
+                button.setProperty("url", url)
+                
+                # Connect click event
+                button.clicked.connect(lambda checked=False, u=url: self.open_url(u))
+                
+                # Add to layout
+                layout.addWidget(button)
+                
+                # Store reference
+                button_store[service_name] = button
+                
+                print(f"Creado botón para {service_name}")
+                
+            # Show the container if we added buttons
+            has_buttons = len(button_store) > 0
+            container.setVisible(has_buttons)
+            
+            if has_buttons:
+                print(f"Enlaces de {tipo} visibles: {has_buttons}")
+                
+            return has_buttons
+            
+        except Exception as e:
+            print(f"Error creando botones de enlaces para {tipo}: {e}")
+            traceback.print_exc()
+            
             container.hide()
             return False
-            
-        # Create a widget with horizontal layout to contain the buttons
-        flow_widget = QWidget()
-        flow_layout = QHBoxLayout(flow_widget)
-        flow_layout.setContentsMargins(5, 5, 5, 5)
-        flow_layout.setSpacing(5)
-        flow_layout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
-        
-        # Add buttons for each link
-        for service_name, url in links_dict.items():
-            if not url or not isinstance(url, str) or not url.strip():
-                continue
-                
-            # Normalize service name and create object name
-            normalized_name = service_name.lower().replace('_', '')
-            object_name = f"{normalized_name}_link_button"
-            if tipo == 'album':
-                object_name = f"{normalized_name}_link_album_button"
-            
-            # Create button
-            button = QPushButton()
-            button.setFixedSize(34, 34)
-            button.setObjectName(object_name)
-            
-            # Get icon from resources
-            icon_path = f":/services/{normalized_name}"
-            icon = QIcon(icon_path)
-            
-            if icon.isNull():
-                # Try alternative icon names
-                alternatives = [
-                    f":/services/{service_name.lower()}",
-                    f":/services/{service_name.lower().replace('-', '')}",
-                    f":/services/{service_name.lower().split('_')[0]}",
-                    f":/services/{service_name.lower().split('-')[0]}"
-                ]
-                
-                for alt_path in alternatives:
-                    icon = QIcon(alt_path)
-                    if not icon.isNull():
-                        break
-            
-            # If still no icon, use text fallback
-            if icon.isNull():
-                # Use text as fallback if no icon is found
-                button.setText(service_name[:2].upper())
-                print(f"No icon found for {service_name}, using text fallback")
-            else:
-                button.setIcon(icon)
-                button.setIconSize(QSize(32, 32))
-            
-            # Set tooltip with service name
-            button.setToolTip(f"{service_name.title()}: {url}")
-            
-            # Set URL as property
-            button.setProperty("url", url)
-            
-            # Connect click event
-            button.clicked.connect(lambda checked=False, u=url: QDesktopServices.openUrl(QUrl(u)))
-            
-            # Add to layout
-            flow_layout.addWidget(button)
-            
-            # Store reference
-            button_store[service_name] = button
-        
-        # Add spacer to align buttons to the left
-        flow_layout.addStretch(1)
-        
-        # Add the flow widget to the main layout
-        layout.addWidget(flow_widget)
-        
-        # Show the container if we added buttons
-        has_buttons = len(button_store) > 0
-        container.setVisible(has_buttons)
-        
-        if has_buttons:
-            print(f"Created {len(button_store)} link buttons for {tipo}")
-        
-        return has_buttons
 
     def update_artist_link_buttons(self, artist_links):
         """
@@ -3856,6 +3902,27 @@ class MusicBrowser(BaseModule):
             self.album_buttons,
             'album'
         )
+
+    def open_url(self, url):
+        """Opens a URL safely using QDesktopServices"""
+        try:
+            from PyQt6.QtCore import QUrl
+            from PyQt6.QtGui import QDesktopServices
+            
+            if url and isinstance(url, str) and url.strip():
+                # Ensure URL has protocol
+                if not url.startswith(('http://', 'https://')):
+                    url = 'https://' + url
+                    
+                QDesktopServices.openUrl(QUrl(url))
+                print(f"Abriendo URL: {url}")
+            else:
+                print(f"URL inválida: {url}")
+        except Exception as e:
+            print(f"Error abriendo URL: {e}")
+            traceback.print_exc()
+
+
 # FEEDS!!
 
 
@@ -4137,6 +4204,102 @@ class MusicBrowser(BaseModule):
             print(f"Error fetching feeds data: {e}")
             return []
 
+
+    def handle_feeds_button_click(self):
+        """Manages the feeds display when feeds button is clicked"""
+        try:
+            # Check if we have the stacked widget
+            if hasattr(self, 'main_ui') and hasattr(self.main_ui, 'info_panel_stacked'):
+                # Switch to feeds panel (index 1)
+                self.switch_info_panel(1)
+                print("Cambiado a panel de feeds")
+            else:
+                print("Panel de feeds no disponible")
+                
+                # Try to create a dialog as fallback
+                self.show_feeds_dialog()
+        except Exception as e:
+            print(f"Error manejando botón de feeds: {e}")
+            traceback.print_exc()
+            
+    def show_feeds_dialog(self):
+        """Shows feeds in a dialog as fallback if stacked widget not available"""
+        try:
+            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox
+            
+            # Get current item
+            current_item = self.results_tree.currentItem()
+            if not current_item:
+                print("No hay elemento seleccionado")
+                return
+                
+            # Get entity type and ID
+            entity_type = None
+            entity_id = None
+            
+            item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
+            if isinstance(item_data, dict):
+                # Is an artist or album
+                if item_data.get('type') == 'artist':
+                    entity_type = 'artist'
+                    entity_id = self.get_artist_id_from_name(item_data.get('name'))
+                elif item_data.get('type') == 'album':
+                    entity_type = 'album'
+                    entity_id = self.get_album_id_from_name(item_data.get('name'), item_data.get('artist'))
+            else:
+                # Is a song
+                if len(item_data) > 0 and item_data[0]:
+                    entity_type = 'song'
+                    entity_id = item_data[0]
+                    
+            if not entity_type or not entity_id:
+                print("No se pudo determinar el tipo de entidad o ID")
+                return
+                
+            # Get feeds
+            feeds = self.get_feeds_data(entity_type, entity_id)
+            if not feeds:
+                print("No hay feeds disponibles")
+                return
+                
+            # Create dialog
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Feeds")
+            dialog.setMinimumSize(600, 400)
+            
+            layout = QVBoxLayout(dialog)
+            
+            # Create feed widgets
+            for feed in feeds:
+                # Create collapsible group box
+                from tools.music_fuzzy.collapsible_groupbox import CollapsibleGroupBox
+                group = CollapsibleGroupBox(feed.get('feed_name', 'Feed'))
+                
+                # Create content label
+                from PyQt6.QtWidgets import QLabel
+                content = QLabel(feed.get('content', ''))
+                content.setWordWrap(True)
+                content.setTextFormat(Qt.TextFormat.RichText)
+                content.setOpenExternalLinks(True)
+                
+                # Add to group
+                group.add_widget(content)
+                
+                # Add to layout
+                layout.addWidget(group)
+                
+            # Add button box
+            button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+            button_box.rejected.connect(dialog.reject)
+            layout.addWidget(button_box)
+            
+            # Show dialog
+            dialog.exec()
+        except Exception as e:
+            print(f"Error mostrando diálogo de feeds: {e}")
+            traceback.print_exc()
+
+
     def get_artist_id_from_name(self, artist_name):
         """Get artist ID from the database using artist name"""
         if not self.db_path or not artist_name:
@@ -4182,6 +4345,65 @@ class MusicBrowser(BaseModule):
         except Exception as e:
             print(f"Error getting album ID: {e}")
             return None
+
+
+# DEBUG
+
+    def detect_ui_elements(self):
+        """Detects and logs all relevant UI elements to help with debugging"""
+        print("\n--- DETECCIÓN DE ELEMENTOS UI ---")
+        
+        # Check main_ui
+        if hasattr(self, 'main_ui'):
+            print("main_ui: OK")
+            
+            # Find stacked widget
+            stacked = self.main_ui.findChild(QStackedWidget, "info_panel_stacked")
+            print(f"info_panel_stacked: {'Encontrado' if stacked else 'No encontrado'}")
+            
+            if stacked:
+                print(f"  Número de páginas: {stacked.count()}")
+                
+            # Find buttons container
+            buttons_container = self.main_ui.findChild(QFrame, "buttons_container")
+            print(f"buttons_container: {'Encontrado' if buttons_container else 'No encontrado'}")
+            
+            if buttons_container:
+                buttons = buttons_container.findChildren(QPushButton)
+                print(f"  Botones encontrados: {len(buttons)}")
+                for btn in buttons:
+                    print(f"    - {btn.objectName()}")
+        else:
+            print("main_ui: No encontrado")
+        
+        # Check scroll areas
+        for scroll_name in ['info_scroll', 'metadata_scroll']:
+            scroll = getattr(self, scroll_name, None)
+            print(f"{scroll_name}: {'Encontrado' if scroll else 'No encontrado'}")
+            
+            if scroll:
+                widget = scroll.widget()
+                print(f"  Widget de contenido: {'Encontrado' if widget else 'No encontrado'}")
+                
+                if widget:
+                    # Find groupboxes
+                    groups = widget.findChildren(QGroupBox)
+                    print(f"  Grupos encontrados: {len(groups)}")
+                    for group in groups:
+                        print(f"    - {group.objectName()}: {'Visible' if group.isVisible() else 'Oculto'}")
+        
+        # Check link groups
+        for group_name in ['artist_links_group', 'album_links_group']:
+            group = getattr(self, group_name, None)
+            print(f"{group_name}: {'Encontrado' if group else 'No encontrado'}")
+            
+        # Check lyrics group
+        if hasattr(self, 'info_groupboxes'):
+            lyrics_group = self.info_groupboxes.get('lyrics_group')
+            print(f"lyrics_group: {'Encontrado' if lyrics_group else 'No encontrado'}")
+            
+        print("--- FIN DETECCIÓN UI ---\n")
+
 
 
 if __name__ == '__main__':

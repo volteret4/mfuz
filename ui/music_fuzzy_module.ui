@@ -854,7 +854,7 @@ QPushButton:hover {
                 <property name="widgetResizable">
                  <bool>true</bool>
                 </property>
-                <widget class="QWidget" name="info_scroll_widget">
+                <widget class="QWidget" name="texto_widget">
                  <property name="geometry">
                   <rect>
                    <x>0</x>
@@ -863,7 +863,7 @@ QPushButton:hover {
                    <height>471</height>
                   </rect>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
                   <item>
                    <widget class="QGroupBox" name="artist_links_group">
                     <property name="title">
