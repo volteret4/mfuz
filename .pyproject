@@ -1,5 +1,17 @@
 {
     "files": [
+        "ui/svg/disc-vinyl-svgrepo-com.svg",
+        "ui/svg/juno-svgrepo-com.svg",
+        "ui/svg/mastodon-icon-svgrepo-com.svg",
+        "ui/svg/imdb-svgrepo-com.svg",
+        "ui/svg/vimeo-color-svgrepo-com.svg",
+        "ui/svg/tumblr-svgrepo-com.svg",
+        "ui/svg/eye-of-ra-svgrepo-com.svg",
+        "ui/svg/myspace-svgrepo-com.svg",
+        "ui/svg/folder-2-svgrepo-com.svg",
+        "ui/svg/folder-check-svgrepo-com.svg",
+        "ui/svg/folder-error-svgrepo-com(1).svg",
+        "ui/svg/folder-error-svgrepo-com.svg",
         "ui/svg/rym(1).svg",
         "ui/svg/rym.png",
         "ui/svg/allmusic.svg",

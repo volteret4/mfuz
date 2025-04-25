@@ -3,10 +3,9 @@
         <file alias="yt">ui/svg/youtube.svg</file>
         <file alias="genius">ui/svg/genius.svg</file>
         <file alias="lastfm">ui/svg/lastfm.svg</file>
-        <file alias="mb">ui/svg/musicbrainz.svg</file>
+        <file alias="musicbrainz">ui/svg/musicbrainz.svg</file>
         <file alias="spotify">ui/svg/spotify.svg</file>
         <file alias="wallabag">ui/svg/wallabag.svg</file>
-        <file alias="wiki">ui/svg/wikipedia.svg</file>
         <file alias="ads">ui/svg/ad.svg</file>
         <file alias="addstar">ui/svg/addmode.svg</file>
         <file alias="add">ui/svg/add.svg</file>
@@ -65,7 +64,7 @@
         <file alias="radio">ui/svg/radio-svgrepo-com.svg</file>
         <file alias="cdisc">ui/svg/cd-svgrepo-com.svg</file>
         <file alias="pianillo">ui/svg/harmonica-svgrepo-com.svg</file>
-        <file alias="wiki_redondo">ui/svg/wikipedia-logo-svgrepo-com.svg</file>
+        <file alias="wiki">ui/svg/wikipedia-logo-svgrepo-com.svg</file>
         <file alias="github">ui/svg/code-github-hosting-svgrepo-com.svg</file>
         <file alias="soundcloud">ui/svg/cloud-music-online-svgrepo-com.svg</file>
         <file alias="rss">ui/svg/blogger-feed-foomla-svgrepo-com.svg</file>
@@ -142,11 +141,18 @@
         <file alias="facebook1">ui/svg/facebook-svgrepo-com(1).svg</file>
         <file alias="facebook2">ui/svg/facebook-svgrepo-com.svg</file>
         <file alias="instagram_ol">ui/svg/instagram-svgrepo-com.svg</file>
-        <file alias="isntagram">ui/svg/instagram-1-svgrepo-com.svg</file>
+        <file alias="instagram">ui/svg/instagram-1-svgrepo-com.svg</file>
         <file alias="facebook">ui/svg/facebook-color-svgrepo-com.svg</file>
         <file alias="boomkat">ui/svg/boomkat.svg</file>
         <file alias="record">ui/svg/record-circle-1-svgrepo-com.svg</file>
         <file alias="rym_svg">ui/svg/rym(1).svg</file>
-        <file alias="rym_png">ui/svg/rym.png</file>
+        <file alias="juno">ui/svg/juno-svgrepo-com.svg</file>
+        <file alias="mastodon">ui/svg/mastodon-icon-svgrepo-com.svg</file>
+        <file alias="imdb">ui/svg/imdb-svgrepo-com.svg</file>
+        <file alias="vimeo">ui/svg/vimeo-color-svgrepo-com.svg</file>
+        <file alias="tumblr">ui/svg/tumblr-svgrepo-com.svg</file>
+        <file alias="ra">ui/svg/eye-of-ra-svgrepo-com.svg</file>
+        <file alias="myspace">ui/svg/myspace-svgrepo-com.svg</file>
+        <file alias="whosampled">ui/svg/disc-vinyl-svgrepo-com.svg</file>
     </qresource>
 </RCC>
