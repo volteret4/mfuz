@@ -329,13 +329,13 @@ class MusicBrowser(BaseModule):
             # Forzar el método fallback
             self._fallback_setup_info_widget()
 
-        # Crear y configurar el frame de enlaces
-        self.setup_link_buttons_container()
 
         # Configuración común
         # Una vez configuradas todas las referencias
         self._setup_references()
         
+        # Crear y configurar el frame de enlaces
+        self.setup_link_buttons_container()
         # Cargar otros componentes UI
         
         # Conectar señales después de tener todos los widgets
@@ -3649,12 +3649,14 @@ class MusicBrowser(BaseModule):
                 self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
                 self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
             
-            # If the UI doesn't have these elements, we won't use them
+            # If the UI doesn't have these elements, we'll create them
             if not self.artist_links_group:
                 print("Nota: artist_links_group no encontrado en UI")
+                # You could create it dynamically here if needed
                 
             if not self.album_links_group:
                 print("Nota: album_links_group no encontrado en UI")
+                # You could create it dynamically here if needed
             
             # Only setup layouts if the groups exist
             if self.artist_links_group:
@@ -3662,7 +3664,7 @@ class MusicBrowser(BaseModule):
                     # Use existing layout if it exists
                     self.artist_links_layout = self.artist_links_group.layout()
                 else:
-                    # Create a new vertical layout (will contain our flow layout)
+                    # Create a new layout
                     self.artist_links_layout = QVBoxLayout(self.artist_links_group)
                     self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
                     self.artist_links_layout.setSpacing(0)
@@ -3674,7 +3676,7 @@ class MusicBrowser(BaseModule):
                     # Use existing layout if it exists
                     self.album_links_layout = self.album_links_group.layout()
                 else:
-                    # Create a new vertical layout (will contain our flow layout)
+                    # Create a new layout
                     self.album_links_layout = QVBoxLayout(self.album_links_group)
                     self.album_links_layout.setContentsMargins(5, 25, 5, 5)
                     self.album_links_layout.setSpacing(0)
@@ -3829,13 +3831,12 @@ class MusicBrowser(BaseModule):
         if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
             return False
             
-        tipo = 'artist'
         return self.update_dynamic_link_buttons(
             self.artist_links_group, 
             self.artist_links_layout,
             artist_links,
             self.artist_buttons,
-            tipo
+            'artist'
         )
 
     def update_album_link_buttons(self, album_links):
@@ -3848,13 +3849,12 @@ class MusicBrowser(BaseModule):
         if not hasattr(self, 'album_links_group') or not self.album_links_group:
             return False
             
-        tipo = 'album'
         return self.update_dynamic_link_buttons(
             self.album_links_group, 
             self.album_links_layout,
             album_links,
             self.album_buttons,
-            tipo
+            'album'
         )
 # FEEDS!!
 
