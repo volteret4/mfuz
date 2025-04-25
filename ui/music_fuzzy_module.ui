@@ -846,1664 +846,1715 @@ QPushButton:hover {
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
-           <widget class="QGroupBox" name="artist_links_group">
-            <property name="title">
-             <string>Enlaces Artista</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_2">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item row="0" column="0">
-              <widget class="QPushButton" name="bc_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="soudcloud_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="yt_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="3">
-              <widget class="QPushButton" name="spot_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QPushButton" name="vimeo_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QPushButton" name="boomkat_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="6">
-              <widget class="QPushButton" name="juno_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="7">
-              <widget class="QPushButton" name="allmusic_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="8">
-              <widget class="QPushButton" name="discogs_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="9">
-              <widget class="QPushButton" name="imdb_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="10">
-              <widget class="QPushButton" name="lastfm_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="11">
-              <widget class="QPushButton" name="mb_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="12">
-              <widget class="QPushButton" name="prog_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="13">
-              <widget class="QPushButton" name="rym_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="14">
-              <widget class="QPushButton" name="ra_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="15">
-              <widget class="QPushButton" name="setlist_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="16">
-              <widget class="QPushButton" name="wiki_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="17">
-              <widget class="QPushButton" name="whosampled_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="18">
-              <widget class="QPushButton" name="bluesky_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="19">
-              <widget class="QPushButton" name="fb_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="20">
-              <widget class="QPushButton" name="ig_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="21">
-              <widget class="QPushButton" name="mastodon_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="22">
-              <widget class="QPushButton" name="myspace_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="23">
-              <widget class="QPushButton" name="twitter_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="24">
-              <widget class="QPushButton" name="tumblr_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="album_links_group">
-            <property name="title">
-             <string>Enlaces Álbum</string>
-            </property>
-            <layout class="QGridLayout" name="gridLayout_3">
-             <property name="leftMargin">
-              <number>9</number>
-             </property>
-             <property name="topMargin">
-              <number>9</number>
-             </property>
-             <property name="bottomMargin">
-              <number>15</number>
-             </property>
-             <item row="0" column="3">
-              <widget class="QPushButton" name="spot_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="17">
-              <widget class="QPushButton" name="whosampled_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="11">
-              <widget class="QPushButton" name="mb_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="15">
-              <widget class="QPushButton" name="setlist_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="21">
-              <widget class="QPushButton" name="mastodon_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="18">
-              <widget class="QPushButton" name="bluesky_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="12">
-              <widget class="QPushButton" name="prog_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="22">
-              <widget class="QPushButton" name="myspace_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="14">
-              <widget class="QPushButton" name="ra_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="16">
-              <widget class="QPushButton" name="wiki_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="7">
-              <widget class="QPushButton" name="allmusic_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="13">
-              <widget class="QPushButton" name="rym_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="soudcloud_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="4">
-              <widget class="QPushButton" name="vimeo_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="20">
-              <widget class="QPushButton" name="ig_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="24">
-              <widget class="QPushButton" name="tumblr_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QPushButton" name="bc_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="19">
-              <widget class="QPushButton" name="fb_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="5">
-              <widget class="QPushButton" name="boomkat_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="8">
-              <widget class="QPushButton" name="discogs_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="9">
-              <widget class="QPushButton" name="imdb_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="10">
-              <widget class="QPushButton" name="lastfm_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="6">
-              <widget class="QPushButton" name="juno_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QPushButton" name="yt_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="23">
-              <widget class="QPushButton" name="twitter_album_link_button">
-               <property name="minimumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>34</width>
-                 <height>34</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../images.qrc">
-                 <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>32</width>
-                 <height>32</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QScrollArea" name="info_scroll">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShape">
-             <enum>QFrame::Shape::NoFrame</enum>
-            </property>
-            <property name="verticalScrollBarPolicy">
-             <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-            </property>
-            <property name="horizontalScrollBarPolicy">
-             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-            </property>
-            <property name="widgetResizable">
-             <bool>true</bool>
-            </property>
+           <widget class="QStackedWidget" name="stackedWidget_2">
+            <widget class="QWidget" name="info_page">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QScrollArea" name="scrollArea">
+                <property name="widgetResizable">
+                 <bool>true</bool>
+                </property>
+                <widget class="QWidget" name="scrollAreaWidgetContents">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>1048</width>
+                   <height>467</height>
+                  </rect>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QGroupBox" name="artist_links_group">
+                    <property name="title">
+                     <string>Enlaces Artista</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_2">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="0">
+                      <widget class="QPushButton" name="bc_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QPushButton" name="soudcloud_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QPushButton" name="yt_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="3">
+                      <widget class="QPushButton" name="spot_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="4">
+                      <widget class="QPushButton" name="vimeo_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="5">
+                      <widget class="QPushButton" name="boomkat_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="6">
+                      <widget class="QPushButton" name="juno_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="7">
+                      <widget class="QPushButton" name="allmusic_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="8">
+                      <widget class="QPushButton" name="discogs_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="9">
+                      <widget class="QPushButton" name="imdb_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="10">
+                      <widget class="QPushButton" name="lastfm_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="11">
+                      <widget class="QPushButton" name="mb_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="12">
+                      <widget class="QPushButton" name="prog_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="13">
+                      <widget class="QPushButton" name="rym_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="14">
+                      <widget class="QPushButton" name="ra_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="15">
+                      <widget class="QPushButton" name="setlist_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="16">
+                      <widget class="QPushButton" name="wiki_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="17">
+                      <widget class="QPushButton" name="whosampled_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="18">
+                      <widget class="QPushButton" name="bluesky_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="19">
+                      <widget class="QPushButton" name="fb_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="20">
+                      <widget class="QPushButton" name="ig_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="21">
+                      <widget class="QPushButton" name="mastodon_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="22">
+                      <widget class="QPushButton" name="myspace_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="23">
+                      <widget class="QPushButton" name="twitter_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="24">
+                      <widget class="QPushButton" name="tumblr_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="album_links_group">
+                    <property name="title">
+                     <string>Enlaces Álbum</string>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_3">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item row="0" column="3">
+                      <widget class="QPushButton" name="spot_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="17">
+                      <widget class="QPushButton" name="whosampled_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="11">
+                      <widget class="QPushButton" name="mb_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="15">
+                      <widget class="QPushButton" name="setlist_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="21">
+                      <widget class="QPushButton" name="mastodon_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="18">
+                      <widget class="QPushButton" name="bluesky_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="12">
+                      <widget class="QPushButton" name="prog_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="22">
+                      <widget class="QPushButton" name="myspace_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="14">
+                      <widget class="QPushButton" name="ra_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="16">
+                      <widget class="QPushButton" name="wiki_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="7">
+                      <widget class="QPushButton" name="allmusic_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="13">
+                      <widget class="QPushButton" name="rym_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="1">
+                      <widget class="QPushButton" name="soudcloud_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="4">
+                      <widget class="QPushButton" name="vimeo_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="20">
+                      <widget class="QPushButton" name="ig_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="24">
+                      <widget class="QPushButton" name="tumblr_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="0">
+                      <widget class="QPushButton" name="bc_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="19">
+                      <widget class="QPushButton" name="fb_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="5">
+                      <widget class="QPushButton" name="boomkat_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="8">
+                      <widget class="QPushButton" name="discogs_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="9">
+                      <widget class="QPushButton" name="imdb_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="10">
+                      <widget class="QPushButton" name="lastfm_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="6">
+                      <widget class="QPushButton" name="juno_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="2">
+                      <widget class="QPushButton" name="yt_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="0" column="23">
+                      <widget class="QPushButton" name="twitter_album_link_button">
+                       <property name="minimumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="maximumSize">
+                        <size>
+                         <width>34</width>
+                         <height>34</height>
+                        </size>
+                       </property>
+                       <property name="text">
+                        <string/>
+                       </property>
+                       <property name="icon">
+                        <iconset resource="../images.qrc">
+                         <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
+                       </property>
+                       <property name="iconSize">
+                        <size>
+                         <width>32</width>
+                         <height>32</height>
+                        </size>
+                       </property>
+                       <property name="flat">
+                        <bool>true</bool>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="lyrics_group">
+                    <property name="title">
+                     <string>Letra</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_9"/>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="wiki_artist_group">
+                    <property name="title">
+                     <string>Wikipedia del artista</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_8"/>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="lastfm_bio_group">
+                    <property name="title">
+                     <string>Lastfm Bio</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_7"/>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QGroupBox" name="wiki_album_group">
+                    <property name="title">
+                     <string>Wikipedia del álbum</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_6"/>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="feeds_page">
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="title">
+                 <string>Feeds</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>

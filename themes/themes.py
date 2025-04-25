@@ -653,6 +653,39 @@ def get_stylesheet(theme_name):
     }}
     
 
+    /* Card styles for information panels */
+    #music_fuzzy_module .info-card {{
+        background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid {theme['border']};
+    }}
+
+    #music_fuzzy_module .metadata-card {{
+        background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid {theme['border']};
+    }}
+
+
+    #music_fuzzy_module #info_label, #music_fuzzy_module #metadata_details_label {{
+        background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
+    }}
+
+    #music_fuzzy_module #info_scroll, #music_fuzzy_module #metadata_scroll {{
+        background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
+    }}
+
+    #music_fuzzy_module .info-card h3 {{
+        color: {theme['accent']};
+        margin-top: 0;
+        margin-bottom: 8px;
+    }}
+
+
     #play_button:hover, #folder_button:hover, #spotify_button:hover, #scrobble_button:hover, 
     #jaangle_button:hover, #extra_button:hover {{
         background-color: {theme['button_hover']};
@@ -660,8 +693,8 @@ def get_stylesheet(theme_name):
     }}
     
 
-    /* Link buttons - using CSS class selector */
-    QPushButton[objectName$="_link_button"] {{
+    /* Link buttons styling */
+    QPushButton[objectName$="_link_button"], QPushButton[objectName$="_link_album_button"] {{
         background-color: {theme['secondary_bg']};
         border: none;
         border-radius: 17px;
@@ -672,9 +705,15 @@ def get_stylesheet(theme_name):
         padding: 0;
     }}
 
-    QPushButton[objectName$="_link_button"]:hover {{
+    QPushButton[objectName$="_link_button"]:hover, QPushButton[objectName$="_link_album_button"]:hover {{
         background-color: {theme['button_hover']};
         border: 1px solid {theme['accent']};
+    }}
+    }}
+
+    QPushButton[objectName$="_link_button"]:pressed, QPushButton[objectName$="_link_album_button"]:pressed {{
+        background-color: %SELECTION%;
+        padding: 1px 0 0 1px;
     }}
     
 
