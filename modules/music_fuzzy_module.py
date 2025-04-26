@@ -21,6 +21,7 @@ from modules.submodules.fuzzy.feed_view_submodule import FeedsView
 from modules.submodules.fuzzy.search_parser import SearchParser  # Assuming you'll refactor your search parser too
 from modules.submodules.fuzzy.entity_view_submodule import EntityView
 from modules.submodules.fuzzy.search_panel import SearchPanel 
+
 # Import base module
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, PROJECT_ROOT
@@ -97,6 +98,11 @@ class MusicBrowser(BaseModule):
         else:
             print(f"Archivo UI no encontrado: {ui_file_path}")
             self._create_fallback_ui()
+
+        from modules.submodules.fuzzy.links_buttons_fix import apply_to_music_browser
+        # Aplicar las correcciones
+        apply_to_music_browser(self)
+
 
     def _create_fallback_ui(self):
         """Create a fallback UI if the main UI file can't be loaded."""
