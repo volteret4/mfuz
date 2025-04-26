@@ -255,26 +255,73 @@ class UIUpdater:
     def _clear_content(self):
         """Clear previous content from UI and hide all groups."""
         # Reset images
-        self.parent.cover_label.setText("No imagen")
-        self.parent.artist_image_label.setText("No imagen de artista")
+        if hasattr(self.parent, 'cover_label') and self.parent.cover_label:
+            try:
+                self.parent.cover_label.setText("No imagen")
+            except RuntimeError:
+                print("Warning: cover_label ya no es válido")
         
-        # Clear content from group boxes and hide them
-        self._clear_group_box(self.parent.artist_group)
-        self._clear_group_box(self.parent.album_group)
-        self._clear_group_box(self.parent.lastfm_bio_group)
-        self._clear_group_box(self.parent.lyrics_group)
+        if hasattr(self.parent, 'artist_image_label') and self.parent.artist_image_label:
+            try:
+                self.parent.artist_image_label.setText("No imagen de artista")
+            except RuntimeError:
+                print("Warning: artist_image_label ya no es válido")
         
-        # Hide all groups by default
-        self.parent.artist_group.setVisible(False)
-        self.parent.album_group.setVisible(False)
-        self.parent.lastfm_bio_group.setVisible(False)
-        self.parent.lyrics_group.setVisible(False)
+        # Verificar y limpiar con seguridad los group boxes
+        self._safely_clear_group_box('artist_group')
+        self._safely_clear_group_box('album_group')
+        self._safely_clear_group_box('lastfm_bio_group')
+        self._safely_clear_group_box('lyrics_group')
         
-        # Reset lyrics
-        self.parent.lyrics_label.setText("")
+        # Ocultar todos los grupos de forma segura
+        self._safely_set_visible('artist_group', False)
+        self._safely_set_visible('album_group', False)
+        self._safely_set_visible('lastfm_bio_group', False)
+        self._safely_set_visible('lyrics_group', False)
         
-        # Hide all link buttons
-        self.parent.link_manager.hide_all_links()
+        # Resetear lyrics con seguridad
+        if hasattr(self.parent, 'lyrics_label') and self.parent.lyrics_label:
+            try:
+                self.parent.lyrics_label.setText("")
+            except RuntimeError:
+                print("Warning: lyrics_label ya no es válido")
+        
+        # Ocultar todos los botones de enlaces con seguridad
+        if hasattr(self.parent, 'link_manager') and self.parent.link_manager:
+            try:
+                self.parent.link_manager.hide_all_links()
+            except RuntimeError:
+                print("Warning: No se pueden ocultar los enlaces")
+
+    def _safely_clear_group_box(self, group_name):
+        """Limpiar un group box de forma segura."""
+        if hasattr(self.parent, group_name):
+            group_box = getattr(self.parent, group_name)
+            if group_box:
+                try:
+                    if hasattr(group_box, 'layout') and group_box.layout():
+                        layout = group_box.layout()
+                        # Remover todos los items del layout
+                        while layout.count():
+                            item = layout.takeAt(0)
+                            widget = item.widget()
+                            if widget:
+                                try:
+                                    widget.deleteLater()
+                                except RuntimeError:
+                                    pass
+                except RuntimeError:
+                    print(f"Warning: {group_name} ya no es válido")
+
+    def _safely_set_visible(self, widget_name, visible):
+        """Establecer la visibilidad de un widget de forma segura."""
+        if hasattr(self.parent, widget_name):
+            widget = getattr(self.parent, widget_name)
+            if widget:
+                try:
+                    widget.setVisible(visible)
+                except RuntimeError:
+                    print(f"Warning: No se puede establecer la visibilidad de {widget_name}")
     
     def _clear_group_box(self, group_box):
         """Clear all widgets from a group box layout."""

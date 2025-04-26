@@ -16,24 +16,46 @@ from modules.submodules.fuzzy.link_manager import LinkManager
 class MusicFuzzyModule(BaseModule):
     """Music browser module with fuzzy search capabilities."""
     
+    # Señal que se emitirá cuando la UI esté inicializada
+    ui_initialized = pyqtSignal()
+
+
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
-        super().__init__(parent, theme, **kwargs)
-        
-        # Initialize database path
+        # Inicializar propiedades básicas antes de super().__init__
         self.db_path = kwargs.get('db_path', os.path.join(Path.home(), '.local', 'share', 'music_app', 'music.db'))
         
-        # Initialize subcomponents
+        # Get config-related parameters
+        self.config_path = kwargs.get('config_path', os.path.join(PROJECT_ROOT, "config", "config.yml"))
+        
+        # Obtener el estado del only_local_files directamente de los kwargs
+        # Esto obtiene el valor del archivo de configuración
+        
+        self.only_local_files_state = kwargs.get('only_local_files', False)
+        
+        # Convertir a booleano si es string
+        if isinstance(self.only_local_files_state, str):
+            self.only_local_files_state = self.only_local_files_state.lower() == 'true'
+        
+        print(f"Estado inicial de 'only_local_files' desde config: {self.only_local_files_state}")
+        
+        # Llamar a super().__init__ para cargar la UI
+        super().__init__(parent, theme, **kwargs)
+        
+        # Inicializar componentes después de cargar la UI
         self.db_manager = DatabaseManager(self.db_path)
         self.search_handler = SearchHandler(self)
         self.ui_updater = UIUpdater(self)
         self.link_manager = LinkManager(self)
         
-        # Connect signals
-        self._connect_signals()
+        # Conectar señales adicionales después de inicializar todos los componentes
+        self._connect_additional_signals()
+        
+        # Configurar el estado del filtro de "solo archivos locales" independientemente del widget
+        self.search_handler.set_only_local(self.only_local_files_state)
         
     def init_ui(self):
         """Initialize UI from the .ui file"""
-        ui_file_name = "music_fuzzy_module.ui"
+        ui_file_name = "fuzzy/music_fuzzy_module.ui"
         if self.load_ui_file(ui_file_name):
             # Set up tree widget
             self.results_tree_widget.setHeaderLabels(["Artista / Álbum / Canción", "Año", "Género"])
@@ -41,67 +63,215 @@ class MusicFuzzyModule(BaseModule):
             self.results_tree_widget.setColumnWidth(1, 60)
             self.results_tree_widget.setColumnWidth(2, 100)
             
-            # Hide all link buttons initially
-            self._setup_link_buttons()
+            # Ensure the advanced settings container exists
+            self._ensure_widget_exists('advanced_settings_container')
+            
+            # Verificar y acceder a todos los widgets importantes
+            # Group boxes
+            self._ensure_widget_exists('artist_group')
+            self._ensure_widget_exists('album_group')
+            self._ensure_widget_exists('lastfm_bio_group')
+            self._ensure_widget_exists('lyrics_group')
+            
+            # Link groups
+            self._ensure_widget_exists('artist_links_group')
+            self._ensure_widget_exists('album_links_group')
+            
+            # Labels para contenido e imágenes
+            self._ensure_widget_exists('lyrics_label')
+            self._ensure_widget_exists('cover_label')
+            self._ensure_widget_exists('artist_image_label')
+            
+            # Conectar señales después de inicializar la UI
+            self._connect_signals()
+            
+            # Check if the advanced_settings_check exists and connect it
+            self._ensure_widget_exists('advanced_settings_check')
+            if hasattr(self, 'advanced_settings_check') and self.advanced_settings_check:
+                self.advanced_settings_check.toggled.connect(self._toggle_advanced_settings)
+            
+            # Emitir señal de que la UI está inicializada
+            self.ui_initialized.emit()
+            
+            return True
         else:
             print(f"Error loading UI file: {ui_file_name}")
+            return False
+
+    def _ensure_widget_exists(self, widget_name):
+        """Asegurarse de que un widget existe y está accesible."""
+        if not hasattr(self, widget_name):
+            # Intentar encontrarlo usando findChild
+            from PyQt6.QtWidgets import QWidget
+            widget = self.findChild(QWidget, widget_name)
+            if widget:
+                setattr(self, widget_name, widget)
+                print(f"Widget '{widget_name}' encontrado y asignado")
+            else:
+                print(f"WARNING: Widget '{widget_name}' no encontrado")
     
     def _connect_signals(self):
-        """Connect UI signals to slots"""
-        # Search box signal
-        self.search_box.returnPressed.connect(self.search_handler.perform_search)
+        """Connect basic UI signals (llamado desde init_ui)"""
+        # Conexiones básicas que no dependen de componentes externos
+        if hasattr(self, 'advanced_settings_check'):
+            self.advanced_settings_check.toggled.connect(self._toggle_advanced_settings)
         
-        # Advanced settings checkbox
-        self.advanced_settings_check.toggled.connect(self._toggle_advanced_settings)
+        if hasattr(self, 'results_tree_widget'):
+            self.results_tree_widget.itemClicked.connect(self._handle_item_clicked)
+
+
+    def _connect_additional_signals(self):
+        """Connect signals that depend on initialized components"""
+        # Conexiones que dependen de componentes como search_handler
+        if hasattr(self, 'search_box') and hasattr(self, 'search_handler'):
+            self.search_box.returnPressed.connect(self.search_handler.perform_search)
         
-        # If the only_local_files checkbox is clicked, re-run the search
-        if hasattr(self, 'only_local_files'):
-            self.only_local_files.toggled.connect(self.search_handler.perform_search)
-        
-        # Tree widget signals
-        self.results_tree_widget.itemClicked.connect(self._handle_item_clicked)
+        # El checkbox ya debería estar conectado en _load_advanced_settings_ui
+        print(f"Señales adicionales conectadas correctamente")
+
+
+    def _load_advanced_settings_ui(self):
+        """Carga la UI de configuración avanzada independientemente de su visibilidad"""
+        if not hasattr(self, 'advanced_settings_container') or not self.advanced_settings_container:
+            print("No se encontró el contenedor de ajustes avanzados")
+            return
+            
+        # Si ya tiene un layout, probablemente ya está cargado
+        if self.advanced_settings_container.layout():
+            return
+            
+        try:
+            # Crear un layout si no existe
+            layout = QVBoxLayout(self.advanced_settings_container)
+            layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Crear un widget para los ajustes avanzados
+            advanced_widget = QWidget()
+            
+            # Cargar archivo UI
+            ui_path = os.path.join(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
+            if os.path.exists(ui_path):
+                from PyQt6 import uic
+                uic.loadUi(ui_path, advanced_widget)
+                
+                # Añadir widget al layout
+                layout.addWidget(advanced_widget)
+                
+                # Obtener referencia al checkbox
+                self.only_local_files = advanced_widget.findChild(QCheckBox, "only_local_files")
+                
+                if self.only_local_files:
+                    print("Checkbox 'only_local_files' encontrado")
+                    # Desconectar primero para evitar conexiones duplicadas
+                    try:
+                        self.only_local_files.toggled.disconnect()
+                    except:
+                        pass
+                        
+                    # Conectar señales
+                    self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                    self.only_local_files.toggled.connect(self._save_checkbox_state)
+                    
+                    # Establecer el estado inicial desde la configuración cargada en __init__
+                    print(f"Estableciendo estado inicial del checkbox: {self.only_local_files_state}")
+                    self.only_local_files.setChecked(bool(self.only_local_files_state))
+                else:
+                    print("WARNING: Checkbox 'only_local_files' no encontrado en el archivo UI")
+                    # Crearlo programáticamente como fallback
+                    self.only_local_files = QCheckBox("Mostrar solo archivos locales")
+                    layout.addWidget(self.only_local_files)
+                    self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                    self.only_local_files.toggled.connect(self._save_checkbox_state)
+                    self.only_local_files.setChecked(bool(self.only_local_files_state))
+            else:
+                print(f"Archivo UI de ajustes avanzados no encontrado: {ui_path}")
+                # Crear una UI básica como fallback
+                self.only_local_files = QCheckBox("Mostrar solo archivos locales")
+                layout.addWidget(self.only_local_files)
+                self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                self.only_local_files.toggled.connect(self._save_checkbox_state)
+                self.only_local_files.setChecked(bool(self.only_local_files_state))
+                
+        except Exception as e:
+            print(f"Error cargando UI de ajustes avanzados: {e}")
+            import traceback
+            traceback.print_exc()
+
 
     def _toggle_advanced_settings(self, checked):
         """Toggle advanced settings container visibility and load UI if needed."""
         if hasattr(self, 'advanced_settings_container'):
-            # Verificar si ya hemos cargado el contenido
-            if checked and not self.advanced_settings_container.children():
-                # Si está marcado y el contenedor no tiene hijos, cargar la UI
+            # Verify if we already loaded the content
+            if checked and not self.advanced_settings_container.layout():
                 try:
-                    # Intentar cargar el archivo UI para los ajustes avanzados
-                    from PyQt6 import uic
-                    advanced_settings_path = os.path.join(PROJECT_ROOT, "ui", "fuzzy","music_fuzzy_advanced_settings.ui")
+                    # Create a layout if it doesn't exist yet
+                    layout = QVBoxLayout(self.advanced_settings_container)
+                    layout.setContentsMargins(0, 0, 0, 0)
                     
-                    if os.path.exists(advanced_settings_path):
-                        # Crear un widget contenedor para los ajustes avanzados
-                        advanced_widget = QWidget()
-                        uic.loadUi(advanced_settings_path, advanced_widget)
+                    # Create a widget for advanced settings
+                    advanced_widget = QWidget()
+                    
+                    # Load UI file
+                    ui_path = os.path.join(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
+                    if os.path.exists(ui_path):
+                        from PyQt6 import uic
+                        uic.loadUi(ui_path, advanced_widget)
                         
-                        # Añadir el widget al layout del contenedor
-                        layout = QVBoxLayout(self.advanced_settings_container)
-                        layout.setContentsMargins(0, 0, 0, 0)
+                        # Add widget to layout
                         layout.addWidget(advanced_widget)
                         
-                        # Buscar el checkbox "only_local_files" en el widget cargado
+                        # Get reference to the checkbox
                         self.only_local_files = advanced_widget.findChild(QCheckBox, "only_local_files")
                         
-                        # Conectar la señal del checkbox si existe
                         if self.only_local_files:
-                            self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                            print("Found only_local_files checkbox")
+                            
+                            # Establecer el estado basado en la configuración
+                            self.only_local_files.setChecked(self.only_local_files_state)
+                            
+                            # Connect to search and to save config
+                            self.only_local_files.toggled.connect(self._on_only_local_toggled)
                         else:
-                            print("No se encontró el checkbox 'only_local_files'")
-                        
-                        print("UI de ajustes avanzados cargada correctamente")
+                            print("WARNING: Checkbox 'only_local_files' not found in the UI file")
+                            # Create it programmatically as a fallback
+                            self.only_local_files = QCheckBox("Show only local files")
+                            layout.addWidget(self.only_local_files)
+                            self.only_local_files.setChecked(self.only_local_files_state)
+                            self.only_local_files.toggled.connect(self._on_only_local_toggled)
                     else:
-                        print(f"No se encontró el archivo UI: {advanced_settings_path}")
+                        print(f"Advanced settings UI file not found: {ui_path}")
+                        # Create a basic UI programmatically as fallback
+                        self.only_local_files = QCheckBox("Show only local files")
+                        layout.addWidget(self.only_local_files)
+                        self.only_local_files.setChecked(self.only_local_files_state)
+                        self.only_local_files.toggled.connect(self._on_only_local_toggled)
+                    
                 except Exception as e:
-                    print(f"Error cargando UI de ajustes avanzados: {e}")
+                    print(f"Error loading advanced settings UI: {e}")
                     import traceback
                     traceback.print_exc()
             
-            # Mostrar u ocultar el contenedor según el estado de la casilla
+            # Show/hide the container based on checkbox state
             self.advanced_settings_container.setVisible(checked)
         
+
+    def _on_only_local_toggled(self, checked):
+        """Handle checkbox state change - update search and save config"""
+        # Actualizar nuestra variable de estado
+        self.only_local_files_state = checked
+        
+        # Actualizar el estado en el search handler
+        if hasattr(self, 'search_handler'):
+            self.search_handler.set_only_local(checked)
+        
+        # Realizar búsqueda (si es necesario) 
+        if hasattr(self, 'search_handler'):
+            self.search_handler.perform_search()
+        
+        # Guardar configuración
+        self._save_checkbox_state(checked)
+
+
     def _setup_link_buttons(self):
         """Initially hide all link buttons"""
         # Artist links
@@ -112,6 +282,7 @@ class MusicFuzzyModule(BaseModule):
         for child in self.album_links_group.findChildren(QPushButton):
             child.setVisible(False)
     
+
     def _handle_item_clicked(self, item, column):
         """Handle clicks on tree widget items"""
         # Get item data
@@ -143,3 +314,72 @@ class MusicFuzzyModule(BaseModule):
             print(f"Error handling item click: {e}")
             import traceback
             traceback.print_exc()
+
+
+
+
+    def _load_checkbox_state(self):
+        """Load the checkbox state from config file"""
+        if not hasattr(self, 'only_local_files') or self.only_local_files is None:
+            return
+        
+        try:
+            # Try to import from main.py to reuse existing function
+            from main import load_config_file
+            
+            config = load_config_file(self.config_path)
+            if not config:
+                return
+            
+            # Check if our module has specific settings
+            for module_config in config.get('modules', []):
+                if module_config.get('name') == 'Music Browser':
+                    # Get checkbox state from module config
+                    only_local = module_config.get('args', {}).get('only_local_files', self.only_local_files_default)
+                    
+                    # Convert string to boolean if needed
+                    if isinstance(only_local, str):
+                        only_local = only_local.lower() == 'true'
+                    
+                    # Set checkbox state
+                    self.only_local_files.setChecked(bool(only_local))
+                    print(f"Loaded 'only_local_files' state: {only_local}")
+                    return
+        except Exception as e:
+            print(f"Error loading checkbox state: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def _save_checkbox_state(self, state):
+        """Save the checkbox state to config file"""
+        try:
+            # Import functions from main.py to reuse existing code
+            from main import load_config_file, save_config_file
+            
+            # Load current config
+            config = load_config_file(self.config_path)
+            if not config:
+                print("Failed to load config file")
+                return
+            
+            # Find our module in the config
+            for module_config in config.get('modules', []):
+                if module_config.get('name') == 'Music Browser':
+                    # Create args dict if it doesn't exist
+                    if 'args' not in module_config:
+                        module_config['args'] = {}
+                    
+                    # Update checkbox state
+                    module_config['args']['only_local_files'] = state
+                    print(f"Saving 'only_local_files' state: {state}")
+                    
+                    # Save config file
+                    save_config_file(self.config_path, config)
+                    return
+            
+            print("Module 'Music Browser' not found in config")
+        except Exception as e:
+            print(f"Error saving checkbox state: {e}")
+            import traceback
+            traceback.print_exc()
+

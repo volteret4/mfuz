@@ -6,46 +6,50 @@ class LinkManager:
     
     def __init__(self, parent):
         self.parent = parent
-        self._connect_link_buttons()
-    
+        # Esperar a que se inicialice la UI antes de conectar los botones
+        # Este debería ejecutarse después de que loadUi haya sido llamado
+        self.parent.ui_initialized.connect(self._connect_link_buttons)
+
     def _connect_link_buttons(self):
         """Connect all link buttons to their handlers."""
+        from PyQt6.QtWidgets import QPushButton
+        
         # Artist links
         link_buttons = [
             # Direct links from artists table
-            ('spotify_url', self.parent.spot_link_button),
-            ('youtube_url', self.parent.yt_link_button),
-            ('musicbrainz_url', self.parent.mb_link_button),
-            ('discogs_url', self.parent.discogs_link_button),
-            ('rateyourmusic_url', self.parent.rym_link_button),
-            ('wikipedia_url', self.parent.wiki_link_button),
-            ('bandcamp_url', self.parent.bc_link_button),
-            ('lastfm_url', self.parent.lastfm_link_button),
+            ('spotify_url', self.parent.findChild(QPushButton, "spot_link_button")),
+            ('youtube_url', self.parent.findChild(QPushButton, "yt_link_button")),
+            ('musicbrainz_url', self.parent.findChild(QPushButton, "mb_link_button")),
+            ('discogs_url', self.parent.findChild(QPushButton, "discogs_link_button")),
+            ('rateyourmusic_url', self.parent.findChild(QPushButton, "rym_link_button")),
+            ('wikipedia_url', self.parent.findChild(QPushButton, "wiki_link_button")),
+            ('bandcamp_url', self.parent.findChild(QPushButton, "bc_link_button")),
+            ('lastfm_url', self.parent.findChild(QPushButton, "lastfm_link_button")),
             
             # Links from artists_networks table
-            ('allmusic', self.parent.allmusic_link_button),
-            ('bandcamp', self.parent.bc_link_button),
-            ('boomkat', self.parent.boomkat_link_button),
-            ('facebook', self.parent.fb_link_button),
-            ('twitter', self.parent.twitter_link_button),
-            ('mastodon', self.parent.mastodon_link_button),
-            ('bluesky', self.parent.bluesky_link_button),
-            ('instagram', self.parent.ig_link_button),
-            ('spotify', self.parent.spot_link_button),
-            ('lastfm', self.parent.lastfm_link_button),
-            ('wikipedia', self.parent.wiki_link_button),
-            ('juno', self.parent.juno_link_button),
-            ('soundcloud', self.parent.soudcloud_link_button),
-            ('youtube', self.parent.yt_link_button),
-            ('imdb', self.parent.imdb_link_button),
-            ('progarchives', self.parent.prog_link_button),
-            ('setlist_fm', self.parent.setlist_link_button),
-            ('who_sampled', self.parent.whosampled_link_button),
-            ('vimeo', self.parent.vimeo_link_button),
-            ('resident_advisor', self.parent.ra_link_button),
-            ('rateyourmusic', self.parent.rym_link_button),
-            ('tumblr', self.parent.tumblr_link_button),
-            ('myspace', self.parent.myspace_link_button)
+            ('allmusic', self.parent.findChild(QPushButton, "allmusic_link_button")),
+            ('bandcamp', self.parent.findChild(QPushButton, "bc_link_button")),
+            ('boomkat', self.parent.findChild(QPushButton, "boomkat_link_button")),
+            ('facebook', self.parent.findChild(QPushButton, "fb_link_button")),
+            ('twitter', self.parent.findChild(QPushButton, "twitter_link_button")),
+            ('mastodon', self.parent.findChild(QPushButton, "mastodon_link_button")),
+            ('bluesky', self.parent.findChild(QPushButton, "bluesky_link_button")),
+            ('instagram', self.parent.findChild(QPushButton, "ig_link_button")),
+            ('spotify', self.parent.findChild(QPushButton, "spot_link_button")),
+            ('lastfm', self.parent.findChild(QPushButton, "lastfm_link_button")),
+            ('wikipedia', self.parent.findChild(QPushButton, "wiki_link_button")),
+            ('juno', self.parent.findChild(QPushButton, "juno_link_button")),
+            ('soundcloud', self.parent.findChild(QPushButton, "soudcloud_link_button")),
+            ('youtube', self.parent.findChild(QPushButton, "yt_link_button")),
+            ('imdb', self.parent.findChild(QPushButton, "imdb_link_button")),
+            ('progarchives', self.parent.findChild(QPushButton, "prog_link_button")),
+            ('setlist_fm', self.parent.findChild(QPushButton, "setlist_link_button")),
+            ('who_sampled', self.parent.findChild(QPushButton, "whosampled_link_button")),
+            ('vimeo', self.parent.findChild(QPushButton, "vimeo_link_button")),
+            ('resident_advisor', self.parent.findChild(QPushButton, "ra_link_button")),
+            ('rateyourmusic', self.parent.findChild(QPushButton, "rym_link_button")),
+            ('tumblr', self.parent.findChild(QPushButton, "tumblr_link_button")),
+            ('myspace', self.parent.findChild(QPushButton, "myspace_link_button"))
         ]
         
         # Connect artist link buttons
@@ -57,14 +61,14 @@ class LinkManager:
         
         # Album links - similar structure to artist links
         album_link_buttons = [
-            ('spotify_url', self.parent.spot_album_link_button),
-            ('youtube_url', self.parent.yt_album_link_button),
-            ('musicbrainz_url', self.parent.mb_album_link_button),
-            ('discogs_url', self.parent.discogs_album_link_button),
-            ('rateyourmusic_url', self.parent.rym_album_link_button),
-            ('wikipedia_url', self.parent.wiki_album_link_button),
-            ('bandcamp_url', self.parent.bc_album_link_button),
-            ('lastfm_url', self.parent.lastfm_album_link_button)
+            ('spotify_url', self.parent.findChild(QPushButton, "spot_album_link_button")),
+            ('youtube_url', self.parent.findChild(QPushButton, "yt_album_link_button")),
+            ('musicbrainz_url', self.parent.findChild(QPushButton, "mb_album_link_button")),
+            ('discogs_url', self.parent.findChild(QPushButton, "discogs_album_link_button")),
+            ('rateyourmusic_url', self.parent.findChild(QPushButton, "rym_album_link_button")),
+            ('wikipedia_url', self.parent.findChild(QPushButton, "wiki_album_link_button")),
+            ('bandcamp_url', self.parent.findChild(QPushButton, "bc_album_link_button")),
+            ('lastfm_url', self.parent.findChild(QPushButton, "lastfm_album_link_button"))
         ]
         
         # Connect album link buttons
@@ -72,6 +76,10 @@ class LinkManager:
             if button:
                 # Use a partial function to preserve the link_type value
                 button.clicked.connect(partial(self._open_link, button))
+        
+        # Find the group containers
+        self.parent.artist_links_group = self.parent.findChild(QWidget, "artist_links_group")
+        self.parent.album_links_group = self.parent.findChild(QWidget, "album_links_group")
     
     def update_artist_links(self, artist):
         """Update artist link buttons based on available links."""

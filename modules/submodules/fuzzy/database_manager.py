@@ -24,25 +24,34 @@ class DatabaseManager:
             
         try:
             cursor = conn.cursor()
-            query = f"%{query}%"
-            
-            sql = """
-                SELECT id, name, formed_year, origin
-                FROM artists
-                WHERE name LIKE ?
-            """
-            
-            params = [query]
+            query_pattern = f"%{query}%"
             
             if only_local:
-                sql += " AND origen = 'local'"
-                
-            sql += " ORDER BY name"
-            
-            cursor.execute(sql, params)
+                # Consulta para artistas con al menos un álbum local
+                sql = """
+                    SELECT DISTINCT artists.id, artists.name, artists.formed_year, artists.origin
+                    FROM artists
+                    INNER JOIN albums ON artists.id = albums.artist_id
+                    WHERE artists.name LIKE ? AND albums.origen = 'local'
+                    ORDER BY artists.name
+                """
+                print("SQL (artistas con álbumes locales):", sql)
+                cursor.execute(sql, (query_pattern,))
+            else:
+                # Consulta para todos los artistas
+                sql = """
+                    SELECT id, name, formed_year, origin
+                    FROM artists
+                    WHERE name LIKE ?
+                    ORDER BY name
+                """
+                print("SQL (todos los artistas):", sql)
+                cursor.execute(sql, (query_pattern,))
             
             # Convert rows to dictionaries
-            return [self._row_to_dict(row) for row in cursor.fetchall()]
+            results = [self._row_to_dict(row) for row in cursor.fetchall()]
+            print(f"Encontrados {len(results)} artistas")
+            return results
         except sqlite3.Error as e:
             print(f"Error searching artists: {e}")
             return []
@@ -57,27 +66,37 @@ class DatabaseManager:
             
         try:
             cursor = conn.cursor()
-            query = f"%{query}%"
-            
-            sql = """
-                SELECT albums.id, albums.name, albums.year, albums.genre, 
-                    artists.name as artist_name, artists.id as artist_id
-                FROM albums
-                JOIN artists ON albums.artist_id = artists.id
-                WHERE albums.name LIKE ?
-            """
-            
-            params = [query]
+            query_pattern = f"%{query}%"
             
             if only_local:
-                sql += " AND albums.origen = 'local'"
-                
-            sql += " ORDER BY albums.name"
-            
-            cursor.execute(sql, params)
+                # Consulta explícita para álbumes locales
+                sql = """
+                    SELECT albums.id, albums.name, albums.year, albums.genre, 
+                        artists.name as artist_name, artists.id as artist_id
+                    FROM albums
+                    JOIN artists ON albums.artist_id = artists.id
+                    WHERE albums.name LIKE ? AND albums.origen = 'local'
+                    ORDER BY albums.name
+                """
+                print("SQL Albums (solo locales):", sql)
+                cursor.execute(sql, (query_pattern,))
+            else:
+                # Consulta para todos los álbumes
+                sql = """
+                    SELECT albums.id, albums.name, albums.year, albums.genre, 
+                        artists.name as artist_name, artists.id as artist_id
+                    FROM albums
+                    JOIN artists ON albums.artist_id = artists.id
+                    WHERE albums.name LIKE ?
+                    ORDER BY albums.name
+                """
+                print("SQL Albums (todos):", sql)
+                cursor.execute(sql, (query_pattern,))
             
             # Convert rows to dictionaries
-            return [self._row_to_dict(row) for row in cursor.fetchall()]
+            results = [self._row_to_dict(row) for row in cursor.fetchall()]
+            print(f"Encontrados {len(results)} álbumes")
+            return results
         except sqlite3.Error as e:
             print(f"Error searching albums: {e}")
             return []
@@ -92,39 +111,51 @@ class DatabaseManager:
             
         try:
             cursor = conn.cursor()
-            query = f"%{query}%"
-            
-            sql = """
-                SELECT s.id, s.title, s.track_number, s.artist, s.album,
-                    s.genre, s.date, s.album_art_path_denorm,
-                    ar.id as artist_id, al.id as album_id
-                FROM songs s
-                LEFT JOIN artists ar ON s.artist = ar.name
-                LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
-                WHERE s.title LIKE ?
-            """
-            
-            params = [query]
+            query_pattern = f"%{query}%"
             
             if only_local:
-                sql += " AND s.origen = 'local'"
-                
-            sql += " ORDER BY s.title"
-            
-            cursor.execute(sql, params)
+                # Consulta explícita para canciones locales
+                sql = """
+                    SELECT s.id, s.title, s.track_number, s.artist, s.album,
+                        s.genre, s.date, s.album_art_path_denorm,
+                        ar.id as artist_id, al.id as album_id
+                    FROM songs s
+                    LEFT JOIN artists ar ON s.artist = ar.name
+                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
+                    WHERE s.title LIKE ? AND s.origen = 'local'
+                    ORDER BY s.title
+                """
+                print("SQL Songs (solo locales):", sql)
+                cursor.execute(sql, (query_pattern,))
+            else:
+                # Consulta para todas las canciones
+                sql = """
+                    SELECT s.id, s.title, s.track_number, s.artist, s.album,
+                        s.genre, s.date, s.album_art_path_denorm,
+                        ar.id as artist_id, al.id as album_id
+                    FROM songs s
+                    LEFT JOIN artists ar ON s.artist = ar.name
+                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
+                    WHERE s.title LIKE ?
+                    ORDER BY s.title
+                """
+                print("SQL Songs (todos):", sql)
+                cursor.execute(sql, (query_pattern,))
             
             # Convert rows to dictionaries
-            return [self._row_to_dict(row) for row in cursor.fetchall()]
+            results = [self._row_to_dict(row) for row in cursor.fetchall()]
+            print(f"Encontradas {len(results)} canciones")
+            return results
         except sqlite3.Error as e:
             print(f"Error searching songs: {e}")
             return []
         finally:
             conn.close()
-    
+
   
 
-    def get_album_songs(self, album_id):
-        """Get all songs in an album."""
+    def get_album_songs(self, album_id, only_local=False):
+        """Get all songs in an album with optional local filtering."""
         conn = self._get_connection()
         if not conn:
             return []
@@ -152,19 +183,35 @@ class DatabaseManager:
                 
             # Now get songs for that album and artist
             if artist_name:
-                cursor.execute("""
-                    SELECT id, title, track_number, artist, duration, bitrate, genre, file_path
-                    FROM songs
-                    WHERE album = ? AND artist = ?
-                    ORDER BY track_number, title
-                """, (album['name'], artist_name))
+                if only_local:
+                    cursor.execute("""
+                        SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
+                        FROM songs
+                        WHERE album = ? AND artist = ? AND origen = 'local'
+                        ORDER BY track_number, title
+                    """, (album['name'], artist_name))
+                else:
+                    cursor.execute("""
+                        SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
+                        FROM songs
+                        WHERE album = ? AND artist = ?
+                        ORDER BY track_number, title
+                    """, (album['name'], artist_name))
             else:
-                cursor.execute("""
-                    SELECT id, title, track_number, artist, duration, bitrate, genre, file_path
-                    FROM songs
-                    WHERE album = ?
-                    ORDER BY track_number, title
-                """, (album['name'],))
+                if only_local:
+                    cursor.execute("""
+                        SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
+                        FROM songs
+                        WHERE album = ? AND origen = 'local'
+                        ORDER BY track_number, title
+                    """, (album['name'],))
+                else:
+                    cursor.execute("""
+                        SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
+                        FROM songs
+                        WHERE album = ?
+                        ORDER BY track_number, title
+                    """, (album['name'],))
             
             # Convert rows to dictionaries
             return [self._row_to_dict(row) for row in cursor.fetchall()]
@@ -173,7 +220,8 @@ class DatabaseManager:
             return []
         finally:
             conn.close()
-    
+
+            
     def get_artist_details(self, artist_id):
         """Get details for an artist."""
         conn = self._get_connection()
@@ -221,20 +269,29 @@ class DatabaseManager:
         finally:
             conn.close()
     
-    def get_artist_albums(self, artist_id):
-        """Get all albums for an artist."""
+    def get_artist_albums(self, artist_id, only_local=False):
+        """Get all albums for an artist with optional local filtering."""
         conn = self._get_connection()
         if not conn:
             return []
             
         try:
             cursor = conn.cursor()
-            cursor.execute("""
-                SELECT id, name, year, genre, total_tracks
-                FROM albums
-                WHERE artist_id = ?
-                ORDER BY year DESC, name
-            """, (artist_id,))
+            if only_local:
+                cursor.execute("""
+                    SELECT id, name, year, genre, total_tracks, origen
+                    FROM albums
+                    WHERE artist_id = ? AND origen = 'local'
+                    ORDER BY year DESC, name
+                """, (artist_id,))
+            else:
+                cursor.execute("""
+                    SELECT id, name, year, genre, total_tracks, origen
+                    FROM albums
+                    WHERE artist_id = ?
+                    ORDER BY year DESC, name
+                """, (artist_id,))
+                
             # Convert rows to dictionaries
             return [self._row_to_dict(row) for row in cursor.fetchall()]
         except sqlite3.Error as e:
@@ -261,7 +318,7 @@ class DatabaseManager:
                 LEFT JOIN lyrics l ON s.lyrics_id = l.id
                 WHERE s.id = ?
             """
-            print(f"Executing query: {query} with song_id={song_id}")
+            #print(f"Executing query: {query} with song_id={song_id}")          # debug consultas sql
             cursor.execute(query, (song_id,))
             result = cursor.fetchone()
             

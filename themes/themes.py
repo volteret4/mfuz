@@ -675,7 +675,7 @@ def get_stylesheet(theme_name):
         background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
     }}
 
-    #music_fuzzy_module #info_scroll, #music_fuzzy_module #metadata_scroll {{
+    #music_fuzzy_module #artist_group #music_fuzzy_module #metadata_scroll {{
         background-color: {theme['card_bg'] if 'card_bg' in theme else theme['secondary_bg']};
     }}
 
