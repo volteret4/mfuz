@@ -16,22 +16,27 @@ class SearchHandler:
         # Clear current results
         self.parent.results_tree_widget.clear()
         
+        # Check if "only_local_files" is checked
+        only_local = False
+        if hasattr(self.parent, 'only_local_files') and self.parent.only_local_files.isChecked():
+            only_local = True
+        
         # Split the query into parts to handle advanced search
         # For now, just use the simple search
-        self._perform_simple_search(query)
-    
-    def _perform_simple_search(self, query):
+        self._perform_simple_search(query, only_local)
+
+    def _perform_simple_search(self, query, only_local=False):
         """Perform a simple search across all entity types."""
         # Search artists
-        artists = self.parent.db_manager.search_artists(query)
+        artists = self.parent.db_manager.search_artists(query, only_local)
         self._add_artists_to_tree(artists)
         
         # Search albums
-        albums = self.parent.db_manager.search_albums(query)
+        albums = self.parent.db_manager.search_albums(query, only_local)
         self._add_albums_to_tree(albums)
         
         # Search songs
-        songs = self.parent.db_manager.search_songs(query)
+        songs = self.parent.db_manager.search_songs(query, only_local)
         self._add_songs_to_tree(songs)
         
         # Expand top-level items

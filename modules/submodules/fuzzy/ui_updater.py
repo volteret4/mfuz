@@ -17,7 +17,7 @@ class UIUpdater:
             print(f"No artist found with id {artist_id}")
             return
         
-        # Clear previous content
+        # Clear previous content (and hide all groups)
         self._clear_content()
         
         # Extract artist name for image path
@@ -36,19 +36,19 @@ class UIUpdater:
         else:
             self.parent.artist_image_label.setText("No imagen de artista")
         
-        # Update Wikipedia content
+        # Update Wikipedia content - only show if content exists
         if artist.get('wikipedia_content'):
-            # Create label in artist_group layout
-            if hasattr(self.parent, 'artist_group') and hasattr(self.parent.artist_group, 'layout'):
+            self.parent.artist_group.setVisible(True)
+            if hasattr(self.parent.artist_group, 'layout'):
                 label = QLabel(artist['wikipedia_content'])
                 label.setWordWrap(True)
                 label.setTextFormat(Qt.TextFormat.RichText)
                 self.parent.artist_group.layout().addWidget(label)
         
-        # Update LastFM bio
+        # Update LastFM bio - only show if content exists
         if artist.get('bio'):
-            # Create label in lastfm_bio_group layout
-            if hasattr(self.parent, 'lastfm_bio_group') and hasattr(self.parent.lastfm_bio_group, 'layout'):
+            self.parent.lastfm_bio_group.setVisible(True)
+            if hasattr(self.parent.lastfm_bio_group, 'layout'):
                 label = QLabel(artist['bio'])
                 label.setWordWrap(True)
                 label.setTextFormat(Qt.TextFormat.RichText)
@@ -71,7 +71,7 @@ class UIUpdater:
         if artist_id:
             artist = self.parent.db_manager.get_artist_details(artist_id)
         
-        # Clear previous content
+        # Clear previous content (and hide all groups)
         self._clear_content()
         
         # Update album cover if available
@@ -101,28 +101,28 @@ class UIUpdater:
         else:
             self.parent.artist_image_label.setText("No imagen de artista")
         
-        # Update Wikipedia content (album)
+        # Update Wikipedia content (album) - only show if content exists
         if album.get('wikipedia_content'):
-            # Create label in album_group layout
-            if hasattr(self.parent, 'album_group') and hasattr(self.parent.album_group, 'layout'):
+            self.parent.album_group.setVisible(True)
+            if hasattr(self.parent.album_group, 'layout'):
                 label = QLabel(album['wikipedia_content'])
                 label.setWordWrap(True)
                 label.setTextFormat(Qt.TextFormat.RichText)
                 self.parent.album_group.layout().addWidget(label)
         
-        # Update Wikipedia content (artist)
+        # Update Wikipedia content (artist) - only show if content exists
         if artist and artist.get('wikipedia_content'):
-            # Create label in artist_group layout
-            if hasattr(self.parent, 'artist_group') and hasattr(self.parent.artist_group, 'layout'):
+            self.parent.artist_group.setVisible(True)
+            if hasattr(self.parent.artist_group, 'layout'):
                 label = QLabel(artist['wikipedia_content'])
                 label.setWordWrap(True)
                 label.setTextFormat(Qt.TextFormat.RichText)
                 self.parent.artist_group.layout().addWidget(label)
         
-        # Update LastFM bio
+        # Update LastFM bio - only show if content exists
         if artist and artist.get('bio'):
-            # Create label in lastfm_bio_group layout
-            if hasattr(self.parent, 'lastfm_bio_group') and hasattr(self.parent.lastfm_bio_group, 'layout'):
+            self.parent.lastfm_bio_group.setVisible(True)
+            if hasattr(self.parent.lastfm_bio_group, 'layout'):
                 label = QLabel(artist['bio'])
                 label.setWordWrap(True)
                 label.setTextFormat(Qt.TextFormat.RichText)
@@ -142,31 +142,30 @@ class UIUpdater:
         if not song:
             return
         
-        # Clear previous content
+        # Clear previous content (and hide all groups)
         self._clear_content()
         
         # Check if 'lyrics' is in the song object
         has_lyrics = False
         try:
-            # This works for sqlite3.Row objects
-            if 'lyrics' in song.keys() and song['lyrics']:
+            # This works for sqlite3.Row objects or dictionaries
+            if (hasattr(song, 'keys') and 'lyrics' in song.keys() and song['lyrics']) or \
+            (isinstance(song, dict) and 'lyrics' in song and song['lyrics']):
                 has_lyrics = True
                 lyrics_text = song['lyrics']
         except (AttributeError, TypeError):
-            # Handle cases where the song might be a list or some other type
-            print(f"Warning: Unexpected song object type: {type(song)}")
             has_lyrics = False
         
         # Update lyrics if available
         if has_lyrics:
+            self.parent.lyrics_group.setVisible(True)
             self.parent.lyrics_label.setText(lyrics_text)
-        else:
-            self.parent.lyrics_label.setText("No hay letras disponibles para esta canción.")
         
         # Update album cover if available
         album_art_path = None
         try:
-            if 'album_art_path_denorm' in song.keys() and song['album_art_path_denorm']:
+            if (hasattr(song, 'keys') and 'album_art_path_denorm' in song.keys() and song['album_art_path_denorm']) or \
+            (isinstance(song, dict) and 'album_art_path_denorm' in song and song['album_art_path_denorm']):
                 album_art_path = song['album_art_path_denorm']
         except (AttributeError, TypeError):
             pass
@@ -186,10 +185,14 @@ class UIUpdater:
         artist_name = None
         album_name = None
         try:
-            if 'artist' in song.keys():
-                artist_name = song['artist']
-            if 'album' in song.keys():
-                album_name = song['album']
+            if hasattr(song, 'keys'):
+                if 'artist' in song.keys():
+                    artist_name = song['artist']
+                if 'album' in song.keys():
+                    album_name = song['album']
+            elif isinstance(song, dict):
+                artist_name = song.get('artist')
+                album_name = song.get('album')
         except (AttributeError, TypeError):
             pass
         
@@ -205,7 +208,7 @@ class UIUpdater:
                     result = cursor.fetchone()
                     if result:
                         artist_id = result['id']
-                except sqlite3.Error as e:
+                except Exception as e:
                     print(f"Error getting artist ID: {e}")
                 finally:
                     conn.close()
@@ -228,19 +231,19 @@ class UIUpdater:
                 # Get artist details
                 artist = self.parent.db_manager.get_artist_details(artist_id)
                 if artist:
-                    # Update Wikipedia content
-                    if 'wikipedia_content' in artist.keys() and artist['wikipedia_content']:
-                        # Add to artist_group layout
-                        if hasattr(self.parent, 'artist_group') and hasattr(self.parent.artist_group, 'layout'):
+                    # Update Wikipedia content - only show if content exists
+                    if 'wikipedia_content' in artist and artist['wikipedia_content']:
+                        self.parent.artist_group.setVisible(True)
+                        if hasattr(self.parent.artist_group, 'layout'):
                             label = QLabel(artist['wikipedia_content'])
                             label.setWordWrap(True)
                             label.setTextFormat(Qt.TextFormat.RichText)
                             self.parent.artist_group.layout().addWidget(label)
                     
-                    # Update LastFM bio
-                    if 'bio' in artist.keys() and artist['bio']:
-                        # Add to lastfm_bio_group layout
-                        if hasattr(self.parent, 'lastfm_bio_group') and hasattr(self.parent.lastfm_bio_group, 'layout'):
+                    # Update LastFM bio - only show if content exists
+                    if 'bio' in artist and artist['bio']:
+                        self.parent.lastfm_bio_group.setVisible(True)
+                        if hasattr(self.parent.lastfm_bio_group, 'layout'):
                             label = QLabel(artist['bio'])
                             label.setWordWrap(True)
                             label.setTextFormat(Qt.TextFormat.RichText)
@@ -250,15 +253,22 @@ class UIUpdater:
                     self._update_artist_links(artist)
     
     def _clear_content(self):
-        """Clear previous content from UI."""
+        """Clear previous content from UI and hide all groups."""
         # Reset images
         self.parent.cover_label.setText("No imagen")
         self.parent.artist_image_label.setText("No imagen de artista")
         
-        # Clear content from group boxes
+        # Clear content from group boxes and hide them
         self._clear_group_box(self.parent.artist_group)
         self._clear_group_box(self.parent.album_group)
         self._clear_group_box(self.parent.lastfm_bio_group)
+        self._clear_group_box(self.parent.lyrics_group)
+        
+        # Hide all groups by default
+        self.parent.artist_group.setVisible(False)
+        self.parent.album_group.setVisible(False)
+        self.parent.lastfm_bio_group.setVisible(False)
+        self.parent.lyrics_group.setVisible(False)
         
         # Reset lyrics
         self.parent.lyrics_label.setText("")

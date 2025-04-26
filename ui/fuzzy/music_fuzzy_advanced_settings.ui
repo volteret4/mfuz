@@ -65,7 +65,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -161,7 +161,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -244,7 +244,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -309,6 +309,13 @@ QPushButton:hover {
        <widget class="QWidget" name="botones_widget" native="true">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
+          <widget class="QCheckBox" name="only_local_files">
+           <property name="text">
+            <string>Mostrar solo músical local</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
@@ -327,7 +334,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -351,7 +358,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -375,7 +382,7 @@ QPushButton:hover {
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/ads</normaloff>:/services/ads</iconset>
            </property>
            <property name="iconSize">
@@ -402,7 +409,7 @@ QPushButton:hover {
   </layout>
  </widget>
  <resources>
-  <include location="../images.qrc"/>
+  <include location="../../images.qrc"/>
  </resources>
  <connections/>
 </ui>

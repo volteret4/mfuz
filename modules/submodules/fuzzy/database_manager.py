@@ -16,7 +16,7 @@ class DatabaseManager:
             print(f"Database connection error: {e}")
             return None
     
-    def search_artists(self, query):
+    def search_artists(self, query, only_local=False):
         """Search artists matching the query."""
         conn = self._get_connection()
         if not conn:
@@ -25,12 +25,21 @@ class DatabaseManager:
         try:
             cursor = conn.cursor()
             query = f"%{query}%"
-            cursor.execute("""
+            
+            sql = """
                 SELECT id, name, formed_year, origin
                 FROM artists
                 WHERE name LIKE ?
-                ORDER BY name
-            """, (query,))
+            """
+            
+            params = [query]
+            
+            if only_local:
+                sql += " AND origen = 'local'"
+                
+            sql += " ORDER BY name"
+            
+            cursor.execute(sql, params)
             
             # Convert rows to dictionaries
             return [self._row_to_dict(row) for row in cursor.fetchall()]
@@ -39,8 +48,8 @@ class DatabaseManager:
             return []
         finally:
             conn.close()
-    
-    def search_albums(self, query):
+
+    def search_albums(self, query, only_local=False):
         """Search albums matching the query."""
         conn = self._get_connection()
         if not conn:
@@ -49,13 +58,24 @@ class DatabaseManager:
         try:
             cursor = conn.cursor()
             query = f"%{query}%"
-            cursor.execute("""
-                SELECT albums.id, albums.name, albums.year, albums.genre, artists.name as artist_name, artists.id as artist_id
+            
+            sql = """
+                SELECT albums.id, albums.name, albums.year, albums.genre, 
+                    artists.name as artist_name, artists.id as artist_id
                 FROM albums
                 JOIN artists ON albums.artist_id = artists.id
                 WHERE albums.name LIKE ?
-                ORDER BY albums.name
-            """, (query,))
+            """
+            
+            params = [query]
+            
+            if only_local:
+                sql += " AND albums.origen = 'local'"
+                
+            sql += " ORDER BY albums.name"
+            
+            cursor.execute(sql, params)
+            
             # Convert rows to dictionaries
             return [self._row_to_dict(row) for row in cursor.fetchall()]
         except sqlite3.Error as e:
@@ -63,8 +83,8 @@ class DatabaseManager:
             return []
         finally:
             conn.close()
-    
-    def search_songs(self, query):
+
+    def search_songs(self, query, only_local=False):
         """Search songs matching the query."""
         conn = self._get_connection()
         if not conn:
@@ -73,7 +93,8 @@ class DatabaseManager:
         try:
             cursor = conn.cursor()
             query = f"%{query}%"
-            cursor.execute("""
+            
+            sql = """
                 SELECT s.id, s.title, s.track_number, s.artist, s.album,
                     s.genre, s.date, s.album_art_path_denorm,
                     ar.id as artist_id, al.id as album_id
@@ -81,8 +102,17 @@ class DatabaseManager:
                 LEFT JOIN artists ar ON s.artist = ar.name
                 LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
                 WHERE s.title LIKE ?
-                ORDER BY s.title
-            """, (query,))
+            """
+            
+            params = [query]
+            
+            if only_local:
+                sql += " AND s.origen = 'local'"
+                
+            sql += " ORDER BY s.title"
+            
+            cursor.execute(sql, params)
+            
             # Convert rows to dictionaries
             return [self._row_to_dict(row) for row in cursor.fetchall()]
         except sqlite3.Error as e:
@@ -90,6 +120,8 @@ class DatabaseManager:
             return []
         finally:
             conn.close()
+    
+  
 
     def get_album_songs(self, album_id):
         """Get all songs in an album."""

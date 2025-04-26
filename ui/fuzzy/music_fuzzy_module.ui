@@ -587,7 +587,7 @@
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/play</normaloff>:/services/play</iconset>
                </property>
                <property name="iconSize">
@@ -644,7 +644,7 @@ QPushButton:pressed {{
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
                </property>
                <property name="iconSize">
@@ -690,7 +690,7 @@ QPushButton:hover {
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/game</normaloff>:/services/game</iconset>
                </property>
                <property name="iconSize">
@@ -739,7 +739,7 @@ QPushButton:hover {
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
                </property>
                <property name="iconSize">
@@ -785,7 +785,7 @@ QPushButton:hover {
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
                </property>
                <property name="iconSize">
@@ -831,7 +831,7 @@ QPushButton:hover {
                 <string/>
                </property>
                <property name="icon">
-                <iconset resource="../images.qrc">
+                <iconset resource="../../images.qrc">
                  <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
                </property>
                <property name="iconSize">
@@ -921,7 +921,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
                        </property>
                        <property name="iconSize">
@@ -953,7 +953,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
                        </property>
                        <property name="iconSize">
@@ -985,7 +985,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
                        </property>
                        <property name="iconSize">
@@ -1017,7 +1017,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
                        </property>
                        <property name="iconSize">
@@ -1049,7 +1049,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
                        </property>
                        <property name="iconSize">
@@ -1081,7 +1081,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
                        </property>
                        <property name="iconSize">
@@ -1113,7 +1113,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
                        </property>
                        <property name="iconSize">
@@ -1145,7 +1145,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
                        </property>
                        <property name="iconSize">
@@ -1177,7 +1177,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
                        </property>
                        <property name="iconSize">
@@ -1209,7 +1209,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
                        </property>
                        <property name="iconSize">
@@ -1241,7 +1241,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
                        </property>
                        <property name="iconSize">
@@ -1273,7 +1273,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
                        </property>
                        <property name="iconSize">
@@ -1305,7 +1305,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
                        </property>
                        <property name="iconSize">
@@ -1337,7 +1337,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
                        </property>
                        <property name="iconSize">
@@ -1369,7 +1369,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
                        </property>
                        <property name="iconSize">
@@ -1401,7 +1401,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
                        </property>
                        <property name="iconSize">
@@ -1433,7 +1433,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
                        </property>
                        <property name="iconSize">
@@ -1465,7 +1465,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
                        </property>
                        <property name="iconSize">
@@ -1497,7 +1497,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
                        </property>
                        <property name="iconSize">
@@ -1529,7 +1529,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
                        </property>
                        <property name="iconSize">
@@ -1561,7 +1561,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
                        </property>
                        <property name="iconSize">
@@ -1593,7 +1593,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
                        </property>
                        <property name="iconSize">
@@ -1625,7 +1625,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
                        </property>
                        <property name="iconSize">
@@ -1657,7 +1657,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
                        </property>
                        <property name="iconSize">
@@ -1689,7 +1689,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
                        </property>
                        <property name="iconSize">
@@ -1755,7 +1755,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/bandcamp</normaloff>:/services/bandcamp</iconset>
                        </property>
                        <property name="iconSize">
@@ -1787,7 +1787,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/soundcloud</normaloff>:/services/soundcloud</iconset>
                        </property>
                        <property name="iconSize">
@@ -1819,7 +1819,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/youtube</normaloff>:/services/youtube</iconset>
                        </property>
                        <property name="iconSize">
@@ -1851,7 +1851,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/spotify</normaloff>:/services/spotify</iconset>
                        </property>
                        <property name="iconSize">
@@ -1883,7 +1883,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/vimeo</normaloff>:/services/vimeo</iconset>
                        </property>
                        <property name="iconSize">
@@ -1915,7 +1915,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/boomkat</normaloff>:/services/boomkat</iconset>
                        </property>
                        <property name="iconSize">
@@ -1947,7 +1947,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/juno</normaloff>:/services/juno</iconset>
                        </property>
                        <property name="iconSize">
@@ -1979,7 +1979,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/allmusic</normaloff>:/services/allmusic</iconset>
                        </property>
                        <property name="iconSize">
@@ -2011,7 +2011,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/discogs</normaloff>:/services/discogs</iconset>
                        </property>
                        <property name="iconSize">
@@ -2043,7 +2043,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/imdb</normaloff>:/services/imdb</iconset>
                        </property>
                        <property name="iconSize">
@@ -2075,7 +2075,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
                        </property>
                        <property name="iconSize">
@@ -2107,7 +2107,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
                        </property>
                        <property name="iconSize">
@@ -2139,7 +2139,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/guitar</normaloff>:/services/guitar</iconset>
                        </property>
                        <property name="iconSize">
@@ -2171,7 +2171,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/rym_svg</normaloff>:/services/rym_svg</iconset>
                        </property>
                        <property name="iconSize">
@@ -2203,7 +2203,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/ra</normaloff>:/services/ra</iconset>
                        </property>
                        <property name="iconSize">
@@ -2235,7 +2235,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/msg</normaloff>:/services/msg</iconset>
                        </property>
                        <property name="iconSize">
@@ -2267,7 +2267,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/wiki</normaloff>:/services/wiki</iconset>
                        </property>
                        <property name="iconSize">
@@ -2299,7 +2299,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/whosampled</normaloff>:/services/whosampled</iconset>
                        </property>
                        <property name="iconSize">
@@ -2331,7 +2331,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/bluesky</normaloff>:/services/bluesky</iconset>
                        </property>
                        <property name="iconSize">
@@ -2363,7 +2363,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/facebook</normaloff>:/services/facebook</iconset>
                        </property>
                        <property name="iconSize">
@@ -2395,7 +2395,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/instagram</normaloff>:/services/instagram</iconset>
                        </property>
                        <property name="iconSize">
@@ -2427,7 +2427,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/mastodon</normaloff>:/services/mastodon</iconset>
                        </property>
                        <property name="iconSize">
@@ -2459,7 +2459,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/myspace</normaloff>:/services/myspace</iconset>
                        </property>
                        <property name="iconSize">
@@ -2491,7 +2491,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/twitter</normaloff>:/services/twitter</iconset>
                        </property>
                        <property name="iconSize">
@@ -2523,7 +2523,7 @@ QPushButton:hover {
                         <string/>
                        </property>
                        <property name="icon">
-                        <iconset resource="../images.qrc">
+                        <iconset resource="../../images.qrc">
                          <normaloff>:/services/tumblr</normaloff>:/services/tumblr</iconset>
                        </property>
                        <property name="iconSize">
@@ -2622,7 +2622,7 @@ QPushButton:hover {
   </layout>
  </widget>
  <resources>
-  <include location="../images.qrc"/>
+  <include location="../../images.qrc"/>
  </resources>
  <connections/>
 </ui>
