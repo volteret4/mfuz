@@ -125,7 +125,7 @@ class EntityView(QWidget):
         
     def extract_links(self, entity_data, entity_type):
         """
-        Extract links from entity data.
+        Extrae enlaces de los datos de entidad con mejor manejo de formatos.
         
         Args:
             entity_data: Data of the entity
@@ -137,44 +137,79 @@ class EntityView(QWidget):
         links = {}
         
         if not entity_data:
+            print(f"[DEBUG] No hay datos para extraer enlaces - entity_type: {entity_type}")
             return links
             
         # Extract from dictionary
         if isinstance(entity_data, dict):
             for key, value in entity_data.items():
-                if key.endswith('_url') and value and isinstance(value, str) and value.strip():
-                    service_name = key.replace('_url', '')
-                    links[service_name] = value
+                # Busca cualquier campo que contenga "url" o "link"
+                if ('url' in key.lower() or 'link' in key.lower()) and value and isinstance(value, str) and value.strip():
+                    # Normaliza el nombre del servicio
+                    service_name = key.replace('_url', '').replace('url', '').replace('_link', '').replace('link', '')
+                    if service_name.startswith('_') or service_name.endswith('_'):
+                        service_name = service_name.strip('_')
+                    if service_name:
+                        links[service_name] = value
+                        print(f"[DEBUG] Enlace encontrado en diccionario: {service_name}: {value[:30]}...")
         
-        # Extract from tuple/list (database query result)
+        # Manejo especial para los índices conocidos basados en el tipo de entidad
         elif isinstance(entity_data, (list, tuple)):
-            # Mappings for known indices
-            if entity_type == 'artist' and len(entity_data) > 20:
+            # Define índices flexibles para diferentes versiones de la BD
+            url_indices = {}
+            
+            if entity_type == 'artist':
+                # Índices conocidos para artistas (ampliar rangos)
                 url_indices = {
-                    'spotify': 16,
-                    'youtube': 17,
-                    'musicbrainz': 18,
-                    'discogs': 19,
-                    'rateyourmusic': 20,
-                    'wikipedia': 26
+                    'spotify': [9, 16, 'spotify'],
+                    'youtube': [10, 17, 'youtube'],
+                    'musicbrainz': [11, 18, 'musicbrainz'],
+                    'discogs': [12, 19, 'discogs'],
+                    'rateyourmusic': [13, 20, 'rateyourmusic'],
+                    'wikipedia': [15, 26, 'wiki'],
+                    'bandcamp': [19, 20, 'bandcamp'],
+                    'lastfm': [22, 23, 'lastfm']
+                }
+            elif entity_type == 'album':
+                # Índices conocidos para álbumes (ampliar rangos)
+                url_indices = {
+                    'spotify': [9, 21, 'spotify'],
+                    'youtube': [11, 22, 'youtube'],
+                    'musicbrainz': [12, 23, 'musicbrainz'],
+                    'discogs': [13, 24, 'discogs'],
+                    'rateyourmusic': [14, 25, 'rateyourmusic'],
+                    'wikipedia': [16, 28, 'wiki'],
+                    'bandcamp': [22, 23, 'bandcamp'],
+                    'lastfm': [26, 27, 'lastfm']
                 }
                 
-                for service, idx in url_indices.items():
-                    if idx < len(entity_data) and entity_data[idx]:
-                        links[service] = entity_data[idx]
-                        
-            elif entity_type == 'album' and len(entity_data) > 25:
-                url_indices = {
-                    'spotify': 21,
-                    'youtube': 22,
-                    'musicbrainz': 23,
-                    'discogs': 24,
-                    'rateyourmusic': 25,
-                    'wikipedia': 28
-                }
-                
-                for service, idx in url_indices.items():
-                    if idx < len(entity_data) and entity_data[idx]:
-                        links[service] = entity_data[idx]
+            # Revisar todos los índices conocidos
+            for service, info in url_indices.items():
+                idx1, idx2, keyword = info
+                # Probar el primer índice
+                if idx1 < len(entity_data) and entity_data[idx1] and isinstance(entity_data[idx1], str) and entity_data[idx1].strip():
+                    links[service] = entity_data[idx1]
+                    print(f"[DEBUG] Enlace de {entity_type} encontrado en índice {idx1}: {service}")
+                # Probar el segundo índice si el primero falló
+                elif idx2 < len(entity_data) and entity_data[idx2] and isinstance(entity_data[idx2], str) and entity_data[idx2].strip():
+                    links[service] = entity_data[idx2]
+                    print(f"[DEBUG] Enlace de {entity_type} encontrado en índice {idx2}: {service}")
+            
+            # Buscar enlaces por contenido en cualquier campo de tipo string
+            for i, item in enumerate(entity_data):
+                if isinstance(item, str) and ('http://' in item or 'https://' in item):
+                    # Intentar determinar el tipo de servicio por URL
+                    for service, info in url_indices.items():
+                        keyword = info[2]
+                        if keyword in item.lower():
+                            links[service] = item
+                            print(f"[DEBUG] Enlace encontrado en posición {i}: {service}: {item[:30]}...")
+                            break
         
+        # Si no se encontraron enlaces, imprimir mensaje
+        if not links:
+            print(f"[DEBUG] No se encontraron enlaces para {entity_type} en los datos proporcionados")
+        else:
+            print(f"[DEBUG] Enlaces encontrados: {len(links)}")
+            
         return links

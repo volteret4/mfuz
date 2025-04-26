@@ -1,5 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QScrollArea
 from PyQt6.QtCore import Qt
+from modules.submodules.fuzzy.entity_view_submodule import EntityView
+
 
 class AlbumView(EntityView):
     """
@@ -39,6 +41,10 @@ class AlbumView(EntityView):
         self.tracks_layout = QVBoxLayout(self.tracks_container)
         self.tracks_layout.setContentsMargins(0, 0, 0, 0)
         
+        self.artist_info_container = QWidget()  # Añadido contenedor para info de artista
+        self.artist_info_layout = QVBoxLayout(self.artist_info_container)
+        self.artist_info_layout.setContentsMargins(0, 0, 0, 0)
+        
         self.wiki_container = QWidget()
         self.wiki_layout = QVBoxLayout(self.wiki_container)
         self.wiki_layout.setContentsMargins(0, 0, 0, 0)
@@ -46,6 +52,7 @@ class AlbumView(EntityView):
         # Add containers to content layout
         self.content_layout.addWidget(self.metadata_container)
         self.content_layout.addWidget(self.tracks_container)
+        self.content_layout.addWidget(self.artist_info_container)  # Añadido a la vista
         self.content_layout.addWidget(self.wiki_container)
         self.content_layout.addStretch()
         
@@ -60,16 +67,19 @@ class AlbumView(EntityView):
         # Clear container layouts
         self._clear_layout(self.metadata_layout)
         self._clear_layout(self.tracks_layout)
+        self._clear_layout(self.artist_info_layout)  # Limpiar layout de artista
         self._clear_layout(self.wiki_layout)
         
         # Hide containers
         self.metadata_container.setVisible(False)
         self.tracks_container.setVisible(False)
+        self.artist_info_container.setVisible(False)  # Ocultar contenedor de artista
         self.wiki_container.setVisible(False)
         
         # Clear link buttons if available
         if self.link_buttons:
             self.link_buttons.update_album_links({})
+            self.link_buttons.update_artist_links({})  # También actualizar links de artista
             
     def _clear_layout(self, layout):
         """Clear all widgets from a layout."""
@@ -119,16 +129,20 @@ class AlbumView(EntityView):
             
         # Get complete album info from database if needed
         album_db_info = None
+        artist_db_info = None
         
         if isinstance(album_data, dict) and album_data.get('type') == 'album':
             # We only have basic info, fetch complete info
             album_db_info = self.db.get_album_info(album_name, artist_name)
+            artist_db_info = self.db.get_artist_info(artist_name)
         elif isinstance(album_data, (list, tuple)):
             # We have a song tuple, fetch album info
             album_db_info = self.db.get_album_info(album_name, artist_name)
+            artist_db_info = self.db.get_artist_info(artist_name)
         else:
             # We already have complete info
             album_db_info = album_data
+            artist_db_info = self.db.get_artist_info(artist_name)
             
         # Calculate total tracks and duration
         total_tracks = 0
@@ -155,11 +169,19 @@ class AlbumView(EntityView):
         # Show metadata
         self._show_album_metadata(album_db_info, album_name, artist_name, year, genre, total_tracks, duration_str)
         
+        # Show artist information
+        if artist_db_info:
+            self._show_artist_info(artist_db_info)
+        
         # Show Wikipedia content
         self._show_album_wiki(album_db_info)
         
+        # Also show artist Wikipedia if available
+        if artist_db_info and artist_db_info.get('wikipedia_content'):
+            self._show_artist_wiki(artist_db_info)
+        
         # Show link buttons
-        self._update_link_buttons(album_db_info)
+        self._update_link_buttons(album_db_info, artist_db_info)
         
     def _show_album_metadata(self, album_db_info, album_name, artist_name, year, genre, total_tracks, duration_str):
         """Show album metadata."""
@@ -220,17 +242,50 @@ class AlbumView(EntityView):
             
         wiki = album_db_info.get('wikipedia_content')
         if wiki and wiki.strip():
-            wiki_card = self.create_info_card("Wikipedia", wiki)
+            wiki_card = self.create_info_card("Wikipedia del Álbum", wiki)
             self.wiki_layout.addWidget(wiki_card)
             self.wiki_container.setVisible(True)
-            
-    def _update_link_buttons(self, album_db_info):
-        """Update album link buttons."""
-        if not self.link_buttons or not album_db_info:
+    
+    def _show_artist_wiki(self, artist_db_info):
+        """Show artist Wikipedia content."""
+        if not artist_db_info:
             return
             
-        # Extract links from album info
-        links = self.extract_links(album_db_info, 'album')
+        wiki = artist_db_info.get('wikipedia_content')
+        if wiki and wiki.strip():
+            wiki_card = self.create_info_card("Wikipedia del Artista", wiki)
+            self.wiki_layout.addWidget(wiki_card)
+            self.wiki_container.setVisible(True)
+    
+    def _show_artist_info(self, artist_db_info):
+        """Show artist information."""
+        if not artist_db_info:
+            return
             
-        # Update link buttons
-        self.link_buttons.update_album_links(links)
+        bio = artist_db_info.get('bio')
+        if bio and bio.strip() and bio != "No hay información del artista disponible":
+            # Create and add artist info card
+            artist_card = self.create_info_card("Información del Artista", bio)
+            self.artist_info_layout.addWidget(artist_card)
+            self.artist_info_container.setVisible(True)
+            
+    def _update_link_buttons(self, album_db_info, artist_db_info=None):
+        """Update album and artist link buttons."""
+        if not self.link_buttons:
+            return
+            
+        # Extract links from album info and update album link buttons
+        if album_db_info:
+            album_links = self.extract_links(album_db_info, 'album')
+            self.link_buttons.update_album_links(album_links)
+            
+        # Extract links from artist info and update artist link buttons
+        if artist_db_info:
+            artist_links = self.extract_links(artist_db_info, 'artist')
+            
+            # Add social media links if available
+            if artist_db_info.get('id'):
+                network_links = self.db.get_artist_networks(artist_db_info['id'])
+                artist_links.update(network_links)
+                
+            self.link_buttons.update_artist_links(artist_links)

@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QScrollArea, QPushButton
 from PyQt6.QtCore import Qt, pyqtSignal
+from modules.submodules.fuzzy.entity_view_submodule import EntityView
 
 class FeedsView(QWidget):
     """

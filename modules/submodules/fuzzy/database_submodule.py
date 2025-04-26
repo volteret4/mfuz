@@ -30,7 +30,7 @@ class MusicDatabase:
         
     def get_artist_info(self, artist_name: str) -> Optional[Dict[str, Any]]:
         """
-        Get artist information from the database.
+        Get artist information from the database with improved error handling.
         
         Args:
             artist_name (str): Artist name to search for
@@ -39,9 +39,11 @@ class MusicDatabase:
             Optional[Dict[str, Any]]: Artist information or None if not found
         """
         if not artist_name:
+            print("[DEBUG] Nombre de artista vacío en get_artist_info")
             return None
             
         try:
+            print(f"[DEBUG] Buscando información para artista: {artist_name}")
             conn = self._get_connection()
             cursor = conn.cursor()
             
@@ -58,10 +60,31 @@ class MusicDatabase:
             cursor.execute(query, (artist_name,))
             result = cursor.fetchone()
             
-            conn.close()
-            
             if not result:
-                return None
+                print(f"[DEBUG] No se encontró información para el artista: {artist_name}")
+                
+                # Intento alternativo: búsqueda por LIKE
+                alt_query = """
+                    SELECT id, name, bio, tags, similar_artists, last_updated, origin,
+                        formed_year, total_albums, spotify_url, youtube_url,
+                        musicbrainz_url, discogs_url, rateyourmusic_url,
+                        links_updated, wikipedia_url, wikipedia_content,
+                        wikipedia_updated, mbid, bandcamp_url, member_of, aliases, lastfm_url
+                    FROM artists
+                    WHERE LOWER(name) LIKE LOWER(?)
+                    LIMIT 1
+                """
+                cursor.execute(alt_query, (f"%{artist_name}%",))
+                result = cursor.fetchone()
+                
+                if not result:
+                    print(f"[DEBUG] Tampoco se encontró con búsqueda aproximada: {artist_name}")
+                    conn.close()
+                    return None
+                else:
+                    print(f"[DEBUG] Se encontró artista con búsqueda aproximada: {result[1]}")
+            else:
+                print(f"[DEBUG] Artista encontrado: {result[1]}")
                 
             # Create dictionary with column names
             columns = [
@@ -72,12 +95,89 @@ class MusicDatabase:
                 'wikipedia_updated', 'mbid', 'bandcamp_url', 'member_of', 'aliases', 'lastfm_url'
             ]
             
-            return {columns[i]: result[i] for i in range(len(columns)) if i < len(result)}
+            artist_info = {columns[i]: result[i] for i in range(len(columns)) if i < len(result)}
+            
+            # Debug: verificar campos clave
+            for key in ['id', 'name', 'bio', 'wikipedia_content', 'spotify_url', 'lastfm_url']:
+                if key in artist_info:
+                    has_value = bool(artist_info[key])
+                    value_preview = str(artist_info[key])[:30] + "..." if has_value and isinstance(artist_info[key], str) else str(artist_info[key])
+                    print(f"[DEBUG] Campo {key}: {has_value} - {value_preview}")
+            
+            conn.close()
+            return artist_info
             
         except Exception as e:
-            print(f"Error getting artist info: {e}")
+            import traceback
+            print(f"[DEBUG] Error getting artist info: {e}")
             traceback.print_exc()
             return None
+
+    def get_artist_networks(self, artist_id: int) -> Dict[str, str]:
+        """
+        Get all social media and external links for an artist with improved error handling.
+        
+        Args:
+            artist_id (int): ID of the artist
+            
+        Returns:
+            Dict[str, str]: Dictionary of network links
+        """
+        if not artist_id:
+            print("[DEBUG] ID de artista vacío en get_artist_networks")
+            return {}
+            
+        try:
+            print(f"[DEBUG] Obteniendo redes sociales para artist_id: {artist_id}")
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            
+            # Verificar si la tabla existe
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='artists_networks'")
+            if not cursor.fetchone():
+                print("[DEBUG] La tabla artists_networks no existe en la base de datos")
+                conn.close()
+                return {}
+            
+            # Get column names first (excluding id, artist_id, enlaces, last_updated)
+            cursor.execute("PRAGMA table_info(artists_networks)")
+            all_columns = [row[1] for row in cursor.fetchall()]
+            link_columns = [col for col in all_columns if col not in ('id', 'artist_id', 'enlaces', 'last_updated')]
+            
+            print(f"[DEBUG] Columnas de enlaces encontradas: {link_columns}")
+            
+            if not link_columns:
+                print("[DEBUG] No se encontraron columnas de enlaces en la tabla")
+                conn.close()
+                return {}
+            
+            # Build dynamic query
+            columns_str = ', '.join(link_columns)
+            query = f"SELECT {columns_str} FROM artists_networks WHERE artist_id = ?"
+            
+            cursor.execute(query, (artist_id,))
+            result = cursor.fetchone()
+            
+            conn.close()
+            
+            if not result:
+                print(f"[DEBUG] No se encontraron redes sociales para artist_id: {artist_id}")
+                return {}
+                
+            # Create dictionary of links
+            links = {}
+            for i, col in enumerate(link_columns):
+                if result[i]:  # If the link exists
+                    links[col] = result[i]
+                    
+            print(f"[DEBUG] Enlaces de redes sociales encontrados: {links}")
+            return links
+            
+        except Exception as e:
+            import traceback
+            print(f"[DEBUG] Error getting artist networks: {e}")
+            traceback.print_exc()
+            return {}
             
     def get_album_info(self, album_name: str, artist_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """
@@ -205,51 +305,7 @@ class MusicDatabase:
             print(f"Error getting lyrics: {e}")
             return None
     
-    def get_artist_networks(self, artist_id: int) -> Dict[str, str]:
-        """
-        Get all social media and external links for an artist.
-        
-        Args:
-            artist_id (int): ID of the artist
-            
-        Returns:
-            Dict[str, str]: Dictionary of network links
-        """
-        if not artist_id:
-            return {}
-            
-        try:
-            conn = self._get_connection()
-            cursor = conn.cursor()
-            
-            # Get column names first (excluding id, artist_id, enlaces, last_updated)
-            cursor.execute("PRAGMA table_info(artists_networks)")
-            all_columns = [row[1] for row in cursor.fetchall()]
-            link_columns = [col for col in all_columns if col not in ('id', 'artist_id', 'enlaces', 'last_updated')]
-            
-            # Build dynamic query
-            columns_str = ', '.join(link_columns)
-            query = f"SELECT {columns_str} FROM artists_networks WHERE artist_id = ?"
-            
-            cursor.execute(query, (artist_id,))
-            result = cursor.fetchone()
-            
-            conn.close()
-            
-            if not result:
-                return {}
-                
-            # Create dictionary of links
-            links = {}
-            for i, col in enumerate(link_columns):
-                if result[i]:  # If the link exists
-                    links[col] = result[i]
-                    
-            return links
-            
-        except Exception as e:
-            print(f"Error getting artist networks: {e}")
-            return {}
+   
     
     def get_feeds_data(self, entity_type: str, entity_id: int) -> List[Dict[str, Any]]:
         """

@@ -1,17 +1,19 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QScrollArea
 from PyQt6.QtCore import Qt
+from modules.submodules.fuzzy.entity_view_submodule import EntityView
 
-class AlbumView(EntityView):
+
+class TrackView(EntityView):
     """
-    View for displaying album details.
+    View for displaying track details.
     """
     
     def __init__(self, parent=None, db=None, media_finder=None, link_buttons=None):
-        """Initialize Album View."""
+        """Initialize Track View."""
         super().__init__(parent, db, media_finder, link_buttons)
         
     def _setup_ui(self):
-        """Set up UI components for album view."""
+        """Set up UI components for track view."""
         # Clear existing layout
         while self.layout.count():
             item = self.layout.takeAt(0)
@@ -35,9 +37,13 @@ class AlbumView(EntityView):
         self.metadata_layout = QVBoxLayout(self.metadata_container)
         self.metadata_layout.setContentsMargins(0, 0, 0, 0)
         
-        self.tracks_container = QWidget()
-        self.tracks_layout = QVBoxLayout(self.tracks_container)
-        self.tracks_layout.setContentsMargins(0, 0, 0, 0)
+        self.lyrics_container = QWidget()
+        self.lyrics_layout = QVBoxLayout(self.lyrics_container)
+        self.lyrics_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.artist_info_container = QWidget()
+        self.artist_info_layout = QVBoxLayout(self.artist_info_container)
+        self.artist_info_layout.setContentsMargins(0, 0, 0, 0)
         
         self.wiki_container = QWidget()
         self.wiki_layout = QVBoxLayout(self.wiki_container)
@@ -45,7 +51,8 @@ class AlbumView(EntityView):
         
         # Add containers to content layout
         self.content_layout.addWidget(self.metadata_container)
-        self.content_layout.addWidget(self.tracks_container)
+        self.content_layout.addWidget(self.lyrics_container)
+        self.content_layout.addWidget(self.artist_info_container)
         self.content_layout.addWidget(self.wiki_container)
         self.content_layout.addStretch()
         
@@ -59,16 +66,19 @@ class AlbumView(EntityView):
         """Clear all content."""
         # Clear container layouts
         self._clear_layout(self.metadata_layout)
-        self._clear_layout(self.tracks_layout)
+        self._clear_layout(self.lyrics_layout)
+        self._clear_layout(self.artist_info_layout)
         self._clear_layout(self.wiki_layout)
         
         # Hide containers
         self.metadata_container.setVisible(False)
-        self.tracks_container.setVisible(False)
+        self.lyrics_container.setVisible(False)
+        self.artist_info_container.setVisible(False)
         self.wiki_container.setVisible(False)
         
         # Clear link buttons if available
         if self.link_buttons:
+            self.link_buttons.update_artist_links({})
             self.link_buttons.update_album_links({})
             
     def _clear_layout(self, layout):
@@ -81,148 +91,142 @@ class AlbumView(EntityView):
             if item.widget():
                 item.widget().deleteLater()
                 
-    def show_entity(self, album_data, tracks=None):
+    def show_entity(self, track_data):
         """
-        Show album details.
+        Show track details.
         
         Args:
-            album_data: Dictionary with album data or tuple from database query
-            tracks: List of track items (optional)
+            track_data: Tuple from database query with track data
         """
-        if not album_data:
+        if not track_data or not isinstance(track_data, (list, tuple)) or len(track_data) < 3:
             return
             
         # Clear previous content
         self.clear()
         
-        # Get album info
-        album_name = None
-        artist_name = None
-        year = None
-        genre = None
+        # Get basic track info
+        track_id = track_data[0] if len(track_data) > 0 else None
+        file_path = track_data[1] if len(track_data) > 1 else None
+        title = track_data[2] if len(track_data) > 2 else "Unknown Title"
+        artist = track_data[3] if len(track_data) > 3 else "Unknown Artist"
+        album_artist = track_data[4] if len(track_data) > 4 else None
+        album = track_data[5] if len(track_data) > 5 else "Unknown Album"
         
-        if isinstance(album_data, dict):
-            album_name = album_data.get('name')
-            artist_name = album_data.get('artist')
-            year = album_data.get('year')
-            genre = album_data.get('genre')
-        elif isinstance(album_data, (list, tuple)) and len(album_data) > 5:
-            album_name = album_data[5]  # Assuming index 5 is album name
-            artist_name = album_data[3]  # Assuming index 3 is artist name
-            if len(album_data) > 6:
-                year = album_data[6]  # Assuming index 6 is date/year
-            if len(album_data) > 7:
-                genre = album_data[7]  # Assuming index 7 is genre
+        # Get artist and album info from database
+        artist_db_info = self.db.get_artist_info(artist) if artist else None
+        album_db_info = self.db.get_album_info(album, artist) if album and artist else None
+        
+        # Debug información - descomentar para depuración
+        # print(f"Track ID: {track_id}")
+        # print(f"Artist DB Info: {artist_db_info}")
+        # print(f"Album DB Info: {album_db_info}")
+        
+        # Show track metadata
+        self._show_track_metadata(track_data)
+        
+        # Show lyrics if available
+        if track_id:
+            self._show_track_lyrics(track_id)
+        
+        # Show artist info
+        if artist_db_info:
+            self._show_artist_info(artist_db_info)
             
-        if not album_name or not artist_name:
+        # Show Wikipedia content if available
+        if artist_db_info and artist_db_info.get('wikipedia_content'):
+            self._show_wikipedia_content("Wikipedia del Artista", artist_db_info.get('wikipedia_content'))
+            
+        if album_db_info and album_db_info.get('wikipedia_content'):
+            self._show_wikipedia_content("Wikipedia del Álbum", album_db_info.get('wikipedia_content'))
+        
+        # Update link buttons
+        self._update_link_buttons(artist_db_info, album_db_info)
+        
+    def _show_track_metadata(self, track_data):
+        """Show track metadata."""
+        if not track_data or len(track_data) < 3:
             return
             
-        # Get complete album info from database if needed
-        album_db_info = None
-        
-        if isinstance(album_data, dict) and album_data.get('type') == 'album':
-            # We only have basic info, fetch complete info
-            album_db_info = self.db.get_album_info(album_name, artist_name)
-        elif isinstance(album_data, (list, tuple)):
-            # We have a song tuple, fetch album info
-            album_db_info = self.db.get_album_info(album_name, artist_name)
-        else:
-            # We already have complete info
-            album_db_info = album_data
-            
-        # Calculate total tracks and duration
-        total_tracks = 0
-        total_duration = 0
-        
-        if tracks:
-            total_tracks = len(tracks)
-            for track in tracks:
-                track_data = track.data(0, Qt.ItemDataRole.UserRole)
-                if track_data and len(track_data) > 19:  # Assuming index 19 is duration
-                    try:
-                        duration = track_data[19]
-                        if isinstance(duration, (int, float)) and duration > 0:
-                            total_duration += duration
-                    except (ValueError, TypeError, IndexError):
-                        pass
-                        
-        # Format duration
-        hours = int(total_duration // 3600)
-        minutes = int((total_duration % 3600) // 60)
-        seconds = int(total_duration % 60)
-        duration_str = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-            
-        # Show metadata
-        self._show_album_metadata(album_db_info, album_name, artist_name, year, genre, total_tracks, duration_str)
-        
-        # Show Wikipedia content
-        self._show_album_wiki(album_db_info)
-        
-        # Show link buttons
-        self._update_link_buttons(album_db_info)
-        
-    def _show_album_metadata(self, album_db_info, album_name, artist_name, year, genre, total_tracks, duration_str):
-        """Show album metadata."""
         metadata = {}
         
-        # Basic metadata
-        metadata["Álbum"] = album_name
-        metadata["Artista"] = artist_name
+        # Extract metadata fields
+        title = track_data[2] if len(track_data) > 2 else "Unknown Title"
+        artist = track_data[3] if len(track_data) > 3 else "Unknown Artist"
+        album_artist = track_data[4] if len(track_data) > 4 else None
+        album = track_data[5] if len(track_data) > 5 else "Unknown Album"
+        date = track_data[6] if len(track_data) > 6 else None
+        genre = track_data[7] if len(track_data) > 7 else None
+        label = track_data[8] if len(track_data) > 8 else None
+        bitrate = track_data[10] if len(track_data) > 10 else None
+        bit_depth = track_data[11] if len(track_data) > 11 else None
+        sample_rate = track_data[12] if len(track_data) > 12 else None
         
-        # Add additional info
-        if album_db_info:
-            if album_db_info.get('year'):
-                metadata["Fecha"] = album_db_info['year']
-            elif year:
-                metadata["Fecha"] = year
-                
-            if album_db_info.get('genre'):
-                metadata["Género"] = album_db_info['genre']
-            elif genre:
-                metadata["Género"] = genre
-                
-            if album_db_info.get('label'):
-                metadata["Sello"] = album_db_info['label']
-                
-            if album_db_info.get('total_tracks'):
-                metadata["Pistas"] = album_db_info['total_tracks']
-            elif total_tracks > 0:
-                metadata["Pistas"] = total_tracks
-                
-            metadata["Duración"] = duration_str
+        # Build metadata dictionary
+        metadata["Título"] = title
+        metadata["Artista"] = artist
+        if album_artist and album_artist != artist:
+            metadata["Album Artist"] = album_artist
+        metadata["Álbum"] = album
+        if date:
+            metadata["Fecha"] = date
+        if genre:
+            metadata["Género"] = genre
+        if label:
+            metadata["Sello"] = label
+        if bitrate:
+            metadata["Bitrate"] = f"{bitrate} kbps"
+        if bit_depth:
+            metadata["Profundidad"] = f"{bit_depth} bits"
+        if sample_rate:
+            metadata["Frecuencia"] = f"{sample_rate} Hz"
             
-            # Additional album-specific metadata
-            if album_db_info.get('producers'):
-                metadata["Productores"] = album_db_info['producers']
-            if album_db_info.get('engineers'):
-                metadata["Ingenieros"] = album_db_info['engineers']
-            if album_db_info.get('mastering_engineers'):
-                metadata["Mastering"] = album_db_info['mastering_engineers']
-        else:
-            # Use provided info if database info not available
-            if year:
-                metadata["Fecha"] = year
-            if genre:
-                metadata["Género"] = genre
-            if total_tracks > 0:
-                metadata["Pistas"] = total_tracks
-            metadata["Duración"] = duration_str
-                
         # Create and add metadata card
         metadata_card = self.create_metadata_card(metadata)
         self.metadata_layout.addWidget(metadata_card)
         self.metadata_container.setVisible(True)
-            
-    def _show_album_wiki(self, album_db_info):
-        """Show album Wikipedia content."""
-        if not album_db_info:
+        
+    def _show_track_lyrics(self, track_id):
+        """Show track lyrics."""
+        if not track_id or not self.db:
             return
             
-        wiki = album_db_info.get('wikipedia_content')
-        if wiki and wiki.strip():
-            wiki_card = self.create_info_card("Wikipedia", wiki)
-            self.wiki_layout.addWidget(wiki_card)
-            self.wiki_container.setVisible(True)
+        # Get lyrics from database
+        lyrics_data = self.db.get_lyrics(track_id)
+        if not lyrics_data:
+            return
+            
+        lyrics, source = lyrics_data
+        
+        if lyrics and lyrics.strip():
+            # Create content with lyrics and source
+            content = f"{lyrics}\n\n<i>Fuente: {source}</i>"
+            
+            # Create and add lyrics card
+            lyrics_card = self.create_info_card("Letra", content)
+            self.lyrics_layout.addWidget(lyrics_card)
+            self.lyrics_container.setVisible(True)
+            
+    def _show_artist_info(self, artist_db_info):
+        """Show artist information."""
+        if not artist_db_info:
+            return
+            
+        bio = artist_db_info.get('bio')
+        if bio and bio.strip() and bio != "No hay información del artista disponible":
+            # Create and add artist info card
+            artist_card = self.create_info_card("Información del Artista", bio)
+            self.artist_info_layout.addWidget(artist_card)
+            self.artist_info_container.setVisible(True)
+            
+    def _show_wikipedia_content(self, title, content):
+        """Show Wikipedia content."""
+        if not content or not content.strip():
+            return
+            
+        # Create and add wiki card
+        wiki_card = self.create_info_card(title, content)
+        self.wiki_layout.addWidget(wiki_card)
+        self.wiki_container.setVisible(True)
             
     def _update_link_buttons(self, artist_db_info, album_db_info):
         """Update link buttons for artist and album."""

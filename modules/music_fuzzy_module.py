@@ -1,4760 +1,1517 @@
 import sys
 import os
-import re
-from typing import Optional, List, Dict, Tuple
-from pathlib import Path
-import sqlite3
-import json
 from PyQt6 import uic
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
-                           QLabel, QScrollArea, QSplitter, QSpinBox, QComboBox, QStackedWidget,
-                           QTreeWidget, QTreeWidgetItem, QAbstractItemView, QGroupBox,
-                           QMenu, QFrame, QStyle, QApplication, QCheckBox, QSizePolicy,
-                           )
-from PyQt6.QtCore import Qt, QDate, QSize
-from PyQt6.QtGui import QPixmap, QShortcut, QKeySequence, QIcon
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QApplication, QTreeWidgetItem, 
+                             QAbstractItemView, QMenu, QStackedWidget, QLineEdit,
+                             QCheckBox, QSplitter, QLabel, QPushButton, QStackedWidget,
+                             QGroupBox)
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QKeySequence, QShortcut
 import subprocess
-import importlib.util
-import glob
-import random
-import urllib.parse
-import time
-import logging
 import traceback
-
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-from base_module import BaseModule, THEMES, PROJECT_ROOT  # Importar la clase base
 import resources_rc
-from tools.music_fuzzy.collapsible_groupbox import CollapsibleGroupBox
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-reproductor = 'deadbeef'
-
-
-class GroupedListItem(QTreeWidgetItem):
-    def __init__(self, text, is_header=False, paths=None):
-        # QTreeWidgetItem no acepta texto como primer argumento
-        # Usamos una lista de strings para las columnas
-        super().__init__([text])  # Pasar el texto como una lista para la primera columna
-
-        self.is_header = is_header
-        self.paths = paths or []
-
-        if is_header:
-            font = self.font(0)  # El font debe especificar la columna (0)
-            font.setBold(True)
-            font.setPointSize(font.pointSize() + 2)
-            self.setFont(0, font)  # Establecer la fuente para la columna 0
-
-            # Si quieres también establecer colores de fondo y texto:
-            # self.setBackground(0, QColor(theme['secondary_bg']))
-            # self.setForeground(0, QColor(theme['accent']))
-
-class SearchParser:
-    def __init__(self):
-        self.filters = {
-            'a:': 'artist',
-            'b:': 'album',
-            'g:': 'genre',
-            'l:': 'label',
-            't:': 'title',
-            'aa:': 'album_artist',
-            'br:': 'bitrate',
-            'd:': 'date',
-            'w:': 'weeks',      # Últimas X semanas
-            'm:': 'months',     # Últimos X meses
-            'y:': 'years',      # Últimos X años
-            'am:': 'added_month', # Añadido en mes X del año Y
-            'ay:': 'added_year'   # Añadido en año Z
-        }
-
-        # Caché simple para consultas frecuentes
-        self.cache = {}
-        self.cache_size = 20
-
-    def build_sql_conditions(self, parsed_query: dict) -> tuple:
-        """Construye las condiciones SQL y parámetros basados en la query parseada."""
-        if not parsed_query:
-            return [], []
-
-        conditions = []
-        params = []
-
-        # Procesar filtros específicos
-        for field, value in parsed_query['filters'].items():
-            if field in ['weeks', 'months', 'years']:
-                try:
-                    value = int(value)
-                    if field == 'weeks':
-                        conditions.append("s.last_modified >= datetime('now', '-' || ? || ' weeks')")
-                    elif field == 'months':
-                        conditions.append("s.last_modified >= datetime('now', '-' || ? || ' months')")
-                    else:  # years
-                        conditions.append("s.last_modified >= datetime('now', '-' || ? || ' years')")
-                    params.append(value)
-                except ValueError:
-                    print(f"Valor inválido para {field}: {value}")
-                    continue
-            elif field == 'added_month':
-                try:
-                    month, year = value.split('/')
-                    month = int(month)
-                    year = int(year)
-                    conditions.append("strftime('%m', s.last_modified) = ? AND strftime('%Y', s.last_modified) = ?")
-                    params.extend([f"{month:02d}", str(year)])
-                except (ValueError, TypeError):
-                    print(f"Formato inválido para mes/año: {value}")
-                    continue
-            elif field == 'added_year':
-                try:
-                    year = int(value)
-                    conditions.append("strftime('%Y', s.last_modified) = ?")
-                    params.append(str(year))
-                except ValueError:
-                    print(f"Año inválido: {value}")
-                    continue
-            elif field == 'bitrate':
-                # Manejar rangos de bitrate (>192, <192, =192)
-                if value.startswith('>'):
-                    conditions.append(f"s.{field} > ?")
-                    params.append(int(value[1:]))
-                elif value.startswith('<'):
-                    conditions.append(f"s.{field} < ?")
-                    params.append(int(value[1:]))
-                else:
-                    conditions.append(f"s.{field} = ?")
-                    params.append(int(value))
-            else:
-                conditions.append(f"s.{field} LIKE ?")
-                params.append(f"%{value}%")
-
-        # Procesar términos generales
-        if parsed_query['general']:
-            general_fields = ['artist', 'title', 'album', 'genre', 'label', 'album_artist']
-            general_conditions = []
-            for field in general_fields:
-                general_conditions.append(f"s.{field} LIKE ?")
-                params.append(f"%{parsed_query['general']}%")
-            if general_conditions:
-                conditions.append(f"({' OR '.join(general_conditions)})")
-
-        return conditions, params
-
-    def parse_query(self, query: str) -> dict:
-        """Parsea la query y devuelve diccionario con filtros y término general."""
-        # Verificar caché
-        if query in self.cache:
-            return self.cache[query]
-
-        filters = {}
-        general_terms = []
-        current_term = ''
-        i = 0
-
-        while i < len(query):
-            # Buscar si hay un filtro al inicio de esta parte
-            found_filter = False
-            for prefix, field in self.filters.items():
-                if query[i:].startswith(prefix):
-                    # Si hay un término acumulado, añadirlo a términos generales
-                    if current_term.strip():
-                        general_terms.append(current_term.strip())
-                        current_term = ''
-
-                    # Avanzar más allá del prefijo
-                    i += len(prefix)
-                    # Recoger el valor hasta el siguiente filtro o fin de cadena
-                    value = ''
-                    while i < len(query):
-                        # Comprobar si empieza otro filtro
-                        next_filter = False
-                        for next_prefix in self.filters:
-                            if query[i:].startswith(next_prefix):
-                                next_filter = True
-                                break
-                        if next_filter:
-                            break
-                        value += query[i]
-                        i += 1
-
-                    value = value.strip()
-                    if value:
-                        filters[field] = value
-                    found_filter = True
-                    break
-
-            if not found_filter and i < len(query):
-                current_term += query[i]
-                i += 1
-
-        # Añadir el último término si existe
-        if current_term.strip():
-            general_terms.append(current_term.strip())
-
-        result = {
-            'filters': filters,
-            'general': ' '.join(general_terms)
-        }
-
-        # Actualizar caché
-        if len(self.cache) >= self.cache_size:
-            # Eliminar el primero si está lleno
-            self.cache.pop(next(iter(self.cache)))
-        self.cache[query] = result
-
-        return result
-
-
+from modules.submodules.fuzzy.database_submodule import MusicDatabase
+from modules.submodules.fuzzy.media_finder import MediaFinder
+from modules.submodules.fuzzy.links_buttons_submodule import LinkButtonsManager
+from modules.submodules.fuzzy.artist_view_submodule import ArtistView
+from modules.submodules.fuzzy.album_view_submodule import AlbumView
+from modules.submodules.fuzzy.track_view_submodule import TrackView
+from modules.submodules.fuzzy.feed_view_submodule import FeedsView
+from modules.submodules.fuzzy.search_parser import SearchParser  # Assuming you'll refactor your search parser too
+from modules.submodules.fuzzy.entity_view_submodule import EntityView
+from modules.submodules.fuzzy.search_panel import SearchPanel 
+# Import base module
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import BaseModule, PROJECT_ROOT
 
 class MusicBrowser(BaseModule):
+    """
+    Main music browser module with a modular architecture.
+    """
+    
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         """
-        Inicializa el módulo de exploración de música.
-
+        Initialize the music browser module.
+        
         Args:
-            parent (QWidget, optional): Widget padre. Defaults to None.
-            theme (str, optional): Tema de la interfaz. Defaults to 'Tokyo Night'.
-            db_path (str, optional): Ruta al archivo de la base de datos de
-                música. Defaults to ''.
-            font_family (str, optional): Familia de fuente para la interfaz.
-                Defaults to 'Inter'.
-            artist_images_dir (str, optional): Directorio para las imágenes de
-                artistas. Defaults to ''.
+            parent (QWidget, optional): Parent widget
+            theme (str, optional): UI theme
+            **kwargs: Additional keyword arguments
         """
-        # Extraer los argumentos específicos de MusicBrowser
+        # Extract module-specific arguments
         self.db_path = kwargs.pop('db_path', '')
-        self.font_family = kwargs.pop('font_family', 'Inter')
         self.artist_images_dir = kwargs.pop('artist_images_dir', '')
         self.hotkeys_config = kwargs.pop('hotkeys', None)
-
-        self.available_themes = kwargs.pop('temas', [])
-        self.selected_theme = kwargs.pop('tema_seleccionado', theme)
-        self.boton_pulsado = 0  # Estado inicial
-
-        # Inicializar referencia a main_ui
-        self.main_ui = None
-
-        # Inicializar referencias a widgets que serán accedidos
-        # Este paso es crucial para evitar AttributeError
-        self.results_tree = None
-        self.results_tree_widget = None
-        self.results_tree_container = None 
-        self.cover_label = None
-        self.artist_image_label = None
         
-        # Labels para mostrar información
-        self.lastfm_label = None
-        self.metadata_label = None
-        self.links_label = None
-        self.wikipedia_artist_label = None
-        self.wikipedia_album_label = None
-        
-        # Botones y grupos
-        self.advanced_buttons = []
-        self.artist_links_group = None
-        self.album_links_group = None
-        self.artist_links_layout = None
-        self.album_links_layout = None
-        self.feeds_button = None
-        self.back_button = None
-        
-        # Estado de carga de UI
-        self.ui_components_loaded = {'main': False, 'tree': False, 'info': False, 'advanced': False}
-        
-        # Colecciones
-        self.info_groupboxes = {}
-        self.artist_buttons = {}
-        self.album_buttons = {}
-        
-        # Llamar al constructor de la clase padre con los argumentos restantes
+        # Initialize parent class
         super().__init__(parent=parent, theme=theme, **kwargs)
-
-        # Inicializar componentes específicos de MusicBrowser
+        
+        # Initialize components
+        self.db = MusicDatabase(self.db_path)
+        self.media_finder = MediaFinder(self.artist_images_dir)
         self.search_parser = SearchParser()
-        self.setup_hotkeys(self.hotkeys_config)
+        
 
+        # Initialize UI
+        self.setup_hotkeys(self.hotkeys_config)
+        
     def init_ui(self):
-        """Inicializa la interfaz del módulo con mejor detección de errores."""
-        # Limpiar el layout existente si hay alguno
+        """Inicializa la interfaz de usuario."""
+        # Preparar layout
         if self.layout():
             QWidget().setLayout(self.layout())
-
-        # Crear un layout principal para el módulo
+            
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
-
-        # Cargar la UI principal
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_module.ui")
+        
+        # Cargar el archivo UI principal
+        ui_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "music_fuzzy_module.ui")
         if os.path.exists(ui_file_path):
             try:
-                # Cargar el archivo UI principal
+                # Cargar UI
                 self.main_ui = QWidget()
                 uic.loadUi(ui_file_path, self.main_ui)
-
-                # Añadir el widget principal al layout
                 main_layout.addWidget(self.main_ui)
-
-                # Transferir referencias importantes
-                self._setup_references()
-                self.ui_components_loaded['main'] = True
-                print(f"UI MusicBrowser cargada desde {ui_file_path}")
+                
+                # Establecer objectName para estilo CSS
+                self.setObjectName("music_fuzzy_module")
+                
+                # Configurar componentes y referencias UI
+                self._setup_ui_references()
+                self._load_results_tree()
+                self._setup_search_panel()
+                self._setup_details_panel()
+                
+                # Conectar señales
+                self._connect_signals()
+                
+                # Aplicar tema
+                self.apply_theme(theme=getattr(self, 'selected_theme', 'Tokyo Night'))
+                
             except Exception as e:
-                print(f"Error cargando UI MusicBrowser: {e}")
+                print(f"Error cargando UI: {e}")
                 traceback.print_exc()
-                self._fallback_init_ui()
+                self._create_fallback_ui()
         else:
-            print(f"Archivo UI MusicBrowser no encontrado: {ui_file_path}")
-            self._fallback_init_ui()
+            print(f"Archivo UI no encontrado: {ui_file_path}")
+            self._create_fallback_ui()
 
-        # Establecer objectName para este módulo principal
-        self.setObjectName("music_fuzzy_module")
+    def _create_fallback_ui(self):
+        """Create a fallback UI if the main UI file can't be loaded."""
+        # Clear existing layout if any
+        if self.layout():
+            QWidget().setLayout(self.layout())
+            
+        # Create a simple layout
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(10, 10, 10, 10)
         
-        # Cargar otros componentes de la UI
-        self._load_results_tree()
-
-        # Configurar los widgets de información
-        self.setup_info_widget()
-
-        # Verificar que los widgets importantes se configuraron
-        if not self.lastfm_label or not self.metadata_label:
-            print("ADVERTENCIA: Los widgets de información no se configuraron correctamente.")
-            # Forzar el método fallback
-            self._fallback_setup_info_widget()
-
-        # Configuración común
-        self._setup_references()
+        # Add a label explaining the issue
+        from PyQt6.QtWidgets import QLabel
+        error_label = QLabel("Error loading Music Browser UI. Check console for details.")
+        error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        main_layout.addWidget(error_label)
         
-        # Crear y configurar el frame de enlaces
-        self.setup_link_buttons_container()
-        
-        # Detectar y conectar el botón de feeds si existe
-        if hasattr(self, 'main_ui'):
-            feeds_button = self.main_ui.findChild(QPushButton, "feeds_button")
-            if feeds_button:
-                self.feeds_button = feeds_button
-                self.feeds_button.clicked.connect(self.handle_feeds_button_click)
-                print("Botón de feeds encontrado y conectado")
-        
-        # Conectar señales después de tener todos los widgets
-        self.connect_signals()
-        
+        print("Using fallback UI due to loading errors")
 
-        self._ensure_link_containers_exist()
-        # Initialize link containers
-        self.init_link_containers()
+    def _setup_search_panel(self):
+        """Set up the search panel component."""
+        # Create search panel
+        self.search_panel = SearchPanel(self)
+        
+        # Get reference to top container from UI
+        top_container = self.main_ui.findChild(QWidget, "top_container")
+        if top_container and top_container.layout():
+            # Replace existing search widgets with search panel
+            while top_container.layout().count():
+                item = top_container.layout().takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+                    
+            top_container.layout().addWidget(self.search_panel)
+            
+            # Connect search panel signals
+            self.search_panel.searchRequested.connect(self.search)
+            self.search_panel.filterRequested.connect(self.search)
+            
+            # Set custom button handlers
+            self.search_panel.set_custom_button_handlers(
+                button1_handler=self.buscar_musica_en_reproduccion
+            )
+        else:
+            print(f"Warning: top_container not found in UI")
+    
+    def _setup_ui_references(self):
+        """Obtiene referencias a widgets del UI cargado."""
+        # Referencias a widgets principales
+        self.search_box = self.main_ui.findChild(QLineEdit, "search_box")
+        self.advanced_settings_check = self.main_ui.findChild(QCheckBox, "advanced_settings_check")
+        self.advanced_settings_container = self.main_ui.findChild(QWidget, "advanced_settings_container")
+        self.results_tree_container = self.main_ui.findChild(QWidget, "results_tree_container")
+        self.main_splitter = self.main_ui.findChild(QSplitter, "main_splitter")
+        
+        # Referencias a etiquetas de imagen
+        self.cover_label = self.main_ui.findChild(QLabel, "cover_label")
+        self.artist_image_label = self.main_ui.findChild(QLabel, "artist_image_label")
+        
+        # Referencias a botones de acción
+        self.play_button = self.main_ui.findChild(QPushButton, "play_button")
+        self.folder_button = self.main_ui.findChild(QPushButton, "folder_button")
+        self.spotify_button = self.main_ui.findChild(QPushButton, "spotify_button")
+        
+        # Referencias a botones personalizados
+        self.custom_button1 = self.main_ui.findChild(QPushButton, "custom_button1")
+        self.custom_button2 = self.main_ui.findChild(QPushButton, "custom_button2")
+        self.custom_button3 = self.main_ui.findChild(QPushButton, "custom_button3")
+        
+        # Seguimiento de botones avanzados para alternar
+        self.advanced_buttons = []
+        if self.custom_button1:
+            self.advanced_buttons.append(self.custom_button1)
+        if self.custom_button2:
+            self.advanced_buttons.append(self.custom_button2)
+        if self.custom_button3:
+            self.advanced_buttons.append(self.custom_button3)
+        
+        # Referencias a los grupos de enlaces (ya definidos en el archivo UI)
+        self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
+        self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
+        
+        print(f"[DEBUG] Referencias a grupos de enlaces: artist={self.artist_links_group}, album={self.album_links_group}")
+        
+        # Referencia al botón de feeds
+        self.feeds_button = self.main_ui.findChild(QPushButton, "feeds_button")
 
-
-        # Aplicar el tema después de toda la inicialización
+    def _setup_details_panel(self):
+        """Set up the details panel with modular views."""
+        # Importar LinkButtonsManager explícitamente aquí
+        from modules.submodules.fuzzy.links_buttons_submodule import LinkButtonsManager
+        
+        # Obtener referencias a los grupos desde el UI
+        self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
+        self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
+        
+        if not self.artist_links_group or not self.album_links_group:
+            print("[ERROR] No se pudieron encontrar los grupos de enlaces en el UI")
+            print(f"[DEBUG] artist_links_group: {self.artist_links_group}")
+            print(f"[DEBUG] album_links_group: {self.album_links_group}")
+            return
+        
+        # Crear link buttons manager con las referencias a los grupos existentes
+        print("[DEBUG] Creando LinkButtonsManager...")
+        self.link_buttons = LinkButtonsManager(
+            artist_group=self.artist_links_group,
+            album_group=self.album_links_group
+        )
+        
+        # Obtener referencia al widget apilado desde el UI
+        # Primero intentar con el nombre exacto
+        self.details_stacked_widget = self.main_ui.findChild(QStackedWidget, "info_panel_stacked")
+        
+        # Si no lo encuentra, intentar buscar cualquier QStackedWidget en el UI
+        if not self.details_stacked_widget:
+            print("[DEBUG] No se encontró info_panel_stacked por nombre, buscando cualquier QStackedWidget...")
+            all_stacked_widgets = self.main_ui.findChildren(QStackedWidget)
+            if all_stacked_widgets:
+                self.details_stacked_widget = all_stacked_widgets[0]
+                print(f"[DEBUG] Encontrado QStackedWidget alternativo: {self.details_stacked_widget}")
+            else:
+                print("[ERROR] No se encontró ningún QStackedWidget en el UI")
+                # Crear uno programáticamente como última opción
+                details_container = self.main_ui.findChild(QWidget, "info_container")
+                if details_container and details_container.layout():
+                    print("[DEBUG] Creando QStackedWidget programáticamente...")
+                    self.details_stacked_widget = QStackedWidget(details_container)
+                    details_container.layout().addWidget(self.details_stacked_widget)
+                else:
+                    print("[ERROR] No se pudo crear un QStackedWidget, no se encontró contenedor adecuado")
+                    return
+        
+        # Crear entity views
+        self.entity_view = QWidget()
+        entity_layout = QVBoxLayout(self.entity_view)
+        entity_layout.setContentsMargins(0, 0, 0, 0)
+        self.db = MusicDatabase(self.db_path)
+        self.media_finder = MediaFinder(self.artist_images_dir)
+        # Crear las vistas individuales
+        self.artist_view = ArtistView(parent=self, db=self.db, 
+                                    media_finder=self.media_finder, 
+                                    link_buttons=self.link_buttons)
+        self.album_view = AlbumView(parent=self, db=self.db, 
+                                media_finder=self.media_finder, 
+                                link_buttons=self.link_buttons)
+        self.track_view = TrackView(parent=self, db=self.db, 
+                                media_finder=self.media_finder, 
+                                link_buttons=self.link_buttons)
+        
+        # Añadir vistas al contenedor
+        entity_layout.addWidget(self.artist_view)
+        entity_layout.addWidget(self.album_view)
+        entity_layout.addWidget(self.track_view)
+        
+        # Ocultar todas las vistas inicialmente
+        self.artist_view.hide()
+        self.album_view.hide()
+        self.track_view.hide()
+        
+        # Crear la vista de feeds
+        self.feeds_view = FeedsView(parent=self, db=self.db)
+        self.feeds_view.backRequested.connect(lambda: self.details_stacked_widget.setCurrentIndex(0))
+        
+        # Limpiar los widgets existentes en el stacked widget si hay alguno
         try:
-            self.apply_theme(self.selected_theme)
+            while self.details_stacked_widget.count() > 0:
+                self.details_stacked_widget.removeWidget(self.details_stacked_widget.widget(0))
         except Exception as e:
-            print(f"Error aplicando tema: {e}")
-            traceback.print_exc()
+            print(f"[DEBUG] Error al limpiar widgets del stacked widget: {e}")
         
-        # Aplicar ajustes específicos que no pueden manejarse solo con CSS
-        self._apply_music_specific_styles()
-
-        # Inicializar el estado de los ajustes avanzados
-        self._advanced_settings_loaded = False
+        # Añadir vistas al widget apilado
+        self.details_stacked_widget.addWidget(self.entity_view)
+        self.details_stacked_widget.addWidget(self.feeds_view)
         
-        # Detectar elementos UI para ayudar con la depuración
-        self.detect_ui_elements()
+        # Mostrar la vista entity por defecto
+        self.details_stacked_widget.setCurrentIndex(0)
+        
+        print("[DEBUG] _setup_details_panel completado correctamente")
 
-
-
-    def _ensure_link_containers_exist(self):
-        """Makes sure link containers exist in the UI."""
-        if not hasattr(self, 'info_scroll') or not self.info_scroll:
-            print("info_scroll not available, cannot create link containers")
+    def _load_results_tree(self):
+        """Load the results tree widget from UI file or create fallback."""
+        # Try to load from UI file first
+        ui_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "ui", "music_fuzzy_results_tree.ui")
+        
+        if os.path.exists(ui_file_path) and self.results_tree_container:
+            try:
+                # Clear existing layout if any
+                if self.results_tree_container.layout():
+                    while self.results_tree_container.layout().count():
+                        item = self.results_tree_container.layout().takeAt(0)
+                        if item.widget():
+                            item.widget().deleteLater()
+                    QWidget().setLayout(self.results_tree_container.layout())
+                
+                # Create new layout
+                container_layout = QVBoxLayout(self.results_tree_container)
+                container_layout.setContentsMargins(0, 0, 0, 0)
+                container_layout.setSpacing(0)
+                
+                # Load tree widget from UI
+                self.results_tree_widget = QWidget()
+                uic.loadUi(ui_file_path, self.results_tree_widget)
+                container_layout.addWidget(self.results_tree_widget)
+                
+                # Get tree widget reference
+                self.results_tree = self.results_tree_widget.results_tree
+                
+                # Configure tree
+                self._configure_results_tree()
+                
+                print("Results tree loaded from UI file")
+                
+            except Exception as e:
+                print(f"Error loading results tree UI: {e}")
+                traceback.print_exc()
+                self._create_fallback_tree()
+        else:
+            print("Results tree UI file not found, creating fallback")
+            self._create_fallback_tree()
+            
+    def _configure_results_tree(self):
+        """Configure the results tree widget."""
+        if not self.results_tree:
             return
             
-        # Get the content widget
-        info_widget = self.info_scroll.widget()
-        if not info_widget:
-            # Create content widget if it doesn't exist
-            info_widget = QWidget()
-            info_layout = QVBoxLayout(info_widget)
-            self.info_scroll.setWidget(info_widget)
-            self.info_widget = info_widget
+        # Set column widths
+        self.results_tree.setColumnWidth(0, 300)  # Title column
+        self.results_tree.setColumnWidth(1, 70)   # Year column
+        self.results_tree.setColumnWidth(2, 100)  # Genre column
         
-        # Check for existing containers
-        artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
-        album_links_group = info_widget.findChild(QGroupBox, "album_links_group")
-        lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
-        
-        # Create containers if they don't exist
-        if not artist_links_group:
-            artist_links_group = QGroupBox("Artist Links", info_widget)
-            artist_links_group.setObjectName("artist_links_group")
-            artist_links_layout = QHBoxLayout(artist_links_group)
-            artist_links_layout.setContentsMargins(5, 25, 5, 5)
-            info_widget.layout().addWidget(artist_links_group)
-            
-        if not album_links_group:
-            album_links_group = QGroupBox("Album Links", info_widget)
-            album_links_group.setObjectName("album_links_group")
-            album_links_layout = QHBoxLayout(album_links_group)
-            album_links_layout.setContentsMargins(5, 25, 5, 5)
-            info_widget.layout().addWidget(album_links_group)
-            
-        if not lyrics_group:
-            lyrics_group = QGroupBox("Lyrics", info_widget)
-            lyrics_group.setObjectName("lyrics_group")
-            lyrics_layout = QVBoxLayout(lyrics_group)
-            lyrics_layout.setContentsMargins(5, 25, 5, 5)
-            
-            # Add lyrics label
-            lyrics_label = QLabel(lyrics_group)
-            lyrics_label.setObjectName("lyrics_label")
-            lyrics_label.setWordWrap(True)
-            lyrics_label.setTextFormat(Qt.TextFormat.RichText)
-            lyrics_layout.addWidget(lyrics_label)
-            
-            info_widget.layout().addWidget(lyrics_group)
-        
-        # Store references
-        self.artist_links_group = artist_links_group
-        self.album_links_group = album_links_group
-        self.lyrics_group = lyrics_group
-        
-        # Initialize groupboxes dictionary if it doesn't exist
-        if not hasattr(self, 'info_groupboxes'):
-            self.info_groupboxes = {}
-            
-        # Store references in the dictionary
-        self.info_groupboxes['artist_links_group'] = artist_links_group
-        self.info_groupboxes['album_links_group'] = album_links_group
-        self.info_groupboxes['lyrics_group'] = lyrics_group
-        
-        # Hide containers initially
-        artist_links_group.hide()
-        album_links_group.hide()
-        lyrics_group.hide()
-        
-        print("Link containers created/initialized")
-
-
-
-    def load_ui_file(self, ui_file_name, required_widgets=None):
-        """
-        Método auxiliar para cargar un archivo UI con manejo de errores
-
-        Args:
-            ui_file_name (str): Nombre del archivo UI (sin ruta)
-            required_widgets (list, optional): Lista de nombres de widgets requeridos
-
-        Returns:
-            bool: True si se cargó correctamente, False si hubo error
-        """
-        try:
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", ui_file_name)
-            if not os.path.exists(ui_file_path):
-                print(f"Archivo UI no encontrado: {ui_file_path}")
-                return False
-
-            from PyQt6 import uic
-            ui_widget = QWidget()
-            uic.loadUi(ui_file_path, ui_widget)
-
-            # Verificar widgets requeridos si se especifican
-            if required_widgets:
-                missing_widgets = []
-                for widget_name in required_widgets:
-                    widget = ui_widget.findChild(QWidget, widget_name)
-                    if widget:
-                        # Transferir referencias al widget a self
-                        setattr(self, widget_name, widget)
-                    else:
-                        missing_widgets.append(widget_name)
-
-                if missing_widgets:
-                    print(f"Widgets requeridos no encontrados: {', '.join(missing_widgets)}")
-                    return False
-
-            # Añadir el widget completo al layout principal si existe
-            if hasattr(self, 'layout') and self.layout():
-                self.layout().addWidget(ui_widget)
-                # Guardar una referencia al widget UI principal
-                self.ui_widget = ui_widget
-
-            print(f"UI cargada desde {ui_file_path}")
-            return True
-        except Exception as e:
-            print(f"Error cargando UI desde archivo: {e}")
-            traceback.print_exc()
-            return False
-
-
-    def _fallback_init_ui(self):
-        """Método de respaldo para crear la UI manualmente si el archivo UI falla."""
-        # Verificar si ya existe un layout
-        if self.layout():
-            # Si ya hay un layout, no creamos uno nuevo
-            # Simplemente limpiamos los widgets existentes
-            while self.layout().count():
-                item = self.layout().takeAt(0)
-                if item.widget():
-                    item.widget().deleteLater()
-        layout = QVBoxLayout(self)
-        layout.setSpacing(5)
-        layout.setContentsMargins(10, 10, 10, 10)
-
-        # Contenedor superior
-        self.top_container = QFrame()
-        self.top_container.setFrameShape(QFrame.Shape.StyledPanel)
-        self.top_container.setFrameShadow(QFrame.Shadow.Raised)
-        self.top_container.setMaximumHeight(50)
-        top_layout = QVBoxLayout(self.top_container)
-        top_layout.setSpacing(5)
-
-        # Inicializar los botones antes de usarlos
-        self.play_button = QPushButton('Reproducir')
-        self.folder_button = QPushButton('Abrir Carpeta')
-        self.custom_button1 = QPushButton('Reproduciendo')
-        self.custom_button2 = QPushButton('Script 2')
-        self.custom_button3 = QPushButton('Script 3')
-
-        # Barra de búsqueda y checkbox para ajustes avanzados
-        search_layout = QHBoxLayout()
-        self.search_box = QLineEdit()
-        self.search_box.setPlaceholderText('a:artista - b:álbum - g:género - l:sello - t:título - aa:album-artist - br:bitrate - d:fecha - w:semanas - m:meses - y:años - am:mes/año - ay:año')
-        search_layout.addWidget(self.search_box)
-
-        # Botones básicos (siempre visibles)
-        for button in [self.play_button, self.folder_button]:
-            button.setFixedWidth(100)
-            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-            search_layout.addWidget(button)
-
-        # Checkbox para ajustes avanzados
-        self.advanced_settings_check = QCheckBox("Más")
-        self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        search_layout.addWidget(self.advanced_settings_check)
-
-        # Botones avanzados (inicialmente ocultos)
-        self.advanced_buttons = []
-        for button in [self.custom_button1, self.custom_button2, self.custom_button3]:
-            button.setFixedWidth(100)
-            button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-            button.hide()  # Ocultar inicialmente
-            search_layout.addWidget(button)
-            self.advanced_buttons.append(button)
-
-        top_layout.addLayout(search_layout)
-        layout.addWidget(self.top_container)
-
-        # Contenedor para ajustes avanzados (inicialmente oculto)
-        self.advanced_settings_container = QFrame()
-        self.advanced_settings_container.setFrameShape(QFrame.Shape.StyledPanel)
-        self.advanced_settings_container.setFrameShadow(QFrame.Shadow.Raised)
-        self.advanced_settings_container.hide()
-        layout.addWidget(self.advanced_settings_container)
-
-        # Splitter principal: árbol de resultados y panel de detalles
-        self.main_splitter = QSplitter(Qt.Orientation.Horizontal)
-
-        # Panel izquierdo (contenedor para el árbol de resultados)
-        self.results_tree_container = QFrame()
-        self.results_tree_container.setFrameShape(QFrame.Shape.StyledPanel)
-        self.results_tree_container.setFrameShadow(QFrame.Shadow.Raised)
-        self.results_tree_container.setMinimumWidth(300)
-        self.main_splitter.addWidget(self.results_tree_container)
-
-        # Panel derecho (detalles)
-        details_widget = QFrame()
-        details_widget.setFrameShape(QFrame.Shape.StyledPanel)
-        details_widget.setFrameShadow(QFrame.Shadow.Raised)
-        details_layout = QVBoxLayout(details_widget)
-        details_layout.setContentsMargins(0, 0, 0, 0)
-        details_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-
-        # Primer tab (panel original de detalles)
-        details_tab = QWidget()
-        details_tab_layout = QVBoxLayout(details_tab)
-        details_tab_layout.setContentsMargins(0, 0, 0, 0)
-
-        # Splitter vertical para separar imágenes y texto
-        self.details_splitter = QSplitter(Qt.Orientation.Vertical)
-
-        # Contenedor superior para las imágenes (colocadas horizontalmente)
-        images_container = QFrame()
-        images_container.setFrameShape(QFrame.Shape.StyledPanel)
-        images_container.setFrameShadow(QFrame.Shadow.Raised)
-        images_layout = QHBoxLayout(images_container)
-        images_layout.setSpacing(10)
-        images_layout.setContentsMargins(45, 5, 45, 5)
-        images_container.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-
-        # Cover del álbum
-        self.cover_label = QLabel()
-        self.cover_label.setFixedSize(200, 200)
-        self.cover_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.cover_label.setStyleSheet("border: 1px solid #333;")
-        images_layout.addWidget(self.cover_label)
-
-        # Añadir margen entre las imagenes
-        images_layout.addSpacing(60)  # Añade un espacio fijo de 60 píxeles
-
-        # Imagen del artista
-        self.artist_image_label = QLabel()
-        self.artist_image_label.setFixedSize(200, 200)
-        self.artist_image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.artist_image_label.setStyleSheet("border: 1px solid #333;")
-        images_layout.addWidget(self.artist_image_label)
-
-        # Añadir contenedor de botones verticales a la derecha
-        buttons_container = QFrame()
-        buttons_container.setFrameShape(QFrame.Shape.NoFrame)
-        buttons_layout = QVBoxLayout(buttons_container)
-
-        buttons_layout.setSpacing(10)
-        buttons_layout.setContentsMargins(0, 0, 0, 0)
-        buttons_layout.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
-
-        # Botón para enviar a Spotify
-        self.spotify_button = QPushButton("Enviar a Spotify")
-        #self.spotify_button.setFixedWidth(120)
-        self.spotify_button.setFixedHeight(38)
-        self.spotify_button.setFixedWidth(38)
-        buttons_layout.addWidget(self.spotify_button)
-
-        buttons_layout.addStretch()
-
-        # Añadir el contenedor de botones al layout de imágenes
-        images_layout.addWidget(buttons_container)
-        # Añadir el contenedor de imágenes al splitter vertical
-        self.details_splitter.addWidget(images_container)
-
-        # Contenedor para el scroll con la información
-        info_container = QFrame()
-        info_container.setFrameShape(QFrame.Shape.StyledPanel)
-        info_container.setFrameShadow(QFrame.Shadow.Raised)
-        info_container_layout = QVBoxLayout(info_container)
-        info_container_layout.setContentsMargins(5, 5, 5, 5)
-        info_container.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-        # ScrollArea para la información
-        self.info_scroll = QScrollArea()
-        self.info_scroll.setWidgetResizable(True)
-        self.info_scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.info_scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
-        self.info_scroll.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        self.info_scroll.setMinimumWidth(600)
-
-        info_container_layout.addWidget(self.info_scroll)
-
-        self.links_frame = self.create_links_frame()
-        # Añadirlo al layout principal donde corresponda
-        # Por ejemplo, si info_widget tiene un layout:
-        if hasattr(self, 'info_widget') and self.info_widget:
-            self.info_widget.layout().addWidget(self.links_frame)
-
-        # Añadir el contenedor de información al splitter vertical
-        self.details_splitter.addWidget(info_container)
-
-        # Configurar proporciones iniciales del splitter vertical (imágenes/información)
-        self.details_splitter.setSizes([200, 800])
-
-        # Añadir el splitter vertical al layout del tab de detalles
-        details_tab_layout.addWidget(self.details_splitter)
-
-        # # Segundo tab (Playlist)
-        # playlist_tab = QWidget()
-        # playlist_layout = QVBoxLayout(playlist_tab)
-        # playlist_layout.setContentsMargins(10, 10, 10, 10)
-
-
-
-        # # Contenedor para los botones de la playlist
-        # playlist_buttons_container = QFrame()
-        # playlist_buttons_container.setFrameShape(QFrame.Shape.NoFrame)
-        # playlist_buttons_layout = QHBoxLayout(playlist_buttons_container)
-        # playlist_buttons_layout.setSpacing(10)
-
-        # # Botones para la playlist
-        # self.clear_playlist_button = QPushButton("Vaciar Playlist")
-        # playlist_buttons_layout.addWidget(self.clear_playlist_button)
-
-        # self.playlist_button1 = QPushButton("Función 1")
-        # playlist_buttons_layout.addWidget(self.playlist_button1)
-
-        # self.playlist_button2 = QPushButton("Función 2")
-        # playlist_buttons_layout.addWidget(self.playlist_button2)
-
-        # self.playlist_button3 = QPushButton("Función 3")
-        # playlist_buttons_layout.addWidget(self.playlist_button3)
-
-        # self.playlist_button4 = QPushButton("Función 4")
-        # playlist_buttons_layout.addWidget(self.playlist_button4)
-
-        # playlist_layout.addWidget(playlist_buttons_container)
-
-
-
-        # Añadir el panel de detalles al splitter principal
-        self.main_splitter.addWidget(details_widget)
-
-        # Configurar proporciones iniciales del splitter principal (árbol/detalles)
-        self.main_splitter.setSizes([400, 800])
-
-        # Añadir el splitter principal al layout de la ventana
-        layout.addWidget(self.main_splitter)
-
-        # El árbol de resultados se cargará posteriormente con load_results_tree_ui
-
-
-    def setup_hotkeys(self, hotkeys_config=None):
-        """
-        Configura atajos de teclado desde la configuración JSON
-        
-        Args:
-            hotkeys_config (dict): Diccionario con configuración de hotkeys
-                formato: {"action_name": "shortcut_key", ...}
-        """
-        # Valores predeterminados si no se proporciona configuración
-        default_hotkeys = {
-            "open_folder": "Ctrl+O",
-            "play_selected": "Return",
-            "spotify": "Ctrl+S",
-            "jaangle": "Ctrl+J",
-            "search_focus": "Ctrl+F",
-            # Añade más según necesites
-        }
-        
-        # Usar configuración proporcionada o predeterminada
-        hotkeys = hotkeys_config or default_hotkeys
-        
-        # Crear y conectar los atajos
-        self.shortcuts = {}
-        
-        # Abrir carpeta (Ctrl+O)
-        self.shortcuts["open_folder"] = QShortcut(QKeySequence(hotkeys["open_folder"]), self)
-        self.shortcuts["open_folder"].activated.connect(self.open_selected_folder)
-        
-        # Reproducir seleccionado (Enter)
-        self.shortcuts["play_selected"] = QShortcut(QKeySequence(hotkeys["play_selected"]), self)
-        self.shortcuts["play_selected"].activated.connect(self.play_selected_item)
-        
-        # Spotify (Ctrl+S)
-        if hasattr(self, "spotify_button") and self.spotify_button:
-            self.shortcuts["spotify"] = QShortcut(QKeySequence(hotkeys["spotify"]), self)
-            self.shortcuts["spotify"].activated.connect(self.handle_spotify_button)
-        
-        # Jaangle (Ctrl+J) - Ejemplo para implementación futura
-        # self.shortcuts["jaangle"] = QShortcut(QKeySequence(hotkeys["jaangle"]), self)
-        # self.shortcuts["jaangle"].activated.connect(self.handle_jaangle_button)
-        
-        # Establecer el foco en el cuadro de búsqueda (Ctrl+F)
-        self.shortcuts["search_focus"] = QShortcut(QKeySequence(hotkeys["search_focus"]), self)
-        self.shortcuts["search_focus"].activated.connect(self.search_box.setFocus)
-        
-        print(f"Hotkeys configurados: {list(self.shortcuts.keys())}")
-
-
-
-    def is_tree_valid(self):
-        """Verifica si el árbol está disponible y válido."""
-        if not hasattr(self, 'results_tree') or self.results_tree is None:
-            print("El árbol de resultados no existe o es None")
-            return False
-
-        # Verificar si no ha sido destruido (si tiene el método)
-        if hasattr(self.results_tree, 'isDestroyed') and self.results_tree.isDestroyed():
-            print("El árbol de resultados ha sido destruido")
-            return False
-
-        return True
-
-
-    def _create_fallback_tree(self):
-        """Crea un árbol de resultados básico como respaldo si falla la carga dinámica."""
-        # Asegurarse de que el contenedor tiene un layout
-        if not self.results_tree_container.layout():
-            container_layout = QVBoxLayout(self.results_tree_container)
-            container_layout.setContentsMargins(0, 0, 0, 0)
-        else:
-            container_layout = self.results_tree_container.layout()
-            # Limpiar cualquier widget previo
-            while container_layout.count():
-                item = container_layout.takeAt(0)
-                if item.widget():
-                    item.widget().deleteLater()
-
-        # Crear un QTreeWidget básico
-        self.results_tree = QTreeWidget()
-        self.results_tree.setAlternatingRowColors(False)
-        self.results_tree.setHeaderHidden(False)
-        self.results_tree.setColumnCount(3)
-        self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
-
-        # Configurar la selección
+        # Configure selection behavior
         self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-
-        # Añadir al layout existentedef _setup_references(self):
-        container_layout.addWidget(self.results_tree)
-        print("Árbol de resultados fallback creado y añadido al layout")
-
-        # Configurar eventos básicos
+        
+        # Set up events
         self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
         self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
         self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
-
-    def _setup_references(self):
-        """Configura las referencias a los widgets cargados desde la UI principal."""
-        try:
-            # Botones y controles principales - usar findChild con objectName exacto
-            self.search_box = self.main_ui.findChild(QLineEdit, "search_box")
-            if not self.search_box:
-                print("ADVERTENCIA: No se pudo encontrar search_box")
-                return False
-                
-            # Buscar por los objectName exactos como están en el archivo .ui
-            self.play_button = self.main_ui.findChild(QPushButton, "play_button")
-            self.folder_button = self.main_ui.findChild(QPushButton, "folder_button")
-            self.spotify_button = self.main_ui.findChild(QPushButton, "spotify_button")
-            self.advanced_settings_check = self.main_ui.findChild(QCheckBox, "advanced_settings_check")
-            self.custom_button1 = self.main_ui.findChild(QPushButton, "custom_button1")
-            self.custom_button2 = self.main_ui.findChild(QPushButton, "custom_button2")
-            self.custom_button3 = self.main_ui.findChild(QPushButton, "custom_button3")
-            
-            # Lista de botones para gestión en grupo
-            self.advanced_buttons = []
-            # Solo añadir botones que existen
-            for btn in [self.custom_button1, self.custom_button2, self.custom_button3]:
-                if btn:
-                    self.advanced_buttons.append(btn)
-
-            # Contenedores - buscar con los nombres exactos del archivo .ui
-            self.top_container = self.main_ui.findChild(QFrame, "top_container")
-            self.advanced_settings_container = self.main_ui.findChild(QFrame, "advanced_settings_container")
-            self.results_tree_container = self.main_ui.findChild(QFrame, "results_tree_container")
-            self.main_splitter = self.main_ui.findChild(QSplitter, "main_splitter")
-            
-            # Etiquetas de imágenes
-            self.cover_label = self.main_ui.findChild(QLabel, "cover_label")
-            self.artist_image_label = self.main_ui.findChild(QLabel, "artist_image_label")
-
-            # Scroll de información - buscar en el main_ui, no en widgets anidados aún
-            self.info_scroll = self.main_ui.findChild(QScrollArea, "info_scroll")
-            
-            # Scroll de metadatos - IMPORTANTE: está en un stackedWidget
-            stackedWidget = self.main_ui.findChild(QStackedWidget, "stackedWidget")
-            if stackedWidget:
-                page = stackedWidget.widget(0)  # Obtener la primera página
-                if page:
-                    self.metadata_scroll = page.findChild(QScrollArea, "metadata_scroll")
-            
-            return True
-        except Exception as e:
-            print(f"Error configurando referencias: {e}")
-            traceback.print_exc()
-            return False
-
-
-    def _load_results_tree(self):
-        """Carga el árbol de resultados desde un archivo UI separado."""
-        # Verificar que el contenedor existe
-        if not hasattr(self, 'results_tree_container') or not self.results_tree_container:
-            print("Error: results_tree_container no existe")
+        
+        # Configure tree appearance
+        self.results_tree.setAlternatingRowColors(True)
+        self.results_tree.setExpandsOnDoubleClick(True)
+        
+    def _create_fallback_tree(self):
+        """Create a fallback tree widget if loading from UI fails."""
+        if not self.results_tree_container:
             return
-
-        # Si ya existe un layout en el contenedor, eliminarlo
+            
+        # Clear existing layout if any
         if self.results_tree_container.layout():
             while self.results_tree_container.layout().count():
                 item = self.results_tree_container.layout().takeAt(0)
                 if item.widget():
                     item.widget().deleteLater()
             QWidget().setLayout(self.results_tree_container.layout())
-
-        # Crear un nuevo layout para el contenedor
+            
+        # Create new layout
         container_layout = QVBoxLayout(self.results_tree_container)
         container_layout.setContentsMargins(0, 0, 0, 0)
         container_layout.setSpacing(0)
-
-        # Cargar el widget del árbol desde un archivo UI separado
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_results_tree.ui")
-        if os.path.exists(ui_file_path):
-            try:
-                # Cargar el archivo UI
-                self.results_tree_widget = QWidget()
-                uic.loadUi(ui_file_path, self.results_tree_widget)
-
-                # Obtener la referencia al árbol y añadirlo al layout
-                self.results_tree = self.results_tree_widget.findChild(QTreeWidget, "results_tree")
-                if self.results_tree:
-                    container_layout.addWidget(self.results_tree_widget)
-                    self.results_tree.setColumnWidth(0, 150)
-                    self.results_tree.setColumnWidth(1, 50)
-                    self.results_tree.setColumnWidth(2, 80)
-
-                    # Configurar eventos del árbol
-                    self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
-                    self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
-                    self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-                    self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
-
-                    self.ui_components_loaded['tree'] = True
-                    print("Árbol de resultados cargado desde UI y añadido al layout")
-                else:
-                    print("No se encontró el widget 'results_tree' en el archivo UI")
-                    self._create_fallback_tree()
-            except Exception as e:
-                print(f"Error cargando UI del árbol de resultados: {e}")
-                traceback.print_exc()
-                self._create_fallback_tree()
-        else:
-            print(f"Archivo UI del árbol no encontrado: {ui_file_path}")
-            self._create_fallback_tree()
-
-
-    def _setup_widgets(self):
-        """Configuración adicional para los widgets después de cargar la UI."""
-        # Configurar el combo de meses solo si existe
-        if hasattr(self, 'month_combo'):
-            if self.month_combo.count() == 0:
-                self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
-
-        # Configurar los spinners de año solo si existen
-        if hasattr(self, 'year_spin'):
-            current_year = QDate.currentDate().year()
-            if self.year_spin.value() == 0:
-                self.year_spin.setValue(current_year)
-
-        if hasattr(self, 'year_only_spin'):
-            current_year = QDate.currentDate().year()
-            if self.year_only_spin.value() == 0:
-                self.year_only_spin.setValue(current_year)
-
-        # Configurar el splitter principal si es necesario
-        if hasattr(self, 'main_splitter'):
-            if self.main_splitter.sizes() == [0, 0]:
-                self.main_splitter.setSizes([400, 800])
-
-        # Configurar el splitter de detalles si es necesario
-        if hasattr(self, 'details_splitter'):
-            if self.details_splitter.sizes() == [0, 0]:
-                self.details_splitter.setSizes([200, 800])
-
-        # Inicializar la lista de botones avanzados si estamos usando la UI
-        if all(hasattr(self, btn) for btn in ['custom_button1', 'custom_button2', 'custom_button3']):
-            self.advanced_buttons = [self.custom_button1, self.custom_button2, self.custom_button3]
-
-        # Inicializar la lista para almacenar los elementos de la playlist
-        self.playlist_items = []
-
-        # Configurar políticas de foco si los widgets existen
-        if hasattr(self, 'search_box'):
-            self.search_box.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
-
-        for button_name in ['play_button', 'folder_button']:
-            if hasattr(self, button_name):
-                getattr(self, button_name).setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-        for button in self.advanced_buttons:
-            if button:
-                button.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-        if hasattr(self, 'advanced_settings_check'):
-            self.advanced_settings_check.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-
-
-
-    def setup_info_widget(self):
-        """Configura los widgets de información dentro de los ScrollAreas."""
-        try:
-            # Verificar que info_scroll existe
-            if not hasattr(self, 'info_scroll') or not self.info_scroll:
-                print("Error: info_scroll no existe")
-                self._fallback_setup_info_widget()
-                return False
-
-            # Crear los widgets contenedores para los ScrollAreas
-            self.info_widget = QWidget()
-            self.metadata_widget = QWidget()
-            
-            # Layouts para los widgets
-            info_layout = QVBoxLayout(self.info_widget)
-            metadata_layout = QVBoxLayout(self.metadata_widget)
-            
-            # Crear las etiquetas con objectNames apropiados
-            self.links_label = QLabel()
-            self.links_label.setObjectName("info_label")
-            self.links_label.setWordWrap(True)
-            self.links_label.setTextFormat(Qt.TextFormat.RichText)
-            self.links_label.setOpenExternalLinks(True)
-            
-            self.wikipedia_artist_label = QLabel()
-            self.wikipedia_artist_label.setObjectName("info_label")
-            self.wikipedia_artist_label.setWordWrap(True)
-            self.wikipedia_artist_label.setTextFormat(Qt.TextFormat.RichText)
-            
-            self.lastfm_label = QLabel()
-            self.lastfm_label.setObjectName("info_label")
-            self.lastfm_label.setWordWrap(True)
-            self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
-            
-            self.wikipedia_album_label = QLabel()
-            self.wikipedia_album_label.setObjectName("info_label")
-            self.wikipedia_album_label.setWordWrap(True)
-            self.wikipedia_album_label.setTextFormat(Qt.TextFormat.RichText)
-            
-            self.metadata_label = QLabel()
-            self.metadata_label.setObjectName("metadata_details_label")
-            self.metadata_label.setWordWrap(True)
-            self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-            self.metadata_label.setOpenExternalLinks(True)
-            
-            # Aplicar estilos (solo si las etiquetas se crearon correctamente)
-            # Allow stylesheet to affect rich text - CHECK IF EXISTS FIRST
-            if hasattr(self, 'lastfm_label') and self.lastfm_label:
-                self.lastfm_label.setStyleSheet("background-color: transparent;")
-            
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                self.wikipedia_artist_label.setStyleSheet("background-color: transparent;")
-            
-            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                self.wikipedia_album_label.setStyleSheet("background-color: transparent;")
-            
-            if hasattr(self, 'metadata_label') and self.metadata_label:
-                self.metadata_label.setStyleSheet("background-color: transparent;")
-            
-            if hasattr(self, 'links_label') and self.links_label:
-                self.links_label.setStyleSheet("background-color: transparent;")
-            
-            # Agregar las etiquetas a los layouts
-            info_layout.addWidget(self.links_label)
-            info_layout.addWidget(self.wikipedia_artist_label)
-            info_layout.addWidget(self.lastfm_label)
-            info_layout.addWidget(self.wikipedia_album_label)
-            info_layout.addStretch()
-            
-            metadata_layout.addWidget(self.metadata_label)
-            metadata_layout.addStretch()
-            
-            # Establecer los widgets en los ScrollAreas
-            if self.info_scroll:
-                self.info_scroll.setWidget(self.info_widget)
-            
-            if hasattr(self, 'metadata_scroll') and self.metadata_scroll:
-                self.metadata_scroll.setWidget(self.metadata_widget)
-            
-            self.ui_components_loaded['info'] = True
-            print("Widgets de información configurados correctamente")
-            return True
-        except Exception as e:
-            print(f"Error general al configurar los widgets de información: {e}")
-            traceback.print_exc()
-            self._fallback_setup_info_widget()
-            return False
-
-    def _fallback_setup_info_widget(self):
-        """Método de respaldo para crear el widget de información manualmente."""
-        print("Usando método fallback para configurar widgets de información")
-
-        # Crear el widget para el interior del scroll principal
-        self.info_widget = QWidget()
-        info_layout = QVBoxLayout(self.info_widget)
-        info_layout.setContentsMargins(5, 5, 5, 5)
-
-        # Labels para la información
-        self.links_label = QLabel()
-        self.links_label.setWordWrap(True)
-        self.links_label.setTextFormat(Qt.TextFormat.RichText)
-        self.links_label.setOpenExternalLinks(True)
-        self.links_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.links_label.setMinimumWidth(600)
-
-        self.wikipedia_artist_label = QLabel()
-        self.wikipedia_artist_label.setWordWrap(True)
-        self.wikipedia_artist_label.setTextFormat(Qt.TextFormat.RichText)
-        self.wikipedia_artist_label.setOpenExternalLinks(True)
-        self.wikipedia_artist_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.wikipedia_artist_label.setMinimumWidth(600)
-
-        self.lastfm_label = QLabel()
-        self.lastfm_label.setWordWrap(True)
-        self.lastfm_label.setTextFormat(Qt.TextFormat.RichText)
-        self.lastfm_label.setOpenExternalLinks(True)
-        self.lastfm_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.lastfm_label.setMinimumWidth(600)
-
-        self.wikipedia_album_label = QLabel()
-        self.wikipedia_album_label.setWordWrap(True)
-        self.wikipedia_album_label.setTextFormat(Qt.TextFormat.RichText)
-        self.wikipedia_album_label.setOpenExternalLinks(True)
-        self.wikipedia_album_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.wikipedia_album_label.setMinimumWidth(600)
-
-        self.metadata_label = QLabel()
-        self.metadata_label.setWordWrap(True)
-        self.metadata_label.setTextFormat(Qt.TextFormat.RichText)
-        self.metadata_label.setOpenExternalLinks(True)
-        self.metadata_label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-        self.metadata_label.setMinimumWidth(600)
-
-        # Agregar las etiquetas al layout en el orden correcto
-        info_layout.addWidget(self.links_label)
-        info_layout.addWidget(self.wikipedia_artist_label)
-        info_layout.addWidget(self.lastfm_label)
-        info_layout.addWidget(self.wikipedia_album_label)
-        info_layout.addStretch()
-
-        # Configurar el ScrollArea principal
-        if hasattr(self, 'info_scroll') and self.info_scroll:
-            self.info_scroll.setWidget(self.info_widget)
-
-        # Configurar el ScrollArea de metadatos si existe
-        if hasattr(self, 'metadata_scroll') and self.metadata_scroll:
-            self.metadata_widget = QWidget()
-            metadata_layout = QVBoxLayout(self.metadata_widget)
-            metadata_layout.addWidget(self.metadata_label)
-            self.metadata_scroll.setWidget(self.metadata_widget)
-
-        print("Panels de información y metadatos creados manualmente (fallback)")
-
-
-    def load_advanced_settings_ui(self):
-        """Carga dinámicamente el widget de configuraciones avanzadas desde un archivo UI separado."""
-        # Verificar que advanced_settings_container existe
-        if not hasattr(self, 'advanced_settings_container') or not self.advanced_settings_container:
-            print("Error: advanced_settings_container no existe")
-            return False
-
-        # Si ya existe un layout en el contenedor, eliminarlo
-        if self.advanced_settings_container.layout():
-            while self.advanced_settings_container.layout().count():
-                item = self.advanced_settings_container.layout().takeAt(0)
-                if item.widget():
-                    item.widget().deleteLater()
-            QWidget().setLayout(self.advanced_settings_container.layout())
-
-        # Crear un nuevo layout para el contenedor
-        container_layout = QVBoxLayout(self.advanced_settings_container)
-        container_layout.setContentsMargins(0, 0, 0, 0)
-        container_layout.setSpacing(0)
-
-        # Cargar el widget desde un archivo UI separado
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_advanced_settings.ui")
-        if os.path.exists(ui_file_path):
-            try:
-                # Cargar el archivo UI
-                advanced_settings = QWidget()
-                uic.loadUi(ui_file_path, advanced_settings)
-
-                # Añadir el widget cargado al contenedor
-                container_layout.addWidget(advanced_settings)
-
-                # Transferir referencias a los widgets importantes
-                self.time_value = advanced_settings.findChild(QSpinBox, "time_value")
-                self.time_unit = advanced_settings.findChild(QComboBox, "time_unit")
-                self.apply_time_filter = advanced_settings.findChild(QPushButton, "apply_time_filter")
-                self.month_combo = advanced_settings.findChild(QComboBox, "month_combo")
-                self.year_spin = advanced_settings.findChild(QSpinBox, "year_spin")
-                self.apply_month_year = advanced_settings.findChild(QPushButton, "apply_month_year")
-                self.year_only_spin = advanced_settings.findChild(QSpinBox, "year_only_spin")
-                self.apply_year = advanced_settings.findChild(QPushButton, "apply_year")
-
-                # Inicializar campos
-                if self.month_combo and self.month_combo.count() == 0:
-                    self.month_combo.addItems([f"{i:02d}" for i in range(1, 13)])
-
-                # Establecer el año actual
-                current_year = QDate.currentDate().year()
-                if self.year_spin and self.year_spin.value() == 0:
-                    self.year_spin.setValue(current_year)
-                if self.year_only_spin and self.year_only_spin.value() == 0:
-                    self.year_only_spin.setValue(current_year)
-
-                # Conectar señales
-                if self.apply_time_filter:
-                    self.apply_time_filter.clicked.connect(self.apply_temporal_filter)
-                if self.apply_month_year:
-                    self.apply_month_year.clicked.connect(self.apply_month_year_filter)
-                if self.apply_year:
-                    self.apply_year.clicked.connect(self.apply_year_filter)
-
-                self.ui_components_loaded['advanced'] = True
-                print("Configuraciones avanzadas cargadas desde UI")
-                return True
-            except Exception as e:
-                print(f"Error cargando UI de ajustes avanzados: {e}")
-                traceback.print_exc()
-                return False
-        else:
-            print(f"Archivo UI de ajustes avanzados no encontrado: {ui_file_path}")
-            return False
-
-
-
-    def connect_signals(self):
-        """Conecta las señales de los widgets con sus manejadores."""
-        # Botones de acción
-        self.play_button.clicked.connect(lambda: self.play_selected_item())
-        self.folder_button.clicked.connect(lambda: self.open_selected_folder())
-        self.custom_button1.clicked.connect(self.buscar_musica_en_reproduccion)
-
-        # Filtros temporales (cuando estén cargados)
-        # Estas conexiones se hacen en load_advanced_settings_ui
-
-        # Búsqueda
-        self.search_box.textChanged.connect(self.search)
-        self.search_box.returnPressed.connect(self.search)
-
-        # Checkbox de configuración avanzada
-        self.advanced_settings_check.stateChanged.connect(self.toggle_advanced_settings)
-
-        # Árbol de resultados (cuando esté cargado)
-        # Estas conexiones se hacen en setup_results_tree
-
-
-        # Botón de Spotify
-        self.spotify_button.clicked.connect(self.handle_spotify_button)
-
-        # Aplicar animaciones a botones importantes
-        try:
-            from themes.themes import ThemeEffects
-            
-            # Añadir animación al botón de reproducción
-            ThemeEffects.apply_button_hover_animation(self.play_button)
-            
-            # Añadir animación al botón de Spotify
-            ThemeEffects.apply_button_hover_animation(self.spotify_button)
-            
-            # También se puede hacer en botones personalizados
-            self.custom_button1.setObjectName("animated_button_playing")
-            ThemeEffects.apply_button_hover_animation(self.custom_button1)
-        except ImportError:
-            # Si no está disponible el módulo de temas, ignorar silenciosamente
-            pass
-
-
-    def setup_space_key(self):
-        """Configura el evento para añadir a playlist al presionar espacio"""
-        self.results_list.keyPressEvent = self.custom_key_press_event
-
-    def custom_key_press_event(self, event):
-        """Maneja eventos de teclado en la lista de resultados"""
-        if event.key() == Qt.Key.Key_Space:
-            self.add_to_playlist()
-        # Llamar al método original para manejar otros eventos de teclado
-        QListWidget.keyPressEvent(self.results_list, event)
-
-    def toggle_advanced_settings(self, state):
-        """
-        Muestra u oculta los elementos de configuración avanzada según el estado del checkbox.
-        Carga el UI la primera vez que se activa.
-        """
-        # Verificar el estado del checkbox
-        is_visible = (state == Qt.CheckState.Checked.value)  # 2 is Qt.Checked
-
-        # Mostrar/ocultar botones avanzados
-        for button in self.advanced_buttons:
-            button.setVisible(is_visible)
-
-        # Si es la primera vez que se activa, cargar el UI
-        if is_visible:
-            if not hasattr(self, '_advanced_settings_loaded') or not self._advanced_settings_loaded:
-                self._advanced_settings_loaded = self.load_advanced_settings_ui()
-
-        # Mostrar/ocultar el contenedor de ajustes avanzados
-        self.advanced_settings_container.setVisible(is_visible)
-
-        # No need to adjust container height, just set proper margin
-        if is_visible:
-            self.top_container.setContentsMargins(5, 5, 5, 5)
-        else:
-            self.top_container.setContentsMargins(5, 5, 5, 5)
-
-        # Forzar actualización
-        self.repaint()
-        QApplication.processEvents()
-
-    def buscar_musica_en_reproduccion(self):
-        """Busca la música en reproducción y rota la búsqueda"""
-        artista = subprocess.run(['playerctl', 'metadata', '--format', '{{artist}}'], capture_output=True, text=True).stdout.strip()
-        album = subprocess.run(['playerctl', 'metadata', '--format', '{{album}}'], capture_output=True, text=True).stdout.strip()
-        cancion = subprocess.run(['playerctl', 'metadata', '--format', '{{title}}'], capture_output=True, text=True).stdout.strip()
-
-        opciones = [cancion, album, artista]  # Lista cíclica
-        self.boton_pulsado = (self.boton_pulsado + 1) % len(opciones)  # Rotar entre 0, 1, 2
-
-        if opciones[self.boton_pulsado]:  # Evitar búsquedas vacías
-            self.set_search_text(opciones[self.boton_pulsado])
-
-
-
-
-
-    def get_song_data_from_current_item(self):
-        """Extrae los datos de canción del ítem actualmente seleccionado"""
-        current_item = self.results_list.currentItem()
-        if not current_item:
-            return None
-
-        # Intenta obtener los datos completos del ítem
-        track_data = current_item.data(Qt.ItemDataRole.UserRole)
-
-        # Si no hay datos adjuntos al ítem o son incorrectos, intentar
-        # obtener información del texto visible y metadatos disponibles
-        if not track_data or not hasattr(track_data, 'artist'):
-            # Extraer información de las etiquetas de metadatos
-            # Suponiendo que esta información está disponible en algún lugar
-            artist = self._extract_artist_from_ui()
-            album = self._extract_album_from_ui()
-            title = current_item.text()
-            label = self._extract_label_from_ui()
-            date = self._extract_date_from_ui()
-
-            # Crear un objeto o diccionario con los datos extraídos
-            track_data = {
-                'artist': artist,
-                'album': album,
-                'title': title,
-                'label': label,
-                'date': date
-            }
-
-        return track_data
-
-    def _extract_artist_from_ui(self):
-        """Extrae información del artista desde la UI actual"""
-        # Este es un método auxiliar para extraer el artista de la UI
-        # Por ejemplo, podrías buscar en el texto de metadata_label o lastfm_label
-
-        # Ejemplo muy básico:
-        artist = "Desconocido"
-
-        metadata_text = self.metadata_label.text()
-        if "Artista:" in metadata_text:
-            # Intenta extraer el artista usando expresiones regulares o parsing de texto
-            import re
-            match = re.search(r'Artista:\s*([^<]+)', metadata_text)
-            if match:
-                artist = match.group(1).strip()
-
-        return artist
-
-    def _extract_album_from_ui(self):
-        """Extrae información del álbum desde la UI actual"""
-        # Similar al método anterior, pero para el álbum
-        album = "Desconocido"
-
-        metadata_text = self.metadata_label.text()
-        if "Álbum:" in metadata_text:
-            import re
-            match = re.search(r'Álbum:\s*([^<]+)', metadata_text)
-            if match:
-                album = match.group(1).strip()
-
-        return album
-
-    def _extract_label_from_ui(self):
-        """Extrae información del sello desde la UI actual"""
-        # Similar a los métodos anteriores, pero para el sello
-        label = "Desconocido"
-
-        metadata_text = self.metadata_label.text()
-        if "Sello:" in metadata_text:
-            import re
-            match = re.search(r'Sello:\s*([^<]+)', metadata_text)
-            if match:
-                label = match.group(1).strip()
-
-        return label
-
-    def _extract_date_from_ui(self):
-        """Extrae información de la fecha desde la UI actual"""
-        # Similar a los métodos anteriores, pero para la fecha
-        date = "Desconocido"
-
-        metadata_text = self.metadata_label.text()
-        if "Fecha:" in metadata_text:
-            import re
-            match = re.search(r'Fecha:\s*([^<]+)', metadata_text)
-            if match:
-                date = match.group(1).strip()
-
-        return date
-
-
-
-
-
-    def set_search_text(self, query):
-        """
-        Establece el texto en el cuadro de búsqueda y ejecuta la búsqueda.
-
-        Args:
-            query (str): El texto de búsqueda a establecer
-        """
-        self.search_box.setText(query)
-        self.search()  # Ejecuta la búsqueda con el texto establecido
-
-
-
-    def apply_temporal_filter(self):
-        """Aplica el filtro de últimas X unidades de tiempo."""
-        value = self.time_value.value()
-        unit = self.time_unit.currentText()
-
-        filter_map = {
-            'Semanas': 'w',
-            'Meses': 'm',
-            'Años': 'y'
-        }
-
-        unit_code = filter_map.get(unit, 'w')
-        self.search_box.setText(f"{unit_code}:{value}")
-        self.search()
-
-    def apply_month_year_filter(self):
-        """Aplica el filtro de mes/año específico."""
-        month = self.month_combo.currentText()
-        year = self.year_spin.value()
-        self.search_box.setText(f"am:{month}/{year}")
-        self.search()
-
-    def apply_year_filter(self):
-        """Aplica el filtro de año específico."""
-        year = self.year_only_spin.value()
-        self.search_box.setText(f"ay:{year}")
-        self.search()
-
-
-    def handle_item_click(self, item):
-        """Maneja el clic en un ítem. Ya no es necesario hacer nada aquí
-        porque handle_item_change se encargará de todo."""
-        pass  # La funcionalidad ahora está en handle_item_change
-
-
-    def handle_item_change(self, current, previous):
-        """Maneja el cambio de ítem seleccionado, ya sea por clic o navegación con teclado."""
-        if not current:
-            self.clear_details()
-            return
-
-        if current.is_header:
-            self.clear_details()
-            self.show_album_info(current)
-        else:
-            self.clear_details()
-            self.show_details(current, previous)
-
-
-    def find_cover_image(self, file_path: str) -> Optional[str]:
-        """Busca la carátula en la carpeta del archivo."""
-        dir_path = Path(file_path).parent
-        cover_names = ['cover', 'folder', 'front', 'album']
-        image_extensions = ['.jpg', '.jpeg', '.png']
-
-        # Primero buscar nombres específicos
-        for name in cover_names:
-            for ext in image_extensions:
-                cover_path = dir_path / f"{name}{ext}"
-                if cover_path.exists():
-                    return str(cover_path)
-
-        # Si no se encuentra, buscar cualquier imagen
-        for file in dir_path.glob('*'):
-            if file.suffix.lower() in image_extensions:
-                return str(file)
-
-        return None
-
-    def find_artist_image(self, artist_name: str) -> Optional[str]:
-        """Busca la imagen del artista en el directorio especificado y retorna una aleatoria si hay varias."""
-        if not self.artist_images_dir or not artist_name:
-            return None
-
-        # Importar random para selección aleatoria
-        import random
-
-        # Normalizar el nombre del artista (quitar acentos, convertir a minúsculas)
-        import unicodedata
-        artist_name_norm = unicodedata.normalize('NFKD', artist_name.lower()) \
-            .encode('ASCII', 'ignore').decode('utf-8')
-
-        # Probar diferentes formatos de nombre
-        name_formats = [
-            artist_name,  # Original
-            artist_name.replace(' ', '_'),  # Con guiones bajos
-            artist_name.replace(' ', '-'),  # Con guiones
-            artist_name_norm,  # Normalizado
-            artist_name_norm.replace(' ', '_'),
-            artist_name_norm.replace(' ', '-')
-        ]
-
-        # Extensiones comunes de imagen
-        extensions = ['jpg', 'jpeg', 'png', 'webp', 'gif']
-
-        # Lista para almacenar todas las imágenes encontradas
-        all_matching_files = []
-
-        # Probar todas las combinaciones
-        for name in name_formats:
-            # Búsqueda exacta con diferentes extensiones
-            for ext in extensions:
-                path = os.path.join(self.artist_images_dir, f"{name}.{ext}")
-                if os.path.exists(path):
-                    all_matching_files.append(path)
-
-            # Búsqueda con patrón glob (para archivos que empiezan con el nombre)
-            pattern = os.path.join(self.artist_images_dir, f"{name}*")
-            matching_files = glob.glob(pattern)
-            # Filtrar por extensiones válidas
-            for file in matching_files:
-                ext = file.lower().split('.')[-1]
-                if ext in extensions:
-                    all_matching_files.append(file)
-
-        # Eliminar duplicados
-        all_matching_files = list(set(all_matching_files))
-
-        # Si se encontraron imágenes, devolver una aleatoria
-        if all_matching_files:
-            return random.choice(all_matching_files)
-
-        return None
-
-    def get_artist_info_from_db(self, artist_name):
-        """
-        Obtiene información completa del artista desde la base de datos.
-
-        Args:
-            artist_name (str): Nombre del artista a buscar
-
-        Returns:
-            dict: Diccionario con la información del artista o None si no se encuentra
-        """
-        if not artist_name or not self.db_path:
-            return None
-
-        try:
-            # Conectar a la base de datos
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-
-            # Buscar el artista
-            query = """
-                SELECT id, name, bio, tags, similar_artists, last_updated, origin,
-                    formed_year, total_albums, spotify_url, youtube_url,
-                    musicbrainz_url, discogs_url, rateyourmusic_url,
-                    links_updated, wikipedia_url, wikipedia_content,
-                    wikipedia_updated, mbid, bandcamp_url, member_of, aliases, lastfm_url
-                FROM artists
-                WHERE LOWER(name) = LOWER(?)
-            """
-            cursor.execute(query, (artist_name,))
-            result = cursor.fetchone()
-
-            conn.close()
-
-            if not result:
-                print(f"No se encontró información en la base de datos para el artista: {artist_name}")
-                return None
-
-            # Crear un diccionario con los resultados
-            columns = [
-                'id', 'name', 'bio', 'tags', 'similar_artists', 'last_updated',
-                'origin', 'formed_year', 'total_albums', 'spotify_url',
-                'youtube_url', 'musicbrainz_url', 'discogs_url', 'rateyourmusic_url',
-                'links_updated', 'wikipedia_url', 'wikipedia_content',
-                'wikipedia_updated', 'mbid', 'bandcamp_url', 'member_of', 'aliases', 'lastfm_url'
-            ]
-
-            artist_info = {}
-            for i, col in enumerate(columns):
-                artist_info[col] = result[i] if i < len(result) else None
-
-            print(f"Información obtenida de la BD para artista: {artist_name}")
-            return artist_info
-
-        except Exception as e:
-            print(f"Error al obtener información del artista desde la base de datos: {e}")
-            traceback.print_exc()
-            return None
-
-
-    def get_album_info_from_db(self, album_name, artist_name=None):
-        """
-        Obtiene información completa del álbum desde la base de datos.
-
-        Args:
-            album_name (str): Nombre del álbum a buscar
-            artist_name (str, optional): Nombre del artista para búsqueda más precisa
-
-        Returns:
-            dict: Diccionario con la información del álbum o None si no se encuentra
-        """
-        if not album_name or not self.db_path:
-            return None
-
-        try:
-            # Conectar a la base de datos
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-
-            # Buscar el álbum
-            if artist_name:
-                # Si tenemos el nombre del artista, usar para una búsqueda más precisa
-                # Primero buscar el ID del artista
-                artist_query = "SELECT id FROM artists WHERE LOWER(name) = LOWER(?)"
-                cursor.execute(artist_query, (artist_name,))
-                artist_result = cursor.fetchone()
-
-                if artist_result:
-                    artist_id = artist_result[0]
-
-                    # Buscar el álbum con ese artist_id
-                    query = """
-                        SELECT id, artist_id, name, year, label, genre, total_tracks,
-                            album_art_path, last_updated, spotify_url, spotify_id,
-                            youtube_url, musicbrainz_url, discogs_url, rateyourmusic_url,
-                            links_updated, wikipedia_url, wikipedia_content,
-                            wikipedia_updated, mbid, folder_path, bitrate_range,
-                            bandcamp_url, producers, engineers, mastering_engineers,
-                            credits, lastfm_url
-                        FROM albums
-                        WHERE LOWER(name) = LOWER(?) AND artist_id = ?
-                    """
-                    cursor.execute(query, (album_name, artist_id))
-                else:
-                    # No se encontró el ID del artista, buscar por nombre del álbum solamente
-                    query = """
-                        SELECT id, artist_id, name, year, label, genre, total_tracks,
-                            album_art_path, last_updated, spotify_url, spotify_id,
-                            youtube_url, musicbrainz_url, discogs_url, rateyourmusic_url,
-                            links_updated, wikipedia_url, wikipedia_content,
-                            wikipedia_updated, mbid, folder_path, bitrate_range,
-                            bandcamp_url, producers, engineers, mastering_engineers,
-                            credits, lastfm_url
-                        FROM albums
-                        WHERE LOWER(name) = LOWER(?)
-                    """
-                    cursor.execute(query, (album_name,))
-            else:
-                # Buscar solo por nombre del álbum
-                query = """
-                    SELECT id, artist_id, name, year, label, genre, total_tracks,
-                        album_art_path, last_updated, spotify_url, spotify_id,
-                        youtube_url, musicbrainz_url, discogs_url, rateyourmusic_url,
-                        links_updated, wikipedia_url, wikipedia_content,
-                        wikipedia_updated, mbid, folder_path, bitrate_range,
-                        bandcamp_url, producers, engineers, mastering_engineers,
-                        credits, lastfm_url
-                    FROM albums
-                    WHERE LOWER(name) = LOWER(?)
-                """
-                cursor.execute(query, (album_name,))
-
-            result = cursor.fetchone()
-
-            conn.close()
-
-            if not result:
-                print(f"No se encontró información en la base de datos para el álbum: {album_name}")
-                return None
-
-            # Crear un diccionario con los resultados
-            columns = [
-                'id', 'artist_id', 'name', 'year', 'label', 'genre', 'total_tracks',
-                'album_art_path', 'last_updated', 'spotify_url', 'spotify_id',
-                'youtube_url', 'musicbrainz_url', 'discogs_url', 'rateyourmusic_url',
-                'links_updated', 'wikipedia_url', 'wikipedia_content',
-                'wikipedia_updated', 'mbid', 'folder_path', 'bitrate_range',
-                'bandcamp_url', 'producers', 'engineers', 'mastering_engineers',
-                'credits', 'lastfm_url'
-            ]
-
-            album_info = {}
-            for i, col in enumerate(columns):
-                album_info[col] = result[i] if i < len(result) else None
-
-            print(f"Información obtenida de la BD para álbum: {album_name}")
-            return album_info
-
-        except Exception as e:
-            print(f"Error al obtener información del álbum desde la base de datos: {e}")
-            traceback.print_exc()
-            return None
-
-
-    
-    def show_album_info(self, album_item):
-        """Muestra la información del álbum."""
-        # Verificar si es un ítem de álbum válido
-        if not album_item:
-            return
-
-        # Obtener datos del álbum del UserRole
-        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
-            return
-
-        # Obtener información directamente de los datos estructurados
-        artist_name = item_data.get('artist', 'Desconocido')
-        album_name = item_data.get('name', 'Desconocido')
-        year = item_data.get('year', '')
-        genre = item_data.get('genre', '')
-
-        # Buscar información del álbum en la base de datos
-        album_db_info = self.get_album_info_from_db(album_name, artist_name)
-
-        # Contar canciones y obtener información adicional
-        total_tracks = album_item.childCount()
-        total_duration = 0
-        album_paths = []
-        first_track_data = None
-
-        # Recorrer todos los tracks hijos del álbum
-        for i in range(total_tracks):
-            track_item = album_item.child(i)
-            if track_item:
-                track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-                if track_data:
-                    if not first_track_data:
-                        first_track_data = track_data
-                    # Añadir duración si está disponible
-                    if len(track_data) > 19:  # Índice 19 es duration en la tabla songs
-                        try:
-                            duration_value = track_data[19]
-                            if isinstance(duration_value, (int, float)) and duration_value > 0:
-                                total_duration += duration_value
-                        except (ValueError, TypeError, IndexError):
-                            pass
-                    # Añadir path si está disponible
-                    if hasattr(track_item, 'paths') and track_item.paths:
-                        album_paths.extend(track_item.paths)
-                    elif len(track_data) > 1:  # Si el path está en el track_data
-                        album_paths.append(track_data[1])
-
-        # Guardar las rutas en el header para usarlas en play_album y open_album_folder
-        album_item.paths = album_paths if hasattr(album_item, 'paths') else []
-
-        # Formatear la duración total
-        hours = int(total_duration // 3600)
-        minutes = int((total_duration % 3600) // 60)
-        seconds = int(total_duration % 60)
-
-        # Verificar que los widgets necesarios estén disponibles
-        if not all([hasattr(self, 'lastfm_label'), hasattr(self, 'metadata_label')]):
-            print("Error: Widgets de información no disponibles, reconfigurando...")
-            self.setup_info_widget()
-
-        # Si aún no tenemos los widgets, mostrar un mensaje de error y salir
-        if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-            print("Error crítico: lastfm_label no disponible después de reconfigurar")
-            return
-
-        if not hasattr(self, 'metadata_label') or not self.metadata_label:
-            print("Error crítico: metadata_label no disponible después de reconfigurar")
-            return
-
-        # Limpiar detalles anteriores
-        self.clear_details()
-
-        # Buscar información del artista también para mostrar su bio y enlaces
-        artist_db_info = self.get_artist_info_from_db(artist_name)
-
-        if first_track_data and len(first_track_data) > 1:
-            # Mostrar la carátula del álbum
-            if hasattr(self, 'cover_label') and self.cover_label:
-                cover_path = None
-
-                # Priorizar ruta de carátula de la base de datos
-                if album_db_info and album_db_info.get('album_art_path'):
-                    cover_path = album_db_info['album_art_path']
-                    if not os.path.exists(cover_path):
-                        cover_path = None
-
-                # Si no hay ruta en la base de datos o no existe, buscar en la carpeta
-                if not cover_path:
-                    cover_path = self.find_cover_image(first_track_data[1])
-
-                if cover_path:
-                    pixmap = QPixmap(cover_path)
-                    pixmap = pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                    self.cover_label.setPixmap(pixmap)
-                else:
-                    self.cover_label.setText("No imagen")
-
-            # Mostrar la imagen del artista
-            if hasattr(self, 'artist_image_label') and self.artist_image_label:
-                artist_image_path = self.find_artist_image(artist_name)
-                if artist_image_path:
-                    artist_pixmap = QPixmap(artist_image_path)
-                    artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                    self.artist_image_label.setPixmap(artist_pixmap)
-                else:
-                    self.artist_image_label.setText("No imagen de artista")
-
-        try:
-            # 1. METADATA LABEL (Información breve para el panel central)
-            if self.metadata_label:
-                # Construir la metadata básica del álbum para el panel central
-                metadata = f"""<div class='metadata-card'>
-                    <b>Álbum:</b> {album_name}<br>
-                    <b>Artista:</b> {artist_name}<br>
-                """
-
-                # Añadir información de la base de datos
-                if album_db_info:
-                    if album_db_info.get('year'):
-                        metadata += f"<b>Fecha:</b> {album_db_info['year']}<br>"
-                    elif year:
-                        metadata += f"<b>Fecha:</b> {year}<br>"
-                    else:
-                        metadata += f"<b>Fecha:</b> {first_track_data[6] if len(first_track_data) > 6 else 'N/A'}<br>"
-
-                    if album_db_info.get('genre'):
-                        metadata += f"<b>Género:</b> {album_db_info['genre']}<br>"
-                    elif genre:
-                        metadata += f"<b>Género:</b> {genre}<br>"
-                    else:
-                        metadata += f"<b>Género:</b> {first_track_data[7] if len(first_track_data) > 7 else 'N/A'}<br>"
-
-                    if album_db_info.get('label'):
-                        metadata += f"<b>Sello:</b> {album_db_info['label']}<br>"
-                    else:
-                        metadata += f"<b>Sello:</b> {first_track_data[8] if len(first_track_data) > 8 else 'N/A'}<br>"
-
-                    # Información adicional específica del álbum
-                    if album_db_info.get('total_tracks'):
-                        metadata += f"<b>Pistas:</b> {album_db_info['total_tracks']}<br>"
-                    else:
-                        metadata += f"<b>Pistas:</b> {total_tracks}<br>"
-
-                    metadata += f"<b>Duración:</b> {hours:02d}:{minutes:02d}:{seconds:02d}<br>"
-
-                    if album_db_info.get('producers'):
-                        metadata += f"<b>Productores:</b> {album_db_info['producers']}<br>"
-                    if album_db_info.get('engineers'):
-                        metadata += f"<b>Ingenieros:</b> {album_db_info['engineers']}<br>"
-                    if album_db_info.get('mastering_engineers'):
-                        metadata += f"<b>Mastering:</b> {album_db_info['mastering_engineers']}<br>"
-                else:
-                    # Usar datos del primer track como respaldo
-                    metadata += f"<b>Fecha:</b> {year or (first_track_data[6] if len(first_track_data) > 6 else 'N/A')}<br>"
-                    metadata += f"<b>Género:</b> {genre or (first_track_data[7] if len(first_track_data) > 7 else 'N/A')}<br>"
-                    metadata += f"<b>Sello:</b> {first_track_data[8] if len(first_track_data) > 8 else 'N/A'}<br>"
-                    metadata += f"<b>Pistas:</b> {total_tracks}<br>"
-                    metadata += f"<b>Duración:</b> {hours:02d}:{minutes:02d}:{seconds:02d}<br>"
-
-                # Cerrar el div de metadata-card
-                metadata += "</div>"
-                
-                # Establecer metadata y asegurarse de que sea visible
-                self.metadata_label.setText(metadata)
-                self.metadata_label.setVisible(True)
-
-            # 2. Extracting links for album and artist
-            album_links = {}
-            artist_links = {}
-
-            # Extract album links
-            if album_db_info:
-                album_links = self.extract_links_from_data(album_db_info, 'album')
-            elif first_track_data and len(first_track_data) > 21:
-                album_links = self.extract_links_from_data(first_track_data, 'album')
-
-            # Extract artist links
-            if artist_db_info:
-                artist_links = self.extract_links_from_data(artist_db_info, 'artist')
-                
-                # Add links from artists_networks if artist ID exists
-                if artist_db_info.get('id'):
-                    network_links = self.get_artist_networks(artist_db_info['id'])
-                    artist_links.update(network_links)
-            elif first_track_data and len(first_track_data) > 16:
-                artist_links = self.extract_links_from_data(first_track_data, 'artist')
-
-            # Update link buttons
-            self.update_artist_link_buttons(artist_links)
-            self.update_album_link_buttons(album_links)
-
-            # 3. LASTFM LABEL (Bio del artista)
-            artist_bio = None
-            if artist_db_info and artist_db_info.get('bio'):
-                artist_bio = artist_db_info['bio']
-            elif first_track_data and len(first_track_data) > 15 and first_track_data[15]:
-                artist_bio = first_track_data[15]
-
-            if self.lastfm_label:
-                if artist_bio and artist_bio != "No hay información del artista disponible":
-                    self.lastfm_label.setText(f"<div class='info-card'><h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div></div>")
-                    self.lastfm_label.setVisible(True)
-                else:
-                    self.lastfm_label.setVisible(False)
-
-            # 4. WIKIPEDIA ARTIST LABEL
-            artist_wiki_content = None
-            if artist_db_info and artist_db_info.get('wikipedia_content'):
-                artist_wiki_content = artist_db_info['wikipedia_content']
-            elif first_track_data and len(first_track_data) > 27 and first_track_data[27]:
-                artist_wiki_content = first_track_data[27]
-
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                if artist_wiki_content:
-                    self.wikipedia_artist_label.setText(f"<div class='info-card'><h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{artist_wiki_content}</div></div>")
-                    self.wikipedia_artist_label.setVisible(True)
-                else:
-                    self.wikipedia_artist_label.setVisible(False)
-
-            # 5. WIKIPEDIA ALBUM LABEL
-            album_wiki_content = None
-            if album_db_info and album_db_info.get('wikipedia_content'):
-                album_wiki_content = album_db_info['wikipedia_content']
-            elif first_track_data and len(first_track_data) > 29 and first_track_data[29]:
-                album_wiki_content = first_track_data[29]
-
-            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                if album_wiki_content:
-                    self.wikipedia_album_label.setText(f"<div class='info-card'><h3>Wikipedia - Álbum:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div></div>")
-                    self.wikipedia_album_label.setVisible(True)
-                else:
-                    self.wikipedia_album_label.setVisible(False)
-
-        except Exception as e:
-            print(f"Error mostrando detalles del álbum: {e}")
-            traceback.print_exc()
-
-            # En caso de error, mostrar información básica
-            if self.metadata_label:
-                self.metadata_label.setText(f"<div class='metadata-card'><b>Álbum:</b> {album_name}<br><b>Artista:</b> {artist_name}<br><b>Error:</b> {str(e)}</div>")
-                self.metadata_label.setVisible(True)
-                
-            # Ocultar otros paneles en caso de error
-            if hasattr(self, 'lastfm_label') and self.lastfm_label:
-                self.lastfm_label.setVisible(False)
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                self.wikipedia_artist_label.setVisible(False)
-            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                self.wikipedia_album_label.setVisible(False)
-            if hasattr(self, 'artist_links_group'):
-                self.artist_links_group.hide()
-            if hasattr(self, 'album_links_group'):
-                self.album_links_group.hide()
-
-    def apply_theme(self, theme_name=None):
-        """
-        Aplica el tema al módulo con mejor manejo de errores para estilos.
         
-        Args:
-            theme_name (str, optional): Nombre del tema a aplicar. Si es None, usa el tema actual.
-        """
-        try:
-            # Importar dinámicamente
-            from themes.themes import apply_theme as apply_central_theme, THEMES
-            
-            # Asegurarse de que tenemos objectName
-            if not self.objectName():
-                self.setObjectName("music_fuzzy_module")
-                
-            # Si hay un cambio de tema, guardarlo
-            if theme_name:
-                self.current_theme = theme_name
-            elif not hasattr(self, 'current_theme'):
-                self.current_theme = 'Tokyo Night'  # Valor por defecto
-                
-            # Verificar que el tema existe
-            if hasattr(THEMES, self.current_theme) and self.current_theme not in THEMES:
-                print(f"Tema {self.current_theme} no encontrado, usando Tokyo Night")
-                self.current_theme = 'Tokyo Night'
-                
-            # Usar el sistema centralizado
-            apply_central_theme(self, self.current_theme)
-            
-            # Aplicar ajustes específicos para este módulo
-            self._apply_music_specific_styles()
-        except Exception as e:
-            print(f"Error aplicando tema: {e}")
-            traceback.print_exc()
-            # No fallar completamente si el tema no se aplica
-
-    def _apply_music_specific_styles(self):
-        """
-        Aplica estilos específicos que no pueden manejarse solo con CSS
-        """
-        # Asegurar que las etiquetas muestren enlaces externos correctamente
-        for label in [self.metadata_label, self.links_label, self.lastfm_label, 
-                    self.wikipedia_artist_label, self.wikipedia_album_label]:
-            if label:
-                label.setOpenExternalLinks(True)
-                label.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
-                label.setVisible(True)  # Make sure labels are visible
-
-        # Configurar los marcos de las imágenes
-        for image_label in [self.cover_label, self.artist_image_label]:
-            if image_label:
-                image_label.setFrameShape(QFrame.Shape.Box)
-                image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        # Configuración específica para el árbol de resultados
-        if self.results_tree:
-            self.results_tree.setAlternatingRowColors(True)
-            self.results_tree.setHeaderHidden(False)
-            
-            # Ajustar tamaños de columnas
-            self.results_tree.setColumnWidth(0, 300)
-            self.results_tree.setColumnWidth(1, 70)
-            self.results_tree.setColumnWidth(2, 100)
-            
-            # Mantener selección visible
-            self.results_tree.setExpandsOnDoubleClick(True)
-
-# MOSTRAR INFO CANCIONES
-
-
-    def show_details(self, current, previous):
-        """Shows the details of the selected item with better organization."""
-        if not current:
-            self.clear_details()
-            return
-
-        data = current.data(0, Qt.ItemDataRole.UserRole)
-        if not data:
-            self.clear_details()
-            return
-
-        try:
-            # Ensure required widgets exist
-            self._ensure_info_widgets_exist()
-            
-            # Clear previous details
-            self.clear_details()
-            
-            # Extract basic information
-            track_info = self._extract_basic_track_info(data)
-            
-            # Display images
-            self._display_track_images(track_info)
-            
-            # Show metadata
-            self._display_track_metadata(track_info)
-            
-            # Get additional information
-            artist_info = self._get_artist_info(track_info['artist'])
-            album_info = self._get_album_info(track_info['album'], track_info['artist'])
-            
-            # Display links
-            self._display_artist_links(artist_info)
-            self._display_album_links(album_info)
-            
-            # Show lyrics
-            self._display_lyrics(data, track_info)
-            
-            # Show artist and album information
-            self._display_artist_info(artist_info, track_info)
-            self._display_album_info(album_info, track_info)
-            
-            # Setup feeds functionality
-            self._setup_feeds_for_entity(data)
-            
-            # Make sure we're on the main info panel
-            self.switch_info_panel(0)
-            
-        except Exception as e:
-            print(f"Error in show_details: {e}")
-            traceback.print_exc()
-            self._display_error_info(data, str(e))
-
-
-    def _ensure_info_widgets_exist(self):
-        """Ensures that all necessary info widgets exist and are set up properly."""
-        # Check if essential widgets are available
-        if not hasattr(self, 'metadata_label') or not self.metadata_label or \
-        not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-            print("Essential info widgets not available, reconfiguring...")
-            self.setup_info_widget()
-            
-            # If still missing, raise exception
-            if not hasattr(self, 'metadata_label') or not self.metadata_label:
-                raise RuntimeError("metadata_label not available after reconfiguration")
-            if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-                raise RuntimeError("lastfm_label not available after reconfiguration")
-                
-        # Setup link buttons if not already done
-        if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
-            self.setup_link_buttons_container()
-            
-        # Make sure feed button is properly hidden initially
-        if hasattr(self, 'feeds_button') and self.feeds_button:
-            self.feeds_button.setVisible(False)
-
-
-    def _extract_basic_track_info(self, data):
-        """Extracts basic track information from the data."""
-        track_info = {
-            'id': data[0] if len(data) > 0 else None,
-            'path': data[1] if len(data) > 1 else None,
-            'title': data[2] if len(data) > 2 else "",
-            'artist': data[3] if len(data) > 3 else "",
-            'album_artist': data[4] if len(data) > 4 else "",
-            'album': data[5] if len(data) > 5 else "",
-            'date': data[6] if len(data) > 6 else "",
-            'genre': data[7] if len(data) > 7 else "",
-            'label': data[8] if len(data) > 8 else "",
-            'mbid': data[9] if len(data) > 9 else "",
-            'bitrate': data[10] if len(data) > 10 else "",
-            'bit_depth': data[11] if len(data) > 11 else "",
-            'sample_rate': data[12] if len(data) > 12 else "",
-            'last_modified': data[13] if len(data) > 13 else "",
-            'track_number': data[14] if len(data) > 14 else ""
-        }
-        
-        return track_info
-
-
-    def _display_track_images(self, track_info):
-        """Displays the album cover and artist image."""
-        # Show album cover
-        if track_info['path'] and hasattr(self, 'cover_label') and self.cover_label:
-            # Get album info to try to find cover art path
-            album_info = self._get_album_info(track_info['album'], track_info['artist'])
-            
-            cover_path = None
-            # Try to get cover from album info
-            if album_info and album_info.get('album_art_path'):
-                cover_path = album_info['album_art_path']
-                if not os.path.exists(cover_path):
-                    cover_path = None
-                    
-            # If not found, look in the file's directory
-            if not cover_path:
-                cover_path = self.find_cover_image(track_info['path'])
-                
-            # Display the cover
-            if cover_path:
-                pixmap = QPixmap(cover_path)
-                pixmap = pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                self.cover_label.setPixmap(pixmap)
-            else:
-                self.cover_label.setText("No imagen")
-        elif hasattr(self, 'cover_label') and self.cover_label:
-            self.cover_label.setText("No imagen")
-            
-        # Show artist image
-        if track_info['artist'] and hasattr(self, 'artist_image_label') and self.artist_image_label:
-            artist_image_path = self.find_artist_image(track_info['artist'])
-            if artist_image_path:
-                artist_pixmap = QPixmap(artist_image_path)
-                artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                self.artist_image_label.setPixmap(artist_pixmap)
-            else:
-                self.artist_image_label.setText("No imagen de artista")
-        elif hasattr(self, 'artist_image_label') and self.artist_image_label:
-            self.artist_image_label.setText("No imagen de artista")
-
-
-    def _display_track_metadata(self, track_info):
-        """Displays track metadata in the metadata panel."""
-        if not hasattr(self, 'metadata_label') or not self.metadata_label:
-            return
-            
-        # Build metadata HTML
-        metadata = f"""<div class='metadata-card'>
-            <b>Título:</b> {track_info['title'] or 'N/A'}<br>
-            <b>Artista:</b> {track_info['artist'] or 'N/A'}<br>
-            <b>Album Artist:</b> {track_info['album_artist'] or 'N/A'}<br>
-            <b>Álbum:</b> {track_info['album'] or 'N/A'}<br>
-            <b>Fecha:</b> {track_info['date'] or 'N/A'}<br>
-            <b>Género:</b> {track_info['genre'] or 'N/A'}<br>
-            <b>Sello:</b> {track_info['label'] or 'N/A'}<br>
-        """
-        
-        # Add technical details if available
-        if track_info['bitrate']:
-            metadata += f"<b>Bitrate:</b> {track_info['bitrate']} kbps<br>"
-        if track_info['bit_depth']:
-            metadata += f"<b>Profundidad:</b> {track_info['bit_depth']} bits<br>"
-        if track_info['sample_rate']:
-            metadata += f"<b>Frecuencia:</b> {track_info['sample_rate']} Hz<br>"
-            
-        # Close the div
-        metadata += "</div>"
-        
-        # Set and show the metadata
-        self.metadata_label.setText(metadata)
-        self.metadata_label.setVisible(True)
-
-
-    def _get_artist_info(self, artist_name):
-        """Gets artist information from the database."""
-        if not artist_name:
-            return None
-            
-        return self.get_artist_info_from_db(artist_name)
-
-
-    def _get_album_info(self, album_name, artist_name=None):
-        """Gets album information from the database."""
-        if not album_name:
-            return None
-            
-        return self.get_album_info_from_db(album_name, artist_name)
-
-
-    def _display_artist_links(self, artist_info):
-        """Displays artist links as buttons."""
-        artist_links = {}
-        
-        # Extract links from artist info
-        if artist_info:
-            artist_links = self.extract_links_from_data(artist_info, 'artist')
-            
-            # Add links from networks table if artist ID exists
-            if artist_info.get('id'):
-                network_links = self.get_artist_networks(artist_info['id'])
-                artist_links.update(network_links)
-                
-        # Update the artist link buttons
-        self.update_artist_link_buttons(artist_links)
-
-
-    def _display_album_links(self, album_info):
-        """Displays album links as buttons."""
-        album_links = {}
-        
-        # Extract links from album info
-        if album_info:
-            album_links = self.extract_links_from_data(album_info, 'album')
-                
-        # Update the album link buttons
-        self.update_album_link_buttons(album_links)
-
-
-    def _display_lyrics(self, data, track_info):
-        """Displays lyrics if available."""
-        lyrics = None
-        lyrics_source = "Unknown"
-        
-        # Try to get lyrics from data
-        if len(data) > 30 and data[30]:
-            lyrics = data[30]
-            if len(data) > 31 and data[31]:
-                lyrics_source = data[31]
-        
-        # If not found in data, try to get from database
-        if not lyrics and track_info['id']:
-            try:
-                conn = sqlite3.connect(self.db_path)
-                cursor = conn.cursor()
-                
-                # Get lyrics
-                cursor.execute("SELECT lyrics FROM lyrics WHERE track_id = ?", (track_info['id'],))
-                lyrics_result = cursor.fetchone()
-                if lyrics_result and lyrics_result[0]:
-                    lyrics = lyrics_result[0]
-                    
-                    # Try to get source
-                    cursor.execute("SELECT source FROM lyrics WHERE track_id = ?", (track_info['id'],))
-                    source_result = cursor.fetchone()
-                    if source_result and source_result[0]:
-                        lyrics_source = source_result[0]
-                        
-                conn.close()
-            except Exception as e:
-                print(f"Error getting lyrics from database: {e}")
-        
-        # Update lyrics display
-        if lyrics:
-            self.update_lyrics_display(lyrics, lyrics_source)
-
-
-    def _display_artist_info(self, artist_info, track_info):
-        """Displays artist information."""
-        # Get artist bio
-        artist_bio = None
-        if artist_info and artist_info.get('bio'):
-            artist_bio = artist_info['bio']
-        
-        # Get artist Wikipedia content
-        wikipedia_content = None
-        if artist_info and artist_info.get('wikipedia_content'):
-            wikipedia_content = artist_info['wikipedia_content']
-        
-        # Display artist bio
-        if artist_bio and hasattr(self, 'lastfm_label') and self.lastfm_label:
-            self.lastfm_label.setText(f"<div class='info-card'><h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div></div>")
-            self.lastfm_label.setVisible(True)
-        elif hasattr(self, 'lastfm_label') and self.lastfm_label:
-            self.lastfm_label.setVisible(False)
-        
-        # Display artist Wikipedia
-        if wikipedia_content and hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-            self.wikipedia_artist_label.setText(f"<div class='info-card'><h3>Wikipedia - {track_info['artist']}:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div></div>")
-            self.wikipedia_artist_label.setVisible(True)
-        elif hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-            self.wikipedia_artist_label.setVisible(False)
-
-
-    def _display_album_info(self, album_info, track_info):
-        """Displays album information."""
-        # Get album Wikipedia content
-        album_wiki_content = None
-        if album_info and album_info.get('wikipedia_content'):
-            album_wiki_content = album_info['wikipedia_content']
-        
-        # Display album Wikipedia
-        if album_wiki_content and hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-            self.wikipedia_album_label.setText(f"<div class='info-card'><h3>Wikipedia - {track_info['album']}:</h3><div style='white-space: pre-wrap;'>{album_wiki_content}</div></div>")
-            self.wikipedia_album_label.setVisible(True)
-        elif hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-            self.wikipedia_album_label.setVisible(False)
-
-
-    def _setup_feeds_for_entity(self, data):
-        """Sets up feeds functionality for the current entity."""
-        # Determine entity type and ID
-        entity_type = None
-        entity_id = None
-        
-        if isinstance(data, dict):
-            # Is artist or album
-            if data.get('type') == 'artist':
-                entity_type = 'artist'
-                entity_id = self.get_artist_id_from_name(data.get('name'))
-            elif data.get('type') == 'album':
-                entity_type = 'album'
-                entity_id = self.get_album_id_from_name(data.get('name'), data.get('artist'))
-        else:
-            # Is a song
-            if len(data) > 0 and data[0]:
-                entity_type = 'song'
-                entity_id = data[0]
-        
-        # Setup feeds button
-        if entity_type and entity_id and hasattr(self, 'feeds_button') and self.feeds_button:
-            # Check if feeds are available
-            feeds = self.get_feeds_data(entity_type, entity_id)
-            self.feeds_button.setVisible(bool(feeds))
-            
-            # Ensure feeds page is set up
-            if feeds:
-                self.setup_feeds_page()
-                
-                # Update feeds display
-                if hasattr(self, 'feeds_container'):
-                    self.create_feed_groupboxes(self.feeds_container, feeds)
-        elif hasattr(self, 'feeds_button') and self.feeds_button:
-            self.feeds_button.setVisible(False)
-
-
-    def _display_error_info(self, data, error_message):
-        """Displays basic info in case of error."""
-        # Show simple metadata
-        if hasattr(self, 'metadata_label') and self.metadata_label and len(data) > 2:
-            title = data[2] if len(data) > 2 else "Unknown"
-            artist = data[3] if len(data) > 3 else "Unknown"
-            
-            self.metadata_label.setText(f"<div class='metadata-card'><b>Título:</b> {title}<br><b>Artista:</b> {artist}<br><b>Error:</b> {error_message}</div>")
-            self.metadata_label.setVisible(True)
-        
-        # Show error in info panel
-        if hasattr(self, 'lastfm_label') and self.lastfm_label:
-            self.lastfm_label.setText(f"<div class='info-card'><h3>Error</h3><p>Could not load detailed information: {error_message}</p></div>")
-            self.lastfm_label.setVisible(True)
-        
-        # Hide other panels
-        for label in ['wikipedia_artist_label', 'wikipedia_album_label']:
-            if hasattr(self, label) and getattr(self, label):
-                getattr(self, label).setVisible(False)
-        
-        # Hide link groups
-        for group in ['artist_links_group', 'album_links_group']:
-            if hasattr(self, group) and getattr(self, group):
-                getattr(self, group).hide()
-    
-# OTRAS FUNCIONES
-
-    def search(self):
-        """Realiza una búsqueda en la base de datos según la consulta escrita en la caja de texto."""
-        print("Método search() llamado")
-
-        if not self.is_tree_valid():
-            print("El árbol de resultados no está disponible. Cargando uno nuevo...")
-            self._load_results_tree()
-            if not self.is_tree_valid():
-                print("No se pudo crear el árbol de resultados. Abortando búsqueda.")
-                return
-
-        query = self.search_box.text()
-        print(f"Realizando búsqueda con texto: '{query}'")
-        parsed = self.search_parser.parse_query(query)
-
-        # Conectar a la base de datos
-        conn = sqlite3.connect(self.db_path)
-
-        # Habilitar escritura a memoria para mejorar rendimiento
-        conn.execute("PRAGMA temp_store = MEMORY")
-
-        c = conn.cursor()
-
-        # Obtener condiciones SQL basadas en la consulta parseada
-        conditions, params = self.search_parser.build_sql_conditions(parsed)
-        # Construir la consulta SQL
-        sql = """
-            SELECT DISTINCT
-                s.id,
-                s.file_path,
-                s.title,
-                s.artist,
-                s.album_artist,
-                s.album,
-                s.date,
-                s.genre,
-                s.label,
-                s.mbid,
-                s.bitrate,
-                s.bit_depth,
-                s.sample_rate,
-                s.last_modified,
-                s.track_number
-                -- Otros campos que necesites
-        """
-
-        sql += """
-            FROM songs s
-            LEFT JOIN artists art ON s.artist = art.name
-            LEFT JOIN albums alb ON s.album = alb.name
-        """
-
-        # Añadir cláusula WHERE si hay condiciones
-        if conditions:
-            sql += " WHERE " + " AND ".join(conditions)
-
-        # Ordenamiento - primero por artista para agrupar correctamente
-        sql += " ORDER BY s.artist, s.album, CAST(s.track_number AS INTEGER)"
-
-        # Añadir un límite razonable
-        sql += " LIMIT 1000"
-
-        try:
-            # Ejecutar la consulta
-            c.execute(sql, params)
-            results = c.fetchall()
-
-            # Limpiar el árbol de resultados
-            if self.results_tree:
-                self.results_tree.clear()
-            else:
-                print("Error: results_tree no está inicializado")
-                return
-
-            # Organizar los resultados por artista > álbum > canción
-            artists = {}
-
-            for row in results:
-                # Usar album_artist (índice 4) en lugar de artist (índice 3)
-                album_artist = row[4] if row[4] else row[3] if row[3] else "Sin artista"
-                artist = row[3] if row[3] else "Sin artista"
-                album = row[5] if row[5] else "Sin álbum"
-                title = row[2] if row[2] else "Sin título"
-                date = row[6] if row[6] else ""
-                year = date.split('-')[0] if date and '-' in date else date
-                genre = row[7] if row[7] else ""
-                track_number = row[14] if row[14] else "0"
-
-                # Crear estructura anidada
-                if album_artist not in artists:
-                    artists[album_artist] = {}
-
-                album_key = f"{album}"
-                if album_key not in artists[album_artist]:
-                    artists[album_artist][album_key] = {
-                        'year': year,
-                        'genre': genre,
-                        'tracks': []
-                    }
-
-                # Extraer año numérico para ordenación
-                try:
-                    numeric_year = int(year) if year and year.isdigit() else 0
-                except (ValueError, TypeError):
-                    numeric_year = 0
-
-                # Añadir la canción con su número de pista
-                track_info = {
-                    'number': track_number,
-                    'title': title,
-                    'data': row,
-                    'year': year,
-                    'genre': genre,
-                    'numeric_year': numeric_year,
-                    'paths': [row[1]]  # Añadir path al track info
-                }
-                artists[album_artist][album_key]['tracks'].append(track_info)
-                artists[album_artist][album_key]['numeric_year'] = numeric_year
-
-            # Añadir elementos al árbol
-            for artist_name, albums in artists.items():
-                # Crear elemento de artista
-                artist_item = QTreeWidgetItem(self.results_tree)
-                artist_item.setText(0, f"🗣 {artist_name}")
-                artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
-                artist_item.is_header = True  # Marcar como header para compatibilidad
-
-                # Convertir diccionario de álbumes a lista y ordenar por año (más reciente primero)
-                album_list = []
-                for album_name, album_data in albums.items():
-                    album_list.append({
-                        'name': album_name,
-                        'year': album_data['year'],
-                        'genre': album_data['genre'],
-                        'numeric_year': album_data['numeric_year'],
-                        'tracks': album_data['tracks']
-                    })
-                
-                # Ordenar los álbumes por año de forma descendente (más reciente primero)
-                album_list.sort(key=lambda x: x['numeric_year'], reverse=False)
-
-                # Añadir álbumes como hijos del artista (ya ordenados por año)
-                for album_data in album_list:
-                    album_name = album_data['name']
-                    album_year = album_data['year']
-                    album_genre = album_data['genre']
-                    tracks = album_data['tracks']
-
-                    # Crear elemento de álbum
-                    album_item = QTreeWidgetItem(artist_item)
-                    album_item.setText(0, f"💿 {album_name}")
-                    album_item.setText(1, album_year)
-                    album_item.setText(2, album_genre)
-                    album_item.setData(0, Qt.ItemDataRole.UserRole, {
-                        'type': 'album',
-                        'name': album_name,
-                        'artist': artist_name,
-                        'year': album_year,
-                        'genre': album_genre
-                    })
-                    album_item.is_header = True  # Marcar como header para compatibilidad
-
-                    # Obtener todas las rutas para este álbum
-                    album_paths = []
-
-                    # Ordenar las pistas por número de track de forma ascendente
-                    def track_sort_key(track):
-                        number = track['number']
-                        # For handling cases where the track number is not a number
-                        if isinstance(number, str):
-                            # Handle formats like "01/12"
-                            if '/' in number:
-                                number = number.split('/')[0]
-                            # Remove letters and other non-numeric characters
-                            number = ''.join(c for c in number if c.isdigit())
-                            
-                            if number.isdigit():
-                                return int(number)
-                            return float('inf')  # If not a number, put it at the end
-                        elif isinstance(number, (int, float)):
-                            return number
-                        return float('inf')
-
-                    # Ordenar pistas por número de track
-                    tracks.sort(key=track_sort_key)
-
-                    # Añadir canciones como hijos del álbum (ordenadas por número de track)
-                    for track in tracks:
-                        try:
-                            track_num_str = track['number']
-                            if isinstance(track_num_str, str) and '/' in track_num_str:
-                                track_num_str = track_num_str.split('/')[0]
-                            
-                            track_num = int(track_num_str) if str(track_num_str).isdigit() else 0
-                            display_text = f"{track_num:02d}. {track['title']}"
-                        except (ValueError, TypeError):
-                            display_text = f"--. {track['title']}"
-
-                        # Crear elemento de canción
-                        track_item = QTreeWidgetItem(album_item)
-                        track_item.setText(0, display_text)
-                        track_item.setText(1, track['year'])
-                        track_item.setText(2, track['genre'])
-                        track_item.setData(0, Qt.ItemDataRole.UserRole, track['data'])
-                        track_item.is_header = False  # Marcar como no header para compatibilidad
-                        track_item.paths = track['paths']  # Guardar rutas
-
-                        # Añadir ruta a las rutas del álbum
-                        album_paths.extend(track['paths'])
-
-                    # Guardar rutas en el item del álbum
-                    album_item.paths = album_paths
-
-                # Expandir los artistas para mostrar los álbumes
-                for i in range(self.results_tree.topLevelItemCount()):
-                    self.results_tree.topLevelItem(i).setExpanded(True)
-
-        except Exception as e:
-            print(f"Error en la búsqueda: {e}")
-            import traceback
-            traceback.print_exc()
-        finally:
-            conn.close()
-
-        if hasattr(self, 'results_tree') and self.results_tree:
-                self.results_tree.setVisible(True)
-                print(f"Árbol actualizado con {self.results_tree.topLevelItemCount()} artistas")
-
-
-    def clear_details(self):
-        """Limpia todos los campos de detalles con manejo seguro de None."""
-        # Limpiar imágenes de forma segura
-        if hasattr(self, 'cover_label') and self.cover_label:
-            self.cover_label.clear()
-            self.cover_label.setText("No imagen")
-
-        if hasattr(self, 'artist_image_label') and self.artist_image_label:
-            self.artist_image_label.clear()
-            self.artist_image_label.setText("No imagen de artista")
-
-        # Limpiar información de metadatos (panel central)
-        if hasattr(self, 'metadata_label') and self.metadata_label:
-            self.metadata_label.setText("")
-            self.metadata_label.setVisible(True)  # Siempre visible, aunque esté vacío
-
-        # Limpiar información detallada (panel inferior)
-        # Inicialmente ocultamos todos los paneles
-        for label_attr in ['links_label', 'wikipedia_artist_label', 'lastfm_label', 'wikipedia_album_label']:
-            if hasattr(self, label_attr) and getattr(self, label_attr):
-                getattr(self, label_attr).setText("")
-                getattr(self, label_attr).setVisible(False)
-
-        # Ocultar contenedores de botones de enlaces
-        for group_attr in ['artist_links_group', 'album_links_group']:
-            if hasattr(self, group_attr) and getattr(self, group_attr):
-                getattr(self, group_attr).hide()
-
-        # Si tenemos GroupBoxes colapsables, resetearlos
-        if hasattr(self, 'info_groupboxes'):
-            for groupbox_name, groupbox in self.info_groupboxes.items():
-                if groupbox:
-                    groupbox.setVisible(False)
-
-        # Ocultar botón de feed si existe
-        if hasattr(self, 'feeds_button') and self.feeds_button:
-            self.feeds_button.setVisible(False)
-                
-        # Asegurarnos de estar en el panel principal
-        if hasattr(self, 'main_ui') and hasattr(self.main_ui, 'info_panel_stacked'):
-            self.main_ui.info_panel_stacked.setCurrentIndex(0)
-
-        # Forzar actualización visual
-        QApplication.processEvents()
-
-    def handle_spotify_button(self):
-        """Manejador para el botón de Spotify que decide qué argumento pasar a enviar_spoti"""
-        if not self.is_tree_valid():
-            print("El árbol de resultados no está disponible")
-            return
-
-        current_item = self.results_tree.currentItem()
-        if not current_item:
-            print("No hay elemento seleccionado")
-            return
-
-        # Obtener datos del ítem seleccionado
-        item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data:
-            print("No hay datos asociados al elemento seleccionado")
-            return
-
-        # Verificar si es un artista/álbum o una canción
-        if isinstance(item_data, dict):
-            # Es un artista o álbum
-            if item_data.get('type') == 'artist':
-                artist_name = item_data.get('name', '')
-                if artist_name:
-                    self.enviar_spoti(artist_name)
-                else:
-                    print("No hay suficiente información del artista para buscar")
-            elif item_data.get('type') == 'album':
-                album_name = item_data.get('name', '')
-                artist_name = item_data.get('artist', '')
-                if album_name and artist_name:
-                    self.enviar_spoti(f"{artist_name} - {album_name}")
-                else:
-                    print("No hay suficiente información del álbum para buscar")
-        else:
-            # Es una canción (los datos son el resultado de la consulta)
-            # Buscar el enlace de Spotify - Índice 16 en los enlaces originales mostrados en show_details
-            spotify_url = None
-
-            # Primero verificamos si tenemos el ID de la canción para buscar en song_links
-            if len(item_data) > 0 and item_data[0]:
-                song_id = item_data[0]
-                spotify_url = self.get_spotify_url_from_db(song_id)
-
-            if spotify_url:
-                # Si tenemos una URL de Spotify, la pasamos como argumento
-                self.enviar_spoti(spotify_url)
-            else:
-                # Si no hay URL, creamos un string con "artista - título"
-                artist = item_data[3] if len(item_data) > 3 and item_data[3] else ""
-                title = item_data[2] if len(item_data) > 2 and item_data[2] else ""
-
-                if artist and title:
-                    query = f"{artist} - {title}"
-                    self.enviar_spoti(query)
-                else:
-                    # Mostrar mensaje si no hay suficiente información
-                    print("No hay suficiente información para buscar en Spotify")
-
-
-    def enviar_spoti(self, arg):
-        """Envía a Spotify basado en el argumento proporcionado
-
-        Args:
-            arg: Puede ser una URL de Spotify o una cadena con 'artista - título'
-        """
-        try:
-            # Verificar si el argumento es una URL de Spotify
-            if arg.startswith("https://open.spotify.com/") or arg.startswith("spotify:"):
-                # Aquí la lógica para manejar URLs de Spotify directamente
-                print(f"Enviando URL de Spotify al creador de listas: {arg}")
-                self.switch_tab("Spotify Playlists", "add_track_by_url", arg)
-            else:
-                self.switch_tab("Spotify Playlists", "search_track_by_query", arg)
-                print(f"Buscando en Spotify: {arg}")
-
-        except Exception as e:
-            print(f"Error al enviar a Spotify: {e}")
-
-
-    def get_spotify_url_from_db(self, song_id):
-        """Obtiene la URL de Spotify desde la base de datos para una canción específica"""
-        try:
-            # Conectar a la base de datos
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-
-            # Consultar la URL de Spotify para el song_id proporcionado
-            cursor.execute("SELECT spotify_url FROM song_links WHERE song_id = ?", (song_id,))
-            result = cursor.fetchone()
-
-            conn.close()
-
-            # Devolver la URL si existe
-            if result and result[0]:
-                return result[0]
-            return None
-        except Exception as e:
-            print(f"Error al obtener la URL de Spotify: {e}")
-            return None
-
-    def play_selected_item(self):
-        """Reproduce el ítem seleccionado en el árbol."""
-        if not hasattr(self, 'results_tree') or not self.results_tree:
-            return
-
-        item = self.results_tree.currentItem()
-        if not item:
-            return
-
-        item_data = item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data:
-            return
-
-        if isinstance(item_data, dict):
-            # Es un artista o álbum
-            if item_data.get('type') == 'album':
-                self.play_album(item)
-        else:
-            # Es una canción
-            self.play_track(item)
-
-
-    def open_selected_folder(self):
-        """Abre la carpeta del ítem seleccionado en el árbol."""
-        if not hasattr(self, 'results_tree') or not self.results_tree:
-            return
-
-        item = self.results_tree.currentItem()
-        if not item:
-            return
-
-        item_data = item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data:
-            return
-
-        if isinstance(item_data, dict):
-            # Es un artista o álbum
-            if item_data.get('type') == 'album':
-                self.open_album_folder(item)
-        else:
-            # Es una canción
-            self.open_track_folder(item_data)
-
-
-    def play_item(self):
-        """Reproduce el ítem seleccionado con verificaciones de seguridad."""
-        current = self.results_list.currentItem()
-        if not current:
-            print("No hay ítem seleccionado")
-            return
-
-        # Verificar si es un header
-        if getattr(current, 'is_header', False):
-            self.play_album()
-            return
-
-        # Obtener los datos del ítem
-        data = current.data(Qt.ItemDataRole.UserRole)
-        if not data:
-            print("No hay datos asociados al ítem")
-            return
-
-        try:
-            file_path = data[1]  # Índice 1 contiene file_path
-            if not file_path or not os.path.exists(file_path):
-                print(f"Ruta de archivo no válida: {file_path}")
-                return
-
-            subprocess.Popen([reproductor, file_path])
-        except (IndexError, TypeError) as e:
-            print(f"Error al acceder a los datos del ítem: {e}")
-        except Exception as e:
-            print(f"Error al reproducir el archivo: {e}")
-
-    def play_album(self, album_item):
-        """
-        Reproduce todas las pistas de un álbum.
-
-        Args:
-            album_item: Elemento del árbol que representa un álbum.
-        """
-        # Verificar que es un álbum
-        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
-            return
-
-        # Recolectar todas las rutas de archivo del álbum
-        album_paths = []
-
-        for i in range(album_item.childCount()):
-            track_item = album_item.child(i)
-            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-            if track_data and len(track_data) > 1:
-                file_path = track_data[1]
-                if file_path and os.path.exists(file_path):
-                    album_paths.append(file_path)
-
-        if album_paths:
-            subprocess.Popen([reproductor] + album_paths)
-        else:
-            print("No se encontraron archivos válidos para reproducir")
-
-    def open_folder(self):
-        """Abre la carpeta del ítem seleccionado."""
-        current = self.results_list.currentItem()
-        if not current:
-            return
-
-        if getattr(current, 'is_header', True):
-            # Si es un header, abrir la carpeta del primer archivo del álbum
-            self.open_album_folder()
-
-        try:
-            if getattr(current, 'is_header', False):
-                # Si es un header, abrir la carpeta del primer archivo del álbum
-                index = self.results_list.row(current) + 1
-                if index < self.results_list.count():
-                    item = self.results_list.item(index)
-                    if item:
-                        data = item.data(Qt.ItemDataRole.UserRole)
-                        if data and len(data) > 1:
-                            file_path = data[1]
-                        else:
-                            return
-                else:
-                    return
-            else:
-                # Si es una canción individual
-                data = current.data(Qt.ItemDataRole.UserRole)
-                if not data or len(data) <= 1:
-                    return
-                file_path = data[1]
-
-            if file_path and os.path.exists(file_path):
-                folder_path = str(Path(file_path).parent)
-                subprocess.Popen(['thunar', folder_path])
-            else:
-                print(f"Ruta no válida: {file_path}")
-
-        except Exception as e:
-            print(f"Error al abrir la carpeta: {e}")
-
-    def open_album_folder(self, album_item):
-        """
-        Abre la carpeta de un álbum.
-
-        Args:
-            album_item: Elemento del árbol que representa un álbum.
-        """
-        # Verificar que es un álbum
-        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
-        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
-            return
-
-        # Usar la primera pista del álbum para obtener la ruta
-        if album_item.childCount() > 0:
-            track_item = album_item.child(0)
-            track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-            if track_data:
-                self.open_track_folder(track_data)
-
-    def open_track_folder(self, track_data):
-        """
-        Abre la carpeta de una pista.
-
-        Args:
-            track_data: Datos de la pista (resultado de la consulta).
-        """
-        try:
-            if len(track_data) > 1:
-                file_path = track_data[1]
-                if file_path and os.path.exists(file_path):
-                    folder_path = str(Path(file_path).parent)
-                    subprocess.Popen(['thunar', folder_path])
-                else:
-                    print(f"Ruta no válida: {file_path}")
-        except Exception as e:
-            print(f"Error al abrir la carpeta: {e}")
-
-
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key.Key_Tab:
-            # Alternar entre la caja de búsqueda y el árbol de resultados
-            if self.search_box.hasFocus():
-                # Verificar si results_tree existe y es válido
-                if self.is_tree_valid():
-                    self.results_tree.setFocus()
-            else:
-                self.search_box.setFocus()
-            event.accept()
-            return
-
-        # Solo procesar las flechas si el árbol de resultados existe, es válido y tiene el foco
-        if self.is_tree_valid() and self.results_tree.hasFocus():
-            if event.key() in [Qt.Key.Key_Left, Qt.Key.Key_Right]:
-                self.navigate_tree_headers(event.key())
-                event.accept()
-                return
-
-        # Verificar si results_tree existe antes de usarlo
-        if hasattr(self, 'results_tree') and self.results_tree:
-            current_item = self.results_tree.currentItem()
-            if current_item:
-                item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
-                if isinstance(item_data, dict) and item_data.get('type') == 'album':
-                    if event.key() == Qt.Key.Key_Return:
-                        self.play_album(current_item)
-                        event.accept()
-                        return
-                    elif event.key() == Qt.Key.Key_O and event.modifiers() == Qt.KeyboardModifier.ControlModifier:
-                        self.open_album_folder(current_item)
-                        event.accept()
-                        return
-
-        super().keyPressEvent(event)
-
-
-    def navigate_tree_headers(self, key):
-        """Navega entre los elementos de nivel superior del árbol (artistas)."""
-        if not hasattr(self, 'results_tree') or not self.results_tree:
-            return
-
-        current_item = self.results_tree.currentItem()
-        if not current_item:
-            return
-
-        # Encontrar el elemento de nivel superior (artista) actual
-        top_level_item = current_item
-        while top_level_item.parent():
-            top_level_item = top_level_item.parent()
-
-        current_index = self.results_tree.indexOfTopLevelItem(top_level_item)
-        if current_index == -1:
-            return
-
-        # Navegar al siguiente o anterior elemento de nivel superior
-        new_index = current_index
-        if key == Qt.Key.Key_Right:
-            new_index = min(current_index + 1, self.results_tree.topLevelItemCount() - 1)
-        else:  # key == Qt.Key.Key_Left
-            new_index = max(current_index - 1, 0)
-
-        if new_index != current_index:
-            new_item = self.results_tree.topLevelItem(new_index)
-            self.results_tree.setCurrentItem(new_item)
-            self.results_tree.scrollToItem(new_item, QAbstractItemView.ScrollHint.PositionAtCenter)
-
-
-
-
-    def run_custom_script(self, script_num):
-        current = self.results_list.currentItem()
-        if not current:
-            return
-
-        data = current.data(Qt.ItemDataRole.UserRole)
-        # Definir los scripts aquí o cargarlos desde configuración
-        scripts = {
-            1: '/path/to/script1.sh',
-            2: '/path/to/script2.sh',
-            3: '/path/to/script3.sh'
-        }
-
-        if script_num in scripts and os.path.exists(scripts[script_num]):
-            subprocess.Popen([scripts[script_num], data[1]])
-
-
-
-    def load_results_tree_ui(self):
-        """Este método ya no se usa directamente"""
-        print("ADVERTENCIA: load_results_tree_ui() está obsoleto, usa _load_results_tree()")
-        return False
-
-
-
-    def setup_results_tree(self):
-        """Configura el árbol de resultados con sus propiedades y señales."""
-        if not hasattr(self, 'results_tree') or self.results_tree is None:
-            print("Cargando árbol de resultados por primera vez")
-            try:
-                if not self.load_results_tree_ui():
-                    print("Advertencia: No se pudo cargar el árbol de resultados dinámicamente.")
-                    self._create_fallback_tree()
-            except Exception as e:
-                print(f"Error al cargar el árbol de resultados: {e}")
-                traceback.print_exc()
-                self._create_fallback_tree()
-        else:
-            print("El árbol de resultados ya existe, no es necesario cargarlo nuevamente")
-
-        # Configurar el aspecto del árbol
-        self.results_tree.setAlternatingRowColors(False)
+        # Create tree widget
+        from PyQt6.QtWidgets import QTreeWidget
+        self.results_tree = QTreeWidget()
+        self.results_tree.setAlternatingRowColors(True)
         self.results_tree.setHeaderHidden(False)
         self.results_tree.setColumnCount(3)
         self.results_tree.setHeaderLabels(["Artistas / Álbumes / Canciones", "Año", "Género"])
-
-        # Ajustar el tamaño de las columnas
-        self.results_tree.setColumnWidth(0, 250)  # Nombre más amplio
-        self.results_tree.setColumnWidth(1, 60)   # Año más estrecho
-        self.results_tree.setColumnWidth(2, 90)  # Género tamaño medio
-
-        # Configurar la selección
-        self.results_tree.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
-        self.results_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-
-        # Configurar eventos
-        self.results_tree.currentItemChanged.connect(self.handle_tree_item_change)
-        self.results_tree.itemDoubleClicked.connect(self.handle_tree_item_double_click)
-        self.results_tree.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-        self.results_tree.customContextMenuRequested.connect(self.show_tree_context_menu)
-
-        # Permitir expandir/colapsar con doble clic y teclas
-        self.results_tree.setExpandsOnDoubleClick(True)
-
-        # Configurar arrastrar y soltar para playlist
-        self.results_tree.setDragEnabled(True)
-        self.results_tree.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
-
-    def update_results_tree(self, results):
+        
+        # Configure tree
+        self._configure_results_tree()
+        
+        # Add to layout
+        container_layout.addWidget(self.results_tree)
+        
+        print("Fallback tree created")
+        
+   
+        
+    def _connect_signals(self):
+        """Connect UI signals to handlers."""
+        # Search box
+        self.search_box.textChanged.connect(self._on_search_text_changed)
+        self.search_box.returnPressed.connect(self.search)
+        
+        # Advanced settings
+        self.advanced_settings_check.stateChanged.connect(self.toggle_advanced_settings)
+        
+        # Action buttons
+        self.play_button.clicked.connect(self.play_selected_item)
+        self.folder_button.clicked.connect(self.open_selected_folder)
+        self.spotify_button.clicked.connect(self.handle_spotify_button)
+        
+        # Custom buttons
+        self.custom_button1.clicked.connect(self.buscar_musica_en_reproduccion)
+        
+        # Feeds button if available
+        if self.feeds_button:
+            self.feeds_button.clicked.connect(self.show_feeds)
+            
+    def _on_search_text_changed(self, text):
         """
-        Actualiza el árbol de resultados con los resultados de búsqueda.
-        Organiza los resultados en una estructura jerárquica: Artista > Álbum > Canción
-
+        Handle search box text changes.
+        Implementa una búsqueda automática al tipear.
+        
         Args:
-            results: Lista de tuplas con los resultados de la búsqueda.
+            text (str): Texto actual en el campo de búsqueda
         """
-        if not hasattr(self, 'results_tree') or self.results_tree is None:
-            print("No se encuentra el árbol de resultados")
+        # Si hay al menos 3 caracteres, ejecutar la búsqueda
+        # o si hay prefijos especiales como "a:", "b:", etc.
+        if len(text) >= 2 or any(prefix in text for prefix in ["a:", "b:", "g:", "l:", "t:", "aa:", "br:", "d:", "w:", "m:", "y:", "am:", "ay:"]):
+            self.search(text)
+    
+    # Métodos faltantes que causan los errores        
+    def handle_tree_item_double_click(self, item, column):
+        """
+        Handle double click on tree item - play the item.
+        
+        Args:
+            item: The clicked tree widget item
+            column: The column that was clicked
+        """
+        # Simple implementation: just play the item
+        self.play_selected_item()
+    
+    def show_tree_context_menu(self, position):
+        """
+        Show context menu for the results tree.
+        
+        Args:
+            position: Position where the context menu should be shown
+        """
+        item = self.results_tree.itemAt(position)
+        if not item:
             return
-
-        # Limpiar el árbol
-        self.results_tree.clear()
-
-        # Organizar los resultados por artista > álbum > canción
-        artists = {}
-
-        for row in results:
-            album_artist = row[4] if row[4] else row[3] if row[3] else "Sin artista"
-            artist = row[3] if row[3] else "Sin artista"
-            album = row[5] if row[5] else "Sin álbum"
-            title = row[2] if row[2] else "Sin título"
-            date = row[6] if row[6] else ""
-            year = date.split('-')[0] if date and '-' in date else date
-            genre = row[7] if row[7] else ""
-            track_number = row[14] if row[14] else "0"
-
-            # Create nested structure
-            if album_artist not in artists:
-                artists[album_artist] = {}
-
-
-            # Crear estructura anidada
-            if artist not in artists:
-                artists[artist] = {}
-
-            album_key = f"{album}"
-            if album_key not in artists[artist]:
-                artists[artist][album_key] = []
-
-            # Añadir la canción con su número de pista
-            track_info = {
-                'number': track_number,
-                'title': title,
-                'data': row,
-                'year': year,
-                'genre': genre
-            }
-            artists[artist][album_key].append(track_info)
-
-        # Añadir elementos al árbol
-        for artist_name, albums in artists.items():
-            # Crear elemento de artista
-            artist_item = QTreeWidgetItem(self.results_tree)
-            artist_item.setText(0, artist_name)
-            artist_item.setIcon(0, self.get_artist_icon())
-            artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'name': artist_name})
-
-            # Añadir álbumes como hijos del artista
-            for album_name, tracks in albums.items():
-                # Obtener información del álbum del primer track
-                album_year = tracks[0]['year'] if tracks else ""
-                album_genre = tracks[0]['genre'] if tracks else ""
-
-                # Crear elemento de álbum
-                album_item = QTreeWidgetItem(artist_item)
-                album_item.setText(0, album_name)
-                album_item.setText(1, album_year)
-                album_item.setText(2, album_genre)
-                album_item.setIcon(0, self.get_album_icon())
-                album_item.setData(0, Qt.ItemDataRole.UserRole, {
-                    'type': 'album',
-                    'name': album_name,
-                    'artist': artist_name,
-                    'year': album_year,
-                    'genre': album_genre
-                })
-
-                # Ordenar las pistas por número
-                try:
-                    tracks.sort(key=lambda x: int(x['number']) if x['number'].isdigit() else float('inf'))
-                except (ValueError, AttributeError):
-                    # En caso de error, no ordenar
-                    pass
-
-                # Añadir canciones como hijos del álbum
-                for track in tracks:
-                    try:
-                        track_num = int(track['number'])
-                        display_text = f"{track_num:02d}. {track['title']}"
-                    except (ValueError, TypeError):
-                        display_text = f"--. {track['title']}"
-
-                    # Crear elemento de canción
-                    track_item = QTreeWidgetItem(album_item)
-                    track_item.setText(0, display_text)
-                    track_item.setText(1, track['year'])
-                    track_item.setText(2, track['genre'])
-                    track_item.setIcon(0, self.get_track_icon())
-                    track_item.setData(0, Qt.ItemDataRole.UserRole, track['data'])
-
-        # Expandir los artistas para mostrar los álbumes
-        for i in range(self.results_tree.topLevelItemCount()):
-            self.results_tree.topLevelItem(i).setExpanded(True)
-
-        # Mostrar información en la barra de estado si está disponible
-        if hasattr(self, 'statusBar'):
-            self.statusBar().showMessage(f"Encontrados {len(results)} resultados")
-
-    def get_artist_icon(self):
-        """Retorna un icono para representar artistas en el árbol."""
-        return self.style().standardIcon(QStyle.StandardPixmap.SP_CommandLink)
-
-    def get_album_icon(self):
-        """Retorna un icono para representar álbumes en el árbol."""
-        return self.style().standardIcon(QStyle.StandardPixmap.SP_DirIcon)
-
-    def get_track_icon(self):
-        """Retorna un icono para representar canciones en el árbol."""
-        return self.style().standardIcon(QStyle.StandardPixmap.SP_FileIcon)
-
+            
+        # Create the context menu
+        context_menu = QMenu(self)
+        
+        # Add common actions
+        play_action = context_menu.addAction("Reproducir")
+        play_action.triggered.connect(self.play_selected_item)
+        
+        open_folder_action = context_menu.addAction("Abrir Carpeta")
+        open_folder_action.triggered.connect(self.open_selected_folder)
+        
+        # Add item-specific actions based on type
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if isinstance(item_data, dict):
+            # It's an artist or album
+            if item_data.get('type') == 'artist':
+                # Artist-specific actions
+                search_artist_action = context_menu.addAction("Buscar por este Artista")
+                search_artist_action.triggered.connect(
+                    lambda: self.search_panel.set_search_text(f"a:{item_data.get('name')}")
+                )
+            elif item_data.get('type') == 'album':
+                # Album-specific actions
+                search_album_action = context_menu.addAction("Buscar por este Álbum")
+                search_album_action.triggered.connect(
+                    lambda: self.search_panel.set_search_text(f"b:{item_data.get('name')}")
+                )
+        else:
+            # It's a track
+            if len(item_data) > 2:  # Make sure we have title
+                copy_title_action = context_menu.addAction("Copiar Título")
+                copy_title_action.triggered.connect(
+                    lambda: QApplication.clipboard().setText(item_data[2])
+                )
+            
+            if len(item_data) > 0:  # Make sure we have ID
+                spotify_action = context_menu.addAction("Buscar en Spotify")
+                spotify_action.triggered.connect(self.handle_spotify_button)
+                
+        # Show the context menu
+        context_menu.exec(self.results_tree.mapToGlobal(position))
+            
     def handle_tree_item_change(self, current, previous):
         """
-        Maneja el cambio de selección en el árbol.
-        Muestra la información del elemento seleccionado.
-
+        Handle change of selected item in the tree.
+        
         Args:
-            current: Elemento actual seleccionado.
-            previous: Elemento previamente seleccionado.
+            current: Currently selected item
+            previous: Previously selected item
         """
         if not current:
             self.clear_details()
             return
-
-        try:
-            # Obtener datos del elemento
-            item_data = current.data(0, Qt.ItemDataRole.UserRole)
-
-            if not item_data:
-                self.clear_details()
-                return
-
-            # Determinar qué tipo de elemento es
-            if isinstance(item_data, dict):
-                # Es un artista o álbum
-                if item_data.get('type') == 'artist':
-                    # Verificar que tenemos los widgets necesarios antes de mostrar info
-                    if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-                        print("lastfm_label no disponible, reconfigurando widgets...")
-                        self.setup_info_widget()
-                    self.show_artist_info(current)
-                elif item_data.get('type') == 'album':
-                    # Verificar que tenemos los widgets necesarios antes de mostrar info
-                    if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-                        print("lastfm_label no disponible, reconfigurando widgets...")
-                        self.setup_info_widget()
-                    self.show_album_info(current)
-                else:
-                    self.clear_details()
-            else:
-                # Es una canción (los datos son el resultado de la consulta)
-                self.show_details(current, previous)
-        except Exception as e:
-            print(f"Error en handle_tree_item_change: {e}")
-            traceback.print_exc()
-            self.clear_details()
-
-    def handle_tree_item_double_click(self, item, column):
-        """
-        Maneja el doble clic en un elemento del árbol.
-        Si es una canción, la reproduce.
-        Si es un artista, simplemente lo expande.
-
-        Args:
-            item: Elemento en el que se hizo doble clic.
-            column: Columna en la que se hizo clic.
-        """
-        # Obtener datos del elemento
-        item_data = item.data(0, Qt.ItemDataRole.UserRole)
-
+            
+        # Get item data
+        item_data = current.data(0, Qt.ItemDataRole.UserRole)
         if not item_data:
+            self.clear_details()
             return
-
-        # Determinar qué tipo de elemento es
+            
+        # Determine entity type and show appropriate view
         if isinstance(item_data, dict):
-            # Es un artista o álbum
+            # It's an artist or album
             if item_data.get('type') == 'artist':
-                # Expandir/colapsar artista
-                item.setExpanded(not item.isExpanded())
+                self.show_artist_details(current)
             elif item_data.get('type') == 'album':
-                # Reproducir el álbum directamente
-                self.play_album(item)
+                self.show_album_details(current)
         else:
-            # Es una canción, la reproducimos
-            self.play_track(item)
+            # It's a track
+            self.show_track_details(current)
+            
 
 
-    def play_track(self, track_item):
+    def show_album_details(self, album_item):
         """
-        Reproduce una pista.
-
+        Show album details with better visibility handling.
+        
         Args:
-            track_item: Elemento del árbol que representa una canción.
+            album_item: Tree item for an album
         """
-        # Obtener datos de la pista
-        track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-        if not track_data:
+        # Hide all views first
+        self.artist_view.hide()
+        self.album_view.show()
+        self.track_view.hide()
+        
+        # Get album data
+        item_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'album':
             return
+            
+        # Collect all tracks
+        tracks = []
+        for i in range(album_item.childCount()):
+            tracks.append(album_item.child(i))
+            
+        # Show album details
+        self.album_view.show_entity(item_data, tracks)
+        
+        # Resto del código...
+        
+        # Forzar visibilidad de los contenedores
+        print("[DEBUG] Forzando visibilidad de los contenedores de enlaces en show_album_details")
+        
+        if hasattr(self, 'album_links_group') and self.album_links_group:
+            # Asegurar que tanto el contenedor como su padre estén visibles
+            self.album_links_group.setVisible(True)
+            self.album_links_group.show()
+            
+            parent = self.album_links_group.parent()
+            if parent:
+                parent.setVisible(True)
+                parent.show()
+        
+        if hasattr(self, 'artist_links_group') and self.artist_links_group:
+            # También mostrar el contenedor de artista para mantener consistencia
+            self.artist_links_group.setVisible(True)
+            self.artist_links_group.show()
+        
+        # Llamar a un método que nos ayude a verificar el estado
+        self.debug_link_groups_status()
 
-        try:
-            file_path = track_data[1]  # Índice 1 contiene file_path
-            if not file_path or not os.path.exists(file_path):
-                print(f"Ruta de archivo no válida: {file_path}")
-                return
-
-            subprocess.Popen([reproductor, file_path])
-        except (IndexError, TypeError) as e:
-            print(f"Error al acceder a los datos de la pista: {e}")
-        except Exception as e:
-            print(f"Error al reproducir el archivo: {e}")
-
-    def show_tree_context_menu(self, position):
+            
+    def show_artist_details(self, artist_item):
         """
-        Muestra un menú contextual para el árbol de resultados.
-
+        Show artist details con mejor manejo de visibilidad.
+        
         Args:
-            position: Posición donde se hizo clic derecho.
+            artist_item: Tree item for an artist
         """
-        # Obtener el elemento bajo el cursor
-        item = self.results_tree.itemAt(position)
-        if not item:
-            return
-
-        # Crear menú contextual
-        context_menu = QMenu(self)
-
-        # Obtener datos del elemento
-        item_data = item.data(0, Qt.ItemDataRole.UserRole)
-
-        if isinstance(item_data, dict):
-            # Es un artista o álbum
-            if item_data.get('type') == 'artist':
-                # Opciones para artista
-                context_menu.addAction("Expandir/Colapsar", lambda: item.setExpanded(not item.isExpanded()))
-                context_menu.addAction("Ver detalles del artista", lambda: self.show_artist_info(item))
-                context_menu.addAction("Añadir todos los álbumes a la playlist", lambda: self.add_artist_to_playlist(item))
-            elif item_data.get('type') == 'album':
-                # Opciones para álbum
-                context_menu.addAction("Reproducir álbum", lambda: self.play_album(item))
-                context_menu.addAction("Añadir álbum a playlist", lambda: self.add_album_to_playlist(item))
-                context_menu.addAction("Abrir carpeta del álbum", lambda: self.open_album_folder(item))
-        else:
-            # Es una canción
-            context_menu.addAction("Reproducir", lambda: self.play_track(item))
-            context_menu.addAction("Añadir a playlist", lambda: self.add_track_to_playlist(item_data))
-            context_menu.addAction("Abrir carpeta", lambda: self.open_track_folder(item_data))
-
-        # Mostrar el menú
-        context_menu.exec(self.results_tree.viewport().mapToGlobal(position))
-
-    def show_artist_info(self, artist_item):
-        """
-        Muestra información detallada de un artista.
-
-        Args:
-            artist_item: Elemento del árbol que representa un artista.
-        """
-        # Verificar que es un artista
+        # Hide all views first
+        self.artist_view.show()
+        self.album_view.hide()
+        self.track_view.hide()
+        
+        # Get artist data
         item_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
         if not item_data or not isinstance(item_data, dict) or item_data.get('type') != 'artist':
             return
-
-        artist_name = item_data.get('name', 'Desconocido')
-
-        # Verificar que los widgets necesarios estén disponibles
-        if not all([hasattr(self, 'lastfm_label'), hasattr(self, 'metadata_label')]):
-            print("Error: Widgets de información no disponibles, reconfigurando...")
-            self.setup_info_widget()
-
-        # Si aún no tenemos los widgets, mostrar un mensaje de error y salir
-        if not hasattr(self, 'lastfm_label') or not self.lastfm_label:
-            print("Error crítico: lastfm_label no disponible después de reconfigurar")
-            return
-
-        if not hasattr(self, 'metadata_label') or not self.metadata_label:
-            print("Error crítico: metadata_label no disponible después de reconfigurar")
-            return
-
-        # Buscar información del artista en la base de datos
-        artist_db_info = self.get_artist_info_from_db(artist_name)
-
-        # También buscar en el primer track por compatibilidad con el código existente
-        first_track_data = None
-        for album_idx in range(artist_item.childCount()):
-            album_item = artist_item.child(album_idx)
-            for track_idx in range(album_item.childCount()):
-                track_item = album_item.child(track_idx)
-                track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
-                if track_data:
-                    first_track_data = track_data
-                    break
-            if first_track_data:
-                break
-
-        # Limpiar detalles anteriores
-        self.clear_details()
-
-        # Mostrar imagen del artista
-        if artist_name and hasattr(self, 'artist_image_label') and self.artist_image_label:
-            artist_image_path = self.find_artist_image(artist_name)
-            if artist_image_path:
-                artist_pixmap = QPixmap(artist_image_path)
-                artist_pixmap = artist_pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio)
-                self.artist_image_label.setPixmap(artist_pixmap)
-            else:
-                self.artist_image_label.setText("No imagen de artista")
-
-        # Mostrar la información en el panel de detalles
-        try:
-            # Crear el contenido para el panel de información (LastFM + Wikipedia)
-            info_text = ""
-            has_artist_info = False
-
-            # Mostrar info de LastFM si está disponible
-            artist_bio = None
-
-            # Priorizar la bio de la base de datos
-            if artist_db_info and artist_db_info.get('bio'):
-                artist_bio = artist_db_info['bio']
-            # Usar la bio del track si está disponible como respaldo
-            elif first_track_data and len(first_track_data) > 15 and first_track_data[15]:
-                artist_bio = first_track_data[15]
-
-            if artist_bio:
-                info_text += f"<h3>Información del Artista:</h3><div style='white-space: pre-wrap;'>{artist_bio}</div><br><br>"
-                has_artist_info = True
-            else:
-                info_text += "<h3>Información del Artista:</h3><p>No hay información disponible</p><br>"
-
-            # Mostrar info de Wikipedia del artista
-            wikipedia_content = None
-            if artist_db_info and artist_db_info.get('wikipedia_content'):
-                wikipedia_content = artist_db_info['wikipedia_content']
-            elif first_track_data and len(first_track_data) > 27 and first_track_data[27]:
-                wikipedia_content = first_track_data[27]
-
-            if wikipedia_content:
-                info_text += f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div><br><br>"
-                has_artist_info = True
-
-            # Establecer texto en lastfm_label y mostrar/ocultar según corresponda
-            if self.lastfm_label:
-                if has_artist_info:
-                    self.lastfm_label.setText(info_text)
-                    self.lastfm_label.setVisible(True)
-                else:
-                    self.lastfm_label.setVisible(False)
-
-            # Construir la metadata básica del artista
-            metadata = f"<b>Artista:</b> {artist_name}<br>"
             
-            # Añadir información adicional si está disponible
-            if artist_db_info:
-                if artist_db_info.get('origin'):
-                    metadata += f"<b>Origen:</b> {artist_db_info['origin']}<br>"
-                if artist_db_info.get('formed_year'):
-                    metadata += f"<b>Año de formación:</b> {artist_db_info['formed_year']}<br>"
-                if artist_db_info.get('total_albums'):
-                    metadata += f"<b>Total de álbumes:</b> {artist_db_info['total_albums']}<br>"
-                if artist_db_info.get('tags'):
-                    metadata += f"<b>Etiquetas:</b> {artist_db_info['tags']}<br>"
-
-            # Contar álbumes desde el árbol
-            albums_count = artist_item.childCount()
-            if not artist_db_info or not artist_db_info.get('total_albums'):
-                metadata += f"<b>Álbumes encontrados:</b> {albums_count}<br>"
-
-            # Mostrar metadata
-            if self.metadata_label:
-                self.metadata_label.setText(metadata)
-                self.metadata_label.setVisible(True)
-
-            # Extraer y mostrar enlaces de artista
-            artist_links = {}
-            if artist_db_info:
-                artist_links = self.extract_links_from_data(artist_db_info, 'artist')
-                
-                # Añadir enlaces de la tabla artists_networks si existe el ID del artista
-                if artist_db_info.get('id'):
-                    network_links = self.get_artist_networks(artist_db_info['id'])
-                    artist_links.update(network_links)
-            elif first_track_data and len(first_track_data) > 16:
-                artist_links = self.extract_links_from_data(first_track_data, 'artist')
-
-            # Actualizar botones de enlaces
-            self.update_artist_link_buttons(artist_links)
-            
-            # Ocultar botones de álbum ya que estamos mostrando solo artista
-            self.update_album_link_buttons({})
-
-            # Mostrar Wikipedia del artista si existe
-            if hasattr(self, 'wikipedia_artist_label') and self.wikipedia_artist_label:
-                if wikipedia_content:
-                    self.wikipedia_artist_label.setText(f"<h3>Wikipedia - Artista:</h3><div style='white-space: pre-wrap;'>{wikipedia_content}</div>")
-                    self.wikipedia_artist_label.setVisible(True)
-                else:
-                    self.wikipedia_artist_label.setVisible(False)
-                    
-            # Ocultar panel de Wikipedia de álbum ya que estamos mostrando un artista
-            if hasattr(self, 'wikipedia_album_label') and self.wikipedia_album_label:
-                self.wikipedia_album_label.setVisible(False)
-                
-        except Exception as e:
-            print(f"Error al mostrar información del artista: {e}")
-            traceback.print_exc()
-
-            # En caso de error, mostrar información básica
-            if self.lastfm_label:
-                self.lastfm_label.setText(f"<h3>Artista: {artist_name}</h3><p>Error al cargar información detallada: {str(e)}</p>")
-                self.lastfm_label.setVisible(True)
-            if self.metadata_label:
-                self.metadata_label.setText(f"<b>Artista:</b> {artist_name}<br><b>Error:</b> No se pudo cargar información adicional.")
-                self.metadata_label.setVisible(True)
-                
-            # Ocultar grupos de botones en caso de error
-            if hasattr(self, 'artist_links_group'):
-                self.artist_links_group.hide()
-            if hasattr(self, 'album_links_group'):
-                self.album_links_group.hide()
-
-    def setup_visibility_controls(self):
-        """Configura los controles de visibilidad para los botones del search_frame."""
-        # Find all checkboxes in the UI that control visibility
-        visibility_checkboxes = {}
+        # Show artist details
+        self.artist_view.show_entity(item_data)
         
-        # Map checkboxes to their target widgets based on naming convention
-        # e.g., "show_play_button_check" controls "play_button"
-        for checkbox in self.findChildren(QCheckBox, QRegExp("show_.*_check")):
-            # Extract the target widget name from the checkbox name
-            # "show_play_button_check" -> "play_button"
-            target_name = checkbox.objectName().replace("show_", "").replace("_check", "")
+        # Update artist image
+        artist_name = item_data.get('name')
+        if artist_name and self.media_finder:
+            artist_image_path = self.media_finder.find_artist_image(artist_name)
+            self.media_finder.load_image_to_label(
+                artist_image_path, 
+                self.artist_image_label, 
+                "No imagen de artista"
+            )
             
-            # Find the target widget
-            target_widget = self.findChild(QWidget, target_name)
-            if target_widget:
-                visibility_checkboxes[checkbox] = target_widget
+        # Clear album image
+        if self.cover_label:
+            self.cover_label.setText("No imagen")
+            
+        # Set feeds button visibility
+        if self.feeds_button:
+            artist_id = self.db.get_entity_id('artist', artist_name)
+            feeds = self.db.get_feeds_data('artist', artist_id) if artist_id else []
+            self.feeds_button.setVisible(bool(feeds))
         
-        # Connect each checkbox's signal to update visibility of its target widget
-        for checkbox, widget in visibility_checkboxes.items():
-            # Save initial state of visibility for the widget
-            widget.setProperty("initialVisibility", widget.isVisible())
-            
-            # Connect state change signal to update visibility
-            checkbox.stateChanged.connect(
-                lambda state, w=widget: w.setVisible(state == Qt.CheckState.Checked.value))
-            
-            # Initialize checkbox state based on widget's current visibility
-            checkbox.setChecked(widget.isVisible())
-
-
-  
-    
-    def get_artist_networks(self, artist_id):
-        """Gets all social media and external links for an artist."""
-        if not artist_id or not self.db_path:
-            return {}
+        # Forzar visibilidad de los contenedores
+        print("[DEBUG] Forzando visibilidad de los contenedores de enlaces en show_artist_details")
         
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
+        if hasattr(self, 'artist_links_group') and self.artist_links_group:
+            # Asegurar que tanto el contenedor como su padre estén visibles
+            self.artist_links_group.setVisible(True)
+            self.artist_links_group.show()
             
-            # Get column names first (excluding id, artist_id, enlaces, last_updated)
-            cursor.execute("PRAGMA table_info(artists_networks)")
-            all_columns = [row[1] for row in cursor.fetchall()]
-            link_columns = [col for col in all_columns if col not in ('id', 'artist_id', 'enlaces', 'last_updated')]
+            parent = self.artist_links_group.parent()
+            if parent:
+                parent.setVisible(True)
+                parent.show()
+        
+        # Llamar a un método que nos ayude a verificar el estado
+        self.debug_link_groups_status()
             
-            # Build dynamic query to get links
-            columns_str = ', '.join(link_columns)
-            query = f"SELECT {columns_str} FROM artists_networks WHERE artist_id = ?"
-            
-            cursor.execute(query, (artist_id,))
-            result = cursor.fetchone()
-            
-            conn.close()
-            
-            if not result:
-                return {}
-                
-            # Create a dictionary of links
-            links = {}
-            for i, col in enumerate(link_columns):
-                if result[i]:  # If the link exists
-                    links[col] = result[i]
-                    
-            return links
-            
-        except Exception as e:
-            print(f"Error getting artist networks: {e}")
-            traceback.print_exc()
-            return {}
-
-
-  
-
-    def extract_links_from_data(self, entity_data, entity_type):
+    def show_track_details(self, track_item):
         """
-        Extrae todos los enlaces disponibles de los datos de una entidad.
+        Show track details.
         
         Args:
-            entity_data: Datos del artista, álbum o canción
-            entity_type: Tipo de entidad ('artist', 'album', 'song')
-            
-        Returns:
-            dict: Diccionario con los enlaces {nombre_servicio: url}
+            track_item: Tree item for a track
         """
-        links = {}
+        # Hide all views first
+        self.artist_view.hide()
+        self.album_view.hide()
+        self.track_view.show()
         
-        if not entity_data:
-            return links
+        # Get track data
+        track_data = track_item.data(0, Qt.ItemDataRole.UserRole)
+        if not track_data:
+            return
+            
+        # Show track details
+        self.track_view.show_entity(track_data)
         
-        # Para entidades de la base de datos (diccionarios)
-        if isinstance(entity_data, dict):
-            # Buscar en todas las claves que terminen en '_url'
-            for key, value in entity_data.items():
-                if key.endswith('_url') and value and isinstance(value, str) and value.strip():
-                    service_name = key.replace('_url', '')
-                    links[service_name] = value
+        # Update cover image
+        if len(track_data) > 1 and self.media_finder:
+            file_path = track_data[1]
+            cover_path = self.media_finder.find_cover_image(file_path)
+            self.media_finder.load_image_to_label(
+                cover_path, 
+                self.cover_label, 
+                "No imagen"
+            )
+            
+        # Update artist image
+        if len(track_data) > 3 and self.media_finder:
+            artist_name = track_data[3]
+            artist_image_path = self.media_finder.find_artist_image(artist_name)
+            self.media_finder.load_image_to_label(
+                artist_image_path, 
+                self.artist_image_label, 
+                "No imagen de artista"
+            )
+            
+        # Set feeds button visibility
+        if self.feeds_button and len(track_data) > 0:
+            track_id = track_data[0]
+            feeds = self.db.get_feeds_data('song', track_id) if track_id else []
+            self.feeds_button.setVisible(bool(feeds))
+            
+    def clear_details(self):
+        """Clear all details panels."""
+        # Hide all entity views
+        self.artist_view.hide()
+        self.album_view.hide()
+        self.track_view.hide()
         
-        # Para entidades de la consulta SQLite (tuplas)
-        elif isinstance(entity_data, (list, tuple)):
-            # Mapeos específicos para índices conocidos en las tuplas
-            if entity_type == 'artist' and len(entity_data) > 20:
-                url_indices = {
-                    'spotify': 16,
-                    'youtube': 17,
-                    'musicbrainz': 18,
-                    'discogs': 19,
-                    'rateyourmusic': 20,
-                    'wikipedia': 26
+        # Clear view content
+        self.artist_view.clear()
+        self.album_view.clear()
+        self.track_view.clear()
+        
+        # Clear images
+        if self.cover_label:
+            self.cover_label.setText("No imagen")
+        if self.artist_image_label:
+            self.artist_image_label.setText("No imagen de artista")
+            
+        # Hide feeds button
+        if self.feeds_button:
+            self.feeds_button.setVisible(False)
+            
+    def toggle_advanced_settings(self, state):
+        """
+        Show or hide advanced settings.
+        
+        Args:
+            state: Checkbox state
+        """
+        is_checked = (state == Qt.CheckState.Checked.value)
+        
+        # Show/hide advanced settings container
+        if self.advanced_settings_container:
+            self.advanced_settings_container.setVisible(is_checked)
+            
+        # Show/hide advanced buttons
+        for button in self.advanced_buttons:
+            if button:
+                button.setVisible(is_checked)
+                
+    def play_selected_item(self):
+        """Play the currently selected item."""
+        selected_items = self.results_tree.selectedItems()
+        if not selected_items:
+            return
+            
+        # Get selected item data
+        item = selected_items[0]
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # Determine what to play
+        if isinstance(item_data, dict):
+            # It's an artist or album - play all child items
+            self._play_tree_item_with_children(item)
+        else:
+            # It's a track - play directly
+            self._play_track(item_data)
+            
+    def _play_tree_item_with_children(self, item):
+        """
+        Play an item with its children.
+        
+        Args:
+            item: Tree item to play
+        """
+        # Collect file paths from all children
+        file_paths = []
+        
+        # If no children, do nothing
+        if item.childCount() == 0:
+            return
+            
+        # Add all child file paths
+        for i in range(item.childCount()):
+            child = item.child(i)
+            child_data = child.data(0, Qt.ItemDataRole.UserRole)
+            
+            # If it's a track and has a file path
+            if not isinstance(child_data, dict) and len(child_data) > 1:
+                file_path = child_data[1]
+                if file_path and os.path.exists(file_path):
+                    file_paths.append(file_path)
+            
+            # If it's an album, add all its track file paths
+            if isinstance(child_data, dict) and child_data.get('type') == 'album':
+                for j in range(child.childCount()):
+                    track_child = child.child(j)
+                    track_data = track_child.data(0, Qt.ItemDataRole.UserRole)
+                    if not isinstance(track_data, dict) and len(track_data) > 1:
+                        file_path = track_data[1]
+                        if file_path and os.path.exists(file_path):
+                            file_paths.append(file_path)
+        
+        # Play all collected file paths
+        if file_paths:
+            self._play_files(file_paths)
+            
+    def _play_track(self, track_data):
+        """
+        Play a track.
+        
+        Args:
+            track_data: Track data from tree item
+        """
+        if not track_data or len(track_data) < 2:
+            return
+            
+        file_path = track_data[1]
+        if not file_path or not os.path.exists(file_path):
+            print(f"File not found: {file_path}")
+            return
+            
+        self._play_files([file_path])
+        
+    def _play_files(self, file_paths):
+        """
+        Play a list of files.
+        
+        Args:
+            file_paths: List of file paths to play
+        """
+        if not file_paths:
+            return
+            
+        # Implement your playback logic here
+        # For example, you could emit a signal with the list of files
+        # to be handled by a player module
+        print(f"Playing {len(file_paths)} files")
+        
+        # Use EntityView signal if tracks should be played through an external module
+        if hasattr(self, 'track_view') and isinstance(self.track_view, EntityView):
+            self.track_view.requestPlayback.emit(file_paths)
+            
+    def open_selected_folder(self):
+        """Open folder of the currently selected item."""
+        selected_items = self.results_tree.selectedItems()
+        if not selected_items:
+            return
+            
+        # Get selected item data
+        item = selected_items[0]
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # Get file path
+        file_path = None
+        
+        if isinstance(item_data, dict):
+            # Find the first child track and use its path
+            if item.childCount() > 0:
+                for i in range(item.childCount()):
+                    child = item.child(i)
+                    child_data = child.data(0, Qt.ItemDataRole.UserRole)
+                    if isinstance(child_data, dict) and child_data.get('type') == 'album':
+                        # It's an album, check its tracks
+                        if child.childCount() > 0:
+                            track_data = child.child(0).data(0, Qt.ItemDataRole.UserRole)
+                            if not isinstance(track_data, dict) and len(track_data) > 1:
+                                file_path = track_data[1]
+                                break
+                    elif not isinstance(child_data, dict) and len(child_data) > 1:
+                        # It's a track
+                        file_path = child_data[1]
+                        break
+        else:
+            # It's a track
+            if len(item_data) > 1:
+                file_path = item_data[1]
+        
+        # Open folder if we have a file path
+        if file_path and os.path.exists(file_path):
+            folder_path = os.path.dirname(file_path)
+            self._open_folder(folder_path)
+            
+    def _open_folder(self, folder_path):
+        """
+        Open a folder in the system file explorer.
+        
+        Args:
+            folder_path: Path to the folder
+        """
+        if not folder_path or not os.path.exists(folder_path):
+            print(f"Folder not found: {folder_path}")
+            return
+            
+        try:
+            if sys.platform == 'win32':
+                # Windows
+                os.startfile(folder_path)
+            elif sys.platform == 'darwin':
+                # macOS
+                subprocess.run(['open', folder_path])
+            else:
+                # Linux
+                subprocess.run(['xdg-open', folder_path])
+                
+            print(f"Opened folder: {folder_path}")
+        except Exception as e:
+            print(f"Error opening folder: {e}")
+            
+    def handle_spotify_button(self):
+        """Handle Spotify button click - search for current track in Spotify."""
+        selected_items = self.results_tree.selectedItems()
+        if not selected_items:
+            return
+            
+        # Get selected item data
+        item = selected_items[0]
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # If it's a track
+        if not isinstance(item_data, dict) and len(item_data) > 0:
+            track_id = item_data[0]
+            spotify_url = self.db.get_spotify_url(track_id)
+            
+            if spotify_url:
+                # Open existing URL
+                from PyQt6.QtGui import QDesktopServices
+                from PyQt6.QtCore import QUrl
+                QDesktopServices.openUrl(QUrl(spotify_url))
+            else:
+                # No URL, search by metadata
+                self._search_spotify_for_track(item_data)
+        else:
+            # Try to get first child track
+            if item.childCount() > 0:
+                child = item.child(0)
+                child_data = child.data(0, Qt.ItemDataRole.UserRole)
+                if not isinstance(child_data, dict):
+                    self._search_spotify_for_track(child_data)
+                    
+    def _search_spotify_for_track(self, track_data):
+        """
+        Search for a track in Spotify.
+        
+        Args:
+            track_data: Track data from tree item
+        """
+        if not track_data or len(track_data) < 3:
+            return
+            
+        # Get track metadata
+        title = track_data[2] if len(track_data) > 2 else ""
+        artist = track_data[3] if len(track_data) > 3 else ""
+        
+        if not title or not artist:
+            return
+            
+        # Create search query
+        search_query = f"{title} {artist}"
+        search_query = search_query.replace(" ", "%20")
+        
+        # Create Spotify search URL
+        spotify_url = f"https://open.spotify.com/search/{search_query}"
+        
+        # Open URL
+        from PyQt6.QtGui import QDesktopServices
+        from PyQt6.QtCore import QUrl
+        QDesktopServices.openUrl(QUrl(spotify_url))
+        
+    def show_feeds(self):
+        """Show feeds for the currently selected item."""
+        # Get current item
+        current_item = self.results_tree.currentItem()
+        if not current_item:
+            return
+            
+        # Get entity type and ID
+        entity_type = None
+        entity_id = None
+        
+        item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if isinstance(item_data, dict):
+            # It's an artist or album
+            if item_data.get('type') == 'artist':
+                entity_type = 'artist'
+                entity_id = self.db.get_entity_id('artist', item_data.get('name'))
+            elif item_data.get('type') == 'album':
+                entity_type = 'album'
+                entity_id = self.db.get_entity_id('album', item_data.get('name'), item_data.get('artist'))
+        else:
+            # It's a track
+            if len(item_data) > 0:
+                entity_type = 'song'
+                entity_id = item_data[0]
+                
+        if not entity_type or not entity_id:
+            return
+            
+        # Show feeds in feeds view
+        self.feeds_view.show_feeds(entity_type, entity_id)
+        
+        # Switch to feeds panel
+        self.details_stacked_widget.setCurrentIndex(1)
+        
+    def search(self, query=None):
+        """
+        Perform a search based on the query.
+        
+        Args:
+            query (str, optional): Search query. If None, use the search box text.
+        """
+        if query is None:
+            query = self.search_box.text()
+            
+        if not query:
+            self.results_tree.clear()
+            return
+            
+        # Parse query
+        parsed_query = self.search_parser.parse_query(query)
+        
+        # Build SQL conditions
+        conditions, params = self.search_parser.build_sql_conditions(parsed_query)
+        
+        # Perform search
+        results = self.db.search_music(conditions, params)
+        
+        # Display results
+        self._display_search_results(results)
+        
+    def _display_search_results(self, results):
+        """
+        Display search results in the tree widget.
+        
+        Args:
+            results: List of result rows from database
+        """
+        # Clear previous results
+        self.results_tree.clear()
+        
+        if not results:
+            return
+            
+        # Dictionary to keep track of artists and albums
+        artists = {}
+        
+        # Organize results by artist and album
+        for result in results:
+            # Extract data
+            track_id = result[0]
+            file_path = result[1]
+            title = result[2]
+            artist = result[3]
+            album_artist = result[4]
+            album = result[5]
+            date = result[6]
+            genre = result[7]
+            
+            # Skip invalid entries
+            if not title or not artist or not album:
+                continue
+                
+            # Create artist item if not exists
+            if artist not in artists:
+                artists[artist] = {
+                    'item': self._create_artist_item(artist),
+                    'albums': {}
                 }
                 
-                for service, idx in url_indices.items():
-                    if idx < len(entity_data) and entity_data[idx]:
-                        links[service] = entity_data[idx]
+            artist_data = artists[artist]
+            
+            # Create album item if not exists
+            if album not in artist_data['albums']:
+                artist_data['albums'][album] = {
+                    'item': self._create_album_item(album, artist, date, genre),
+                    'tracks': []
+                }
+                artist_data['item'].addChild(artist_data['albums'][album]['item'])
+                
+            # Create track item
+            track_item = self._create_track_item(result)
+            
+            # Add track to album
+            artist_data['albums'][album]['item'].addChild(track_item)
+            
+            # Store track in albums data
+            artist_data['albums'][album]['tracks'].append(track_item)
+            
+        # Add artist items to tree
+        for artist_data in artists.values():
+            self.results_tree.addTopLevelItem(artist_data['item'])
+            
+        # Expand all artists
+        for i in range(self.results_tree.topLevelItemCount()):
+            self.results_tree.topLevelItem(i).setExpanded(True)
+            
+    def _create_artist_item(self, artist_name):
+        """
+        Create an artist tree item.
+        
+        Args:
+            artist_name: Name of the artist
+            
+        Returns:
+            QTreeWidgetItem: The created item
+        """
+        item = QTreeWidgetItem([artist_name, "", ""])
+        item.setData(0, Qt.ItemDataRole.UserRole, {
+            'type': 'artist',
+            'name': artist_name
+        })
+        
+        return item
+        
+    def _create_album_item(self, album_name, artist_name, date=None, genre=None):
+        """
+        Create an album tree item.
+        
+        Args:
+            album_name: Name of the album
+            artist_name: Name of the artist
+            date: Release date
+            genre: Genre
+            
+        Returns:
+            QTreeWidgetItem: The created item
+        """
+        item = QTreeWidgetItem([album_name, date or "", genre or ""])
+        item.setData(0, Qt.ItemDataRole.UserRole, {
+            'type': 'album',
+            'name': album_name,
+            'artist': artist_name,
+            'date': date,
+            'genre': genre
+        })
+        
+        return item
+        
+    def _create_track_item(self, track_data):
+        """
+        Create a track tree item.
+        
+        Args:
+            track_data: Track data from database
+            
+        Returns:
+            QTreeWidgetItem: The created item
+        """
+        track_id = track_data[0]
+        title = track_data[2]
+        date = track_data[6]
+        genre = track_data[7]
+        
+        # Get track number if available
+        track_number = ""
+        if len(track_data) > 14:
+            try:
+                track_number = str(int(track_data[14]))
+                title = f"{track_number}. {title}"
+            except (ValueError, TypeError):
+                pass
+                
+        item = QTreeWidgetItem([title, date or "", genre or ""])
+        item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+        
+        return item
+        
+    def setup_hotkeys(self, hotkeys_config=None):
+        """
+        Set up keyboard shortcuts.
+        
+        Args:
+            hotkeys_config: Dictionary with hotkey configurations
+        """
+        if not hotkeys_config:
+            # Default hotkeys
+            hotkeys_config = {
+                'play': 'Space',
+                'folder': 'Ctrl+O',
+                'spotify': 'Ctrl+S'
+            }
+            
+        # Play hotkey
+        if 'play' in hotkeys_config:
+            play_shortcut = QShortcut(QKeySequence(hotkeys_config['play']), self)
+            play_shortcut.activated.connect(self.play_selected_item)
+            
+        # Folder hotkey
+        if 'folder' in hotkeys_config:
+            folder_shortcut = QShortcut(QKeySequence(hotkeys_config['folder']), self)
+            folder_shortcut.activated.connect(self.open_selected_folder)
+            
+        # Spotify hotkey
+        if 'spotify' in hotkeys_config:
+            spotify_shortcut = QShortcut(QKeySequence(hotkeys_config['spotify']), self)
+            spotify_shortcut.activated.connect(self.handle_spotify_button)
+            
+    def buscar_musica_en_reproduccion(self):
+        """Search for currently playing music in external players."""
+        # This implementation depends on your system and what players you want to support
+        # For now, we'll just show a simple message
+        print("Buscando música en reproducción...")
+        
+        # Example: For Linux with MPRIS (DBus)
+        try:
+            if sys.platform == 'linux':
+                # Try to get currently playing track from MPRIS
+                import dbus
+                bus = dbus.SessionBus()
+                
+                # List of common MPRIS player service names
+                players = [
+                    'org.mpris.MediaPlayer2.spotify',
+                    'org.mpris.MediaPlayer2.rhythmbox',
+                    'org.mpris.MediaPlayer2.vlc',
+                    'org.mpris.MediaPlayer2.clementine'
+                ]
+                
+                # Try each player
+                for player_service in players:
+                    try:
+                        player_obj = bus.get_object(player_service, '/org/mpris/MediaPlayer2')
+                        player_props = dbus.Interface(player_obj, 'org.freedesktop.DBus.Properties')
+                        metadata = player_props.Get('org.mpris.MediaPlayer2.Player', 'Metadata')
                         
-            elif entity_type == 'album' and len(entity_data) > 25:
-                url_indices = {
-                    'spotify': 21,
-                    'youtube': 22,
-                    'musicbrainz': 23,
-                    'discogs': 24,
-                    'rateyourmusic': 25,
-                    'wikipedia': 28
-                }
-                
-                for service, idx in url_indices.items():
-                    if idx < len(entity_data) and entity_data[idx]:
-                        links[service] = entity_data[idx]
-        
-        return links
-
-
-
-    def create_link_buttons_widget(self, urls_dict, parent=None):
-        """
-        Crea un widget con botones QPushButton para enlaces.
-        
-        Args:
-            urls_dict: Diccionario con los enlaces {nombre_servicio: url}
-            parent: Widget padre opcional
-            
-        Returns:
-            QWidget: Widget con los botones de enlaces
-        """
-        from PyQt6.QtWidgets import QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QLabel
-        from PyQt6.QtGui import QIcon, QDesktopServices
-        from PyQt6.QtCore import QSize, Qt, QUrl
-        
-        # Crear un widget contenedor
-        container = QWidget(parent)
-        main_layout = QVBoxLayout(container)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        
-        buttons_layout = QHBoxLayout()
-        buttons_layout.setSpacing(5)
-        buttons_layout.setContentsMargins(0, 0, 0, 0)
-        
-        # Añadir botones para cada enlace
-        for service, url in urls_dict.items():
-            if url and isinstance(url, str) and url.strip():
-                # Obtener el nombre del servicio
-                service_name = service.split('_')[-1] if '_' in service else service
-                icon_path = f":/services/{service_name.lower()}"
-                
-                # Crear botón con ícono
-                button = QPushButton()
-                button.setIcon(QIcon(icon_path))
-                button.setIconSize(QSize(24, 24))
-                button.setFixedSize(40, 40)
-                button.setToolTip(service_name.title())
-                
-                # Conectar la señal del botón para abrir el enlace
-                button.clicked.connect(lambda checked=False, u=url: QDesktopServices.openUrl(QUrl(u)))
-                
-                # Añadir al layout
-                buttons_layout.addWidget(button)
-        
-        # Añadir espacio flexible al final para alinear a la izquierda
-        buttons_layout.addStretch()
-        
-        # Añadir el layout de botones al layout principal
-        main_layout.addLayout(buttons_layout)
-        
-        return container
-
-    def create_entity_links_widget(self, entity_data, entity_type, entity_name, parent=None):
-        """
-        Crea un widget con título y botones para los enlaces de una entidad.
-        
-        Args:
-            entity_data: Datos del artista, álbum o canción
-            entity_type: Tipo de entidad ('artist', 'album', 'song')
-            entity_name: Nombre de la entidad para el título
-            parent: Widget padre opcional
-            
-        Returns:
-            QWidget: Widget con título y botones
-        """
-        from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel
-        from PyQt6.QtCore import Qt
-        
-        # Extraer enlaces
-        links = {}
-        if entity_type == 'artist':
-            if isinstance(entity_data, dict):
-                # Es información de la base de datos
-                links = self.extract_links_from_data(entity_data, 'artist')
-                
-                # Añadir enlaces de artists_networks si existe id
-                if entity_data.get('id'):
-                    network_links = self.get_artist_networks(entity_data['id'])
-                    links.update(network_links)
-            else:
-                # Es información de la consulta
-                links = self.extract_links_from_data(entity_data, 'artist')
-        elif entity_type == 'album':
-            links = self.extract_links_from_data(entity_data, 'album')
-        
-        if not links:
-            return None
-        
-        # Crear widget contenedor
-        container = QWidget(parent)
-        layout = QVBoxLayout(container)
-        layout.setContentsMargins(0, 5, 0, 5)
-        
-        # Añadir título
-        title_label = QLabel(f"<b>{entity_type.title()} {entity_name}:</b>")
-        layout.addWidget(title_label)
-        
-        # Añadir botones
-        buttons_widget = self.create_link_buttons_widget(links, container)
-        layout.addWidget(buttons_widget)
-        
-        return container
-
-
-
-
-    def create_links_frame(self):
-        """
-        Crea un frame para mostrar los enlaces con botones nativos.
-        
-        Returns:
-            QFrame: Frame para mostrar enlaces
-        """
-        from PyQt6.QtWidgets import QFrame, QVBoxLayout, QLabel
-        
-        # Crear el frame
-        links_frame = QFrame()
-        links_frame.setFrameShape(QFrame.Shape.StyledPanel)
-        links_frame.setFrameShadow(QFrame.Shadow.Raised)
-        
-        # Crear layout
-        layout = QVBoxLayout(links_frame)
-        
-        # Añadir título
-        title_label = QLabel("<h3>Enlaces:</h3>")
-        layout.addWidget(title_label)
-        
-        # Widget contenedor para los enlaces dinámicos
-        self.links_container = QWidget()
-        self.links_container_layout = QVBoxLayout(self.links_container)
-        self.links_container_layout.setContentsMargins(0, 0, 0, 0)
-        layout.addWidget(self.links_container)
-        
-        # Añadir espacio al final
-        layout.addStretch()
-        
-        return links_frame
-
-    def setup_link_buttons_container(self):
-        """Initializes the link button containers with better debugging."""
-        try:
-            # Store debug info
-            debug_info = {}
-            
-            # Find the group boxes directly from the main UI
-            if hasattr(self, 'main_ui'):
-                # Try to find by direct reference first
-                self.artist_links_group = self.main_ui.findChild(QGroupBox, "artist_links_group")
-                debug_info['artist_direct'] = bool(self.artist_links_group)
-                
-                self.album_links_group = self.main_ui.findChild(QGroupBox, "album_links_group")
-                debug_info['album_direct'] = bool(self.album_links_group)
-                
-                self.lyrics_group = self.main_ui.findChild(QGroupBox, "lyrics_group")
-                debug_info['lyrics_direct'] = bool(self.lyrics_group)
-                
-                # Try looking in info_scroll's widget if they weren't found directly
-                if hasattr(self, 'info_scroll') and self.info_scroll and self.info_scroll.widget():
-                    info_widget = self.info_scroll.widget()
-                    
-                    if not self.artist_links_group:
-                        self.artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
-                        debug_info['artist_in_info'] = bool(self.artist_links_group)
-                    
-                    if not self.album_links_group:
-                        self.album_links_group = info_widget.findChild(QGroupBox, "album_links_group")
-                        debug_info['album_in_info'] = bool(self.album_links_group)
-                    
-                    if not self.lyrics_group:
-                        self.lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
-                        debug_info['lyrics_in_info'] = bool(self.lyrics_group)
-                
-                # Initialize info_groupboxes if it doesn't exist
-                if not hasattr(self, 'info_groupboxes'):
-                    self.info_groupboxes = {}
-                
-                # Store references in info_groupboxes
-                if self.artist_links_group:
-                    self.info_groupboxes['artist_links_group'] = self.artist_links_group
-                    
-                if self.album_links_group:
-                    self.info_groupboxes['album_links_group'] = self.album_links_group
-                    
-                if self.lyrics_group:
-                    self.info_groupboxes['lyrics_group'] = self.lyrics_group
-            
-            # Log debug info
-            print(f"Link containers debug: {debug_info}")
-            
-            # Get existing layouts or create new ones
-            self.artist_links_layout = None
-            if self.artist_links_group:
-                if self.artist_links_group.layout():
-                    self.artist_links_layout = self.artist_links_group.layout()
-                    debug_info['artist_layout_existing'] = True
-                else:
-                    self.artist_links_layout = QHBoxLayout(self.artist_links_group)
-                    self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
-                    self.artist_links_layout.setSpacing(5)
-                    debug_info['artist_layout_created'] = True
-                    
-            self.album_links_layout = None
-            if self.album_links_group:
-                if self.album_links_group.layout():
-                    self.album_links_layout = self.album_links_group.layout()
-                    debug_info['album_layout_existing'] = True
-                else:
-                    self.album_links_layout = QHBoxLayout(self.album_links_group)
-                    self.album_links_layout.setContentsMargins(5, 25, 5, 5)
-                    self.album_links_layout.setSpacing(5)
-                    debug_info['album_layout_created'] = True
-            
-            # Always initialize button collections
-            self.artist_buttons = {}
-            self.album_buttons = {}
-                
-            # Hide the groups initially
-            if self.artist_links_group:
-                self.artist_links_group.hide()
-                
-            if self.album_links_group:
-                self.album_links_group.hide()
-                
-            if self.lyrics_group:
-                self.lyrics_group.hide()
-                
-            # Log final status
-            debug_info['artist_final'] = bool(self.artist_links_group and self.artist_links_layout)
-            debug_info['album_final'] = bool(self.album_links_group and self.album_links_layout)
-            print(f"Link containers final status: {debug_info}")
-            
-            # Determine success status
-            success = bool(
-                (self.artist_links_group and self.artist_links_layout) or
-                (self.album_links_group and self.album_links_layout)
-            )
-            
-            return success
-            
+                        # Extract track info
+                        artist = str(metadata.get('xesam:artist', [''])[0])
+                        title = str(metadata.get('xesam:title', ''))
+                        album = str(metadata.get('xesam:album', ''))
+                        
+                        if artist and title:
+                            # Set search query
+                            search_query = f"a:{artist} t:{title}"
+                            self.search_box.setText(search_query)
+                            self.search(search_query)
+                            return
+                    except Exception as e:
+                        # This player failed, try next one
+                        continue
+                        
+                print("No se encontró música en reproducción.")
+        except ImportError:
+            print("Módulo dbus no encontrado. No se puede buscar música en reproducción.")
         except Exception as e:
-            print(f"Error in setup_link_buttons_container: {e}")
-            traceback.print_exc()
-                
-            # Ensure we have null references instead of uninitialized ones
-            self.artist_links_group = None
-            self.album_links_group = None
-            self.lyrics_group = None
-            self.artist_links_layout = None
-            self.album_links_layout = None
-            self.artist_buttons = {}
-            self.album_buttons = {}
-                
-            return False
-
-
-    def update_dynamic_link_buttons(self, container, links_dict, button_store, tipo=None):
+            print(f"Error al buscar música en reproducción: {e}")
+        
+    def apply_theme(self, theme=None):
         """
-        Creates or updates dynamic link buttons in a container with improved error handling.
+        Apply a theme to the module.
         
         Args:
-            container (QGroupBox): The container for the buttons
-            links_dict (dict): Dictionary of links {service_name: url}
-            button_store (dict): Dictionary to store button references
-            tipo (str): Type of buttons ('artist' or 'album')
-        
-        Returns:
-            bool: True if buttons were created/shown, False otherwise
+            theme (str, optional): Name of the theme
         """
-        # Validate container
-        if not container:
-            print(f"Missing container for {tipo} links")
-            return False
+        # This would be implemented based on your theming system
+        self.selected_theme = theme
         
-        # Get existing layout
-        layout = container.layout()
-        if not layout:
-            print(f"Container exists but has no layout for {tipo} links")
-            # Create layout as a last resort
-            layout = QHBoxLayout(container)
-            layout.setContentsMargins(5, 25, 5, 5)
-            layout.setSpacing(5)
-            print(f"Created emergency layout for {tipo} links")
+        # Apply theme to tree widget
+        if hasattr(self, 'results_tree'):
+            # Add theme-specific styling
+            pass
+
+
+    def debug_current_item(self):
+        """
+        Muestra información detallada del elemento seleccionado para diagnóstico.
+        Esta función puede agregarse a MusicBrowser para facilitar la depuración.
+        """
+        import traceback
         
-        # Debug info
-        print(f"Working with {tipo} links layout: {layout}")
-                
+        print("\n===== DIAGNÓSTICO DEL ELEMENTO ACTUAL =====")
+        
         try:
-            # Clear existing buttons first
-            while layout.count():
-                item = layout.takeAt(0)
-                if item.widget():
-                    widget = item.widget()
-                    layout.removeWidget(widget)
-                    widget.setParent(None)
-                    widget.deleteLater()
-            
-            # Clear button store
-            button_store.clear()
-            
-            if not links_dict:
-                container.hide()
-                return False
-            
-            # Debug output    
-            print(f"Creating buttons for {len(links_dict)} {tipo} links")
-                
-            # Create buttons for each link
-            for service_name, url in links_dict.items():
-                if not url or not isinstance(url, str) or not url.strip():
-                    continue
-                    
-                # Normalize service name and create object name
-                normalized_name = service_name.lower().replace('_', '')
-                object_name = f"{normalized_name}_link_button"
-                if tipo == 'album':
-                    object_name = f"{normalized_name}_link_album_button"
-                
-                # Create button
-                button = QPushButton(container)  # Set parent explicitly
-                button.setFixedSize(34, 34)
-                button.setObjectName(object_name)
-                
-                # Get icon from resources
-                icon_path = f":/services/{normalized_name}"
-                icon = QIcon(icon_path)
-                
-                if icon.isNull():
-                    # Try alternative icon names
-                    alternatives = [
-                        f":/services/{service_name.lower()}",
-                        f":/services/{service_name.lower().replace('-', '')}",
-                        f":/services/{service_name.lower().split('_')[0]}",
-                        f":/services/{service_name.lower().split('-')[0]}"
-                    ]
-                    
-                    for alt_path in alternatives:
-                        icon = QIcon(alt_path)
-                        if not icon.isNull():
-                            break
-                
-                # If still no icon, use text fallback
-                if icon.isNull():
-                    # Use text as fallback if no icon is found
-                    button.setText(service_name[:2].upper())
-                    print(f"No icon found for {service_name}, using text fallback")
-                else:
-                    button.setIcon(icon)
-                    button.setIconSize(QSize(28, 28))
-                
-                # Set tooltip with service name
-                button.setToolTip(f"{service_name.title()}: {url}")
-                
-                # Set URL as property
-                button.setProperty("url", url)
-                
-                # Connect click event
-                button.clicked.connect(lambda checked=False, u=url: self.open_url(u))
-                
-                # Add to layout
-                layout.addWidget(button)
-                
-                # Store reference
-                button_store[service_name] = button
-            
-            # Add stretch to push buttons to the left
-            layout.addStretch()
-                
-            # Show the container if we added buttons
-            has_buttons = len(button_store) > 0
-            container.setVisible(has_buttons)
-            
-            print(f"Successfully created {len(button_store)} buttons for {tipo}")
-            return has_buttons
-            
-        except Exception as e:
-            print(f"Error creating link buttons for {tipo}: {e}")
-            traceback.print_exc()
-            
-            container.hide()
-            return False
-
-    def update_artist_link_buttons(self, artist_links):
-        """
-        Updates artist link buttons based on available links.
-        
-        Args:
-            artist_links (dict): Dictionary of artist links {service_name: url}
-        """
-        if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
-            print("Artist links group not found")
-            return False
-            
-        return self.update_dynamic_link_buttons(
-            self.artist_links_group,
-            artist_links,
-            self.artist_buttons,
-            'artist'
-        )
-
-    def update_album_link_buttons(self, album_links):
-        """
-        Updates album link buttons based on available links.
-        
-        Args:
-            album_links (dict): Dictionary of album links {service_name: url}
-        """
-        if not hasattr(self, 'album_links_group') or not self.album_links_group:
-            print("Album links group not found")
-            return False
-            
-        return self.update_dynamic_link_buttons(
-            self.album_links_group,
-            album_links,
-            self.album_buttons,
-            'album'
-        )
-    
-    
-    def open_url(self, url):
-        """Opens a URL safely using QDesktopServices"""
-        try:
-            from PyQt6.QtCore import QUrl
-            from PyQt6.QtGui import QDesktopServices
-            
-            if url and isinstance(url, str) and url.strip():
-                # Ensure URL has protocol
-                if not url.startswith(('http://', 'https://')):
-                    url = 'https://' + url
-                    
-                QDesktopServices.openUrl(QUrl(url))
-                print(f"Abriendo URL: {url}")
-            else:
-                print(f"URL inválida: {url}")
-        except Exception as e:
-            print(f"Error abriendo URL: {e}")
-            traceback.print_exc()
-
-
-    def init_link_containers(self):
-        """
-        Properly initializes link containers after UI is loaded.
-        Should be called from init_ui after the UI is fully loaded.
-        """
-        # Check if info_scroll and its widget exist
-        if not hasattr(self, 'info_scroll') or not self.info_scroll:
-            print("info_scroll not available")
-            return False
-            
-        info_widget = self.info_scroll.widget()
-        if not info_widget:
-            print("info_scroll has no widget")
-            return False
-        
-        # Find the containers
-        self.artist_links_group = info_widget.findChild(QGroupBox, "artist_links_group")
-        self.album_links_group = info_widget.findChild(QGroupBox, "album_links_group") 
-        self.lyrics_group = info_widget.findChild(QGroupBox, "lyrics_group")
-        
-        # Debug information
-        print(f"Found containers: artist={bool(self.artist_links_group)}, album={bool(self.album_links_group)}, lyrics={bool(self.lyrics_group)}")
-        
-        # Initialize dictionary if needed
-        if not hasattr(self, 'info_groupboxes'):
-            self.info_groupboxes = {}
-        
-        # Store references and ensure layouts exist
-        if self.artist_links_group:
-            self.info_groupboxes['artist_links_group'] = self.artist_links_group
-            
-            # Force remove any existing layout
-            if self.artist_links_group.layout():
-                print("Removing existing artist links layout")
-                QWidget().setLayout(self.artist_links_group.layout())
-            
-            # Create new layout
-            print("Creating new layout for artist_links_group")
-            self.artist_links_layout = QHBoxLayout(self.artist_links_group)
-            self.artist_links_layout.setContentsMargins(5, 25, 5, 5)
-            self.artist_links_layout.setSpacing(5)
-        
-        if self.album_links_group:
-            self.info_groupboxes['album_links_group'] = self.album_links_group
-            
-            # Force remove any existing layout
-            if self.album_links_group.layout():
-                print("Removing existing album links layout")
-                QWidget().setLayout(self.album_links_group.layout())
-            
-            # Create new layout
-            print("Creating new layout for album_links_group")
-            self.album_links_layout = QHBoxLayout(self.album_links_group)
-            self.album_links_layout.setContentsMargins(5, 25, 5, 5)
-            self.album_links_layout.setSpacing(5)
-        
-        if self.lyrics_group:
-            self.info_groupboxes['lyrics_group'] = self.lyrics_group
-            
-            # Force remove any existing layout
-            if self.lyrics_group.layout():
-                print("Removing existing lyrics layout")
-                QWidget().setLayout(self.lyrics_group.layout())
-            
-            # Create new layout
-            print("Creating new layout for lyrics_group")
-            lyrics_layout = QVBoxLayout(self.lyrics_group)
-            lyrics_layout.setContentsMargins(5, 25, 5, 5)
-            
-            # Add a label for lyrics if it doesn't exist
-            lyrics_label = self.lyrics_group.findChild(QLabel, "lyrics_label")
-            if not lyrics_label:
-                lyrics_label = QLabel(self.lyrics_group)
-                lyrics_label.setObjectName("lyrics_label")
-                lyrics_label.setWordWrap(True)
-                lyrics_label.setTextFormat(Qt.TextFormat.RichText)
-                lyrics_layout.addWidget(lyrics_label)
-            self.lyrics_label = lyrics_label
-        
-        # Store button references
-        self.artist_buttons = {}
-        self.album_buttons = {}
-        
-        # Hide containers initially
-        if self.artist_links_group:
-            self.artist_links_group.hide()
-        if self.album_links_group:
-            self.album_links_group.hide()
-        if self.lyrics_group:
-            self.lyrics_group.hide()
-        
-        # Debug final status
-        print(f"Link containers initialized: artist={bool(self.artist_links_group and self.artist_links_group.layout())}, album={bool(self.album_links_group and self.album_links_group.layout())}")
-        
-        return True
-
-
-    def update_lyrics_display(self, lyrics_text, source="Unknown"):
-        """
-        Updates the lyrics display with proper formatting
-        
-        Args:
-            lyrics_text (str): The lyrics text
-            source (str): Source of the lyrics
-        """
-        if not lyrics_text:
-            if hasattr(self, 'lyrics_group') and self.lyrics_group:
-                self.lyrics_group.hide()
-            return
-        
-        # Format lyrics with source
-        formatted_lyrics = f"{lyrics_text}\n\n<i>Source: {source}</i>"
-        
-        # Find the lyrics label
-        lyrics_label = None
-        if hasattr(self, 'lyrics_label'):
-            lyrics_label = self.lyrics_label
-        elif hasattr(self, 'lyrics_group') and self.lyrics_group:
-            lyrics_label = self.lyrics_group.findChild(QLabel, "lyrics_label")
-            if lyrics_label:
-                self.lyrics_label = lyrics_label
-        
-        # Update label and show group
-        if lyrics_label:
-            lyrics_label.setText(formatted_lyrics)
-            if hasattr(self, 'lyrics_group') and self.lyrics_group:
-                self.lyrics_group.show()
-                
-                # Move to the top if possible
-                if self.lyrics_group.parentWidget() and self.lyrics_group.parentWidget().layout():
-                    layout = self.lyrics_group.parentWidget().layout()
-                    layout.removeWidget(self.lyrics_group)
-                    layout.insertWidget(0, self.lyrics_group)
-
-
-# FEEDS!!
-    def improve_collapsible_groupbox(self):
-        """
-        Make UI-defined group boxes collapsible.
-        Called after UI is loaded.
-        """
-        # Get all group boxes from the info widget
-        if hasattr(self, 'info_widget') and self.info_widget:
-            for groupbox in self.info_widget.findChildren(QGroupBox):
-                # Skip if already a CollapsibleGroupBox
-                if isinstance(groupbox, CollapsibleGroupBox):
-                    continue
-                    
-                # Convert to collapsible
-                self.convert_to_collapsible(groupbox)
-
-    def create_feed_groupboxes(self, parent_widget, feeds_data):
-        """
-        Creates collapsible groupboxes for each feed
-        
-        Args:
-            parent_widget: Widget where to add the groupboxes
-            feeds_data: List of dictionaries with feed data
-        """
-        # Clear existing widgets
-        layout = parent_widget.layout()
-        if layout:
-            while layout.count():
-                item = layout.takeAt(0)
-                if item.widget():
-                    item.widget().deleteLater()
-        else:
-            layout = QVBoxLayout(parent_widget)
-            layout.setContentsMargins(0, 0, 0, 0)
-            layout.setSpacing(8)
-        
-        # Create a groupbox for each feed
-        for feed in feeds_data:
-            feed_title = feed.get('feed_name', 'Unknown Feed')
-            feed_content = feed.get('content', '')
-            
-            if not feed_content.strip():
-                continue  # Skip empty feeds
-            
-            # Create collapsible groupbox
-            groupbox = CollapsibleGroupBox(feed_title)
-            
-            # Create content label
-            from PyQt6.QtWidgets import QLabel
-            content_label = QLabel(feed_content)
-            content_label.setWordWrap(True)
-            content_label.setTextFormat(Qt.TextFormat.RichText)
-            content_label.setOpenExternalLinks(True)
-            
-            # Add label to groupbox
-            groupbox.add_widget(content_label)
-            
-            # Add groupbox to parent layout
-            layout.addWidget(groupbox)
-        
-        # Add stretch at the end to push everything to the top
-        layout.addStretch()
-
-    def update_info_groupboxes(self, item_data):
-        """
-        Updates the visibility and content of all info groupboxes
-        based on available data
-        
-        Args:
-            item_data: Data of the current selected item
-        """
-        # Get references to all groupboxes
-        if not hasattr(self, "info_groupboxes"):
-            # Create dictionary of groupboxes for first-time run
-            from PyQt6.QtWidgets import QGroupBox
-            self.info_groupboxes = {}
-            
-            # Find all QGroupBox objects in the stacked widget's first page
-            info_page = self.main_ui.info_panel_stacked.widget(0)
-            for groupbox in info_page.findChildren(QGroupBox):
-                self.info_groupboxes[groupbox.objectName()] = groupbox
-                
-                # Convert each groupbox to CollapsibleGroupBox
-                self.convert_to_collapsible(groupbox)
-        
-        # Update artist bio groupbox
-        artist_bio = None
-        if isinstance(item_data, dict) and item_data.get('bio'):
-            artist_bio = item_data.get('bio')
-        elif isinstance(item_data, (list, tuple)) and len(item_data) > 15:
-            artist_bio = item_data[15]
-            
-        artist_bio_box = self.info_groupboxes.get('artist_bio_group')
-        if artist_bio_box:
-            self.update_groupbox_content(
-                artist_bio_box, 
-                artist_bio,
-                "lastfm_label"
-            )
-        
-        # Update artist wikipedia groupbox
-        artist_wiki = None
-        if isinstance(item_data, dict) and item_data.get('wikipedia_content'):
-            artist_wiki = item_data.get('wikipedia_content')
-        elif isinstance(item_data, (list, tuple)) and len(item_data) > 27:
-            artist_wiki = item_data[27]
-            
-        artist_wiki_box = self.info_groupboxes.get('artist_wiki_group')
-        if artist_wiki_box:
-            self.update_groupbox_content(
-                artist_wiki_box, 
-                artist_wiki,
-                "wikipedia_artist_label"
-            )
-        
-        # Update album wikipedia groupbox
-        album_wiki = None
-        if isinstance(item_data, dict) and item_data.get('wikipedia_content'):
-            album_wiki = item_data.get('wikipedia_content')
-        elif isinstance(item_data, (list, tuple)) and len(item_data) > 29:
-            album_wiki = item_data[29]
-            
-        album_wiki_box = self.info_groupboxes.get('album_wiki_group')
-        if album_wiki_box:
-            self.update_groupbox_content(
-                album_wiki_box, 
-                album_wiki,
-                "wikipedia_album_label"
-            )
-        
-        # Update lyrics groupbox
-        lyrics = None
-        lyrics_source = "Unknown"
-        if isinstance(item_data, (list, tuple)) and len(item_data) > 30:
-            lyrics = item_data[30]
-            if len(item_data) > 31 and item_data[31]:
-                lyrics_source = item_data[31]
-                
-        lyrics_box = self.info_groupboxes.get('lyrics_group')
-        if lyrics_box:
-            content = lyrics
-            if lyrics and lyrics_source:
-                content = f"{lyrics}\n\nFuente: {lyrics_source}"
-                
-            self.update_groupbox_content(
-                lyrics_box, 
-                content,
-                "lyrics_label"
-            )
-
-    def convert_to_collapsible(self, groupbox):
-        """
-        Converts a standard QGroupBox to a CollapsibleGroupBox
-        preserving its content and properties
-        
-        Args:
-            groupbox: QGroupBox to convert
-        """
-        if isinstance(groupbox, CollapsibleGroupBox):
-            return groupbox  # Already converted
-            
-        # Get properties
-        title = groupbox.title()
-        parent = groupbox.parentWidget()
-        geometry = groupbox.geometry()
-        object_name = groupbox.objectName()
-        stylesheet = groupbox.styleSheet()
-        
-        # Get layout and remove groupbox from parent
-        original_layout = groupbox.layout()
-        layout_items = []
-        
-        if original_layout:
-            # Store all layout items
-            for i in range(original_layout.count()):
-                item = original_layout.itemAt(i)
-                layout_items.append(item)
-        
-        # Create new collapsible groupbox
-        new_groupbox = CollapsibleGroupBox(title, parent)
-        new_groupbox.setObjectName(object_name)
-        new_groupbox.setGeometry(geometry)
-        new_groupbox.setStyleSheet(stylesheet)
-        
-        # Add original widgets to new groupbox
-        for item in layout_items:
-            if item.widget():
-                new_groupbox.add_widget(item.widget())
-            elif item.layout():
-                new_groupbox.add_layout(item.layout())
-        
-        # Remove old groupbox
-        groupbox.setParent(None)
-        groupbox.deleteLater()
-        
-        # Replace reference in dictionary
-        self.info_groupboxes[object_name] = new_groupbox
-        
-        return new_groupbox
-
-    def update_groupbox_content(self, groupbox, content, label_name=None):
-        """
-        Updates the content of a groupbox and shows/hides based on content
-        
-        Args:
-            groupbox: QGroupBox to update
-            content: Content to set
-            label_name: Name of label widget inside groupbox
-        """
-        if not content:
-            groupbox.setVisible(False)
-            return
-            
-        # Find the label inside the groupbox
-        if label_name:
-            label = None
-            # First check if we already have a reference
-            if hasattr(self, label_name):
-                label = getattr(self, label_name)
-            else:
-                # Otherwise, find the label in groupbox children
-                label = groupbox.findChild(QLabel, label_name)
-                if label:
-                    setattr(self, label_name, label)
-            
-            if label:
-                # Set content to label
-                label.setText(content)
-        
-        # Show groupbox
-        groupbox.setVisible(True)
-
-
-    def switch_info_panel(self, panel_index):
-        """
-        Switches the info panel to the specified index
-        
-        Args:
-            panel_index: Index of the panel to switch to (0 for main info, 1 for feeds)
-        """
-        if hasattr(self.main_ui, 'info_panel_stacked'):
-            self.main_ui.info_panel_stacked.setCurrentIndex(panel_index)
-            
-    def get_feeds_data(self, entity_type, entity_id):
-        """
-        Retrieves feeds data for an entity from the database
-        
-        Args:
-            entity_type: Type of entity ('artist', 'album', 'song')
-            entity_id: ID of the entity
-            
-        Returns:
-            list: List of dictionaries with feed data
-        """
-        if not self.db_path or not entity_id:
-            return []
-            
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            # Query feeds table
-            query = """
-                SELECT id, feed_name, post_title, post_url, post_date, content, added_date
-                FROM feeds
-                WHERE entity_type = ? AND entity_id = ?
-                ORDER BY post_date DESC
-            """
-            
-            cursor.execute(query, (entity_type, entity_id))
-            rows = cursor.fetchall()
-            
-            conn.close()
-            
-            # Convert to list of dictionaries
-            feeds = []
-            for row in rows:
-                feed = {
-                    'id': row[0],
-                    'feed_name': row[1],
-                    'post_title': row[2],
-                    'post_url': row[3],
-                    'post_date': row[4],
-                    'content': row[5],
-                    'added_date': row[6]
-                }
-                feeds.append(feed)
-                
-            return feeds
-            
-        except Exception as e:
-            print(f"Error fetching feeds data: {e}")
-            return []
-
-
-    def handle_feeds_button_click(self):
-        """Manages the feeds display when feeds button is clicked"""
-        try:
-            # Check if we have the stacked widget
-            if hasattr(self, 'main_ui') and hasattr(self.main_ui, 'info_panel_stacked'):
-                # Switch to feeds panel (index 1)
-                self.switch_info_panel(1)
-                print("Cambiado a panel de feeds")
-            else:
-                print("Panel de feeds no disponible")
-                
-                # Try to create a dialog as fallback
-                self.show_feeds_dialog()
-        except Exception as e:
-            print(f"Error manejando botón de feeds: {e}")
-            traceback.print_exc()
-            
-    def show_feeds_dialog(self):
-        """Shows feeds in a dialog as fallback if stacked widget not available"""
-        try:
-            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox
-            
-            # Get current item
-            current_item = self.results_tree.currentItem()
-            if not current_item:
-                print("No hay elemento seleccionado")
+            # 1. Obtener el elemento seleccionado
+            selected_items = self.results_tree.selectedItems()
+            if not selected_items:
+                print("[DIAGNÓSTICO] No hay elementos seleccionados")
                 return
-                
-            # Get entity type and ID
-            entity_type = None
-            entity_id = None
             
-            item_data = current_item.data(0, Qt.ItemDataRole.UserRole)
+            item = selected_items[0]
+            item_data = item.data(0, Qt.ItemDataRole.UserRole)
+            
+            # 2. Verificar tipo de elemento
             if isinstance(item_data, dict):
-                # Is an artist or album
-                if item_data.get('type') == 'artist':
-                    entity_type = 'artist'
-                    entity_id = self.get_artist_id_from_name(item_data.get('name'))
-                elif item_data.get('type') == 'album':
-                    entity_type = 'album'
-                    entity_id = self.get_album_id_from_name(item_data.get('name'), item_data.get('artist'))
-            else:
-                # Is a song
-                if len(item_data) > 0 and item_data[0]:
-                    entity_type = 'song'
-                    entity_id = item_data[0]
+                print(f"[DIAGNÓSTICO] Tipo de elemento: {'artista' if item_data.get('type') == 'artist' else 'álbum'}")
+                for key, value in item_data.items():
+                    print(f"[DIAGNÓSTICO] {key}: {value}")
                     
-            if not entity_type or not entity_id:
-                print("No se pudo determinar el tipo de entidad o ID")
-                return
-                
-            # Get feeds
-            feeds = self.get_feeds_data(entity_type, entity_id)
-            if not feeds:
-                print("No hay feeds disponibles")
-                return
-                
-            # Create dialog
-            dialog = QDialog(self)
-            dialog.setWindowTitle("Feeds")
-            dialog.setMinimumSize(600, 400)
-            
-            layout = QVBoxLayout(dialog)
-            
-            # Create feed widgets
-            for feed in feeds:
-                # Create collapsible group box
-                from tools.music_fuzzy.collapsible_groupbox import CollapsibleGroupBox
-                group = CollapsibleGroupBox(feed.get('feed_name', 'Feed'))
-                
-                # Create content label
-                from PyQt6.QtWidgets import QLabel
-                content = QLabel(feed.get('content', ''))
-                content.setWordWrap(True)
-                content.setTextFormat(Qt.TextFormat.RichText)
-                content.setOpenExternalLinks(True)
-                
-                # Add to group
-                group.add_widget(content)
-                
-                # Add to layout
-                layout.addWidget(group)
-                
-            # Add button box
-            button_box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
-            button_box.rejected.connect(dialog.reject)
-            layout.addWidget(button_box)
-            
-            # Show dialog
-            dialog.exec()
-        except Exception as e:
-            print(f"Error mostrando diálogo de feeds: {e}")
-            traceback.print_exc()
-
-
-    def get_artist_id_from_name(self, artist_name):
-        """Get artist ID from the database using artist name"""
-        if not self.db_path or not artist_name:
-            return None
-            
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("SELECT id FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
-            result = cursor.fetchone()
-            
-            conn.close()
-            
-            return result[0] if result else None
-        except Exception as e:
-            print(f"Error getting artist ID: {e}")
-            return None
-
-    def get_album_id_from_name(self, album_name, artist_name=None):
-        """Get album ID from the database using album name and artist name"""
-        if not self.db_path or not album_name:
-            return None
-            
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            if artist_name:
-                # Get artist ID first
-                artist_id = self.get_artist_id_from_name(artist_name)
-                if artist_id:
-                    cursor.execute("SELECT id FROM albums WHERE LOWER(name) = LOWER(?) AND artist_id = ?", 
-                                (album_name, artist_id))
+                # Si es artista, buscar en la base de datos
+                if item_data.get('type') == 'artist':
+                    artist_name = item_data.get('name')
+                    print(f"\n[DIAGNÓSTICO] Obteniendo información completa para artista: {artist_name}")
+                    artist_db_info = self.db.get_artist_info(artist_name)
+                    
+                    if artist_db_info:
+                        print("[DIAGNÓSTICO] Información de base de datos disponible")
+                        # Mostrar campos importantes
+                        important_fields = ['id', 'name', 'bio', 'spotify_url', 'youtube_url', 'lastfm_url', 'wikipedia_url']
+                        for field in important_fields:
+                            has_value = field in artist_db_info and bool(artist_db_info[field])
+                            print(f"[DIAGNÓSTICO] {field}: {'PRESENTE' if has_value else 'AUSENTE'}")
+                        
+                        # Verificar enlaces
+                        print("\n[DIAGNÓSTICO] Extrayendo enlaces...")
+                        links = self.artist_view.extract_links(artist_db_info, 'artist')
+                        print(f"[DIAGNÓSTICO] Enlaces encontrados: {links}")
+                        
+                        # Verificar redes sociales
+                        if artist_db_info.get('id'):
+                            print(f"\n[DIAGNÓSTICO] Obteniendo redes sociales para ID: {artist_db_info['id']}")
+                            networks = self.db.get_artist_networks(artist_db_info['id'])
+                            print(f"[DIAGNÓSTICO] Redes sociales: {networks}")
+                    else:
+                        print("[DIAGNÓSTICO] No se encontró información en la base de datos")
+                        
+                    # Verificar estado de contenedores y grupos
+                    print("\n[DIAGNÓSTICO] Estado de componentes UI:")
+                    print(f"[DIAGNÓSTICO] artist_view visible: {self.artist_view.isVisible()}")
+                    print(f"[DIAGNÓSTICO] wiki_container existe: {hasattr(self.artist_view, 'wiki_container')}")
+                    if hasattr(self.artist_view, 'wiki_container'):
+                        print(f"[DIAGNÓSTICO] wiki_container visible: {self.artist_view.wiki_container.isVisible()}")
+                    print(f"[DIAGNÓSTICO] bio_container existe: {hasattr(self.artist_view, 'bio_container')}")
+                    if hasattr(self.artist_view, 'bio_container'):
+                        print(f"[DIAGNÓSTICO] bio_container visible: {self.artist_view.bio_container.isVisible()}")
+                    print(f"[DIAGNÓSTICO] artist_links_group existe: {self.artist_links_group is not None}")
+                    if self.artist_links_group:
+                        print(f"[DIAGNÓSTICO] artist_links_group visible: {self.artist_links_group.isVisible()}")
+                    print(f"[DIAGNÓSTICO] link_buttons existe: {hasattr(self, 'link_buttons') and self.link_buttons is not None}")
             else:
-                cursor.execute("SELECT id FROM albums WHERE LOWER(name) = LOWER(?)", (album_name,))
+                # Es una canción
+                print("[DIAGNÓSTICO] Tipo de elemento: canción")
+                if len(item_data) > 5:
+                    print(f"[DIAGNÓSTICO] ID: {item_data[0]}")
+                    print(f"[DIAGNÓSTICO] Ruta: {item_data[1]}")
+                    print(f"[DIAGNÓSTICO] Título: {item_data[2]}")
+                    print(f"[DIAGNÓSTICO] Artista: {item_data[3]}")
+                    print(f"[DIAGNÓSTICO] Álbum: {item_data[5]}")
+                    
+                    # Verificar si existe URL de Spotify
+                    track_id = item_data[0]
+                    spotify_url = self.db.get_spotify_url(track_id)
+                    print(f"[DIAGNÓSTICO] URL de Spotify: {spotify_url}")
+                    
+            print("\n[DIAGNÓSTICO] Verificando estructura de la base de datos...")
+            db_status = self.check_database_connection() if hasattr(self, 'check_database_connection') else None
+            if db_status:
+                print(f"[DIAGNÓSTICO] Estado de la base de datos: {db_status}")
                 
-            result = cursor.fetchone()
+        except Exception as e:
+            print(f"[DIAGNÓSTICO] Error durante el diagnóstico: {e}")
+            traceback.print_exc()
+        
+        print("===== FIN DEL DIAGNÓSTICO =====\n")
+        
+    def check_database_connection(self):
+        """
+        Verifica la conexión a la base de datos y su estructura.
+        
+        Returns:
+            dict: Resultados de la verificación
+        """
+        try:
+            import sqlite3
+            import os
             
+            if not self.db_path or not os.path.exists(self.db_path):
+                return {"success": False, "error": f"Archivo de base de datos no encontrado: {self.db_path}"}
+                
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Verificar tablas principales
+            tables_check = {}
+            for table in ["artists", "albums", "songs", "lyrics", "artists_networks"]:
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'")
+                tables_check[table] = bool(cursor.fetchone())
+                
+            # Verificar si hay datos
+            data_check = {}
+            if tables_check["artists"]:
+                cursor.execute("SELECT COUNT(*) FROM artists")
+                data_check["artists_count"] = cursor.fetchone()[0]
+                
+            if tables_check["albums"]:
+                cursor.execute("SELECT COUNT(*) FROM albums")
+                data_check["albums_count"] = cursor.fetchone()[0]
+                
+            if tables_check["songs"]:
+                cursor.execute("SELECT COUNT(*) FROM songs")
+                data_check["songs_count"] = cursor.fetchone()[0]
+                
+            # Verificar si hay contenido de Wikipedia
+            wiki_check = {}
+            if tables_check["artists"]:
+                cursor.execute("SELECT COUNT(*) FROM artists WHERE wikipedia_content IS NOT NULL AND wikipedia_content != ''")
+                wiki_check["artists_with_wiki"] = cursor.fetchone()[0]
+                
+            # Verificar si hay enlaces
+            links_check = {}
+            if tables_check["artists"]:
+                cursor.execute("SELECT COUNT(*) FROM artists WHERE spotify_url IS NOT NULL AND spotify_url != ''")
+                links_check["artists_with_spotify"] = cursor.fetchone()[0]
+                
+            # Verificar tabla de redes sociales
+            network_check = {}
+            if tables_check["artists_networks"]:
+                cursor.execute("SELECT COUNT(*) FROM artists_networks")
+                network_check["artists_networks_count"] = cursor.fetchone()[0]
+                
+                # Obtener las columnas de la tabla
+                cursor.execute("PRAGMA table_info(artists_networks)")
+                network_check["columns"] = [row[1] for row in cursor.fetchall()]
+                
             conn.close()
             
-            return result[0] if result else None
+            return {
+                "success": True,
+                "tables": tables_check,
+                "data": data_check,
+                "wiki": wiki_check,
+                "links": links_check,
+                "networks": network_check
+            }
+            
         except Exception as e:
-            print(f"Error getting album ID: {e}")
-            return None
+            import traceback
+            traceback.print_exc()
+            return {"success": False, "error": str(e)}
 
 
-    def setup_feeds_page(self):
-        """Sets up the feeds page in the stacked widget"""
-        if not hasattr(self, 'main_ui') or not hasattr(self.main_ui, 'info_panel_stacked'):
-            return False
-            
-        # Get the second page of the stacked widget
-        feeds_page = self.main_ui.info_panel_stacked.widget(1)
-        if not feeds_page:
-            return False
-            
-        # Check if layout exists
-        if not feeds_page.layout():
-            feeds_layout = QVBoxLayout(feeds_page)
-        else:
-            feeds_layout = feeds_page.layout()
-            
-        # Add back button if it doesn't exist
-        back_button = feeds_page.findChild(QPushButton, "back_button")
-        if not back_button:
-            back_button = QPushButton("Back to Info", feeds_page)
-            back_button.setObjectName("back_button")
-            back_button.clicked.connect(lambda: self.switch_info_panel(0))
-            feeds_layout.insertWidget(0, back_button)
-            
-        # Add container for feeds if it doesn't exist
-        feeds_container = feeds_page.findChild(QWidget, "feeds_container")
-        if not feeds_container:
-            feeds_container = QWidget(feeds_page)
-            feeds_container.setObjectName("feeds_container")
-            feeds_container_layout = QVBoxLayout(feeds_container)
-            feeds_container_layout.setContentsMargins(0, 0, 0, 0)
-            feeds_layout.addWidget(feeds_container)
-            
-        # Store references
-        self.feeds_container = feeds_container
-        self.back_button = back_button
+
+    def debug_link_containers(self):
+        """
+        Función para diagnosticar problemas con los contenedores de enlaces.
+        """
+        from PyQt6.QtWidgets import QGroupBox, QLayout
         
+        print("\n===== DIAGNÓSTICO DE CONTENEDORES DE ENLACES =====")
+        
+        # 1. Verificar instancia de link_buttons
+        print(f"[DIAGNÓSTICO] link_buttons existe: {hasattr(self, 'link_buttons')}")
+        if hasattr(self, 'link_buttons'):
+            print(f"[DIAGNÓSTICO] link_buttons es None: {self.link_buttons is None}")
+        
+        # 2. Examinar artist_links_group
+        print(f"\n[DIAGNÓSTICO] artist_links_group existe: {hasattr(self, 'artist_links_group')}")
+        if hasattr(self, 'artist_links_group') and self.artist_links_group:
+            print(f"[DIAGNÓSTICO] artist_links_group clase: {self.artist_links_group.__class__.__name__}")
+            print(f"[DIAGNÓSTICO] artist_links_group es QGroupBox: {isinstance(self.artist_links_group, QGroupBox)}")
+            print(f"[DIAGNÓSTICO] artist_links_group objectName: {self.artist_links_group.objectName()}")
+            print(f"[DIAGNÓSTICO] artist_links_group visible: {self.artist_links_group.isVisible()}")
+            print(f"[DIAGNÓSTICO] artist_links_group tiene layout: {self.artist_links_group.layout() is not None}")
+            
+            if self.artist_links_group.layout():
+                print(f"[DIAGNÓSTICO] artist_links_group layout clase: {self.artist_links_group.layout().__class__.__name__}")
+                print(f"[DIAGNÓSTICO] artist_links_group layout contiene: {self.artist_links_group.layout().count()} elementos")
+        
+        # 3. Examinar album_links_group
+        print(f"\n[DIAGNÓSTICO] album_links_group existe: {hasattr(self, 'album_links_group')}")
+        if hasattr(self, 'album_links_group') and self.album_links_group:
+            print(f"[DIAGNÓSTICO] album_links_group clase: {self.album_links_group.__class__.__name__}")
+            print(f"[DIAGNÓSTICO] album_links_group es QGroupBox: {isinstance(self.album_links_group, QGroupBox)}")
+            print(f"[DIAGNÓSTICO] album_links_group objectName: {self.album_links_group.objectName()}")
+            print(f"[DIAGNÓSTICO] album_links_group visible: {self.album_links_group.isVisible()}")
+            print(f"[DIAGNÓSTICO] album_links_group tiene layout: {self.album_links_group.layout() is not None}")
+            
+            if self.album_links_group.layout():
+                print(f"[DIAGNÓSTICO] album_links_group layout clase: {self.album_links_group.layout().__class__.__name__}")
+                print(f"[DIAGNÓSTICO] album_links_group layout contiene: {self.album_links_group.layout().count()} elementos")
+        
+        # 4. Reparar layouts si es necesario
+        print("\n[DIAGNÓSTICO] Reparando layouts...")
+        self.fix_link_group_layouts()
+        
+        print("===== FIN DEL DIAGNÓSTICO DE CONTENEDORES =====\n")
+        
+
+    def fix_link_buttons(self):
+        """
+        Asegura que las referencias a los botones de enlaces estén correctamente establecidas.
+        No crea nuevos elementos, solo actualiza referencias si es necesario.
+        """
+        print("[DEBUG] Actualizando referencias a LinkButtonsManager...")
+        
+        # Verificar que los contenedores existen en el UI
+        if not hasattr(self, 'artist_links_group') or not self.artist_links_group:
+            self.artist_links_group = self.main_ui.findChild(QWidget, "artist_links_group")
+            
+        if not hasattr(self, 'album_links_group') or not self.album_links_group:
+            self.album_links_group = self.main_ui.findChild(QWidget, "album_links_group")
+        
+        # Si no se encontraron los contenedores, no podemos continuar
+        if not self.artist_links_group or not self.album_links_group:
+            print("[DEBUG] Error: No se encontraron los contenedores de enlaces en el UI")
+            return False
+        
+        # Si el gestor de enlaces no existe, crearlo con las referencias existentes
+        if not hasattr(self, 'link_buttons') or not self.link_buttons:
+            from modules.submodules.fuzzy.links_buttons_submodule import LinkButtonsManager
+            self.link_buttons = LinkButtonsManager(self.artist_links_group, self.album_links_group)
+            print("[DEBUG] LinkButtonsManager recreado con las referencias existentes")
+            
         return True
 
 
-# DEBUG
 
-    def detect_ui_elements(self):
-        """Detects and logs all relevant UI elements to help with debugging"""
-        print("\n--- DETECCIÓN DE ELEMENTOS UI ---")
+    def _ensure_link_containers(self):
+        """
+        Obtiene referencias a los contenedores de enlaces existentes en el UI.
+        No crea nuevos elementos, solo asegura que las referencias estén establecidas.
+        """
+        # Obtener referencias a los grupos de enlaces ya definidos en el archivo UI
+        self.artist_links_group = self.main_ui.findChild(QWidget, "artist_links_group")
+        self.album_links_group = self.main_ui.findChild(QWidget, "album_links_group")
         
-        # Check main_ui
-        if hasattr(self, 'main_ui'):
-            print("main_ui: OK")
-            
-            # Find stacked widget
-            stacked = self.main_ui.findChild(QStackedWidget, "info_panel_stacked")
-            print(f"info_panel_stacked: {'Encontrado' if stacked else 'No encontrado'}")
-            
-            if stacked:
-                print(f"  Número de páginas: {stacked.count()}")
-                
-            # Find buttons container
-            buttons_container = self.main_ui.findChild(QFrame, "buttons_container")
-            print(f"buttons_container: {'Encontrado' if buttons_container else 'No encontrado'}")
-            
-            if buttons_container:
-                buttons = buttons_container.findChildren(QPushButton)
-                print(f"  Botones encontrados: {len(buttons)}")
-                for btn in buttons:
-                    print(f"    - {btn.objectName()}")
+        print(f"[DEBUG] Referencia a artist_links_group: {self.artist_links_group}")
+        print(f"[DEBUG] Referencia a album_links_group: {self.album_links_group}")
+        
+        # Verificar que se encontraron los grupos
+        if not self.artist_links_group or not self.album_links_group:
+            print("[DEBUG] ADVERTENCIA: No se encontraron los grupos de enlaces en el UI")
+
+
+
+    def debug_link_groups_status(self):
+        """Muestra el estado actual de los grupos de enlaces y sus layouts."""
+        print("\n===== ESTADO DE LOS GRUPOS DE ENLACES =====")
+        
+        if hasattr(self, 'artist_links_group'):
+            print(f"artist_links_group existe: {self.artist_links_group is not None}")
+            if self.artist_links_group:
+                print(f"artist_links_group clase: {self.artist_links_group.__class__.__name__}")
+                print(f"artist_links_group tiene layout: {self.artist_links_group.layout() is not None}")
+                print(f"artist_links_group es visible: {self.artist_links_group.isVisible()}")
+                if self.artist_links_group.layout():
+                    print(f"artist_links_group layout tipo: {self.artist_links_group.layout().__class__.__name__}")
+                    print(f"artist_links_group layout elementos: {self.artist_links_group.layout().count()}")
         else:
-            print("main_ui: No encontrado")
+            print("artist_links_group no está definido en la clase")
         
-        # Check scroll areas
-        for scroll_name in ['info_scroll', 'metadata_scroll']:
-            scroll = getattr(self, scroll_name, None)
-            print(f"{scroll_name}: {'Encontrado' if scroll else 'No encontrado'}")
-            
-            if scroll:
-                widget = scroll.widget()
-                print(f"  Widget de contenido: {'Encontrado' if widget else 'No encontrado'}")
+        if hasattr(self, 'album_links_group'):
+            print(f"album_links_group existe: {self.album_links_group is not None}")
+            if self.album_links_group:
+                print(f"album_links_group clase: {self.album_links_group.__class__.__name__}")
+                print(f"album_links_group tiene layout: {self.album_links_group.layout() is not None}")
+                print(f"album_links_group es visible: {self.album_links_group.isVisible()}")
+                if self.album_links_group.layout():
+                    print(f"album_links_group layout tipo: {self.album_links_group.layout().__class__.__name__}")
+                    print(f"album_links_group layout elementos: {self.album_links_group.layout().count()}")
+        else:
+            print("album_links_group no está definido en la clase")
+        
+        if hasattr(self, 'link_buttons'):
+            print(f"link_buttons existe: {self.link_buttons is not None}")
+            if self.link_buttons:
+                print(f"link_buttons.artist_group existe: {hasattr(self.link_buttons, 'artist_group') and self.link_buttons.artist_group is not None}")
+                print(f"link_buttons.album_group existe: {hasattr(self.link_buttons, 'album_group') and self.link_buttons.album_group is not None}")
                 
-                if widget:
-                    # Find groupboxes
-                    groups = widget.findChildren(QGroupBox)
-                    print(f"  Grupos encontrados: {len(groups)}")
-                    for group in groups:
-                        print(f"    - {group.objectName()}: {'Visible' if group.isVisible() else 'Oculto'}")
-        
-        # Check link groups
-        for group_name in ['artist_links_group', 'album_links_group']:
-            group = getattr(self, group_name, None)
-            print(f"{group_name}: {'Encontrado' if group else 'No encontrado'}")
+                if hasattr(self.link_buttons, 'artist_group') and self.link_buttons.artist_group:
+                    print(f"link_buttons.artist_group es el mismo que artist_links_group: {self.link_buttons.artist_group is self.artist_links_group}")
+                
+                if hasattr(self.link_buttons, 'album_group') and self.link_buttons.album_group:
+                    print(f"link_buttons.album_group es el mismo que album_links_group: {self.link_buttons.album_group is self.album_links_group}")
+        else:
+            print("link_buttons no está definido en la clase")
             
-        # Check lyrics group
-        if hasattr(self, 'info_groupboxes'):
-            lyrics_group = self.info_groupboxes.get('lyrics_group')
-            print(f"lyrics_group: {'Encontrado' if lyrics_group else 'No encontrado'}")
-            
-        print("--- FIN DETECCIÓN UI ---\n")
-
-
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser(description='Navegador de música')
-    parser.add_argument('db_path', help='Ruta a la base de datos SQLite')
-    parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
-    parser.add_argument('--artist-images-dir', help='Carpeta donde buscar las imágenes de los artistas')
-
-    args = parser.parse_args()
-
-    app = QApplication(sys.argv)
-    browser = MusicBrowser(
-        args.db_path,
-        font_family=args.font,
-        artist_images_dir=args.artist_images_dir
-    )
-    browser.show()
-    sys.exit(app.exec())
+        print("===== FIN DEL ESTADO =====\n")
