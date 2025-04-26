@@ -356,3 +356,4 @@ class UIUpdater:
     def _update_album_links(self, album):
         """Update album link buttons based on available links."""
         self.parent.link_manager.update_album_links(album)
+

@@ -869,7 +869,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="info_panel_stacked">
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="info_page">
              <layout class="QVBoxLayout" name="verticalLayout_5">
