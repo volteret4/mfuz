@@ -90,6 +90,17 @@ class MusicFuzzyModule(BaseModule):
             if hasattr(self, 'advanced_settings_check') and self.advanced_settings_check:
                 self.advanced_settings_check.toggled.connect(self._toggle_advanced_settings)
             
+            # Ensure we have references to the stacked widget pages
+            self._ensure_widget_exists('info_panel_stacked')
+            if hasattr(self, 'info_panel_stacked'):
+                # Get references to the pages
+                self.info_page = self.info_panel_stacked.findChild(QWidget, "info_page")
+                self.feeds_page = self.info_panel_stacked.findChild(QWidget, "feeds_page")
+
+            # Ensure we have a reference to the feeds groupbox
+            self._ensure_widget_exists('feeds_groupbox')
+
+
             # Emitir señal de que la UI está inicializada
             self.ui_initialized.emit()
             
@@ -118,6 +129,9 @@ class MusicFuzzyModule(BaseModule):
         
         if hasattr(self, 'results_tree_widget'):
             self.results_tree_widget.itemClicked.connect(self._handle_item_clicked)
+
+        if hasattr(self, 'feeds_button'):
+            self.feeds_button.clicked.connect(self._toggle_feeds_view)
 
 
     def _connect_additional_signals(self):
@@ -383,3 +397,23 @@ class MusicFuzzyModule(BaseModule):
             import traceback
             traceback.print_exc()
 
+
+    def _toggle_feeds_view(self):
+        """Toggle between info view and feeds view."""
+        if not hasattr(self, 'info_panel_stacked') or not self.info_panel_stacked:
+            return
+        
+        # Get the current widget
+        current_widget = self.info_panel_stacked.currentWidget()
+        
+        # Toggle between the two pages
+        if current_widget == self.info_page:
+            self.info_panel_stacked.setCurrentWidget(self.feeds_page)
+            # Update button text/tooltip to reflect current state
+            if hasattr(self, 'feeds_button'):
+                self.feeds_button.setToolTip("Mostrar información")
+        else:
+            self.info_panel_stacked.setCurrentWidget(self.info_page)
+            # Update button text/tooltip to reflect current state
+            if hasattr(self, 'feeds_button'):
+                self.feeds_button.setToolTip("Mostrar feeds")

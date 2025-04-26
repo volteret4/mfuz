@@ -56,6 +56,13 @@ class UIUpdater:
         
         # Update artist links
         self._update_artist_links(artist)
+        
+        # Load feeds for this artist
+        self.load_artist_feeds(artist_id)
+        
+        # Show the info page by default
+        if hasattr(self.parent, 'info_panel_stacked'):
+            self.parent.info_panel_stacked.setCurrentWidget(self.parent.info_page)
     
     def update_album_view(self, album_id):
         """Update UI with album details."""
@@ -272,6 +279,7 @@ class UIUpdater:
         self._safely_clear_group_box('album_group')
         self._safely_clear_group_box('lastfm_bio_group')
         self._safely_clear_group_box('lyrics_group')
+        self._safely_clear_group_box('feeds_groupbox')  # Also clear the feeds group box
         
         # Ocultar todos los grupos de forma segura
         self._safely_set_visible('artist_group', False)
@@ -357,3 +365,98 @@ class UIUpdater:
         """Update album link buttons based on available links."""
         self.parent.link_manager.update_album_links(album)
 
+    def load_artist_feeds(self, artist_id):
+        """Load and display feeds for an artist."""
+        if not artist_id:
+            return
+        
+        # Get connection to database
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return
+        
+        try:
+            cursor = conn.cursor()
+            # Query feeds table for this artist
+            cursor.execute("""
+                SELECT id, entity_type, entity_id, post_title, post_url, content, post_date
+                FROM feeds
+                WHERE entity_type = 'artists' AND entity_id = ?
+                ORDER BY post_date DESC
+            """, (artist_id,))
+            
+            feeds = cursor.fetchall()
+            
+            # Clear existing feeds layout
+            if hasattr(self.parent, 'feeds_groupbox') and self.parent.feeds_groupbox:
+                # Clear existing widgets first
+                if self.parent.feeds_groupbox.layout():
+                    self._clear_layout(self.parent.feeds_groupbox.layout())
+                else:
+                    # Create layout if it doesn't exist
+                    from PyQt6.QtWidgets import QVBoxLayout
+                    layout = QVBoxLayout(self.parent.feeds_groupbox)
+                    self.parent.feeds_groupbox.setLayout(layout)
+            
+            # If no feeds found, show a message
+            if not feeds or len(feeds) == 0:
+                from PyQt6.QtWidgets import QLabel
+                no_feeds_label = QLabel("No hay feeds disponibles para este artista")
+                self.parent.feeds_groupbox.layout().addWidget(no_feeds_label)
+                return
+            
+            # Add feeds to the layout
+            from PyQt6.QtWidgets import QGroupBox, QVBoxLayout, QLabel
+            from PyQt6.QtCore import Qt
+            import re
+            
+            # Get the layout of the feeds_groupbox
+            feeds_layout = self.parent.feeds_groupbox.layout()
+            
+            for feed in feeds:
+                # Extract domain from URL
+                domain = ""
+                if feed['post_url']:
+                    match = re.search(r'https?://(?:www\.)?([^/]+)', feed['post_url'])
+                    if match:
+                        domain = match.group(1)
+                
+                # Create a group box for each feed
+                feed_box = QGroupBox(f"{feed['post_title']} - {domain}")
+                feed_layout = QVBoxLayout(feed_box)
+                
+                # Create content label
+                content_label = QLabel(feed['content'])
+                content_label.setWordWrap(True)
+                content_label.setTextFormat(Qt.TextFormat.RichText)
+                content_label.setOpenExternalLinks(True)
+                
+                # Add content to feed box
+                feed_layout.addWidget(content_label)
+                
+                # Add feed box to main layout
+                feeds_layout.addWidget(feed_box)
+            
+            # Add stretch to push feeds to the top
+            feeds_layout.addStretch()
+            
+        except Exception as e:
+            print(f"Error loading feeds: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            conn.close()
+
+    def _clear_layout(self, layout):
+        """Clear all items from a layout."""
+        if layout is None:
+            return
+        
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget:
+                widget.setParent(None)
+            child_layout = item.layout()
+            if child_layout:
+                self._clear_layout(child_layout)
