@@ -167,14 +167,14 @@ def load_local_playlists(self):
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
                     # Imprimir contenido para debugear
-                    self.log(f"Contenido de {filename}: {content[:100]}...")
+                    #self.log(f"Contenido de {filename}: {content[:100]}...")
                     
                     playlist_data = json.loads(content)
                     
                 # Validar los datos de la playlist
                 if 'name' in playlist_data and 'items' in playlist_data:
                     playlists.append(playlist_data)
-                    self.log(f"Playlist cargada: {playlist_data['name']} ({len(playlist_data.get('items', []))} elementos)")
+                    #self.log(f"Playlist cargada: {playlist_data['name']} ({len(playlist_data.get('items', []))} elementos)")
                 else:
                     self.log(f"Archivo {filename} no tiene formato válido de playlist")
             except Exception as e:
@@ -366,8 +366,8 @@ def load_rss_playlists(self):
                 test_data = self.playlist_rss_comboBox.itemData(last_index, Qt.ItemDataRole.UserRole)
                 if test_data is None:
                     self.log(f"ERROR: Failed to set data for item {last_index}")
-                else:
-                    self.log(f"Successfully set data for item {last_index}: {test_data['name']}")
+                # else:
+                #     self.log(f"Successfully set data for item {last_index}: {test_data['name']}")
         
         self.playlist_rss_comboBox.blockSignals(False)
         return True
@@ -396,7 +396,7 @@ def count_tracks_in_playlist(playlist_path):
                 if line and not line.startswith('#'):
                     count += 1
                     
-        print(f"Counted {count} tracks in {os.path.basename(playlist_path)}")
+        #print(f"Counted {count} tracks in {os.path.basename(playlist_path)}")
         return count
     except Exception as e:
         print(f"Error counting tracks in {playlist_path}: {str(e)}")

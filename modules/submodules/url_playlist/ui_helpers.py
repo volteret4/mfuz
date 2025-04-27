@@ -2,7 +2,7 @@ import os
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import ( QMenu, QTreeWidgetItem, QDialog, QMessageBox, QLineEdit, QApplication,
                             QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QDialogButtonBox, QFrame, QDialog,
-                            QComboBox
+                            QComboBox, QCheckBox, 
                             )
 from PyQt6.QtCore import Qt, QSize, QThreadPool
 import traceback
@@ -14,6 +14,7 @@ from modules.submodules.url_playlist.media_utils import play_media
 from modules.submodules.url_playlist.playlist_manager import (determine_source_from_url,
                          create_local_playlist, save_playlists, display_local_playlist
                          )
+from modules.submodules.url_playlist.rss_manager import load_rss_playlist_content
 # Asegurarse de que PROJECT_ROOT está disponible
 try:
     from base_module import PROJECT_ROOT
@@ -371,8 +372,8 @@ def update_unified_playlist_menu(self):
         self.log(traceback.format_exc())
         return False
 
-def display_search_results(self, results):
-    """Shows search results in the TreeWidget with proper nesting."""
+def display_search_results(self, results, group_by_service=True):
+    """Shows search results in the TreeWidget with proper nesting by service."""
     if not results:
         self.textEdit.append("No se encontraron resultados.")
         QApplication.processEvents()
@@ -381,212 +382,208 @@ def display_search_results(self, results):
     # Count items before adding new ones
     initial_count = self.treeWidget.topLevelItemCount()
     
-    # Separate results by source and type
-    db_results = [r for r in results if r.get('from_database', False) or r.get('source', '').lower() == 'local']
-    external_results = [r for r in results if not r.get('from_database', False) and r.get('source', '').lower() != 'local']
+    # Siempre agrupar por servicio
+    group_by_service = True
     
-    # First, add database results under "Música Local" node
-    if db_results:
-        local_music_item = QTreeWidgetItem(self.treeWidget)
-        local_music_item.setText(0, "Música Local")
-        local_music_item.setText(2, "Fuente")
+    # Agrupar resultados por servicio
+    results_by_service = {}
+    
+    for result in results:
+        source = result.get('source', 'unknown').lower()
+        if source not in results_by_service:
+            results_by_service[source] = []
+        results_by_service[source].append(result)
+    
+    # Definir el orden deseado de los servicios: local primero, luego otros
+    service_order = ['local', 'spotify', 'youtube', 'bandcamp', 'soundcloud', 'unknown']
+    
+    # Ordenar los servicios según el orden definido
+    sorted_services = sorted(
+        results_by_service.keys(), 
+        key=lambda x: service_order.index(x) if x in service_order else len(service_order)
+    )
+    
+    # Log para depuración
+    self.log(f"Servicios disponibles después del filtrado: {sorted_services}")
+    
+    # Añadir cada servicio como un elemento de nivel superior
+    for service in sorted_services:
+        service_results = results_by_service[service]
         
-        # Add icon for local music
-        local_music_item.setIcon(0, self.service_icons.get('local', QIcon()))
+        # Log para depuración
+        self.log(f"Procesando servicio: {service} con {len(service_results)} elementos")
         
-        # Format as bold
-        font = local_music_item.font(0)
+        # Omitir servicios vacíos
+        if not service_results:
+            continue
+        
+        # Crear item para el servicio
+        service_item = QTreeWidgetItem(self.treeWidget)
+        service_display_name = service.capitalize()
+        service_item.setText(0, service_display_name)
+        service_item.setText(2, "Servicio")
+        
+        # Añadir icono del servicio
+        service_item.setIcon(0, self.service_icons.get(service, self.service_icons.get('unknown')))
+        
+        # Formatear como negrita
+        font = service_item.font(0)
         font.setBold(True)
-        local_music_item.setFont(0, font)
+        service_item.setFont(0, font)
         
-        # Group by artist first
+        # Agrupar por artista
         by_artist = {}
-        standalone_albums = []
-        standalone_tracks = []
+        standalone_items = []
         
-        # First pass - sort items by type
-        for result in db_results:
+        for result in service_results:
+            artist_name = result.get('artist', '')
             item_type = result.get('type', '').lower()
+            origen = result.get('origen', 'unknown')
             
+            self.log(f"  - Elemento: {result.get('title')}, tipo: {item_type}, origen: {origen}")
+            
+            # Seguir el proceso normal de organización
             if item_type == 'artist':
-                artist_name = result.get('title', '')
                 by_artist[artist_name] = result
-            elif item_type == 'album':
-                artist_name = result.get('artist', '')
-                if artist_name:
-                    if artist_name not in by_artist:
-                        by_artist[artist_name] = {
-                            'title': artist_name,
-                            'artist': artist_name,
-                            'type': 'artist',
-                            'albums': []
-                        }
-                    if 'albums' not in by_artist[artist_name]:
-                        by_artist[artist_name]['albums'] = []
-                    by_artist[artist_name]['albums'].append(result)
-                else:
-                    standalone_albums.append(result)
+            elif item_type == 'album' and artist_name:
+                if artist_name not in by_artist:
+                    by_artist[artist_name] = {
+                        'title': artist_name,
+                        'artist': artist_name,
+                        'type': 'artist',
+                        'albums': []
+                    }
+                if 'albums' not in by_artist[artist_name]:
+                    by_artist[artist_name]['albums'] = []
+                by_artist[artist_name]['albums'].append(result)
             elif item_type in ['track', 'song']:
-                standalone_tracks.append(result)
+                # Intentar encontrar el artista apropiado
+                if artist_name and artist_name in by_artist:
+                    # Buscar el álbum correspondiente
+                    album_name = result.get('album', '')
+                    album_found = False
+                    
+                    if 'albums' in by_artist[artist_name]:
+                        for album in by_artist[artist_name]['albums']:
+                            if album.get('title', '') == album_name:
+                                if 'tracks' not in album:
+                                    album['tracks'] = []
+                                album['tracks'].append(result)
+                                album_found = True
+                                break
+                        
+                        # Si no se encuentra el álbum pero tenemos un artista, crear un nuevo álbum
+                        if not album_found and album_name:
+                            new_album = {
+                                'title': album_name,
+                                'artist': artist_name,
+                                'type': 'album',
+                                'tracks': [result]
+                            }
+                            by_artist[artist_name]['albums'].append(new_album)
+                        elif not album_found:
+                            # No hay información del álbum, añadir como pista independiente
+                            standalone_items.append(result)
+                    else:
+                        # El artista no tiene matriz de álbumes todavía
+                        standalone_items.append(result)
+                else:
+                    # No hay coincidencia de artista, añadir como independiente
+                    standalone_items.append(result)
+            else:
+                standalone_items.append(result)
         
-        # Add artists with their albums and tracks
+        # Añadir artistas con sus álbumes y pistas
         for artist_name, artist_data in by_artist.items():
-            artist_item = QTreeWidgetItem(local_music_item)
+            artist_item = QTreeWidgetItem(service_item)
             artist_item.setText(0, artist_name)
             artist_item.setText(1, artist_name)
             artist_item.setText(2, "Artista")
             
-            # Format as bold
+            # Formatear como negrita
             font = artist_item.font(0)
             font.setBold(True)
             artist_item.setFont(0, font)
             
-            # Store complete data
+            # Almacenar datos completos
             artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
             
-            # Add albums
+            # Añadir álbumes
             if 'albums' in artist_data and artist_data['albums']:
                 for album in artist_data['albums']:
                     album_item = QTreeWidgetItem(artist_item)
-                    album_item.setText(0, album.get('title', ''))
+                    album_item.setText(0, album.get('title', 'Unknown Album'))
                     album_item.setText(1, artist_name)
                     album_item.setText(2, "Álbum")
                     if album.get('year'):
                         album_item.setText(3, str(album.get('year')))
                     
-                    # Store complete data
+                    # Añadir indicador de origen para depuración
+                    origen_text = f" [{album.get('origen', 'unknown')}]"
+                    album_item.setText(0, album.get('title', 'Unknown Album') + origen_text)
+                    
+                    # Almacenar datos completos
                     album_item.setData(0, Qt.ItemDataRole.UserRole, album)
                     
-                    # Add tracks
+                    # Añadir pistas si están disponibles
                     if 'tracks' in album and album['tracks']:
                         for track in album['tracks']:
-                            _add_result_to_tree(self, track, album_item)
+                            track_item = QTreeWidgetItem(album_item)
+                            track_item.setText(0, track.get('title', 'Unknown Track'))
+                            track_item.setText(1, artist_name)
+                            track_item.setText(2, "Canción")
+                            
+                            # Añadir número de pista si está disponible
+                            if track.get('track_number'):
+                                track_item.setText(3, str(track.get('track_number')))
+                            
+                            # Añadir duración si está disponible
+                            if track.get('duration'):
+                                duration_str = format_duration(track.get('duration'))
+                                track_item.setText(4, duration_str)
+                            
+                            # Añadir indicador de origen para depuración
+                            track_origen_text = f" [{track.get('origen', 'unknown')}]"
+                            track_item.setText(0, track.get('title', 'Unknown Track') + track_origen_text)
+                            
+                            # Almacenar datos completos
+                            track_item.setData(0, Qt.ItemDataRole.UserRole, track)
             
-            # Expand artist item
+            # Expandir item del artista
             artist_item.setExpanded(True)
         
-        # Add standalone albums
-        for album in standalone_albums:
-            album_item = QTreeWidgetItem(local_music_item)
-            album_item.setText(0, album.get('title', ''))
-            album_item.setText(1, album.get('artist', ''))
-            album_item.setText(2, "Álbum")
-            if album.get('year'):
-                album_item.setText(3, str(album.get('year')))
-            
-            # Store complete data
-            album_item.setData(0, Qt.ItemDataRole.UserRole, album)
-            
-            # Add tracks
-            if 'tracks' in album and album['tracks']:
-                for track in album['tracks']:
-                    _add_result_to_tree(self, track, album_item)
-            
-            # Expand album item
-            album_item.setExpanded(True)
+        # Añadir elementos independientes
+        for item in standalone_items:
+            _add_result_to_tree(self, item, service_item)
         
-        # Add standalone tracks
-        for track in standalone_tracks:
-            _add_result_to_tree(self, track, local_music_item)
+        # Contar elementos filtrados en este servicio
+        filtered_count = _count_service_items(service_item)
+        service_item.setText(0, f"{service_display_name} ({filtered_count})")
         
-        # Expand local music item
-        local_music_item.setExpanded(True)
-        
-        # Add result count badge
-        local_count = len(db_results)
-        if local_count > 0:
-            local_music_item.setText(0, f"Música Local ({local_count})")
-    
-    # Add external results by service
-    if external_results:
-        by_service = {}
-        
-        # Group by service
-        for result in external_results:
-            service = result.get('source', 'unknown').lower()
-            if service not in by_service:
-                by_service[service] = []
-            by_service[service].append(result)
-        
-        # Add each service
-        for service, service_results in by_service.items():
-            service_item = QTreeWidgetItem(self.treeWidget)
-            service_item.setText(0, service.capitalize())
-            service_item.setText(2, "Servicio")
-            
-            # Add service icon
-            service_item.setIcon(0, self.service_icons.get(service, self.service_icons.get('unknown')))
-            
-            # Format as bold
-            font = service_item.font(0)
-            font.setBold(True)
-            service_item.setFont(0, font)
-            
-            # Group by artist
-            by_artist = {}
-            standalone_items = []
-            
-            for result in service_results:
-                artist_name = result.get('artist', '')
-                item_type = result.get('type', '').lower()
-                
-                if item_type == 'artist':
-                    by_artist[artist_name] = result
-                elif item_type == 'album' and artist_name:
-                    if artist_name not in by_artist:
-                        by_artist[artist_name] = {
-                            'title': artist_name,
-                            'artist': artist_name,
-                            'type': 'artist',
-                            'albums': []
-                        }
-                    if 'albums' not in by_artist[artist_name]:
-                        by_artist[artist_name]['albums'] = []
-                    by_artist[artist_name]['albums'].append(result)
-                else:
-                    standalone_items.append(result)
-            
-            # Add artists with their content
-            for artist_name, artist_data in by_artist.items():
-                artist_item = QTreeWidgetItem(service_item)
-                artist_item.setText(0, artist_name)
-                artist_item.setText(1, artist_name)
-                artist_item.setText(2, "Artista")
-                
-                # Format as bold
-                font = artist_item.font(0)
-                font.setBold(True)
-                artist_item.setFont(0, font)
-                
-                # Store complete data
-                artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
-                
-                # Add albums
-                if 'albums' in artist_data and artist_data['albums']:
-                    for album in artist_data['albums']:
-                        album_item = _add_result_to_tree(self, album, artist_item)
-                
-                # Expand artist item
-                artist_item.setExpanded(True)
-            
-            # Add standalone items
-            for item in standalone_items:
-                _add_result_to_tree(self, item, service_item)
-            
-            # Expand service item
+        # Expandir item del servicio si tiene hijos
+        if filtered_count > 0:
             service_item.setExpanded(True)
-            
-            # Add result count badge to service
-            service_count = len(service_results)
-            if service_count > 0:
-                service_item.setText(0, f"{service.capitalize()} ({service_count})")
+        else:
+            # Eliminar elementos de servicio vacíos
+            index = self.treeWidget.indexOfTopLevelItem(service_item)
+            if index >= 0:
+                self.treeWidget.takeTopLevelItem(index)
     
-    # Update count of results
+
+    
+    # Actualizar recuento de resultados
     new_count = self.treeWidget.topLevelItemCount() - initial_count
-    self.textEdit.append(f"Se encontraron {len(results)} resultados")
+    
+    # Contar elementos visibles reales (puede ser menos que el total debido al filtrado)
+    visible_items = 0
+    for i in range(initial_count, self.treeWidget.topLevelItemCount()):
+        item = self.treeWidget.topLevelItem(i)
+        visible_items += _count_tree_items(item)
+        
+    self.textEdit.append(f"Se encontraron {visible_items} resultados")
     QApplication.processEvents()
     
-    # Select the first item if exists
+    # Seleccionar el primer elemento si existe
     if self.treeWidget.topLevelItemCount() > 0:
         first_root = self.treeWidget.topLevelItem(0)
         
@@ -594,25 +591,70 @@ def display_search_results(self, results):
             first_child = first_root.child(0)
             self.treeWidget.setCurrentItem(first_child)
             
-            # Try to display info for this item
+            # Intentar mostrar información de este elemento
             item_data = first_child.data(0, Qt.ItemDataRole.UserRole)
             if item_data:
                 display_wiki_info(self, item_data)
 
 
-def display_external_results(self, results):
+def _count_tree_items(item):
+    """Cuenta recursivamente el número total de ítems en un árbol."""
+    if not item:
+        return 0
+        
+    count = 1  # Contar el ítem actual
+    
+    # Contar recursivamente todos los hijos
+    for i in range(item.childCount()):
+        count += _count_tree_items(item.child(i))
+        
+    return count
+
+
+def _count_service_items(service_item):
+    """Cuenta el número de artistas, álbumes y canciones en un servicio."""
+    if not service_item:
+        return 0
+        
+    # No contamos el ítem del servicio en sí, solo sus hijos
+    count = 0
+    
+    # Contar todos los artistas, álbumes y canciones
+    for i in range(service_item.childCount()):
+        artist_item = service_item.child(i)
+        count += 1  # Contar artista
+        
+        # Contar álbumes de este artista
+        for j in range(artist_item.childCount()):
+            album_item = artist_item.child(j)
+            count += 1  # Contar álbum
+            
+            # Contar canciones de este álbum
+            count += album_item.childCount()
+    
+    return count
+
+
+def display_external_results(self, results, group_by_service=False):
     """Display external search results, keeping database results already shown."""
     if not results:
         self.log("No se encontraron resultados externos.")
         return
     
+    # Check for group_by_service setting from urlplaylist_only_local
+    if hasattr(self, 'urlplaylist_only_local') and self.urlplaylist_only_local:
+        group_by_service = True
+    
     # Filter out results from database to avoid duplicates
     external_results = [r for r in results if not r.get('from_database', False)]
     
+    # Filter by origen if urlplaylist_only_local is enabled
+    if hasattr(self, 'urlplaylist_only_local') and self.urlplaylist_only_local:
+        external_results = [r for r in external_results if r.get('origen', '') == 'local']
+    
     if external_results:
-        self.display_search_results(external_results)
+        display_search_results(self, external_results, group_by_service)
         self.log(f"Se añadieron {len(external_results)} resultados de servicios externos")
-
 
 def on_tree_double_click(self, item, column):
     """Handle double click on tree item to either expand/collapse or load content"""
@@ -621,7 +663,7 @@ def on_tree_double_click(self, item, column):
     
     # If it's a playlist item, load its content
     if item_data and 'type' in item_data and item_data['type'] == 'playlist' and 'path' in item_data:
-        self.load_rss_playlist_content(item, item_data)
+        load_rss_playlist_content(self, item, item_data)
         return
         
     # If it's a track item, play it
@@ -661,6 +703,26 @@ def show_advanced_settings(parent_instance):
         
         if os.path.exists(ui_file):
             uic.loadUi(ui_file, dialog)
+            
+            # Check if urlplaylist_only_local already exists
+            only_local_checkbox = dialog.findChild(QCheckBox, 'urlplaylist_only_local')
+            
+            # If it doesn't exist, create it
+            if not only_local_checkbox:
+                # Add the checkbox to the dialog
+                frame = dialog.findChild(QFrame, 'frame')
+                if frame and frame.layout():
+                    only_local_checkbox = QCheckBox("Mostrar solo archivos locales", dialog)
+                    only_local_checkbox.setObjectName('urlplaylist_only_local')
+                    
+                    # Get current value from parent instance
+                    if hasattr(parent_instance, 'urlplaylist_only_local'):
+                        only_local_checkbox.setChecked(parent_instance.urlplaylist_only_local)
+                    else:
+                        only_local_checkbox.setChecked(False)
+                        
+                    # Add to layout
+                    frame.layout().addWidget(only_local_checkbox)
             
             # Set up current values
             if hasattr(dialog, 'num_servicios_spinBox'):
@@ -851,7 +913,7 @@ def on_playlist_local_changed(self, index):
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
                     selected_playlist = json.load(f)
-                self.log(f"Playlist cargada directamente del archivo JSON")
+                #self.log(f"Playlist cargada directamente del archivo JSON")
             except Exception as e:
                 self.log(f"Error cargando archivo JSON: {str(e)}")
         
@@ -868,7 +930,7 @@ def on_playlist_local_changed(self, index):
                             'created': int(time.time()),
                             'modified': int(time.time())
                         }
-                        self.log(f"Playlist cargada directamente del archivo PLS")
+                        #self.log(f"Playlist cargada directamente del archivo PLS")
                 except Exception as e:
                     self.log(f"Error cargando archivo PLS: {str(e)}")
     
@@ -1474,6 +1536,15 @@ def _setup_service_checkboxes(parent_instance, dialog):
                 value = value.lower() == 'true'
             checkbox.setChecked(value)
 
+    # Set the urlplaylist_only_local checkbox
+    only_local_checkbox = dialog.findChild(QCheckBox, 'urlplaylist_only_local')
+    if only_local_checkbox:
+        # Set state from parent instance
+        only_local_checkbox.setChecked(parent_instance.urlplaylist_only_local)
+        parent_instance.log(f"Setting urlplaylist_only_local checkbox to: {parent_instance.urlplaylist_only_local}")
+    else:
+        parent_instance.log("urlplaylist_only_local checkbox not found in dialog")
+
     # Set the playlist view radio buttons
     if hasattr(dialog, 'pl_unidas') and hasattr(dialog, 'pl_separadas'):
         unified_view = getattr(parent_instance, 'playlist_unified_view', False)
@@ -1654,12 +1725,179 @@ def display_wiki_info(self, result_data):
             basic_data=result_data  # Pass the basic data to the worker
         )
         
-        # Conectar señales
-        worker.signals.results.connect(process_detailed_results(self, result_data))
-        worker.signals.error.connect(handle_info_load_error(self, error_msg="Ha ocurrido un error al cargar la información"))
-        worker.signals.finished.connect(on_info_load_finished(self, result_data, basic_data=result_data))
+        # Definir funciones callback para conectar a las señales del worker
+        def on_results_received(results):
+            if results:
+                self.log(f"Recibida información detallada: {len(results)} resultados")
         
-        # Initiate the worker
+        def on_error_occurred(error_msg):
+            self.log(f"Error al cargar información: {error_msg}")
+            self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>{error_msg}</p>")
+        
+        def on_loading_finished(result, basic_data):
+            try:
+                item_type = basic_data.get('type', '').lower()
+                title = basic_data.get('title', '')
+                artist = basic_data.get('artist', '')
+                album = basic_data.get('album', '')
+                
+                # Generate HTML to display the information with enhanced format
+                if item_type == 'artist':
+                    # Only show artist name
+                    html_content = f"<h2>{artist}</h2>"
+                elif item_type == 'album':
+                    # Show album by artist in one line
+                    html_content = f"<h2>{title} por {artist}</h2>"
+                elif item_type in ['track', 'song']:
+                    # Show song from album by artist
+                    album_text = f" del álbum {album}" if album else ""
+                    html_content = f"<h2>{title}{album_text} por {artist}</h2>"
+                else:
+                    # General format for other types
+                    html_content = f"<h2>{title}</h2>"
+                    if artist:
+                        html_content += f"<h3>por {artist}</h3>"
+                
+                html_content += "<hr>"
+                
+                # Dictionary to store all links found
+                all_links = {}
+                
+                # Special handling for Bandcamp content
+                if basic_data.get('source', '').lower() == 'bandcamp':
+                    if item_type == 'artist':
+                        # Show Bandcamp artist info
+                        html_content += "<h3>Bandcamp Artist</h3>"
+                        
+                        # List albums if available
+                        if 'albums' in basic_data and basic_data['albums']:
+                            html_content += f"<h3>Albums ({len(basic_data['albums'])})</h3>"
+                            html_content += "<ul>"
+                            for album in basic_data['albums']:
+                                album_year = f" ({album.get('year')})" if album.get('year') else ""
+                                html_content += f"<li><a href='{album.get('url', '#')}'>{album.get('title', 'Unknown Album')}</a>{album_year}</li>"
+                            html_content += "</ul>"
+                    
+                    elif item_type == 'album':
+                        # Show Bandcamp album info
+                        html_content += "<h3>Bandcamp Album</h3>"
+                        
+                        if basic_data.get('year'):
+                            html_content += f"<p><b>Year:</b> {basic_data['year']}</p>"
+                        
+                        # List tracks if available
+                        if 'tracks' in basic_data and basic_data['tracks']:
+                            html_content += f"<h3>Tracks ({len(basic_data['tracks'])})</h3>"
+                            html_content += "<ol>"
+                            for track in basic_data['tracks']:
+                                duration_str = format_duration(track.get('duration', 0))
+                                html_content += f"<li><a href='{track.get('url', '#')}'>{track.get('title', 'Unknown Track')}</a> ({duration_str})</li>"
+                            html_content += "</ol>"
+                    
+                    elif item_type in ['track', 'song']:
+                        # Show Bandcamp track info
+                        html_content += "<h3>Bandcamp Track</h3>"
+                        
+                        if basic_data.get('duration'):
+                            duration_str = format_duration(basic_data.get('duration', 0))
+                            html_content += f"<p><b>Duration:</b> {duration_str}</p>"
+                        
+                        if basic_data.get('track_number'):
+                            html_content += f"<p><b>Track Number:</b> {basic_data['track_number']}</p>"
+                
+                # Format info according to type
+                if item_type == 'artist':
+                    # Artist data
+                    if result and 'artist_info' in result:
+                        # Replace with proper function for formatting artist info
+                        html_content += "<h3>Artist Info</h3>"
+                        for key, value in result['artist_info'].items():
+                            if value and key not in ['id', 'name']:
+                                html_content += f"<p><b>{key.capitalize()}:</b> {value}</p>"
+                    
+                    # Wikipedia content
+                    if result and result.get('wiki_content'):
+                        html_content += "<h3>Wikipedia</h3>"
+                        html_content += f"<p>{result['wiki_content'][:500]}...</p>"
+                        
+                    # Genres
+                    if result and result.get('genres'):
+                        html_content += "<h3>Genres</h3>"
+                        html_content += "<ul>"
+                        for genre in result['genres']:
+                            html_content += f"<li>{genre}</li>"
+                        html_content += "</ul>"
+                    
+                    # Store links for later display
+                    if result and result.get('artist_links'):
+                        all_links['artist_links'] = result['artist_links']
+                    
+                elif item_type == 'album':
+                    # Album data
+                    if result and 'album_info' in result:
+                        # Replace with proper function for formatting album info
+                        html_content += "<h3>Album Info</h3>"
+                        for key, value in result['album_info'].items():
+                            if value and key not in ['id', 'name', 'songs']:
+                                html_content += f"<p><b>{key.capitalize()}:</b> {value}</p>"
+                    
+                    # Wikipedia content
+                    if result and result.get('wiki_content'):
+                        html_content += "<h3>Wikipedia</h3>"
+                        html_content += f"<p>{result['wiki_content'][:500]}...</p>"
+                    
+                    # Store links for later display
+                    if result and result.get('album_links'):
+                        all_links['album_links'] = result['album_links']
+                    
+                elif item_type in ['track', 'song']:
+                    # Song data
+                    if result and result.get('song_info'):
+                        # Replace with proper function for formatting song info
+                        html_content += "<h3>Song Info</h3>"
+                        for key, value in result['song_info'].items():
+                            if value and key not in ['id', 'title']:
+                                html_content += f"<p><b>{key.capitalize()}:</b> {value}</p>"
+                    else:
+                        html_content += "<p>No detailed song information found.</p>"
+                    
+                    # Related album data
+                    if result and result.get('album_info'):
+                        html_content += "<h3>Album Information</h3>"
+                        for key, value in result['album_info'].items():
+                            if value and key not in ['id', 'name', 'songs']:
+                                html_content += f"<p><b>{key.capitalize()}:</b> {value}</p>"
+                    
+                    # Store links for later display
+                    if result and result.get('track_links'):
+                        all_links['track_links'] = result['track_links']
+                    if result and result.get('album_links'):
+                        all_links['album_links'] = result['album_links']
+                
+                # Links from services (Spotify, Bandcamp, etc.)
+                if all_links:
+                    html_content += "<h3>Links</h3><ul>"
+                    for link_type, links in all_links.items():
+                        for service, url in links.items():
+                            if url:
+                                html_content += f"<li><a href='{url}'>{service.capitalize()}</a></li>"
+                    html_content += "</ul>"
+                
+                # Set HTML content
+                self.info_wiki_textedit.setHtml(html_content)
+                
+            except Exception as e:
+                self.log(f"Error processing loaded information: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
+                self.info_wiki_textedit.setHtml(f"<h2>Error</h2><p>An error occurred while processing the information: {str(e)}</p>")
+        
+        # Conectar señales
+        worker.signals.results.connect(on_results_received)
+        worker.signals.error.connect(on_error_occurred)
+        worker.signals.finished.connect(on_loading_finished)
+        
+        # Iniciar el worker
         QThreadPool.globalInstance().start(worker)
         
     except Exception as e:

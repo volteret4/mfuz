@@ -53,7 +53,7 @@ from modules.submodules.url_playlist.ui_helpers import (
     _add_result_to_tree, load_rss_playlist_content_to_tree
 )
 from modules.submodules.url_playlist.db_manager import (
-    search_database_links, _process_database_results
+    search_database_links, _process_database_results, perform_search_with_service_filter
 )
 from modules.submodules.url_playlist.rss_manager import (
     setup_rss_controls
@@ -85,6 +85,10 @@ class UrlPlayer(BaseModule):
         self.exclude_spotify_from_local = kwargs.get('exclude_spotify_from_local', True)
         self.playlists = {'spotify': [], 'local': [], 'rss': []}
 
+
+
+
+
         # Credentials
         
         # Lastfm
@@ -95,8 +99,8 @@ class UrlPlayer(BaseModule):
         self.scrobbles_by_date = os.environ.get("SCROBBLES_BY_DATE") or kwargs.get('scrobbles_by_date')
         
         # Spotify
-        self.spotify_client_id = os.environ.get("SPOTIFY_CLIENT_ID") or kwargs.get('spotify_client_id')
-        self.spotify_client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET") or kwargs.get('spotify_client_secret')
+        # self.spotify_client_id = os.environ.get("SPOTIFY_CLIENT_ID") or kwargs.get('spotify_client_id')
+        # self.spotify_client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET") or kwargs.get('spotify_client_secret')
         self.spotify_user_id = os.environ.get("SPOTIFY_USER_ID") or kwargs.get('spotify_user_id')
         self.spotify_redirect_uri = os.environ.get("SPOTIFY_REDIRECT_URI") or kwargs.get('spotify_redirect_uri')
         
@@ -214,7 +218,17 @@ class UrlPlayer(BaseModule):
         
         # Log the final configuration
         print(f"[UrlPlayer] Final config - DB: {self.db_path}, Spotify enabled: {self.spotify_enabled}, Last.fm enabled: {self.lastfm_enabled}")
+
+        # Initialize the "only local" setting with default value of False
+        self.urlplaylist_only_local = kwargs.get('urlplaylist_only_local', False)
         
+        # Convert to boolean if it's a string
+        if isinstance(self.urlplaylist_only_local, str):
+            self.urlplaylist_only_local = self.urlplaylist_only_local.lower() == 'true'
+            
+        # Set flag as attribute
+        self.log(f"Initialize urlplaylist_only_local: {self.urlplaylist_only_local}")   
+
         self._is_initializing = False
 
     def init_ui(self):
@@ -458,100 +472,13 @@ class UrlPlayer(BaseModule):
         if not query:
             return
         
-        self.log(f"Searching: {query}")
+        # Obtener el estado de only_local
+        only_local = False
+        if hasattr(self, 'urlplaylist_only_local'):
+            only_local = self.urlplaylist_only_local
         
-        # Clear previous results
-        self.treeWidget.clear()
-        self.textEdit.clear()
-        QApplication.processEvents()  # Update UI
-        
-        # Show loading indicator
-        from modules.submodules.url_playlist.ui_helpers import show_loading_indicator
-        show_loading_indicator(self, True)
-        
-        # Get the selected service
-        service = self.servicios.currentText()
-        
-        # Get the search type
-        search_type = "all"
-        if hasattr(self, 'tipo_combo') and self.tipo_combo:
-            search_type = self.tipo_combo.currentText().lower()
-        
-        # Show progress
-        self.textEdit.append(f"Buscando '{query}' en {service} (tipo: {search_type}, máx {self.pagination_value} resultados por servicio)...")
-        QApplication.processEvents()  # Update UI
-        
-        # Create a structure to track added items
-        self.added_items = {
-            'artists': set(),      # Set of artist names
-            'albums': set(),       # Set of "artist - album" keys
-            'tracks': set()        # Set of "artist - title" keys
-        }
-        
-        # First check database for existing links and structure
-        self.log("Consultando la base de datos local primero...")
-        db_links = search_database_links(self, self.db_path, query, search_type)
-        
-        # Process database results immediately
-        if db_links:
-            db_results = _process_database_results(self, db_links)
-            if db_results:
-                display_search_results(self, db_results)
-                self.log(f"Encontrados {len(db_results)} resultados en la base de datos local")
-        
-        # Determine which services to include
-        active_services = []
-        if service == "Todos":
-            # Check each service in the included_services dictionary
-            for service_id, included in self.included_services.items():
-                # Convert included to boolean if it's a string
-                if isinstance(included, str):
-                    included = included.lower() == 'true'
-                
-                if included:
-                    active_services.append(service_id)
-        else:
-            # Convert from display name to service id (lowercase)
-            service_id = service.lower()
-            active_services = [service_id]
-        
-        if not active_services:
-            self.log("No hay servicios seleccionados para la búsqueda. Actívalos en Ajustes Avanzados.")
-            return
-            
-        # Disable controls during search
-        self.searchButton.setEnabled(False)
-        self.lineEdit.setEnabled(False)
-        QApplication.processEvents()  # Update UI
-        
-        # Import the worker from the submódulo
-        #from modules.submodules.url_playlist.search_workers import SearchWorker
-        
-        # Create and configure the worker
-        worker = SearchWorker(active_services, query, max_results=self.pagination_value)
-        worker.parent = self  # Set parent to access search_in_database
-        worker.search_type = search_type  # Pass search type to worker
-        
-        # Pass database links to worker
-        worker.db_links = db_links
-        
-        # Pass necessary attributes from parent
-        worker.db_path = self.db_path
-        worker.spotify_client_id = self.spotify_client_id
-        worker.spotify_client_secret = self.spotify_client_secret
-        worker.lastfm_manager_key = self.lastfm_manager_key
-        worker.lastfm_username = self.lastfm_username
-        
-        # Pass the tracking structure to avoid duplicates
-        worker.added_items = self.added_items
-        
-        # Connect signals
-        worker.signals.results.connect(self, display_external_results)
-        worker.signals.error.connect(lambda err: self.log(f"Error en búsqueda: {err}"))
-        worker.signals.finished.connect(SearchWorker.search_finished)
-        
-        # Start the worker in the thread pool
-        QThreadPool.globalInstance().start(worker)
+        # Utilizar la nueva función de búsqueda
+        perform_search_with_service_filter(self, query, only_local)
 
 
     def connect_signals(self):
@@ -581,7 +508,6 @@ class UrlPlayer(BaseModule):
 
             # Conectar eventos de doble clic
             if self.treeWidget:
-                self.treeWidget.itemDoubleClicked.connect(on_tree_double_click)
                 # Ensure signal is connected only once
                 try:
                     self.treeWidget.itemDoubleClicked.disconnect(on_tree_double_click)
@@ -1188,6 +1114,17 @@ class UrlPlayer(BaseModule):
                     else:
                         self.included_services[key] = bool(value)
             
+            # Load urlplaylist_only_local setting
+            if 'urlplaylist_only_local' in module_args:
+                value = module_args['urlplaylist_only_local']
+                if isinstance(value, str):
+                    self.urlplaylist_only_local = value.lower() == 'true'
+                else:
+                    self.urlplaylist_only_local = bool(value)
+                self.log(f"Loaded urlplaylist_only_local: {self.urlplaylist_only_local}")
+            else:
+                self.urlplaylist_only_local = False
+            
             # Cargar ruta de playlists locales
             if 'local_playlist_path' in module_args:
                 local_playlist_path = module_args['local_playlist_path']
@@ -1257,7 +1194,11 @@ class UrlPlayer(BaseModule):
             self.show_spotify_playlists = dialog.sp_checkbox.isChecked()
             self.show_rss_playlists = dialog.blogs_checkbox.isChecked()
             
-
+            # Save "Only Local" setting
+            only_local_checkbox = dialog.findChild(QCheckBox, 'urlplaylist_only_local')
+            if only_local_checkbox:
+                self.urlplaylist_only_local = only_local_checkbox.isChecked()
+                self.log(f"Set urlplaylist_only_local to: {self.urlplaylist_only_local}")
 
             # Last.fm username
             if hasattr(dialog, 'entrada_usuario'):
@@ -1356,7 +1297,7 @@ class UrlPlayer(BaseModule):
                 os.path.join(PROJECT_ROOT, ".content", "config", "config.yml")
             ]
             
-           
+        
             config_path = None
             for path in config_paths:
                 if os.path.exists(path):
@@ -1436,6 +1377,9 @@ class UrlPlayer(BaseModule):
                 'show_spotify_playlists': getattr(self, 'show_spotify_playlists', True),
                 'show_rss_playlists': getattr(self, 'show_rss_playlists', True),
                 
+                # Añadir configuración de urlplaylist_only_local
+                'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
+                
                 # lastfm
                 'lastfm_user': lastfm_settings['lastfm_user'],
                 'scrobbles_limit': lastfm_settings['scrobbles_limit'],
@@ -1448,10 +1392,9 @@ class UrlPlayer(BaseModule):
                 'freshrss_api_key': self.freshrss_auth_token
             }
             
-            
-
             # Añadir valores de depuración
             self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
+            self.log(f"Guardando configuración - Only local: {new_settings['urlplaylist_only_local']}")
             
             # Bandera para saber si se encontró y actualizó el módulo
             module_updated = False

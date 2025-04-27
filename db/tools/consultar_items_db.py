@@ -323,6 +323,23 @@ class MusicDatabaseQuery:
         """
         artist_info = {}
         
+        # Obtener información básica del artista, incluyendo origen
+        basic_query = """
+        SELECT id, name, bio, origen FROM artists WHERE LOWER(name) = LOWER(?)
+        """
+        self.cursor.execute(basic_query, (artist_name,))
+        artist_row = self.cursor.fetchone()
+        
+        if not artist_row:
+            return None
+        
+        artist_info['id'] = artist_row[0]
+        artist_info['name'] = artist_row[1]
+        if artist_row[2]:  # bio
+            artist_info['bio'] = artist_row[2]
+        if artist_row[3]:  # origen
+            artist_info['origen'] = artist_row[3]
+        
         # Información básica y URLs del artista
         artist_links = self.get_artist_links(artist_name)
         if artist_links:
@@ -340,7 +357,8 @@ class MusicDatabaseQuery:
             albums.name, 
             albums.year, 
             albums.genre, 
-            albums.album_art_path 
+            albums.album_art_path,
+            albums.origen
         FROM albums 
         JOIN artists ON albums.artist_id = artists.id 
         WHERE LOWER(artists.name) = LOWER(?)
@@ -357,6 +375,10 @@ class MusicDatabaseQuery:
                 'album_art_path': album_row[4]
             }
             
+            # Añadir origen si existe
+            if album_row[5]:
+                album['origen'] = album_row[5]
+            
             # Obtener URLs del álbum
             album_links = self.get_album_links(artist_name, album['name'])
             if album_links:
@@ -364,18 +386,26 @@ class MusicDatabaseQuery:
             
             # Obtener canciones del álbum
             songs_query = """
-            SELECT id, title, track_number, duration, file_path
+            SELECT id, title, track_number, duration, file_path, origen
             FROM songs 
             WHERE LOWER(artist) = LOWER(?) AND LOWER(album) = LOWER(?)
             """
             self.cursor.execute(songs_query, (artist_name, album['name']))
-            album['songs'] = [{
-                'id': song[0],
-                'title': song[1], 
-                'track_number': song[2],
-                'duration': song[3],
-                'file_path': song[4]
-            } for song in self.cursor.fetchall()]
+            album['songs'] = []
+            
+            for song in self.cursor.fetchall():
+                song_data = {
+                    'id': song[0],
+                    'title': song[1], 
+                    'track_number': song[2],
+                    'duration': song[3],
+                    'file_path': song[4]
+                }
+                # Añadir origen si existe
+                if song[5]:
+                    song_data['origen'] = song[5]
+                    
+                album['songs'].append(song_data)
             
             albums.append(album)
         
@@ -383,22 +413,29 @@ class MusicDatabaseQuery:
         
         # Todas las canciones del artista
         songs_query = """
-        SELECT id, title, album, duration, file_path, album_art_path_denorm
+        SELECT id, title, album, duration, file_path, album_art_path_denorm, origen
         FROM songs 
         WHERE LOWER(artist) = LOWER(?)
         """
         self.cursor.execute(songs_query, (artist_name,))
-        artist_info['songs'] = [{
-            'id': song[0],
-            'title': song[1], 
-            'album': song[2],
-            'duration': song[3],
-            'file_path': song[4],
-            'album_art_path': song[5]
-        } for song in self.cursor.fetchall()]
+        artist_info['songs'] = []
+        
+        for song in self.cursor.fetchall():
+            song_data = {
+                'id': song[0],
+                'title': song[1], 
+                'album': song[2],
+                'duration': song[3],
+                'file_path': song[4],
+                'album_art_path': song[5]
+            }
+            # Añadir origen si existe
+            if song[6]:
+                song_data['origen'] = song[6]
+                
+            artist_info['songs'].append(song_data)
         
         return artist_info
-
 
 
 
@@ -425,7 +462,8 @@ class MusicDatabaseQuery:
                 a.label,
                 a.total_tracks,
                 a.album_art_path,
-                a.folder_path
+                a.folder_path,
+                a.origen
             FROM albums a
             JOIN artists art ON a.artist_id = art.id 
             WHERE a.name LIKE ? COLLATE NOCASE 
@@ -444,7 +482,8 @@ class MusicDatabaseQuery:
                 a.label,
                 a.total_tracks,
                 a.album_art_path,
-                a.folder_path
+                a.folder_path,
+                a.origen
             FROM albums a
             JOIN artists art ON a.artist_id = art.id 
             WHERE a.name LIKE ? COLLATE NOCASE
@@ -457,29 +496,48 @@ class MusicDatabaseQuery:
         if not album_row:
             return None
         
-        # El resto del código permanece igual, pero añadimos un LIMIT en la consulta de canciones
+        album_info = {
+            'id': album_row[0],
+            'name': album_row[1],
+            'artist': album_row[2],
+            'year': album_row[3],
+            'genre': album_row[4],
+            'label': album_row[5],
+            'total_tracks': album_row[6],
+            'album_art_path': album_row[7],
+            'folder_path': album_row[8],
+        }
+        
+        # Añadir origen si existe
+        if album_row[9]:
+            album_info['origen'] = album_row[9]
         
         # Obtener canciones del álbum con un índice eficiente
         songs_query = """
-        SELECT id, title, track_number, duration, file_path, has_lyrics
+        SELECT id, title, track_number, duration, file_path, has_lyrics, origen
         FROM songs 
         WHERE album LIKE ? COLLATE NOCASE
         ORDER BY track_number
         """
         self.cursor.execute(songs_query, (album_name,))
-        album_info['songs'] = [{
-            'id': song[0],
-            'title': song[1], 
-            'track_number': song[2],
-            'duration': song[3],
-            'file_path': song[4],
-            'has_lyrics': bool(song[5])
-        } for song in self.cursor.fetchall()]
+        album_info['songs'] = []
+        
+        for song in self.cursor.fetchall():
+            song_data = {
+                'id': song[0],
+                'title': song[1], 
+                'track_number': song[2],
+                'duration': song[3],
+                'file_path': song[4],
+                'has_lyrics': bool(song[5])
+            }
+            # Añadir origen si existe
+            if song[6]:
+                song_data['origen'] = song[6]
+                
+            album_info['songs'].append(song_data)
         
         return album_info
-
-
-
 
     def get_song_info(self, song_title, artist_name=None, album_name=None):
         """
@@ -504,7 +562,8 @@ class MusicDatabaseQuery:
             songs.duration,
             songs.file_path,
             songs.album_art_path_denorm,
-            songs.has_lyrics
+            songs.has_lyrics,
+            songs.origen
         FROM songs 
         WHERE LOWER(songs.title) = LOWER(?)
         """
@@ -536,6 +595,10 @@ class MusicDatabaseQuery:
             'has_lyrics': bool(song_row[8])
         }
         
+        # Añadir origen si existe
+        if song_row[9]:
+            song_info['origen'] = song_row[9]
+        
         # Obtener letra si existe
         if song_info['has_lyrics']:
             lyrics = self.get_song_lyrics(song_title, song_info['artist'])
@@ -558,7 +621,6 @@ class MusicDatabaseQuery:
             song_info['artist_links'] = artist_links
         
         return song_info
-
 
 
     def get_song_path_if_exists(self, artist=None, album=None, song=None):
@@ -1176,6 +1238,72 @@ class MusicDatabaseQuery:
         
         return result
         
+
+    def get_item_origen(self, item_type, item_id=None, name=None, artist=None, album=None):
+        """
+        Obtiene el origen de un artista, álbum o canción.
+        
+        :param item_type: Tipo de item ('artist', 'album', 'song')
+        :param item_id: ID del item (opcional)
+        :param name: Nombre del artista, título del álbum o canción (opcional)
+        :param artist: Nombre del artista para buscar álbum/canción (opcional)
+        :param album: Nombre del álbum para buscar canción (opcional)
+        :return: String con el origen o None si no se encuentra
+        """
+        if item_type.lower() == 'artist':
+            if item_id:
+                query = "SELECT origen FROM artists WHERE id = ?"
+                params = (item_id,)
+            elif name:
+                query = "SELECT origen FROM artists WHERE LOWER(name) = LOWER(?)"
+                params = (name,)
+            else:
+                return None
+        
+        elif item_type.lower() == 'album':
+            if item_id:
+                query = "SELECT origen FROM albums WHERE id = ?"
+                params = (item_id,)
+            elif name and artist:
+                query = """
+                SELECT albums.origen FROM albums 
+                JOIN artists ON albums.artist_id = artists.id
+                WHERE LOWER(albums.name) = LOWER(?) AND LOWER(artists.name) = LOWER(?)
+                """
+                params = (name, artist)
+            elif name:
+                query = "SELECT origen FROM albums WHERE LOWER(name) = LOWER(?)"
+                params = (name,)
+            else:
+                return None
+        
+        elif item_type.lower() == 'song':
+            if item_id:
+                query = "SELECT origen FROM songs WHERE id = ?"
+                params = (item_id,)
+            elif name and artist and album:
+                query = """
+                SELECT origen FROM songs 
+                WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?) AND LOWER(album) = LOWER(?)
+                """
+                params = (name, artist, album)
+            elif name and artist:
+                query = """
+                SELECT origen FROM songs 
+                WHERE LOWER(title) = LOWER(?) AND LOWER(artist) = LOWER(?)
+                """
+                params = (name, artist)
+            else:
+                return None
+        else:
+            return None
+        
+        self.cursor.execute(query, params)
+        result = self.cursor.fetchone()
+        return result[0] if result else None
+
+
+
 def main():
     parser = argparse.ArgumentParser(description='Consultas a base de datos musical')
     parser.add_argument('--db', required=True, help='Ruta a la base de datos SQLite')
