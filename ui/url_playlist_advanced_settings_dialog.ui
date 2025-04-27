@@ -366,7 +366,7 @@ QHeaderView::section {
                          <string>&amp;MusicBrainz</string>
                         </property>
                         <property name="icon">
-                         <iconset resource="../images.qrc">
+                         <iconset>
                           <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
                         </property>
                        </widget>
@@ -532,7 +532,7 @@ QHeaderView::section {
                          <string>Listenbrainz</string>
                         </property>
                         <property name="icon">
-                         <iconset resource="../images.qrc">
+                         <iconset>
                           <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
                         </property>
                        </widget>
@@ -576,7 +576,7 @@ QHeaderView::section {
                    <item>
                     <widget class="QLineEdit" name="entrada_usuario">
                      <property name="text">
-                      <string>Introduce aqui tu usuario para lastfm</string>
+                      <string/>
                      </property>
                     </widget>
                    </item>
@@ -840,7 +840,11 @@ QHeaderView::section {
                     </widget>
                    </item>
                    <item>
-                    <widget class="QSpinBox" name="scrobblers_spinBox"/>
+                    <widget class="QSpinBox" name="scrobblers_spinBox">
+                     <property name="maximum">
+                      <number>10000</number>
+                     </property>
+                    </widget>
                    </item>
                   </layout>
                  </widget>
