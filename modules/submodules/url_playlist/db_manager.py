@@ -480,7 +480,6 @@ def fetch_artist_song_paths(self, artist_name):
         self.log(traceback.format_exc())
         return None
 
-
 def perform_search_with_service_filter(self, query, only_local=False):
     """
     Realiza una búsqueda en la base de datos y organiza los resultados por servicio.
@@ -516,19 +515,21 @@ def perform_search_with_service_filter(self, query, only_local=False):
             # Si only_local es True, filtrar resultados
             if only_local:
                 self.log(f"Filtrando {len(db_results)} resultados para mostrar solo origen 'local'")
-                filtered_results = []
                 
                 # Pre-filtrar manualmente resultados locales
+                filtered_results = []
+                
                 for result in db_results:
                     origen = result.get('origen')
                     file_path = result.get('file_path')
                     title = result.get('title', '')
                     
+                    # Solo incluir resultados con origen 'local' o con file_path
                     if origen == 'local' or file_path:
                         filtered_results.append(result)
                         self.log(f"Elemento local: {title}, origen: {origen}, file_path: {file_path}")
                 
-                # Añadir enlaces a servicios para los elementos locales
+                # Aplicar filtrado más detallado manteniendo la organización por servicio
                 if filtered_results:
                     # Aplicar el filtro con agrupación por servicio
                     db_results = filter_results_by_origen(filtered_results, only_local=True, service_grouping=True)
@@ -563,8 +564,8 @@ def perform_search_with_service_filter(self, query, only_local=False):
         if hasattr(self, 'textEdit'):
             self.textEdit.append("No se encontraron resultados en la base de datos")
     
-    # Buscar en servicios externos si no estamos limitados a local
-    if not only_local:
+    # Buscar en servicios externos si no estamos limitados a local o si buscamos enlaces locales con servicios externos
+    if not only_local or (only_local and any(self.included_services.get(svc, False) for svc in ['spotify', 'youtube', 'bandcamp', 'soundcloud'])):
         # Determinar qué servicios buscar
         active_services = []
         selected_service = self.servicios.currentText() if hasattr(self, 'servicios') else "Todos"
@@ -596,6 +597,7 @@ def perform_search_with_service_filter(self, query, only_local=False):
             worker.spotify_client_secret = self.spotify_client_secret
             worker.lastfm_manager_key = self.lastfm_manager_key
             worker.lastfm_username = self.lastfm_username
+            worker.only_local = only_local  # Pasar el flag de only_local al worker
             
             # Crear una estructura para rastrear elementos añadidos
             self.added_items = {
@@ -609,7 +611,7 @@ def perform_search_with_service_filter(self, query, only_local=False):
             worker.group_by_service = True
             
             # Conectar señales
-            worker.signals.results.connect(lambda results: display_external_results(self, results, True))
+            worker.signals.results.connect(lambda results: display_external_results_with_filter(self, results, True, only_local))
             worker.signals.error.connect(lambda err: self.log(f"Error en búsqueda: {err}"))
             worker.signals.finished.connect(SearchWorker.search_finished)
             
@@ -622,6 +624,32 @@ def perform_search_with_service_filter(self, query, only_local=False):
     
     # Actualizar la UI
     QApplication.processEvents()
+
+def display_external_results_with_filter(self, results, group_by_service=False, only_local=False):
+    """Display external search results with local origin filtering if needed."""
+    if not results:
+        self.log("No se encontraron resultados externos.")
+        return
+    
+    # Filter results if only_local is enabled
+    if only_local:
+        # Para resultados externos, solo mostrar aquellos con origen 'local' o file_path
+        filtered_results = []
+        for r in results:
+            if r.get('origen') == 'local' or r.get('file_path'):
+                filtered_results.append(r)
+                self.log(f"Resultado externo con origen local: {r.get('title', '')}")
+        
+        # Use the original function with filtered results
+        display_external_results(self, filtered_results, group_by_service)
+        self.log(f"Se añadieron {len(filtered_results)} resultados locales de servicios externos")
+    else:
+        # Use the original function as-is for non-filtered results
+        display_external_results(self, results, group_by_service)
+        self.log(f"Se añadieron {len(results)} resultados de servicios externos")
+
+
+        
 def filter_results_by_origen(results, only_local=False, service_grouping=True):
     """
     Filtra resultados según su origen y opcionalmente los agrupa por servicio.
@@ -643,13 +671,16 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
         origen = result.get('origen')
         file_path = result.get('file_path')
         
+        # Verificación estricta de origen local
+        is_local = origen == 'local' or file_path
+        
         # Si es artista, revisamos sus álbumes y canciones individualmente
         if item_type == 'artist':
             # Crear una copia del resultado para modificarla
             filtered_artist = result.copy()
             
             # Si el artista en sí es local o tiene filepath
-            if origen == 'local' or file_path:
+            if is_local:
                 # Filtrar álbumes locales de este artista
                 if 'albums' in result:
                     filtered_albums = []
@@ -677,6 +708,7 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                         
                                         # Almacenar enlaces a servicios para esta canción local
                                         if service_grouping:
+                                            # Verificar y almacenar enlaces específicos de servicios
                                             for service in ['spotify', 'youtube', 'bandcamp', 'soundcloud']:
                                                 service_url = None
                                                 
@@ -696,6 +728,8 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                                         service_track = track.copy()
                                                         service_track['source'] = service
                                                         service_track['url'] = service_url
+                                                        # Preservar el origen local
+                                                        service_track['origen'] = 'local'
                                                         services_by_local[service][track_key] = service_track
                                 
                                 # Actualizar tracks solo con los que son locales
@@ -725,6 +759,8 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                             service_album = album.copy()
                                             service_album['source'] = service
                                             service_album['url'] = service_url
+                                            # Preservar el origen local
+                                            service_album['origen'] = 'local'
                                             services_by_local[service][album_key] = service_album
                             
                             filtered_albums.append(filtered_album)
@@ -756,15 +792,17 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                 service_artist = result.copy()
                                 service_artist['source'] = service
                                 service_artist['url'] = service_url
+                                # Preservar el origen local
+                                service_artist['origen'] = 'local'
                                 services_by_local[service][artist_key] = service_artist
                 
                 # Añadir artista filtrado a resultados si tiene algún álbum o es local por sí mismo
-                if 'albums' in filtered_artist and filtered_artist['albums'] or origen == 'local':
+                if 'albums' in filtered_artist and filtered_artist['albums'] or is_local:
                     filtered_results.append(filtered_artist)
         
         # Si es un álbum directamente, verificar si es local
         elif item_type == 'album':
-            if origen == 'local' or file_path:
+            if is_local:
                 # Crear una copia del álbum para modificarla
                 filtered_album = result.copy()
                 
@@ -798,6 +836,8 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                             service_track = track.copy()
                                             service_track['source'] = service
                                             service_track['url'] = service_url
+                                            # Preservar el origen local
+                                            service_track['origen'] = 'local'
                                             services_by_local[service][track_key] = service_track
                     
                     # Actualizar tracks solo con los locales
@@ -825,13 +865,16 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                 service_album = result.copy()
                                 service_album['source'] = service
                                 service_album['url'] = service_url
+                                # Preservar el origen local
+                                service_album['origen'] = 'local'
                                 services_by_local[service][album_key] = service_album
                 
                 filtered_results.append(filtered_album)
         
         # Si es una canción directamente, verificar si es local
         elif item_type in ['track', 'song']:
-            if origen == 'local' or file_path:
+            if is_local:
+                # Añadir la canción original
                 filtered_results.append(result)
                 
                 # Almacenar enlaces a servicios para esta canción local
@@ -853,14 +896,17 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
                                 service_track = result.copy()
                                 service_track['source'] = service
                                 service_track['url'] = service_url
+                                # Preservar el origen local
+                                service_track['origen'] = 'local'
                                 services_by_local[service][track_key] = service_track
     
     # Añadir elementos de servicios a los resultados filtrados
     if service_grouping:
         for service, items_dict in services_by_local.items():
             for item_key, service_item in items_dict.items():
-                # Asegurarnos de establecer correctamente el source
+                # Asegurarnos de establecer correctamente el source y mantener origen local
                 service_item['source'] = service
+                service_item['origen'] = 'local'
                 filtered_results.append(service_item)
     
     print(f"[filter_results_by_origen] Resultados filtrados finales: {len(filtered_results)}")

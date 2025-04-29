@@ -10,43 +10,44 @@ from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QIcon
 
 from modules.submodules.url_playlist.playlist_manager import determine_source_from_url
-#from modules.submodules.url_playlist.ui_helpers import add_item_to_queue
+
 # Función para reproducir a partir de un índice
 def play_from_index(self, index):
-    """Reproduce desde un índice específico de la cola."""
-    if not self.current_playlist or index < 0 or index >= len(self.current_playlist):
-        self.log("No hay elementos válidos para reproducir")
-        return
+    """Play a specific track from the playlist by index"""
+    if not hasattr(self, 'current_playlist') or not self.current_playlist or index < 0 or index >= len(self.current_playlist):
+        self.log("No valid item to play")
+        return False
     
-    # Actualizar el índice actual
+    # Update current index
     self.current_track_index = index
     
-    # Seleccionar visualmente el elemento en la lista
+    # Select the item in the list
     self.listWidget.setCurrentRow(index)
     
-    # Obtener la URL o path del elemento a reproducir
-    current_item = self.current_playlist[index]
-    url = current_item.get('file_path', current_item.get('url'))  # Try file_path first, then URL
+    # Get the track data
+    track = self.current_playlist[index]
+    url = track.get('file_path', track.get('url'))
     
-    # Verificar que la URL o path sea válido
     if not url:
-        self.log("URL/path inválido para reproducción")
-        return
+        self.log("No playable URL found for track")
+        return False
     
-    # Detener reproducción actual si existe
-    stop_playback(self)
+    # Play using the player manager
+    result = self.player_manager.play(url)
     
-    # Reproducir la URL/path actual
-    play_single_url(self, url)
-    
-    # Resaltar elemento actual
-    self.highlight_current_track()
-    
-    # Mostrar información en el log
-    title = current_item.get('title', 'Desconocido')
-    artist = current_item.get('artist', '')
-    display = f"{artist} - {title}" if artist else title
-    self.log(f"Reproduciendo: {display}")
+    if result:
+        # Display track info
+        title = track.get('title', 'Unknown')
+        artist = track.get('artist', '')
+        display = f"{artist} - {title}" if artist else title
+        self.log(f"Playing: {display}")
+        
+        # Highlight the current track
+        self.highlight_current_track()
+        
+    return result
+
+
 
 def play_single_url(self, url):
     """Reproduce una única URL o archivo local con MPV."""
@@ -390,18 +391,19 @@ def add_to_queue(parent_instance):
                     # Add all child tracks
                     for i in range(item.childCount()):
                         child = item.child(i)
-                        parent_instance.add_item_to_queue(parent_instance, child)
+                        add_item_to_queue(parent_instance, child)
                     continue  # Skip adding the album itself
         
         # If it's a parent item with children (like artist or playlist)
         elif item.childCount() > 0:
             for i in range(item.childCount()):
                 child = item.child(i)
-                parent_instance.add_item_to_queue(parent_instance, child)
+                
+                add_item_to_queue(parent_instance, child)
             continue  # Skip adding the parent itself
         
         # For individual tracks or other items without special handling
-        parent_instance.add_item_to_queue(parent_instance, item)
+        add_item_to_queue(parent_instance, item)
 
 
 def remove_from_queue(parent_instance):
@@ -417,3 +419,183 @@ def remove_from_queue(parent_instance):
         # Actualizar la lista interna
         if 0 <= row < len(parent_instance.current_playlist):
             parent_instance.current_playlist.pop(row)
+
+def play_item(self, item):
+    """Play a tree widget item directly"""
+    try:
+        from PyQt6.QtCore import Qt
+        
+        # Get item data
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data:
+            self.log("No item data to play")
+            return
+            
+        # Extract required information
+        url = None
+        if isinstance(item_data, dict):
+            # Try file_path first for local files
+            url = item_data.get('file_path')
+            
+            # If no file_path, try service URLs in preferred order
+            if not url:
+                service_priority = ['youtube', 'spotify', 'bandcamp', 'soundcloud', 'local']
+                for service in service_priority:
+                    service_url = item_data.get(f'{service}_url')
+                    if service_url:
+                        url = service_url
+                        break
+                        
+            # Last resort: generic URL
+            if not url:
+                url = item_data.get('url')
+        else:
+            # If item_data is not a dict, assume it's the URL
+            url = str(item_data)
+            
+        if not url:
+            self.log("No playable URL found")
+            return
+            
+        # Add to queue first
+        added = add_item_to_queue(self, item)
+        
+        if not added:
+            self.log("Failed to add item to queue")
+            return
+            
+        # Set as current and play
+        self.current_track_index = len(self.current_playlist) - 1
+        
+        # Play using the PlayerManager
+        if hasattr(self, 'player_manager'):
+            self.player_manager.play(url)
+        else:
+            # Fallback to old play method
+            from modules.submodules.url_playlist.media_utils import play_media
+            play_media(self)
+        
+    except Exception as e:
+        self.log(f"Error playing item: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+
+
+def add_item_to_queue(controller, item):
+    """Add a specific item to the queue with appropriate icon"""
+    try:
+        from PyQt6.QtCore import Qt  # Ensure Qt is imported here too
+        from PyQt6.QtWidgets import QListWidgetItem
+        
+        # Get item data
+        title = item.text(0)
+        artist = item.text(1)
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if not item_data:
+            if hasattr(controller, 'log'):
+                controller.log("No item data found, cannot add to queue")
+            else:
+                print("No item data found, cannot add to queue")
+            return False
+        
+        # Get the playable URL based on priority
+        url = None
+        source = None
+        
+        if isinstance(item_data, dict):
+            # Use file_path first if available (for local files)
+            if 'file_path' in item_data and item_data['file_path']:
+                url = item_data['file_path']
+                source = 'local'
+            # Then try URL
+            elif 'url' in item_data and item_data['url']:
+                url = item_data['url']
+                source = item_data.get('source', 'unknown')
+            # Finally check for service-specific URLs
+            else:
+                # Get service priority
+                service_priority = ['youtube', 'spotify', 'bandcamp', 'soundcloud', 'local']
+                
+                # Try each service in priority order
+                for service in service_priority:
+                    service_url_key = f'{service}_url'
+                    if service_url_key in item_data and item_data[service_url_key]:
+                        url = item_data[service_url_key]
+                        source = service
+                        break
+        else:
+            url = str(item_data)
+            if hasattr(controller, '_determine_source_from_url'):
+                source = controller._determine_source_from_url(url)
+            else:
+                # Fallback to direct import
+                from modules.submodules.url_playlist.playlist_manager import determine_source_from_url
+                source = determine_source_from_url(url)
+        
+        if not url:
+            if hasattr(controller, 'log'):
+                controller.log(f"No URL or file path found for: {title}")
+            else:
+                print(f"No URL or file path found for: {title}")
+            return False
+        
+        # Create a new item for the playlist
+        display_text = title
+        if artist:
+            display_text = f"{artist} - {title}"
+        
+        # Create the item with appropriate icon
+        queue_item = QListWidgetItem(display_text)
+        queue_item.setData(Qt.ItemDataRole.UserRole, url)
+        
+        # Set icon based on source
+        if hasattr(controller, 'get_source_icon'):
+            icon = controller.get_source_icon(url, {'source': source})
+            queue_item.setIcon(icon)
+        elif hasattr(controller, 'service_icons') and source in controller.service_icons:
+            # Use icons directly if available
+            queue_item.setIcon(controller.service_icons[source])
+        
+        # Make sure the controller has a listWidget
+        if not hasattr(controller, 'listWidget'):
+            print("Controller has no listWidget attribute")
+            return False
+            
+        # Add to the list
+        controller.listWidget.addItem(queue_item)
+        
+        # Update internal playlist - include file_path if available
+        playlist_item = {
+            'title': title, 
+            'artist': artist, 
+            'url': url,
+            'source': source,
+            'entry_data': item_data
+        }
+        
+        # Add file_path if it exists
+        if isinstance(item_data, dict) and 'file_path' in item_data:
+            playlist_item['file_path'] = item_data['file_path']
+        
+        # Initialize current_playlist if it doesn't exist
+        if not hasattr(controller, 'current_playlist'):
+            controller.current_playlist = []
+            
+        controller.current_playlist.append(playlist_item)
+        
+        if hasattr(controller, 'log'):
+            controller.log(f"Added to queue: {display_text}")
+        else:
+            print(f"Added to queue: {display_text}")
+            
+        return True
+    
+    except Exception as e:
+        if hasattr(controller, 'log'):
+            controller.log(f"Error adding item to queue: {str(e)}")
+        else:
+            print(f"Error adding item to queue: {str(e)}")
+        import traceback
+        print(traceback.format_exc())
+        return False

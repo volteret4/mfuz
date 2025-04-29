@@ -2,7 +2,7 @@ import os
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import ( QMenu, QTreeWidgetItem, QDialog, QMessageBox, QLineEdit, QApplication,
                             QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QDialogButtonBox, QFrame, QDialog,
-                            QComboBox, QCheckBox, 
+                            QComboBox, QCheckBox, QListWidgetItem
                             )
 from PyQt6.QtCore import Qt, QSize, QThreadPool
 import traceback
@@ -10,9 +10,10 @@ from PyQt6 import uic
 
 
 from modules.submodules.url_playlist.spotify_manager import api_call_with_retry
-from modules.submodules.url_playlist.media_utils import play_media
+from modules.submodules.url_playlist.media_utils import play_media, add_to_queue, play_item, add_item_to_queue
 from modules.submodules.url_playlist.playlist_manager import (determine_source_from_url,
-                         create_local_playlist, save_playlists, display_local_playlist
+                         create_local_playlist, save_playlists, display_local_playlist,
+                         _determine_source_from_url
                          )
 from modules.submodules.url_playlist.rss_manager import load_rss_playlist_content
 # Asegurarse de que PROJECT_ROOT está disponible
@@ -184,7 +185,7 @@ def setup_context_menus(self):
     """Set up context menus for tree and list widgets"""
     # Set custom context menu for treeWidget
     self.treeWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-    self.treeWidget.customContextMenuRequested.connect(self.show_tree_context_menu)
+    self.treeWidget.customContextMenuRequested.connect(show_tree_context_menu)
     
     # Set custom context menu for listWidget
     self.listWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -656,41 +657,27 @@ def display_external_results(self, results, group_by_service=False):
         display_search_results(self, external_results, group_by_service)
         self.log(f"Se añadieron {len(external_results)} resultados de servicios externos")
 
-def on_tree_double_click(self, item, column):
-    """Handle double click on tree item to either expand/collapse or load content"""
-    # Get the item data
-    item_data = item.data(0, Qt.ItemDataRole.UserRole)
-    
-    # If it's a playlist item, load its content
-    if item_data and 'type' in item_data and item_data['type'] == 'playlist' and 'path' in item_data:
-        load_rss_playlist_content(self, item, item_data)
-        return
+
         
-    # If it's a track item, play it
-    if item_data and 'type' in item_data and item_data['type'] == 'track' and 'url' in item_data:
-        self.play_item(item)
-        return
-
-    # If it's a root item (source) with children, just expand/collapse
-    if item.childCount() > 0:
-        item.setExpanded(not item.isExpanded())
-        return
-    
-    # Use the same method as the Add button to ensure paths are included
-    add_item_to_queue(self, item)
-    
-    # If nothing is playing, play the newly added item
-    if not self.is_playing and self.current_track_index == -1:
-        self.current_track_index = len(self.current_playlist) - 1
-        play_media(self)
-
-def on_list_double_click(self, item):
+def on_list_double_click(item):
     """Maneja el doble clic en un elemento de la lista."""
-    row = self.listWidget.row(item)
+    # Obtener el widget padre
+    list_widget = item.listWidget()
+    # Obtener la instancia principal
+    self = list_widget.parent()
+    while self and not hasattr(self, 'current_track_index'):
+        self = self.parent()
+    
+    if not self or not hasattr(self, 'current_track_index'):
+        print("Error: No se pudo encontrar la instancia principal")
+        return
+    
+    row = list_widget.row(item)
     self.current_track_index = row
     
     # Iniciar reproducción del elemento seleccionado
-    self.play_from_index(row)
+    from modules.submodules.url_playlist.media_utils import play_from_index
+    play_from_index(self, row)
     self.log(f"Reproduciendo '{item.text()}'")
 
 
@@ -750,40 +737,99 @@ def show_advanced_settings(parent_instance):
         import traceback
         parent_instance.log(traceback.format_exc())
 
-def on_tree_selection_changed(self):
-    """Handle selection changes in the tree widget without switching tabs"""
+def on_tree_double_click(item, column):
+    """Handle double click on tree item to either expand/collapse or load content"""
     try:
-        # Get the current selected item
-        selected_items = self.treeWidget.selectedItems()
-        if not selected_items:
-            return
-            
-        item = selected_items[0]
+        from PyQt6.QtCore import Qt
+        from PyQt6.QtWidgets import QApplication
         
-        # Get the data associated with the item
+        # Get the tree widget
+        tree_widget = item.treeWidget()
+        
+        # First, try to get the controller through the property
+        controller = tree_widget.property("controller")
+        
+        # If no controller is found through property, look through parent hierarchy
+        if not controller:
+            # Start with tree widget's parent
+            parent = tree_widget.parent()
+            while parent:
+                if hasattr(parent, 'add_item_to_queue') and callable(getattr(parent, 'add_item_to_queue')):
+                    controller = parent
+                    break
+                parent = parent.parent()
+        
+        # If still not found, try to find in all top-level widgets
+        if not controller:
+            for widget in QApplication.instance().topLevelWidgets():
+                if hasattr(widget, 'add_item_to_queue') and callable(getattr(widget, 'add_item_to_queue')):
+                    controller = widget
+                    break
+        
+        # If still not found, look through ALL widgets (last resort - could be slow)
+        if not controller:
+            for widget in QApplication.instance().allWidgets():
+                if hasattr(widget, 'add_item_to_queue') and callable(getattr(widget, 'add_item_to_queue')):
+                    controller = widget
+                    break
+        
+        # If we can't find the controller, log it and return
+        if not controller:
+            print(f"Could not find controller with add_item_to_queue method.")
+            print(f"Item text: {item.text(0)}")
+            return
+        
+        # Now use the controller for all operations
+        
+        # Get the item data
         item_data = item.data(0, Qt.ItemDataRole.UserRole)
         
-        # Display information about the selected item without changing tabs
-        if item_data and hasattr(self, 'textEdit'):
-            # Format basic info in the text area instead of switching to Wiki tab
-            title = item_data.get('title', '')
-            artist = item_data.get('artist', '')
-            item_type = item_data.get('type', '')
+        # If it's a parent item with children, just expand/collapse
+        if item.childCount() > 0:
+            item.setExpanded(not item.isExpanded())
+            return
+        
+        # If it's a playlist item, load its content
+        if item_data and isinstance(item_data, dict) and item_data.get('type') == 'playlist' and 'path' in item_data:
+            if hasattr(controller, 'load_rss_playlist_content'):
+                controller.load_rss_playlist_content(item, item_data)
+            elif hasattr(controller, 'load_rss_playlist_content_to_tree'):
+                controller.load_rss_playlist_content_to_tree(item_data)
+            else:
+                # Fallback to direct import
+                from modules.submodules.url_playlist.rss_manager import load_rss_playlist_content
+                load_rss_playlist_content(controller, item, item_data)
+            return
             
-            info_text = f"Selected: {title}\n"
-            if artist:
-                info_text += f"Artist: {artist}\n"
-            if item_type:
-                info_text += f"Type: {item_type}\n"
-                
-            # Add file path if available
-            if item_data.get('file_path'):
-                info_text += f"Path: {item_data.get('file_path')}\n"
-                
-            # Update the text area
-            self.textEdit.append(info_text)
+        # If it's a track item with URL, play it
+        if item_data and isinstance(item_data, dict) and item_data.get('type') in ['track', 'song'] and ('url' in item_data or 'file_path' in item_data):
+            if hasattr(controller, 'play_item'):
+                controller.play_item(item)
+            else:
+                # Track but no play_item method, add to queue
+                controller.add_item_to_queue(item)
+                # And try to play the queue
+                if hasattr(controller, 'play_from_index') and hasattr(controller, 'current_playlist'):
+                    index = len(controller.current_playlist) - 1
+                    if index >= 0:
+                        controller.play_from_index(index)
+            return
+        
+        # For all other items, add to queue
+        controller.add_item_to_queue(item)
+        
+        # If nothing is playing, play the newly added item
+        if hasattr(controller, 'is_playing') and hasattr(controller, 'current_playlist'):
+            if (not controller.is_playing) and len(controller.current_playlist) > 0:
+                index = len(controller.current_playlist) - 1
+                if hasattr(controller, 'play_from_index'):
+                    controller.play_from_index(index)
+        
     except Exception as e:
-        self.log(f"Error handling tree selection change: {str(e)}")
+        import traceback
+        print(f"Error in on_tree_double_click: {e}")
+        print(traceback.format_exc())
+
 
 
 def on_spotify_playlist_changed(self, index):
@@ -1573,89 +1619,6 @@ def _setup_service_checkboxes(parent_instance, dialog):
             show_rss = show_rss.lower() == 'true'
         dialog.blogs_checkbox.setChecked(show_rss)
 
-def add_item_to_queue(self, item):
-    """Add a specific item to the queue with appropriate icon"""
-    title = item.text(0)
-    artist = item.text(1)
-    item_data = item.data(0, Qt.ItemDataRole.UserRole)
-    
-    if not item_data:
-        return
-    
-    # Debug logging to identify the issue
-    self.log(f"Adding item with data: {json.dumps(item_data, default=str)}")
-    
-    # Get the playable URL based on priority
-    url = None
-    source = None
-    
-    if isinstance(item_data, dict):
-        # Get service priority
-        service_priority = get_service_priority(self)
-        
-        # Try each service in priority order
-        for service in service_priority:
-            service_url_key = f'{service}_url'
-            if service_url_key in item_data and item_data[service_url_key]:
-                url = item_data[service_url_key]
-                source = service
-                self.log(f"Using {service} URL: {url}")
-                break
-        
-        # If no service URL found, try file path or generic URL
-        if not url:
-            # Check for file path first for local files
-            file_path = item_data.get('file_path')
-            if file_path:
-                url = file_path
-                source = 'local'
-                self.log(f"Using file path: {file_path}")
-            else:
-                # Fall back to generic URL
-                url = item_data.get('url')
-                source = item_data.get('source', self._determine_source_from_url(url))
-                self.log(f"Using generic URL: {url}")
-    else:
-        url = str(item_data)
-        source = self._determine_source_from_url(url)
-    
-    if not url:
-        self.log(f"No URL or file path found for: {title}")
-        return
-    
-    # Create a new item for the playlist
-    display_text = title
-    if artist:
-        display_text = f"{artist} - {title}"
-    
-    # Create the item with appropriate icon
-    queue_item = QListWidgetItem(display_text)
-    queue_item.setData(Qt.ItemDataRole.UserRole, url)
-    
-    # Set icon based on source
-    icon = self.get_source_icon(url, {'source': source})
-    queue_item.setIcon(icon)
-    
-    # Add to the list
-    self.listWidget.addItem(queue_item)
-    
-    # Update internal playlist - include file_path if available
-    playlist_item = {
-        'title': title, 
-        'artist': artist, 
-        'url': url,
-        'source': source,
-        'entry_data': item_data
-    }
-    
-    # Add file_path if it exists
-    if isinstance(item_data, dict) and 'file_path' in item_data:
-        playlist_item['file_path'] = item_data['file_path']
-    
-    self.current_playlist.append(playlist_item)
-    
-    self.log(f"Added to queue: {display_text} with URL/path: {url}")
-
 
 
 def display_wiki_info(self, result_data):
@@ -2106,3 +2069,108 @@ def get_service_priority(self):
     except Exception as e:
         self.log(f"Error getting service priority: {str(e)}")
         return ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+
+
+
+def show_tree_context_menu(self, position):
+    """Show context menu for tree widget items with specific options based on item type"""
+    # Get the item at this position
+    item = self.treeWidget.itemAt(position)
+    if not item:
+        return
+        
+    # Get the item data
+    item_data = item.data(0, Qt.ItemDataRole.UserRole)
+    if not item_data:
+        return
+    
+    # Create the menu
+    menu = QMenu(self)
+    
+    # Different options based on item type
+    if isinstance(item_data, dict) and 'type' in item_data:
+        if item_data['type'] == 'track':
+            # Track options
+            play_action = menu.addAction("Reproducir")
+            add_to_queue_action = menu.addAction("Añadir a cola")
+            menu.addSeparator()
+            copy_url_action = menu.addAction("Copiar URL")
+            
+            # Spotify option if available
+            if hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+                menu.addSeparator()
+                add_to_spotify_action = menu.addAction("Añadir a playlist de Spotify")
+        
+        elif item_data['type'] == 'playlist' and 'blog' in item_data and 'state' in item_data:
+            # Playlist options
+            play_playlist_action = menu.addAction("Reproducir playlist")
+            add_all_to_queue_action = menu.addAction("Añadir todo a cola")
+            menu.addSeparator()
+            
+            # Solo mostrar opción de marcar como escuchada si está pendiente
+            if item_data['state'] == 'pending':
+                mark_listened_action = menu.addAction("Marcar como escuchada")
+    
+    # Show the menu and handle the selected action
+    action = menu.exec(self.treeWidget.mapToGlobal(position))
+    
+    if not action:
+        return
+        
+    # Handle actions based on item type
+    if isinstance(item_data, dict) and 'type' in item_data:
+        if item_data['type'] == 'track':
+            if action == play_action:
+                self.play_item(item)
+            elif action == add_to_queue_action:
+                add_item_to_queue(self, item)
+            elif action == copy_url_action:
+                # Actualizar para usar 'url' de track_data
+                track_url = item_data.get('url', '')
+                self.copy_text_to_clipboard(track_url)
+            elif hasattr(self, 'spotify_authenticated') and self.spotify_authenticated and action == add_to_spotify_action:
+                self.add_to_spotify_playlist(item_data)
+                
+        elif item_data['type'] == 'playlist':
+            if action == play_playlist_action:
+                self.play_rss_playlist(item_data)
+            elif action == add_all_to_queue_action:
+                self.add_rss_playlist_to_queue(item)
+            elif 'state' in item_data and item_data['state'] == 'pending' and action == mark_listened_action:
+                self.move_rss_playlist_to_listened(item_data)
+
+
+def on_tree_selection_changed(self):
+    """Handle selection changes in the tree widget without switching tabs"""
+    try:
+        # Get the current selected item
+        selected_items = self.treeWidget.selectedItems()
+        if not selected_items:
+            return
+            
+        item = selected_items[0]
+        
+        # Get the data associated with the item
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        
+        # Display information about the selected item without changing tabs
+        if item_data and hasattr(self, 'textEdit'):
+            # Format basic info in the text area instead of switching to Wiki tab
+            title = item_data.get('title', '')
+            artist = item_data.get('artist', '')
+            item_type = item_data.get('type', '')
+            
+            info_text = f"Selected: {title}\n"
+            if artist:
+                info_text += f"Artist: {artist}\n"
+            if item_type:
+                info_text += f"Type: {item_type}\n"
+                
+            # Add file path if available
+            if item_data.get('file_path'):
+                info_text += f"Path: {item_data.get('file_path')}\n"
+                
+            # Update the text area
+            self.textEdit.append(info_text)
+    except Exception as e:
+        self.log(f"Error handling tree selection change: {str(e)}")

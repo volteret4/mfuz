@@ -11,7 +11,6 @@ from PyQt6.QtWidgets import QTreeWidgetItem, QMessageBox
 from PyQt6.QtGui import QIcon
 
 
-
 # Asegurarse de que PROJECT_ROOT está disponible
 try:
     from base_module import PROJECT_ROOT
@@ -627,7 +626,7 @@ def display_local_playlist(self, playlist):
             title = item.get('title', 'Unknown Track')
             artist = item.get('artist', '')
             url = item.get('url', '')
-            source = item.get('source', self._determine_source_from_url(url))
+            source = item.get('source', _determine_source_from_url(self, url))
             
             # Create track item
             track_item = QTreeWidgetItem(root_item)
@@ -663,3 +662,19 @@ def display_local_playlist(self, playlist):
         self.log(f"Error displaying local playlist: {str(e)}")
         import traceback
         self.log(traceback.format_exc())
+
+
+def _determine_source_from_url(self, url):
+    """Determine the source (service) from a URL."""
+    url = str(url).lower()
+    if 'spotify.com' in url:
+        return 'spotify'
+    elif 'youtube.com' in url or 'youtu.be' in url:
+        return 'youtube'
+    elif 'soundcloud.com' in url:
+        return 'soundcloud'
+    elif 'bandcamp.com' in url:
+        return 'bandcamp'
+    elif url.startswith(('/', 'file:', '~', 'C:', 'D:')):
+        return 'local'
+    return 'unknown'

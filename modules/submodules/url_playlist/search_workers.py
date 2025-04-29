@@ -323,9 +323,19 @@ class SearchWorker(QRunnable):
             import traceback
             print(traceback.format_exc())
 
+
+
     def search_youtube(self, query):
-        """Search YouTube with standardized result format."""
+        """Search YouTube with standardized result format and respect only_local filter."""
         try:
+            # Verificar si debemos aplicar filtro only_local
+            only_local = getattr(self, 'only_local', False)
+            
+            # Si only_local está activo, buscar solo enlaces en la base de datos
+            if only_local:
+                return self._search_youtube_from_database(query)
+            
+            # Si no, realizar una búsqueda normal en YouTube
             import subprocess
             import json
             
@@ -372,6 +382,195 @@ class SearchWorker(QRunnable):
             
         except Exception as e:
             self.log(f"YouTube search error: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+    def _search_youtube_from_database(self, query):
+        """
+        Busca enlaces de YouTube en la base de datos para elementos con origen 'local'.
+        Solo se usa cuando only_local=True.
+        """
+        try:
+            self.log(f"Buscando enlaces de YouTube en la base de datos para: {query}")
+            
+            # Verificar acceso a la base de datos
+            if not hasattr(self, 'db_path') or not self.db_path:
+                self.log("Error: No se especificó ruta de base de datos")
+                return []
+                
+            # Obtener enlaces de la base de datos
+            import sqlite3
+            import os
+            
+            if not os.path.exists(self.db_path):
+                self.log(f"Error: Base de datos no encontrada en {self.db_path}")
+                return []
+            
+            # Conectar a la base de datos
+            results = []
+            
+            try:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                # Consulta para canciones con enlaces de YouTube y origen 'local'
+                sql_songs = """
+                SELECT s.title, s.artist, s.album, sl.youtube_url
+                FROM songs s 
+                JOIN song_links sl ON s.id = sl.song_id
+                WHERE sl.youtube_url IS NOT NULL AND s.origen = 'local'
+                AND (s.title LIKE ? OR s.artist LIKE ? OR s.album LIKE ?)
+                """
+                
+                # Consulta para álbumes con enlaces de YouTube y origen 'local'
+                sql_albums = """
+                SELECT a.name, ar.name, a.year, a.youtube_url
+                FROM albums a 
+                JOIN artists ar ON a.artist_id = ar.id
+                WHERE a.youtube_url IS NOT NULL AND a.origen = 'local'
+                AND (a.name LIKE ? OR ar.name LIKE ?)
+                """
+                
+                # Parámetros de búsqueda
+                search_param = f"%{query}%"
+                
+                # Buscar canciones
+                cursor.execute(sql_songs, (search_param, search_param, search_param))
+                for row in cursor.fetchall():
+                    title, artist, album, youtube_url = row
+                    results.append({
+                        "source": "youtube",
+                        "title": title,
+                        "artist": artist,
+                        "album": album,
+                        "url": youtube_url,
+                        "type": "track",
+                        "origen": "local",
+                        "from_database": True
+                    })
+                    self.log(f"Found local YouTube track: {title} by {artist}")
+                
+                # Buscar álbumes
+                cursor.execute(sql_albums, (search_param, search_param))
+                for row in cursor.fetchall():
+                    album_name, artist_name, year, youtube_url = row
+                    results.append({
+                        "source": "youtube",
+                        "title": album_name,
+                        "artist": artist_name,
+                        "year": year,
+                        "url": youtube_url,
+                        "type": "album",
+                        "origen": "local",
+                        "from_database": True
+                    })
+                    self.log(f"Found local YouTube album: {album_name} by {artist_name}")
+                
+                conn.close()
+                
+                # Búsqueda más amplia en caso de no encontrar resultados directos
+                if not results:
+                    self.log("No se encontraron resultados directos, realizando búsqueda más amplia...")
+                    results = self._expand_youtube_database_search(query)
+                
+                return results
+                
+            except sqlite3.Error as e:
+                self.log(f"Error de base de datos: {str(e)}")
+                return []
+                
+        except Exception as e:
+            self.log(f"Error buscando enlaces de YouTube en la base de datos: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return []
+
+    def _expand_youtube_database_search(self, query):
+        """
+        Búsqueda expandida de enlaces de YouTube en la base de datos.
+        Intenta buscar coincidencias parciales o en otras tablas.
+        """
+        try:
+            import sqlite3
+            
+            results = []
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Consulta para artistas con enlaces de redes sociales y origen local
+            sql_artists = """
+            SELECT ar.name, an.youtube
+            FROM artists ar 
+            JOIN artists_networks an ON ar.id = an.artist_id
+            WHERE an.youtube IS NOT NULL AND ar.origen = 'local'
+            AND ar.name LIKE ?
+            """
+            
+            # Consulta de todas las tablas que pueden tener enlaces de YouTube
+            sql_all_tables = """
+            SELECT 'song' as type, s.title, s.artist, s.album, sl.youtube_url
+            FROM songs s 
+            JOIN song_links sl ON s.id = sl.song_id
+            WHERE sl.youtube_url IS NOT NULL AND s.origen = 'local'
+            
+            UNION
+            
+            SELECT 'album' as type, a.name, ar.name, '', a.youtube_url
+            FROM albums a 
+            JOIN artists ar ON a.artist_id = ar.id
+            WHERE a.youtube_url IS NOT NULL AND a.origen = 'local'
+            
+            UNION
+            
+            SELECT 'artist' as type, ar.name, '', '', an.youtube
+            FROM artists ar 
+            JOIN artists_networks an ON ar.id = an.artist_id
+            WHERE an.youtube IS NOT NULL AND ar.origen = 'local'
+            """
+            
+            # Parámetros de búsqueda
+            search_param = f"%{query}%"
+            
+            # Buscar artistas
+            cursor.execute(sql_artists, (search_param,))
+            for row in cursor.fetchall():
+                artist_name, youtube_url = row
+                results.append({
+                    "source": "youtube",
+                    "title": artist_name,
+                    "artist": artist_name,
+                    "url": youtube_url,
+                    "type": "artist",
+                    "origen": "local",
+                    "from_database": True
+                })
+                self.log(f"Found local YouTube artist: {artist_name}")
+            
+            # Si aún no hay resultados, usar la consulta unificada
+            if not results:
+                cursor.execute(sql_all_tables)
+                for row in cursor.fetchall():
+                    item_type, title, artist, album, youtube_url = row
+                    
+                    results.append({
+                        "source": "youtube",
+                        "title": title,
+                        "artist": artist,
+                        "album": album if album else "",
+                        "url": youtube_url,
+                        "type": item_type,
+                        "origen": "local",
+                        "from_database": True
+                    })
+                    self.log(f"Found local YouTube {item_type}: {title}" + (f" by {artist}" if artist else ""))
+            
+            conn.close()
+            
+            return results
+            
+        except Exception as e:
+            self.log(f"Error en búsqueda expandida de YouTube: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
             return []

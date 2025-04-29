@@ -191,7 +191,21 @@ class UrlPlayer(BaseModule):
         
         # Now call the parent constructor which will call init_ui()
         super().__init__(parent, theme, **kwargs)
-        
+
+        from tools.player_manager import PlayerManager
+        self.player_manager = PlayerManager(parent=self)
+
+        # Connect player manager signals
+        self.player_manager.playback_started.connect(self.on_playback_started)
+        self.player_manager.playback_stopped.connect(self.on_playback_stopped)
+        self.player_manager.playback_paused.connect(self.on_playback_paused)
+        self.player_manager.playback_resumed.connect(self.on_playback_resumed)
+        self.player_manager.track_finished.connect(self.on_track_finished)
+        self.player_manager.playback_error.connect(self.on_playback_error)
+
+
+
+        self.treeWidget.setProperty("controller", self)
         self._is_initializing = True
         
         # Primero cargar las credenciales con tu método existente
@@ -480,14 +494,13 @@ class UrlPlayer(BaseModule):
         # Utilizar la nueva función de búsqueda
         perform_search_with_service_filter(self, query, only_local)
 
-
     def connect_signals(self):
         """Conecta las señales de los widgets a sus respectivos slots."""
         try:
             # Conectar señales con verificación previa
             if self.searchButton:
                 self.searchButton.clicked.connect(self.perform_search)
-                
+                    
             if self.playButton:
                 self.playButton.clicked.connect(lambda: toggle_play_pause(self))            
             if self.rewButton:
@@ -510,9 +523,12 @@ class UrlPlayer(BaseModule):
             if self.treeWidget:
                 # Ensure signal is connected only once
                 try:
-                    self.treeWidget.itemDoubleClicked.disconnect(on_tree_double_click)
+                    # Primero desconectamos la señal si ya estaba conectada
+                    self.treeWidget.itemDoubleClicked.disconnect()
                 except:
                     pass
+                # Conectamos la señal directamente a la función, que ahora espera dos argumentos
+                from modules.submodules.url_playlist.ui_helpers import on_tree_double_click
                 self.treeWidget.itemDoubleClicked.connect(on_tree_double_click)
 
             if self.listWidget:
@@ -522,6 +538,7 @@ class UrlPlayer(BaseModule):
                 except TypeError:
                     pass  # If it wasn't connected, that's fine
                 # Connect to the right method
+                from modules.submodules.url_playlist.ui_helpers import on_list_double_click
                 self.listWidget.itemDoubleClicked.connect(on_list_double_click)
             
             if hasattr(self, 'ajustes_avanzados'):
@@ -530,12 +547,14 @@ class UrlPlayer(BaseModule):
             # Add this at the end
             if self.treeWidget:
                 # Connect item selection changed
-                self.treeWidget.itemSelectionChanged.connect(on_tree_selection_changed(self))
+                from modules.submodules.url_playlist.ui_helpers import on_tree_selection_changed
+                self.treeWidget.itemSelectionChanged.connect(lambda: on_tree_selection_changed(self))
                 print("[UrlPlayer] Señales conectadas correctamente")
 
             # Playlist-related connections
             if hasattr(self, 'playlist_spotify_comboBox'):
-                self.playlist_spotify_comboBox.currentIndexChanged.connect(on_spotify_playlist_changed)
+                from modules.submodules.url_playlist.ui_helpers import on_spotify_playlist_changed
+                self.playlist_spotify_comboBox.currentIndexChanged.connect(lambda idx: on_spotify_playlist_changed(self, idx))
             
             # Conectar señal del combobox RSS
             if hasattr(self, 'playlist_rss_comboBox'):
@@ -543,9 +562,11 @@ class UrlPlayer(BaseModule):
                     self.playlist_rss_comboBox.currentIndexChanged.disconnect()
                 except:
                     pass
-                self.playlist_rss_comboBox.currentIndexChanged.connect(on_playlist_rss_changed)
-                
+                from modules.submodules.url_playlist.ui_helpers import on_playlist_rss_changed
+                self.playlist_rss_comboBox.currentIndexChanged.connect(lambda idx: on_playlist_rss_changed(self, idx))
+                    
             # Set up additional controls for RSS
+            from modules.submodules.url_playlist.rss_manager import setup_rss_controls
             setup_rss_controls(self)
             
             if hasattr(self, 'playlist_local_comboBox'):
@@ -555,7 +576,8 @@ class UrlPlayer(BaseModule):
                 except:
                     pass
                 
-                self.playlist_local_comboBox.currentIndexChanged.connect(on_playlist_local_changed)
+                from modules.submodules.url_playlist.ui_helpers import on_playlist_local_changed
+                self.playlist_local_comboBox.currentIndexChanged.connect(lambda idx: on_playlist_local_changed(self, idx))
 
             # For the save playlist button
             if hasattr(self, 'GuardarPlaylist'):
@@ -563,13 +585,15 @@ class UrlPlayer(BaseModule):
                     self.GuardarPlaylist.clicked.disconnect()
                 except TypeError:
                     pass
-                self.GuardarPlaylist.clicked.connect(on_guardar_playlist_clicked)
+                from modules.submodules.url_playlist.playlist_manager import on_guardar_playlist_clicked
+                self.GuardarPlaylist.clicked.connect(lambda: on_guardar_playlist_clicked(self))
             
             if hasattr(self, 'VaciarPlaylist'):
-                self.VaciarPlaylist.clicked.connect(clear_playlist)
+                from modules.submodules.url_playlist.ui_helpers import clear_playlist
+                self.VaciarPlaylist.clicked.connect(lambda: clear_playlist(self))
             
             # Connect signals for RSS playlist operations
-            self.ask_mark_as_listened_signal.connect(show_mark_as_listened_dialog)
+            self.ask_mark_as_listened_signal.connect(lambda data: show_mark_as_listened_dialog(self, data))
             self.show_error_signal.connect(lambda msg: QMessageBox.critical(self, "Error", msg))
 
             # Setup context menus
@@ -577,10 +601,24 @@ class UrlPlayer(BaseModule):
             setup_context_menus(self)
 
             # Update RSS playlists automatically at startup
+            from modules.submodules.url_playlist.playlist_manager import load_rss_playlists
             load_rss_playlists(self)
+
+            if self.playButton:
+                self.playButton.clicked.connect(self.toggle_play_pause)
+            
+            if self.rewButton:
+                self.rewButton.clicked.connect(self.play_previous)
+            
+            if self.ffButton:
+                self.ffButton.clicked.connect(self.play_next)
+
+
 
         except Exception as e:
             print(f"[UrlPlayer] Error al conectar señales: {str(e)}")
+            import traceback
+            print(traceback.format_exc())
 
     def setup_services_combo(self):
         """Configura el combo box de servicios disponibles."""
@@ -1460,3 +1498,133 @@ class UrlPlayer(BaseModule):
             import traceback
             self.log(traceback.format_exc())
    
+
+    def on_playback_started(self):
+        """Handle player starting playback"""
+        self.is_playing = True
+        self.playButton.setIcon(QIcon(":/services/b_pause"))
+        self.log("Playback started")
+        self.highlight_current_track()
+
+    def on_playback_stopped(self):
+        """Handle player stopping playback"""
+        self.is_playing = False
+        self.playButton.setIcon(QIcon(":/services/b_play"))
+        self.log("Playback stopped")
+
+    def on_playback_paused(self):
+        """Handle player pausing playback"""
+        self.is_playing = False
+        self.playButton.setIcon(QIcon(":/services/b_play"))
+        self.log("Playback paused")
+
+    def on_playback_resumed(self):
+        """Handle player resuming playback"""
+        self.is_playing = True
+        self.playButton.setIcon(QIcon(":/services/b_pause"))
+        self.log("Playback resumed")
+
+    def on_track_finished(self):
+        """Handle track finishing playback"""
+        self.log("Track finished")
+        
+        # Play next track if available
+        if hasattr(self, 'current_playlist') and self.current_playlist:
+            next_index = self.current_track_index + 1
+            
+            if next_index < len(self.current_playlist):
+                # Play the next track
+                self.current_track_index = next_index
+                self.play_from_index(next_index)
+            else:
+                # End of playlist
+                self.current_track_index = -1
+                self.is_playing = False
+                self.playButton.setIcon(QIcon(":/services/b_play"))
+                self.log("End of playlist reached")
+
+    def on_playback_error(self, error):
+        """Handle player errors"""
+        self.log(f"Playback error: {error}")
+        
+        # Try to recover by playing next track
+        if hasattr(self, 'current_playlist') and self.current_playlist:
+            next_index = self.current_track_index + 1
+            
+            if next_index < len(self.current_playlist):
+                # Try to play the next track
+                self.current_track_index = next_index
+                self.play_from_index(next_index)
+
+
+    def toggle_play_pause(self):
+        """Toggle between play and pause"""
+        if not hasattr(self, 'current_playlist') or not self.current_playlist:
+            # Nothing in playlist, try to add the selected item
+            self.add_to_queue()
+            if not self.current_playlist:
+                self.log("Nothing to play")
+                return
+        
+        if not self.is_playing:
+            # If we have a current track, play/resume it
+            if self.current_track_index >= 0 and self.current_track_index < len(self.current_playlist):
+                if self.player_manager.is_playing:
+                    self.player_manager.resume()
+                else:
+                    self.play_from_index(self.current_track_index)
+            else:
+                # Start from the beginning
+                self.play_from_index(0)
+        else:
+            # Pause current playback
+            self.player_manager.pause()
+
+    def play_next(self):
+        """Play the next track in the playlist"""
+        if not hasattr(self, 'current_playlist') or not self.current_playlist:
+            self.log("No playlist available")
+            return
+        
+        next_index = self.current_track_index + 1
+        
+        # Loop back to beginning if at the end
+        if next_index >= len(self.current_playlist):
+            next_index = 0
+        
+        self.play_from_index(next_index)
+
+    def play_previous(self):
+        """Play the previous track in the playlist"""
+        if not hasattr(self, 'current_playlist') or not self.current_playlist:
+            self.log("No playlist available")
+            return
+        
+        prev_index = self.current_track_index - 1
+        
+        # Loop to end if at the beginning
+        if prev_index < 0:
+            prev_index = len(self.current_playlist) - 1
+        
+        self.play_from_index(prev_index)
+
+    def highlight_current_track(self):
+        """Highlight the currently playing track in the list"""
+        if not hasattr(self, 'listWidget') or not hasattr(self, 'current_track_index'):
+            return
+        
+        # Reset all items to normal style
+        for i in range(self.listWidget.count()):
+            item = self.listWidget.item(i)
+            item.setForeground(self.palette().text())
+            font = item.font()
+            font.setBold(False)
+            item.setFont(font)
+        
+        # Highlight the current track if valid
+        if 0 <= self.current_track_index < self.listWidget.count():
+            item = self.listWidget.item(self.current_track_index)
+            item.setForeground(self.palette().highlight())
+            font = item.font()
+            font.setBold(True)
+            item.setFont(font)
