@@ -29,7 +29,6 @@ from typing import Dict, List, Optional
 import mutagen
 from mutagen.easyid3 import EasyID3
 from mutagen.flac import FLAC
-import pylast
 import sqlite3
 from datetime import datetime, timedelta
 import argparse
@@ -39,7 +38,7 @@ from base_module import PROJECT_ROOT
 
 
 class MusicLibraryManager:
-    def __init__(self, root_path: str, db_path: str, lastfm_api_key: str):
+    def __init__(self, root_path: str, db_path: str):
         self.root_path = Path(root_path).resolve()
         self.db_path = Path(db_path).resolve()
         self.supported_formats = ('.mp3', '.flac', '.m4a')
@@ -51,13 +50,31 @@ class MusicLibraryManager:
         )
         self.logger = logging.getLogger(__name__)
         
-        # LastFM initialization
-        self.network = pylast.LastFMNetwork(
-            api_key=lastfm_api_key,
-        )
-        
-        # Initialize database
+        # Initialize database - asegúrate de que esto se ejecute
         self.init_database()
+        
+        # Verifica que las tablas necesarias existan
+        self._verify_tables_exist()
+
+
+
+    def _verify_tables_exist(self):
+        """Verifica que todas las tablas necesarias existen, y las crea si no."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        required_tables = ['songs', 'artists', 'albums', 'genres', 'lyrics', 'song_links']
+        
+        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        existing_tables = [table[0] for table in c.fetchall()]
+        
+        for table in required_tables:
+            if table not in existing_tables:
+                self.logger.warning(f"Tabla {table} no encontrada. Reinicializando base de datos.")
+                self.init_database(create_indices=True)
+                break
+        
+        conn.close()
 
     def init_database(self, create_indices=False):
         """Initialize SQLite database with comprehensive tables and optionally create indices."""
@@ -88,6 +105,7 @@ class MusicLibraryManager:
                     sample_rate INTEGER,
                     last_modified TIMESTAMP,
                     added_timestamp TIMESTAMP,
+                    added_day INTEGER,
                     added_week INTEGER,
                     added_month INTEGER,
                     added_year INTEGER,
@@ -98,7 +116,8 @@ class MusicLibraryManager:
                     replay_gain_album_gain REAL,
                     replay_gain_album_peak REAL,
                     album_art_path_denorm TEXT,
-                    has_lyrics INTEGER DEFAULT 0
+                    has_lyrics INTEGER DEFAULT 0,
+                    origen TEXT DEFAULT 'local'
                 )
             ''')
         else:
@@ -109,6 +128,7 @@ class MusicLibraryManager:
             # Add new columns if they don't exist
             new_columns = {
                 'added_timestamp': 'TIMESTAMP',
+                'added_day': 'INTEGER',
                 'added_week': 'INTEGER',
                 'added_month': 'INTEGER',
                 'added_year': 'INTEGER',
@@ -119,7 +139,8 @@ class MusicLibraryManager:
                 'replay_gain_album_gain': 'REAL',
                 'replay_gain_album_peak': 'REAL',
                 'album_art_path_denorm': 'TEXT',
-                'has_lyrics': 'INTEGER DEFAULT 0'
+                'has_lyrics': 'INTEGER DEFAULT 0',
+                'origen': 'TEXT DEFAULT "local"'
             }
             
             for col_name, col_type in new_columns.items():
@@ -148,7 +169,13 @@ class MusicLibraryManager:
                     wikipedia_url TEXT,
                     wikipedia_content TEXT,
                     wikipedia_updated TIMESTAMP,
-                    mbid TEXT
+                    mbid TEXT,
+                    added_timestamp TIMESTAMP,
+                    added_day INTEGER,
+                    added_week INTEGER,
+                    added_month INTEGER,
+                    added_year INTEGER,
+                    origen TEXT DEFAULT 'local'
                 )
             ''')
         else:
@@ -169,7 +196,13 @@ class MusicLibraryManager:
                 'wikipedia_updated': 'TIMESTAMP',
                 'mbid': 'TEXT',
                 'aliases': 'TEXT',
-                'member_of': 'TEXT'
+                'member_of': 'TEXT',
+                'added_timestamp': 'TIMESTAMP',
+                'added_day': 'INTEGER',
+                'added_week': 'INTEGER',
+                'added_month': 'INTEGER',
+                'added_year': 'INTEGER',
+                'origen': 'TEXT DEFAULT "local"'
             }
             
             for col_name, col_type in new_artist_columns.items():
@@ -202,6 +235,12 @@ class MusicLibraryManager:
                     mbid TEXT,
                     folder_path TEXT,
                     bitrate_range TEXT,
+                    added_timestamp TIMESTAMP,
+                    added_day INTEGER,
+                    added_week INTEGER,
+                    added_month INTEGER,
+                    added_year INTEGER,
+                    origen TEXT DEFAULT 'local',
                     FOREIGN KEY(artist_id) REFERENCES artists(id),
                     UNIQUE(artist_id, name)
                 )
@@ -229,124 +268,131 @@ class MusicLibraryManager:
                 'producers': 'TEXT',
                 'engineers': 'TEXT',
                 'mastering_engineers': 'TEXT',
-                'credits': 'JSON'
+                'credits': 'JSON',
+                'added_timestamp': 'TIMESTAMP',
+                'added_day': 'INTEGER',
+                'added_week': 'INTEGER',
+                'added_month': 'INTEGER',
+                'added_year': 'INTEGER',
+                'origen': 'TEXT DEFAULT "local"'
             }
             
             for col_name, col_type in new_album_columns.items():
                 if col_name not in album_columns:
                     c.execute(f"ALTER TABLE albums ADD COLUMN {col_name} {col_type}")
         
-        
-        # Genres table
-        if 'genres' not in existing_tables:
-            c.execute('''
-                CREATE TABLE IF NOT EXISTS genres (
-                    id INTEGER PRIMARY KEY,
-                    name TEXT UNIQUE,
-                    description TEXT,
-                    related_genres TEXT,
-                    origin_year INTEGER
-                )
-            ''')
-        
-        # Lyrics table
-        if 'lyrics' not in existing_tables:
-            c.execute('''
-                CREATE TABLE IF NOT EXISTS lyrics (
-                    id INTEGER PRIMARY KEY,
-                    track_id INTEGER,
-                    lyrics TEXT,
-                    source TEXT DEFAULT 'Genius',
-                    last_updated TIMESTAMP,
-                    FOREIGN KEY(track_id) REFERENCES songs(id)
-                )
-            ''')
             
-        # Song Links table
-        if 'song_links' not in existing_tables:
-            c.execute('''
-                CREATE TABLE IF NOT EXISTS song_links (
-                    id INTEGER PRIMARY KEY,
-                    song_id INTEGER,
-                    spotify_url TEXT,
-                    spotify_id TEXT,
-                    lastfm_url TEXT,
-                    links_updated TIMESTAMP,
-                    youtube_url TEXT,
-                    musicbrainz_url TEXT,
-                    musicbrainz_recording_id TEXT,
-                    FOREIGN KEY(song_id) REFERENCES songs(id)
-                )
-            ''')
-        else:
-            # Check existing columns in song_links table
-            c.execute("PRAGMA table_info(song_links)")
-            song_links_columns = {col[1] for col in c.fetchall()}
             
-            # Add new columns if they don't exist
-            new_song_links_columns = {
-                'spotify_url': 'TEXT',
-                'spotify_id': 'TEXT',
-                'lastfm_url': 'TEXT',
-                'links_updated': 'TIMESTAMP',
-                'youtube_url': 'TEXT',
-                'musicbrainz_url': 'TEXT',
-                'musicbrainz_recording_id': 'TEXT'
-            }
+            # Genres table
+            if 'genres' not in existing_tables:
+                c.execute('''
+                    CREATE TABLE IF NOT EXISTS genres (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT UNIQUE,
+                        description TEXT,
+                        related_genres TEXT,
+                        origin_year INTEGER
+                    )
+                ''')
             
-            for col_name, col_type in new_song_links_columns.items():
-                if col_name not in song_links_columns:
-                    c.execute(f"ALTER TABLE song_links ADD COLUMN {col_name} {col_type}")
-        
-        # Create FTS tables if they don't exist
-        if 'songs_fts' not in existing_tables:
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(
-                    title, artist, album, genre,
-                    content=songs, content_rowid=id
-                )
-            ''')
-        
-        if 'lyrics_fts' not in existing_tables:
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS lyrics_fts USING fts5(
-                    lyrics,
-                    content=lyrics, content_rowid=id
-                )
-            ''')
-        
-        if 'song_fts' not in existing_tables:
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS song_fts USING fts5(
-                    id, title, artist, album, genre
-                )
-            ''')
-        
-        if 'artist_fts' not in existing_tables:
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS artist_fts USING fts5(
-                    id, name, bio, tags
-                )
-            ''')
-        
-        if 'album_fts' not in existing_tables:
-            c.execute('''
-                CREATE VIRTUAL TABLE IF NOT EXISTS album_fts USING fts5(
-                    id, name, genre
-                )
-            ''')
-        
-        # Create indices if requested
-        if create_indices:
-            c.execute("CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)")
-            c.execute("CREATE INDEX IF NOT EXISTS idx_songs_album ON songs(album)")
-            c.execute("CREATE INDEX IF NOT EXISTS idx_songs_genre ON songs(genre)")
-            c.execute("CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)")
-            c.execute("CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)")
-            c.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
-        
-        conn.commit()
-        conn.close()
+            # Lyrics table
+            if 'lyrics' not in existing_tables:
+                c.execute('''
+                    CREATE TABLE IF NOT EXISTS lyrics (
+                        id INTEGER PRIMARY KEY,
+                        track_id INTEGER,
+                        lyrics TEXT,
+                        source TEXT DEFAULT 'Genius',
+                        last_updated TIMESTAMP,
+                        FOREIGN KEY(track_id) REFERENCES songs(id)
+                    )
+                ''')
+                
+            # Song Links table
+            if 'song_links' not in existing_tables:
+                c.execute('''
+                    CREATE TABLE IF NOT EXISTS song_links (
+                        id INTEGER PRIMARY KEY,
+                        song_id INTEGER,
+                        spotify_url TEXT,
+                        spotify_id TEXT,
+                        lastfm_url TEXT,
+                        links_updated TIMESTAMP,
+                        youtube_url TEXT,
+                        musicbrainz_url TEXT,
+                        musicbrainz_recording_id TEXT,
+                        FOREIGN KEY(song_id) REFERENCES songs(id)
+                    )
+                ''')
+            else:
+                # Check existing columns in song_links table
+                c.execute("PRAGMA table_info(song_links)")
+                song_links_columns = {col[1] for col in c.fetchall()}
+                
+                # Add new columns if they don't exist
+                new_song_links_columns = {
+                    'spotify_url': 'TEXT',
+                    'spotify_id': 'TEXT',
+                    'lastfm_url': 'TEXT',
+                    'links_updated': 'TIMESTAMP',
+                    'youtube_url': 'TEXT',
+                    'musicbrainz_url': 'TEXT',
+                    'musicbrainz_recording_id': 'TEXT'
+                }
+                
+                for col_name, col_type in new_song_links_columns.items():
+                    if col_name not in song_links_columns:
+                        c.execute(f"ALTER TABLE song_links ADD COLUMN {col_name} {col_type}")
+            
+            # Create FTS tables if they don't exist
+            if 'songs_fts' not in existing_tables:
+                c.execute('''
+                    CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(
+                        title, artist, album, genre,
+                        content=songs, content_rowid=id
+                    )
+                ''')
+            
+            if 'lyrics_fts' not in existing_tables:
+                c.execute('''
+                    CREATE VIRTUAL TABLE IF NOT EXISTS lyrics_fts USING fts5(
+                        lyrics,
+                        content=lyrics, content_rowid=id
+                    )
+                ''')
+            
+            if 'song_fts' not in existing_tables:
+                c.execute('''
+                    CREATE VIRTUAL TABLE IF NOT EXISTS song_fts USING fts5(
+                        id, title, artist, album, genre
+                    )
+                ''')
+            
+            if 'artist_fts' not in existing_tables:
+                c.execute('''
+                    CREATE VIRTUAL TABLE IF NOT EXISTS artist_fts USING fts5(
+                        id, name, bio, tags
+                    )
+                ''')
+            
+            if 'album_fts' not in existing_tables:
+                c.execute('''
+                    CREATE VIRTUAL TABLE IF NOT EXISTS album_fts USING fts5(
+                        id, name, genre
+                    )
+                ''')
+            
+            # Create indices if requested
+            if create_indices:
+                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)")
+                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_album ON songs(album)")
+                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_genre ON songs(genre)")
+                c.execute("CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)")
+                c.execute("CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)")
+                c.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
+            
+            conn.commit()
+            conn.close()
         
 
     def create_indices(self):
@@ -357,7 +403,39 @@ class MusicLibraryManager:
         try:
             self.logger.info("Creando índices para optimizar la base de datos...")
             
-            # 1. Índices para búsquedas generales
+            # 1. Índices para campos MusicBrainz en songs
+            indices_musicbrainz_songs = [
+                "CREATE INDEX IF NOT EXISTS idx_songs_mbid ON songs(mbid)",
+                "CREATE INDEX IF NOT EXISTS idx_songs_musicbrainz_artistid ON songs(musicbrainz_artistid)",
+                "CREATE INDEX IF NOT EXISTS idx_songs_musicbrainz_recordingid ON songs(musicbrainz_recordingid)",
+                "CREATE INDEX IF NOT EXISTS idx_songs_musicbrainz_albumartistid ON songs(musicbrainz_albumartistid)",
+                "CREATE INDEX IF NOT EXISTS idx_songs_musicbrainz_releasegroupid ON songs(musicbrainz_releasegroupid)"
+            ]
+            
+            # 2. Índices para campos MusicBrainz en albums
+            indices_musicbrainz_albums = [
+                "CREATE INDEX IF NOT EXISTS idx_albums_mbid ON albums(mbid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_musicbrainz_albumid ON albums(musicbrainz_albumid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_musicbrainz_albumartistid ON albums(musicbrainz_albumartistid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_musicbrainz_releasegroupid ON albums(musicbrainz_releasegroupid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_catalognumber ON albums(catalognumber)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_originalyear ON albums(originalyear)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_releasecountry ON albums(releasecountry)"
+            ]
+            
+            # 3. Índices para campos MusicBrainz en artists
+            indices_musicbrainz_artists = [
+                "CREATE INDEX IF NOT EXISTS idx_artists_mbid ON artists(mbid)"
+            ]
+            
+            # 4. Índices compuestos para búsquedas comunes con campos MusicBrainz
+            indices_compuestos_musicbrainz = [
+                "CREATE INDEX IF NOT EXISTS idx_songs_artist_mb_id ON songs(artist, musicbrainz_artistid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_artist_mb_id ON albums(name, musicbrainz_albumid)",
+                "CREATE INDEX IF NOT EXISTS idx_albums_year_country ON albums(year, releasecountry)"
+            ]
+            
+            # Añadir a los índices existentes
             indices_generales = [
                 "CREATE INDEX IF NOT EXISTS idx_songs_title ON songs(title)",
                 "CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)",
@@ -373,7 +451,6 @@ class MusicLibraryManager:
                 "CREATE INDEX IF NOT EXISTS idx_albums_year ON albums(year)"
             ]
             
-            # 2. Índices para búsquedas case-insensitive
             indices_case_insensitive = [
                 "CREATE INDEX IF NOT EXISTS idx_songs_title_lower ON songs(LOWER(title))",
                 "CREATE INDEX IF NOT EXISTS idx_songs_artist_lower ON songs(LOWER(artist))",
@@ -384,7 +461,6 @@ class MusicLibraryManager:
                 "CREATE INDEX IF NOT EXISTS idx_albums_genre_lower ON albums(LOWER(genre))"
             ]
             
-            # 3. Índices compuestos para consultas específicas
             indices_compuestos = [
                 "CREATE INDEX IF NOT EXISTS idx_songs_artist_album ON songs(artist, album)",
                 "CREATE INDEX IF NOT EXISTS idx_songs_album_title ON songs(album, title)",
@@ -393,80 +469,31 @@ class MusicLibraryManager:
                 "CREATE INDEX IF NOT EXISTS idx_songs_date_added ON songs(added_year, added_month, added_week)"
             ]
             
-            # 4. Índices para JOINs específicos
-            indices_joins = [
-                "CREATE INDEX IF NOT EXISTS idx_songs_id ON songs(id)",
-                "CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)",
-                "CREATE INDEX IF NOT EXISTS idx_songs_artist_album_join ON songs(artist, album)"
-            ]
-            
-            # 5. Índices para la consulta de búsqueda principal
-            indices_busqueda = [
-                "CREATE INDEX IF NOT EXISTS idx_songs_artist_album_track ON songs(artist, album, track_number)"
-            ]
-            
-            # 6. Índices para URLs y servicios externos
-            indices_urls = [
-                "CREATE INDEX IF NOT EXISTS idx_song_links_urls ON song_links(song_id, spotify_url, youtube_url, spotify_id, lastfm_url)"
-            ]
-            
-            # Crear todos los índices
-            indices_totales = indices_generales + indices_case_insensitive + indices_compuestos + indices_joins + indices_busqueda + indices_urls
+            # Crear todos los índices combinados
+            indices_totales = (
+                indices_generales + 
+                indices_case_insensitive + 
+                indices_compuestos + 
+                indices_musicbrainz_songs + 
+                indices_musicbrainz_albums + 
+                indices_musicbrainz_artists + 
+                indices_compuestos_musicbrainz
+            )
             
             for index_query in indices_totales:
                 try:
                     c.execute(index_query)
                     conn.commit()
                 except sqlite3.OperationalError as e:
-                    # Algunos índices pueden fallar si la columna no existe todavía
                     self.logger.warning(f"Índice no creado: {e}")
 
-            # 7. Enable foreign keys without trying to alter existing tables
+            # Enable foreign keys
             try:
                 c.execute("PRAGMA foreign_keys = ON")
                 self.logger.info("Foreign keys enabled for future operations")
             except sqlite3.OperationalError as e:
                 self.logger.warning(f"Could not enable foreign keys: {e}")
-            
-            # # 7. Restricciones de clave foránea (si no existen ya)
-            # try:
-            #     c.execute("PRAGMA foreign_keys = ON")
                 
-            #     # Verificar si ya existen las restricciones antes de añadirlas
-            #     c.execute("PRAGMA foreign_key_list(songs)")
-            #     if not c.fetchall():
-            #         c.execute("ALTER TABLE songs ADD CONSTRAINT fk_songs_lyrics FOREIGN KEY (lyrics_id) REFERENCES lyrics(id)")
-                
-            #     c.execute("PRAGMA foreign_key_list(lyrics)")
-            #     if not c.fetchall():
-            #         c.execute("ALTER TABLE lyrics ADD CONSTRAINT fk_lyrics_songs FOREIGN KEY (track_id) REFERENCES songs(id)")
-                
-            #     c.execute("PRAGMA foreign_key_list(albums)")
-            #     if not c.fetchall():
-            #         c.execute("ALTER TABLE albums ADD CONSTRAINT fk_albums_artists FOREIGN KEY (artist_id) REFERENCES artists(id)")
-                
-            #     c.execute("PRAGMA foreign_key_list(song_links)")
-            #     if not c.fetchall():
-            #         c.execute("ALTER TABLE song_links ADD CONSTRAINT fk_song_links_songs FOREIGN KEY (song_id) REFERENCES songs(id)")
-            
-            except sqlite3.OperationalError as e:
-                self.logger.warning(f"No se pudieron crear restricciones de clave foránea: {e}")
-                
-            # 8. Intentar crear tablas FTS (Full-Text Search) si están soportadas
-            try:
-                c.execute("DROP TABLE IF EXISTS songs_fts")
-                c.execute("CREATE VIRTUAL TABLE songs_fts USING fts5(title, artist, album, genre, content=songs)")
-                
-                c.execute("DROP TABLE IF EXISTS lyrics_fts")
-                c.execute("CREATE VIRTUAL TABLE lyrics_fts USING fts5(lyrics, content=lyrics)")
-                
-                self.logger.info("Tablas de búsqueda de texto completo creadas exitosamente")
-            except sqlite3.OperationalError as e:
-                self.logger.warning(f"No se pudieron crear tablas FTS: {e}")
-            
-            # 9. Actualizar estadísticas del optimizador
-            c.execute("ANALYZE")
-            
             self.logger.info("Creación de índices completada")
         
         except Exception as e:
@@ -511,6 +538,51 @@ class MusicLibraryManager:
         
         finally:
             conn.close()
+
+
+
+    def update_schema_with_musicbrainz_metadata(self):
+        """Actualiza el esquema para incluir nuevos metadatos de MusicBrainz."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        # Nuevas columnas para la tabla songs
+        new_songs_columns = {
+            'musicbrainz_artistid': 'TEXT',
+            'musicbrainz_recordingid': 'TEXT',
+            'musicbrainz_albumartistid': 'TEXT',
+            'musicbrainz_releasegroupid': 'TEXT'
+        }
+        
+        # Verificar y añadir columnas en la tabla songs
+        c.execute("PRAGMA table_info(songs)")
+        existing_song_columns = {col[1] for col in c.fetchall()}
+        for col_name, col_type in new_songs_columns.items():
+            if col_name not in existing_song_columns:
+                c.execute(f"ALTER TABLE songs ADD COLUMN {col_name} {col_type}")
+        
+        # Nuevas columnas para la tabla albums
+        new_albums_columns = {
+            'musicbrainz_albumid': 'TEXT',
+            'musicbrainz_albumartistid': 'TEXT',
+            'musicbrainz_releasegroupid': 'TEXT',
+            'catalognumber': 'TEXT',
+            'media': 'TEXT',
+            'discnumber': 'TEXT',
+            'releasecountry': 'TEXT',
+            'originalyear': 'INTEGER'
+        }
+        
+        # Verificar y añadir columnas en la tabla albums
+        c.execute("PRAGMA table_info(albums)")
+        existing_album_columns = {col[1] for col in c.fetchall()}
+        for col_name, col_type in new_albums_columns.items():
+            if col_name not in existing_album_columns:
+                c.execute(f"ALTER TABLE albums ADD COLUMN {col_name} {col_type}")
+        
+        conn.commit()
+        conn.close()
+        self.logger.info("Esquema actualizado con columnas para metadatos de MusicBrainz")
 
 
     def update_schema(self):
@@ -576,60 +648,77 @@ class MusicLibraryManager:
 
 
     def get_audio_metadata(self, file_path: Path) -> Optional[Dict]:
-        """Extract comprehensive audio metadata including correctly calculated bitrate."""
+        """Extract comprehensive audio metadata including MusicBrainz IDs and additional fields."""
         try:
             audio = None
             audio_tech = None
-            track_number = '0'
             
             # Handle different audio formats
             if file_path.suffix.lower() == '.mp3':
-                audio = EasyID3(file_path)
+                audio = mutagen.File(file_path, easy=True)
                 audio_tech = mutagen.File(file_path)
-                track_number = audio.get('tracknumber', ['0'])[0].split('/')[0]
-                
-                # Get ID3 tags for replay gain (MP3)
-                raw_audio = mutagen.File(file_path)
                 
             elif file_path.suffix.lower() == '.flac':
-                audio = FLAC(file_path)
+                audio = mutagen.flac.FLAC(file_path)
                 audio_tech = audio
-                track_number = str(audio.get('tracknumber', ['0'])[0]).split('/')[0]
-                
-                # FLAC has direct access to replay gain
-                raw_audio = audio
                 
             elif file_path.suffix.lower() == '.m4a':
                 audio = mutagen.File(file_path)
                 audio_tech = audio
-                track_number = audio.get('trkn', [[0, 0]])[0][0]
-                
-                # For M4A, tags are directly accessible
-                raw_audio = audio
-                
+            
             if not audio or not audio_tech:
                 return None
 
+            # Extraer track_number y manejarlo correctamente según el formato
+            track_number = '0'
+            if file_path.suffix.lower() == '.mp3':
+                if 'tracknumber' in audio:
+                    track_number = audio['tracknumber'][0].split('/')[0]
+            elif file_path.suffix.lower() == '.flac':
+                if 'tracknumber' in audio:
+                    track_number = str(audio.get('tracknumber', ['0'])[0]).split('/')[0]
+            elif file_path.suffix.lower() == '.m4a':
+                if 'trkn' in audio:
+                    track_number = str(audio.get('trkn', [[0, 0]])[0][0])
+
             current_time = datetime.now()
             
+            # Metadata básica
             metadata = {
                 'file_path': str(file_path),
-                'title': audio.get('title', ['Untitled'])[0],
+                'title': self._get_tag_value(audio, 'title', 'Untitled'),
                 'track_number': int(track_number) if track_number and str(track_number).isdigit() else 0,
-                'artist': audio.get('artist', ['Unknown Artist'])[0],
-                'album_artist': audio.get('albumartist', [None])[0] or audio.get('album artist', [None])[0] or audio.get('artist', ['Unknown Artist'])[0],
-                'album': audio.get('album', ['Unknown Album'])[0],
-                'date': audio.get('date', [''])[0] or audio.get('year', [''])[0],
-                'genre': audio.get('genre', ['Unknown'])[0],
-                'label': audio.get('organization', [None])[0] or audio.get('label', [None])[0] or '',
-                'mbid': audio.get('musicbrainz_trackid', [''])[0],
+                'artist': self._get_tag_value(audio, 'artist', 'Unknown Artist'),
+                'album_artist': self._get_tag_value(audio, 'albumartist', None) or 
+                            self._get_tag_value(audio, 'album artist', None) or 
+                            self._get_tag_value(audio, 'artist', 'Unknown Artist'),
+                'album': self._get_tag_value(audio, 'album', 'Unknown Album'),
+                'date': self._get_tag_value(audio, 'date', '') or self._get_tag_value(audio, 'year', ''),
+                'genre': self._get_tag_value(audio, 'genre', 'Unknown'),
+                'label': self._get_tag_value(audio, 'organization', None) or 
+                        self._get_tag_value(audio, 'label', ''),
+                'mbid': self._get_tag_value(audio, 'musicbrainz_trackid', ''),
                 'date_created': datetime.fromtimestamp(os.path.getctime(file_path)),
                 'last_modified': datetime.fromtimestamp(os.path.getmtime(file_path)),
                 'added_timestamp': current_time,
-                'added_week': int(current_time.strftime('%V')),  # ISO week number
+                'added_day': current_time.day,
+                'added_week': int(current_time.strftime('%V')),
                 'added_month': current_time.month,
                 'added_year': current_time.year,
-                'folder_path': str(file_path.parent)  # Add folder path for album grouping
+                'folder_path': str(file_path.parent),
+                'origen': 'local',
+                
+                # Nuevos metadatos de MusicBrainz
+                'musicbrainz_artistid': self._get_tag_value(audio, 'musicbrainz_artistid', ''),
+                'musicbrainz_recordingid': self._get_tag_value(audio, 'musicbrainz_recordingid', ''),
+                'musicbrainz_albumid': self._get_tag_value(audio, 'musicbrainz_albumid', ''),
+                'musicbrainz_albumartistid': self._get_tag_value(audio, 'musicbrainz_albumartistid', ''),
+                'musicbrainz_releasegroupid': self._get_tag_value(audio, 'musicbrainz_releasegroupid', ''),
+                'catalognumber': self._get_tag_value(audio, 'catalognumber', ''),
+                'media': self._get_tag_value(audio, 'media', ''),
+                'discnumber': self._get_tag_value(audio, 'discnumber', ''),
+                'releasecountry': self._get_tag_value(audio, 'releasecountry', ''),
+                'originalyear': self._extract_year(self._get_tag_value(audio, 'originalyear', ''))
             }
 
             # Technical information - correctly calculate bitrate
@@ -653,40 +742,42 @@ class MusicLibraryManager:
                 metadata['duration'] = getattr(audio_tech.info, 'length', 0)
             
             # Extract ReplayGain information based on file format
-            # For FLAC files
-            if file_path.suffix.lower() == '.flac':
-                metadata['replay_gain_track_gain'] = self._extract_float_tag(raw_audio, 'replaygain_track_gain')
-                metadata['replay_gain_track_peak'] = self._extract_float_tag(raw_audio, 'replaygain_track_peak')
-                metadata['replay_gain_album_gain'] = self._extract_float_tag(raw_audio, 'replaygain_album_gain')
-                metadata['replay_gain_album_peak'] = self._extract_float_tag(raw_audio, 'replaygain_album_peak')
-            
-            # For MP3 files - different tag formats exist, try multiple variants
-            elif file_path.suffix.lower() == '.mp3':
-                # Try to find replay gain info in raw ID3 tags
-                metadata['replay_gain_track_gain'] = self._extract_mp3_replay_gain(raw_audio, 'TXXX:REPLAYGAIN_TRACK_GAIN', 'TXXX:replaygain_track_gain')
-                metadata['replay_gain_track_peak'] = self._extract_mp3_replay_gain(raw_audio, 'TXXX:REPLAYGAIN_TRACK_PEAK', 'TXXX:replaygain_track_peak')
-                metadata['replay_gain_album_gain'] = self._extract_mp3_replay_gain(raw_audio, 'TXXX:REPLAYGAIN_ALBUM_GAIN', 'TXXX:replaygain_album_gain')
-                metadata['replay_gain_album_peak'] = self._extract_mp3_replay_gain(raw_audio, 'TXXX:REPLAYGAIN_ALBUM_PEAK', 'TXXX:replaygain_album_peak')
-                
-            # For M4A files
-            elif file_path.suffix.lower() == '.m4a':
-                # M4A usually has replay gain in ----:com.apple.iTunes:replaygain_track_gain format
-                for tag in raw_audio:
-                    if 'replaygain_track_gain' in tag.lower():
-                        metadata['replay_gain_track_gain'] = self._parse_replay_gain_value(str(raw_audio[tag][0]))
-                    if 'replaygain_track_peak' in tag.lower():
-                        metadata['replay_gain_track_peak'] = self._parse_replay_gain_value(str(raw_audio[tag][0]))
-                    if 'replaygain_album_gain' in tag.lower():
-                        metadata['replay_gain_album_gain'] = self._parse_replay_gain_value(str(raw_audio[tag][0]))
-                    if 'replaygain_album_peak' in tag.lower():
-                        metadata['replay_gain_album_peak'] = self._parse_replay_gain_value(str(raw_audio[tag][0]))
-
-
+            metadata['replay_gain_track_gain'] = self._extract_float_tag(audio, 'replaygain_track_gain')
+            metadata['replay_gain_track_peak'] = self._extract_float_tag(audio, 'replaygain_track_peak')
+            metadata['replay_gain_album_gain'] = self._extract_float_tag(audio, 'replaygain_album_gain')
+            metadata['replay_gain_album_peak'] = self._extract_float_tag(audio, 'replaygain_album_peak')
 
             return metadata
 
         except Exception as e:
             self.logger.error(f"Metadata extraction error for {file_path}: {str(e)}")
+            return None
+
+    def _get_tag_value(self, audio, tag_name, default_value=''):
+        """Obtiene el valor de una etiqueta de forma segura para diferentes formatos de audio."""
+        if tag_name in audio:
+            value = audio[tag_name]
+            if isinstance(value, list) and value:
+                return value[0]
+            return value
+        return default_value
+
+    def _extract_year(self, year_str):
+        """Extraer año como entero desde una cadena de texto."""
+        if not year_str:
+            return None
+        
+        # Intentar extraer el año como entero
+        try:
+            # Buscar un patrón de 4 dígitos que represente un año
+            import re
+            year_match = re.search(r'\b(19|20)\d{2}\b', str(year_str))
+            if year_match:
+                return int(year_match.group(0))
+            
+            # Si no tiene formato de año, probar a convertir directamente
+            return int(year_str)
+        except (ValueError, TypeError):
             return None
 
 
@@ -976,6 +1067,28 @@ class MusicLibraryManager:
         folder_albums = {}
         
         try:
+            # Verificar si la tabla song_links existe y crearla si no
+            c.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
+            if not c.fetchone():
+                c.execute('''
+                    CREATE TABLE IF NOT EXISTS song_links (
+                        id INTEGER PRIMARY KEY,
+                        song_id INTEGER,
+                        spotify_url TEXT,
+                        spotify_id TEXT,
+                        lastfm_url TEXT,
+                        links_updated TIMESTAMP,
+                        youtube_url TEXT,
+                        musicbrainz_url TEXT,
+                        musicbrainz_recording_id TEXT,
+                        bandcamp_url TEXT,
+                        soundcloud_url TEXT,
+                        boomkat_url TEXT,
+                        FOREIGN KEY(song_id) REFERENCES songs(id)
+                    )
+                ''')
+                conn.commit()
+            
             # First pass: gather folder information to establish consistent album metadata
             for file_path in self.root_path.rglob('*'):
                 if file_path.suffix.lower() in self.supported_formats:
@@ -1034,6 +1147,7 @@ class MusicLibraryManager:
                                 # Preserve original added_timestamp if it exists
                                 if original_added_timestamp:
                                     metadata['added_timestamp'] = original_added_timestamp
+                                    metadata['added_day'] = original_added_timestamp.day
                                     metadata['added_week'] = int(original_added_timestamp.strftime('%V'))
                                     metadata['added_month'] = original_added_timestamp.month
                                     metadata['added_year'] = original_added_timestamp.year
@@ -1050,10 +1164,12 @@ class MusicLibraryManager:
                                         (file_path, title, track_number, artist, album_artist, 
                                         album, date, genre, label, mbid, bitrate, 
                                         bit_depth, sample_rate, last_modified, duration,
-                                        added_timestamp, added_week, added_month, added_year,
+                                        added_timestamp, added_day, added_week, added_month, added_year,
                                         replay_gain_track_gain, replay_gain_track_peak, 
-                                        replay_gain_album_gain, replay_gain_album_peak)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                        replay_gain_album_gain, replay_gain_album_peak, origen,
+                                        musicbrainz_artistid, musicbrainz_recordingid, 
+                                        musicbrainz_albumartistid, musicbrainz_releasegroupid)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                     ''', (
                                         metadata['file_path'], metadata['title'], metadata['track_number'], 
                                         metadata['artist'], consistent_album_artist, folder_metadata['album'], 
@@ -1061,9 +1177,15 @@ class MusicLibraryManager:
                                         metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
                                         metadata.get('sample_rate'), metadata['last_modified'], 
                                         metadata.get('duration'), metadata['added_timestamp'],
-                                        metadata['added_week'], metadata['added_month'], metadata['added_year'],
+                                        metadata.get('added_day'), metadata['added_week'], 
+                                        metadata['added_month'], metadata['added_year'],
                                         metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
-                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak')
+                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
+                                        'local',
+                                        metadata.get('musicbrainz_artistid', ''),
+                                        metadata.get('musicbrainz_recordingid', ''),
+                                        metadata.get('musicbrainz_albumartistid', ''),
+                                        metadata.get('musicbrainz_releasegroupid', '')
                                     ))
                                     
                                     # Asegurarse de que la canción también tenga entrada en song_links
@@ -1092,10 +1214,10 @@ class MusicLibraryManager:
                                         (file_path, title, track_number, artist, album_artist, 
                                         album, date, genre, label, mbid, bitrate, 
                                         bit_depth, sample_rate, last_modified, duration,
-                                        added_timestamp, added_week, added_month, added_year,
+                                        added_timestamp, added_day, added_week, added_month, added_year,
                                         replay_gain_track_gain, replay_gain_track_peak, 
-                                        replay_gain_album_gain, replay_gain_album_peak)
-                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                        replay_gain_album_gain, replay_gain_album_peak, origen)
+                                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                                     ''', (
                                         metadata['file_path'], metadata['title'], metadata['track_number'], 
                                         metadata['artist'], metadata['album_artist'], metadata['album'], 
@@ -1103,9 +1225,11 @@ class MusicLibraryManager:
                                         metadata['mbid'], metadata.get('bitrate'), metadata.get('bit_depth'),
                                         metadata.get('sample_rate'), metadata['last_modified'], 
                                         metadata.get('duration'), metadata['added_timestamp'],
-                                        metadata['added_week'], metadata['added_month'], metadata['added_year'],
+                                        metadata.get('added_day'), metadata['added_week'], 
+                                        metadata['added_month'], metadata['added_year'],
                                         metadata.get('replay_gain_track_gain'), metadata.get('replay_gain_track_peak'),
-                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak')
+                                        metadata.get('replay_gain_album_gain'), metadata.get('replay_gain_album_peak'),
+                                        'local'
                                     ))
                                     
                                     # Asegurarse de que la canción también tenga entrada en song_links
@@ -1122,11 +1246,16 @@ class MusicLibraryManager:
                                 error_files += 1
                                 error_logger.error(f"Metadata extraction failed: {abs_path}")
                         
-                        conn.commit()
+                        # Hacemos commit más frecuentemente para evitar perder trabajo
+                        if processed_files % 10 == 0:
+                            conn.commit()
                     
                     except Exception as file_error:
                         error_files += 1
                         error_logger.error(f"File processing error {abs_path}: {str(file_error)}")
+            
+            # Commit final para asegurar que todos los cambios se guarden
+            conn.commit()
         
         except Exception as scan_error:
             self.logger.error(f"Library scan error: {str(scan_error)}")
@@ -1141,11 +1270,31 @@ class MusicLibraryManager:
             self.logger.info(f"Files with errors: {error_files}")
 
 
-
-
     def _ensure_song_links_entry(self, cursor, file_path):
         """Asegurarse de que existe una entrada en song_links para esta canción"""
-        # Primero obtener el ID de la canción
+        # Primero, verificar si la tabla song_links existe
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
+        if not cursor.fetchone():
+            # Si la tabla no existe, crearla
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS song_links (
+                    id INTEGER PRIMARY KEY,
+                    song_id INTEGER,
+                    spotify_url TEXT,
+                    spotify_id TEXT,
+                    lastfm_url TEXT,
+                    links_updated TIMESTAMP,
+                    youtube_url TEXT,
+                    musicbrainz_url TEXT,
+                    musicbrainz_recording_id TEXT,
+                    bandcamp_url TEXT,
+                    soundcloud_url TEXT,
+                    boomkat_url TEXT,
+                    FOREIGN KEY(song_id) REFERENCES songs(id)
+                )
+            ''')
+        
+        # Ahora obtener el ID de la canción
         cursor.execute("SELECT id FROM songs WHERE file_path = ?", (file_path,))
         result = cursor.fetchone()
         if result:
@@ -1170,57 +1319,61 @@ class MusicLibraryManager:
         # Clean up artist name to remove featuring parts
         artist_name = artist_name.split('feat.')[0].split('with')[0].split('&')[0].strip()
         
-        cursor.execute("SELECT last_updated FROM artists WHERE name = ?", (artist_name,))
+        cursor.execute("SELECT id FROM artists WHERE name = ?", (artist_name,))
         existing_artist = cursor.fetchone()
         
-        # Only update if no existing record or older than 30 days
+        current_time = datetime.now()
+        
+        # Simplemente insertar el artista si no existe
         if not existing_artist:
             cursor.execute('''
                 INSERT INTO artists 
-                (name, last_updated)
-                VALUES (?, ?)
-            ''', (artist_name, datetime.now()))
-        elif existing_artist and (datetime.now() - self._parse_db_datetime(existing_artist[0])) > timedelta(days=30):
-            lastfm_info = self.get_lastfm_artist_info(artist_name)
-            
-            if lastfm_info:
-                cursor.execute('''
-                    UPDATE artists 
-                    SET bio = ?, tags = ?, similar_artists = ?, last_updated = ?
-                    WHERE name = ?
-                ''', (
-                    lastfm_info['bio'], lastfm_info['tags'], 
-                    lastfm_info['similar_artists'], lastfm_info['last_updated'],
-                    artist_name
-                ))
+                (name, last_updated, added_timestamp, added_day, added_week, added_month, added_year, origen)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                artist_name, current_time, current_time, 
+                current_time.day, int(current_time.strftime('%V')), 
+                current_time.month, current_time.year, 'local'
+            ))
+
 
 
 
     def _update_album_info(self, cursor, metadata):
-        """Update album information using folder-based consistency and calculate bitrate range."""
-        # Skip if invalid data
+        """Update album information with all MusicBrainz and additional metadata."""
+        # Omitir si no hay datos válidos
         if not metadata['artist'] or not metadata['album']:
             return
             
-        # Clean up artist name (just in case)
+        # Limpiar nombre de artista 
         artist_name = metadata['artist'].split('feat.')[0].split('with')[0].split('&')[0].strip()
         
-        # First check if artist exists
+        # Verificar si existe el artista
         cursor.execute("SELECT id FROM artists WHERE name = ?", (artist_name,))
         artist_result = cursor.fetchone()
         
+        current_time = datetime.now()
+        
         if not artist_result:
-            # If artist doesn't exist, create it
+            # Crear el artista si no existe
             cursor.execute('''
-                INSERT INTO artists (name, last_updated)
-                VALUES (?, ?)
-            ''', (artist_name, datetime.now()))
+                INSERT INTO artists (
+                    name, last_updated, added_timestamp, added_day, added_week, 
+                    added_month, added_year, origen, mbid
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                artist_name, current_time, current_time, 
+                current_time.day, int(current_time.strftime('%V')), 
+                current_time.month, current_time.year, 'local',
+                metadata.get('musicbrainz_albumartistid', '')
+            ))
             cursor.execute("SELECT id FROM artists WHERE name = ?", (artist_name,))
             artist_result = cursor.fetchone()
-            
+                
         artist_id = artist_result[0]
         
-        # Check if this album already exists for this artist
+        # Verificar si existe este álbum para este artista
         cursor.execute('''
             SELECT id, last_updated 
             FROM albums 
@@ -1229,7 +1382,7 @@ class MusicLibraryManager:
         
         existing_album = cursor.fetchone()
         
-        # Calculate bitrate range for the album
+        # Calcular el rango de bitrate
         cursor.execute('''
             SELECT MIN(bitrate), MAX(bitrate)
             FROM songs
@@ -1240,7 +1393,6 @@ class MusicLibraryManager:
         min_bitrate = bitrate_range[0] if bitrate_range and bitrate_range[0] is not None else 0
         max_bitrate = bitrate_range[1] if bitrate_range and bitrate_range[1] is not None else 0
         
-        # If we have new song data, update the range with current song bitrate
         if 'bitrate' in metadata and metadata['bitrate']:
             if metadata['bitrate'] < min_bitrate or min_bitrate == 0:
                 min_bitrate = metadata['bitrate']
@@ -1249,27 +1401,57 @@ class MusicLibraryManager:
         
         bitrate_range_str = f"{min_bitrate}-{max_bitrate}" if min_bitrate != max_bitrate else str(min_bitrate)
         
-        # Insert or update based on existence and last updated time
+        # Insertar o actualizar el álbum
         if not existing_album:
             cursor.execute('''
-                INSERT INTO albums 
-                (artist_id, name, year, label, genre, last_updated, bitrate_range, folder_path)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO albums (
+                    artist_id, name, year, label, genre, last_updated, bitrate_range, folder_path, 
+                    added_timestamp, added_day, added_week, added_month, added_year, origen,
+                    musicbrainz_albumid, musicbrainz_albumartistid, musicbrainz_releasegroupid,
+                    catalognumber, media, discnumber, releasecountry, originalyear, mbid
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-                artist_id, metadata['album'], 
-                metadata['date'], metadata['label'], 
-                metadata['genre'], datetime.now(),
-                bitrate_range_str, metadata.get('folder_path', '')
+                artist_id, metadata['album'], metadata['date'], metadata['label'], metadata['genre'],
+                current_time, bitrate_range_str, metadata.get('folder_path', ''),
+                current_time, current_time.day, int(current_time.strftime('%V')),
+                current_time.month, current_time.year, 'local',
+                metadata.get('musicbrainz_albumid', ''),
+                metadata.get('musicbrainz_albumartistid', ''),
+                metadata.get('musicbrainz_releasegroupid', ''),
+                metadata.get('catalognumber', ''),
+                metadata.get('media', ''),
+                metadata.get('discnumber', ''),
+                metadata.get('releasecountry', ''),
+                metadata.get('originalyear'),
+                metadata.get('musicbrainz_albumid', '')  # Usamos musicbrainz_albumid como mbid
             ))
         elif (datetime.now() - self._parse_db_datetime(existing_album[1])) > timedelta(days=30):
             cursor.execute('''
                 UPDATE albums
-                SET year = ?, label = ?, genre = ?, last_updated = ?, bitrate_range = ?, folder_path = ?
+                SET year = ?, label = ?, genre = ?, last_updated = ?, bitrate_range = ?, folder_path = ?,
+                    musicbrainz_albumid = COALESCE(musicbrainz_albumid, ?),
+                    musicbrainz_albumartistid = COALESCE(musicbrainz_albumartistid, ?),
+                    musicbrainz_releasegroupid = COALESCE(musicbrainz_releasegroupid, ?),
+                    catalognumber = COALESCE(catalognumber, ?),
+                    media = COALESCE(media, ?),
+                    discnumber = COALESCE(discnumber, ?),
+                    releasecountry = COALESCE(releasecountry, ?),
+                    originalyear = COALESCE(originalyear, ?),
+                    mbid = COALESCE(mbid, ?)
                 WHERE id = ?
             ''', (
-                metadata['date'], metadata['label'], 
-                metadata['genre'], datetime.now(),
+                metadata['date'], metadata['label'], metadata['genre'], current_time,
                 bitrate_range_str, metadata.get('folder_path', ''),
+                metadata.get('musicbrainz_albumid', ''),
+                metadata.get('musicbrainz_albumartistid', ''),
+                metadata.get('musicbrainz_releasegroupid', ''),
+                metadata.get('catalognumber', ''),
+                metadata.get('media', ''),
+                metadata.get('discnumber', ''),
+                metadata.get('releasecountry', ''),
+                metadata.get('originalyear'),
+                metadata.get('musicbrainz_albumid', ''),
                 existing_album[0]
             ))
 
@@ -1284,31 +1466,31 @@ class MusicLibraryManager:
                 INSERT INTO genres (name) VALUES (?)
             ''', (genre_name,))
 
-    def get_lastfm_artist_info(self, artist_name: str) -> Optional[Dict]:
-        """Retrieve comprehensive LastFM artist information."""
-        try:
-            artist = self.network.get_artist(artist_name)
+    # def get_lastfm_artist_info(self, artist_name: str) -> Optional[Dict]:
+    #     """Retrieve comprehensive LastFM artist information."""
+    #     try:
+    #         artist = self.network.get_artist(artist_name)
             
-            return {
-                'name': artist_name,
-                'bio': artist.get_bio_summary(),
-                'tags': json.dumps([tag.item.name for tag in artist.get_top_tags()]),
-                'similar_artists': json.dumps([similar.item.name for similar in artist.get_similar()]),
-                'last_updated': datetime.now(),
-                'origin': None,  # LastFM doesn't directly provide this
-                'formed_year': None  # LastFM doesn't directly provide this
-            }
-        except Exception as e:
-            self.logger.error(f"LastFM artist info error for {artist_name}: {str(e)}")
-            return {
-                'name': artist_name,
-                'bio': '',
-                'tags': json.dumps([]),
-                'similar_artists': json.dumps([]),
-                'last_updated': datetime.now(),
-                'origin': None,
-                'formed_year': None
-            }
+    #         return {
+    #             'name': artist_name,
+    #             'bio': artist.get_bio_summary(),
+    #             'tags': json.dumps([tag.item.name for tag in artist.get_top_tags()]),
+    #             'similar_artists': json.dumps([similar.item.name for similar in artist.get_similar()]),
+    #             'last_updated': datetime.now(),
+    #             'origin': None,  # LastFM doesn't directly provide this
+    #             'formed_year': None  # LastFM doesn't directly provide this
+    #         }
+    #     except Exception as e:
+    #         self.logger.error(f"LastFM artist info error for {artist_name}: {str(e)}")
+    #         return {
+    #             'name': artist_name,
+    #             'bio': '',
+    #             'tags': json.dumps([]),
+    #             'similar_artists': json.dumps([]),
+    #             'last_updated': datetime.now(),
+    #             'origin': None,
+    #             'formed_year': None
+    #         }
     
     def _parse_db_datetime(self, datetime_str):
         """Safely parse datetime strings from database."""
@@ -1392,9 +1574,10 @@ class MusicLibraryManager:
             conn.close()
 
 
+
 def main(config=None):
     if config is None:
-        parser = argparse.ArgumentParser(description='enlaces_artista_album')
+        parser = argparse.ArgumentParser(description='db_musica_path')
         parser.add_argument('--config', required=True, help='Archivo de configuración')
         args = parser.parse_args()
         
@@ -1409,25 +1592,27 @@ def main(config=None):
     # Verificamos que todas las claves necesarias existan
     db_path = config.get('db_path')
     root_path = config.get('root_path')
-    lastfm_api_key = config.get('lastfm_api_key')
+    
     print(f"db_path: {db_path}")
     print(f"Ruta de la base de datos (después de Path().resolve()): {Path(db_path).resolve()}")
     print(f"¿La ruta existe? {os.path.exists(db_path)}")
     print(f"¿Tienes permisos? {os.access(db_path, os.R_OK | os.W_OK) if os.path.exists(db_path) else 'N/A'}")
 
-    if not all([db_path, root_path, lastfm_api_key]):
+    if not all([db_path, root_path]):
         missing = []
         if not db_path: missing.append('db_path')
         if not root_path: missing.append('root_path')
-        if not lastfm_api_key: missing.append('lastfm_api_key')
         print(f"Error: Faltan claves necesarias en la configuración: {', '.join(missing)}")
         return 1
         
-    manager = MusicLibraryManager(root_path, db_path, lastfm_api_key)
+    manager = MusicLibraryManager(root_path, db_path)
 
+    # Asegurar que el esquema esté actualizado con los nuevos campos
+    manager.update_schema_with_musicbrainz_metadata()
 
     if config.get('update_schema', False):
         manager.update_schema()
+
     
     if config.get('optimize', False):
         manager.optimize_database()

@@ -134,112 +134,154 @@ def save_last_timestamp(conn, timestamp, username):
 
 
 
-def get_listenbrainz_listens(username, token, from_timestamp=0, max_items=100000, limit_total=100000):
-    """Obtiene los listens de ListenBrainz para un usuario desde un timestamp específico"""
+def get_listenbrainz_listens(username, token, from_timestamp=0, max_items=1000, limit_total=None):
+    """
+    Obtiene los listens de ListenBrainz para un usuario desde un timestamp específico,
+    gestionando correctamente la paginación.
+    
+    Args:
+        username: Nombre de usuario de ListenBrainz
+        token: Token de autorización
+        from_timestamp: Timestamp desde el que empezar a obtener listens
+        max_items: Máximo número de items por solicitud (por defecto 1000)
+        limit_total: Límite total de listens a obtener (None para no límite)
+    
+    Returns:
+        Lista de listens obtenidos
+    """
     all_listens = []
-    print(f"usuario {username}")
+    print(f"Obteniendo listens para el usuario: {username}")
+    
     headers = {
         'Accept': 'application/json',
-        'Authorization': f'Token {token}'  # Added token authorization
+        'Authorization': f'Token {token}'
     }
     
     base_url = 'https://api.listenbrainz.org/1/user/'
     
-    # Convert from_timestamp to integer if it's not already
+    # Convertir from_timestamp a entero si no lo es ya
     try:
         from_timestamp = int(from_timestamp)
     except (ValueError, TypeError):
         from_timestamp = 0
     
+    # Determinar dirección de la paginación y punto de inicio
     if from_timestamp > 0:
-        min_ts = from_timestamp
-        endpoint = f'{username}/listens'
-        params = {'min_ts': min_ts, 'count': max_items}
+        # Paginación hacia adelante desde un timestamp específico
         direction = "forward"
+        current_ts = from_timestamp
+        params_key = 'min_ts'  # Para paginación hacia adelante, usamos min_ts
     else:
-        endpoint = f'{username}/listens'
-        params = {'count': max_items}
+        # Paginación hacia atrás desde el presente
         direction = "backward"
+        current_ts = None
+        params_key = 'max_ts'  # Para paginación hacia atrás, usamos max_ts
     
+    endpoint = f'{username}/listens'
     url = f"{base_url}{endpoint}"
     
+    # Función para extraer de forma segura el timestamp de un listen
     def safe_get_timestamp(listen):
-        """Safely extract timestamp, converting to integer"""
         try:
-            # Ensure timestamp is converted to integer
             ts = listen.get('listened_at', 0)
             return int(ts) if ts is not None else 0
         except (ValueError, TypeError):
             return 0
     
+    # Función para obtener listens con manejo de errores
     def fetch_listens(params):
-        """Helper function to fetch listens with error handling"""
         try:
             response = requests.get(url, headers=headers, params=params)
-            
             if response.status_code != 200:
                 print(f"Error al obtener listens: {response.status_code}")
                 print(f"Detalles: {response.text}")
                 return None
-            
             return response.json()
         except Exception as e:
             print(f"Excepción al obtener listens: {e}")
             return None
     
-    # First call to get recent listens
-    data = fetch_listens(params)
+    # Bucle de paginación
+    more_results = True
+    page = 1
     
-    if not data or 'payload' not in data or 'listens' not in data['payload']:
-        print("No se encontraron listens")
-        return []
+    while more_results:
+        # Construir parámetros para la solicitud
+        params = {'count': max_items}
+        
+        # Añadir parámetro de timestamp para la paginación
+        if direction == "forward" and current_ts:
+            params['min_ts'] = current_ts
+        elif direction == "backward" and current_ts:
+            params['max_ts'] = current_ts
+        
+        # Primera página sin timestamp en backward
+        if direction == "backward" and page == 1:
+            # No añadir max_ts para la primera página en backward
+            pass
+        
+        print(f"Obteniendo página {page} de listens con params: {params}")
+        
+        # Realizar solicitud
+        data = fetch_listens(params)
+        
+        # Verificar respuesta
+        if not data or 'payload' not in data or 'listens' not in data['payload']:
+            print(f"No se encontraron más listens en la página {page}")
+            more_results = False
+            continue
+        
+        # Procesar listens recibidos
+        listens = data['payload']['listens']
+        if not listens:
+            print(f"Página {page} vacía, finalizando paginación")
+            more_results = False
+            continue
+        
+        # Añadir a la lista general
+        all_listens.extend(listens)
+        print(f"Página {page}: Obtenidos {len(listens)} listens (total acumulado: {len(all_listens)})")
+        
+        # Comprobar si hemos alcanzado el límite total
+        if limit_total and len(all_listens) >= limit_total:
+            print(f"Alcanzado límite total de {limit_total} listens")
+            more_results = False
+            continue
+        
+        # Actualizar timestamp para la siguiente página
+        if direction == "forward":
+            # Para paginación forward, usar el timestamp más reciente + 1
+            timestamps = [safe_get_timestamp(listen) for listen in listens]
+            if timestamps:
+                current_ts = max(timestamps) + 1
+            else:
+                more_results = False
+        else:  # backward
+            # Para paginación backward, usar el timestamp más antiguo - 1
+            timestamps = [safe_get_timestamp(listen) for listen in listens]
+            if timestamps:
+                current_ts = min(timestamps) - 1
+            else:
+                more_results = False
+        
+        # Esperar un poco para no sobrecargar la API
+        time.sleep(0.5)
+        page += 1
+        
+        # Verificar si hay más resultados según la API
+        if 'payload' in data and 'count' in data['payload'] and data['payload']['count'] < max_items:
+            print(f"La API indica que no hay más resultados (recibidos {data['payload']['count']} < {max_items} solicitados)")
+            more_results = False
     
-    # Add first batch of listens
-    listens = data['payload']['listens']
-    all_listens.extend(listens)
-    print(f"Obtenidos {len(listens)} listens iniciales")
+    # Ordenar listens por timestamp antes de devolverlos
+    all_listens.sort(key=lambda x: safe_get_timestamp(x))
     
-    # Check if we've reached total limit
-    if limit_total and len(all_listens) >= limit_total:
-        print(f"Alcanzado límite de {limit_total} listens")
-        return all_listens[:limit_total]
-    
-    # Fetch additional listens based on direction
-    if direction == "backward":
-        has_more = True
-        while has_more and listens:
-            if limit_total and len(all_listens) >= limit_total:
-                print(f"Alcanzado límite de {limit_total} listens")
-                break
-            
-            # Safely get the oldest timestamp
-            oldest_listen_ts = min([safe_get_timestamp(listen) for listen in listens])
-            max_ts = max(0, oldest_listen_ts - 1)  # Avoid negative timestamps
-            
-            params = {'max_ts': max_ts, 'count': max_items}
-            time.sleep(0.5)
-            
-            data = fetch_listens(params)
-            if not data or 'payload' not in data or 'listens' not in data['payload']:
-                break
-            
-            listens = data['payload']['listens']
-            if not listens:
-                break
-            
-            all_listens.extend(listens)
-            print(f"Obtenidos {len(listens)} listens adicionales (total: {len(all_listens)})")
-    
-    # Sort listens by timestamp
-    all_listens.sort(key=lambda x: int(safe_get_timestamp(x)))
-    
-    # Apply total limit if specified
+    # Aplicar límite total si es necesario
     if limit_total and len(all_listens) > limit_total:
         all_listens = all_listens[:limit_total]
-        print(f"Limitado a {limit_total} listens")
+        print(f"Listens limitados a {limit_total} según parámetro limit_total")
     
     return all_listens
-
     
 def process_listens(conn, listens, existing_artists, existing_albums, existing_songs, 
                     normalize_strings=False, use_mbid=False, use_fuzzy=False, limit=None):
