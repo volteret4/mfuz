@@ -142,15 +142,15 @@ class SetlistfmService:
     def get_upcoming_concerts(self, artist_name, country_code="ES"):
         """Obtiene conciertos próximos mediante web scraping"""
         setlistfm_id = self.get_artist_setlistfm_id(artist_name)
-        year = datetime.now().year
+        current_year = datetime.now().year  # Cambio: usar current_year para ser más claro
 
         if not setlistfm_id:
             message = f"No Setlist.fm ID found for {artist_name}"
             self.logger.error(message)
             return [], message
             
-        # Verificar cache
-        cache_key = f"setlistfm_upcoming_{setlistfm_id}_{country_code}"
+        # Verificar cache - incluir el año en la key para diferenciarlo
+        cache_key = f"setlistfm_upcoming_{setlistfm_id}_{country_code}_{current_year}"
         cache_hash = self._get_cache_hash(cache_key)
         cache_file = self.cache_dir / f"setlistfm_{cache_hash}.json"
         
@@ -170,12 +170,13 @@ class SetlistfmService:
             }
             
             while has_more_pages:
-                # Construir URL con número de página
-                url = f"https://www.setlist.fm/search?artist={setlistfm_id}&year={year}&upcoming=true&page={page}"
+                # Construir URL con filtros específicos de año
+                url = f"https://www.setlist.fm/search?artist={setlistfm_id}&year={current_year}&upcoming=true&page={page}"
                 
                 self.logger.info(f"===== SETLIST.FM DEBUG =====")
                 self.logger.info(f"Artist: {artist_name}")
                 self.logger.info(f"Setlistfm ID: {setlistfm_id}")
+                self.logger.info(f"Year: {current_year}")  # Logging del año
                 self.logger.info(f"Page: {page}")
                 self.logger.info(f"URL: {url}")
                 self.logger.info(f"==========================")
@@ -187,14 +188,10 @@ class SetlistfmService:
                 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 
-                # Selector CSS más específico - cambio aquí
+                # Tu selector existente
                 concert_blocks = soup.select('div.row.contentBox.visiblePrint div.col-xs-12.setlistPreview')
                 
                 self.logger.info(f"Found {len(concert_blocks)} concert blocks on page {page}")
-                
-                # Debugging: Guardar HTML para inspección
-                with open(self.cache_dir / f"setlistfm_debug_page_{page}.html", "w", encoding="utf-8") as f:
-                    f.write(response.text)
                 
                 # Si no hay bloques en esta página, terminar
                 if not concert_blocks:
@@ -304,19 +301,25 @@ class SetlistfmService:
                 next_page_link = soup.select_one('.listPagingNavigator > li:nth-last-child(1) > a')
 
                 if next_page_link and 'page=' in next_page_link.get('href', ''):
-                    # Extraer número de página de la URL
-                    import re
+                    # Extractar el href completo
                     next_url = next_page_link.get('href')
-                    page_match = re.search(r'page=(\d+)', next_url)
-                    if page_match:
-                        page = int(page_match.group(1))
-                        self.logger.info(f"Navegando a página {page}")
-                        time.sleep(0.5)
+                    
+                    # Verificar que la URL sigue conteniendo el filtro de año
+                    if f'year={current_year}' in next_url and 'upcoming=true' in next_url:
+                        page_match = re.search(r'page=(\d+)', next_url)
+                        if page_match:
+                            page = int(page_match.group(1))
+                            self.logger.info(f"Navegando a página {page}")
+                            time.sleep(0.5)
+                        else:
+                            has_more_pages = False
                     else:
+                        # Si Setlist.fm nos está redirigiendo a una página sin el filtro de año, detenemos
                         has_more_pages = False
+                        self.logger.info(f"Filtro de año perdido, deteniendo navegación")
                 else:
                     has_more_pages = False
-                    self.logger.info(f"No se encontraron más páginas. Total páginas procesadas: {page}")
+                    self.logger.info(f"No se encontraron más páginas para el año {current_year}")
             
             # Guardar en cache
             self._save_to_cache(cache_file, all_concerts)
