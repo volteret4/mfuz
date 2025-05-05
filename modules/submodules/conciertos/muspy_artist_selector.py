@@ -1,22 +1,20 @@
 from PyQt6.QtWidgets import QDialog, QHBoxLayout, QVBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem
 from PyQt6.QtCore import Qt
 
-
-
-class ArtistSelectorDialog(QDialog):
-    """Diálogo para seleccionar artistas de la base de datos"""
+class MuspyArtistSelectorDialog(QDialog):
+    """Diálogo para seleccionar artistas de MuSpy"""
     
-    def __init__(self, parent=None, db_connection=None):
+    def __init__(self, parent=None, artists_list=None):
         super().__init__(parent)
         self.parent = parent
-        self.db_connection = db_connection
+        self.artists_list = artists_list or []
         self.selected_artists = []
         self.init_ui()
         self.load_artists()
     
     def init_ui(self):
         """Inicializar la interfaz del diálogo"""
-        self.setWindowTitle("Seleccionar Artistas")
+        self.setWindowTitle("Seleccionar Artistas de MuSpy")
         self.setMinimumSize(500, 400)
         
         layout = QVBoxLayout()
@@ -28,8 +26,8 @@ class ArtistSelectorDialog(QDialog):
         layout.addWidget(self.search_field)
         
         # Lista de artistas
-        self.artists_list = QListWidget()
-        layout.addWidget(self.artists_list)
+        self.artists_list_widget = QListWidget()
+        layout.addWidget(self.artists_list_widget)
         
         # Botones
         button_layout = QHBoxLayout()
@@ -53,41 +51,35 @@ class ArtistSelectorDialog(QDialog):
         self.setLayout(layout)
     
     def load_artists(self):
-        """Cargar artistas desde la base de datos"""
+        """Cargar artistas desde la lista proporcionada"""
         try:
-            if not self.db_connection:
-                self.artists_list.addItem("Error: No se puede conectar a la base de datos")
+            if not self.artists_list:
+                self.artists_list_widget.addItem("Error: No se encontraron artistas en MuSpy")
                 return
             
-            cursor = self.db_connection.cursor()
-            
-            # Consultar artistas ordenados por nombre
-            cursor.execute("SELECT name FROM artists ORDER BY name")
-            artists = cursor.fetchall()
-            
             # Añadir a la lista con checkboxes
-            for artist in artists:
+            for artist in self.artists_list:
                 item = QListWidgetItem()
-                item.setText(artist[0])
+                item.setText(artist)
                 item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
                 item.setCheckState(Qt.CheckState.Unchecked)
-                self.artists_list.addItem(item)
+                self.artists_list_widget.addItem(item)
             
             # Cargar artistas guardados previamente y marcarlos
             if hasattr(self.parent, 'saved_artists') and self.parent.saved_artists:
                 saved = self.parent.saved_artists
-                for i in range(self.artists_list.count()):
-                    item = self.artists_list.item(i)
+                for i in range(self.artists_list_widget.count()):
+                    item = self.artists_list_widget.item(i)
                     if item.text() in saved:
                         item.setCheckState(Qt.CheckState.Checked)
             
         except Exception as e:
-            self.artists_list.addItem(f"Error cargando artistas: {str(e)}")
+            self.artists_list_widget.addItem(f"Error cargando artistas: {str(e)}")
     
     def filter_artists(self, text):
         """Filtrar artistas por texto de búsqueda"""
-        for i in range(self.artists_list.count()):
-            item = self.artists_list.item(i)
+        for i in range(self.artists_list_widget.count()):
+            item = self.artists_list_widget.item(i)
             if text.lower() in item.text().lower():
                 item.setHidden(False)
             else:
@@ -95,22 +87,22 @@ class ArtistSelectorDialog(QDialog):
     
     def select_all(self):
         """Seleccionar todos los artistas visibles"""
-        for i in range(self.artists_list.count()):
-            item = self.artists_list.item(i)
+        for i in range(self.artists_list_widget.count()):
+            item = self.artists_list_widget.item(i)
             if not item.isHidden():
                 item.setCheckState(Qt.CheckState.Checked)
     
     def deselect_all(self):
         """Deseleccionar todos los artistas"""
-        for i in range(self.artists_list.count()):
-            item = self.artists_list.item(i)
+        for i in range(self.artists_list_widget.count()):
+            item = self.artists_list_widget.item(i)
             item.setCheckState(Qt.CheckState.Unchecked)
     
     def get_selected_artists(self):
         """Obtener lista de artistas seleccionados"""
         selected = []
-        for i in range(self.artists_list.count()):
-            item = self.artists_list.item(i)
+        for i in range(self.artists_list_widget.count()):
+            item = self.artists_list_widget.item(i)
             if item.checkState() == Qt.CheckState.Checked:
                 selected.append(item.text())
         return selected

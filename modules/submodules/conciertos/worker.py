@@ -29,6 +29,11 @@ class ConcertSearchWorker(QThread):
         self.db_path = db_path
         self.concerts = []
         self._running = True
+        
+        # Debug: verificar que services no está vacío
+        print(f"Worker: Services received: {services}")
+        print(f"Worker: Artists received: {artists}")
+        print(f"Worker: Country code: {country_code}")
     
     def run(self):
         """Realizar búsqueda en segundo plano"""
@@ -88,6 +93,11 @@ class ConcertSearchWorker(QThread):
                     # Activar logging detallado para Setlist.fm
                     if service_name == "setlistfm":
                         self.log_message.emit(f"=== DEBUGGING SETLIST.FM FOR {artist} ===")
+                        self.log_message.emit(f"Results type: {type(results)}")
+                        self.log_message.emit(f"Results count: {len(results) if isinstance(results, list) else 'N/A'}")
+                        self.log_message.emit(f"Message: {message}")
+                        if results and isinstance(results, list):
+                            self.log_message.emit(f"First result keys: {list(results[0].keys()) if results else 'No results'}")
 
                     # Validar resultados
                     if not isinstance(results, list):
@@ -97,10 +107,26 @@ class ConcertSearchWorker(QThread):
                     # Emitir mensaje de log
                     self.log_message.emit(message)
                     
-                    # Añadir la fuente si no está presente
+                    # Añadir la fuente si no está presente y asegurar campos necesarios
                     for concert in results:
                         if 'source' not in concert:
                             concert['source'] = service_name.capitalize()
+                        
+                        # Asegurar campos necesarios para identificar duplicados
+                        if 'artist' not in concert or not concert.get('artist'):
+                            concert['artist'] = artist
+                        if 'date' not in concert or not concert.get('date'):
+                            concert['date'] = '9999-99-99'  # Fecha por defecto
+                        if 'venue' not in concert or not concert.get('venue'):
+                            concert['venue'] = ''
+                        if 'name' not in concert or not concert.get('name'):
+                            concert['name'] = 'Evento sin nombre'
+                        
+                        # Asegurar que url e id existen
+                        if 'url' not in concert:
+                            concert['url'] = ''
+                        if 'id' not in concert:
+                            concert['id'] = ''
                     
                     # Acumular resultados para este artista
                     artist_concerts.extend(results)
@@ -118,30 +144,7 @@ class ConcertSearchWorker(QThread):
                 self.progress_update.emit(current_progress, total_operations)
             
             # Añadir todos los conciertos de este artista a la lista global
-            for concert in artist_concerts:
-                # Verificar estructura de datos mínima
-                if not isinstance(concert, dict):
-                    continue
-                    
-                # Asegurar que tenga los campos mínimos
-                if not concert.get('name') or not concert.get('artist'):
-                    concert['artist'] = artist
-                    if not concert.get('name'):
-                        concert['name'] = 'Evento sin nombre'
-                
-                # Comprobar si ya existe un concierto similar
-                duplicate = False
-                for existing_concert in all_concerts:
-                    # Considerar duplicado si coincide artista, fecha y lugar
-                    if (existing_concert.get('artist') == concert.get('artist') and
-                        existing_concert.get('date') == concert.get('date') and
-                        existing_concert.get('venue') == concert.get('venue')):
-                        duplicate = True
-                        break
-                
-                # Si no es duplicado, añadir
-                if not duplicate:
-                    all_concerts.append(concert)
+            all_concerts.extend(artist_concerts)
         
         if self._running:
             # Ordenar conciertos por fecha

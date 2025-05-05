@@ -207,7 +207,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="debug_btn_3">
+          <widget class="QPushButton" name="add_to_cal">
            <property name="text">
             <string/>
            </property>

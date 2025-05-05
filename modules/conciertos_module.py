@@ -18,8 +18,10 @@ from modules.submodules.conciertos.artist_selector import ArtistSelectorDialog
 from modules.submodules.conciertos.worker import ConcertSearchWorker
 from modules.submodules.conciertos.spotify import SpotifyService
 from modules.submodules.conciertos.setlistfm import SetlistfmService
-import resources_rc
+from modules.submodules.conciertos.muspy import MuspyService
+from modules.submodules.conciertos.muspy_artist_selector import MuspyArtistSelectorDialog
 from modules.submodules.conciertos import setlistfm
+import resources_rc
 
 class ConciertosModule(BaseModule):
     """Módulo para gestionar conciertos de artistas"""
@@ -116,21 +118,54 @@ class ConciertosModule(BaseModule):
 
         # Inicializar servicio de Setlistfm si está habilitado
         if self.setlistfm_enabled:
-            # Pasar la configuración completa de setlistfm al servicio
-            setlistfm_config = self.setlistfm_config.copy()
-            setlistfm_config['cache_directory'] = self.cache_dir
-            
-            self.setlistfm_service = SetlistfmService(
-                api_key=self.setlistfm_apikey,
-                cache_dir=self.cache_dir,
-                cache_duration=24,  # duración de caché en horas
-                db_path=self.db_path,
-                config=setlistfm_config  # Pasar la configuración completa
-            )
-            self.log_area.append(f"Setlistfm API Key: {self.setlistfm_apikey}")
-            self.log_area.append("Servicio de Setlist.fm inicializado correctamente")
+            try:
+                # Pasar la configuración completa de setlistfm al servicio
+                setlistfm_config = self.setlistfm_config.copy()
+                setlistfm_config['cache_directory'] = self.cache_dir
+                
+                self.setlistfm_service = SetlistfmService(
+                    api_key=self.setlistfm_apikey,
+                    cache_dir=self.cache_dir,
+                    cache_duration=24,  # duración de caché en horas
+                    db_path=self.db_path,
+                    config=setlistfm_config  # Pasar la configuración completa
+                )
+                self.log_area.append(f"Setlistfm API Key: {self.setlistfm_apikey[:5]}...")  # Solo muestra los primeros 5 caracteres
+                self.log_area.append("Servicio de Setlist.fm inicializado correctamente")
+            except Exception as e:
+                self.log_area.append(f"Error inicializando Setlist.fm: {str(e)}")
+                self.log_area.append(traceback.format_exc())
+                self.setlistfm_enabled = False
         else:
             self.log_area.append("API de Setlist.fm no está habilitada en la configuración")
+
+        # Inicializar servicio de MuSpy si está habilitado
+        self.muspy_config = self.apis.get('muspy', {})
+        self.muspy_enabled = self.muspy_config.get('enabled', 'False').lower() == 'true'
+        self.muspy_username = self.global_config.get('muspy_username', '')
+        self.muspy_password = self.global_config.get('muspy_password', '')
+        self.muspy_id = self.global_config.get('muspy_id', '')
+
+        if self.muspy_enabled:
+            try:
+                self.muspy_service = MuspyService(
+                    username=self.muspy_username,
+                    password=self.muspy_password,
+                    user_id=self.muspy_id,
+                    cache_dir=self.cache_dir,
+                    cache_duration=24
+                )
+                self.log_area.append("MuSpy service initialized correctly")
+            except Exception as e:
+                self.muspy_enabled = False
+                self.log_area.append(f"Exception initializing MuSpy: {str(e)}")
+                import traceback
+                self.log_area.append(traceback.format_exc())
+        else:
+            self.log_area.append("MuSpy API is not enabled in configuration")
+
+        # Add to your debug log information:
+        self.log_area.append(f"MuSpy service exists: {hasattr(self, 'muspy_service')}")
 
 
         # Añadir mensaje al campo de búsqueda si está vacío
@@ -153,6 +188,11 @@ class ConciertosModule(BaseModule):
         
         # Configurar menús contextuales
         self.setup_context_menus()
+
+        # Debug: verificar inicialización de servicios
+        self.log_area.append(f"Ticketmaster service exists: {hasattr(self, 'ticketmaster_service')}")
+        self.log_area.append(f"Spotify service exists: {hasattr(self, 'spotify_service')}")
+        self.log_area.append(f"Setlistfm service exists: {hasattr(self, 'setlistfm_service')}")
     
     def init_ui(self):
         """Inicializar la UI desde el archivo .ui"""
@@ -162,8 +202,15 @@ class ConciertosModule(BaseModule):
         ui_file = os.path.join(PROJECT_ROOT, "ui", "conciertos_module.ui")
         try:
             uic.loadUi(ui_file, self)
+             # Hide the advanced settings groupbox by default
+            self.global_config_group.setVisible(False)
+
+            # Set checkbox initial state to match visibility
+            self.advanced_settings.setChecked(False)
+            
             # Configurar el placeholder del campo de búsqueda
             self.lineEdit.setPlaceholderText("Buscar artistas individualmente")
+           
             return True
         except Exception as e:
             print(f"Error cargando UI: {e}")
@@ -191,11 +238,21 @@ class ConciertosModule(BaseModule):
         self.concerts_tree.cellClicked.connect(self.on_concert_selected)
 
 
+
+        # Signal connection for advanced settings checkbox
+        self.advanced_settings.stateChanged.connect(self.toggle_advanced_settings)
+
+        # Debug buttons connections if they exist
         if hasattr(self, 'debug_btn'):
             self.debug_btn.clicked.connect(lambda: self.debug_ticketmaster_api(self.lineEdit.text()))
-
+        
         if hasattr(self, 'debug_btn_2'):
             self.debug_btn_2.clicked.connect(lambda: self.debug_ticketmaster_response(self.lineEdit.text()))
+
+    def toggle_advanced_settings(self, state):
+        """Toggle visibility of advanced settings based on checkbox state"""
+        # Qt.Checked is equal to 2
+        self.global_config_group.setVisible(state == 2)
 
     def search_from_lineedit(self):
         """Buscar conciertos para el artista introducido en el lineEdit"""
@@ -235,81 +292,6 @@ class ConciertosModule(BaseModule):
         if not concert_data:
             return
         
-        # Get event_id if available (only for Ticketmaster events)
-        event_id = concert_data.get('id')
-        event_details = {}
-        
-        if event_id and concert_data.get('source') == 'Ticketmaster':
-            self.log_area.append(f"Getting detailed info for event ID: {event_id}")
-            event_details = self.get_event_details(event_id)
-        
-        # Extract detailed information (if available)
-        classifications = []
-        if event_details and 'classifications' in event_details:
-            for classification in event_details.get('classifications', []):
-                segment = classification.get('segment', {}).get('name', '')
-                genre = classification.get('genre', {}).get('name', '')
-                subgenre = classification.get('subGenre', {}).get('name', '')
-                
-                if segment and genre:
-                    if subgenre:
-                        classifications.append(f"{segment} - {genre} - {subgenre}")
-                    else:
-                        classifications.append(f"{segment} - {genre}")
-        
-        # Notes
-        please_note = event_details.get('pleaseNote', '')
-        
-        # Price ranges
-        price_ranges = []
-        if event_details and 'priceRanges' in event_details:
-            for price in event_details.get('priceRanges', []):
-                min_price = price.get('min', 0)
-                max_price = price.get('max', 0)
-                currency = price.get('currency', 'EUR')
-                
-                if min_price == max_price:
-                    price_ranges.append(f"{min_price} {currency}")
-                else:
-                    price_ranges.append(f"{min_price} - {max_price} {currency}")
-        
-        # Event dates
-        start_date = ''
-        end_date = ''
-        
-        if event_details and 'dates' in event_details:
-            dates = event_details.get('dates', {})
-            
-            # Start date/time
-            if 'start' in dates:
-                start_info = dates.get('start', {})
-                start_date_str = start_info.get('localDate', '')
-                start_time_str = start_info.get('localTime', '')
-                
-                if start_date_str and start_time_str:
-                    try:
-                        start_datetime = datetime.strptime(f"{start_date_str} {start_time_str}", "%Y-%m-%d %H:%M:%S")
-                        start_date = start_datetime.strftime("%d/%m/%Y %H:%M")
-                    except ValueError:
-                        start_date = f"{start_date_str} {start_time_str}"
-                elif start_date_str:
-                    start_date = start_date_str
-            
-            # End date/time
-            if 'end' in dates:
-                end_info = dates.get('end', {})
-                end_date_str = end_info.get('localDate', '')
-                end_time_str = end_info.get('localTime', '')
-                
-                if end_date_str and end_time_str:
-                    try:
-                        end_datetime = datetime.strptime(f"{end_date_str} {end_time_str}", "%Y-%m-%d %H:%M:%S")
-                        end_date = end_datetime.strftime("%d/%m/%Y %H:%M")
-                    except ValueError:
-                        end_date = f"{end_date_str} {end_time_str}"
-                elif end_date_str:
-                    end_date = end_date_str
-        
         # Build detailed HTML info
         html_info = f"""
         <div style="font-family: sans-serif;">
@@ -319,41 +301,28 @@ class ConciertosModule(BaseModule):
             <p><b>Date:</b> {concert_data['date']}</p>
         """
         
-        # Add start/end time if available
-        if start_date:
-            html_info += f"<p><b>Start:</b> {start_date}</p>"
-        if end_date:
-            html_info += f"<p><b>End:</b> {end_date}</p>"
-        
-        # Add time if available in basic concert data
+        # Add time if available
         if concert_data.get('time'):
             html_info += f"<p><b>Time:</b> {concert_data['time']}</p>"
         
-        # Add classifications if available
-        if classifications:
-            html_info += f"<p><b>Classifications:</b> {', '.join(classifications)}</p>"
-        
-        # Add price ranges if available
-        if price_ranges:
-            html_info += f"<p><b>Price ranges:</b> {', '.join(price_ranges)}</p>"
-        
-        # Add notes if available
-        if please_note:
-            html_info += f"<p><b>Notes:</b> {please_note}</p>"
-        
-        # Add ticket link
-        if concert_data.get('url'):
-            html_info += f"<p><a href=\"{concert_data['url']}\">Buy tickets</a></p>"
+        # Add ticket sources section
+        sources = concert_data.get('sources', [])
+        if sources:
+            html_info += "<h3>Find tickets at:</h3><ul>"
+            for source in sources:
+                source_name = source.get('name', 'Unknown')
+                source_url = source.get('url', '')
+                if source_url:
+                    html_info += f"<li><a href=\"{source_url}\">{source_name}</a></li>"
+                else:
+                    html_info += f"<li>{source_name} (no link available)</li>"
+            html_info += "</ul>"
         
         html_info += "</div>"
         
         # Show information in info area
         self.info_area.setHtml(html_info)
         
-        if concert_data.get('source') == 'Setlist.fm' and concert_data.get('id'):
-            self.display_setlist_details(concert_data.get('id'))
-
-
         # Load and show image if available
         if concert_data.get('image'):
             self.load_image_for_concert(concert_data)
@@ -484,7 +453,10 @@ class ConciertosModule(BaseModule):
         if index == 0:  # Artistas de la base de datos
             self.show_db_artists_dialog()
         elif index == 1:  # Artistas de muspy
-            self.log_area.append("Funcionalidad de muspy no implementada aún")
+            if self.muspy_enabled:
+                self.get_muspy_followed_artists()
+            else:
+                self.log_area.append("API de MuSpy no está habilitada en la configuración")
         elif index == 2:  # Artistas de Spotify
             if self.spotify_enabled:
                 self.get_spotify_followed_artists()
@@ -697,6 +669,15 @@ class ConciertosModule(BaseModule):
         else:
             self.log_area.append("Spotify no disponible - cliente no inicializado")
 
+        if 'setlistfm' in enabled_apis:
+                if hasattr(self, 'setlistfm_service'):
+                    services.append(('setlistfm', self.setlistfm_service))
+                    self.log_area.append("Setlistfm service added to search")
+                else:
+                    self.log_area.append("Setlistfm no disponible - servicio no inicializado")
+
+
+
         # Iniciar el worker en un hilo separado con todos los servicios disponibles
         self.search_worker = ConcertSearchWorker(
             services,
@@ -724,6 +705,7 @@ class ConciertosModule(BaseModule):
         
         # Verificar APIs habilitadas
         enabled_apis = self._get_enabled_apis()
+        self.log_area.append(f"Enabled APIs before creating services list: {enabled_apis}")
         if not enabled_apis:
             self.log_area.append("No hay APIs habilitadas para buscar conciertos")
             return
@@ -748,7 +730,8 @@ class ConciertosModule(BaseModule):
             if hasattr(self, 'spotify_service') and self.spotify_service is not None:
                 services.append(('spotify', self.spotify_service))        
         if 'setlistfm' in enabled_apis:
-            services.append(('setlistfm', self.setlistfm_service))
+            if hasattr(self, 'setlistfm_service'):
+                services.append(('setlistfm', self.setlistfm_service))
 
         # Crear e iniciar worker
         self.search_worker = ConcertSearchWorker(
@@ -811,13 +794,16 @@ class ConciertosModule(BaseModule):
     
     def display_concerts(self, concerts):
         """Display concerts in the table widget"""
-        # Save current list of concerts
-        self.current_concerts = concerts
+        # Unificar conciertos antes de mostrar
+        unified_concerts = self.unify_concerts(concerts)
+        
+        # Guardar lista unificada
+        self.current_concerts = unified_concerts
         
         # Clear table
         self.concerts_tree.setRowCount(0)
         
-        if not concerts:
+        if not unified_concerts:
             self.log_area.append("No concerts found")
             return
         
@@ -830,10 +816,10 @@ class ConciertosModule(BaseModule):
                 except ValueError:
                     return datetime(9999, 12, 31)
                     
-            concerts_sorted = sorted(concerts, key=sort_by_date)
+            concerts_sorted = sorted(unified_concerts, key=sort_by_date)
         except Exception as e:
             self.log_area.append(f"Error sorting concerts: {e}")
-            concerts_sorted = concerts
+            concerts_sorted = unified_concerts
         
         # Add concerts to the table
         for i, concert in enumerate(concerts_sorted):
@@ -866,19 +852,21 @@ class ConciertosModule(BaseModule):
         self.concerts_tree.resizeColumnsToContents()
         
         # Show message with number of concerts
-        self.log_area.append(f"Found {len(concerts)} concerts in total")
+        total_sources = sum(len(c.get('sources', [{}])) for c in unified_concerts)
+        self.log_area.append(f"Found {len(unified_concerts)} unique concerts from {total_sources} sources")
         
         # Add summary by source
         sources = {}
-        for concert in concerts:
-            source = concert.get('source', 'Unknown')
-            sources[source] = sources.get(source, 0) + 1
+        for concert in unified_concerts:
+            for source in concert.get('sources', []):
+                source_name = source.get('name', 'Unknown')
+                sources[source_name] = sources.get(source_name, 0) + 1
         
         for source, count in sources.items():
             self.log_area.append(f"  - {source}: {count} concerts")
         
         # Switch to concerts page if there are results
-        if concerts:
+        if unified_concerts:
             self.stackedWidget.setCurrentIndex(0)
     
     def on_search_finished(self):
@@ -1150,26 +1138,33 @@ class ConciertosModule(BaseModule):
             return []
 
     def _get_enabled_apis(self):
-        """
-        Obtener lista de servicios de API habilitados
-        
-        Returns:
-            list: Lista de servicios habilitados
-        """
+        """Get list of enabled API services"""
         enabled_apis = []
         
-        # Verificar Ticketmaster
+        # Debug: Check the status of each service
+        self.log_area.append(f"Checking APIs:")
+        self.log_area.append(f"- Ticketmaster enabled: {self.ticketmaster_enabled}")
+        self.log_area.append(f"- Spotify enabled: {self.spotify_enabled}")
+        self.log_area.append(f"- Setlistfm enabled: {self.setlistfm_enabled}")
+        self.log_area.append(f"- MuSpy enabled: {self.muspy_enabled}")
+        
+        # Check Ticketmaster
         if hasattr(self, 'ticketmaster_service') and self.ticketmaster_enabled:
             enabled_apis.append('ticketmaster')
         
-        # Verificar Spotify
+        # Check Spotify
         if hasattr(self, 'spotify_service') and self.spotify_enabled:
             enabled_apis.append('spotify')
         
-        # Verificar Setlist.fm
-        if hasattr(self, 'setlistfm_service') and self.setlistfm_enabled:
+        # Check Setlist.fm
+        if self.setlistfm_enabled:
             enabled_apis.append('setlistfm')
         
+        # Check MuSpy
+        if hasattr(self, 'muspy_service') and self.muspy_enabled:
+            enabled_apis.append('muspy')
+        
+        self.log_area.append(f"Enabled APIs found: {enabled_apis}")
         return enabled_apis
 
 
@@ -1233,6 +1228,69 @@ class ConciertosModule(BaseModule):
             self.get_spotify_followed_artists()
         else:
             self.log_area.append("Error en la autorización de Spotify")
+
+
+    def unify_concerts(self, concerts):
+        """
+        Unifica conciertos duplicados manteniendo información de todas las fuentes
+        
+        Args:
+            concerts (list): Lista de conciertos potencialmente duplicados
+            
+        Returns:
+            list: Lista de conciertos unificados
+        """
+        # Crear diccionario para agrupar conciertos por clave única
+        concerts_dict = {}
+        
+        for concert in concerts:
+            # Crear clave única basada en artista, fecha y venue
+            key = (
+                concert.get('artist', '').lower(),
+                concert.get('date', ''),
+                concert.get('venue', '').lower()
+            )
+            
+            if key not in concerts_dict:
+                # Primer concierto con esta clave
+                concerts_dict[key] = {
+                    'artist': concert.get('artist', ''),
+                    'venue': concert.get('venue', ''),
+                    'city': concert.get('city', ''),
+                    'date': concert.get('date', ''),
+                    'time': concert.get('time', ''),
+                    'name': concert.get('name', ''),
+                    'image': concert.get('image', ''),
+                    'sources': [{
+                        'name': concert.get('source', 'Unknown'),
+                        'url': concert.get('url', ''),
+                        'id': concert.get('id', '')
+                    }],
+                    # Mantener estructura para compatibilidad
+                    'source': concert.get('source', ''),
+                    'url': concert.get('url', ''),
+                    'id': concert.get('id', '')
+                }
+            else:
+                # Agregar nueva fuente al concierto existente
+                existing = concerts_dict[key]
+                new_source = {
+                    'name': concert.get('source', 'Unknown'),
+                    'url': concert.get('url', ''),
+                    'id': concert.get('id', '')
+                }
+                # Evitar duplicados de fuente
+                if not any(s['name'] == new_source['name'] and s['url'] == new_source['url'] 
+                        for s in existing['sources']):
+                    existing['sources'].append(new_source)
+                
+                # Actualizar información si está vacía
+                if not existing.get('time') and concert.get('time'):
+                    existing['time'] = concert['time']
+                if not existing.get('image') and concert.get('image'):
+                    existing['image'] = concert['image']
+        
+        return list(concerts_dict.values())
 
 
 
@@ -1383,13 +1441,13 @@ class ConciertosModule(BaseModule):
 
 
     def clear_all_cache(self):
-        """Limpiar todo el caché de conciertos"""
+        """Clear all concert cache"""
         try:
             for file in self.cache_dir.glob("*.json"):
                 file.unlink()
-            self.log_area.append(f"Se ha limpiado todo el caché de conciertos")
+            self.log_area.append(f"All concert cache has been cleared")
         except Exception as e:
-            self.log_area.append(f"Error limpiando caché: {str(e)}")
+            self.log_area.append(f"Error clearing cache: {str(e)}")
 
 
 
@@ -1495,6 +1553,53 @@ class ConciertosModule(BaseModule):
         
         except Exception as e:
             self.log_area.append(f"Error showing setlist details: {str(e)}")
+
+
+# MUSPY
+    def get_muspy_followed_artists(self):
+        """Obtener artistas seguidos en MuSpy y mostrar diálogo de selección"""
+        if not hasattr(self, 'muspy_service') or not self.muspy_service:
+            self.log_area.append("Servicio de MuSpy no está inicializado")
+            return
+        
+        # Mostrar indicador de carga
+        self.show_loading_indicator(True, "Obteniendo artistas de MuSpy...")
+        
+        # Obtener artistas seguidos
+        artists, message = self.muspy_service.get_followed_artists()
+        
+        # Ocultar indicador de carga
+        self.show_loading_indicator(False)
+        
+        # Mostrar mensaje en el log
+        self.log_area.append(message)
+        
+        if not artists:
+            self.log_area.append("No se encontraron artistas en MuSpy o ocurrió un error")
+            return
+        
+        # Mostrar diálogo de selección
+        dialog = MuspyArtistSelectorDialog(self, artists)
+        if dialog.exec():
+            selected_artists = dialog.get_selected_artists()
+            if selected_artists:
+                # Guardar en el archivo JSON
+                success = self.save_selected_artists(selected_artists)
+                if success:
+                    self.log_area.append(f"Se seleccionaron {len(selected_artists)} artistas de MuSpy y se guardaron")
+                    # Preguntar si desea buscar conciertos inmediatamente
+                    from PyQt6.QtWidgets import QMessageBox
+                    reply = QMessageBox.question(
+                        self, 
+                        'Buscar Conciertos', 
+                        '¿Deseas buscar conciertos para los artistas seleccionados ahora?',
+                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                        QMessageBox.StandardButton.Yes
+                    )
+                    if reply == QMessageBox.StandardButton.Yes:
+                        # Obtener código de país
+                        country_code = self.country_code_input.text() or self.default_country
+                        self.search_concerts_for_saved_artists(country_code)
 
 
 # DEBUG SPOTIFY
