@@ -40,7 +40,6 @@ class RedesSocialesArtistas:
         Args:
             config (dict, optional): Configuración del módulo.
         """
-        #super().__init__(config)
         self.logger = logging.getLogger("redes_sociales_artistas")
         self.config = config or {}
         
@@ -51,7 +50,8 @@ class RedesSocialesArtistas:
             'batch_size': 50,
             'force_update': False,
             'missing_only': True,
-            'concurrent_workers': 1
+            'concurrent_workers': 1,
+            'user_agent': 'MusicDatabaseApp/1.0'
         }
         
         # Combinar con la configuración proporcionada
@@ -59,10 +59,13 @@ class RedesSocialesArtistas:
             if key not in self.config:
                 self.config[key] = value
         
+        # Mostrar configuración
+        self.logger.info(f"Configuración: {self.config}")
+        
         # Inicializar cliente de Discogs
         self.discogs_token = self.config.get('discogs_token')
         if not self.discogs_token:
-            self.logger.error("No se ha proporcionado un token de Discogs")
+            self.logger.warning("No se ha proporcionado un token de Discogs. Algunas funcionalidades pueden estar limitadas.")
         
         self.discogs_client = DiscogsClient(
             token=self.discogs_token,
@@ -114,8 +117,10 @@ class RedesSocialesArtistas:
             'ra.co': 'resident_advisor',
             'rateyourmusic.com': 'rateyourmusic',
             'RateYourMusic.com': 'rateyourmusic',
-            'residentadvisor.net': 'resident_advisor'
+            'residentadvisor.net': 'resident_advisor',
+            'discogs.com': 'discogs'
         }
+
     
     def connect_db(self):
         """
@@ -174,11 +179,27 @@ class RedesSocialesArtistas:
                 tumblr TEXT,
                 resident_advisor TEXT,
                 rateyourmusic TEXT,
+                discogs TEXT,
+                discogs_http TEXT,
                 enlaces TEXT,
                 last_updated TIMESTAMP,
                 FOREIGN KEY (artist_id) REFERENCES artists(id)
             )
             ''')
+            
+            # Verificar si las columnas 'discogs' y 'discogs_http' ya existen
+            self.cursor.execute("PRAGMA table_info(artists_networks)")
+            columns = [col[1] for col in self.cursor.fetchall()]
+            
+            # Si la columna 'discogs' no existe, añadirla
+            if 'discogs' not in columns:
+                self.logger.info("Añadiendo columna 'discogs' a la tabla artists_networks")
+                self.cursor.execute("ALTER TABLE artists_networks ADD COLUMN discogs TEXT")
+            
+            # Si la columna 'discogs_http' no existe, añadirla
+            if 'discogs_http' not in columns:
+                self.logger.info("Añadiendo columna 'discogs_http' a la tabla artists_networks")
+                self.cursor.execute("ALTER TABLE artists_networks ADD COLUMN discogs_http TEXT")
             
             # Crear índice para búsquedas más rápidas
             self.cursor.execute('''
@@ -194,7 +215,9 @@ class RedesSocialesArtistas:
             return False
         finally:
             self.close_db()
-    
+
+
+            
     def get_artists_to_process(self):
         """
         Obtiene la lista de artistas para procesar.
@@ -206,30 +229,63 @@ class RedesSocialesArtistas:
             return []
         
         try:
-            if self.config.get('missing_only', True):
-                # Obtener artistas que no están en la tabla artists_networks
+            # Primero, comprobar si hay artistas en la base de datos
+            self.cursor.execute("SELECT COUNT(*) FROM artists")
+            artist_count = self.cursor.fetchone()[0]
+            
+            if artist_count == 0:
+                self.logger.warning("No hay artistas en la base de datos")
+                return []
+            
+            # Verificar si la tabla artists_networks existe
+            self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='artists_networks'")
+            if not self.cursor.fetchone():
+                # La tabla no existe, procesaremos artistas normalmente
+                self.logger.info("La tabla artists_networks no existe, se crearán registros nuevos")
                 query = '''
+                SELECT a.id, a.name, a.discogs_url 
+                FROM artists a
+                ORDER BY RANDOM()
+                LIMIT ?
+                '''
+                self.cursor.execute(query, (self.config.get('batch_size', 50),))
+                result = self.cursor.fetchall()
+                return result
+            
+            # Si estamos en modo missing_only, buscamos artistas que tengan AL MENOS UNA columna vacía
+            if self.config.get('missing_only', True):
+                # Obtener todos los nombres de columna de la tabla artists_networks excepto id, artist_id y last_updated
+                self.cursor.execute("PRAGMA table_info(artists_networks)")
+                columns = self.cursor.fetchall()
+                column_names = [col[1] for col in columns if col[1] not in ['id', 'artist_id', 'last_updated']]
+                
+                # Construir dinámicamente la condición SQL para que al menos una columna sea NULL
+                null_conditions = " OR ".join([f"{col} IS NULL" for col in column_names])
+                
+                query = f'''
                 SELECT a.id, a.name, a.discogs_url 
                 FROM artists a
                 LEFT JOIN artists_networks an ON a.id = an.artist_id
-                WHERE an.id IS NULL
-                ORDER BY a.id
+                WHERE an.id IS NULL OR ({null_conditions})
+                ORDER BY RANDOM()
                 LIMIT ?
                 '''
-                self.cursor.execute(query, (self.config.get('batch_size', 50),))
             else:
-                # Obtener todos los artistas
+                # Si no estamos en modo missing_only, simplemente seleccionamos artistas al azar
                 query = '''
                 SELECT a.id, a.name, a.discogs_url 
                 FROM artists a
-                ORDER BY a.id
+                ORDER BY RANDOM()
                 LIMIT ?
                 '''
-                self.cursor.execute(query, (self.config.get('batch_size', 50),))
             
-            return self.cursor.fetchall()
+            self.cursor.execute(query, (self.config.get('batch_size', 50),))
+            result = self.cursor.fetchall()
+            self.logger.info(f"Encontrados {len(result)} artistas para procesar")
+            return result
         except sqlite3.Error as e:
             self.logger.error(f"Error al obtener artistas: {str(e)}")
+            self.conn.rollback()
             return []
         finally:
             self.close_db()
@@ -355,12 +411,40 @@ class RedesSocialesArtistas:
             artist_name (str): Nombre del artista a buscar.
             
         Returns:
-            str: URL de Discogs del artista, o None si no se encontró.
+            tuple: (URL de API de Discogs, URL HTTP de Discogs) o (None, None) si no se encontró.
         """
         artist_result = self.discogs_client.search_artist(artist_name)
         if artist_result:
-            return artist_result.get('resource_url')
-        return None
+            api_url = artist_result.get('resource_url')
+            # Intentar obtener la URI HTTP de Discogs desde la API
+            discogs_http_url = None
+            try:
+                # Esperar para respetar el rate limit
+                time.sleep(self.config.get('rate_limit', 1.0))
+                
+                response = requests.get(
+                    api_url,
+                    headers={'User-Agent': self.config.get('user_agent', 'MusicDatabaseApp/1.0')}
+                )
+                response.raise_for_status()
+                
+                artist_data = response.json()
+                if 'uri' in artist_data:
+                    discogs_http_url = artist_data['uri']
+                else:
+                    # Construir la URL HTTP a partir de la URL de la API
+                    # Formato: https://api.discogs.com/artists/XXX -> https://www.discogs.com/artist/XXX-Artist-Name
+                    artist_id = api_url.split('/')[-1]
+                    # Normalizar el nombre del artista para la URL
+                    normalized_name = artist_name.replace(' ', '-')
+                    discogs_http_url = f"https://www.discogs.com/artist/{artist_id}-{normalized_name}"
+            
+            except Exception as e:
+                self.logger.warning(f"Error al obtener la URI HTTP de Discogs para {artist_name}: {str(e)}")
+            
+            return api_url, discogs_http_url
+        
+        return None, None
     
     def process_artist(self, artist):
         """
@@ -382,40 +466,88 @@ class RedesSocialesArtistas:
         
         self.logger.info(f"Procesando artista: {artist_name} (ID: {artist_id})")
         
+        # ... código existente ...
+        
+        # Variables para ambas URLs de Discogs
+        discogs_api_url = None
+        discogs_http_url = None
+        
         if not discogs_url:
-            # Buscar en Discogs API
-            discogs_url = self.search_discogs_artist(artist_name)
-            if not discogs_url:
+            # Buscar en Discogs API - ahora devuelve ambas URLs
+            discogs_api_url, discogs_http_url = self.search_discogs_artist(artist_name)
+            discogs_url = discogs_api_url  # Para mantener compatibilidad con el resto del código
+            
+            if not discogs_api_url:
                 self.logger.warning(f"No se encontró el artista '{artist_name}' en Discogs")
                 
                 # Guardar un registro vacío para no volver a procesar
-                if self.config.get('missing_only', True):
-                    if not self.connect_db():
-                        return {"success": False, "artist_id": artist_id}
+                if not self.connect_db():
+                    return {"success": False, "artist_id": artist_id, "message": "Error de conexión"}
+                
+                try:
+                    # Verificar si ya existe
+                    self.cursor.execute('SELECT id FROM artists_networks WHERE artist_id = ?', (artist_id,))
+                    existing = self.cursor.fetchone()
                     
-                    try:
+                    if existing:
+                        # Ya existe, actualizar timestamp
+                        self.cursor.execute('''
+                        UPDATE artists_networks SET last_updated = ? WHERE artist_id = ?
+                        ''', (datetime.now(), artist_id))
+                    else:
+                        # Insertar nuevo registro vacío
                         self.cursor.execute('''
                         INSERT INTO artists_networks 
                         (artist_id, last_updated) 
                         VALUES (?, ?)
-                        ''', (artist_id, datetime.now(),))
-                        self.conn.commit()
-                    except sqlite3.Error as e:
-                        self.logger.error(f"Error al guardar registro vacío: {str(e)}")
-                        self.conn.rollback()
-                    finally:
-                        self.close_db()
+                        ''', (artist_id, datetime.now()))
+                        
+                    self.conn.commit()
+                    self.logger.info(f"Guardado registro vacío para '{artist_name}'")
+                except sqlite3.Error as e:
+                    self.logger.error(f"Error al guardar registro vacío: {str(e)}")
+                    self.conn.rollback()
+                finally:
+                    self.close_db()
                 
-                return {"success": False, "artist_id": artist_id}
+                return {"success": False, "artist_id": artist_id, "message": "No encontrado en Discogs"}
+        else:
+            # Si ya tenemos la URL de la API, intentar obtener la URL HTTP
+            try:
+                discogs_api_url = discogs_url
+                # Esperar para respetar el rate limit
+                time.sleep(self.config.get('rate_limit', 1.0))
+                
+                response = requests.get(
+                    discogs_api_url,
+                    headers={'User-Agent': self.config.get('user_agent', 'MusicDatabaseApp/1.0')}
+                )
+                response.raise_for_status()
+                
+                artist_data = response.json()
+                if 'uri' in artist_data:
+                    discogs_http_url = artist_data['uri']
+                else:
+                    # Construir la URL HTTP a partir de la URL de la API
+                    artist_id = discogs_api_url.split('/')[-1]
+                    normalized_name = artist_name.replace(' ', '-')
+                    discogs_http_url = f"https://www.discogs.com/artist/{artist_id}-{normalized_name}"
+            
+            except Exception as e:
+                self.logger.warning(f"Error al obtener la URI HTTP de Discogs para {artist_name}: {str(e)}")
         
         # Obtener la página HTML
-        html_content = self.get_discogs_page(discogs_url)
+        html_content = self.get_discogs_page(discogs_http_url or discogs_api_url)
         if not html_content:
             self.logger.warning(f"No se pudo obtener la página de Discogs para '{artist_name}'")
             return {"success": False, "artist_id": artist_id}
         
         # Extraer las redes sociales
         networks = self.extract_social_networks(html_content, artist_name)
+        
+        # Añadir las URLs de Discogs a las redes sociales
+        networks['discogs'] = discogs_api_url
+        networks['discogs_http'] = discogs_http_url
         
         # Guardar en la base de datos
         if not self.connect_db():
@@ -434,7 +566,7 @@ class RedesSocialesArtistas:
                 instagram = ?, spotify = ?, lastfm = ?, wikipedia = ?, juno = ?,
                 soundcloud = ?, youtube = ?, imdb = ?, progarchives = ?, setlist_fm = ?,
                 who_sampled = ?, vimeo = ?, genius = ?, myspace = ?, tumblr = ?,
-                resident_advisor = ?, rateyourmusic = ?, enlaces = ?, last_updated = ?
+                resident_advisor = ?, rateyourmusic = ?, discogs = ?, discogs_http = ?, enlaces = ?, last_updated = ?
                 WHERE artist_id = ?
                 '''
                 params = (
@@ -446,7 +578,7 @@ class RedesSocialesArtistas:
                     networks['imdb'], networks['progarchives'], networks['setlist_fm'],
                     networks['who_sampled'], networks['vimeo'], networks['genius'],
                     networks['myspace'], networks['tumblr'], networks['resident_advisor'],
-                    networks['rateyourmusic'],
+                    networks['rateyourmusic'], networks['discogs'], networks['discogs_http'],
                     networks['enlaces'], datetime.now(), artist_id
                 )
             else:
@@ -456,8 +588,8 @@ class RedesSocialesArtistas:
                 (artist_id, allmusic, bandcamp, boomkat, facebook, twitter, mastodon, bluesky,
                 instagram, spotify, lastfm, wikipedia, juno, soundcloud,
                 youtube, imdb, progarchives, setlist_fm, who_sampled, vimeo,
-                genius, myspace, tumblr, resident_advisor, rateyourmusic, enlaces, last_updated)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                genius, myspace, tumblr, resident_advisor, rateyourmusic, discogs, discogs_http, enlaces, last_updated)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 '''
                 params = (
                     artist_id, networks['allmusic'], networks['bandcamp'], networks['boomkat'],
@@ -468,7 +600,7 @@ class RedesSocialesArtistas:
                     networks['imdb'], networks['progarchives'], networks['setlist_fm'],
                     networks['who_sampled'], networks['vimeo'], networks['genius'],
                     networks['myspace'], networks['tumblr'], networks['resident_advisor'],
-                    networks['rateyourmusic'],
+                    networks['rateyourmusic'], networks['discogs'], networks['discogs_http'],
                     networks['enlaces'], datetime.now()
                 )
             
@@ -487,7 +619,15 @@ class RedesSocialesArtistas:
         """
         Ejecuta el procesamiento de redes sociales de artistas.
         """
-        self.logger.info("Iniciando procesamiento de redes sociales")
+        self.logger.info(f"Iniciando procesamiento de redes sociales con configuración:")
+        self.logger.info(f"  force_update: {self.config.get('force_update', False)}")
+        self.logger.info(f"  missing_only: {self.config.get('missing_only', True)}")
+        self.logger.info(f"  batch_size: {self.config.get('batch_size', 50)}")
+        
+        # Verificar la configuración
+        if not self.db_path:
+            self.logger.error("Error: No se ha especificado la ruta de la base de datos (db_path)")
+            return False
         
         # Configurar la base de datos
         if not self.setup_database():
@@ -497,7 +637,47 @@ class RedesSocialesArtistas:
         # Obtener artistas para procesar
         artists = self.get_artists_to_process()
         if not artists:
-            self.logger.info("No hay artistas para procesar.")
+            self.logger.info("No hay artistas para procesar o no se encontraron artistas en la base de datos.")
+            
+            # Verificar si hay artistas en la base de datos
+            if not self.connect_db():
+                return False
+            
+            try:
+                self.cursor.execute("SELECT COUNT(*) FROM artists")
+                artist_count = self.cursor.fetchone()[0]
+                
+                if artist_count == 0:
+                    self.logger.warning("No hay artistas en la base de datos. Debe ejecutar primero los scripts que importan artistas.")
+                else:
+                    # Contar artistas que no tienen redes sociales completas
+                    # Obtener todos los nombres de columna de la tabla artists_networks excepto id, artist_id y last_updated
+                    self.cursor.execute("PRAGMA table_info(artists_networks)")
+                    columns = self.cursor.fetchall()
+                    column_names = [col[1] for col in columns if col[1] not in ['id', 'artist_id', 'last_updated']]
+
+                    # Construir dinámicamente la condición SQL para que al menos una columna sea NULL
+                    null_conditions = " OR ".join([f"{col} IS NULL" for col in column_names])
+
+                    # Contar artistas que no tienen redes sociales completas
+                    self.cursor.execute(f'''
+                        SELECT COUNT(*) FROM artists a
+                        LEFT JOIN artists_networks an ON a.id = an.artist_id
+                        WHERE an.id IS NULL OR ({null_conditions})
+                    ''')
+                    missing_count = self.cursor.fetchone()[0]
+
+                    if missing_count == 0:
+                        self.logger.info("Todos los artistas tienen TODAS las redes sociales registradas (no hay valores NULL).")
+                        self.logger.info("Para actualizar todos los artistas, use force_update=true en la configuración.")
+                    else:
+                        self.logger.warning(f"Hay {missing_count} artistas con al menos una red social faltante, pero no se pudieron seleccionar.")
+                        self.logger.info("Intente aumentar el valor de batch_size o verificar los permisos de la base de datos.")
+            except sqlite3.Error as e:
+                self.logger.error(f"Error al verificar artistas: {str(e)}")
+            finally:
+                self.close_db()
+            
             return True
         
         self.logger.info(f"Se procesarán {len(artists)} artistas")
@@ -517,7 +697,6 @@ class RedesSocialesArtistas:
         
         self.logger.info(f"Procesamiento completado: {successful} exitosos, {failed} fallidos")
         return True
-
 def main(config=None):
     """
     Función principal para ejecutar el módulo.

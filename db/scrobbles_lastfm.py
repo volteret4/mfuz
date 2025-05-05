@@ -1207,33 +1207,32 @@ def lookup_album_in_database(conn, album_name, artist_id, artist_name=None, mbid
 def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_api_key, interactive=False):
     """
     Función mejorada para obtener/crear álbum asegurándose de que se añade correctamente
-    
-    Args:
-        conn: Conexión a la base de datos
-        album_name: Nombre del álbum
-        artist_name: Nombre del artista
-        artist_id: ID del artista
-        mbid: MBID del álbum (opcional)
-        lastfm_api_key: API key de Last.fm
-        interactive: Si está en modo interactivo
-        
-    Returns:
-        ID del álbum o None si no se puede obtener
     """
-    print(f"\n=== Procesando álbum: {album_name} de {artist_name} ===")
+    print(f"\n=== Procesando álbum: {album_name} de {artist_name} (MBID: {mbid}) ===")
     
-    # 1. Primero intentar encontrar en la base de datos
+    if not album_name or not artist_id:
+        print("Nombre de álbum o ID de artista no proporcionados, omitiendo")
+        return None
+    
     cursor = conn.cursor()
+    
+    # Primero intentar encontrar por MBID si está disponible (más preciso)
+    if mbid:
+        cursor.execute("SELECT id, name FROM albums WHERE mbid = ?", (mbid,))
+        result = cursor.fetchone()
+        if result:
+            print(f"Álbum encontrado por MBID: {result[1]} (ID: {result[0]})")
+            return result[0]
     
     # Buscar por nombre y artista_id
     cursor.execute("""
-        SELECT id, name, mbid, origen FROM albums 
+        SELECT id, name, mbid FROM albums 
         WHERE artist_id = ? AND LOWER(name) = LOWER(?)
     """, (artist_id, album_name))
     
     result = cursor.fetchone()
     if result:
-        album_id, db_album_name, db_mbid, origen = result
+        album_id, db_album_name, db_mbid = result
         print(f"Álbum encontrado en base de datos: {db_album_name} (ID: {album_id})")
         
         # Si tenemos un nuevo MBID y el existente es diferente o no existe, actualizar
@@ -1244,16 +1243,45 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_a
         
         return album_id
     
-    # 2. Si no está en la base de datos, buscar información
+    # Si no está en la base de datos, buscar información y crearlo
+    print(f"Álbum no encontrado en base de datos. Buscando información para: {album_name}")
+    
+    # Obtener información del álbum
     album_info = get_album_info(album_name, artist_name, mbid, lastfm_api_key)
     
+    # Si no se puede obtener de Last.fm y tenemos MBID, intentar con MusicBrainz
+    if not album_info and mbid:
+        print(f"Intentando obtener información de MusicBrainz para MBID: {mbid}")
+        mb_album = get_album_from_musicbrainz(mbid)
+        if mb_album:
+            print(f"Información obtenida de MusicBrainz: {mb_album.get('title', album_name)}")
+            
+            # Crear entrada en la base de datos con datos de MusicBrainz
+            try:
+                cursor.execute("""
+                    INSERT INTO albums (artist_id, name, mbid, origen, year)
+                    VALUES (?, ?, ?, 'musicbrainz', ?)
+                    RETURNING id
+                """, (
+                    artist_id,
+                    mb_album.get('title', album_name),
+                    mbid,
+                    mb_album.get('first-release-date', '')[:4] if 'first-release-date' in mb_album else None
+                ))
+                
+                album_id = cursor.fetchone()[0]
+                conn.commit()
+                print(f"Álbum añadido desde MusicBrainz con ID: {album_id}")
+                
+                # Actualizar con detalles adicionales
+                update_album_details_from_musicbrainz(conn, album_id, mbid)
+                
+                return album_id
+            except sqlite3.Error as e:
+                print(f"Error al añadir álbum desde MusicBrainz: {e}")
+    
+    # Si tenemos información de Last.fm, crear con esos datos
     if album_info:
-        print(f"Información de álbum obtenida de Last.fm: {album_info.get('name', album_name)}")
-        
-        # Extraer todos los datos relevantes
-        album_mbid = album_info.get('mbid', mbid)
-        album_url = album_info.get('url', '')
-        
         # Extraer año
         year = None
         if 'releasedate' in album_info:
@@ -1264,128 +1292,37 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_a
             except (ValueError, AttributeError):
                 pass
         
-        # Número de pistas
-        total_tracks = 0
-        if 'tracks' in album_info and 'track' in album_info['tracks']:
-            tracks = album_info['tracks']['track']
-            if isinstance(tracks, list):
-                total_tracks = len(tracks)
-            else:
-                total_tracks = 1
+        # Extraer MBID (podría venir en la respuesta si no lo teníamos antes)
+        album_mbid = album_info.get('mbid', mbid)
         
-        # En modo interactivo, preguntar al usuario
-        if interactive:
-            print("\n" + "="*60)
-            print(f"INFORMACIÓN DEL ÁLBUM A AÑADIR:")
-            print("="*60)
-            print(f"Nombre: {album_info.get('name', album_name)}")
-            print(f"Artista: {artist_name} (ID: {artist_id})")
-            print(f"MBID: {album_mbid}")
-            print(f"Año: {year}")
-            print(f"URL: {album_url}")
-            print(f"Total de pistas: {total_tracks}")
-            print("-"*60)
-            respuesta = input("\n¿Añadir este álbum a la base de datos? (s/n): ").lower()
-            if respuesta != 's':
-                print("Operación cancelada por el usuario.")
-                return None
-        
-        # 3. Crear el álbum en la base de datos
         try:
             cursor.execute("""
-                INSERT INTO albums (artist_id, name, year, lastfm_url, mbid, total_tracks, origen)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO albums (artist_id, name, year, lastfm_url, mbid, origen)
+                VALUES (?, ?, ?, ?, ?, ?)
                 RETURNING id
             """, (
                 artist_id,
                 album_info.get('name', album_name),
                 year,
-                album_url,
+                album_info.get('url', ''),
                 album_mbid,
-                total_tracks,
                 'lastfm'
             ))
             
             album_id = cursor.fetchone()[0]
             conn.commit()
-            print(f"Álbum añadido con ID: {album_id}")
+            print(f"Álbum añadido desde Last.fm con ID: {album_id}")
             
-            # 4. Actualizar con datos de MusicBrainz si hay MBID
+            # Si tenemos MBID, actualizar con datos de MusicBrainz
             if album_mbid:
                 update_album_details_from_musicbrainz(conn, album_id, album_mbid)
             
             return album_id
-            
         except sqlite3.Error as e:
-            print(f"Error al añadir álbum {album_name}: {e}")
-            return None
+            print(f"Error al añadir álbum desde Last.fm: {e}")
     
-    # 5. Si no hay información de Last.fm, intentar con MusicBrainz por nombre
-    print(f"No se pudo obtener información de Last.fm para álbum {album_name}")
-    
-    mb_album = get_album_from_musicbrainz_by_name(album_name, artist_name)
-    if mb_album:
-        print(f"Información de álbum obtenida de MusicBrainz: {mb_album.get('title', album_name)}")
-        
-        # Extraer datos básicos de MusicBrainz
-        mb_album_name = mb_album.get('title', album_name)
-        mb_album_id = mb_album.get('id', mbid)
-        
-        # Extraer año si está disponible
-        year = None
-        if 'date' in mb_album:
-            date_str = mb_album['date']
-            if date_str and len(date_str) >= 4:
-                try:
-                    year = int(date_str[:4])
-                except ValueError:
-                    pass
-        
-        # En modo interactivo, preguntar al usuario
-        if interactive:
-            print("\n" + "="*60)
-            print(f"INFORMACIÓN DEL ÁLBUM A AÑADIR (MusicBrainz):")
-            print("="*60)
-            print(f"Nombre: {mb_album_name}")
-            print(f"Artista: {artist_name} (ID: {artist_id})")
-            print(f"MBID: {mb_album_id}")
-            print(f"Año: {year}")
-            print("-"*60)
-            respuesta = input("\n¿Añadir este álbum a la base de datos? (s/n): ").lower()
-            if respuesta != 's':
-                print("Operación cancelada por el usuario.")
-                return None
-        
-        # Crear el álbum con datos de MusicBrainz
-        try:
-            cursor.execute("""
-                INSERT INTO albums (artist_id, name, year, mbid, origen)
-                VALUES (?, ?, ?, ?, ?)
-                RETURNING id
-            """, (
-                artist_id,
-                mb_album_name,
-                year,
-                mb_album_id,
-                'musicbrainz'
-            ))
-            
-            album_id = cursor.fetchone()[0]
-            conn.commit()
-            print(f"Álbum añadido con ID: {album_id} (origen: MusicBrainz)")
-            
-            # Actualizar con datos completos de MusicBrainz
-            update_album_details_from_musicbrainz(conn, album_id, mb_album_id)
-            
-            return album_id
-            
-        except sqlite3.Error as e:
-            print(f"Error al añadir álbum {mb_album_name}: {e}")
-            return None
-    
-    # 6. Si no hay información, crear con datos mínimos
-    print(f"No se pudo obtener información para álbum {album_name}. Creando con datos mínimos.")
-    
+    # Si no hay información disponible, crear con datos mínimos
+    print(f"No se pudo obtener información para álbum '{album_name}'. Creando con datos mínimos.")
     try:
         cursor.execute("""
             INSERT INTO albums (artist_id, name, mbid, origen)
@@ -1397,9 +1334,8 @@ def get_or_update_album(conn, album_name, artist_name, artist_id, mbid, lastfm_a
         conn.commit()
         print(f"Álbum añadido con datos mínimos, ID: {album_id}")
         return album_id
-        
     except sqlite3.Error as e:
-        print(f"Error al añadir álbum {album_name}: {e}")
+        print(f"Error al añadir álbum con datos mínimos: {e}")
         return None
 
 def setup_musicbrainz(cache_directory=None):
@@ -3633,6 +3569,9 @@ class LastFMScrobbler:
                 
         self._update_progress(f"Processing {len(tracks)} scrobbles...", 40)
         
+        # Add this line to ensure albums are created first
+        album_ids = self.ensure_albums_from_scrobbles(tracks)
+        
         # Use the provided callback or the object's own
         process_callback = callback if callback else self.progress_callback
         
@@ -3640,7 +3579,7 @@ class LastFMScrobbler:
         result = self._process_scrobbles(
             self.conn, tracks, self.existing_artists, self.existing_albums, 
             self.existing_songs, self.lastfm_api_key, interactive, process_callback, 
-            add_items=self._add_items  # Explicitly pass the value
+            add_items=self._add_items
         )
         
         # Update the timestamp
@@ -3807,8 +3746,7 @@ class LastFMScrobbler:
             cursor.execute("""
                 SELECT a.name, a.artist, a.mbid, ar.id
                 FROM temp_albums a
-                LEFT JOIN artists ar ON LOWER(a.artist) = LOWER(ar.name)
-                WHERE ar.id IS NOT NULL
+                JOIN artists ar ON LOWER(a.artist) = LOWER(ar.name)
             """)
             albums_data = cursor.fetchall()
             albums_to_create = len(albums_data)
@@ -3821,13 +3759,13 @@ class LastFMScrobbler:
                     update_progress(f"Creando álbum {i+1}/{albums_to_create}: {album_name}", progress)
                     
                     try:
-                        # Obtener información del álbum
+                        # Get album information
                         album_info = get_album_info(album_name, artist_name, album_mbid, lastfm_api_key)
                         
                         if album_info:
                             album_id = add_album_to_db(conn, album_info, artist_id, self.lastfm_user)
                         else:
-                            # Crear álbum básico si no hay información
+                            # Create basic album if no info is available
                             cursor.execute("""
                                 INSERT INTO albums (artist_id, name, mbid, origen)
                                 VALUES (?, ?, ?, ?)
@@ -3839,7 +3777,7 @@ class LastFMScrobbler:
                         
                         if album_id:
                             album_key = (album_name.lower(), artist_name.lower())
-                            existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id}
+                            existing_albums[album_key] = {'id': album_id, 'artist_id': artist_id, 'origen': f"scrobbles_{self.lastfm_user}"}
                     except Exception as e:
                         print(f"Error al crear álbum {album_name}: {e}")
             
@@ -4024,6 +3962,94 @@ class LastFMScrobbler:
         """
         # Call the global function but pass self.lastfm_api_key explicitly
         return update_artists_metadata(self.conn, self.lastfm_api_key, limit)
+
+    def ensure_albums_from_scrobbles(self, tracks):
+        """
+        Ensures that all albums mentioned in scrobbles are added to the database.
+        
+        Args:
+            tracks: List of tracks from Last.fm scrobbles
+            
+        Returns:
+            Dictionary of created/found album IDs
+        """
+        self.connect()
+        cursor = self.conn.cursor()
+        album_ids = {}
+        
+        # Group tracks by artist and album
+        albums_to_process = {}
+        for track in tracks:
+            artist_name = track['artist']['#text']
+            album_name = track['album']['#text'] if 'album' in track and '#text' in track['album'] else None
+            album_mbid = track['album'].get('mbid', '') if 'album' in track else None
+            
+            if album_name and artist_name:
+                key = (album_name.lower(), artist_name.lower())
+                if key not in albums_to_process:
+                    albums_to_process[key] = {
+                        'name': album_name,
+                        'artist': artist_name,
+                        'mbid': album_mbid
+                    }
+        
+        # Process each unique album
+        total_albums = len(albums_to_process)
+        self._update_progress(f"Processing {total_albums} unique albums...", 25)
+        
+        for i, ((album_name_lower, artist_name_lower), album_data) in enumerate(albums_to_process.items()):
+            album_name = album_data['name']
+            artist_name = album_data['artist']
+            album_mbid = album_data['mbid']
+            
+            progress = 25 + (i / max(1, total_albums) * 10)
+            self._update_progress(f"Processing album {i+1}/{total_albums}: {album_name}", progress)
+            
+            # Find artist ID
+            cursor.execute("SELECT id FROM artists WHERE LOWER(name) = LOWER(?)", (artist_name,))
+            artist_result = cursor.fetchone()
+            
+            if artist_result:
+                artist_id = artist_result[0]
+                
+                # Check if album exists
+                cursor.execute("""
+                    SELECT id FROM albums 
+                    WHERE artist_id = ? AND LOWER(name) = LOWER(?)
+                """, (artist_id, album_name))
+                
+                album_result = cursor.fetchone()
+                
+                if album_result:
+                    # Album exists
+                    album_id = album_result[0]
+                    album_ids[(album_name_lower, artist_name_lower)] = album_id
+                else:
+                    # Create new album
+                    try:
+                        # Get album info
+                        album_info = get_album_info(album_name, artist_name, album_mbid, self.lastfm_api_key)
+                        
+                        if album_info:
+                            album_id = add_album_to_db(conn, album_info, artist_id, self.lastfm_user)
+                        else:
+                            # Create basic album
+                            cursor.execute("""
+                                INSERT INTO albums (artist_id, name, mbid, origen)
+                                VALUES (?, ?, ?, ?)
+                                RETURNING id
+                            """, (artist_id, album_name, album_mbid, f"scrobbles_{self.lastfm_user}"))
+                            
+                            album_id = cursor.fetchone()[0]
+                            self.conn.commit()
+                        
+                        if album_id:
+                            album_ids[(album_name_lower, artist_name_lower)] = album_id
+                            print(f"Album created: {album_name} (ID: {album_id})")
+                    except Exception as e:
+                        print(f"Error creating album {album_name}: {e}")
+        
+        return album_ids
 
 
     def update_scrobbles(self, force_update=False, interactive=None, callback=None, filter_duplicates=True):
