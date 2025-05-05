@@ -139,11 +139,11 @@ class SetlistfmService:
             
         return None
 
-        
     def get_upcoming_concerts(self, artist_name, country_code="ES"):
         """Obtiene conciertos próximos mediante web scraping"""
         setlistfm_id = self.get_artist_setlistfm_id(artist_name)
-        
+        year = datetime.now().year
+
         if not setlistfm_id:
             message = f"No Setlist.fm ID found for {artist_name}"
             self.logger.error(message)
@@ -161,138 +161,174 @@ class SetlistfmService:
             return cached_data, message
             
         try:
-            concerts = []
-            url = f"https://www.setlist.fm/search?artist={setlistfm_id}&upcoming=true"
-            
-            # Debug: Mostrar ID y URL
-            self.logger.info(f"===== SETLIST.FM DEBUG =====")
-            self.logger.info(f"Artist: {artist_name}")
-            self.logger.info(f"Setlistfm ID: {setlistfm_id}")
-            self.logger.info(f"URL: {url}")
-            self.logger.info(f"==========================")
+            all_concerts = []
+            page = 1
+            has_more_pages = True
             
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
             }
             
-            response = requests.get(url, headers=headers)
-            response.raise_for_status()
-            
-            # Debug: Mostrar estado de la respuesta
-            self.logger.info(f"Response status: {response.status_code}")
-            
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Encontrar todos los bloques de conciertos - CORREGIR SELECTOR
-            concert_blocks = soup.select('div.contentBox')
-            
-            self.logger.info(f"Found {len(concert_blocks)} concert blocks")
-            
-            for idx, block in enumerate(concert_blocks):
-                try:
-                    # Debug: Mostrar información de cada bloque
-                    self.logger.info(f"Processing concert block {idx+1}")
-                    
-                    # Extraer fecha - CORREGIR SELECTORES
-                    date_div = block.select_one('.dateBlock')
-                    if date_div:
-                        month = date_div.select_one('.month').text.strip()
-                        day = date_div.select_one('.day').text.strip()
-                        year = date_div.select_one('.year').text.strip()
+            while has_more_pages:
+                # Construir URL con número de página
+                url = f"https://www.setlist.fm/search?artist={setlistfm_id}&year={year}&upcoming=true&page={page}"
+                
+                self.logger.info(f"===== SETLIST.FM DEBUG =====")
+                self.logger.info(f"Artist: {artist_name}")
+                self.logger.info(f"Setlistfm ID: {setlistfm_id}")
+                self.logger.info(f"Page: {page}")
+                self.logger.info(f"URL: {url}")
+                self.logger.info(f"==========================")
+                
+                response = requests.get(url, headers=headers)
+                response.raise_for_status()
+                
+                self.logger.info(f"Response status: {response.status_code}")
+                
+                soup = BeautifulSoup(response.text, 'html.parser')
+                
+                # Selector CSS más específico - cambio aquí
+                concert_blocks = soup.select('div.row.contentBox.visiblePrint div.col-xs-12.setlistPreview')
+                
+                self.logger.info(f"Found {len(concert_blocks)} concert blocks on page {page}")
+                
+                # Debugging: Guardar HTML para inspección
+                with open(self.cache_dir / f"setlistfm_debug_page_{page}.html", "w", encoding="utf-8") as f:
+                    f.write(response.text)
+                
+                # Si no hay bloques en esta página, terminar
+                if not concert_blocks:
+                    has_more_pages = False
+                    break
+                
+                for idx, block in enumerate(concert_blocks):
+                    try:
+                        # Debug: Mostrar información de cada bloque
+                        self.logger.info(f"Processing concert block {idx+1} on page {page}")
                         
-                        self.logger.info(f"Date found: {month} {day} {year}")
-                        
-                        # Convertir a formato YYYY-MM-DD
-                        month_num = {
-                            'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
-                            'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
-                            'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
-                        }.get(month, '01')
-                        
-                        formatted_date = f"{year}-{month_num}-{day.zfill(2)}"
-                    else:
-                        self.logger.warning(f"No date found in block {idx+1}")
-                        formatted_date = "Unknown"
-                    
-                    # Extraer detalles del concierto - CORREGIR SELECTORES
-                    details = block.select_one('.details')
-                    if details:
-                        # Obtener el nombre del concierto directamente del h2
-                        h2 = block.select_one('h2 a')
-                        concert_name = h2.text.strip() if h2 else f"{artist_name} concert"
-                        
-                        # Artista
-                        artist_span = details.select_one('strong a span')
-                        artist_name_concert = artist_span.text.strip() if artist_span else artist_name
-                        
-                        self.logger.info(f"Artist found: {artist_name_concert}")
-                        
-                        # Tour - CORREGIR SELECTOR
-                        tour_name = ''
-                        tour_span = details.select_one('span:nth-of-type(2)')
-                        if tour_span and 'Tour:' in tour_span.text:
-                            tour_link = tour_span.select_one('strong a')
-                            if tour_link:
-                                tour_name = tour_link.text.strip()
-                        
-                        # Venue - CORREGIR SELECTOR
-                        venue_name = ''
-                        city = ''
-                        country = ''
-                        
-                        venue_span = details.select_one('span:nth-of-type(3)')
-                        if venue_span and 'Venue:' in venue_span.text:
-                            venue_link = venue_span.select_one('strong a span')
-                            if venue_link:
-                                venue_text = venue_link.text.strip()
-                                parts = venue_text.split(', ')
-                                venue_name = parts[0] if parts else venue_text
-                                if len(parts) > 1:
-                                    city = parts[1]
-                                if len(parts) > 2:
-                                    country = parts[2]
-                        
-                        self.logger.info(f"Venue: {venue_name}, City: {city}, Country: {country}")
-                        
-                        # URL del concierto - CORREGIR SELECTOR
-                        setlist_link = h2 if h2 else block.select_one('a[href*="setlist"]')
-                        concert_url = f"https://www.setlist.fm/{setlist_link['href']}" if setlist_link else ''
-                        
-                        concert = {
-                            'artist': artist_name_concert,
-                            'name': concert_name,
-                            'venue': venue_name,
-                            'city': city,
-                            'country': country,
-                            'date': formatted_date,
-                            'url': concert_url,
-                            'id': setlistfm_id,
-                            'source': 'Setlist.fm'
-                        }
-                        
-                        self.logger.info(f"Concert extracted: {concert}")
-                        concerts.append(concert)
-                    else:
-                        self.logger.warning(f"No details found in block {idx+1}")
+                        # Extraer fecha
+                        date_div = block.select_one('.dateBlock')
+                        if date_div:
+                            month = date_div.select_one('.month')
+                            day = date_div.select_one('.day')
+                            year = date_div.select_one('.year')
                             
-                except Exception as e:
-                    self.logger.warning(f"Error parsing concert block {idx+1}: {e}")
-                    self.logger.warning(f"Block HTML: {block.prettify()[:500]}")
-                    continue
+                            if month and day and year:
+                                month_text = month.text.strip()
+                                day_text = day.text.strip()
+                                year_text = year.text.strip()
+                                
+                                self.logger.info(f"Date found: {month_text} {day_text} {year_text}")
+                                
+                                # Convertir a formato YYYY-MM-DD
+                                month_num = {
+                                    'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+                                    'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+                                    'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+                                }.get(month_text, '01')
+                                
+                                formatted_date = f"{year_text}-{month_num}-{day_text.zfill(2)}"
+                            else:
+                                self.logger.warning(f"Missing date elements in block {idx+1}")
+                                formatted_date = "Unknown"
+                        else:
+                            self.logger.warning(f"No date div found in block {idx+1}")
+                            formatted_date = "Unknown"
+                        
+                        # Extraer detalles del concierto
+                        details = block.select_one('.details')
+                        if details:
+                            # Obtener el nombre del concierto directamente del h2
+                            h2 = block.select_one('h2 a')
+                            concert_name = h2.text.strip() if h2 else f"{artist_name} concert"
+                            
+                            # Artista
+                            artist_span = details.select_one('strong a span')
+                            artist_name_concert = artist_span.text.strip() if artist_span else artist_name
+                            
+                            self.logger.info(f"Artist found: {artist_name_concert}")
+                            
+                            # Tour
+                            tour_name = ''
+                            tour_span = details.select_one('span:nth-of-type(2)')
+                            if tour_span and 'Tour:' in tour_span.text:
+                                tour_link = tour_span.select_one('strong a')
+                                if tour_link:
+                                    tour_name = tour_link.text.strip()
+                            
+                            # Venue
+                            venue_name = ''
+                            city = ''
+                            country = ''
+                            
+                            venue_span = details.select_one('span:nth-of-type(3)')
+                            if venue_span and 'Venue:' in venue_span.text:
+                                venue_link = venue_span.select_one('strong a span')
+                                if venue_link:
+                                    venue_text = venue_link.text.strip()
+                                    parts = venue_text.split(', ')
+                                    venue_name = parts[0] if parts else venue_text
+                                    if len(parts) > 1:
+                                        city = parts[1]
+                                    if len(parts) > 2:
+                                        country = parts[2]
+                            
+                            self.logger.info(f"Venue: {venue_name}, City: {city}, Country: {country}")
+                            
+                            # URL del concierto
+                            setlist_link = h2 if h2 else block.select_one('a[href*="setlist"]')
+                            concert_url = f"https://www.setlist.fm/{setlist_link['href']}" if setlist_link else ''
+                            
+                            concert = {
+                                'artist': artist_name_concert,
+                                'name': concert_name,
+                                'venue': venue_name,
+                                'city': city,
+                                'country': country,
+                                'date': formatted_date,
+                                'url': concert_url,
+                                'id': setlistfm_id,
+                                'source': 'Setlist.fm'
+                            }
+                            
+                            self.logger.info(f"Concert extracted: {concert}")
+                            all_concerts.append(concert)
+                        else:
+                            self.logger.warning(f"No details found in block {idx+1}")
+                                
+                    except Exception as e:
+                        self.logger.warning(f"Error parsing concert block {idx+1}: {e}")
+                        continue
+                
+                # Verificar si hay una página siguiente
+                next_page_link = soup.select_one('.listPagingNavigator > li:nth-last-child(1) > a')
+
+                if next_page_link and 'page=' in next_page_link.get('href', ''):
+                    # Extraer número de página de la URL
+                    import re
+                    next_url = next_page_link.get('href')
+                    page_match = re.search(r'page=(\d+)', next_url)
+                    if page_match:
+                        page = int(page_match.group(1))
+                        self.logger.info(f"Navegando a página {page}")
+                        time.sleep(0.5)
+                    else:
+                        has_more_pages = False
+                else:
+                    has_more_pages = False
+                    self.logger.info(f"No se encontraron más páginas. Total páginas procesadas: {page}")
             
             # Guardar en cache
-            self._save_to_cache(cache_file, concerts)
+            self._save_to_cache(cache_file, all_concerts)
             
-            message = f"Found {len(concerts)} upcoming events for {artist_name} from Setlist.fm"
+            message = f"Found {len(all_concerts)} upcoming events for {artist_name} from Setlist.fm across {page} pages"
             self.logger.info(message)
-            return concerts, message
+            return all_concerts, message
             
         except Exception as e:
             message = f"Error fetching setlist.fm data: {str(e)}"
             self.logger.error(message)
             return [], message
-
-
 
     def _load_from_cache(self, cache_file):
         """
