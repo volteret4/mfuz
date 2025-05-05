@@ -13,7 +13,7 @@ class ConcertSearchWorker(QThread):
     search_finished = pyqtSignal()
     progress_update = pyqtSignal(int, int)  # actual, total
     
-    def __init__(self, services, artists, country_code):
+    def __init__(self, services, artists, country_code, db_path):
         """
         Inicializar worker
         
@@ -26,6 +26,7 @@ class ConcertSearchWorker(QThread):
         self.services = services
         self.artists = artists
         self.country_code = country_code
+        self.db_path = db_path
         self.concerts = []
         self._running = True
     
@@ -80,10 +81,10 @@ class ConcertSearchWorker(QThread):
                     
                     # Llamar al método adecuado según el tipo de servicio
                     if service_name == "spotify":
-                        results, message = service.get_artist_concerts(artist, self.country_code)
-                    else:  # Ticketmaster y otros servicios
+                        results, message = service.get_artist_concerts_from_db_or_search(artist, self.db_path)
+                    else:
                         results, message = service.search_concerts(artist, self.country_code)
-                    
+                                        
                     # Activar logging detallado para Setlist.fm
                     if service_name == "setlistfm":
                         self.log_message.emit(f"=== DEBUGGING SETLIST.FM FOR {artist} ===")

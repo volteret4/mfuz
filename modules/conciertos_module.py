@@ -1,4 +1,3 @@
-
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem, QApplication
 from PyQt6.QtWidgets import QLabel, QWidget, QCheckBox, QMenu, QAbstractItemView, QTableWidget, QTableWidgetItem
 from PyQt6 import uic
@@ -29,7 +28,8 @@ class ConciertosModule(BaseModule):
         super().__init__(**kwargs)
         
         # Configuración del módulo
-        self.config = kwargs.get('config', {})
+        self.global_config = kwargs.get('global_theme_config', {})  # Configuración global
+        self.config = kwargs.get('config', {})  # Configuración específica del módulo
         self.apis = self.config.get('apis', {})
         self.db_path = db_path or self.config.get('db_path', os.path.join(Path.home(), 'db', 'sqlite', 'music.db'))
         
@@ -44,9 +44,9 @@ class ConciertosModule(BaseModule):
         #Credenciales Spotify
         self.spotify_config = self.apis.get('spotify', {})
         self.spotify_enabled = self.spotify_config.get('enabled', 'False').lower() == 'true'
-        self.spotify_client_id = self.config.get('spotify_client_id', '')
-        self.spotify_client_secret = self.config.get('spotify_client_secret', '')
-        self.spotify_redirect_uri = self.config.get('spotify_redirect_uri', '')
+        self.spotify_client_id = self.global_config.get('spotify_client_id', '')
+        self.spotify_client_secret = self.global_config.get('spotify_client_secret', '')
+        self.spotify_redirect_uri = self.global_config.get('spotify_redirect_uri', '')
 
         # Credenciales setlisfm
         self.setlistfm_config = self.apis.get('setlistfm', {})
@@ -81,20 +81,37 @@ class ConciertosModule(BaseModule):
         
         # Inicializar servicio de Spotify si está habilitado
         if self.spotify_enabled:
-            try:
-                self.spotify_service = SpotifyService(
-                    client_id=self.spotify_client_id,
-                    client_secret=self.spotify_client_secret,
-                    redirect_uri=self.spotify_redirect_uri,
-                    cache_dir=self.cache_dir,
-                    cache_duration=24  # duración de caché en horas
-                )
-                self.log_area.append("Servicio de Spotify inicializado correctamente")
-            except Exception as e:
-                self.log_area.append(f"Error inicializando servicio de Spotify: {str(e)}")
+            from modules.submodules.conciertos.spotify import SpotifyService
+            
+            # Verificar credenciales antes de intentar inicializar
+            if not self.spotify_client_id or not self.spotify_client_secret:
+                self.log_area.append("Error: Credenciales de Spotify no configuradas")
+                self.log_area.append(f"Client ID: {'Configurado' if self.spotify_client_id else 'No configurado'}")
+                self.log_area.append(f"Client Secret: {'Configurado' if self.spotify_client_secret else 'No configurado'}")
                 self.spotify_enabled = False
-        else:
-            self.log_area.append("API de Spotify no está habilitada en la configuración")
+            else:
+                try:
+                    self.spotify_service = SpotifyService(
+                        client_id=self.spotify_client_id,
+                        client_secret=self.spotify_client_secret,
+                        redirect_uri=self.spotify_redirect_uri,
+                        cache_dir=self.cache_dir,
+                        cache_duration=24
+                    )
+                    
+                    if self.spotify_service.setup():
+                        self.log_area.append("Servicio de Spotify inicializado correctamente")
+                    else:
+                        self.spotify_enabled = False
+                        self.log_area.append("Error en la configuración de Spotify")
+                        # Agregar diagnóstico más detallado
+                        if hasattr(self.spotify_service, 'last_error'):
+                            self.log_area.append(f"Detalle del error: {self.spotify_service.last_error}")
+                except Exception as e:
+                    self.spotify_enabled = False
+                    self.log_area.append(f"Excepción al inicializar Spotify: {str(e)}")
+                    import traceback
+                    self.log_area.append(traceback.format_exc())
 
 
         # Inicializar servicio de Setlistfm si está habilitado
@@ -575,12 +592,12 @@ class ConciertosModule(BaseModule):
         Returns:
             tuple: (lista de conciertos, mensaje)
         """
-        if not self.api_key:
+        if not self.ticketmaster_api_key:
             return [], "No se ha configurado API Key para Ticketmaster"
         
         # Comprobar si tenemos resultado en caché válido
-        cache_file = self._get_cache_file_path(artist_name, country_code)
-        cached_data = TicketmasterService._load_from_cache(cache_file)
+        cache_file = TicketmasterService._get_cache_file_path(self, artist_name, country_code)
+        cached_data = TicketmasterService._load_from_cache(self, cache_file)
         
         if cached_data:
             return cached_data, f"Se encontraron {len(cached_data)} conciertos para {artist_name} (caché)"
@@ -671,17 +688,21 @@ class ConciertosModule(BaseModule):
             services.append(('ticketmaster', self.ticketmaster_service))
         
         if 'spotify' in enabled_apis:
-            services.append(('spotify', self.spotify_service))
-        
-        if 'setlistfm' in enabled_apis:
-            services.append(('setlistfm', self.setlistfm_service))
-            self.log_area.append(f"Setlistfm API Key: {self.setlistfm_apikey}")
+            # Verificar que spotify_service existe antes de añadirlo
+            if hasattr(self, 'spotify_service') and self.spotify_service is not None:
+                services.append(('spotify', self.spotify_service))
+                self.log_area.append("Spotify service added to search")
+            else:
+                self.log_area.append("Spotify no disponible - servicio no inicializado correctamente")
+        else:
+            self.log_area.append("Spotify no disponible - cliente no inicializado")
 
         # Iniciar el worker en un hilo separado con todos los servicios disponibles
         self.search_worker = ConcertSearchWorker(
             services,
             [artist_name], 
-            country_code
+            country_code,
+            self.db_path  # Pasar ruta de BD
         )
         self.search_worker.log_message.connect(self.log_message)
         self.search_worker.concerts_found.connect(self.display_concerts)
@@ -724,8 +745,8 @@ class ConciertosModule(BaseModule):
             services.append(('ticketmaster', self.ticketmaster_service))
         
         if 'spotify' in enabled_apis:
-            services.append(('spotify', self.spotify_service))
-        
+            if hasattr(self, 'spotify_service') and self.spotify_service is not None:
+                services.append(('spotify', self.spotify_service))        
         if 'setlistfm' in enabled_apis:
             services.append(('setlistfm', self.setlistfm_service))
 
@@ -733,7 +754,8 @@ class ConciertosModule(BaseModule):
         self.search_worker = ConcertSearchWorker(
             services,
             self.saved_artists, 
-            country_code
+            country_code,
+            self.db_path
         )
         
         # Conectar señales
@@ -1473,3 +1495,33 @@ class ConciertosModule(BaseModule):
         
         except Exception as e:
             self.log_area.append(f"Error showing setlist details: {str(e)}")
+
+
+# DEBUG SPOTIFY
+    def diagnose_spotify_config(self):
+        """Diagnosticar configuración de Spotify"""
+        self.log_area.append("\n=== DIAGNÓSTICO SPOTIFY ===")
+        
+        # Verificar variables de entorno
+        env_client_id = os.environ.get('SPOTIFY_CLIENT_ID')
+        env_client_secret = os.environ.get('SPOTIFY_CLIENT_SECRET')
+        
+        self.log_area.append(f"Variables de entorno:")
+        self.log_area.append(f"  SPOTIFY_CLIENT_ID: {'Configurado' if env_client_id else 'No configurado'}")
+        self.log_area.append(f"  SPOTIFY_CLIENT_SECRET: {'Configurado' if env_client_secret else 'No configurado'}")
+        
+        # Verificar configuración del módulo
+        self.log_area.append(f"\nConfiguración del módulo:")
+        self.log_area.append(f"  spotify_enabled: {self.spotify_enabled}")
+        self.log_area.append(f"  spotify_client_id: {'Configurado' if self.spotify_client_id else 'No configurado'}")
+        self.log_area.append(f"  spotify_client_secret: {'Configurado' if self.spotify_client_secret else 'No configurado'}")
+        self.log_area.append(f"  spotify_redirect_uri: {self.spotify_redirect_uri}")
+        
+        # Verificar caché
+        cache_files = list(self.cache_dir.glob("spotify_*.json"))
+        self.log_area.append(f"\nArchivos de caché:")
+        for cache_file in cache_files:
+            self.log_area.append(f"  - {cache_file.name}")
+        
+        self.log_area.append("========================\n")
+
