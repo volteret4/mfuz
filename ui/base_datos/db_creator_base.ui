@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="A_db_path">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -247,21 +247,21 @@
              <item row="0" column="2">
               <widget class="QLabel" name="stats_folders_label">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
              <item row="1" column="2">
               <widget class="QLabel" name="stats_files_label">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
              <item row="2" column="2">
               <widget class="QLabel" name="stats_size_label">
                <property name="text">
-                <string>TextLabel</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -379,7 +379,7 @@
               <widget class="QLineEdit" name="lastfm_user_line"/>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
+              <widget class="QLabel" name="lastfm_apikey_label">
                <property name="text">
                 <string>Lastfm api key</string>
                </property>
@@ -387,6 +387,13 @@
              </item>
              <item row="1" column="1">
               <widget class="QLineEdit" name="lastfm_apikey_line"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="QPushButton" name="verificar_apikey_button">
+               <property name="text">
+                <string>Verificar API Key</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -430,7 +437,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QCheckBox" name="checkBox">
+                  <widget class="QCheckBox" name="complete_relationships_check">
                    <property name="text">
                     <string>Completar información</string>
                    </property>
@@ -466,20 +473,103 @@
                  </property>
                  <item>
                   <widget class="QLabel" name="output_json_label">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>28</height>
+                    </size>
+                   </property>
                    <property name="text">
                     <string>JSON Output</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="output_json_line"/>
+                  <widget class="QLineEdit" name="output_json_line">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>28</height>
+                    </size>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <widget class="QPushButton" name="output_json_button">
                    <property name="text">
-                    <string>PushButton</string>
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../images.qrc">
+                     <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>28</width>
+                     <height>28</height>
+                    </size>
+                   </property>
+                   <property name="flat">
+                    <bool>true</bool>
                    </property>
                   </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_9" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_14">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <spacer name="horizontalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>373</width>
+                     <height>17</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="ejecutar_escuchas_button">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Obtener Escuchas</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>372</width>
+                     <height>17</height>
+                    </size>
+                   </property>
+                  </spacer>
                  </item>
                 </layout>
                </widget>
@@ -523,20 +613,91 @@
                 <layout class="QHBoxLayout" name="horizontalLayout_8">
                  <item>
                   <widget class="QLabel" name="info_output_json_label">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>28</height>
+                    </size>
+                   </property>
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="info_output_json_line"/>
+                  <widget class="QLineEdit" name="info_output_json_line">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>28</height>
+                    </size>
+                   </property>
+                  </widget>
                  </item>
                  <item>
                   <widget class="QPushButton" name="info_output_json_button">
                    <property name="text">
-                    <string>PushButton</string>
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="../../images.qrc">
+                     <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>28</width>
+                     <height>28</height>
+                    </size>
+                   </property>
+                   <property name="flat">
+                    <bool>true</bool>
                    </property>
                   </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget_10" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_15">
+                 <item>
+                  <spacer name="horizontalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="ejecutar_info_button">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Obtener Info Artistas/Álbumes</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_5">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
                  </item>
                 </layout>
                </widget>
@@ -578,14 +739,14 @@
                 <item>
                  <widget class="QLabel" name="scrobbles_guardados_label">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>Scrobbles guardados:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="label_6">
+                 <widget class="QLabel" name="scrobbles_guardados_value">
                   <property name="text">
-                   <string>scrobbles_guardados_value</string>
+                   <string>0</string>
                   </property>
                  </widget>
                 </item>
@@ -605,14 +766,14 @@
                 <item>
                  <widget class="QLabel" name="scrobbles_unicos_label">
                   <property name="text">
-                   <string>scrobbles_unicos_label</string>
+                   <string>Scrobbles únicos:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="scrobbles_unicos_value">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>0</string>
                   </property>
                  </widget>
                 </item>
@@ -632,14 +793,14 @@
                 <item>
                  <widget class="QLabel" name="scrobbles_totales_label">
                   <property name="text">
-                   <string>Scrobbles totales</string>
+                   <string>Scrobbles totales:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="scrobbles_totales_value">
                   <property name="text">
-                   <string>scrobbles_totales_value</string>
+                   <string>0</string>
                   </property>
                  </widget>
                 </item>
@@ -661,27 +822,6 @@
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QPushButton" name="verificar_apikey_button">
-                  <property name="text">
-                   <string>PushButton</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="ejecutar_escuchas_button">
-                  <property name="text">
-                   <string>PushButton</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="ejecutar_info_button">
-                  <property name="text">
-                   <string>ejecutar_info_button</string>
-                  </property>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -739,7 +879,7 @@
            <x>0</x>
            <y>0</y>
            <width>894</width>
-           <height>290</height>
+           <height>265</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_10">

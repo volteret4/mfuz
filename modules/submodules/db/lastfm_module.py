@@ -97,6 +97,9 @@ class LastFMModule:
         }
         self.logger = logging.getLogger(self.__class__.__name__)
         
+        script_path = Path(PROJECT_ROOT, "db", "lastfm", "lastfm_escuchas.py")
+        self.script_path = script_path
+
         # Cargar configuración específica para lastfm desde FLAC_config_database_creator.json si existe
         self.load_specific_config()
 
@@ -121,16 +124,16 @@ class LastFMModule:
             if not config_path:
                 self.logger.info("No se encontró archivo de configuración específico FLAC_config_database_creator.json")
                 return
-                
+                    
             with open(config_path, 'r', encoding='utf-8') as f:
                 specific_config = json.load(f)
-                
+                    
             # Extraer configuración relevante para lastfm
             # Actualizar common (claves comunes)
             if 'common' in specific_config:
                 if 'common' not in self.config:
                     self.config['common'] = {}
-                    
+                        
                 for key, value in specific_config['common'].items():
                     if key.startswith('lastfm') or key in ['db_path']:
                         self.config['common'][key] = value
@@ -139,9 +142,9 @@ class LastFMModule:
             for section in ['lastfm_escuchas', 'lastfm_info']:
                 if section in specific_config:
                     self.config[section] = specific_config[section]
-                    
+                        
             self.logger.info(f"Configuración específica cargada: {', '.join(self.config.keys())}")
-            
+                
         except Exception as e:
             self.logger.error(f"Error al cargar configuración específica: {e}")
 
@@ -154,8 +157,26 @@ class LastFMModule:
         Args:
             container_widget: Widget contenedor donde se mostrarán los elementos
         """
+        print(f"Configurando UI para LastFMModule en contenedor: {container_widget.objectName()}")
+        
         # Almacenar referencias a los widgets importantes
         self._find_ui_elements(container_widget)
+        
+        # Inicializar labels de estadísticas si existen
+        if self.ui_elements.get('scrobbles_totales_value'):
+            self.ui_elements['scrobbles_totales_value'].setText("0")
+        if self.ui_elements.get('scrobbles_unicos_value'):
+            self.ui_elements['scrobbles_unicos_value'].setText("0")
+        if self.ui_elements.get('scrobbles_guardados_value'):
+            self.ui_elements['scrobbles_guardados_value'].setText("0")
+        
+        # Inicializar textos de botones
+        if self.ui_elements.get('verificar_apikey_button'):
+            self.ui_elements['verificar_apikey_button'].setText("Verificar API Key")
+        if self.ui_elements.get('ejecutar_escuchas_button'):
+            self.ui_elements['ejecutar_escuchas_button'].setText("Obtener Escuchas")
+        if self.ui_elements.get('ejecutar_info_button'):
+            self.ui_elements['ejecutar_info_button'].setText("Obtener Info")
         
         # Cargar configuración en la UI
         self._load_config_to_ui()
@@ -167,33 +188,134 @@ class LastFMModule:
         
     def _find_ui_elements(self, container):
         """Encuentra y almacena referencias a los elementos de la UI."""
-        # Campos de configuración básica
+        print("Buscando elementos UI para LastFMModule...")
+        
+        # Reiniciar diccionario de elementos
+        self.ui_elements = {}
+        
+        # Recopilación de todos los widgets principales por tipo
+        all_line_edits = container.findChildren(QLineEdit)
+        all_checkboxes = container.findChildren(QCheckBox)
+        all_buttons = container.findChildren(QPushButton)
+        all_labels = container.findChildren(QLabel)
+        
+        # Campos de configuración básica por nombre exacto
         self.ui_elements['lastfm_user_line'] = container.findChild(QLineEdit, "lastfm_user_line")
         self.ui_elements['lastfm_apikey_line'] = container.findChild(QLineEdit, "lastfm_apikey_line")
         
-        # Pestaña de Escuchas
-        self.ui_elements['force_update_check'] = container.findChild(QCheckBox, "force_update_check")
-        self.ui_elements['output_json_line'] = container.findChild(QLineEdit, "output_json_line")
-        self.ui_elements['output_json_button'] = container.findChild(QPushButton, "output_json_button")
-        self.ui_elements['add_items_check'] = container.findChild(QCheckBox, "add_items_check")
-        self.ui_elements['complete_relationships_check'] = container.findChild(QCheckBox, "complete_relationships_check")
+        # Búsqueda por nombre parcial si no se encuentra por nombre exacto
+        if not self.ui_elements['lastfm_user_line']:
+            for line_edit in all_line_edits:
+                obj_name = line_edit.objectName().lower()
+                if 'lastfm' in obj_name and ('user' in obj_name or 'usuario' in obj_name):
+                    self.ui_elements['lastfm_user_line'] = line_edit
+                    print(f"✓ Encontrado lastfm_user_line por nombre parcial: {obj_name}")
+                    break
+                    
+        if not self.ui_elements['lastfm_apikey_line']:
+            for line_edit in all_line_edits:
+                obj_name = line_edit.objectName().lower()
+                if 'lastfm' in obj_name and ('api' in obj_name or 'key' in obj_name):
+                    self.ui_elements['lastfm_apikey_line'] = line_edit
+                    print(f"✓ Encontrado lastfm_apikey_line por nombre parcial: {obj_name}")
+                    break
         
-        # Pestaña de Info
-        self.ui_elements['info_force_update_check'] = container.findChild(QCheckBox, "info_force_update_check")
-        self.ui_elements['info_output_json_line'] = container.findChild(QLineEdit, "info_output_json_line")
-        self.ui_elements['info_output_json_button'] = container.findChild(QPushButton, "info_output_json_button")
-        self.ui_elements['info_add_items_check'] = container.findChild(QCheckBox, "info_add_items_check")
-        self.ui_elements['info_complete_relationships_check'] = container.findChild(QCheckBox, "info_complete_relationships_check")
+        # Buscar tabWidget si existe 
+        self.lastfm_tab_widget = container.findChild(QTabWidget)
+        if self.lastfm_tab_widget:
+            print(f"✓ Encontrado tab widget: {self.lastfm_tab_widget.objectName()}")
+            # Identificar pestañas por sus nombres
+            if self.lastfm_tab_widget.count() >= 2:
+                escuchas_tab = None
+                info_tab = None
+                
+                for i in range(self.lastfm_tab_widget.count()):
+                    tab_name = self.lastfm_tab_widget.tabText(i).lower()
+                    if 'escuchas' in tab_name or 'scrobbles' in tab_name:
+                        escuchas_tab = self.lastfm_tab_widget.widget(i)
+                        print(f"✓ Pestaña de Escuchas identificada en índice {i}")
+                    elif 'info' in tab_name:
+                        info_tab = self.lastfm_tab_widget.widget(i)
+                        print(f"✓ Pestaña de Info identificada en índice {i}")
+                
+                # Si identificamos las pestañas, buscar elementos dentro de ellas
+                if escuchas_tab:
+                    self._find_escuchas_elements(escuchas_tab)
+                if info_tab:
+                    self._find_info_elements(info_tab)
+            
+            # Almacenar en el elemento padre para acceso futuro
+            if hasattr(self.parent, 'lastfm_tab_widget'):
+                self.parent.lastfm_tab_widget = self.lastfm_tab_widget
+        else:
+            print("✗ No se encontró QTabWidget")
+            # Si no hay tabs, buscar en todo el contenedor
+            self._find_escuchas_elements(container)
+            self._find_info_elements(container)
         
         # Botones de acción
         self.ui_elements['verificar_apikey_button'] = container.findChild(QPushButton, "verificar_apikey_button")
         self.ui_elements['ejecutar_escuchas_button'] = container.findChild(QPushButton, "ejecutar_escuchas_button")
         self.ui_elements['ejecutar_info_button'] = container.findChild(QPushButton, "ejecutar_info_button")
         
+        # Buscar botones por texto si no se encuentran
+        if not self.ui_elements['verificar_apikey_button']:
+            for button in all_buttons:
+                text = button.text().lower()
+                if ('verif' in text and 'api' in text) or ('check' in text and 'api' in text):
+                    self.ui_elements['verificar_apikey_button'] = button
+                    print(f"✓ Encontrado verificar_apikey_button por texto: {button.text()}")
+                    break
+        
+        if not self.ui_elements['ejecutar_escuchas_button']:
+            for button in all_buttons:
+                text = button.text().lower()
+                if ('escucha' in text) or ('play' in text) or ('scrobble' in text):
+                    self.ui_elements['ejecutar_escuchas_button'] = button
+                    print(f"✓ Encontrado ejecutar_escuchas_button por texto: {button.text()}")
+                    break
+        
+        if not self.ui_elements['ejecutar_info_button']:
+            for button in all_buttons:
+                text = button.text().lower()
+                if 'info' in text or 'metadata' in text:
+                    self.ui_elements['ejecutar_info_button'] = button
+                    print(f"✓ Encontrado ejecutar_info_button por texto: {button.text()}")
+                    break
+        
         # Etiquetas de estadísticas
         self.ui_elements['scrobbles_totales_value'] = container.findChild(QLabel, "scrobbles_totales_value")
         self.ui_elements['scrobbles_unicos_value'] = container.findChild(QLabel, "scrobbles_unicos_value")
         self.ui_elements['scrobbles_guardados_value'] = container.findChild(QLabel, "scrobbles_guardados_value")
+        
+        # Buscar etiquetas por texto si no se encuentran
+        if not self.ui_elements['scrobbles_totales_value']:
+            for label in all_labels:
+                if 'total' in label.text().lower() and 'scrobble' in label.text().lower():
+                    self.ui_elements['scrobbles_totales_value'] = label
+                    print(f"✓ Encontrado scrobbles_totales_value por texto: {label.text()}")
+                    break
+        
+        if not self.ui_elements['scrobbles_unicos_value']:
+            for label in all_labels:
+                if ('unic' in label.text().lower() or 'unique' in label.text().lower()) and 'scrobble' in label.text().lower():
+                    self.ui_elements['scrobbles_unicos_value'] = label
+                    print(f"✓ Encontrado scrobbles_unicos_value por texto: {label.text()}")
+                    break
+        
+        if not self.ui_elements['scrobbles_guardados_value']:
+            for label in all_labels:
+                if ('guard' in label.text().lower() or 'save' in label.text().lower()) and 'scrobble' in label.text().lower():
+                    self.ui_elements['scrobbles_guardados_value'] = label
+                    print(f"✓ Encontrado scrobbles_guardados_value por texto: {label.text()}")
+                    break
+                    
+        # Reportar elementos encontrados
+        found_count = sum(1 for element in self.ui_elements.values() if element is not None)
+        print(f"Elementos encontrados: {found_count}/{len(self.ui_elements)}")
+        missing_elements = [key for key, value in self.ui_elements.items() if value is None]
+        if missing_elements:
+            print(f"Elementos no encontrados: {', '.join(missing_elements)}")
         
     def _load_config_to_ui(self):
         """Carga la configuración del archivo JSON a la interfaz."""
@@ -212,7 +334,7 @@ class LastFMModule:
                 user = common.get('lastfm_username', '')
             print(f"Cargando usuario Last.fm: {user}")
             self.ui_elements['lastfm_user_line'].setText(user)
-                
+                    
         if self.ui_elements.get('lastfm_apikey_line'):
             api_key = common.get('lastfm_api_key', '')
             # Verificar también lastfm_apikey como alternativa
@@ -220,7 +342,7 @@ class LastFMModule:
                 api_key = common.get('lastfm_apikey', '')
             print(f"Cargando API key Last.fm: {api_key[:5]}..." if api_key else "No hay API key")
             self.ui_elements['lastfm_apikey_line'].setText(api_key)
-            
+                
         # Configuración de lastfm_escuchas
         escuchas_config = self.config.get('lastfm_escuchas', {})
         if self.ui_elements.get('force_update_check'):
@@ -236,36 +358,76 @@ class LastFMModule:
             print(f"Cargando output_json: {output_json}")
             self.ui_elements['output_json_line'].setText(output_json)
             
+        if self.ui_elements.get('add_items_check'):
+            add_items = escuchas_config.get('add_items', True)
+            print(f"Cargando add_items: {add_items}")
+            self.ui_elements['add_items_check'].setChecked(add_items)
+            
+        if self.ui_elements.get('complete_relationships_check'):
+            complete_rel = escuchas_config.get('complete_relationships', True)
+            print(f"Cargando complete_relationships: {complete_rel}")
+            self.ui_elements['complete_relationships_check'].setChecked(complete_rel)
+                
         # Configuración de lastfm_info
         info_config = self.config.get('lastfm_info', {})
+        
+        # Debug para identificar el problema
+        print(f"Configuración lastfm_info: {info_config}")
+        
         if self.ui_elements.get('info_force_update_check'):
-            self.ui_elements['info_force_update_check'].setChecked(info_config.get('force_update', False))
+            force_update = info_config.get('force_update', False)
+            self.ui_elements['info_force_update_check'].setChecked(force_update)
+            print(f"Cargando info_force_update: {force_update}")
+            
         if self.ui_elements.get('info_output_json_line'):
             info_output_json = info_config.get('output_json', '')
+            # Si no hay valor específico, intentar construir uno predeterminado
+            if not info_output_json:
+                info_output_json = os.path.join(PROJECT_ROOT, ".content", "cache", "db", "lastfm", "FLAC_info_lastfm.json")
+                # Crear directorio si no existe
+                os.makedirs(os.path.dirname(info_output_json), exist_ok=True)
+                print(f"Usando ruta predeterminada para info_output_json: {info_output_json}")
+                
             # Si es ruta relativa, convertirla a absoluta
-            if info_output_json and not os.path.isabs(info_output_json):
-                info_output_json = Path(PROJECT_ROOT, info_output_json)
+            elif not os.path.isabs(info_output_json):
+                info_output_json = str(Path(PROJECT_ROOT, info_output_json))
+                
             self.ui_elements['info_output_json_line'].setText(info_output_json)
+            print(f"Cargando info_output_json: {info_output_json}")
+            
         if self.ui_elements.get('info_add_items_check'):
-            self.ui_elements['info_add_items_check'].setChecked(info_config.get('add_items', True))
+            add_items = info_config.get('add_items', True)
+            self.ui_elements['info_add_items_check'].setChecked(add_items)
+            print(f"Cargando info_add_items: {add_items}")
+            
         if self.ui_elements.get('info_complete_relationships_check'):
-            self.ui_elements['info_complete_relationships_check'].setChecked(info_config.get('complete_relationships', True))
+            complete_rel = info_config.get('complete_relationships', True)
+            self.ui_elements['info_complete_relationships_check'].setChecked(complete_rel)
+            print(f"Cargando info_complete_relationships: {complete_rel}")
+
 
     def _connect_signals(self):
         """Conecta las señales de los elementos de la UI."""
+        print("Conectando señales en LastFMModule...")
+        
         # Botones de selección de archivos
         if self.ui_elements.get('output_json_button'):
             self.ui_elements['output_json_button'].clicked.connect(lambda: self._browse_for_json_file('output_json_line'))
+            print("✓ Conectado output_json_button")
         if self.ui_elements.get('info_output_json_button'):
             self.ui_elements['info_output_json_button'].clicked.connect(lambda: self._browse_for_json_file('info_output_json_line'))
-            
+            print("✓ Conectado info_output_json_button")
+                
         # Botones de acción
         if self.ui_elements.get('verificar_apikey_button'):
             self.ui_elements['verificar_apikey_button'].clicked.connect(self.verificar_apikey)
+            print("✓ Conectado verificar_apikey_button")
         if self.ui_elements.get('ejecutar_escuchas_button'):
             self.ui_elements['ejecutar_escuchas_button'].clicked.connect(self.ejecutar_escuchas)
+            print("✓ Conectado ejecutar_escuchas_button")
         if self.ui_elements.get('ejecutar_info_button'):
             self.ui_elements['ejecutar_info_button'].clicked.connect(self.ejecutar_info)
+            print("✓ Conectado ejecutar_info_button")
             
     def _browse_for_json_file(self, target_line_edit):
         """
@@ -309,20 +471,20 @@ class LastFMModule:
             self.config['lastfm_escuchas'] = {}
         if 'lastfm_info' not in self.config:
             self.config['lastfm_info'] = {}
-            
+                
         # Actualizar configuración común
         if self.ui_elements.get('lastfm_user_line'):
             user = self.ui_elements['lastfm_user_line'].text()
             self.config['common']['lastfm_user'] = user
             # También actualizar lastfm_username para compatibilidad
             self.config['common']['lastfm_username'] = user
-            
+                
         if self.ui_elements.get('lastfm_apikey_line'):
             api_key = self.ui_elements['lastfm_apikey_line'].text()
             self.config['common']['lastfm_api_key'] = api_key
             # También actualizar lastfm_apikey para compatibilidad
             self.config['common']['lastfm_apikey'] = api_key
-            
+                
         # Actualizar configuración de lastfm_escuchas
         if self.ui_elements.get('force_update_check'):
             self.config['lastfm_escuchas']['force_update'] = self.ui_elements['force_update_check'].isChecked()
@@ -336,7 +498,7 @@ class LastFMModule:
             self.config['lastfm_escuchas']['add_items'] = self.ui_elements['add_items_check'].isChecked()
         if self.ui_elements.get('complete_relationships_check'):
             self.config['lastfm_escuchas']['complete_relationships'] = self.ui_elements['complete_relationships_check'].isChecked()
-            
+                
         # Actualizar configuración de lastfm_info
         if self.ui_elements.get('info_force_update_check'):
             self.config['lastfm_info']['force_update'] = self.ui_elements['info_force_update_check'].isChecked()
@@ -350,7 +512,7 @@ class LastFMModule:
             self.config['lastfm_info']['add_items'] = self.ui_elements['info_add_items_check'].isChecked()
         if self.ui_elements.get('info_complete_relationships_check'):
             self.config['lastfm_info']['complete_relationships'] = self.ui_elements['info_complete_relationships_check'].isChecked()
-            
+                
         # Asegurar que scripts_order existe
         if 'scripts_order' not in self.config:
             self.config['scripts_order'] = []
@@ -484,7 +646,7 @@ class LastFMModule:
             return
             
         # Añadir path de base de datos a los argumentos
-        args.extend(["--db_path", db_path])
+        args.extend(["--db_path", str(db_path)])  # Convertir a string
         
         # Argumentos opcionales
         if self.config['lastfm_escuchas'].get('force_update'):
@@ -494,7 +656,7 @@ class LastFMModule:
             output_json = self.config['lastfm_escuchas']['output_json']
             # Si es ruta relativa, convertirla a absoluta
             if not os.path.isabs(output_json):
-                output_json = Path(PROJECT_ROOT, output_json)
+                output_json = str(Path(PROJECT_ROOT, output_json))  # Convertir a string
             args.extend(["--output_json", output_json])
             
         # Crear directorio para output_json si no existe
@@ -503,7 +665,7 @@ class LastFMModule:
             os.makedirs(output_dir, exist_ok=True)
             
         # Iniciar ejecución
-        self._ejecutar_script("lastfm_escuchas.py", args)
+        self._ejecutar_script(self.script_path, args)
 
     # Modificación de ejecutar_info
     def ejecutar_info(self):
@@ -512,11 +674,25 @@ class LastFMModule:
             return
             
         # Preparar comando
-        script_path = Path(PROJECT_ROOT, "db", "lastfm", "lastfm_info.py")
+        script_path = Path(PROJECT_ROOT, "db", "lastfm_info.py")
         if not os.path.exists(script_path):
-            QMessageBox.warning(self.parent, "Error", f"Script no encontrado: {script_path}")
-            return
+            # Intentar buscar en otras ubicaciones comunes
+            alt_paths = [
+                Path(PROJECT_ROOT, "db", "lastfm", "lastfm_info.py"),
+                Path(PROJECT_ROOT, "lastfm_info.py")
+            ]
             
+            found = False
+            for alt_path in alt_paths:
+                if os.path.exists(alt_path):
+                    script_path = alt_path
+                    found = True
+                    break
+                    
+            if not found:
+                QMessageBox.warning(self.parent, "Error", f"Script no encontrado: lastfm_info.py")
+                return
+                
         # Actualizar configuración primero
         self.update_config_from_ui()
             
@@ -532,27 +708,42 @@ class LastFMModule:
             return
             
         # Añadir path de base de datos a los argumentos
-        args.extend(["--db_path", db_path])
+        args.extend(["--db_path", str(db_path)])  # Convertir a string
         
         # Argumentos opcionales específicos para lastfm_info
         if self.config['lastfm_info'].get('cache_dir'):
             cache_dir = self.config['lastfm_info']['cache_dir']
             if not os.path.isabs(cache_dir):
-                cache_dir = Path(PROJECT_ROOT, cache_dir)
+                cache_dir = str(Path(PROJECT_ROOT, cache_dir))  # Convertir a string
             args.extend(["--cache_dir", cache_dir])
             os.makedirs(cache_dir, exist_ok=True)
+        else:
+            # Usar un directorio de caché por defecto
+            cache_dir = str(Path(PROJECT_ROOT, ".content", "cache", "lastfm"))
+            os.makedirs(cache_dir, exist_ok=True)
+            args.extend(["--cache_dir", cache_dir])
             
+        # Agregar límites si están definidos
         if self.config['lastfm_info'].get('limite_artistas'):
             args.extend(["--limite_artistas", str(self.config['lastfm_info']['limite_artistas'])])
+        else:
+            # Valor predeterminado
+            args.extend(["--limite_artistas", "50"])
             
         if self.config['lastfm_info'].get('limite_albumes'):
             args.extend(["--limite_albumes", str(self.config['lastfm_info']['limite_albumes'])])
+        else:
+            # Valor predeterminado
+            args.extend(["--limite_albumes", "50"])
             
         if self.config['lastfm_info'].get('limite_canciones'):
             args.extend(["--limite_canciones", str(self.config['lastfm_info']['limite_canciones'])])
+        else:
+            # Valor predeterminado
+            args.extend(["--limite_canciones", "50"])
         
-        # Iniciar ejecución
-        self._ejecutar_script("lastfm_info.py", args)
+        # Iniciar ejecución con la ruta del script completa
+        self._ejecutar_script(str(script_path), args)
         
     def _ejecutar_script(self, script_name, args):
         """
@@ -562,8 +753,11 @@ class LastFMModule:
             script_name: Nombre del script a ejecutar
             args: Lista de argumentos para el script
         """
+        # Convertir todos los argumentos a strings para evitar problemas con objetos Path
+        args = [str(arg) for arg in args]
+        
         script_path = os.path.join(PROJECT_ROOT, "db", script_name)
-        command = [sys.executable, script_path] + args
+        command = [sys.executable, str(script_path)] + args
         
         # Detener hilo anterior si está corriendo
         if self.capture_thread and self.capture_thread.isRunning():
@@ -785,13 +979,13 @@ class LastFMModule:
         Returns:
             int: Índice de la pestaña activa o 0 si no se puede determinar
         """
-        # Primero buscar el tabWidget en el padre
-        if hasattr(self.parent, 'lastfm_tab_widget') and self.parent.lastfm_tab_widget:
-            return self.parent.lastfm_tab_widget.currentIndex()
-            
+        # Primero usar la referencia almacenada en el constructor
+        if hasattr(self, 'lastfm_tab_widget') and self.lastfm_tab_widget:
+            return self.lastfm_tab_widget.currentIndex()
+                
         # Si no está directamente, buscar entre los elementos hijos
         if hasattr(self.parent, 'findChild'):
-            tab_widget = self.parent.findChild(QTabWidget, "lastfm_tab_widget")
+            tab_widget = self.parent.findChild(QTabWidget)
             if tab_widget:
                 return tab_widget.currentIndex()
         
@@ -810,3 +1004,139 @@ class LastFMModule:
         # Si la UI ya está inicializada, cargar los valores
         if self.ui_elements:
             self._load_config_to_ui()
+
+
+    def _find_escuchas_elements(self, container):
+        """Busca elementos específicos de la pestaña de Escuchas"""
+        self.ui_elements['force_update_check'] = container.findChild(QCheckBox, "force_update_check")
+        self.ui_elements['output_json_line'] = container.findChild(QLineEdit, "output_json_line")
+        self.ui_elements['output_json_button'] = container.findChild(QPushButton, "output_json_button")
+        self.ui_elements['add_items_check'] = container.findChild(QCheckBox, "add_items_check")
+        self.ui_elements['complete_relationships_check'] = container.findChild(QCheckBox, "complete_relationships_check")
+        
+        # Buscar por texto o nombre parcial si no se encuentra por nombre exacto
+        all_checkboxes = container.findChildren(QCheckBox)
+        all_line_edits = container.findChildren(QLineEdit)
+        all_buttons = container.findChildren(QPushButton)
+        
+        if not self.ui_elements['force_update_check']:
+            for checkbox in all_checkboxes:
+                text = checkbox.text().lower()
+                obj_name = checkbox.objectName().lower()
+                if ('force' in text or 'forzar' in text) and ('update' in text or 'actualiz' in text):
+                    self.ui_elements['force_update_check'] = checkbox
+                    print(f"✓ Encontrado force_update_check por texto: {checkbox.text()}")
+                    break
+                elif 'force' in obj_name and 'update' in obj_name:
+                    self.ui_elements['force_update_check'] = checkbox
+                    print(f"✓ Encontrado force_update_check por nombre parcial: {obj_name}")
+                    break
+        
+        if not self.ui_elements['output_json_line']:
+            for line_edit in all_line_edits:
+                obj_name = line_edit.objectName().lower()
+                if ('output' in obj_name or 'salida' in obj_name) and 'json' in obj_name:
+                    self.ui_elements['output_json_line'] = line_edit
+                    print(f"✓ Encontrado output_json_line por nombre parcial: {obj_name}")
+                    break
+        
+        if not self.ui_elements['output_json_button']:
+            # Buscar botón cerca del line edit
+            if self.ui_elements['output_json_line']:
+                for button in all_buttons:
+                    if button.parentWidget() == self.ui_elements['output_json_line'].parentWidget():
+                        self.ui_elements['output_json_button'] = button
+                        print(f"✓ Encontrado output_json_button por parentesco")
+                        break
+        
+        if not self.ui_elements['add_items_check']:
+            for checkbox in all_checkboxes:
+                text = checkbox.text().lower()
+                obj_name = checkbox.objectName().lower()
+                if ('add' in text or 'añadir' in text) and ('item' in text or 'element' in text):
+                    self.ui_elements['add_items_check'] = checkbox
+                    print(f"✓ Encontrado add_items_check por texto: {checkbox.text()}")
+                    break
+                elif ('add' in obj_name or 'añadir' in obj_name) and 'item' in obj_name:
+                    self.ui_elements['add_items_check'] = checkbox
+                    print(f"✓ Encontrado add_items_check por nombre parcial: {obj_name}")
+                    break
+        
+        if not self.ui_elements['complete_relationships_check']:
+            for checkbox in all_checkboxes:
+                text = checkbox.text().lower()
+                obj_name = checkbox.objectName().lower()
+                if ('complet' in text or 'relation' in text) or ('complet' in obj_name and 'relation' in obj_name):
+                    self.ui_elements['complete_relationships_check'] = checkbox
+                    print(f"✓ Encontrado complete_relationships_check por texto/nombre: {checkbox.text()}")
+                    break
+
+    def _find_info_elements(self, container):
+        """Busca elementos específicos de la pestaña de Info"""
+        self.ui_elements['info_force_update_check'] = container.findChild(QCheckBox, "info_force_update_check")
+        self.ui_elements['info_output_json_line'] = container.findChild(QLineEdit, "info_output_json_line")
+        self.ui_elements['info_output_json_button'] = container.findChild(QPushButton, "info_output_json_button")
+        self.ui_elements['info_add_items_check'] = container.findChild(QCheckBox, "info_add_items_check")
+        self.ui_elements['info_complete_relationships_check'] = container.findChild(QCheckBox, "info_complete_relationships_check")
+        
+        # Buscar por texto o nombre parcial si no se encuentra por nombre exacto
+        all_checkboxes = container.findChildren(QCheckBox)
+        all_line_edits = container.findChildren(QLineEdit)
+        all_buttons = container.findChildren(QPushButton)
+        
+        # Fuerza bruta: si hay pocos elementos, asignarlos directamente por orden
+        if len(all_checkboxes) <= 3 and not any([
+                self.ui_elements['info_force_update_check'],
+                self.ui_elements['info_add_items_check'],
+                self.ui_elements['info_complete_relationships_check']]):
+            
+            print("Pocos checkboxes encontrados, asignando por orden...")
+            for i, checkbox in enumerate(all_checkboxes):
+                if i == 0:
+                    self.ui_elements['info_force_update_check'] = checkbox
+                    print(f"✓ Asignado info_force_update_check por orden: {checkbox.text()}")
+                elif i == 1:
+                    self.ui_elements['info_add_items_check'] = checkbox
+                    print(f"✓ Asignado info_add_items_check por orden: {checkbox.text()}")
+                elif i == 2:
+                    self.ui_elements['info_complete_relationships_check'] = checkbox
+                    print(f"✓ Asignado info_complete_relationships_check por orden: {checkbox.text()}")
+        
+        if len(all_line_edits) == 1 and not self.ui_elements['info_output_json_line']:
+            self.ui_elements['info_output_json_line'] = all_line_edits[0]
+            print(f"✓ Asignado info_output_json_line por ser único: {all_line_edits[0].objectName()}")
+        
+        if len(all_buttons) == 1 and not self.ui_elements['info_output_json_button']:
+            self.ui_elements['info_output_json_button'] = all_buttons[0]
+            print(f"✓ Asignado info_output_json_button por ser único: {all_buttons[0].text()}")
+        
+        # Búsqueda por keywords si la asignación directa no funcionó
+        if not self.ui_elements['info_force_update_check']:
+            for checkbox in all_checkboxes:
+                text = checkbox.text().lower()
+                obj_name = checkbox.objectName().lower()
+                if ('force' in text or 'forzar' in text) and ('update' in text or 'actualiz' in text):
+                    self.ui_elements['info_force_update_check'] = checkbox
+                    print(f"✓ Encontrado info_force_update_check por texto: {checkbox.text()}")
+                    break
+                elif 'force' in obj_name and 'update' in obj_name and 'info' in obj_name:
+                    self.ui_elements['info_force_update_check'] = checkbox
+                    print(f"✓ Encontrado info_force_update_check por nombre parcial: {obj_name}")
+                    break
+        
+        if not self.ui_elements['info_output_json_line']:
+            for line_edit in all_line_edits:
+                obj_name = line_edit.objectName().lower()
+                if (('output' in obj_name or 'salida' in obj_name) and 'json' in obj_name and 'info' in obj_name):
+                    self.ui_elements['info_output_json_line'] = line_edit
+                    print(f"✓ Encontrado info_output_json_line por nombre parcial: {obj_name}")
+                    break
+        
+        if not self.ui_elements['info_output_json_button']:
+            # Buscar botón cerca del line edit
+            if self.ui_elements['info_output_json_line']:
+                for button in all_buttons:
+                    if button.parentWidget() == self.ui_elements['info_output_json_line'].parentWidget():
+                        self.ui_elements['info_output_json_button'] = button
+                        print(f"✓ Encontrado info_output_json_button por parentesco")
+                        break
