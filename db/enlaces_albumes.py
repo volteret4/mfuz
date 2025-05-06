@@ -41,7 +41,7 @@ class AlbumLinksManager():
             boomkat_url TEXT,
             soundcloud_url TEXT,
             allmusic_url TEXT,
-            last_updated TIMESTAMP,
+            links_updated TIMESTAMP,
             FOREIGN KEY (album_id) REFERENCES albums(id)
         )
         ''')
@@ -51,7 +51,7 @@ class AlbumLinksManager():
         
         # Asegurarse de que todos los álbumes tienen una entrada en album_links
         self.cursor.execute('''
-        INSERT OR IGNORE INTO album_links (album_id, last_updated)
+        INSERT OR IGNORE INTO album_links (album_id, links_updated)
         SELECT id, NULL FROM albums WHERE id NOT IN (SELECT album_id FROM album_links)
         ''')
         
@@ -713,7 +713,7 @@ class AlbumLinksManager():
                 update_values.append(allmusic_url)
             
             if update_fields:  # Solo actualizar si hay campos para actualizar
-                update_fields.append("last_updated = ?")
+                update_fields.append("links_updated = ?")
                 update_values.append(current_time)
                 
                 query = f"UPDATE album_links SET {', '.join(update_fields)} WHERE album_id = ?"
@@ -723,7 +723,7 @@ class AlbumLinksManager():
         else:
             # Insertar un nuevo registro
             self.cursor.execute('''
-            INSERT INTO album_links (album_id, boomkat_url, soundcloud_url, allmusic_url, last_updated)
+            INSERT INTO album_links (album_id, boomkat_url, soundcloud_url, allmusic_url, links_updated)
             VALUES (?, ?, ?, ?, ?)
             ''', (album_id, boomkat_url, soundcloud_url, allmusic_url, current_time))
         

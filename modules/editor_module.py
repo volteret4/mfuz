@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTabWidget,
                            QCheckBox, QDialog, QFileDialog, QScrollArea, QHeaderView)
 from PyQt6.QtCore import Qt, pyqtSignal, QDateTime, QSettings
 import logging
+from pathlib import Path
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, THEMES, PROJECT_ROOT
@@ -46,7 +47,7 @@ class DatabaseEditor(BaseModule):
     def init_ui(self):
         """Inicializa la interfaz del módulo usando archivos UI."""
         # Intentar cargar el archivo UI
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "database_editor.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "database_editor.ui")
         if os.path.exists(ui_file_path):
             try:
                 uic.loadUi(ui_file_path, self)

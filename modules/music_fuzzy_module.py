@@ -22,10 +22,10 @@ class MusicFuzzyModule(BaseModule):
 
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         # Inicializar propiedades básicas antes de super().__init__
-        self.db_path = kwargs.get('db_path', os.path.join(Path.home(), '.local', 'share', 'music_app', 'music.db'))
+        self.db_path = kwargs.get('db_path', Path(Path.home(), '.local', 'share', 'music_app', 'music.db'))
         
         # Get config-related parameters
-        self.config_path = kwargs.get('config_path', os.path.join(PROJECT_ROOT, "config", "config.yml"))
+        self.config_path = kwargs.get('config_path', Path(PROJECT_ROOT, "config", "config.yml"))
         
         # Obtener el estado del only_local_files directamente de los kwargs
         # Esto obtiene el valor del archivo de configuración
@@ -163,7 +163,7 @@ class MusicFuzzyModule(BaseModule):
             advanced_widget = QWidget()
             
             # Cargar archivo UI
-            ui_path = os.path.join(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
+            ui_path = Path(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
             if os.path.exists(ui_path):
                 from PyQt6 import uic
                 uic.loadUi(ui_path, advanced_widget)
@@ -226,7 +226,7 @@ class MusicFuzzyModule(BaseModule):
                     advanced_widget = QWidget()
                     
                     # Load UI file
-                    ui_path = os.path.join(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
+                    ui_path = Path(PROJECT_ROOT, "ui", "fuzzy", "music_fuzzy_advanced_settings.ui")
                     if os.path.exists(ui_path):
                         from PyQt6 import uic
                         uic.loadUi(ui_path, advanced_widget)

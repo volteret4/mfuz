@@ -3,6 +3,7 @@ import sys
 import json
 import logging
 import yaml
+from pathlib import Path
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
                           QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
                           QDialogButtonBox, QComboBox, QProgressDialog,
@@ -145,7 +146,7 @@ class TwitterManager:
         """
         try:
             # Intentar cargar el archivo UI
-            ui_file_path = os.path.join(self.project_root, "ui", "muspy", "muspy_credentials.ui")
+            ui_file_path = Path(self.project_root, "ui", "muspy", "muspy_credentials.ui")
             
             if os.path.exists(ui_file_path):
                 # Crear diálogo y cargar UI
@@ -257,7 +258,7 @@ class TwitterManager:
         """
         Guarda las credenciales de Twitter en el archivo de configuración
         """
-        config_path = os.path.join(self.project_root, "config", "config.yml")
+        config_path = Path(self.project_root, "config", "config.yml")
         
         try:
             # Asegurar que el directorio existe
@@ -1141,7 +1142,7 @@ class TwitterManager:
             return
             
         # Cargar artistas seleccionados
-        json_path = os.path.join(self.project_root, ".content", "cache", "artists_selected.json")
+        json_path = Path(self.project_root, ".content", "cache", "artists_selected.json")
         
         if not os.path.exists(json_path):
             QMessageBox.warning(self.parent, "Error", "No selected artists found. Please load artists first.")
@@ -1391,7 +1392,7 @@ class TwitterManager:
             return
             
         # Cargar artistas seleccionados
-        json_path = os.path.join(self.project_root, ".content", "cache", "artists_selected.json")
+        json_path = Path(self.project_root, ".content", "cache", "artists_selected.json")
         
         if not os.path.exists(json_path):
             QMessageBox.warning(self.parent, "Error", "No selected artists found. Please load artists first.")
@@ -2118,10 +2119,10 @@ class TwitterManager:
                 
             full_db_path = self.parent.db_path
             if not os.path.isabs(full_db_path):
-                full_db_path = os.path.join(self.project_root, full_db_path)
+                full_db_path = Path(self.project_root, full_db_path)
             
             # Construir ruta al script
-            script_path = os.path.join(self.project_root, "db", "tools", "consultar_items_db.py")
+            script_path = Path(self.project_root, "db", "tools", "consultar_items_db.py")
             
             # Verificar si el script existe
             if not os.path.exists(script_path):
@@ -2156,11 +2157,11 @@ class TwitterManager:
                 return
             
             # Asegurar que existe el directorio de caché
-            cache_dir = os.path.join(self.project_root, ".content", "cache")
+            cache_dir = Path(self.project_root, ".content", "cache")
             os.makedirs(cache_dir, exist_ok=True)
             
             # Cargar artistas existentes si el archivo ya existe
-            json_path = os.path.join(cache_dir, "artists_selected_twitter.json")
+            json_path = Path(cache_dir, "artists_selected_twitter.json")
             existing_artists = []
             if os.path.exists(json_path):
                 try:
@@ -2178,7 +2179,7 @@ class TwitterManager:
             
             # Crear el diálogo usando el archivo UI
             dialog = QDialog(self.parent)
-            ui_file_path = os.path.join(self.project_root, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(self.project_root, "ui", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2274,7 +2275,7 @@ class TwitterManager:
             try:
                 # Asegurar que existe el directorio
                 os.makedirs(cache_dir, exist_ok=True)
-                json_path = os.path.join(cache_dir, "artists_selected_twitter.json")
+                json_path = Path(cache_dir, "artists_selected_twitter.json")
                 
                 with open(json_path, 'w', encoding='utf-8') as f:
                     json.dump(selected_artists, f, ensure_ascii=False, indent=2)
@@ -2320,7 +2321,7 @@ class TwitterManager:
             return
                 
         # Cargar artistas seleccionados
-        json_path = os.path.join(self.project_root, ".content", "cache", filename)
+        json_path = Path(self.project_root, ".content", "cache", filename)
         
         if not os.path.exists(json_path):
             QMessageBox.warning(self.parent, "Error", f"Archivo {filename} no encontrado.")

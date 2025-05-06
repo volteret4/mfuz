@@ -4,7 +4,7 @@ import subprocess
 import time
 import traceback
 import socket
-
+from pathlib import Path
 from PyQt6.QtCore import QProcess
 from PyQt6.QtWidgets import QMessageBox
 from PyQt6.QtGui import QIcon
@@ -73,7 +73,7 @@ def play_single_url(self, url):
             self.mpv_temp_dir = "/tmp"
     
     # Crear ruta para el socket
-    socket_path = os.path.join(self.mpv_temp_dir, "mpv_socket")
+    socket_path = Path(self.mpv_temp_dir, "mpv_socket")
     self.mpv_socket = socket_path
     
     # Si existe un socket anterior, eliminarlo

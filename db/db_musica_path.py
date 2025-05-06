@@ -1140,7 +1140,7 @@ class MusicLibraryManager:
                             original_added_timestamp = None
                             
 
-                        if force_update or not db_last_modified or last_modified > db_last_modified:
+                        if force_update == True or not db_last_modified or last_modified > db_last_modified:
                             metadata = self.get_audio_metadata(file_path)
                             
                             if metadata:

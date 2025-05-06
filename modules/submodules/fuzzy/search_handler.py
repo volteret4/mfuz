@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QTreeWidgetItem
 from PyQt6.QtCore import Qt
 import sqlite3
 
+
 class SearchHandler:
     """Handles search operations for the music browser."""
     

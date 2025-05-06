@@ -86,13 +86,13 @@ class MediaFinder:
         for name in name_formats:
             # Exact matches with different extensions
             for ext in extensions:
-                path = os.path.join(self.artist_images_dir, f"{name}.{ext}")
+                path = Path(self.artist_images_dir, f"{name}.{ext}")
                 if os.path.exists(path):
                     matching_files.append(path)
             
             # Partial matches with glob
             for ext in extensions:
-                pattern = os.path.join(self.artist_images_dir, f"{name}*.{ext}")
+                pattern = Path(self.artist_images_dir, f"{name}*.{ext}")
                 matching_files.extend(glob.glob(pattern))
         
         # Remove duplicates

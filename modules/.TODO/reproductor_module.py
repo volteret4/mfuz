@@ -37,7 +37,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(log_dir, 'application_debug.log'), mode='w'),
+        logging.FileHandler(Path(log_dir, 'application_debug.log'), mode='w'),
         logging.StreamHandler()
     ]
 )

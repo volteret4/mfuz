@@ -10,6 +10,7 @@ from typing import Dict, List, Optional, Tuple
 from bs4 import BeautifulSoup
 from PyQt6.QtCore import Qt, QObject, QRunnable, pyqtSignal, pyqtSlot
 from PyQt6.QtWidgets import QApplication
+from pathlib import Path
 
 from modules.submodules.url_playlist.ui_helpers import display_wiki_info
 # Asegurarse de que PROJECT_ROOT está disponible
@@ -18,7 +19,7 @@ try:
     from base_module import PROJECT_ROOT
 except ImportError:
     import os
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
 # Clases para los trabajadores de búsqueda
 class InfoLoadWorker(QRunnable):

@@ -241,9 +241,9 @@ class MusicBrainzAuthManager:
                 self.logger.error("Could not find CSRF token on login page")
                 # Save HTML to file for debugging
                 try:
-                    debug_dir = os.path.join(self.cache_dir, "debug")
+                    debug_dir = Path(self.cache_dir, "debug")
                     os.makedirs(debug_dir, exist_ok=True)
-                    with open(os.path.join(debug_dir, "login_page.html"), 'w', encoding='utf-8') as f:
+                    with open(Path(debug_dir, "login_page.html"), 'w', encoding='utf-8') as f:
                         f.write(response.text)
                     self.logger.debug(f"Saved login page HTML to {debug_dir}/login_page.html")
                 except Exception as e:

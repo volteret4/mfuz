@@ -67,12 +67,12 @@ class UrlPlayer(BaseModule):
 
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         # Extract specific configurations from kwargs with improved defaults
-        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', os.path.join(os.path.expanduser("~"), ".config", "mpv", "_mpv_socket"))
+        self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', Path(os.path.expanduser("~"), ".config", "mpv", "_mpv_socket"))
         
         # Extract database configuration with better handling
         self.db_path = kwargs.get('db_path')
         if self.db_path and not os.path.isabs(self.db_path):
-            self.db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            self.db_path = Path(PROJECT_ROOT, self.db_path)
         
         # Extract API credentials from kwargs with explicit handling
         self.spotify_authenticated = False
@@ -115,9 +115,9 @@ class UrlPlayer(BaseModule):
         
 
         # Paths
-        self.spotify_token_path = kwargs.get('spotify_token_path', os.path.join(PROJECT_ROOT, ".content", "cache", "spotify_token.txt"))
-        self.spotify_playlist_path = kwargs.get('spotify_playlist_path', os.path.join(PROJECT_ROOT, ".content", "cache", "spotify_playlist_path"))
-        self.lastfm_cache_path = kwargs.get('lastfm_cache_path', os.path.join(PROJECT_ROOT, ".content", "cache", "lastfm_cache.json"))
+        self.spotify_token_path = kwargs.get('spotify_token_path', Path(PROJECT_ROOT, ".content", "cache", "spotify_token.txt"))
+        self.spotify_playlist_path = kwargs.get('spotify_playlist_path', Path(PROJECT_ROOT, ".content", "cache", "spotify_playlist_path"))
+        self.lastfm_cache_path = kwargs.get('lastfm_cache_path', Path(PROJECT_ROOT, ".content", "cache", "lastfm_cache.json"))
 
         # Log the received configuration
         print(f"[UrlPlayer] Received configs - DB: {self.db_path}, Spotify credentials: {bool(self.spotify_client_id)}, Last.fm credentials: {bool(self.lastfm_manager_key)}")
@@ -138,8 +138,8 @@ class UrlPlayer(BaseModule):
         self.freshrss_auth_token = kwargs.pop('freshrss_api_key', '')
         
         # Directorios para playlists RSS
-        self.rss_pending_dir = kwargs.pop('rss_pending_dir', os.path.join(PROJECT_ROOT, ".content", "playlists", "blogs", "pendiente"))
-        self.rss_listened_dir = kwargs.pop('rss_listened_dir', os.path.join(PROJECT_ROOT, ".content", "playlists", "blogs", "escuchado"))
+        self.rss_pending_dir = kwargs.pop('rss_pending_dir', Path(PROJECT_ROOT, ".content", "playlists", "blogs", "pendiente"))
+        self.rss_listened_dir = kwargs.pop('rss_listened_dir', Path(PROJECT_ROOT, ".content", "playlists", "blogs", "escuchado"))
         
         # Asegurar que los directorios existan
         os.makedirs(self.rss_pending_dir, exist_ok=True)
@@ -830,7 +830,7 @@ class UrlPlayer(BaseModule):
 
     def get_app_path(self, file_path):
         """Create standardized paths relative to PROJECT_ROOT"""
-        return os.path.join(PROJECT_ROOT, file_path)
+        return Path(PROJECT_ROOT, file_path)
 
 
 
@@ -990,9 +990,9 @@ class UrlPlayer(BaseModule):
         
         # If still missing, systematically try all config file locations
         config_files = [
-            os.path.join(PROJECT_ROOT, "config", "api_keys.json"),
-            os.path.join(PROJECT_ROOT, ".content", "config", "api_keys.json"),
-            os.path.join(os.path.expanduser("~"), ".config", "music_app", "api_keys.json")
+            Path(PROJECT_ROOT, "config", "api_keys.json"),
+            Path(PROJECT_ROOT, ".content", "config", "api_keys.json"),
+            Path(os.path.expanduser("~"), ".config", "music_app", "api_keys.json")
         ]
         
         for config_path in config_files:
@@ -1168,12 +1168,12 @@ class UrlPlayer(BaseModule):
                 local_playlist_path = module_args['local_playlist_path']
                 # Manejar ruta relativa
                 if not os.path.isabs(local_playlist_path):
-                    local_playlist_path = os.path.join(PROJECT_ROOT, local_playlist_path)
+                    local_playlist_path = Path(PROJECT_ROOT, local_playlist_path)
                 self.local_playlist_path = local_playlist_path
                 self.log(f"Ruta de playlists locales cargada: {self.local_playlist_path}")
             else:
                 # Ruta por defecto
-                self.local_playlist_path = os.path.join(PROJECT_ROOT, ".content", "playlists", "locales")
+                self.local_playlist_path = Path(PROJECT_ROOT, ".content", "playlists", "locales")
                 self.log(f"Usando ruta de playlists locales por defecto: {self.local_playlist_path}")
 
 
@@ -1182,7 +1182,7 @@ class UrlPlayer(BaseModule):
                 mpv_temp_dir = module_args['mpv_temp_dir']
                 # Handle relative path
                 if not os.path.isabs(mpv_temp_dir):
-                    mpv_temp_dir = os.path.join(os.path.expanduser("~"), mpv_temp_dir)
+                    mpv_temp_dir = Path(os.path.expanduser("~"), mpv_temp_dir)
                 self.mpv_temp_dir = mpv_temp_dir
                 
             # Load playlist view settings
@@ -1330,9 +1330,9 @@ class UrlPlayer(BaseModule):
         try:
             # Try multiple config paths
             config_paths = [
-                os.path.join(PROJECT_ROOT, "config", "config.yml"),
-                os.path.join(PROJECT_ROOT, "config", "config_placeholder.yaml"),
-                os.path.join(PROJECT_ROOT, ".content", "config", "config.yml")
+                Path(PROJECT_ROOT, "config", "config.yml"),
+                Path(PROJECT_ROOT, "config", "config_placeholder.yaml"),
+                Path(PROJECT_ROOT, ".content", "config", "config.yml")
             ]
             
         

@@ -16,7 +16,7 @@ try:
     from base_module import PROJECT_ROOT
 except ImportError:
     import os
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
 # Intentar importar spotipy, con manejo de errores
 try:
@@ -56,9 +56,9 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
         
         # Ensure cache directory exists - usa la ruta que prefieras
         if not cache_path:
-            cache_dir = os.path.join(os.path.expanduser("~"), ".cache", "music_app", "spotify")
+            cache_dir = Path(os.path.expanduser("~"), ".cache", "music_app", "spotify")
             os.makedirs(cache_dir, exist_ok=True)
-            cache_path = os.path.join(cache_dir, "spotify_token.txt")
+            cache_path = Path(cache_dir, "spotify_token.txt")
             
         print(f"Using token cache path: {cache_path}")
         
@@ -522,7 +522,7 @@ def load_spotify_playlists(self, force_update=False):
         return False
         
     try:
-        cache_path = os.path.join(os.path.expanduser("~"), ".cache", "music_app", "spotify", "playlists.json")
+        cache_path = Path(os.path.expanduser("~"), ".cache", "music_app", "spotify", "playlists.json")
         
         if not force_update and os.path.exists(cache_path):
             with open(cache_path, 'r', encoding='utf-8') as f:

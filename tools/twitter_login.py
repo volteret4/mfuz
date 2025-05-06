@@ -9,6 +9,7 @@ import requests
 import webbrowser
 from PyQt6.QtWidgets import QInputDialog, QMessageBox, QLineEdit
 from PyQt6.QtCore import QObject, pyqtSignal
+from pathlib import Path
 
 """
 Twitter/X Authentication Manager
@@ -62,9 +63,9 @@ class TwitterAuthManager(QObject):
         if not self.project_root:
             return None
             
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "twitter")
+        cache_dir = Path(self.project_root, ".content", "cache", "twitter")
         os.makedirs(cache_dir, exist_ok=True)
-        return os.path.join(cache_dir, ".twitter_tokens.json")
+        return Path(cache_dir, ".twitter_tokens.json")
     
     def _load_cached_tokens(self):
         """Carga tokens desde caché si están disponibles"""

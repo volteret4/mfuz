@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem, QApplication
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem, QApplication
 from PyQt6.QtWidgets import QLabel, QWidget, QCheckBox, QMenu, QAbstractItemView, QTableWidget, QTableWidgetItem
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl
@@ -33,7 +33,7 @@ class ConciertosModule(BaseModule):
         self.global_config = kwargs.get('global_theme_config', {})  # Configuración global
         self.config = kwargs.get('config', {})  # Configuración específica del módulo
         self.apis = self.config.get('apis', {})
-        self.db_path = db_path or self.config.get('db_path', os.path.join(Path.home(), 'db', 'sqlite', 'music.db'))
+        self.db_path = db_path or self.config.get('db_path', Path(Path.home(), 'db', 'sqlite', 'music.db'))
         
         # Configuración de país
         self.default_country = self.config.get('country_code', 'ES')
@@ -199,7 +199,7 @@ class ConciertosModule(BaseModule):
         if hasattr(self, 'concerts_tree'):
             self.concerts_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
             self.concerts_tree.resizeColumnsToContents()
-        ui_file = os.path.join(PROJECT_ROOT, "ui", "conciertos_module.ui")
+        ui_file = Path(PROJECT_ROOT, "ui", "conciertos_module.ui")
         try:
             uic.loadUi(ui_file, self)
              # Hide the advanced settings groupbox by default
@@ -237,7 +237,27 @@ class ConciertosModule(BaseModule):
         self.buscar_searchbox.clicked.connect(self.search_from_lineedit)
         self.concerts_tree.cellClicked.connect(self.on_concert_selected)
 
-
+            # Set up the menu for the add_to_cal button
+        self.cal_menu = QMenu(self)
+        
+        # Select All/None actions
+        self.select_all_action = QAction("Seleccionar todos", self)
+        self.select_all_action.triggered.connect(self.select_all_concerts)
+        self.cal_menu.addAction(self.select_all_action)
+        
+        self.deselect_all_action = QAction("Deseleccionar todos", self)
+        self.deselect_all_action.triggered.connect(self.deselect_all_concerts)
+        self.cal_menu.addAction(self.deselect_all_action)
+        
+        self.cal_menu.addSeparator()
+        
+        # Create ICS action
+        self.create_ics_action = QAction("Crear archivo ICS", self)
+        self.create_ics_action.triggered.connect(self.create_ics_file)
+        self.cal_menu.addAction(self.create_ics_action)
+        
+        # Connect the add_to_cal button to show the menu
+        self.add_to_cal.setMenu(self.cal_menu)
 
         # Signal connection for advanced settings checkbox
         self.advanced_settings.stateChanged.connect(self.toggle_advanced_settings)
@@ -253,6 +273,27 @@ class ConciertosModule(BaseModule):
         """Toggle visibility of advanced settings based on checkbox state"""
         # Qt.Checked is equal to 2
         self.global_config_group.setVisible(state == 2)
+
+
+    def select_all_concerts(self):
+        """Select all concerts in the table for calendar export"""
+        for row in range(self.concerts_tree.rowCount()):
+            checkbox_widget = self.concerts_tree.cellWidget(row, 0)
+            if checkbox_widget:
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox:
+                    checkbox.setChecked(True)
+        self.log_area.append("Selected all concerts for calendar export")
+
+    def deselect_all_concerts(self):
+        """Deselect all concerts in the table for calendar export"""
+        for row in range(self.concerts_tree.rowCount()):
+            checkbox_widget = self.concerts_tree.cellWidget(row, 0)
+            if checkbox_widget:
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox:
+                    checkbox.setChecked(False)
+        self.log_area.append("Deselected all concerts for calendar export")
 
     def search_from_lineedit(self):
         """Buscar conciertos para el artista introducido en el lineEdit"""
@@ -287,8 +328,8 @@ class ConciertosModule(BaseModule):
         if row < 0 or column < 0:
             return
         
-        # Get concert data from the first column
-        concert_data = self.concerts_tree.item(row, 0).data(Qt.ItemDataRole.UserRole)
+        # Get concert data from the artist column (column 1)
+        concert_data = self.concerts_tree.item(row, 1).data(Qt.ItemDataRole.UserRole)
         if not concert_data:
             return
         
@@ -326,7 +367,6 @@ class ConciertosModule(BaseModule):
         # Load and show image if available
         if concert_data.get('image'):
             self.load_image_for_concert(concert_data)
-
 
     def load_image_for_concert(self, concert_data):
         """Cargar imagen del concierto en segundo plano"""
@@ -821,19 +861,38 @@ class ConciertosModule(BaseModule):
             self.log_area.append(f"Error sorting concerts: {e}")
             concerts_sorted = unified_concerts
         
+        # Configure table headers if needed
+        if self.concerts_tree.columnCount() != 4:
+            self.concerts_tree.setColumnCount(4)
+            self.concerts_tree.setHorizontalHeaderLabels(["Cal", "Artista", "Ciudad", "Fecha"])
+        
         # Add concerts to the table
         for i, concert in enumerate(concerts_sorted):
             self.concerts_tree.insertRow(i)
             
-            # Artist
+            # Calendar checkbox column (first column)
+            checkbox = QCheckBox()
+            checkbox.setChecked(False)  # Default unchecked
+            
+            # Create a widget to hold the checkbox and center it
+            checkbox_widget = QWidget()
+            layout = QHBoxLayout(checkbox_widget)
+            layout.addWidget(checkbox)
+            layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Set the widget as the cell widget
+            self.concerts_tree.setCellWidget(i, 0, checkbox_widget)
+            
+            # Artist (second column)
             artist_item = QTableWidgetItem(concert.get('artist', 'Unknown Artist'))
-            self.concerts_tree.setItem(i, 0, artist_item)
+            self.concerts_tree.setItem(i, 1, artist_item)
             
-            # City
+            # City (third column)
             city_item = QTableWidgetItem(concert.get('city', 'Unknown City'))
-            self.concerts_tree.setItem(i, 1, city_item)
+            self.concerts_tree.setItem(i, 2, city_item)
             
-            # Format date
+            # Format date (fourth column)
             date_str = concert.get('date', '')
             try:
                 if date_str and date_str != 'Unknown date':
@@ -843,9 +902,9 @@ class ConciertosModule(BaseModule):
                 pass
             
             date_item = QTableWidgetItem(date_str)
-            self.concerts_tree.setItem(i, 2, date_item)
+            self.concerts_tree.setItem(i, 3, date_item)
             
-            # Store full concert data in the first column item
+            # Store full concert data in the artist item
             artist_item.setData(Qt.ItemDataRole.UserRole, concert)
         
         # Resize columns to content
@@ -997,8 +1056,8 @@ class ConciertosModule(BaseModule):
         # Obtener item seleccionado
         selected_row = self.concerts_tree.rowAt(position.y())
         if selected_row >= 0:
-            # Get the item in the first column of the selected row
-            selected_item = self.concerts_tree.item(selected_row, 0)
+            # Get the item in the artist column (column 1) of the selected row
+            selected_item = self.concerts_tree.item(selected_row, 1)
             if selected_item and selected_item.data(Qt.ItemDataRole.UserRole):
                 # Acciones para item seleccionado
                 concert_data = selected_item.data(Qt.ItemDataRole.UserRole)
@@ -1011,7 +1070,7 @@ class ConciertosModule(BaseModule):
                 
                 # Acción para ver detalles
                 view_details_action = QAction("Ver detalles", self)
-                view_details_action.triggered.connect(lambda: self.on_concert_selected(selected_row, 0))
+                view_details_action.triggered.connect(lambda: self.on_concert_selected(selected_row, 1))
                 context_menu.addAction(view_details_action)
                 
                 context_menu.addSeparator()
@@ -1630,3 +1689,158 @@ class ConciertosModule(BaseModule):
         
         self.log_area.append("========================\n")
 
+
+
+# CALENDARIO
+    def create_ics_file(self):
+        """Create an ICS file for selected concerts"""
+        selected_concerts = []
+        
+        # Collect all selected concerts
+        for row in range(self.concerts_tree.rowCount()):
+            # Get the checkbox from the first column
+            checkbox_widget = self.concerts_tree.cellWidget(row, 0)
+            if checkbox_widget:
+                # Find the checkbox within the widget
+                checkbox = checkbox_widget.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    # Get concert data from the artist column (index 1)
+                    concert_data = self.concerts_tree.item(row, 1).data(Qt.ItemDataRole.UserRole)
+                    if concert_data:
+                        selected_concerts.append(concert_data)
+        
+        if not selected_concerts:
+            self.log_area.append("No concerts selected for calendar export")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.information(self, "No Concerts Selected", 
+                                    "Please select at least one concert by checking the box in the calendar column.")
+            return
+        
+
+        # Ask user for file location
+        from PyQt6.QtWidgets import QFileDialog
+        file_path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Save Calendar File",
+            str(Path.home() / "Downloads" / "concerts.ics"),
+            "iCalendar Files (*.ics)"
+        )
+        
+        if not file_path:
+            return  # User cancelled
+        
+        try:
+            # Generate ICS content
+            ics_content = self.generate_ics_content(selected_concerts)
+            
+            # Save to file
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(ics_content)
+            
+            self.log_area.append(f"Calendar file saved to: {file_path}")
+            self.log_area.append(f"Added {len(selected_concerts)} concerts to calendar")
+            
+            # Ask if user wants to open the file
+            from PyQt6.QtWidgets import QMessageBox
+            reply = QMessageBox.question(
+                self, 
+                'Open Calendar File', 
+                'Do you want to open the calendar file now?',
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+                QMessageBox.StandardButton.No
+            )
+            
+            if reply == QMessageBox.StandardButton.Yes:
+                # Open file with default application
+                QDesktopServices.openUrl(QUrl.fromLocalFile(file_path))
+                
+        except Exception as e:
+            self.log_area.append(f"Error creating calendar file: {str(e)}")
+            import traceback
+            self.log_area.append(traceback.format_exc())
+
+    def generate_ics_content(self, concerts):
+        """Generate ICS file content for the selected concerts"""
+        # Basic ICS header
+        ics_content = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//Concert Calendar//Music App//ES",
+            "CALSCALE:GREGORIAN",
+            "METHOD:PUBLISH"
+        ]
+        
+        # Current timestamp for DTSTAMP
+        from datetime import datetime
+        now = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+        
+        # Generate unique ID base
+        import uuid
+        uid_base = str(uuid.uuid4())
+        
+        # Add each concert as an event
+        for i, concert in enumerate(concerts):
+            # Get basic information
+            summary = f"{concert.get('artist', 'Unknown Artist')} @ {concert.get('venue', 'Unknown Venue')}"
+            location = f"{concert.get('venue', '')}, {concert.get('city', '')}"
+            description = concert.get('name', 'Concert')
+            
+            # Add venue and other info to description if available
+            if concert.get('venue'):
+                description += f"\nVenue: {concert.get('venue')}"
+            
+            # Add URL if available
+            if concert.get('url'):
+                description += f"\nTicket Info: {concert.get('url')}"
+            
+            # Format date and time
+            date_str = concert.get('date', '')
+            time_str = concert.get('time', '19:00')  # Default to 7 PM if not specified
+            
+            start_date = date_str.replace('-', '')
+            
+            # Handle time if available, otherwise make it an all-day event
+            if time_str and ':' in time_str:
+                # Try to parse the time string
+                try:
+                    hour, minute = time_str.split(':')[:2]
+                    start_datetime = f"{start_date}T{hour.zfill(2)}{minute.zfill(2)}00"
+                    end_datetime = f"{start_date}T{str(int(hour) + 3).zfill(2)}{minute.zfill(2)}00"  # Default 3-hour concert
+                    
+                    dtstart = f"DTSTART:{start_datetime}"
+                    dtend = f"DTEND:{end_datetime}"
+                except:
+                    # Fallback to all-day event
+                    dtstart = f"DTSTART;VALUE=DATE:{start_date}"
+                    dtend = f"DTEND;VALUE=DATE:{start_date}"
+            else:
+                # All-day event
+                dtstart = f"DTSTART;VALUE=DATE:{start_date}"
+                dtend = f"DTEND;VALUE=DATE:{start_date}"
+            
+            # Create unique ID for this event
+            uid = f"{uid_base}-{i}@musicapp"
+            
+            # Add event to calendar
+            ics_content.extend([
+                "BEGIN:VEVENT",
+                f"UID:{uid}",
+                f"DTSTAMP:{now}",
+                dtstart,
+                dtend,
+                f"SUMMARY:{summary}",
+                f"DESCRIPTION:{description.replace(chr(10), chr(10) + ' ')}",  # Properly format multi-line description
+                f"LOCATION:{location}",
+                "BEGIN:VALARM",
+                "ACTION:DISPLAY",
+                "DESCRIPTION:Reminder",
+                "TRIGGER:-P1D",  # 1 day before
+                "END:VALARM",
+                "END:VEVENT"
+            ])
+        
+        # Close calendar
+        ics_content.append("END:VCALENDAR")
+        
+        # Join all lines with CRLF as per ICS spec
+        return "\r\n".join(ics_content)

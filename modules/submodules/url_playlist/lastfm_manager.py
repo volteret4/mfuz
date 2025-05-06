@@ -5,7 +5,7 @@ import threading
 import urllib.parse
 import requests
 from datetime import datetime
-
+from pathlib import Path
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QMenu, QProgressDialog, QApplication, QMessageBox, QPushButton, QSlider, QSpinBox
 from PyQt6.QtGui import QIcon
@@ -16,7 +16,7 @@ try:
     from base_module import PROJECT_ROOT
 except ImportError:
     import os
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
 def setup_lastfm_menu_items(parent_instance, menu):
     """Set up Last.fm menu items in any menu"""
@@ -54,9 +54,9 @@ def setup_lastfm_menu_items(parent_instance, menu):
 
 def get_lastfm_cache_path():
     """Get the path to the Last.fm scrobbles cache file"""
-    cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+    cache_dir = Path(PROJECT_ROOT, ".content", "cache")
     os.makedirs(cache_dir, exist_ok=True)
-    return os.path.join(cache_dir, "lastfm_scrobbles.json")
+    return Path(cache_dir, "lastfm_scrobbles.json")
 
 def sync_lastfm_scrobbles(self):
     """Synchronize Last.fm scrobbles and store them in a cache file"""

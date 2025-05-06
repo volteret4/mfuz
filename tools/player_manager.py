@@ -40,7 +40,7 @@ class PlayerManager(QObject):
         try:
             # Try to find the project root
             project_root = self._find_project_root()
-            config_path = os.path.join(project_root, "config", "config.yml")
+            config_path = Path(project_root, "config", "config.yml")
             
             if os.path.exists(config_path):
                 import yaml
@@ -62,7 +62,7 @@ class PlayerManager(QObject):
             # First check if PROJECT_ROOT is defined globally
             import sys
             for path in sys.path:
-                if os.path.exists(os.path.join(path, "base_module.py")):
+                if os.path.exists(Path(path, "base_module.py")):
                     return path
             
             # Try to navigate up from current file
@@ -70,7 +70,7 @@ class PlayerManager(QObject):
             max_depth = 5
             
             for _ in range(max_depth):
-                if os.path.exists(os.path.join(current_dir, "base_module.py")):
+                if os.path.exists(Path(current_dir, "base_module.py")):
                     return current_dir
                 current_dir = os.path.dirname(current_dir)
                 
@@ -171,7 +171,7 @@ class PlayerManager(QObject):
         if self.current_player.get('player_temp_dir'):
             temp_dir = os.path.expanduser(self.current_player['player_temp_dir'])
             os.makedirs(temp_dir, exist_ok=True)
-            self.socket_path = os.path.join(temp_dir, "player_socket")
+            self.socket_path = Path(temp_dir, "player_socket")
             
             # Delete existing socket file if it exists
             if os.path.exists(self.socket_path):

@@ -1,4 +1,5 @@
 import sqlite3
+from pathlib import Path
 
 class DatabaseManager:
     """Manages database interactions for the music browser."""

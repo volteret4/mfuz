@@ -104,7 +104,7 @@ class ConfigEditorModule(BaseModule):
     def init_ui(self):
         """Initialize the UI using UI file or create it manually"""
         # Try to load UI file
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "config_editor.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "config_editor.ui")
         if os.path.exists(ui_file_path):
             try:
                 # Load UI from file

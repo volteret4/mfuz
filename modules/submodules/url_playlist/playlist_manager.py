@@ -16,16 +16,16 @@ try:
     from base_module import PROJECT_ROOT
 except ImportError:
     import os
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
 def get_local_playlist_path(self):
     """Get the local playlist save path from configuration."""
     # Default path if not specified in config
-    default_path = os.path.join(PROJECT_ROOT, ".content", "playlists", "locales")
+    default_path = Path(PROJECT_ROOT, ".content", "playlists", "locales")
     
     try:
         # Try to read from config
-        config_path = os.path.join(PROJECT_ROOT, "config", "config.yml")
+        config_path = Path(PROJECT_ROOT, "config", "config.yml")
         if not os.path.exists(config_path):
             os.makedirs(os.path.dirname(default_path), exist_ok=True)
             return default_path
@@ -39,7 +39,7 @@ def get_local_playlist_path(self):
             path = config['global_theme_config']['local_playlist_path']
             # Handle relative paths
             if not os.path.isabs(path):
-                path = os.path.join(PROJECT_ROOT, path)
+                path = Path(PROJECT_ROOT, path)
             return path
         
         # Then check module configuration
@@ -49,7 +49,7 @@ def get_local_playlist_path(self):
                     path = module['args']['local_playlist_path']
                     # Handle relative paths
                     if not os.path.isabs(path):
-                        path = os.path.join(PROJECT_ROOT, path)
+                        path = Path(PROJECT_ROOT, path)
                     return path
         
         # Default if not found
@@ -162,7 +162,7 @@ def load_local_playlists(self):
         
         for filename in json_files:
             try:
-                file_path = os.path.join(local_playlist_path, filename)
+                file_path = Path(local_playlist_path, filename)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
                     # Imprimir contenido para debugear
@@ -184,7 +184,7 @@ def load_local_playlists(self):
             for pls_file in pls_files:
                 try:
                     playlist_name = os.path.splitext(pls_file)[0]
-                    file_path = os.path.join(local_playlist_path, pls_file)
+                    file_path = Path(local_playlist_path, pls_file)
                     
                     # Extraer datos de archivo .pls
                     items = parse_pls_file(file_path)
@@ -232,12 +232,12 @@ def create_local_playlist(self, name):
         }
         
         # Guardar como JSON
-        json_path = os.path.join(local_playlist_dir, f"{safe_name}.json")
+        json_path = Path(local_playlist_dir, f"{safe_name}.json")
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(playlist_data, f, indent=2, ensure_ascii=False)
         
         # También crear un archivo PLS vacío
-        pls_path = os.path.join(local_playlist_dir, f"{safe_name}.pls")
+        pls_path = Path(local_playlist_dir, f"{safe_name}.pls")
         with open(pls_path, 'w', encoding='utf-8') as f:
             f.write("[playlist]\n")
             f.write("NumberOfEntries=0\n\n")
@@ -301,14 +301,14 @@ def load_rss_playlists(self):
         
         # Scan all blogs and their playlists
         for blog in os.listdir(self.rss_pending_dir):
-            blog_path = os.path.join(self.rss_pending_dir, blog)
+            blog_path = Path(self.rss_pending_dir, blog)
             if os.path.isdir(blog_path):
                 blog_playlists[blog] = []
                 
                 # Find all .m3u files for this blog
                 for file in os.listdir(blog_path):
                     if file.endswith('.m3u'):
-                        abs_path = os.path.abspath(os.path.join(blog_path, file))
+                        abs_path = os.path.abspath(Path(blog_path, file))
                         
                         if os.path.exists(abs_path):
                             track_count = count_tracks_in_playlist(abs_path)
@@ -410,7 +410,7 @@ def move_rss_playlist_to_listened(self, playlist_data):
             return False
             
         # Directorio de destino
-        blog_listened_dir = os.path.join(self.rss_listened_dir, playlist_data['blog'])
+        blog_listened_dir = Path(self.rss_listened_dir, playlist_data['blog'])
         os.makedirs(blog_listened_dir, exist_ok=True)
         
         # Rutas de origen
@@ -428,8 +428,8 @@ def move_rss_playlist_to_listened(self, playlist_data):
         new_txt_name = timestamp + os.path.basename(txt_path) if os.path.exists(txt_path) else None
         
         # Rutas de destino
-        dest_playlist = os.path.join(blog_listened_dir, new_name)
-        dest_txt = os.path.join(blog_listened_dir, new_txt_name) if new_txt_name else None
+        dest_playlist = Path(blog_listened_dir, new_name)
+        dest_txt = Path(blog_listened_dir, new_txt_name) if new_txt_name else None
         
         # Mover archivos
         shutil.move(playlist_path, dest_playlist)

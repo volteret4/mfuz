@@ -2,6 +2,8 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import os
 from PyQt6.QtWidgets import QLabel
+from pathlib import Path
+
 
 class UIUpdater:
     """Updates UI elements based on selection in the tree widget."""
@@ -347,11 +349,11 @@ class UIUpdater:
         """Get the path to the artist's image."""
         # This is a placeholder - implement according to your image storage strategy
         # For example, you might look in a specific directory for an image file named after the artist
-        base_path = os.path.join(os.path.expanduser("~"), ".local", "share", "music_app", "images", "artists")
+        base_path = Path(os.path.expanduser("~"), ".local", "share", "music_app", "images", "artists")
         
         # Check for various extensions
         for ext in ['jpg', 'jpeg', 'png']:
-            path = os.path.join(base_path, f"{artist_name}.{ext}")
+            path = Path(base_path, f"{artist_name}.{ext}")
             if os.path.exists(path):
                 return path
         

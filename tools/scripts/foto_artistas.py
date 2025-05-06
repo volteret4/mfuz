@@ -12,6 +12,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
 from collections import Counter
+from pathlib import Path
 
 def parse_arguments():
     """Configura y parsea los argumentos de línea de comandos"""
@@ -209,7 +210,7 @@ def download_and_check_image(url, artist_name, image_number, output_dir, existin
             
         # Crear nombre de archivo
         image_filename = format_filename(artist_name, image_number)
-        image_path = os.path.join(output_dir, image_filename)
+        image_path = Path(output_dir, image_filename)
         
         # Guardar la imagen
         with open(image_path, 'wb') as img_file:
@@ -494,7 +495,7 @@ def find_and_remove_duplicates(folder_path, similarity_threshold=0.85):
     # Calcular hash de cada imagen
     image_hashes = {}
     for file in image_files:
-        file_path = os.path.join(folder_path, file)
+        file_path = Path(folder_path, file)
         try:
             with open(file_path, 'rb') as f:
                 img_data = f.read()
@@ -537,7 +538,7 @@ def find_and_remove_duplicates(folder_path, similarity_threshold=0.85):
     for group in duplicates:
         print(f"Grupo de imágenes similares:")
         for idx, file in enumerate(group):
-            file_path = os.path.join(folder_path, file)
+            file_path = Path(folder_path, file)
             file_size = os.path.getsize(file_path) / 1024  # KB
             print(f"  {idx+1}. {file} ({file_size:.1f} KB)")
         
@@ -550,7 +551,7 @@ def find_and_remove_duplicates(folder_path, similarity_threshold=0.85):
         
         for file in remove:
             try:
-                os.remove(os.path.join(folder_path, file))
+                os.remove(Path(folder_path, file))
                 total_removed += 1
             except Exception as e:
                 print(f"  Error al eliminar {file}: {str(e)}")
@@ -646,7 +647,7 @@ def main():
         image_hashes = []
         if existing_count > 0:
             for i in range(1, existing_count + 1):
-                img_path = os.path.join(args.output, format_filename(artist, i))
+                img_path = Path(args.output, format_filename(artist, i))
                 if os.path.exists(img_path):
                     try:
                         with open(img_path, 'rb') as f:

@@ -5,6 +5,7 @@ import json
 import requests
 import time
 import logging
+from pathlib import Path
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog, QTableWidget, QTableWidgetItem,
                           QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QStackedWidget,
                           QDialogButtonBox, QComboBox, QProgressDialog, QApplication)
@@ -59,11 +60,11 @@ class MusicBrainzManager:
                 except ImportError:
                     try:
                         # Ruta relativa (PROJECT_ROOT/tools)
-                        sys.path.append(os.path.join(self.project_root, "tools"))
+                        sys.path.append(Path(self.project_root, "tools"))
                         from musicbrainz_login import MusicBrainzAuthManager
                     except ImportError:
                         # Ruta absoluta
-                        mb_login_path = os.path.join(self.project_root, "tools", "musicbrainz_login.py") 
+                        mb_login_path = Path(self.project_root, "tools", "musicbrainz_login.py") 
                         if os.path.exists(mb_login_path):
                             import importlib.util
                             spec = importlib.util.spec_from_file_location("musicbrainz_login", mb_login_path)
@@ -122,9 +123,9 @@ class MusicBrainzManager:
                 return
         
         # Intentar usar la caché primero
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "musicbrainz")
+        cache_dir = Path(self.project_root, ".content", "cache", "musicbrainz")
         os.makedirs(cache_dir, exist_ok=True)
-        cache_file = os.path.join(cache_dir, f"mb_collection_{collection_id}.json")
+        cache_file = Path(cache_dir, f"mb_collection_{collection_id}.json")
         
         if os.path.exists(cache_file):
             try:
@@ -518,9 +519,9 @@ class MusicBrainzManager:
             return self._mb_collections
                 
         # Check if cache file exists
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "musicbrainz")
+        cache_dir = Path(self.project_root, ".content", "cache", "musicbrainz")
         os.makedirs(cache_dir, exist_ok=True)
-        cache_file = os.path.join(cache_dir, f"mb_collections_{self.musicbrainz_username}.json")
+        cache_file = Path(cache_dir, f"mb_collections_{self.musicbrainz_username}.json")
         
         # Try to use cache if not forcing refresh
         if not force_refresh and os.path.exists(cache_file):
@@ -1302,7 +1303,7 @@ class MusicBrainzManager:
                     return
         
         # Ruta al archivo JSON
-        json_path = os.path.join(self.project_root, ".content", "cache", "albums_selected.json")
+        json_path = Path(self.project_root, ".content", "cache", "albums_selected.json")
         
         # Verificar si existe el archivo
         if not os.path.exists(json_path):
@@ -1605,7 +1606,7 @@ class MusicBrainzManager:
         self._mb_collections = None
         
         # Borrar archivos de caché
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "musicbrainz")
+        cache_dir = Path(self.project_root, ".content", "cache", "musicbrainz")
         os.makedirs(cache_dir, exist_ok=True)  # Asegurar que el directorio existe
         
         files_removed = 0
@@ -1621,14 +1622,14 @@ class MusicBrainzManager:
             
             for cache_file in cache_files:
                 try:
-                    os.remove(os.path.join(cache_dir, cache_file))
+                    os.remove(Path(cache_dir, cache_file))
                     files_removed += 1
                     self.logger.debug(f"Removed cache file: {cache_file}")
                 except Exception as e:
                     self.logger.error(f"Error removing cache file {cache_file}: {e}")
         else:
             # Invalidar solo una colección específica
-            collection_cache = os.path.join(cache_dir, f"mb_collection_{collection_id}.json")
+            collection_cache = Path(cache_dir, f"mb_collection_{collection_id}.json")
             if os.path.exists(collection_cache):
                 try:
                     os.remove(collection_cache)
@@ -1638,7 +1639,7 @@ class MusicBrainzManager:
                     self.logger.error(f"Error removing collection cache: {e}")
             
             # También invalidar el caché general de colecciones
-            user_cache = os.path.join(cache_dir, f"mb_collections_{self.musicbrainz_username}.json")
+            user_cache = Path(cache_dir, f"mb_collections_{self.musicbrainz_username}.json")
             if os.path.exists(user_cache):
                 try:
                     os.remove(user_cache)

@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import ( QMenu, QTreeWidgetItem, QDialog, QMessageBox, QLin
 from PyQt6.QtCore import Qt, QSize, QThreadPool
 import traceback
 from PyQt6 import uic
-
+from pathlib import Path
 
 from modules.submodules.url_playlist.spotify_manager import api_call_with_retry
 from modules.submodules.url_playlist.media_utils import play_media, add_to_queue, play_item, add_item_to_queue
@@ -21,7 +21,7 @@ try:
     from base_module import PROJECT_ROOT
 except ImportError:
     import os
-    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
 def format_duration(duration):
     """Formats duration into a readable string"""
@@ -288,14 +288,14 @@ def setup_unified_playlist_menu(self):
             # Scan RSS directories
             if os.path.exists(self.rss_pending_dir):
                 for blog_dir in os.listdir(self.rss_pending_dir):
-                    blog_path = os.path.join(self.rss_pending_dir, blog_dir)
+                    blog_path = Path(self.rss_pending_dir, blog_dir)
                     if os.path.isdir(blog_path):
                         blogs[blog_dir] = {'path': blog_path, 'playlists': []}
                         
                         # Find playlists for this blog
                         for playlist_file in os.listdir(blog_path):
                             if playlist_file.endswith('.m3u'):
-                                abs_path = os.path.abspath(os.path.join(blog_path, playlist_file))
+                                abs_path = os.path.abspath(Path(blog_path, playlist_file))
                                 track_count = count_tracks_in_playlist(abs_path)
                                 
                                 blogs[blog_dir]['playlists'].append({
@@ -686,7 +686,7 @@ def show_advanced_settings(parent_instance):
     try:
         # Create the dialog from UI file
         dialog = QDialog(parent_instance)
-        ui_file = os.path.join(PROJECT_ROOT, "ui", "url_playlist_advanced_settings_dialog.ui")
+        ui_file = Path(PROJECT_ROOT, "ui", "url_playlist_advanced_settings_dialog.ui")
         
         if os.path.exists(ui_file):
             uic.loadUi(ui_file, dialog)
@@ -954,7 +954,7 @@ def on_playlist_local_changed(self, index):
         local_playlist_path = self.get_local_playlist_path()
         
         # Buscar archivo JSON
-        json_file = os.path.join(local_playlist_path, f"{selected_text}.json")
+        json_file = Path(local_playlist_path, f"{selected_text}.json")
         if os.path.exists(json_file):
             try:
                 with open(json_file, 'r', encoding='utf-8') as f:
@@ -965,7 +965,7 @@ def on_playlist_local_changed(self, index):
         
         # Si no hay JSON, buscar archivo PLS
         if not selected_playlist:
-            pls_file = os.path.join(local_playlist_path, f"{selected_text}.pls")
+            pls_file = Path(local_playlist_path, f"{selected_text}.pls")
             if os.path.exists(pls_file):
                 try:
                     items = self.parse_pls_file(pls_file)
@@ -1070,7 +1070,7 @@ def show_create_playlist_dialog(self, playlist_type):
     
     # Cargar el archivo UI para el diálogo
     dialog = QDialog(self)
-    ui_path = os.path.join(PROJECT_ROOT, "ui", "create_playlist_dialog.ui")
+    ui_path = Path(PROJECT_ROOT, "ui", "create_playlist_dialog.ui")
     
     if os.path.exists(ui_path):
         uic.loadUi(ui_path, dialog)
@@ -1428,7 +1428,7 @@ def load_rss_playlist_content_to_tree(self, playlist_data):
             self.log(f"ERROR: Playlist file not found: {playlist_path}")
             # Attempt to reconstruct the correct path
             if playlist_data.get('blog') and playlist_data.get('name'):
-                corrected_path = os.path.join(self.rss_pending_dir, playlist_data['blog'], playlist_data['name'])
+                corrected_path = Path(self.rss_pending_dir, playlist_data['blog'], playlist_data['name'])
                 self.log(f"Trying corrected path: {corrected_path}")
                 if os.path.exists(corrected_path):
                     playlist_path = corrected_path
