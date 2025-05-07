@@ -5,6 +5,7 @@ import os
 import traceback
 import importlib
 
+
 # Verificar si existe el módulo themes.py
 themes_path = Path(__file__).parent / "themes" / "themes.py"
 if themes_path.exists():
@@ -136,7 +137,7 @@ class BaseModule(QWidget):
             bool: True si se cargó correctamente, False si hubo error
         """
         try:
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", ui_file_name)
+            ui_file_path = Path(PROJECT_ROOT, "ui", ui_file_name)
             if not os.path.exists(ui_file_path):
                 print(f"Archivo UI no encontrado: {ui_file_path}")
                 return False

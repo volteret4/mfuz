@@ -486,7 +486,7 @@ class MuspyArtistModule(BaseModule):
         ]
         
         # Intentar cargar desde archivo UI
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_releases_module.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_releases_module.ui")
         
         if os.path.exists(ui_file_path):
             try:
@@ -1169,7 +1169,7 @@ class MuspyArtistModule(BaseModule):
             add_menu = QMenu("Add Albums to Collection", self)
             
             # First check if we have the albums_selected.json file
-            albums_json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
+            albums_json_path = Path(PROJECT_ROOT, ".content", "cache", "albums_selected.json")
             
             if not os.path.exists(albums_json_path):
                 no_albums_action = QAction("No albums selected (load albums first)", self)
@@ -2080,7 +2080,7 @@ class MuspyArtistModule(BaseModule):
 
             # Ensure db_path is absolute
             if not os.path.isabs(self.db_path):
-                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+                full_db_path = Path(PROJECT_ROOT, self.db_path)
             else:
                 full_db_path = self.db_path
             
@@ -2089,7 +2089,7 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
 
             # Build path to the script
-            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
+            script_path = Path(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             
             # Check if script exists
             if not os.path.exists(script_path):
@@ -2125,11 +2125,11 @@ class MuspyArtistModule(BaseModule):
                 return
             
             # Ensure cache directory exists
-            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+            cache_dir = Path(PROJECT_ROOT, ".content", "cache")
             os.makedirs(cache_dir, exist_ok=True)
             
             # Load existing artists if file already exists
-            json_path = os.path.join(cache_dir, "artists_selected.json")
+            json_path = Path(cache_dir, "artists_selected.json")
             existing_artists = []
             if os.path.exists(json_path):
                 try:
@@ -2149,7 +2149,7 @@ class MuspyArtistModule(BaseModule):
             
             # Create the dialog using the UI file
             dialog = QDialog(self)
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2225,9 +2225,9 @@ class MuspyArtistModule(BaseModule):
             # Save selected artists to JSON
             try:
                 # Ensure the directory exists
-                cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+                cache_dir = Path(PROJECT_ROOT, ".content", "cache")
                 os.makedirs(cache_dir, exist_ok=True)
-                json_path = os.path.join(cache_dir, "artists_selected.json")
+                json_path = Path(cache_dir, "artists_selected.json")
                 
                 self.results_text.append(f"Trying to save to: {json_path}")
                 self.results_text.append(f"Directory exists: {os.path.exists(os.path.dirname(json_path))}")
@@ -2278,7 +2278,7 @@ class MuspyArtistModule(BaseModule):
 
             # Ensure db_path is absolute
             if not os.path.isabs(self.db_path):
-                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+                full_db_path = Path(PROJECT_ROOT, self.db_path)
             else:
                 full_db_path = self.db_path
             
@@ -2287,7 +2287,7 @@ class MuspyArtistModule(BaseModule):
             self.results_text.append(f"Database exists: {os.path.exists(full_db_path)}")
 
             # Build path to the script
-            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
+            script_path = Path(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             
             # Check if script exists
             if not os.path.exists(script_path):
@@ -2323,11 +2323,11 @@ class MuspyArtistModule(BaseModule):
                 return
             
             # Ensure cache directory exists
-            cache_dir = os.path.join(PROJECT_ROOT, ".content", "cache")
+            cache_dir = Path(PROJECT_ROOT, ".content", "cache")
             os.makedirs(cache_dir, exist_ok=True)
             
             # Load existing albums if file already exists
-            json_path = os.path.join(cache_dir, "albums_selected.json")
+            json_path = Path(cache_dir, "albums_selected.json")
             existing_albums = []
             if os.path.exists(json_path):
                 try:
@@ -2347,7 +2347,7 @@ class MuspyArtistModule(BaseModule):
             
             # Create the dialog using the UI file
             dialog = QDialog(self)
-            ui_file_path = os.path.join(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2606,13 +2606,13 @@ class MuspyArtistModule(BaseModule):
         try:
             # Determine database path
             if not os.path.isabs(self.db_path):
-                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+                full_db_path = Path(PROJECT_ROOT, self.db_path)
             else:
                 full_db_path = self.db_path
                 
             # Ensure script path is available
             if not self.query_db_script_path or not os.path.exists(self.query_db_script_path):
-                script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
+                script_path = Path(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             else:
                 script_path = self.query_db_script_path
                 
@@ -2695,12 +2695,12 @@ class MuspyArtistModule(BaseModule):
         try:
             # Use consultar_items_db to search
             if not os.path.isabs(self.db_path):
-                full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+                full_db_path = Path(PROJECT_ROOT, self.db_path)
             else:
                 full_db_path = self.db_path
                 
             # Build the command - search for albums
-            script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
+            script_path = Path(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
             cmd = f"python {script_path} --db {full_db_path} --buscar albums --limite 100"
             
             # Run the command
@@ -3178,11 +3178,11 @@ class MuspyArtistModule(BaseModule):
         Displays new releases in the stacked widget
         """
         if not os.path.isabs(self.db_path):
-            full_db_path = os.path.join(PROJECT_ROOT, self.db_path)
+            full_db_path = Path(PROJECT_ROOT, self.db_path)
         else:
             full_db_path = self.db_path
         
-        script_path = os.path.join(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
+        script_path = Path(PROJECT_ROOT, "db", "tools", "consultar_items_db.py")
         
         # Define the operation to run with progress monitoring
         def fetch_new_releases(update_progress):
@@ -3293,7 +3293,7 @@ class MuspyArtistModule(BaseModule):
     def sync_artists_with_muspy(self):
         """Synchronize artists from JSON file with Muspy using progress bar"""
         # Ruta al archivo JSON
-        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+        json_path = Path(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
         
         # Verificar si el archivo existe
         if not os.path.exists(json_path):

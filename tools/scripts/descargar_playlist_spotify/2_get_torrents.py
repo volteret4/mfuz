@@ -18,7 +18,7 @@ import os
 import argparse
 from datetime import datetime
 import subprocess
-
+from pathlib import Path
 
 def load_config(config_file):
     """Load configuration from a JSON file."""
@@ -312,7 +312,7 @@ def actualizar_json_file(json_file, discos_descargados):
 def iniciar_script_fondo(num_torrents, num_canciones, output_path, json_file, temp_server_port):
     """Inicia el script y muestra su salida en tiempo real, pasando el número total de canciones."""
     try:
-        script_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '3_servidor_playlist.py')
+        script_path = Path(os.path.dirname(os.path.abspath(__file__)), '3_servidor_playlist.py')
         
         if not os.path.exists(script_path):
             print("Advertencia: No se encontró el script. Por favor, asegúrate de que '3_servidor_playlist.py' existe.")
@@ -419,7 +419,7 @@ def descargar_torrent(torrent, carpeta_torrents_temporales):
         # Descargar el torrent
         import urllib.request
         nombre_archivo = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_torrent.torrent"
-        ruta_archivo = os.path.join(carpeta_torrents_temporales, nombre_archivo)
+        ruta_archivo = Path(carpeta_torrents_temporales, nombre_archivo)
         print(f"\nIntentando descargar a: {ruta_archivo}")
         
         # Añadir más información para depurar
@@ -483,7 +483,7 @@ def copiar_torrents_a_carpeta(torrents_descargados, carpeta_watchfolder, artista
         try:
             if os.path.exists(torrent_path):
                 nombre_archivo = os.path.basename(torrent_path)
-                destino = os.path.join(carpeta_watchfolder, nombre_archivo)
+                destino = Path(carpeta_watchfolder, nombre_archivo)
                 
                 # Verificar si el archivo ya existe en el destino
                 if os.path.exists(destino):
@@ -492,7 +492,7 @@ def copiar_torrents_a_carpeta(torrents_descargados, carpeta_watchfolder, artista
                     nombre_base, extension = os.path.splitext(nombre_archivo)
                     timestamp = datetime.now().strftime("%H%M%S")
                     nuevo_nombre = f"{nombre_base}_{timestamp}{extension}"
-                    destino = os.path.join(carpeta_watchfolder, nuevo_nombre)
+                    destino = Path(carpeta_watchfolder, nuevo_nombre)
                     print(f"Usando nombre alternativo: {nuevo_nombre}")
                     nombre_archivo = nuevo_nombre
                 

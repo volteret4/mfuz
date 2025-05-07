@@ -5,6 +5,7 @@ import requests
 import logging
 import datetime
 from PyQt6 import uic
+from pathlib import Path
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
                           QVBoxLayout, QHBoxLayout, QLabel, QPushButton,
                           QDialogButtonBox, QComboBox, QProgressDialog,
@@ -450,7 +451,7 @@ class BlueskyManager:
         QApplication.processEvents()
         
         # Path to the artists JSON file
-        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+        json_path = Path(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
         
         # Check if file exists
         if not os.path.exists(json_path):
@@ -544,7 +545,7 @@ class BlueskyManager:
             return
         
         # Intentar cargar desde archivo UI primero
-        ui_file_path = os.path.join(self.project_root, "ui", "muspy", "lastfm_bluesky_dialog.ui")
+        ui_file_path = Path(self.project_root, "ui", "muspy", "lastfm_bluesky_dialog.ui")
         dialog = QDialog(self.parent)
         dialog.setWindowTitle("Buscar Top Artistas de LastFM en Bluesky")
         

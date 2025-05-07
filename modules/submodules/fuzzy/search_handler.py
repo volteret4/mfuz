@@ -1,17 +1,71 @@
 from PyQt6.QtWidgets import QTreeWidgetItem
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 import sqlite3
+
 
 class SearchHandler:
     """Handles search operations for the music browser."""
     
     def __init__(self, parent):
         self.parent = parent
+        # Añadir un temporizador para retrasar la búsqueda
+        self.search_timer = QTimer()
+        self.search_timer.setSingleShot(True)
+        self.search_timer.timeout.connect(self._execute_search)
+        self.search_delay = 500  # milisegundos de espera antes de ejecutar la búsqueda
         
     def perform_search(self):
-        """Perform a search based on the search box text and process special filters."""
+        """Inicia el temporizador para realizar la búsqueda después de una pausa en la escritura."""
+        query = self.parent.search_box.text().strip()
+        
+        # Si está vacío, limpiar resultados y salir
+        if not query:
+            self.parent.results_tree_widget.clear()
+            return
+        
+        # Verificar si tenemos filtros especiales
+        has_filters = self._has_special_filters(query)
+        
+        # Si tenemos filtros, verificamos si hay suficiente texto después del último filtro
+        if has_filters:
+            # Encontrar el último filtro en la consulta
+            filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:"]  # Añadir t: para título
+            last_filter_pos = -1
+            last_filter = None
+            
+            for f in filters:
+                pos = query.rfind(f)
+                if pos > last_filter_pos:
+                    last_filter_pos = pos
+                    last_filter = f
+            
+            # Si encontramos un filtro, verificar si hay suficiente texto después de él
+            if last_filter_pos >= 0:
+                text_after_filter = query[last_filter_pos + len(last_filter):].strip()
+                # Si hay menos de 3 caracteres después del filtro, no buscar todavía
+                # A menos que sea un filtro de año o tiempo (y:, rs:, rm:, ra:)
+                if len(text_after_filter) < 3 and last_filter not in ["y:", "rs:", "rm:", "ra:"]:
+                    return
+        else:
+            # Si no hay filtros, verificar longitud mínima
+            if len(query) < 3:
+                return
+
+        # Para filtros numéricos, ejecutar la búsqueda inmediatamente sin esperar el temporizador
+        if has_filters and last_filter in ["y:", "rs:", "rm:", "ra:"]:
+            self.search_timer.stop()
+            self._execute_search()
+        
+        # Reiniciar el temporizador cada vez que el usuario escribe
+        self.search_timer.stop()
+        self.search_timer.start(self.search_delay)
+
+    def _execute_search(self):
+        """Ejecuta la búsqueda real después de que el temporizador expire."""
         query = self.parent.search_box.text().strip()
         if not query:
+            # Si el campo de búsqueda está vacío, limpiamos los resultados
+            self.parent.results_tree_widget.clear()
             return
         
         # Clear current results
@@ -50,6 +104,8 @@ class SearchHandler:
         
         # Search albums that match the query directly
         albums = self.parent.db_manager.search_albums(query, only_local)
+        print(f"Encontrados {len(albums)} álbumes que coinciden con '{query}'")
+        
         for album in albums:
             # Get the artist
             artist_id = album.get('artist_id')
@@ -62,10 +118,30 @@ class SearchHandler:
                     artist = self.parent.db_manager.get_artist_details(artist_id)
                     if artist:
                         artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
+                        print(f"Añadido artista: {artist.get('name')} para álbum: {album.get('name')}")
                 
                 # Add the album if we have a valid artist item
                 if artist_item:
-                    self._add_filtered_album(album, artist_item, only_local)
+                    print(f"Añadiendo álbum: {album.get('name')} al artista: {artist_item.text(0)}")
+                    # Explícitamente establecer load_content=True para cargar todas las canciones
+                    album_item = self._add_filtered_album(album, artist_item, only_local, load_content=True)
+                    
+                    # Verificar que el álbum se haya añadido correctamente
+                    if album_item:
+                        print(f"Álbum añadido correctamente, tiene {album_item.childCount()} canciones")
+                        # Si no hay canciones, forzar la carga explícitamente
+                        if album_item.childCount() == 0:
+                            print(f"Cargando canciones para el álbum ID: {album.get('id')}")
+                            songs = self.parent.db_manager.get_album_songs(album.get('id'), only_local)
+                            print(f"Encontradas {len(songs)} canciones para el álbum")
+                            for song in songs:
+                                self._add_filtered_song(song, album_item, only_local)
+                    else:
+                        print(f"ERROR: No se pudo añadir el álbum: {album.get('name')}")
+                else:
+                    print(f"ERROR: No se encontró artist_item para el álbum: {album.get('name')}")
+            else:
+                print(f"ERROR: El álbum no tiene artist_id: {album}")
         
         # Search songs that match the query directly
         songs = self.parent.db_manager.search_songs(query, only_local)
@@ -88,7 +164,7 @@ class SearchHandler:
                     if not album_item:
                         album = self.parent.db_manager.get_album_details(album_id)
                         if album:
-                            album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                            album_item = self._add_filtered_album(album, artist_item, only_local, load_content=True)
                     
                     # Add song to album
                     if album_item:
@@ -148,6 +224,7 @@ class SearchHandler:
         """Add an album to an artist with filtered content."""
         # Skip non-local albums if filtering is enabled
         if only_local and album.get('origen') != 'local':
+            print(f"Saltando álbum no local: {album.get('name')}")
             return None
             
         # Check if album is already added
@@ -155,6 +232,7 @@ class SearchHandler:
             item = artist_item.child(i)
             data = item.data(0, Qt.ItemDataRole.UserRole)
             if data and data.get('type') == 'album' and data.get('id') == album['id']:
+                print(f"Álbum ya añadido: {album.get('name')}")
                 return item
         
         # Create album item
@@ -166,71 +244,28 @@ class SearchHandler:
         # Store album ID in the item
         album_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'album', 'id': album['id']})
         
+        print(f"Álbum creado: {album.get('name')}, ID: {album.get('id')}")
+        
         # Load album's songs if requested
         if load_content:
+            print(f"Cargando canciones para el álbum: {album.get('name')}")
             # Get songs for this album
             songs = self.parent.db_manager.get_album_songs(album['id'], only_local)
+            print(f"Encontradas {len(songs)} canciones para álbum ID: {album['id']}")
             
             # Add songs to album
             for song in songs:
-                self._add_filtered_song(song, album_item, only_local)
+                song_item = self._add_filtered_song(song, album_item, only_local)
+                if song_item:
+                    print(f"Canción añadida: {song.get('title')}")
+                else:
+                    print(f"ERROR: No se pudo añadir canción: {song.get('title')}")
+        else:
+            print(f"ADVERTENCIA: No se cargarán canciones para el álbum: {album.get('name')} (load_content=False)")
         
         return album_item
 
-    def _add_filtered_song(self, song, album_item, only_local=False):
-        """Add a song to an album with filtering."""
-        # Return immediately if album_item is None
-        if album_item is None:
-            return None
-            
-        # Skip non-local songs if filtering is enabled
-        if only_local and song.get('origen') != 'local':
-            return None
-            
-        # Check if song is already added
-        title = song.get('title', 'Unknown Title')
-        track_number = song.get('track_number', '')
-        
-        for i in range(album_item.childCount()):
-            item = album_item.child(i)
-            # Check by ID if available
-            data = item.data(0, Qt.ItemDataRole.UserRole)
-            if data and data.get('type') == 'song' and data.get('id') == song['id']:
-                return item
-            
-            # Or check by title and track number
-            item_text = item.text(0)
-            if track_number and '.' in item_text:
-                parts = item_text.split('.', 1)
-                if parts[0].strip() == str(track_number) and parts[1].strip() == title:
-                    return item
-            elif item_text == title:
-                return item
-        
-        # Create song item
-        song_item = QTreeWidgetItem(album_item)
-        
-        # Format title with track number if available
-        if track_number:
-            song_item.setText(0, f"{track_number}. {title}")
-        else:
-            song_item.setText(0, title)
-        
-        # Format duration
-        duration_str = ""
-        if song.get('duration'):
-            minutes = int(song['duration']) // 60
-            seconds = int(song['duration']) % 60
-            duration_str = f"{minutes}:{seconds:02d}"
-        
-        song_item.setText(1, duration_str)
-        song_item.setText(2, song.get('genre', ''))
-        
-        # Store song ID in the item
-        song_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'song', 'id': song['id']})
-        
-        return song_item
-
+ 
 
 
 
@@ -439,7 +474,7 @@ class SearchHandler:
 
     def _has_special_filters(self, query):
         """Verifica si la consulta contiene filtros especiales."""
-        filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:"]
+        filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:"]  # Añadir t: para título
         return any(f in query for f in filters)
 
     def _perform_filtered_search(self, query, only_local=False):
@@ -447,37 +482,35 @@ class SearchHandler:
         # Analizar la consulta para extraer los filtros
         filters = self._extract_filters(query)
         
+        print(f"Filtros detectados: {filters}")
+        
         # Aplicar los filtros según su tipo
-        if "artist" in filters:
+        if "title" in filters:  # Filtro para título de canción (t:)
+            # Buscar solo canciones que coincidan con el filtro de título
+            self._search_songs_by_title(filters["title"], only_local)
+        elif "artist" in filters:
             # Buscar artistas que coincidan con el filtro
             artists = self.parent.db_manager.search_artists(filters["artist"], only_local)
             for artist in artists:
                 self._add_filtered_artist(artist, only_local)
-        
         elif "album" in filters:
             # Buscar álbumes que coincidan con el filtro
             self._search_albums_filtered(filters["album"], only_local)
-        
         elif "genre" in filters:
             # Buscar por género manteniendo la estructura
             self._search_by_genre(filters["genre"], only_local)
-        
         elif "year" in filters:
             # Buscar por año manteniendo la estructura
             self._search_by_year(filters["year"], only_local)
-        
         elif "label" in filters:
             # Buscar por sello manteniendo la estructura
             self._search_by_label(filters["label"], only_local)
-        
         elif "recent_weeks" in filters:
             # Buscar por semanas recientes manteniendo la estructura
             self._search_recent(filters["recent_weeks"], "week", only_local)
-        
         elif "recent_months" in filters:
             # Buscar por meses recientes manteniendo la estructura
             self._search_recent(filters["recent_months"], "month", only_local)
-        
         elif "recent_years" in filters:
             # Buscar por años recientes manteniendo la estructura
             self._search_recent(filters["recent_years"], "year", only_local)
@@ -499,7 +532,8 @@ class SearchHandler:
             "s:": "label",
             "rs:": "recent_weeks",
             "rm:": "recent_months",
-            "ra:": "recent_years"
+            "ra:": "recent_years",
+            "t:": "title"  # Añadir filtro para título
         }
         
         # Buscar cada prefijo en la consulta
@@ -523,6 +557,100 @@ class SearchHandler:
                 filters[filter_name] = filter_value
         
         return filters
+
+    def _search_songs_by_title(self, title_query, only_local=False):
+        """Busca canciones por título y las muestra en el árbol de resultados."""
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return
+        
+        try:
+            cursor = conn.cursor()
+            query_pattern = f"%{title_query}%"
+            
+            # Consulta para encontrar canciones por título
+            if only_local:
+                sql = """
+                    SELECT s.id, s.title, s.track_number, s.artist, s.album,
+                        s.genre, s.date, s.duration, s.file_path, s.origen,
+                        ar.id as artist_id, al.id as album_id
+                    FROM songs s
+                    LEFT JOIN artists ar ON s.artist = ar.name
+                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
+                    WHERE s.title LIKE ? AND s.origen = 'local'
+                    ORDER BY s.artist, s.album, s.track_number, s.title
+                """
+            else:
+                sql = """
+                    SELECT s.id, s.title, s.track_number, s.artist, s.album,
+                        s.genre, s.date, s.duration, s.file_path, s.origen,
+                        ar.id as artist_id, al.id as album_id
+                    FROM songs s
+                    LEFT JOIN artists ar ON s.artist = ar.name
+                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
+                    WHERE s.title LIKE ?
+                    ORDER BY s.artist, s.album, s.track_number, s.title
+                """
+            
+            print(f"SQL para búsqueda de títulos: {sql}")
+            cursor.execute(sql, (query_pattern,))
+            
+            # Obtener todas las filas
+            rows = cursor.fetchall()
+            print(f"Encontradas {len(rows)} canciones con título: {title_query}")
+            
+            # Convertir filas a diccionarios
+            songs = [dict(row) for row in rows]
+            
+            # Almacenar artistas y álbumes ya añadidos para evitar duplicados
+            artists_added = {}
+            albums_added = {}
+            
+            for song in songs:
+                # Obtener IDs de artista y álbum
+                artist_id = song.get('artist_id')
+                album_id = song.get('album_id')
+                
+                if not artist_id:
+                    print(f"Canción sin artista ID: {song.get('title')}")
+                    continue
+                    
+                # Añadir artista si no está ya en el árbol
+                if artist_id not in artists_added:
+                    artist = self.parent.db_manager.get_artist_details(artist_id)
+                    if artist:
+                        artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
+                        artists_added[artist_id] = artist_item
+                    else:
+                        print(f"No se encontró el artista con ID: {artist_id}")
+                        continue
+                
+                artist_item = artists_added.get(artist_id)
+                
+                # Añadir álbum si no está ya en el árbol
+                if album_id and (artist_id, album_id) not in albums_added:
+                    album = self.parent.db_manager.get_album_details(album_id)
+                    if album:
+                        album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                        albums_added[(artist_id, album_id)] = album_item
+                    else:
+                        print(f"No se encontró el álbum con ID: {album_id}")
+                        continue
+                
+                album_item = albums_added.get((artist_id, album_id))
+                
+                # Añadir canción al álbum
+                if album_item:
+                    self._add_filtered_song(song, album_item, only_local)
+                else:
+                    print(f"No se pudo añadir la canción {song.get('title')} al árbol")
+            
+        except sqlite3.Error as e:
+            print(f"Error en búsqueda de títulos: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            conn.close()
 
 
     def _search_by_genre(self, genre_query, only_local=False):
@@ -707,7 +835,7 @@ class SearchHandler:
             conn.close()
 
     def _search_by_label(self, label_query, only_local=False):
-        """Busca por sello discográfico manteniendo la estructura jerárquica."""
+        """Busca por sello discográfico creando una estructura jerárquica con el sello como nodo raíz."""
         conn = self.parent.db_manager._get_connection()
         if not conn:
             return
@@ -716,62 +844,113 @@ class SearchHandler:
             cursor = conn.cursor()
             query_pattern = f"%{label_query}%"
             
-            # Construir la consulta SQL
+            # Primero, obtener los sellos que coinciden con la búsqueda
             if only_local:
-                sql = """
-                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label,
-                        ar.id as artist_id, ar.name as artist_name
+                label_sql = """
+                    SELECT DISTINCT a.label
                     FROM albums a
-                    JOIN artists ar ON a.artist_id = ar.id
                     WHERE a.label LIKE ? AND a.origen = 'local'
-                    ORDER BY ar.name, a.year DESC
+                    ORDER BY a.label
                 """
             else:
-                sql = """
-                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label,
-                        ar.id as artist_id, ar.name as artist_name
+                label_sql = """
+                    SELECT DISTINCT a.label
                     FROM albums a
-                    JOIN artists ar ON a.artist_id = ar.id
                     WHERE a.label LIKE ?
-                    ORDER BY ar.name, a.year DESC
+                    ORDER BY a.label
                 """
             
-            cursor.execute(sql, (query_pattern,))
+            cursor.execute(label_sql, (query_pattern,))
+            labels = cursor.fetchall()
             
-            # Diccionario para almacenar los artistas ya añadidos
-            artists_added = {}
-            
-            for row in cursor.fetchall():
-                artist_id = row['artist_id']
+            # Para cada sello encontrado, crear un nodo raíz
+            for label_row in labels:
+                label_name = label_row['label']
+                if not label_name:
+                    continue
+                    
+                # Crear un item para el sello
+                label_item = QTreeWidgetItem(self.parent.results_tree_widget)
+                label_item.setText(0, f"Sello: {label_name}")
+                label_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'label', 'name': label_name})
                 
-                # Si el artista no está en nuestro diccionario, lo añadimos
-                if artist_id not in artists_added:
-                    # Obtener detalles del artista
+                # Consultar los artistas que tienen álbumes bajo este sello
+                if only_local:
+                    artist_sql = """
+                        SELECT DISTINCT ar.id as artist_id, ar.name as artist_name
+                        FROM albums a
+                        JOIN artists ar ON a.artist_id = ar.id
+                        WHERE a.label = ? AND a.origen = 'local'
+                        ORDER BY ar.name
+                    """
+                else:
+                    artist_sql = """
+                        SELECT DISTINCT ar.id as artist_id, ar.name as artist_name
+                        FROM albums a
+                        JOIN artists ar ON a.artist_id = ar.id
+                        WHERE a.label = ?
+                        ORDER BY ar.name
+                    """
+                
+                cursor.execute(artist_sql, (label_name,))
+                artists = cursor.fetchall()
+                
+                # Para cada artista, crear un nodo hijo bajo el sello
+                for artist_row in artists:
+                    artist_id = artist_row['artist_id']
+                    
+                    # Obtener detalles completos del artista
                     artist = self.parent.db_manager.get_artist_details(artist_id)
-                    if artist:
-                        # Añadir artista al árbol
-                        artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
-                        artists_added[artist_id] = artist_item
-                
-                # Obtener el item del artista
-                artist_item = artists_added.get(artist_id)
-                
-                if artist_item:
-                    # Crear objeto álbum y añadirlo al artista
-                    album = {
-                        'id': row['album_id'],
-                        'name': row['album_name'],
-                        'year': row['year'],
-                        'genre': row['genre'],
-                        'artist_id': artist_id
-                    }
+                    if not artist:
+                        continue
                     
-                    # Si 'label' está en las claves, añadirlo
-                    if 'label' in row.keys():
-                        album['label'] = row['label']
+                    # Crear un item para el artista bajo el sello
+                    artist_item = QTreeWidgetItem(label_item)
+                    artist_item.setText(0, artist.get('name', 'Unknown Artist'))
+                    artist_item.setText(1, str(artist.get('formed_year', '')) if artist.get('formed_year') else "")
+                    artist_item.setText(2, artist.get('origin', ''))
+                    artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'id': artist['id']})
                     
-                    # Añadir álbum al artista
-                    self._add_filtered_album(album, artist_item, only_local)
+                    # Consultar los álbumes de este artista para este sello
+                    if only_local:
+                        album_sql = """
+                            SELECT id, name, year, genre, total_tracks, origen
+                            FROM albums
+                            WHERE artist_id = ? AND label = ? AND origen = 'local'
+                            ORDER BY year DESC, name
+                        """
+                    else:
+                        album_sql = """
+                            SELECT id, name, year, genre, total_tracks, origen
+                            FROM albums
+                            WHERE artist_id = ? AND label = ?
+                            ORDER BY year DESC, name
+                        """
+                    
+                    cursor.execute(album_sql, (artist_id, label_name))
+                    albums = cursor.fetchall()
+                    
+                    # Para cada álbum, crear un nodo hijo bajo el artista
+                    for album_row in albums:
+                        # Convertir el objeto sqlite3.Row a diccionario para usar .get()
+                        album = self._row_to_dict(album_row)
+                        
+                        # Verificar filtro de solo local
+                        if only_local and album.get('origen') != 'local':
+                            continue
+                        
+                        # Añadir álbum al artista
+                        album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                        
+                        # Asegurarnos de que el álbum se haya añadido correctamente
+                        if album_item:
+                            # Ahora cargar las canciones de este álbum
+                            songs = self.parent.db_manager.get_album_songs(album['id'], only_local)
+                            for song in songs:
+                                self._add_filtered_song(song, album_item, only_local)
+                
+                # Expandir el nodo del sello para mostrar los artistas
+                label_item.setExpanded(True)
         
         except sqlite3.Error as e:
             print(f"Error en búsqueda por sello: {e}")

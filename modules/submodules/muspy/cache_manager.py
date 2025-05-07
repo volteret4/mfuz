@@ -24,11 +24,11 @@ class CacheManager:
             dict or None: Cached data if available and not expired, None otherwise
         """
         # Ensure cache directory exists
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "muspy_module")
+        cache_dir = Path(self.project_root, ".content", "cache", "muspy_module")
         os.makedirs(cache_dir, exist_ok=True)
         
         # Define cache file path
-        cache_file = os.path.join(cache_dir, f"{cache_type}_cache.json")
+        cache_file = Path(cache_dir, f"{cache_type}_cache.json")
         
         # If we're storing data
         if data is not None:
@@ -90,11 +90,11 @@ class CacheManager:
             dict or None: Cached data if available and not expired, None otherwise
         """
         # Ensure cache directory exists
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "muspy", "spotify")
+        cache_dir = Path(self.project_root, ".content", "cache", "muspy", "spotify")
         os.makedirs(cache_dir, exist_ok=True)
         
         # Define cache file path
-        cache_file = os.path.join(cache_dir, f"{cache_key}_cache.json")
+        cache_file = Path(cache_dir, f"{cache_key}_cache.json")
         
         # If we're storing data
         if data is not None:
@@ -149,15 +149,15 @@ class CacheManager:
         import glob
         from PyQt6.QtWidgets import QMessageBox
         
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "muspy_module")
+        cache_dir = Path(self.project_root, ".content", "cache", "muspy_module")
         
         if not os.path.exists(cache_dir):
             return
         
         try:
             # Find all LastFM cache files
-            lastfm_cache_files = glob.glob(os.path.join(cache_dir, "top_artists_*.json"))
-            lastfm_cache_files.extend(glob.glob(os.path.join(cache_dir, "loved_tracks_*.json")))
+            lastfm_cache_files = glob.glob(Path(cache_dir, "top_artists_*.json"))
+            lastfm_cache_files.extend(glob.glob(Path(cache_dir, "loved_tracks_*.json")))
             
             for cache_file in lastfm_cache_files:
                 try:
@@ -178,14 +178,14 @@ class CacheManager:
         import glob
         
         # Ensure cache directory exists
-        cache_dir = os.path.join(self.project_root, ".content", "cache", "muspy", "spotify")
+        cache_dir = Path(self.project_root, ".content", "cache", "muspy", "spotify")
         
         if not os.path.exists(cache_dir):
             return 0
         
         try:
             # Find all Spotify cache files
-            cache_files = glob.glob(os.path.join(cache_dir, "*_cache.json"))
+            cache_files = glob.glob(Path(cache_dir, "*_cache.json"))
             
             if not cache_files:
                 return 0

@@ -9,7 +9,7 @@ import re
 from tabulate import tabulate
 import sys
 import time
-
+from pathlib import Path
 
 
 
@@ -328,7 +328,7 @@ def copy_file(source_path, destination_folder):
     
     # Obtener solo el nombre del archivo sin la ruta
     filename = os.path.basename(source_path)
-    destination_path = os.path.join(destination_folder, filename)
+    destination_path = Path(destination_folder, filename)
     
     try:
         # Escapar comillas simples en las rutas
@@ -544,7 +544,7 @@ def main():
         # Reemplazar espacios con guiones bajos
         sanitized_name = sanitized_name.replace(' ', '_')
         # Crear la ruta completa
-        path_destino_flac = os.path.join(path_destino_flac_base, sanitized_name)
+        path_destino_flac = Path(path_destino_flac_base, sanitized_name)
     else:
         path_destino_flac = path_destino_flac_base
     

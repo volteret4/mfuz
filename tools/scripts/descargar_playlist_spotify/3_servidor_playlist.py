@@ -10,13 +10,13 @@ import time
 import logging
 from urllib.parse import parse_qs, urlparse
 import logging.handlers
-
+from pathlib import Path
 
 
 
 
 # Configurar logging para escribir a archivo y consola
-log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "servidor_playlist.log")
+log_file = Path(os.path.dirname(os.path.abspath(__file__)), "servidor_playlist.log")
 file_handler = logging.handlers.RotatingFileHandler(
     log_file, maxBytes=5*1024*1024, backupCount=3, encoding='utf-8'
 )
@@ -91,7 +91,7 @@ class TorrentProcessor:
         logger.info(f"Procesando descarga: Album '{album}' en ruta '{ruta}'")
         
         # Ruta completa donde buscar los archivos
-        ruta_completa = os.path.join(self.carpeta_descargas_qbitorrent, ruta)
+        ruta_completa = Path(self.carpeta_descargas_qbitorrent, ruta)
         logger.info(f"Buscando archivos en la ruta completa: {ruta_completa}")
         
         if not os.path.exists(ruta_completa):
@@ -141,7 +141,7 @@ class TorrentProcessor:
         for root, dirs, files in os.walk(ruta_completa):
             for file in files:
                 if file.lower().endswith(('.mp3', '.flac', '.wav', '.ogg', '.m4a')):
-                    archivos_musica.append(os.path.join(root, file))
+                    archivos_musica.append(Path(root, file))
         
         if not archivos_musica:
             logger.warning(f"No se encontraron archivos de música en '{ruta_completa}'")
@@ -167,13 +167,13 @@ class TorrentProcessor:
                 
                 if patron.search(nombre_archivo):
                     # Usar la ruta como carpeta destino
-                    album_dir = os.path.join(self.output_path, ruta)
+                    album_dir = Path(self.output_path, ruta)
                     
                     # Crear carpetas si no existen
                     os.makedirs(album_dir, exist_ok=True)
                     
                     # Destino final
-                    destino = os.path.join(album_dir, nombre_archivo)
+                    destino = Path(album_dir, nombre_archivo)
                     
                     # Copiar archivo
                     try:

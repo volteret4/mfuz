@@ -181,6 +181,7 @@
         "ui/base_datos/db_creator_base.ui",
         "ui/muspy/lastfm_bluesky_dialog.ui",
         "ui/muspy/muspy_credentials.ui",
-        "ui/stats/estadisticas_module.ui"
+        "ui/stats/estadisticas_module.ui",
+        "ui/conciertos/conciertos_advanced_settings.ui"
     ]
 }

@@ -4,6 +4,7 @@ import argparse
 import json
 import importlib.util
 from base_module import BaseModule, PROJECT_ROOT
+from pathlib import Path
 
 def load_script_module(script_path):
     """Carga dinámicamente un script Python como módulo"""
@@ -24,7 +25,7 @@ def resolve_paths_recursive(obj, PROJECT_ROOT):
     if isinstance(obj, dict):
         for key, value in obj.items():
             if key.endswith('_path') and isinstance(value, str) and not os.path.isabs(value):
-                obj[key] = os.path.join(PROJECT_ROOT, value)
+                obj[key] = Path(PROJECT_ROOT, value)
             else:
                 obj[key] = resolve_paths_recursive(value, PROJECT_ROOT)
         return obj
@@ -80,7 +81,7 @@ def main():
 
     # Ejecutar cada script
     for script_name in scripts_to_run:
-        script_path = os.path.join(PROJECT_ROOT, "db", f"{script_name}.py")
+        script_path = Path(PROJECT_ROOT, "db", f"{script_name}.py")
         if not os.path.exists(script_path):
             print(f"Error: No se encontró el script: {script_path}")
             continue

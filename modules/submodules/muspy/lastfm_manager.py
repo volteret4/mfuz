@@ -5,6 +5,7 @@ import json
 import requests
 import logging
 import time
+from pathlib import Path
 from datetime import datetime
 from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QProgressDialog, QApplication, QDialog,
                             QHBoxLayout, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView,
@@ -921,7 +922,7 @@ class LastFMManager:
 
         try:
             # Get the selected artists from the JSON file
-            json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+            json_path = Path(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
             if not os.path.exists(json_path):
                 self.ui_callback.append("No selected artists found. Please load artists first.")
                 return

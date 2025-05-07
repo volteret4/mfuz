@@ -406,94 +406,6 @@
            </spacer>
           </item>
           <item>
-           <widget class="QStackedWidget" name="details_stacked_widget">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>200</height>
-             </size>
-            </property>
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <widget class="QWidget" name="page">
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QScrollArea" name="metadata_scroll">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>200</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Shape::NoFrame</enum>
-                </property>
-                <property name="lineWidth">
-                 <number>0</number>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignJustify|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_2">
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QWidget" name="widget" native="true"/>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item>
            <widget class="QFrame" name="buttons_container">
             <property name="minimumSize">
              <size>
@@ -546,7 +458,7 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item row="0" column="0">
+             <item row="0" column="3">
               <widget class="QPushButton" name="play_button">
                <property name="minimumSize">
                 <size>
@@ -604,7 +516,266 @@
                </property>
               </widget>
              </item>
+             <item row="6" column="3">
+              <widget class="QPushButton" name="muspy_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="QPushButton" name="feeds_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="0">
+              <widget class="QPushButton" name="add_to_queue">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="contextMenuPolicy">
+                <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;añadir a playlist spotify&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+	border: none;
+}
+QPushButton:pressed {{
+	background-color: {theme['selection']};
+	border: none;
+}}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="play_button_3">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/rew</normaloff>:/services/rew</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="shortcut">
+                <string>Alt+Shift+R</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="4">
+              <widget class="QPushButton" name="folder_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
               <widget class="QPushButton" name="spotify_button">
                <property name="minimumSize">
                 <size>
@@ -658,7 +829,111 @@ QPushButton:pressed {{
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
+             <item row="3" column="3">
+              <widget class="QPushButton" name="muspy_button_2">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/stop</normaloff>:/services/stop</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="4">
+              <widget class="QPushButton" name="play_button_4">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/ff</normaloff>:/services/ff</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="shortcut">
+                <string>Alt+Shift+R</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="4">
               <widget class="QPushButton" name="jaangle_button">
                <property name="minimumSize">
                 <size>
@@ -704,56 +979,7 @@ QPushButton:hover {
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="folder_button">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="focusPolicy">
-                <enum>Qt::FocusPolicy::NoFocus</enum>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="1">
+             <item row="5" column="3">
               <widget class="QPushButton" name="scrobble_button">
                <property name="minimumSize">
                 <size>
@@ -799,99 +1025,7 @@ QPushButton:hover {
                </property>
               </widget>
              </item>
-             <item row="5" column="1">
-              <widget class="QPushButton" name="feeds_button">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QPushButton" name="muspy_button_2">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/musico3</normaloff>:/services/musico3</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
+             <item row="6" column="0">
               <widget class="QPushButton" name="search_online_button_3">
                <property name="minimumSize">
                 <size>
@@ -975,8 +1109,8 @@ QPushButton:hover {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1006</width>
-                   <height>457</height>
+                   <width>1048</width>
+                   <height>471</height>
                   </rect>
                  </property>
                  <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -2661,34 +2795,6 @@ QPushButton:hover {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QGroupBox" name="lyrics_group">
-                    <property name="title">
-                     <string>Letra</string>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_9">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QLabel" name="lyrics_label">
-                       <property name="text">
-                        <string>Titulo</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </widget>
-                  </item>
-                  <item>
                    <widget class="QGroupBox" name="artist_group">
                     <property name="title">
                      <string>Wikipedia del artista</string>
@@ -2759,41 +2865,347 @@ QPushButton:hover {
                <number>0</number>
               </property>
               <item>
-               <widget class="QScrollArea" name="scrollArea">
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <widget class="QWidget" name="scrollAreaWidgetContents">
-                 <property name="geometry">
-                  <rect>
-                   <x>0</x>
-                   <y>0</y>
-                   <width>1006</width>
-                   <height>489</height>
-                  </rect>
+               <widget class="QWidget" name="widget_2" native="true">
+                <layout class="QVBoxLayout" name="verticalLayout_23">
+                 <property name="leftMargin">
+                  <number>0</number>
                  </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_12">
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QGroupBox" name="feeds_groupbox">
-                    <property name="title">
-                     <string>Feeds</string>
-                    </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QStackedWidget" name="stackedWidget_feeds">
+                   <widget class="QWidget" name="feeds_artists">
+                    <layout class="QVBoxLayout" name="verticalLayout_12">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QScrollArea" name="scrollArea_artists">
+                       <property name="widgetResizable">
+                        <bool>true</bool>
+                       </property>
+                       <widget class="QWidget" name="scrollAreaWidgetContent_artists">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>0</y>
+                          <width>84</width>
+                          <height>117</height>
+                         </rect>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_15">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QGroupBox" name="groupBox_artists">
+                           <property name="title">
+                            <string>GroupBox</string>
+                           </property>
+                           <layout class="QVBoxLayout" name="verticalLayout_20">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <item>
+                             <widget class="QLabel" name="artistas_label">
+                              <property name="text">
+                               <string>Artistas</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="artistas_textEdit"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </widget>
+                     </item>
+                    </layout>
                    </widget>
-                  </item>
-                 </layout>
-                </widget>
+                   <widget class="QWidget" name="feeds_albums">
+                    <layout class="QVBoxLayout" name="verticalLayout_16">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QScrollArea" name="scrollArea_albums">
+                       <property name="widgetResizable">
+                        <bool>true</bool>
+                       </property>
+                       <widget class="QWidget" name="scrollAreaWidgetContents_albums">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>0</y>
+                          <width>84</width>
+                          <height>118</height>
+                         </rect>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_17">
+                         <property name="spacing">
+                          <number>6</number>
+                         </property>
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QGroupBox" name="groupBox_albums">
+                           <property name="title">
+                            <string>GroupBox</string>
+                           </property>
+                           <layout class="QVBoxLayout" name="verticalLayout_21">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <item>
+                             <widget class="QLabel" name="albums_label">
+                              <property name="text">
+                               <string>Álbumes</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="albums_textEdit"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                   <widget class="QWidget" name="feeds_menciones">
+                    <layout class="QVBoxLayout" name="verticalLayout_19">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QScrollArea" name="scrollArea_menciones">
+                       <property name="widgetResizable">
+                        <bool>true</bool>
+                       </property>
+                       <widget class="QWidget" name="scrollAreaWidgetContents_menciones">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>0</y>
+                          <width>145</width>
+                          <height>117</height>
+                         </rect>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_18">
+                         <property name="leftMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>0</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>0</number>
+                         </property>
+                         <item>
+                          <widget class="QGroupBox" name="groupBox_menciones">
+                           <property name="title">
+                            <string>GroupBox</string>
+                           </property>
+                           <layout class="QVBoxLayout" name="verticalLayout_22">
+                            <property name="leftMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                             <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                             <number>0</number>
+                            </property>
+                            <item>
+                             <widget class="QLabel" name="menciones_label">
+                              <property name="text">
+                               <string>Menciones en otros posts</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QTextEdit" name="menciones_textEdit"/>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </widget>
+                     </item>
+                    </layout>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_3" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_4">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QPushButton" name="artists_pushButton">
+                      <property name="text">
+                       <string>artistas</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="albums_pushButton">
+                      <property name="text">
+                       <string>álbums</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="menciones_pushButton">
+                      <property name="text">
+                       <string>menciones</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="mas_info_page">
+             <layout class="QVBoxLayout" name="verticalLayout_13">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="title">
+                 <string>GroupBox</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_metadata">
+                   <property name="title">
+                    <string>Metadata</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_inforelease">
+                   <property name="title">
+                    <string>Info release</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QGroupBox" name="groupBox_infosello">
+                   <property name="title">
+                    <string>Info sello</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>

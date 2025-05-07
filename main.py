@@ -258,7 +258,7 @@ class TabManager(QMainWindow):
     def init_ui(self):
         """Inicializa la interfaz principal."""
         # Cargar la UI desde el archivo
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "tab_manager.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "tab_manager.ui")
         if os.path.exists(ui_file_path):
             try:
                 # Cargar el archivo UI
@@ -597,7 +597,7 @@ class TabManager(QMainWindow):
                 return
                 
             # 1. Cargar el panel de información principal (enlaces, wikipedia, lastfm, etc.)
-            info_ui_path = os.path.join(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
+            info_ui_path = Path(PROJECT_ROOT, "ui", "music_fuzzy_info_panel.ui")
             if os.path.exists(info_ui_path):
                 try:
                     self.info_widget = QWidget()

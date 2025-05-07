@@ -10,6 +10,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
+from pathlib import Path
 
 from base_module import PROJECT_ROOT
 #from modules.submodules.muspy import cache_manager
@@ -230,7 +231,7 @@ class SpotifyManager:
 
             
             # Setup cache path
-            cache_path = os.path.join(PROJECT_ROOT, ".content", "cache", ".spotify_cache")
+            cache_path = Path(PROJECT_ROOT, ".content", "cache", ".spotify_cache")
             # Set up the OAuth object
             sp_oauth = SpotifyOAuth(
                 client_id=self.spotify_client_id,
@@ -1078,7 +1079,7 @@ class SpotifyManager:
             return
         
         # Path to the JSON file
-        json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+        json_path = Path(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
         
         # Check if file exists
         if not os.path.exists(json_path):
@@ -1520,7 +1521,7 @@ class SpotifyManager:
                 return
             
             # Get the selected artists from JSON
-            json_path = os.path.join(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
+            json_path = Path(PROJECT_ROOT, ".content", "cache", "artists_selected.json")
             if not os.path.exists(json_path):
                 self.ui_callback.append("No selected artists found. Please load artists first.")
                 return

@@ -122,7 +122,7 @@ class MusicQuiz(BaseModule):
     def init_ui(self):
         """Inicializa la interfaz de usuario del módulo."""
         # Cargar la UI desde el archivo
-        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_module.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "jaangle_module.ui")
         
         if os.path.exists(ui_file_path):
             try:
@@ -231,7 +231,7 @@ class MusicQuiz(BaseModule):
             cols = 3
         
         # Ruta al archivo UI de la opción
-        option_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_option_item.ui")
+        option_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_option_item.ui")
         
         for i in range(self.options_count):
             row, col = divmod(i, cols)
@@ -770,7 +770,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -908,7 +908,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_album_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_album_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -1082,7 +1082,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_genre_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_genre_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -1844,7 +1844,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
 
             # Cargar la UI del diálogo
-            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_session_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_session_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -2191,7 +2191,7 @@ class MusicQuiz(BaseModule):
         try:
             dialog = QDialog(self)
 
-            dialog_ui_path = os.path.join(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic

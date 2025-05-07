@@ -61,7 +61,7 @@ class StatsModule(BaseModule):
     def init_ui(self):
         """Inicializa la interfaz de usuario utilizando el archivo UI."""
         # Intentamos cargar desde el archivo UI
-        ui_path = os.path.join(PROJECT_ROOT, "ui", "stats", "stats_module.ui")
+        ui_path = Path(PROJECT_ROOT, "ui", "stats", "stats_module.ui")
         
         if os.path.exists(ui_path):
             try:
@@ -302,9 +302,9 @@ class StatsModule(BaseModule):
         if not self.db_path:
             # Intentar encontrar la base de datos en ubicaciones típicas
             possible_paths = [
-                os.path.join(os.path.dirname(__file__), "data", "music.db"),
-                os.path.join(PROJECT_ROOT, "data", "music.db"),
-                os.path.join(os.path.expanduser("~"), ".config", "musicapp", "music.db")
+                Path(os.path.dirname(__file__), "data", "music.db"),
+                Path(PROJECT_ROOT, "data", "music.db"),
+                Path(os.path.expanduser("~"), ".config", "musicapp", "music.db")
             ]
             
             for path in possible_paths:
@@ -4807,9 +4807,9 @@ class StatsModule(BaseModule):
                 if not self.db_path or not os.path.exists(self.db_path):
                     # Buscar la base de datos en ubicaciones comunes
                     possible_paths = [
-                        os.path.join(os.path.dirname(__file__), "data", "music.db"),
-                        os.path.join(PROJECT_ROOT, "data", "music.db"),
-                        os.path.join(os.path.expanduser("~"), ".config", "musicapp", "music.db")
+                        Path(os.path.dirname(__file__), "data", "music.db"),
+                        Path(PROJECT_ROOT, "data", "music.db"),
+                        Path(os.path.expanduser("~"), ".config", "musicapp", "music.db")
                     ]
                     
                     for path in possible_paths:
