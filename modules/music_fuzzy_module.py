@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QTreeWidgetItem, QPushButton, QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox
+from PyQt6.QtWidgets import QWidget, QTreeWidgetItem, QPushButton, QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox, QRadioButton
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
 import os
@@ -205,11 +205,11 @@ class MusicFuzzyModule(BaseModule):
                 # Añadir widget al layout
                 layout.addWidget(advanced_widget)
                 
-                # Obtener referencia al checkbox
-                self.only_local_files = advanced_widget.findChild(QCheckBox, "only_local_files")
+                # Obtener referencia al radio button (no al checkbox)
+                self.only_local_files = advanced_widget.findChild(QRadioButton, "only_local_files")
                 
                 if self.only_local_files:
-                    print("Checkbox 'only_local_files' encontrado")
+                    print("Radio button 'only_local_files' encontrado")
                     # Desconectar primero para evitar conexiones duplicadas
                     try:
                         self.only_local_files.toggled.disconnect()
@@ -221,12 +221,17 @@ class MusicFuzzyModule(BaseModule):
                     self.only_local_files.toggled.connect(self._save_checkbox_state)
                     
                     # Establecer el estado inicial desde la configuración cargada en __init__
-                    print(f"Estableciendo estado inicial del checkbox: {self.only_local_files_state}")
+                    print(f"Estableciendo estado inicial del radio button: {self.only_local_files_state}")
                     self.only_local_files.setChecked(bool(self.only_local_files_state))
+                    
+                    # También obtener la referencia al botón "show_all" para completar el grupo
+                    self.show_all = advanced_widget.findChild(QRadioButton, "show_all")
+                    if self.show_all:
+                        self.show_all.setChecked(not bool(self.only_local_files_state))
                 else:
-                    print("WARNING: Checkbox 'only_local_files' no encontrado en el archivo UI")
+                    print("WARNING: Radio button 'only_local_files' no encontrado en el archivo UI")
                     # Crearlo programáticamente como fallback
-                    self.only_local_files = QCheckBox("Mostrar solo archivos locales")
+                    self.only_local_files = QRadioButton("Mostrar solo archivos locales")
                     layout.addWidget(self.only_local_files)
                     self.only_local_files.toggled.connect(self.search_handler.perform_search)
                     self.only_local_files.toggled.connect(self._save_checkbox_state)
@@ -234,7 +239,7 @@ class MusicFuzzyModule(BaseModule):
             else:
                 print(f"Archivo UI de ajustes avanzados no encontrado: {ui_path}")
                 # Crear una UI básica como fallback
-                self.only_local_files = QCheckBox("Mostrar solo archivos locales")
+                self.only_local_files = QRadioButton("Mostrar solo archivos locales")
                 layout.addWidget(self.only_local_files)
                 self.only_local_files.toggled.connect(self.search_handler.perform_search)
                 self.only_local_files.toggled.connect(self._save_checkbox_state)
@@ -277,28 +282,34 @@ class MusicFuzzyModule(BaseModule):
                         # Add widget to layout
                         layout.addWidget(advanced_widget)
                         
-                        # Get reference to the checkbox
-                        self.only_local_files = advanced_widget.findChild(QCheckBox, "only_local_files")
+                        # Get reference to the radio button (not checkbox)
+                        self.only_local_files = advanced_widget.findChild(QRadioButton, "only_local_files")
                         
                         if self.only_local_files:
-                            print("Found only_local_files checkbox")
+                            print("Found only_local_files radio button")
                             
                             # Establecer el estado basado en la configuración
                             self.only_local_files.setChecked(self.only_local_files_state)
                             
                             # Connect to search and to save config
                             self.only_local_files.toggled.connect(self._on_only_local_toggled)
+                            
+                            # Also get reference to show_all button
+                            self.show_all = advanced_widget.findChild(QRadioButton, "show_all")
+                            if self.show_all:
+                                self.show_all.setChecked(not self.only_local_files_state)
+                                self.show_all.toggled.connect(self._on_show_all_toggled)
                         else:
-                            print("WARNING: Checkbox 'only_local_files' not found in the UI file")
+                            print("WARNING: Radio button 'only_local_files' not found in the UI file")
                             # Create it programmatically as a fallback
-                            self.only_local_files = QCheckBox("Show only local files")
+                            self.only_local_files = QRadioButton("Show only local files")
                             layout.addWidget(self.only_local_files)
                             self.only_local_files.setChecked(self.only_local_files_state)
                             self.only_local_files.toggled.connect(self._on_only_local_toggled)
                     else:
                         print(f"Advanced settings UI file not found: {ui_path}")
                         # Create a basic UI programmatically as fallback
-                        self.only_local_files = QCheckBox("Show only local files")
+                        self.only_local_files = QRadioButton("Show only local files")
                         layout.addWidget(self.only_local_files)
                         self.only_local_files.setChecked(self.only_local_files_state)
                         self.only_local_files.toggled.connect(self._on_only_local_toggled)
@@ -318,7 +329,7 @@ class MusicFuzzyModule(BaseModule):
             print("Radio button 'only_local_files' activado")
             self.only_local_state = True
             self._save_checkbox_state(True)
-            self.perform_search()
+            self.search_handler.perform_search()
 
     def _on_show_all_toggled(self, checked):
         """Manejador para el radio button 'show_all'."""
@@ -326,7 +337,7 @@ class MusicFuzzyModule(BaseModule):
             print("Radio button 'show_all' activado")
             self.only_local_state = False
             self._save_checkbox_state(False)
-            self.perform_search()
+            self.search_handler.perform_search()
 
 
     def _setup_link_buttons(self):
