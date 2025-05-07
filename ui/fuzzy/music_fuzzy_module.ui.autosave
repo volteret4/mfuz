@@ -406,94 +406,6 @@
            </spacer>
           </item>
           <item>
-           <widget class="QStackedWidget" name="details_stacked_widget">
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>200</height>
-             </size>
-            </property>
-            <property name="currentIndex">
-             <number>1</number>
-            </property>
-            <widget class="QWidget" name="page">
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QScrollArea" name="metadata_scroll">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>0</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>200</height>
-                 </size>
-                </property>
-                <property name="frameShape">
-                 <enum>QFrame::Shape::NoFrame</enum>
-                </property>
-                <property name="lineWidth">
-                 <number>0</number>
-                </property>
-                <property name="verticalScrollBarPolicy">
-                 <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-                </property>
-                <property name="horizontalScrollBarPolicy">
-                 <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-                </property>
-                <property name="widgetResizable">
-                 <bool>true</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignJustify|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="page_2">
-             <layout class="QVBoxLayout" name="verticalLayout_2">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <widget class="QWidget" name="widget" native="true"/>
-              </item>
-             </layout>
-            </widget>
-           </widget>
-          </item>
-          <item>
            <widget class="QFrame" name="buttons_container">
             <property name="minimumSize">
              <size>
@@ -546,7 +458,7 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item row="0" column="0">
+             <item row="0" column="3">
               <widget class="QPushButton" name="play_button">
                <property name="minimumSize">
                 <size>
@@ -604,7 +516,404 @@
                </property>
               </widget>
              </item>
+             <item row="6" column="3">
+              <widget class="QPushButton" name="muspy_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="4">
+              <widget class="QPushButton" name="feeds_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/rss</normaloff>:/services/rss</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
              <item row="3" column="0">
+              <widget class="QPushButton" name="add_to_queue_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="contextMenuPolicy">
+                <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
+               </property>
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;añadir a playlist spotify&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+	border: none;
+}
+QPushButton:pressed {{
+	background-color: {theme['selection']};
+	border: none;
+}}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="QPushButton" name="scrobble_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="4">
+              <widget class="QPushButton" name="jaangle_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/game</normaloff>:/services/game</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QPushButton" name="prev_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/rew</normaloff>:/services/rew</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="shortcut">
+                <string>Alt+Shift+R</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QPushButton" name="search_online_button_3">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/search_circulo</normaloff>:/services/search_circulo</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="4">
+              <widget class="QPushButton" name="folder_button">
+               <property name="minimumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>38</width>
+                 <height>38</height>
+                </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {{
+  border-radius: 25px;
+  border: none;
+  padding: 8px 16px;
+  margin: 2px
+}}
+QPushButton:hover {
+    background-color: {theme['button_hover']};
+    margin: 1px;
+    margin-top: 0px;
+    margin-bottom: 3px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="../../images.qrc">
+                 <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>36</width>
+                 <height>36</height>
+                </size>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
               <widget class="QPushButton" name="spotify_button">
                <property name="minimumSize">
                 <size>
@@ -658,54 +967,8 @@ QPushButton:pressed {{
                </property>
               </widget>
              </item>
-             <item row="5" column="0">
-              <widget class="QPushButton" name="jaangle_button">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/game</normaloff>:/services/game</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QPushButton" name="folder_button">
+             <item row="0" column="4">
+              <widget class="QPushButton" name="next_button">
                <property name="minimumSize">
                 <size>
                  <width>38</width>
@@ -722,25 +985,31 @@ QPushButton:hover {
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
                <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
+                <string notr="true">            QPushButton {{
+                background-color: {theme['bg']};
+                border: 2px;
+                border-radius: 19px;
+            }}
+            
+            
+            QPushButton:hover {{
+                background-color: {theme['button_hover']};
+                margin: 1px;
+                margin-top: 0px;
+                margin-bottom: 3px;
+            }}
+            
+            QPushButton:pressed {{
+                background-color: {theme['selection']};
+                border: none;
+            }}</string>
                </property>
                <property name="text">
                 <string/>
                </property>
                <property name="icon">
                 <iconset resource="../../images.qrc">
-                 <normaloff>:/services/folder</normaloff>:/services/folder</iconset>
+                 <normaloff>:/services/ff</normaloff>:/services/ff</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -748,13 +1017,16 @@ QPushButton:hover {
                  <height>36</height>
                 </size>
                </property>
+               <property name="shortcut">
+                <string>Alt+Shift+R</string>
+               </property>
                <property name="flat">
                 <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QPushButton" name="scrobble_button">
+             <item row="3" column="3">
+              <widget class="QPushButton" name="stop_button">
                <property name="minimumSize">
                 <size>
                  <width>38</width>
@@ -786,145 +1058,7 @@ QPushButton:hover {
                </property>
                <property name="icon">
                 <iconset resource="../../images.qrc">
-                 <normaloff>:/services/lastfm</normaloff>:/services/lastfm</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="5" column="1">
-              <widget class="QPushButton" name="feeds_button">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/chicken2</normaloff>:/services/chicken2</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="0">
-              <widget class="QPushButton" name="muspy_button_2">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/musico3</normaloff>:/services/musico3</iconset>
-               </property>
-               <property name="iconSize">
-                <size>
-                 <width>36</width>
-                 <height>36</height>
-                </size>
-               </property>
-               <property name="flat">
-                <bool>true</bool>
-               </property>
-              </widget>
-             </item>
-             <item row="4" column="1">
-              <widget class="QPushButton" name="search_online_button_3">
-               <property name="minimumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>38</width>
-                 <height>38</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">QPushButton {{
-  border-radius: 25px;
-  border: none;
-  padding: 8px 16px;
-  margin: 2px
-}}
-QPushButton:hover {
-    background-color: {theme['button_hover']};
-    margin: 1px;
-    margin-top: 0px;
-    margin-bottom: 3px;
-}</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <property name="icon">
-                <iconset resource="../../images.qrc">
-                 <normaloff>:/services/search_circulo</normaloff>:/services/search_circulo</iconset>
+                 <normaloff>:/services/stop</normaloff>:/services/stop</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -2771,8 +2905,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>1048</width>
-                          <height>441</height>
+                          <width>84</width>
+                          <height>117</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -2849,8 +2983,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>1066</width>
-                          <height>459</height>
+                          <width>84</width>
+                          <height>118</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -2930,8 +3064,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>1048</width>
-                          <height>441</height>
+                          <width>145</width>
+                          <height>117</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_18">

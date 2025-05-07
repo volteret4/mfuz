@@ -280,23 +280,42 @@ class DatabaseManager:
             cursor = conn.cursor()
             if only_local:
                 cursor.execute("""
-                    SELECT id, name, year, genre, total_tracks, origen
+                    SELECT id, name, year, genre, total_tracks, origen, folder_path
                     FROM albums
                     WHERE artist_id = ? AND origen = 'local'
                     ORDER BY year DESC, name
                 """, (artist_id,))
             else:
                 cursor.execute("""
-                    SELECT id, name, year, genre, total_tracks, origen
+                    SELECT id, name, year, genre, total_tracks, origen, folder_path
                     FROM albums
                     WHERE artist_id = ?
                     ORDER BY year DESC, name
                 """, (artist_id,))
-                
+                    
             # Convert rows to dictionaries
-            return [self._row_to_dict(row) for row in cursor.fetchall()]
-        except sqlite3.Error as e:
+            albums = [self._row_to_dict(row) for row in cursor.fetchall()]
+            
+            # Verificar si cada álbum tiene folder_path
+            for album in albums:
+                if 'folder_path' not in album or not album['folder_path']:
+                    print(f"ADVERTENCIA: El álbum {album.get('name', 'Unknown')} (ID: {album.get('id')}) no tiene folder_path")
+                    
+                    # Intentar obtener folder_path directamente
+                    try:
+                        cursor.execute("SELECT folder_path FROM albums WHERE id = ?", (album['id'],))
+                        folder_path_result = cursor.fetchone()
+                        if folder_path_result and folder_path_result['folder_path']:
+                            album['folder_path'] = folder_path_result['folder_path']
+                            print(f"Obtenido folder_path directamente: {album['folder_path']}")
+                    except Exception as e:
+                        print(f"Error al obtener folder_path: {e}")
+            
+            return albums
+        except Exception as e:
             print(f"Error getting artist albums: {e}")
+            import traceback
+            traceback.print_exc()
             return []
         finally:
             conn.close()
@@ -326,12 +345,30 @@ class DatabaseManager:
             
             if result:
                 print(f"Found song with id {song_id}, keys: {result.keys()}")
+                # Asegurarse de que result sea un diccionario con los campos accesibles
+                song_dict = self._row_to_dict(result)
+                
+                # Verificar si file_path existe y tiene valor
+                if 'file_path' in song_dict and song_dict['file_path']:
+                    print(f"Song file_path: {song_dict['file_path']}")
+                else:
+                    print(f"ADVERTENCIA: La canción con ID {song_id} no tiene file_path o file_path está vacío")
+                    
+                    # Intentar obtener file_path directamente si no está en el resultado
+                    cursor.execute("SELECT file_path FROM songs WHERE id = ?", (song_id,))
+                    file_path_result = cursor.fetchone()
+                    if file_path_result and file_path_result['file_path']:
+                        song_dict['file_path'] = file_path_result['file_path']
+                        print(f"Obtenido file_path directamente: {song_dict['file_path']}")
+                
+                return song_dict
             else:
                 print(f"No song found with id {song_id}")
-                
-            return result
-        except sqlite3.Error as e:
+                return None
+        except Exception as e:
             print(f"Error getting song details: {e}")
+            import traceback
+            traceback.print_exc()
             return None
         finally:
             conn.close()
