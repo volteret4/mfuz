@@ -313,20 +313,20 @@ class MusicFuzzyModule(BaseModule):
         
 
     def _on_only_local_toggled(self, checked):
-        """Handle checkbox state change - update search and save config"""
-        # Actualizar nuestra variable de estado
-        self.only_local_files_state = checked
-        
-        # Actualizar el estado en el search handler
-        if hasattr(self, 'search_handler'):
-            self.search_handler.set_only_local(checked)
-        
-        # Realizar búsqueda (si es necesario) 
-        if hasattr(self, 'search_handler'):
-            self.search_handler.perform_search()
-        
-        # Guardar configuración
-        self._save_checkbox_state(checked)
+        """Manejador para el radio button 'only_local_files'."""
+        if checked:
+            print("Radio button 'only_local_files' activado")
+            self.only_local_state = True
+            self._save_checkbox_state(True)
+            self.perform_search()
+
+    def _on_show_all_toggled(self, checked):
+        """Manejador para el radio button 'show_all'."""
+        if checked:
+            print("Radio button 'show_all' activado")
+            self.only_local_state = False
+            self._save_checkbox_state(False)
+            self.perform_search()
 
 
     def _setup_link_buttons(self):
