@@ -95,11 +95,15 @@ class SearchHandler:
         # Clear the tree first
         self.parent.results_tree_widget.clear()
         
+        print(f"Realizando búsqueda simple con query: '{query}', only_local: {only_local}")
+        
         # Search artists
         artists = self.parent.db_manager.search_artists(query, only_local)
+        print(f"Encontrados {len(artists)} artistas que coinciden con '{query}'")
         
         # For each artist, add them to the tree and load their local content
         for artist in artists:
+            print(f"Añadiendo artista: {artist.get('name')}, ID: {artist.get('id')}")
             artist_item = self._add_filtered_artist(artist, only_local)
         
         # Search albums that match the query directly
@@ -107,73 +111,102 @@ class SearchHandler:
         print(f"Encontrados {len(albums)} álbumes que coinciden con '{query}'")
         
         for album in albums:
+            print(f"Procesando álbum: {album.get('name')}, ID: {album.get('id')}")
             # Get the artist
             artist_id = album.get('artist_id')
+            print(f"  Artista del álbum - ID: {artist_id}")
+            
             if artist_id:
                 # Check if this artist is already in the tree
                 artist_item = self._find_artist_item(artist_id)
                 
                 # If not, add the artist first
                 if not artist_item:
+                    print(f"  Artista no encontrado en el árbol, buscando detalles para ID: {artist_id}")
                     artist = self.parent.db_manager.get_artist_details(artist_id)
                     if artist:
+                        print(f"  Añadiendo artista: {artist.get('name')}")
                         artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
-                        print(f"Añadido artista: {artist.get('name')} para álbum: {album.get('name')}")
+                    else:
+                        print(f"  No se encontraron detalles para el artista con ID: {artist_id}")
+                else:
+                    print(f"  Artista ya existe en el árbol")
                 
                 # Add the album if we have a valid artist item
                 if artist_item:
-                    print(f"Añadiendo álbum: {album.get('name')} al artista: {artist_item.text(0)}")
-                    # Explícitamente establecer load_content=True para cargar todas las canciones
-                    album_item = self._add_filtered_album(album, artist_item, only_local, load_content=True)
+                    print(f"  Añadiendo álbum {album.get('name')} al artista")
+                    album_item = self._add_filtered_album(album, artist_item, only_local)
                     
-                    # Verificar que el álbum se haya añadido correctamente
                     if album_item:
-                        print(f"Álbum añadido correctamente, tiene {album_item.childCount()} canciones")
-                        # Si no hay canciones, forzar la carga explícitamente
-                        if album_item.childCount() == 0:
-                            print(f"Cargando canciones para el álbum ID: {album.get('id')}")
-                            songs = self.parent.db_manager.get_album_songs(album.get('id'), only_local)
-                            print(f"Encontradas {len(songs)} canciones para el álbum")
-                            for song in songs:
-                                self._add_filtered_song(song, album_item, only_local)
+                        print(f"  Álbum añadido correctamente, cargando canciones...")
+                        songs = self.parent.db_manager.get_album_songs(album['id'], only_local)
+                        print(f"  Encontradas {len(songs)} canciones para el álbum {album.get('name')}")
+                        
+                        for song in songs:
+                            print(f"    Añadiendo canción: {song.get('title')}")
+                            song_item = self._add_filtered_song(song, album_item, only_local)
+                            if not song_item:
+                                print(f"    ADVERTENCIA: No se pudo añadir la canción {song.get('title')}")
                     else:
-                        print(f"ERROR: No se pudo añadir el álbum: {album.get('name')}")
-                else:
-                    print(f"ERROR: No se encontró artist_item para el álbum: {album.get('name')}")
+                        print(f"  ERROR: No se pudo añadir el álbum {album.get('name')} al árbol")
             else:
-                print(f"ERROR: El álbum no tiene artist_id: {album}")
+                print(f"  ERROR: El álbum {album.get('name')} no tiene un artist_id válido")
         
         # Search songs that match the query directly
         songs = self.parent.db_manager.search_songs(query, only_local)
+        print(f"Encontradas {len(songs)} canciones que coinciden con '{query}'")
+        
         for song in songs:
             # Find or add artist and album
             artist_id = song.get('artist_id')
             album_id = song.get('album_id')
             
+            print(f"Procesando canción: {song.get('title')}, artist_id: {artist_id}, album_id: {album_id}")
+            
             if artist_id:
                 # Find or add artist
                 artist_item = self._find_artist_item(artist_id)
                 if not artist_item:
+                    print(f"  Artista no encontrado en el árbol, buscando detalles para ID: {artist_id}")
                     artist = self.parent.db_manager.get_artist_details(artist_id)
                     if artist:
+                        print(f"  Añadiendo artista: {artist.get('name')}")
                         artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
+                    else:
+                        print(f"  No se encontraron detalles para el artista con ID: {artist_id}")
                 
                 if artist_item and album_id:
                     # Find or add album
                     album_item = self._find_album_item(artist_item, album_id)
                     if not album_item:
+                        print(f"  Álbum no encontrado en el árbol, buscando detalles para ID: {album_id}")
                         album = self.parent.db_manager.get_album_details(album_id)
                         if album:
-                            album_item = self._add_filtered_album(album, artist_item, only_local, load_content=True)
+                            print(f"  Añadiendo álbum: {album.get('name')}")
+                            album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                        else:
+                            print(f"  No se encontraron detalles para el álbum con ID: {album_id}")
                     
                     # Add song to album
                     if album_item:
-                        self._add_filtered_song(song, album_item, only_local)
+                        print(f"  Añadiendo canción: {song.get('title')} al álbum")
+                        song_item = self._add_filtered_song(song, album_item, only_local)
+                        if not song_item:
+                            print(f"  ERROR: No se pudo añadir la canción al álbum")
+                    else:
+                        print(f"  ERROR: No se pudo encontrar o crear el álbum para la canción")
+                elif not album_id:
+                    print(f"  ADVERTENCIA: La canción {song.get('title')} no tiene album_id")
+            else:
+                print(f"  ERROR: La canción {song.get('title')} no tiene artist_id")
         
         # Expand top-level items
-        for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+        top_count = self.parent.results_tree_widget.topLevelItemCount()
+        print(f"Expanding {top_count} elementos de nivel superior")
+        for i in range(top_count):
             self.parent.results_tree_widget.topLevelItem(i).setExpanded(True)
-
+        
+        print("Búsqueda simple completada")
 
 
     def _find_artist_item(self, artist_id):
@@ -187,11 +220,14 @@ class SearchHandler:
 
     def _find_album_item(self, artist_item, album_id):
         """Find an album item under an artist by ID."""
+        print(f"Buscando álbum con ID {album_id} bajo el artista")
         for i in range(artist_item.childCount()):
             item = artist_item.child(i)
             data = item.data(0, Qt.ItemDataRole.UserRole)
             if data and data.get('type') == 'album' and data.get('id') == album_id:
+                print(f"Álbum encontrado")
                 return item
+        print(f"Álbum con ID {album_id} no encontrado bajo el artista")
         return None
 
     def _add_filtered_artist(self, artist, only_local=False, load_content=True):
@@ -223,48 +259,55 @@ class SearchHandler:
     def _add_filtered_album(self, album, artist_item, only_local=False, load_content=True):
         """Add an album to an artist with filtered content."""
         # Skip non-local albums if filtering is enabled
-        if only_local and album.get('origen') != 'local':
-            print(f"Saltando álbum no local: {album.get('name')}")
-            return None
+        if only_local and ('origen' in album and album['origen'] != 'local'):
+            print(f"Verificando si el álbum tiene canciones locales: {album['name']}, ID: {album['id']}")
             
+            # Obtener canciones del álbum para verificar si hay alguna local
+            songs = self.parent.db_manager.get_album_songs(album['id'], only_local=True)
+            
+            # Si hay canciones locales, mostrar el álbum aunque no sea local
+            if not songs or len(songs) == 0:
+                print(f"Saltando álbum no local sin canciones locales: {album['name']}")
+                return None
+            else:
+                print(f"Álbum no local pero con {len(songs)} canciones locales, mostrando: {album['name']}")
+        
         # Check if album is already added
         for i in range(artist_item.childCount()):
             item = artist_item.child(i)
             data = item.data(0, Qt.ItemDataRole.UserRole)
             if data and data.get('type') == 'album' and data.get('id') == album['id']:
-                print(f"Álbum ya añadido: {album.get('name')}")
+                print(f"Álbum ya añadido: {album['name']}")
                 return item
         
         # Create album item
+        print(f"Creando nuevo item de álbum: {album['name']}")
         album_item = QTreeWidgetItem(artist_item)
-        album_item.setText(0, album.get('name', 'Unknown Album'))
-        album_item.setText(1, str(album.get('year', '')) if album.get('year') else "")
-        album_item.setText(2, album.get('genre', ''))
+        album_item.setText(0, album['name'] if 'name' in album else 'Unknown Album')
+        album_item.setText(1, str(album['year']) if 'year' in album and album['year'] else "")
+        album_item.setText(2, album['genre'] if 'genre' in album else "")
         
         # Store album ID in the item
         album_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'album', 'id': album['id']})
         
-        print(f"Álbum creado: {album.get('name')}, ID: {album.get('id')}")
-        
         # Load album's songs if requested
         if load_content:
-            print(f"Cargando canciones para el álbum: {album.get('name')}")
-            # Get songs for this album
+            print(f"Cargando canciones para el álbum: {album['name']}")
+            # Get songs for this album (usando only_local si está activado)
             songs = self.parent.db_manager.get_album_songs(album['id'], only_local)
-            print(f"Encontradas {len(songs)} canciones para álbum ID: {album['id']}")
+            print(f"Encontradas {len(songs)} canciones para el álbum")
             
             # Add songs to album
             for song in songs:
+                title = song['title'] if 'title' in song else 'Unknown Title'
+                print(f"Añadiendo canción: {title} al álbum")
                 song_item = self._add_filtered_song(song, album_item, only_local)
-                if song_item:
-                    print(f"Canción añadida: {song.get('title')}")
-                else:
-                    print(f"ERROR: No se pudo añadir canción: {song.get('title')}")
+                if not song_item:
+                    print(f"ERROR: No se pudo añadir la canción {title} al álbum")
         else:
-            print(f"ADVERTENCIA: No se cargarán canciones para el álbum: {album.get('name')} (load_content=False)")
+            print(f"Saltando carga de canciones para el álbum: {album['name']}")
         
         return album_item
-
  
 
 
@@ -1189,31 +1232,30 @@ class SearchHandler:
         """Add a song to an album with filtering."""
         # Return immediately if album_item is None
         if album_item is None:
+            print("album_item es None, no se puede añadir canción")
             return None
-            
+                
         # Skip non-local songs if filtering is enabled
-        try:
-            if only_local:
-                if isinstance(song, sqlite3.Row) and 'origen' in song.keys() and song['origen'] != 'local':
-                    return None
-                elif isinstance(song, dict) and song.get('origen') != 'local':
-                    return None
-        except Exception as e:
-            print(f"Error checking 'origen' in song: {e}")
+        origen = None
+        if 'origen' in song:
+            origen = song['origen']
         
+        if only_local and origen != 'local':
+            print(f"Saltando canción no local: {song['title'] if 'title' in song else 'Unknown Title'}")
+            return None
+                
         # Get song title and track number safely
         title = None
         track_number = None
-        try:
-            if isinstance(song, sqlite3.Row):
-                title = song['title'] if 'title' in song.keys() else 'Unknown Title'
-                track_number = song['track_number'] if 'track_number' in song.keys() else ''
-            else:
-                title = song.get('title', 'Unknown Title')
-                track_number = song.get('track_number', '')
-        except Exception as e:
-            print(f"Error getting song title/track_number: {e}")
+        
+        if 'title' in song:
+            title = song['title']
+        else:
             title = 'Unknown Title'
+            
+        if 'track_number' in song:
+            track_number = song['track_number']
+        else:
             track_number = ''
         
         # Check if song is already added
@@ -1222,15 +1264,11 @@ class SearchHandler:
             # Check by ID if available
             data = item.data(0, Qt.ItemDataRole.UserRole)
             song_id = None
-            try:
-                if isinstance(song, sqlite3.Row):
-                    song_id = song['id'] if 'id' in song.keys() else None
-                else:
-                    song_id = song.get('id')
-            except Exception as e:
-                print(f"Error getting song id: {e}")
-                
+            if 'id' in song:
+                song_id = song['id']
+                    
             if data and data.get('type') == 'song' and data.get('id') == song_id:
+                print(f"Canción ya añadida: {title}")
                 return item
             
             # Or check by title and track number
@@ -1238,11 +1276,14 @@ class SearchHandler:
             if track_number and '.' in item_text:
                 parts = item_text.split('.', 1)
                 if parts[0].strip() == str(track_number) and parts[1].strip() == title:
+                    print(f"Canción ya añadida: {title}")
                     return item
             elif item_text == title:
+                print(f"Canción ya añadida: {title}")
                 return item
         
         # Create song item
+        print(f"Creando nuevo item de canción: {title}")
         song_item = QTreeWidgetItem(album_item)
         
         # Format title with track number if available
@@ -1253,41 +1294,27 @@ class SearchHandler:
         
         # Format duration
         duration_str = ""
-        try:
-            if isinstance(song, sqlite3.Row) and 'duration' in song.keys() and song['duration']:
+        if 'duration' in song and song['duration']:
+            try:
                 minutes = int(song['duration']) // 60
                 seconds = int(song['duration']) % 60
                 duration_str = f"{minutes}:{seconds:02d}"
-            elif isinstance(song, dict) and song.get('duration'):
-                minutes = int(song['duration']) // 60
-                seconds = int(song['duration']) % 60
-                duration_str = f"{minutes}:{seconds:02d}"
-        except Exception as e:
-            print(f"Error formatting duration: {e}")
+            except Exception as e:
+                print(f"Error formatting duration: {e}")
         
         song_item.setText(1, duration_str)
         
         # Get genre safely
         genre = ""
-        try:
-            if isinstance(song, sqlite3.Row):
-                genre = song['genre'] if 'genre' in song.keys() else ''
-            else:
-                genre = song.get('genre', '')
-        except Exception as e:
-            print(f"Error getting genre: {e}")
+        if 'genre' in song:
+            genre = song['genre']
         
         song_item.setText(2, genre)
         
         # Store song ID in the item
         song_id = None
-        try:
-            if isinstance(song, sqlite3.Row):
-                song_id = song['id'] if 'id' in song.keys() else None
-            else:
-                song_id = song.get('id')
-        except Exception as e:
-            print(f"Error getting song id for data storage: {e}")
+        if 'id' in song:
+            song_id = song['id']
         
         song_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'song', 'id': song_id})
         

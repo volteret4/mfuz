@@ -159,6 +159,7 @@ class DatabaseManager:
         """Get all songs in an album with optional local filtering."""
         conn = self._get_connection()
         if not conn:
+            print(f"ERROR: No se pudo conectar a la base de datos para obtener canciones del álbum {album_id}")
             return []
             
         try:
@@ -171,7 +172,10 @@ class DatabaseManager:
             """, (album_id,))
             album = cursor.fetchone()
             if not album:
+                print(f"ERROR: No se encontró el álbum con ID {album_id}")
                 return []
+            
+            print(f"Álbum encontrado: {album['name']}, artist_id: {album['artist_id']}")
             
             # Get the artist name
             cursor.execute("""
@@ -181,43 +185,74 @@ class DatabaseManager:
             """, (album['artist_id'],))
             artist = cursor.fetchone()
             artist_name = artist['name'] if artist else None
+            
+            if artist_name:
+                print(f"Artista encontrado: {artist_name}")
+            else:
+                print(f"ADVERTENCIA: No se encontró el artista con ID {album['artist_id']}")
                 
             # Now get songs for that album and artist
+            sql = ""
+            params = []
+            
             if artist_name:
                 if only_local:
-                    cursor.execute("""
+                    sql = """
                         SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
                         FROM songs
                         WHERE album = ? AND artist = ? AND origen = 'local'
                         ORDER BY track_number, title
-                    """, (album['name'], artist_name))
+                    """
+                    params = [album['name'], artist_name]
+                    print(f"Buscando canciones locales para álbum '{album['name']}' del artista '{artist_name}'")
                 else:
-                    cursor.execute("""
+                    sql = """
                         SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
                         FROM songs
                         WHERE album = ? AND artist = ?
                         ORDER BY track_number, title
-                    """, (album['name'], artist_name))
+                    """
+                    params = [album['name'], artist_name]
+                    print(f"Buscando todas las canciones para álbum '{album['name']}' del artista '{artist_name}'")
             else:
                 if only_local:
-                    cursor.execute("""
+                    sql = """
                         SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
                         FROM songs
                         WHERE album = ? AND origen = 'local'
                         ORDER BY track_number, title
-                    """, (album['name'],))
+                    """
+                    params = [album['name']]
+                    print(f"Buscando canciones locales para álbum '{album['name']}' sin artista específico")
                 else:
-                    cursor.execute("""
+                    sql = """
                         SELECT id, title, track_number, artist, duration, bitrate, genre, file_path, origen
                         FROM songs
                         WHERE album = ?
                         ORDER BY track_number, title
-                    """, (album['name'],))
+                    """
+                    params = [album['name']]
+                    print(f"Buscando todas las canciones para álbum '{album['name']}' sin artista específico")
+            
+            print(f"Ejecutando SQL: {sql}")
+            print(f"Con parámetros: {params}")
+            
+            cursor.execute(sql, params)
+            songs = cursor.fetchall()
+            
+            if songs:
+                for song in songs:
+                    # Usar acceso de diccionario normal para sqlite3.Row
+                    origen = song['origen'] if 'origen' in song.keys() else 'desconocido'
+                    print(f"Canción encontrada: {song['title']}, origen: {origen}")
+            
+            print(f"Encontradas {len(songs)} canciones para el álbum {album['name']}")
             
             # Convert rows to dictionaries
-            return [self._row_to_dict(row) for row in cursor.fetchall()]
+            result = [self._row_to_dict(row) for row in songs]
+            return result
         except sqlite3.Error as e:
-            print(f"Error getting album songs: {e}")
+            print(f"Error en get_album_songs para álbum ID {album_id}: {e}")
             return []
         finally:
             conn.close()
