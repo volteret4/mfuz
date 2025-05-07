@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import os
-from PyQt6.QtWidgets import QLabel
+from PyQt6.QtWidgets import QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget
 from pathlib import Path
 
 
@@ -143,6 +143,10 @@ class UIUpdater:
         # Update artist links if available
         if artist:
             self._update_artist_links(artist)
+
+        # Load feeds specific to this album
+        artist_id = album.get('artist_id') if album else None
+        self.load_artist_feeds(artist_id, album_id)
     
     def update_song_view(self, song_id):
         """Update UI with song details."""
@@ -210,17 +214,29 @@ class UIUpdater:
             # Get artist ID from database
             conn = self.parent.db_manager._get_connection()
             artist_id = None
-            if conn:
-                try:
-                    cursor = conn.cursor()
-                    cursor.execute("SELECT id FROM artists WHERE name = ?", (artist_name,))
-                    result = cursor.fetchone()
-                    if result:
-                        artist_id = result['id']
-                except Exception as e:
-                    print(f"Error getting artist ID: {e}")
-                finally:
-                    conn.close()
+            try:
+                # Intentar obtener artist_id desde la base de datos para esta canción
+                conn = self.parent.db_manager._get_connection()
+                if conn:
+                    try:
+                        cursor = conn.cursor()
+                        cursor.execute("""
+                            SELECT ar.id
+                            FROM songs s
+                            JOIN artists ar ON s.artist = ar.name
+                            WHERE s.id = ?
+                        """, (song_id,))
+                        result = cursor.fetchone()
+                        if result:
+                            artist_id = result['id']
+                            # Cargar feeds para este artista
+                            self.load_artist_feeds(artist_id)
+                    except Exception as e:
+                        print(f"Error obteniendo artist_id para cargar feeds: {e}")
+                    finally:
+                        conn.close()
+            except Exception as e:
+                print(f"Error general cargando feeds para canción: {e}")
             
             # If we found the artist ID, update artist view
             if artist_id:
@@ -260,6 +276,38 @@ class UIUpdater:
                     
                     # Update artist links
                     self._update_artist_links(artist)
+        
+        # Get artist_id and album_id for this song
+        artist_id = None
+        album_id = None
+        
+        # Intentar obtener artist_id y album_id desde la base de datos
+        conn = self.parent.db_manager._get_connection()
+        if conn:
+            try:
+                cursor = conn.cursor()
+                cursor.execute("""
+                    SELECT ar.id as artist_id, al.id as album_id
+                    FROM songs s
+                    LEFT JOIN artists ar ON s.artist = ar.name
+                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
+                    WHERE s.id = ?
+                """, (song_id,))
+                
+                result = cursor.fetchone()
+                if result:
+                    if 'artist_id' in result.keys():
+                        artist_id = result['artist_id']
+                    if 'album_id' in result.keys():
+                        album_id = result['album_id']
+            except Exception as e:
+                print(f"Error obteniendo artist_id/album_id para song: {e}")
+            finally:
+                conn.close()
+        
+        # Cargar feeds para la canción específica
+        print(f"Cargando feeds para canción id={song_id}, album_id={album_id}, artist_id={artist_id}")
+        self.load_artist_feeds(artist_id=artist_id, album_id=album_id, song_id=song_id)
     
     def _clear_content(self):
         """Clear previous content from UI and hide all groups."""
@@ -367,9 +415,13 @@ class UIUpdater:
         """Update album link buttons based on available links."""
         self.parent.link_manager.update_album_links(album)
 
-    def load_artist_feeds(self, artist_id):
-        """Load and display feeds for an artist."""
-        if not artist_id:
+    def load_artist_feeds(self, artist_id, album_id=None, song_id=None):
+        """Load and display feeds based on what was selected.
+        
+        If album_id or song_id is provided, show feeds specific to that item.
+        If only artist_id is provided, show feeds for all the artist's albums.
+        """
+        if not artist_id and not album_id and not song_id:
             return
         
         # Get connection to database
@@ -379,68 +431,104 @@ class UIUpdater:
         
         try:
             cursor = conn.cursor()
-            # Query feeds table for this artist
-            cursor.execute("""
-                SELECT id, entity_type, entity_id, post_title, post_url, content, post_date
-                FROM feeds
-                WHERE entity_type = 'artists' AND entity_id = ?
-                ORDER BY post_date DESC
-            """, (artist_id,))
             
-            feeds = cursor.fetchall()
+            # Variables para almacenar los feeds
+            artist_feeds = []
+            album_feeds = []
+            mention_feeds = []
             
-            # Clear existing feeds layout
-            if hasattr(self.parent, 'feeds_groupbox') and self.parent.feeds_groupbox:
-                # Clear existing widgets first
-                if self.parent.feeds_groupbox.layout():
-                    self._clear_layout(self.parent.feeds_groupbox.layout())
-                else:
-                    # Create layout if it doesn't exist
-                    from PyQt6.QtWidgets import QVBoxLayout
-                    layout = QVBoxLayout(self.parent.feeds_groupbox)
-                    self.parent.feeds_groupbox.setLayout(layout)
+            # Si tenemos un song_id, conseguimos su album_id
+            if song_id and not album_id:
+                try:
+                    cursor.execute("""
+                        SELECT album_id FROM songs
+                        WHERE id = ?
+                    """, (song_id,))
+                    result = cursor.fetchone()
+                    if result and 'album_id' in result:
+                        album_id = result['album_id']
+                except Exception as e:
+                    print(f"Error getting album_id from song: {e}")
             
-            # If no feeds found, show a message
-            if not feeds or len(feeds) == 0:
-                from PyQt6.QtWidgets import QLabel
-                no_feeds_label = QLabel("No hay feeds disponibles para este artista")
-                self.parent.feeds_groupbox.layout().addWidget(no_feeds_label)
-                return
-            
-            # Add feeds to the layout
-            from PyQt6.QtWidgets import QGroupBox, QVBoxLayout, QLabel
-            from PyQt6.QtCore import Qt
-            import re
-            
-            # Get the layout of the feeds_groupbox
-            feeds_layout = self.parent.feeds_groupbox.layout()
-            
-            for feed in feeds:
-                # Extract domain from URL
-                domain = ""
-                if feed['post_url']:
-                    match = re.search(r'https?://(?:www\.)?([^/]+)', feed['post_url'])
-                    if match:
-                        domain = match.group(1)
+            # Determinar qué feeds cargar según lo que se haya seleccionado
+            if album_id:
+                # Caso 1: Si se seleccionó un álbum o canción, mostrar feeds específicos para ese álbum
+                cursor.execute("""
+                    SELECT f.id, f.entity_type, f.entity_id, f.post_title, f.post_url, f.content, f.post_date, f.feed_name
+                    FROM feeds f
+                    WHERE f.entity_type = 'album' AND f.entity_id = ?
+                    ORDER BY f.post_date DESC
+                """, (album_id,))
                 
-                # Create a group box for each feed
-                feed_box = QGroupBox(f"{feed['post_title']} - {domain}")
-                feed_layout = QVBoxLayout(feed_box)
+                album_feeds = cursor.fetchall()
                 
-                # Create content label
-                content_label = QLabel(feed['content'])
-                content_label.setWordWrap(True)
-                content_label.setTextFormat(Qt.TextFormat.RichText)
-                content_label.setOpenExternalLinks(True)
-                
-                # Add content to feed box
-                feed_layout.addWidget(content_label)
-                
-                # Add feed box to main layout
-                feeds_layout.addWidget(feed_box)
+                # También conseguimos el artist_id si no se proporcionó
+                if not artist_id:
+                    try:
+                        cursor.execute("""
+                            SELECT artist_id FROM albums
+                            WHERE id = ?
+                        """, (album_id,))
+                        result = cursor.fetchone()
+                        if result and 'artist_id' in result:
+                            artist_id = result['artist_id']
+                    except Exception as e:
+                        print(f"Error getting artist_id from album: {e}")
             
-            # Add stretch to push feeds to the top
-            feeds_layout.addStretch()
+            if artist_id:
+                # Caso 2: Cargar feeds del artista
+                cursor.execute("""
+                    SELECT id, entity_type, entity_id, post_title, post_url, content, post_date, feed_name
+                    FROM feeds
+                    WHERE entity_type = 'artists' AND entity_id = ?
+                    ORDER BY post_date DESC
+                """, (artist_id,))
+                
+                artist_feeds = cursor.fetchall()
+                
+                # Caso 3: Si no hay album_id (es decir, se seleccionó directamente un artista),
+                # cargar todos los feeds de todos los álbumes del artista
+                if not album_id:
+                    cursor.execute("""
+                        SELECT f.id, f.entity_type, f.entity_id, f.post_title, f.post_url, f.content, f.post_date, f.feed_name
+                        FROM feeds f
+                        JOIN albums a ON f.entity_id = a.id 
+                        WHERE f.entity_type = 'album' AND a.artist_id = ?
+                        ORDER BY f.post_date DESC
+                    """, (artist_id,))
+                    
+                    album_feeds = cursor.fetchall()
+                
+                # Siempre cargar menciones para el artista
+                cursor.execute("""
+                    SELECT f.id, f.entity_type, f.entity_id, f.post_title, f.post_url, f.content, f.post_date, f.feed_name
+                    FROM feeds f
+                    JOIN menciones m ON f.id = m.feed_id
+                    WHERE m.artist_id = ?
+                    ORDER BY f.post_date DESC
+                """, (artist_id,))
+                
+                mention_feeds = cursor.fetchall()
+            
+            # Actualizar los tres grupos de feeds
+            self._update_feed_group('artistas', artist_feeds)
+            self._update_feed_group('albums', album_feeds)
+            self._update_feed_group('menciones', mention_feeds)
+            
+            # Asegurarse de que la página de feeds esté disponible
+            if hasattr(self.parent, 'info_panel_stacked') and self.parent.info_panel_stacked:
+                if hasattr(self.parent, 'feeds_page'):
+                    # Establecer la pestaña inicial de feeds a artistas o álbumes según el contexto
+                    stackedWidget = self.parent.findChild(QStackedWidget, "stackedWidget_feeds")
+                    if stackedWidget:
+                        # Si se seleccionó un álbum, mostrar primero esa pestaña
+                        if album_id and len(album_feeds) > 0:
+                            stackedWidget.setCurrentIndex(1)  # Índice para álbumes
+                        else:
+                            stackedWidget.setCurrentIndex(0)  # Índice para artistas
+                    
+                    # Conectar los botones de las pestañas si no están ya conectados
+                    self._connect_feed_buttons()
             
         except Exception as e:
             print(f"Error loading feeds: {e}")
@@ -448,6 +536,100 @@ class UIUpdater:
             traceback.print_exc()
         finally:
             conn.close()
+
+    def _update_feed_group(self, group_type, feeds):
+        """Update a specific feed group with content."""
+        # Encontrar el grupo, texto y etiqueta apropiados
+        group_box = None
+        text_edit = None
+        label = None
+        
+        if group_type == 'artistas':
+            group_box = self.parent.findChild(QGroupBox, "groupBox_artists")
+            text_edit = self.parent.findChild(QTextEdit, "artistas_textEdit")
+            label = self.parent.findChild(QLabel, "artistas_label")
+        elif group_type == 'albums':
+            group_box = self.parent.findChild(QGroupBox, "groupBox_albums")
+            text_edit = self.parent.findChild(QTextEdit, "albums_textEdit")
+            label = self.parent.findChild(QLabel, "albums_label")
+        elif group_type == 'menciones':
+            group_box = self.parent.findChild(QGroupBox, "groupBox_menciones")
+            text_edit = self.parent.findChild(QTextEdit, "menciones_textEdit")
+            label = self.parent.findChild(QLabel, "menciones_label")
+        
+        if not group_box or not text_edit:
+            print(f"No se pudieron encontrar los elementos UI para el tipo de grupo: {group_type}")
+            return
+        
+        # Limpiar contenido existente
+        text_edit.clear()
+        
+        # Si no se encontraron feeds, mostrar un mensaje
+        if not feeds or len(feeds) == 0:
+            text_edit.setHtml(f"<p>No hay feeds de {group_type} disponibles para este artista</p>")
+            if label:
+                label.setText(f"{group_type.capitalize()} (0)")
+            group_box.setTitle(f"{group_type.capitalize()} (0)")
+            return
+        
+        # Actualizar la etiqueta con el recuento
+        if label:
+            label.setText(f"{group_type.capitalize()} ({len(feeds)})")
+        
+        # Actualizar el título del group box
+        group_box.setTitle(f"{group_type.capitalize()} ({len(feeds)})")
+        
+        # Construir el contenido HTML para los feeds
+        html_content = ""
+        
+        for feed in feeds:
+            title = feed['post_title'] if 'post_title' in feed.keys() and feed['post_title'] else "Sin título"
+            url = feed['post_url'] if 'post_url' in feed.keys() and feed['post_url'] else "#"
+            content = feed['content'] if 'content' in feed.keys() and feed['content'] else "Sin contenido"
+            post_date = feed['post_date'] if 'post_date' in feed.keys() and feed['post_date'] else ""
+            feed_name = feed['feed_name'] if 'feed_name' in feed.keys() and feed['feed_name'] else "Fuente desconocida"
+            
+            # Extraer dominio de la URL para mostrar
+            domain = ""
+            import re
+            if url and url != "#":
+                match = re.search(r'https?://(?:www\.)?([^/]+)', url)
+                if match:
+                    domain = match.group(1)
+            
+            # Formatear la entrada del feed como HTML
+            html_content += f"""
+            <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                <h3><a href="{url}" style="text-decoration:none;">{title}</a> 
+                <span style="font-size:small;">({domain})</span></h3>
+                <div style="font-size:small; color:#666;">Fuente: {feed_name} | Fecha: {post_date}</div>
+                <div style="margin-top: 5px;">{content}</div>
+            </div>
+            """
+        
+        # Actualizar el texto con contenido formateado
+        text_edit.setHtml(html_content)
+
+    def _connect_feed_buttons(self):
+        """Connect the feed navigation buttons if not already connected."""
+        # Encontrar los botones
+        artists_button = self.parent.findChild(QPushButton, "artists_pushButton")
+        albums_button = self.parent.findChild(QPushButton, "albums_pushButton")
+        menciones_button = self.parent.findChild(QPushButton, "menciones_pushButton")
+        stack_widget = self.parent.findChild(QStackedWidget, "stackedWidget_feeds")
+        
+        if artists_button and albums_button and menciones_button and stack_widget:
+            # Verificar si ya están conectados
+            if hasattr(self, '_feed_buttons_connected') and self._feed_buttons_connected:
+                return
+            
+            # Conectar cada botón a su página correspondiente
+            artists_button.clicked.connect(lambda: stack_widget.setCurrentIndex(0))
+            albums_button.clicked.connect(lambda: stack_widget.setCurrentIndex(1))
+            menciones_button.clicked.connect(lambda: stack_widget.setCurrentIndex(2))
+            
+            # Marcar como conectados para evitar múltiples conexiones
+            self._feed_buttons_connected = True
 
     def _clear_layout(self, layout):
         """Clear all items from a layout."""

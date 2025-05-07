@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QTreeWidgetItem, QPushButton, QLabel, QVBoxLayout, QCheckBox
+from PyQt6.QtWidgets import QWidget, QTreeWidgetItem, QPushButton, QLabel, QVBoxLayout, QCheckBox, QStackedWidget
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
 import os
@@ -132,13 +132,30 @@ class MusicFuzzyModule(BaseModule):
 
         if hasattr(self, 'feeds_button'):
             self.feeds_button.clicked.connect(self._toggle_feeds_view)
+            
+        # Conectar los botones de navegación de feeds
+        self._connect_feed_tab_buttons()
 
+
+    def _connect_feed_tab_buttons(self):
+        """Connect the feed tab navigation buttons."""
+        artists_button = self.findChild(QPushButton, "artists_pushButton")
+        albums_button = self.findChild(QPushButton, "albums_pushButton")
+        menciones_button = self.findChild(QPushButton, "menciones_pushButton")
+        stack_widget = self.findChild(QStackedWidget, "stackedWidget_feeds")
+        
+        if artists_button and albums_button and menciones_button and stack_widget:
+            # Connect buttons to switch between feed tabs
+            artists_button.clicked.connect(lambda: stack_widget.setCurrentIndex(0))
+            albums_button.clicked.connect(lambda: stack_widget.setCurrentIndex(1))
+            menciones_button.clicked.connect(lambda: stack_widget.setCurrentIndex(2))
 
     def _connect_additional_signals(self):
         """Connect signals that depend on initialized components"""
         # Conexiones que dependen de componentes como search_handler
         if hasattr(self, 'search_box') and hasattr(self, 'search_handler'):
-            self.search_box.returnPressed.connect(self.search_handler.perform_search)
+            self.search_box.textChanged.connect(self.search_handler.perform_search)
+            #self.search_box.returnPressed.connect(self.search_handler.perform_search)
         
         # El checkbox ya debería estar conectado en _load_advanced_settings_ui
         print(f"Señales adicionales conectadas correctamente")
@@ -408,11 +425,18 @@ class MusicFuzzyModule(BaseModule):
         
         # Toggle between the two pages
         if current_widget == self.info_page:
+            # Switch to feeds view
             self.info_panel_stacked.setCurrentWidget(self.feeds_page)
             # Update button text/tooltip to reflect current state
             if hasattr(self, 'feeds_button'):
                 self.feeds_button.setToolTip("Mostrar información")
+            
+            # Make sure we're showing the artists feed tab by default
+            stackedWidget = self.findChild(QStackedWidget, "stackedWidget_feeds")
+            if stackedWidget:
+                stackedWidget.setCurrentIndex(0)
         else:
+            # Switch to info view
             self.info_panel_stacked.setCurrentWidget(self.info_page)
             # Update button text/tooltip to reflect current state
             if hasattr(self, 'feeds_button'):

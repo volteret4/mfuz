@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QTreeWidgetItem
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 import sqlite3
 
 
@@ -8,11 +8,64 @@ class SearchHandler:
     
     def __init__(self, parent):
         self.parent = parent
+        # Añadir un temporizador para retrasar la búsqueda
+        self.search_timer = QTimer()
+        self.search_timer.setSingleShot(True)
+        self.search_timer.timeout.connect(self._execute_search)
+        self.search_delay = 500  # milisegundos de espera antes de ejecutar la búsqueda
         
     def perform_search(self):
-        """Perform a search based on the search box text and process special filters."""
+        """Inicia el temporizador para realizar la búsqueda después de una pausa en la escritura."""
+        query = self.parent.search_box.text().strip()
+        
+        # Si está vacío, limpiar resultados y salir
+        if not query:
+            self.parent.results_tree_widget.clear()
+            return
+        
+        # Verificar si tenemos filtros especiales
+        has_filters = self._has_special_filters(query)
+        
+        # Si tenemos filtros, verificamos si hay suficiente texto después del último filtro
+        if has_filters:
+            # Encontrar el último filtro en la consulta
+            filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:"]
+            last_filter_pos = -1
+            last_filter = None
+            
+            for f in filters:
+                pos = query.rfind(f)
+                if pos > last_filter_pos:
+                    last_filter_pos = pos
+                    last_filter = f
+            
+            # Si encontramos un filtro, verificar si hay suficiente texto después de él
+            if last_filter_pos >= 0:
+                text_after_filter = query[last_filter_pos + len(last_filter):].strip()
+                # Si hay menos de 3 caracteres después del filtro, no buscar todavía
+                # A menos que sea un filtro de año o tiempo (y:, rs:, rm:, ra:)
+                if len(text_after_filter) < 3 and last_filter not in ["y:", "rs:", "rm:", "ra:"]:
+                    return
+        else:
+            # Si no hay filtros, verificar longitud mínima
+            if len(query) < 3:
+                return
+
+        # Para filtros numéricos, ejecutar la búsqueda inmediatamente sin esperar el temporizador
+        if has_filters and last_filter in ["y:", "rs:", "rm:", "ra:"]:
+            self.search_timer.stop()
+            self._execute_search()
+        
+        # Reiniciar el temporizador cada vez que el usuario escribe
+        self.search_timer.stop()
+        self.search_timer.start(self.search_delay)
+
+    def _execute_search(self):
+        """Ejecuta la búsqueda real después de que el temporizador expire."""
         query = self.parent.search_box.text().strip()
         if not query:
+            # Si el campo de búsqueda está vacío, limpiamos los resultados
+            self.parent.results_tree_widget.clear()
             return
         
         # Clear current results
@@ -36,6 +89,7 @@ class SearchHandler:
         else:
             # Búsqueda normal
             self._perform_simple_search(query, only_local)
+
 
     def _perform_simple_search(self, query, only_local=False):
         """Perform a simple search across all entity types with proper local filtering."""
