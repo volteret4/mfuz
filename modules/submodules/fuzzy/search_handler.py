@@ -762,7 +762,7 @@ class SearchHandler:
             conn.close()
 
     def _search_by_label(self, label_query, only_local=False):
-        """Busca por sello discográfico manteniendo la estructura jerárquica."""
+        """Busca por sello discográfico creando una estructura jerárquica con el sello como nodo raíz."""
         conn = self.parent.db_manager._get_connection()
         if not conn:
             return
@@ -771,62 +771,113 @@ class SearchHandler:
             cursor = conn.cursor()
             query_pattern = f"%{label_query}%"
             
-            # Construir la consulta SQL
+            # Primero, obtener los sellos que coinciden con la búsqueda
             if only_local:
-                sql = """
-                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label,
-                        ar.id as artist_id, ar.name as artist_name
+                label_sql = """
+                    SELECT DISTINCT a.label
                     FROM albums a
-                    JOIN artists ar ON a.artist_id = ar.id
                     WHERE a.label LIKE ? AND a.origen = 'local'
-                    ORDER BY ar.name, a.year DESC
+                    ORDER BY a.label
                 """
             else:
-                sql = """
-                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label,
-                        ar.id as artist_id, ar.name as artist_name
+                label_sql = """
+                    SELECT DISTINCT a.label
                     FROM albums a
-                    JOIN artists ar ON a.artist_id = ar.id
                     WHERE a.label LIKE ?
-                    ORDER BY ar.name, a.year DESC
+                    ORDER BY a.label
                 """
             
-            cursor.execute(sql, (query_pattern,))
+            cursor.execute(label_sql, (query_pattern,))
+            labels = cursor.fetchall()
             
-            # Diccionario para almacenar los artistas ya añadidos
-            artists_added = {}
-            
-            for row in cursor.fetchall():
-                artist_id = row['artist_id']
+            # Para cada sello encontrado, crear un nodo raíz
+            for label_row in labels:
+                label_name = label_row['label']
+                if not label_name:
+                    continue
+                    
+                # Crear un item para el sello
+                label_item = QTreeWidgetItem(self.parent.results_tree_widget)
+                label_item.setText(0, f"Sello: {label_name}")
+                label_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'label', 'name': label_name})
                 
-                # Si el artista no está en nuestro diccionario, lo añadimos
-                if artist_id not in artists_added:
-                    # Obtener detalles del artista
+                # Consultar los artistas que tienen álbumes bajo este sello
+                if only_local:
+                    artist_sql = """
+                        SELECT DISTINCT ar.id as artist_id, ar.name as artist_name
+                        FROM albums a
+                        JOIN artists ar ON a.artist_id = ar.id
+                        WHERE a.label = ? AND a.origen = 'local'
+                        ORDER BY ar.name
+                    """
+                else:
+                    artist_sql = """
+                        SELECT DISTINCT ar.id as artist_id, ar.name as artist_name
+                        FROM albums a
+                        JOIN artists ar ON a.artist_id = ar.id
+                        WHERE a.label = ?
+                        ORDER BY ar.name
+                    """
+                
+                cursor.execute(artist_sql, (label_name,))
+                artists = cursor.fetchall()
+                
+                # Para cada artista, crear un nodo hijo bajo el sello
+                for artist_row in artists:
+                    artist_id = artist_row['artist_id']
+                    
+                    # Obtener detalles completos del artista
                     artist = self.parent.db_manager.get_artist_details(artist_id)
-                    if artist:
-                        # Añadir artista al árbol
-                        artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
-                        artists_added[artist_id] = artist_item
-                
-                # Obtener el item del artista
-                artist_item = artists_added.get(artist_id)
-                
-                if artist_item:
-                    # Crear objeto álbum y añadirlo al artista
-                    album = {
-                        'id': row['album_id'],
-                        'name': row['album_name'],
-                        'year': row['year'],
-                        'genre': row['genre'],
-                        'artist_id': artist_id
-                    }
+                    if not artist:
+                        continue
                     
-                    # Si 'label' está en las claves, añadirlo
-                    if 'label' in row.keys():
-                        album['label'] = row['label']
+                    # Crear un item para el artista bajo el sello
+                    artist_item = QTreeWidgetItem(label_item)
+                    artist_item.setText(0, artist.get('name', 'Unknown Artist'))
+                    artist_item.setText(1, str(artist.get('formed_year', '')) if artist.get('formed_year') else "")
+                    artist_item.setText(2, artist.get('origin', ''))
+                    artist_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'artist', 'id': artist['id']})
                     
-                    # Añadir álbum al artista
-                    self._add_filtered_album(album, artist_item, only_local)
+                    # Consultar los álbumes de este artista para este sello
+                    if only_local:
+                        album_sql = """
+                            SELECT id, name, year, genre, total_tracks, origen
+                            FROM albums
+                            WHERE artist_id = ? AND label = ? AND origen = 'local'
+                            ORDER BY year DESC, name
+                        """
+                    else:
+                        album_sql = """
+                            SELECT id, name, year, genre, total_tracks, origen
+                            FROM albums
+                            WHERE artist_id = ? AND label = ?
+                            ORDER BY year DESC, name
+                        """
+                    
+                    cursor.execute(album_sql, (artist_id, label_name))
+                    albums = cursor.fetchall()
+                    
+                    # Para cada álbum, crear un nodo hijo bajo el artista
+                    for album_row in albums:
+                        # Convertir el objeto sqlite3.Row a diccionario para usar .get()
+                        album = self._row_to_dict(album_row)
+                        
+                        # Verificar filtro de solo local
+                        if only_local and album.get('origen') != 'local':
+                            continue
+                        
+                        # Añadir álbum al artista
+                        album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                        
+                        # Asegurarnos de que el álbum se haya añadido correctamente
+                        if album_item:
+                            # Ahora cargar las canciones de este álbum
+                            songs = self.parent.db_manager.get_album_songs(album['id'], only_local)
+                            for song in songs:
+                                self._add_filtered_song(song, album_item, only_local)
+                
+                # Expandir el nodo del sello para mostrar los artistas
+                label_item.setExpanded(True)
         
         except sqlite3.Error as e:
             print(f"Error en búsqueda por sello: {e}")

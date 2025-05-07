@@ -1,7 +1,7 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import os
-from PyQt6.QtWidgets import QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget
+from PyQt6.QtWidgets import QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget, QWidget, QSizePolicy
 from pathlib import Path
 
 
@@ -150,6 +150,10 @@ class UIUpdater:
     
     def update_song_view(self, song_id):
         """Update UI with song details."""
+        # Importar las clases necesarias
+        from PyQt6.QtWidgets import QLabel, QVBoxLayout, QGroupBox
+        from PyQt6.QtCore import Qt
+        
         # Get song details
         song = self.parent.db_manager.get_song_details(song_id)
         if not song:
@@ -160,20 +164,116 @@ class UIUpdater:
         
         # Check if 'lyrics' is in the song object
         has_lyrics = False
+        lyrics_text = ""
         try:
-            # This works for sqlite3.Row objects or dictionaries
-            if (hasattr(song, 'keys') and 'lyrics' in song.keys() and song['lyrics']) or \
-            (isinstance(song, dict) and 'lyrics' in song and song['lyrics']):
-                has_lyrics = True
+            if hasattr(song, 'keys') and 'lyrics' in song.keys():
                 lyrics_text = song['lyrics']
-        except (AttributeError, TypeError):
+                has_lyrics = lyrics_text is not None and lyrics_text.strip() != ""
+            elif isinstance(song, dict) and 'lyrics' in song:
+                lyrics_text = song['lyrics']
+                has_lyrics = lyrics_text is not None and lyrics_text.strip() != ""
+        except (AttributeError, TypeError) as e:
+            print(f"Error checking lyrics: {e}")
             has_lyrics = False
         
         # Update lyrics if available
         if has_lyrics:
-            self.parent.lyrics_group.setVisible(True)
-            self.parent.lyrics_label.setText(lyrics_text)
-        
+            try:
+                # Encontrar el contenedor donde irá el grupo de letras
+                texto_widget = self.parent.findChild(QWidget, "texto_widget")
+                if not texto_widget:
+                    print("No se encontró el contenedor 'texto_widget'")
+                    return
+                
+                # Encontrar los grupos existentes para poder insertar entre ellos
+                album_links_group = self.parent.findChild(QGroupBox, "album_links_group")
+                artist_group = self.parent.findChild(QGroupBox, "artist_group")
+                
+                # Eliminar el grupo anterior si existe
+                if hasattr(self.parent, 'lyrics_group') and self.parent.lyrics_group:
+                    old_group = self.parent.lyrics_group
+                    if old_group.parent():
+                        old_group.parent().layout().removeWidget(old_group)
+                    old_group.deleteLater()
+                    self.parent.lyrics_group = None
+                    self.parent.lyrics_label = None
+                
+                # Crear un nuevo grupo de letras
+                song_title = song['title'] if 'title' in song.keys() else ''
+                lyrics_group = QGroupBox(f"Letra - {song_title}")
+                
+                # Configurar el grupo para que se expanda horizontalmente
+                lyrics_group.setSizePolicy(
+                    QSizePolicy.Policy.Expanding, 
+                    QSizePolicy.Policy.Minimum
+                )
+                
+                # Crear un layout para el grupo con CERO márgenes
+                layout = QVBoxLayout(lyrics_group)
+                layout.setContentsMargins(0, 0, 0, 0)
+                layout.setSpacing(0)
+                
+                # Preprocesar el texto para preservar el formato
+                # Reemplazar saltos de línea con etiquetas <br>
+                formatted_lyrics = lyrics_text.replace('\n', '<br>')
+                
+                # Crear un QLabel simple para mostrar las letras
+                lyrics_label = QLabel()
+                lyrics_label.setText(formatted_lyrics)
+                lyrics_label.setWordWrap(True)
+                lyrics_label.setTextFormat(Qt.TextFormat.RichText)
+                lyrics_label.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+                lyrics_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
+                
+                # Configurar el label para que se expanda horizontalmente
+                lyrics_label.setSizePolicy(
+                    QSizePolicy.Policy.Expanding, 
+                    QSizePolicy.Policy.MinimumExpanding
+                )
+                
+                # Eliminar cualquier margen o padding interno
+                lyrics_label.setStyleSheet("""
+                    QLabel {
+                        margin: 0;
+                        padding: 0;
+                        border: none;
+                    }
+                """)
+                
+                # Añadir el label al layout
+                layout.addWidget(lyrics_label)
+                
+                # Añadir el grupo al layout del contenedor en la posición correcta
+                content_layout = texto_widget.layout()
+                
+                # Determinar la posición para insertar
+                insert_position = 0
+                
+                if album_links_group and artist_group:
+                    # Encontrar la posición del album_links_group y del artist_group
+                    for i in range(content_layout.count()):
+                        item = content_layout.itemAt(i)
+                        if item.widget() == album_links_group:
+                            insert_position = i + 1  # Justo después del album_links_group
+                            break
+                
+                # Insertar el grupo de letras en la posición correcta
+                content_layout.insertWidget(insert_position, lyrics_group)
+                
+                # Guardar referencias
+                self.parent.lyrics_group = lyrics_group
+                self.parent.lyrics_label = lyrics_label
+                
+                print(f"Lyrics group added at position {insert_position}")
+                
+            except Exception as e:
+                print(f"Error creating lyrics group: {e}")
+                import traceback
+                traceback.print_exc()
+        else:
+            print("No lyrics to display")
+
+
         # Update album cover if available
         album_art_path = None
         try:
@@ -337,10 +437,16 @@ class UIUpdater:
         self._safely_set_visible('lastfm_bio_group', False)
         self._safely_set_visible('lyrics_group', False)
         
-        # Resetear lyrics con seguridad
+        # Resetear lyrics con seguridad - en lugar de ocultarlo, simplemente limpiar su contenido
         if hasattr(self.parent, 'lyrics_label') and self.parent.lyrics_label:
             try:
+                # Limpiar el texto sin ocultar el widget
                 self.parent.lyrics_label.setText("")
+                
+                # Opcionalmente, puedes hacer que el widget sea visualmente "invisible"
+                # estableciendo su altura mínima y máxima a cero
+                self.parent.lyrics_label.setMinimumHeight(0)
+                self.parent.lyrics_label.setMaximumHeight(0)
             except RuntimeError:
                 print("Warning: lyrics_label ya no es válido")
         
@@ -379,8 +485,37 @@ class UIUpdater:
                 try:
                     widget.setVisible(visible)
                 except RuntimeError:
-                    print(f"Warning: No se puede establecer la visibilidad de {widget_name}")
+                    print(f"Warning: No se puede establecer la visibilidad de {widget_name}, el objeto C++ subyacente ha sido eliminado")
+                    # Intentar recrear el widget si es necesario
+                    if widget_name == 'lyrics_group':
+                        try:
+                            self._ensure_lyrics_group_exists()
+                        except Exception as e:
+                            print(f"No se pudo recrear {widget_name}: {e}")
     
+    def _ensure_lyrics_group_exists(self):
+        """Asegura que el grupo de letras existe."""
+        from PyQt6.QtWidgets import QGroupBox, QVBoxLayout, QLabel, QWidget
+        
+        if not hasattr(self.parent, 'lyrics_group') or not self.parent.lyrics_group:
+            # Encontrar el contenedor padre
+            parent_container = self.parent.findChild(QWidget, "texto_widget")
+            if not parent_container:
+                return
+                
+            # Crear un nuevo QGroupBox para las letras
+            self.parent.lyrics_group = QGroupBox("Letra", parent_container)
+            layout = QVBoxLayout(self.parent.lyrics_group)
+            
+            # Crear un nuevo QLabel para el contenido
+            self.parent.lyrics_label = QLabel("")
+            layout.addWidget(self.parent.lyrics_label)
+            
+            # Añadir el grupo al layout del padre
+            if parent_container.layout():
+                parent_container.layout().addWidget(self.parent.lyrics_group)
+
+
     def _clear_group_box(self, group_box):
         """Clear all widgets from a group box layout."""
         if hasattr(group_box, 'layout'):
@@ -644,3 +779,5 @@ class UIUpdater:
             child_layout = item.layout()
             if child_layout:
                 self._clear_layout(child_layout)
+
+

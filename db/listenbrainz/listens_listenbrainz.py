@@ -1261,7 +1261,7 @@ def main():
     
     config = {}
     config.update(config_data.get("common", {}))
-    config.update(config_data.get("scrobbles_listenbrainz", {}))
+    config.update(config_data.get("listenbrainz/listens_listenbrainz", {}))
 
     db_path = args.db_path or config['db_path']
     if not db_path: 

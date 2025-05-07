@@ -1,86 +1,148 @@
 import webbrowser
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QWidget
+import subprocess
 
 class LinkManager:
     """Manages external links for artists and albums."""
     
     def __init__(self, parent):
         self.parent = parent
-        # Esperar a que se inicialice la UI antes de conectar los botones
-        # Este debería ejecutarse después de que loadUi haya sido llamado
-        self.parent.ui_initialized.connect(self._connect_link_buttons)
-
+        
+        # No dependemos de la señal, conectamos los botones directamente
+        # después de que la UI se inicialice completamente
+        if self.parent.isVisible():
+            # Si la UI ya está visible, conectamos inmediatamente
+            self._connect_link_buttons()
+        else:
+            # Esperar al evento show para conectar los botones
+            self.parent.showEvent = self._wrap_show_event(self.parent.showEvent)
+    
+    def _wrap_show_event(self, original_show_event):
+        """Wrap the show event to connect buttons when the UI becomes visible."""
+        def wrapped_show_event(event):
+            # Llamar al evento original primero
+            if original_show_event:
+                original_show_event(event)
+                
+            # Conectar los botones después de que la UI sea visible
+            self._connect_link_buttons()
+            
+        return wrapped_show_event
+    
     def _connect_link_buttons(self):
         """Connect all link buttons to their handlers."""
-        from PyQt6.QtWidgets import QPushButton
+        from PyQt6.QtWidgets import QPushButton, QWidget
+        print("INICIANDO CONEXIÓN DE BOTONES DE ENLACES...")
         
-        # Artist links
-        link_buttons = [
-            # Direct links from artists table
-            ('spotify_url', self.parent.findChild(QPushButton, "spot_link_button")),
-            ('youtube_url', self.parent.findChild(QPushButton, "yt_link_button")),
-            ('musicbrainz_url', self.parent.findChild(QPushButton, "mb_link_button")),
-            ('discogs_url', self.parent.findChild(QPushButton, "discogs_link_button")),
-            ('rateyourmusic_url', self.parent.findChild(QPushButton, "rym_link_button")),
-            ('wikipedia_url', self.parent.findChild(QPushButton, "wiki_link_button")),
-            ('bandcamp_url', self.parent.findChild(QPushButton, "bc_link_button")),
-            ('lastfm_url', self.parent.findChild(QPushButton, "lastfm_link_button")),
+        # Buscar los contenedores directamente
+        artist_links_group = self.parent.findChild(QWidget, "artist_links_group")
+        album_links_group = self.parent.findChild(QWidget, "album_links_group")
+        
+        if not artist_links_group:
+            print("ERROR: No se encontró el grupo de enlaces de artistas")
+        if not album_links_group:
+            print("ERROR: No se encontró el grupo de enlaces de álbumes")
+        
+        if artist_links_group:
+            # Almacenar referencia
+            self.parent.artist_links_group = artist_links_group
             
-            # Links from artists_networks table
-            ('allmusic', self.parent.findChild(QPushButton, "allmusic_link_button")),
-            ('bandcamp', self.parent.findChild(QPushButton, "bc_link_button")),
-            ('boomkat', self.parent.findChild(QPushButton, "boomkat_link_button")),
-            ('facebook', self.parent.findChild(QPushButton, "fb_link_button")),
-            ('twitter', self.parent.findChild(QPushButton, "twitter_link_button")),
-            ('mastodon', self.parent.findChild(QPushButton, "mastodon_link_button")),
-            ('bluesky', self.parent.findChild(QPushButton, "bluesky_link_button")),
-            ('instagram', self.parent.findChild(QPushButton, "ig_link_button")),
-            ('spotify', self.parent.findChild(QPushButton, "spot_link_button")),
-            ('lastfm', self.parent.findChild(QPushButton, "lastfm_link_button")),
-            ('wikipedia', self.parent.findChild(QPushButton, "wiki_link_button")),
-            ('juno', self.parent.findChild(QPushButton, "juno_link_button")),
-            ('soundcloud', self.parent.findChild(QPushButton, "soudcloud_link_button")),
-            ('youtube', self.parent.findChild(QPushButton, "yt_link_button")),
-            ('imdb', self.parent.findChild(QPushButton, "imdb_link_button")),
-            ('progarchives', self.parent.findChild(QPushButton, "prog_link_button")),
-            ('setlist_fm', self.parent.findChild(QPushButton, "setlist_link_button")),
-            ('who_sampled', self.parent.findChild(QPushButton, "whosampled_link_button")),
-            ('vimeo', self.parent.findChild(QPushButton, "vimeo_link_button")),
-            ('resident_advisor', self.parent.findChild(QPushButton, "ra_link_button")),
-            ('rateyourmusic', self.parent.findChild(QPushButton, "rym_link_button")),
-            ('tumblr', self.parent.findChild(QPushButton, "tumblr_link_button")),
-            ('myspace', self.parent.findChild(QPushButton, "myspace_link_button"))
-        ]
+            # Conectar botones
+            for button in artist_links_group.findChildren(QPushButton):
+                button_name = button.objectName()
+                print(f"Conectando botón de artista: {button_name}")
+                
+                # Asegurarse de que no haya conexiones previas
+                try:
+                    button.clicked.disconnect()
+                except:
+                    pass
+                
+                # Conectar el botón a nuestra función simple
+                button.clicked.connect(lambda *args, b=button: self._simple_open_url(b))
         
-        # Connect artist link buttons
-        for link_type, button in link_buttons:
-            if button:
-                # Use a partial function to preserve the link_type value
-                from functools import partial
-                button.clicked.connect(partial(self._open_link, button))
-        
-        # Album links - similar structure to artist links
-        album_link_buttons = [
-            ('spotify_url', self.parent.findChild(QPushButton, "spot_album_link_button")),
-            ('youtube_url', self.parent.findChild(QPushButton, "yt_album_link_button")),
-            ('musicbrainz_url', self.parent.findChild(QPushButton, "mb_album_link_button")),
-            ('discogs_url', self.parent.findChild(QPushButton, "discogs_album_link_button")),
-            ('rateyourmusic_url', self.parent.findChild(QPushButton, "rym_album_link_button")),
-            ('wikipedia_url', self.parent.findChild(QPushButton, "wiki_album_link_button")),
-            ('bandcamp_url', self.parent.findChild(QPushButton, "bc_album_link_button")),
-            ('lastfm_url', self.parent.findChild(QPushButton, "lastfm_album_link_button"))
-        ]
-        
-        # Connect album link buttons
-        for link_type, button in album_link_buttons:
-            if button:
-                # Use a partial function to preserve the link_type value
-                button.clicked.connect(partial(self._open_link, button))
-        
-        # Find the group containers
-        self.parent.artist_links_group = self.parent.findChild(QWidget, "artist_links_group")
-        self.parent.album_links_group = self.parent.findChild(QWidget, "album_links_group")
+        if album_links_group:
+            # Almacenar referencia
+            self.parent.album_links_group = album_links_group
+            
+            # Conectar botones
+            for button in album_links_group.findChildren(QPushButton):
+                button_name = button.objectName()
+                print(f"Conectando botón de álbum: {button_name}")
+                
+                # Asegurarse de que no haya conexiones previas
+                try:
+                    button.clicked.disconnect()
+                except:
+                    pass
+                
+                # Conectar el botón a nuestra función simple
+                button.clicked.connect(lambda *args, b=button: self._simple_open_url(b))
     
+        print("CONEXIÓN DE BOTONES COMPLETADA")
+    
+    def _simple_open_url(self, button):
+        """Una función simple para abrir URLs que primero intenta con xdg-open en Linux."""
+        try:
+            url = button.property('url')
+            button_name = button.objectName()
+            
+            print(f"BOTÓN PULSADO: {button_name}")
+            print(f"ABRIENDO URL: {url}")
+            
+            if not url:
+                print(f"ERROR: El botón {button_name} no tiene URL")
+                return
+            
+            import platform
+            system = platform.system()
+            
+            # Intentar primero con el método específico del sistema operativo
+            try:
+                if system == 'Linux':
+                    # En Linux, usar xdg-open de forma no bloqueante
+                    import subprocess
+                    print(f"Intentando abrir con xdg-open: {url}")
+                    subprocess.Popen(['xdg-open', url], 
+                                start_new_session=True,
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                    print(f"Comando xdg-open ejecutado para: {url}")
+                    return
+                elif system == 'Windows':
+                    # En Windows, usar el comando start
+                    import subprocess
+                    print(f"Intentando abrir con start: {url}")
+                    subprocess.Popen(f'start "" "{url}"', 
+                                shell=True,
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                    print(f"Comando start ejecutado para: {url}")
+                    return
+                elif system == 'Darwin':  # macOS
+                    # En macOS, usar open
+                    import subprocess
+                    print(f"Intentando abrir con open: {url}")
+                    subprocess.Popen(['open', url], 
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                    print(f"Comando open ejecutado para: {url}")
+                    return
+            except Exception as e:
+                print(f"Error con el método específico del sistema operativo: {e}")
+            
+            # Usar webbrowser como respaldo
+            import webbrowser
+            print(f"Usando webbrowser como respaldo para: {url}")
+            webbrowser.open(url)
+            print(f"URL abierta con webbrowser: {url}")
+            
+        except Exception as e:
+            print(f"ERROR general al abrir URL: {e}")
+            import traceback
+            traceback.print_exc()
+
+
     def update_artist_links(self, artist):
         """Update artist link buttons based on available links."""
         # Hide all buttons first
@@ -153,30 +215,152 @@ class LinkManager:
     
     def _show_link_if_available(self, item, link_key, button):
         """Show a link button if the corresponding link is available."""
-        if item and item.get(link_key):
+        if item and link_key in item and item[link_key]:
+            url = item[link_key]
+            print(f"Configurando botón {button.objectName()} con URL: {url}")
+            
+            # Hacer visible el botón
             button.setVisible(True)
             
-            # Store the URL in the button's property
-            button.setProperty('url', item[link_key])
+            # Guardar la URL como propiedad
+            button.setProperty('url', url)
+            
+            # Verificar que la propiedad se estableció correctamente
+            stored_url = button.property('url')
+            print(f"URL almacenada en el botón: {stored_url}")
+            
+            # También podemos añadir un tooltip para mostrar la URL cuando se pasa el mouse
+            button.setToolTip(f"Abrir: {url}")
         else:
             button.setVisible(False)
+            button.setProperty('url', "")  # Limpiar la propiedad
     
     def _open_artist_link(self, link_type):
         """Open the artist link in a web browser."""
         sender = self.parent.sender()
         if sender and sender.property('url'):
             url = sender.property('url')
-            webbrowser.open(url)
+            self._open_link(url)
     
     def _open_album_link(self, link_type):
         """Open the album link in a web browser."""
         sender = self.parent.sender()
         if sender and sender.property('url'):
             url = sender.property('url')
-            webbrowser.open(url)
+            self._open_link(url)
 
-    def _open_link(self, button):
-        """Open a link in the web browser."""
+
+    def _open_link(self, button=None):
+        """Open a link in the default browser using subprocess in non-blocking mode."""
+        # Si no se proporciona botón, usar el remitente (sender)
+        if button is None:
+            button = self.parent.sender()
+            
         url = button.property('url')
+        print(f"Intentando abrir URL: {url}")
+        
         if url:
-            webbrowser.open(url)
+            import subprocess
+            import platform
+            import os
+            
+            system = platform.system()
+            print(f"Sistema operativo detectado: {system}")
+            
+            try:
+                # Determinar el comando según el sistema operativo y ejecutar de forma no bloqueante
+                if system == 'Linux':
+                    print(f"Ejecutando xdg-open para URL: {url}")
+                    subprocess.Popen(['xdg-open', url], 
+                                start_new_session=True, 
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                elif system == 'Windows':
+                    print(f"Ejecutando start para URL: {url}")
+                    # Usamos Popen con shell=True, que es necesario para 'start' en Windows
+                    subprocess.Popen(f'start "" "{url}"', 
+                                shell=True, 
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                elif system == 'Darwin':
+                    print(f"Ejecutando open para URL: {url}")
+                    subprocess.Popen(['open', url], 
+                                stdout=subprocess.DEVNULL, 
+                                stderr=subprocess.DEVNULL)
+                else:
+                    # Fallback para otros sistemas
+                    import webbrowser
+                    print(f"Sistema no detectado, usando webbrowser para: {url}")
+                    webbrowser.open(url)
+                    
+                print(f"Comando ejecutado para abrir URL: {url}")
+                
+            except Exception as e:
+                print(f"Error al abrir URL {url}: {e}")
+                try:
+                    # Último recurso: webbrowser
+                    import webbrowser
+                    webbrowser.open(url)
+                    print(f"Usado webbrowser como fallback para: {url}")
+                except Exception as e2:
+                    print(f"Error final al abrir enlace: {e2}")
+        else:
+            print("No se encontró URL en el botón")
+
+
+    def _open_link_direct(self, button):
+        """Open a link directly using the provided button."""
+        try:
+            url = button.property('url')
+            print(f"BOTÓN PULSADO: {button.objectName()}")
+            print(f"Abriendo URL: {url}")
+            
+            if not url:
+                print("ERROR: No se encontró URL en el botón")
+                return
+                
+            import subprocess
+            import platform
+            
+            system = platform.system()
+            print(f"Sistema operativo: {system}")
+            
+            if system == 'Linux':
+                print(f"Ejecutando: xdg-open {url}")
+                # Usar Popen para no bloquear
+                subprocess.Popen(['xdg-open', url], 
+                            stderr=subprocess.PIPE, 
+                            stdout=subprocess.PIPE, 
+                            start_new_session=True)
+                            
+            elif system == 'Windows':
+                print(f"Ejecutando: start {url}")
+                subprocess.Popen(f'start "" "{url}"', 
+                            shell=True, 
+                            stderr=subprocess.PIPE, 
+                            stdout=subprocess.PIPE)
+                            
+            elif system == 'Darwin':  # macOS
+                print(f"Ejecutando: open {url}")
+                subprocess.Popen(['open', url], 
+                            stderr=subprocess.PIPE, 
+                            stdout=subprocess.PIPE)
+                            
+            else:
+                print(f"Sistema no reconocido, usando webbrowser")
+                import webbrowser
+                webbrowser.open(url)
+                
+            print(f"Comando ejecutado para URL: {url}")
+        except Exception as e:
+            print(f"ERROR abriendo enlace: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # Último intento con webbrowser
+            try:
+                import webbrowser
+                webbrowser.open(url)
+                print(f"Intentado abrir con webbrowser como último recurso")
+            except Exception as e2:
+                print(f"Error final al abrir enlace: {e2}")

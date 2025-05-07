@@ -313,13 +313,14 @@ class DatabaseManager:
             
         try:
             cursor = conn.cursor()
+            # Modificar la consulta para obtener las letras correctamente
             query = """
                 SELECT s.*, l.lyrics
                 FROM songs s
                 LEFT JOIN lyrics l ON s.lyrics_id = l.id
                 WHERE s.id = ?
             """
-            #print(f"Executing query: {query} with song_id={song_id}")          # debug consultas sql
+            print(f"Executing query: {query} with song_id={song_id}")
             cursor.execute(query, (song_id,))
             result = cursor.fetchone()
             
