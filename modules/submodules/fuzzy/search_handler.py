@@ -13,7 +13,7 @@ class SearchHandler:
         self.search_timer.setSingleShot(True)
         self.search_timer.timeout.connect(self._execute_search)
         self.search_delay = 500  # milisegundos de espera antes de ejecutar la búsqueda
-        
+            
     def perform_search(self):
         """Inicia el temporizador para realizar la búsqueda después de una pausa en la escritura."""
         query = self.parent.search_box.text().strip()
@@ -26,25 +26,55 @@ class SearchHandler:
         # Verificar si tenemos filtros especiales
         has_filters = self._has_special_filters(query)
         
-        # Si tenemos filtros, verificamos si hay suficiente texto después del último filtro
+        # Si tenemos filtros, verificamos si hay suficiente texto después del último filtro o operador
         if has_filters:
             # Encontrar el último filtro en la consulta
-            filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:"]  # Añadir t: para título
+            filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:", "b:"]
+            operators = ["+", "&"]
+            
             last_filter_pos = -1
             last_filter = None
             
+            # Buscar el último filtro
             for f in filters:
                 pos = query.rfind(f)
                 if pos > last_filter_pos:
                     last_filter_pos = pos
                     last_filter = f
             
-            # Si encontramos un filtro, verificar si hay suficiente texto después de él
-            if last_filter_pos >= 0:
+            # Buscar el último operador
+            last_operator_pos = -1
+            last_operator = None
+            
+            for op in operators:
+                pos = query.rfind(op)
+                if pos > last_operator_pos:
+                    last_operator_pos = pos
+                    last_operator = op
+            
+            # Determinar qué verificar: el último filtro o el último operador
+            if last_operator_pos > last_filter_pos:
+                # Si el último operador está después del último filtro
+                text_after_operator = query[last_operator_pos + len(last_operator):].strip()
+                
+                # Si hay menos de 3 caracteres después del operador, no buscar todavía
+                if len(text_after_operator) < 3:
+                    return
+                    
+                # Si se acaba de añadir un nuevo filtro después del operador (termina en :), esperar más caracteres
+                if ":" in text_after_operator and len(text_after_operator.split(":")[-1]) < 2:
+                    return
+            elif last_filter_pos >= 0:
+                # Si el último filtro es lo más reciente
                 text_after_filter = query[last_filter_pos + len(last_filter):].strip()
+                
                 # Si hay menos de 3 caracteres después del filtro, no buscar todavía
                 # A menos que sea un filtro de año o tiempo (y:, rs:, rm:, ra:)
                 if len(text_after_filter) < 3 and last_filter not in ["y:", "rs:", "rm:", "ra:"]:
+                    return
+                    
+                # Si se acaba de añadir un nuevo filtro (termina en :), esperar más caracteres
+                if text_after_filter == "" or (len(text_after_filter) < 2 and ":" in text_after_filter[-1:]):
                     return
         else:
             # Si no hay filtros, verificar longitud mínima
@@ -517,8 +547,19 @@ class SearchHandler:
 
     def _has_special_filters(self, query):
         """Verifica si la consulta contiene filtros especiales."""
-        filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:"]  # Añadir t: para título
-        return any(f in query for f in filters)
+        filters = ["a:", "d:", "g:", "y:", "s:", "rs:", "rm:", "ra:", "t:"]
+        operators = ["+", "&"]  
+        # Comprobar si hay algún filtro
+        has_filters = any(f in query for f in filters)
+        
+        # Si no hay filtros directos, comprobar si hay operadores combinados
+        if not has_filters:
+            return False
+            
+        # Si hay filtros, comprobar si hay operadores combinados
+        has_operators = any(op in query for op in operators)
+        
+        return has_filters
 
     def _perform_filtered_search(self, query, only_local=False):
         """Realiza una búsqueda con filtros especiales manteniendo la estructura jerárquica."""
