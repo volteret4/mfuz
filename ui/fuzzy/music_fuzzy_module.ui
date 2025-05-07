@@ -1026,7 +1026,7 @@ QPushButton:hover {
               </widget>
              </item>
              <item row="6" column="0">
-              <widget class="QPushButton" name="search_online_button_3">
+              <widget class="QPushButton" name="playing_button">
                <property name="minimumSize">
                 <size>
                  <width>38</width>
@@ -1109,7 +1109,7 @@ QPushButton:hover {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1048</width>
+                   <width>1028</width>
                    <height>471</height>
                   </rect>
                  </property>

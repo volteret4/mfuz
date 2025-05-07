@@ -388,3 +388,56 @@ class PlayerManager:
             import traceback
             traceback.print_exc()
             return False
+
+
+    def get_now_playing_search_query(self):
+        """
+        Obtiene información de la canción que está sonando y devuelve una cadena formateada
+        para usar en una búsqueda combinada.
+        
+        Returns:
+            str: Una cadena con formato 'a:artist&t:title' o None si no hay reproducción
+        """
+        print("Obteniendo información de reproducción para búsqueda")
+        
+        try:
+            deadbeef_path = self._get_player_path('deadbeef')
+            if not os.path.exists(deadbeef_path):
+                print(f"ERROR: Ejecutable deadbeef no encontrado en {deadbeef_path}")
+                return None
+                
+            # Ejecutar el comando deadbeef --nowplaying-tf "%artist%-%title%"
+            cmd = [deadbeef_path, "--nowplaying-tf", "%artist%-%title%-%album%"]
+            print(f"Ejecutando comando: {' '.join(cmd)}")
+            
+            result = subprocess.run(cmd, capture_output=True, text=True)
+            output = result.stdout.strip()
+            
+            if not output or "-" not in output:
+                print("No hay información de reproducción disponible o formato inválido")
+                return None
+            
+            # Dividir la salida en artista y título
+            parts = output.split("-", 2)  # Dividir solo en la primera ocurrencia de "-"
+            if len(parts) != 3:
+                print(f"Formato inesperado en la salida: {output}")
+                return None
+                
+            artist = parts[0].strip()
+            title = parts[1].strip()
+            album = parts[2].strip()
+            
+            if not artist or not title:
+                print("Artista o título vacío")
+                return None
+                
+            # Crear la cadena de búsqueda
+            search_query = f"a:{artist}&b:{album}&t:{title}"
+            print(f"Cadena de búsqueda generada: {search_query}")
+            
+            return search_query
+        except Exception as e:
+            print(f"Error al obtener información para búsqueda: {e}")
+            import traceback
+            traceback.print_exc()
+            return None

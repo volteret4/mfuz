@@ -346,7 +346,7 @@ QPushButton:hover {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="playing_button">
+          <widget class="QPushButton" name="playing_button_inactive">
            <property name="text">
             <string>Reproduciendo</string>
            </property>

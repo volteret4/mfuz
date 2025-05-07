@@ -143,6 +143,10 @@ class MusicFuzzyModule(BaseModule):
             self.play_button.clicked.connect(self._handle_play_button)
             print("Play button connected")
 
+        # Conectar botón de reproducción actual
+        if hasattr(self, 'playing_button'):  # Asumiendo que 'custom_button1' es tu 'playing_button'
+            self.playing_button.clicked.connect(self._handle_playing_button)
+
         # Conectar los botones del reproductor
         self._connect_player_buttons()
 
@@ -1493,122 +1497,139 @@ class MusicFuzzyModule(BaseModule):
             else:
                 print("No se encontraron álbumes para el artista")
 
+
     def _handle_playing_button(self):
-        """
-        Maneja el clic en el botón de 'reproduciendo ahora'.
-        Obtiene la canción actual y la muestra en el árbol.
-        """
-        print("Botón de 'reproduciendo ahora' pulsado")
+        """Maneja el clic en el botón de reproducción actual."""
+        print("Botón 'Reproduciendo' pulsado")
         
-        if not hasattr(self, 'player_manager'):
-            print("ERROR: player_manager no inicializado")
-            return
-            
-        # Obtener la ruta del archivo en reproducción
-        current_path = self.player_manager.get_now_playing()
-        if not current_path:
-            print("No hay nada reproduciéndose actualmente")
-            return
-            
-        print(f"Actualmente reproduciendo: {current_path}")
+        # Obtener la cadena de búsqueda para lo que está sonando
+        search_query = self.player_manager.get_now_playing_search_query()
         
-        # Buscar la canción en la base de datos
-        conn = self.db_manager._get_connection()
-        if not conn:
-            print("No se pudo conectar a la base de datos")
-            return
+        if search_query:
+            # Establecer la consulta en el cuadro de búsqueda
+            self.search_box.setText(search_query)
             
-        try:
-            cursor = conn.cursor()
-            # Buscar la canción por ruta de archivo
-            cursor.execute("""
-                SELECT id, title, artist, album
-                FROM songs
-                WHERE file_path = ?
-            """, (current_path,))
+            # Iniciar la búsqueda
+            self.search_handler.perform_search()
+        else:
+            print("No se pudo obtener información de la reproducción actual")
+
+    # def _handle_playing_button(self):
+    #     """
+    #     Maneja el clic en el botón de 'reproduciendo ahora'.
+    #     Obtiene la canción actual y la muestra en el árbol.
+    #     """
+    #     print("Botón de 'reproduciendo ahora' pulsado")
+        
+    #     if not hasattr(self, 'player_manager'):
+    #         print("ERROR: player_manager no inicializado")
+    #         return
             
-            song = cursor.fetchone()
-            if not song:
-                print(f"No se encontró la canción en la base de datos: {current_path}")
-                return
+    #     # Obtener la ruta del archivo en reproducción
+    #     current_path = self.player_manager.get_now_playing()
+    #     if not current_path:
+    #         print("No hay nada reproduciéndose actualmente")
+    #         return
+            
+    #     print(f"Actualmente reproduciendo: {current_path}")
+        
+    #     # Buscar la canción en la base de datos
+    #     conn = self.db_manager._get_connection()
+    #     if not conn:
+    #         print("No se pudo conectar a la base de datos")
+    #         return
+            
+    #     try:
+    #         cursor = conn.cursor()
+    #         # Buscar la canción por ruta de archivo
+    #         cursor.execute("""
+    #             SELECT id, title, artist, album
+    #             FROM songs
+    #             WHERE file_path = ?
+    #         """, (current_path,))
+            
+    #         song = cursor.fetchone()
+    #         if not song:
+    #             print(f"No se encontró la canción en la base de datos: {current_path}")
+    #             return
                 
-            song_id = song['id']
-            artist_name = song['artist']
-            album_name = song['album']
+    #         song_id = song['id']
+    #         artist_name = song['artist']
+    #         album_name = song['album']
             
-            print(f"Canción encontrada: ID={song_id}, Artista={artist_name}, Álbum={album_name}")
+    #         print(f"Canción encontrada: ID={song_id}, Artista={artist_name}, Álbum={album_name}")
             
-            # Buscar el ID del artista
-            cursor.execute("""
-                SELECT id
-                FROM artists
-                WHERE name = ?
-            """, (artist_name,))
+    #         # Buscar el ID del artista
+    #         cursor.execute("""
+    #             SELECT id
+    #             FROM artists
+    #             WHERE name = ?
+    #         """, (artist_name,))
             
-            artist_row = cursor.fetchone()
-            if not artist_row:
-                print(f"No se encontró el artista en la base de datos: {artist_name}")
-                return
+    #         artist_row = cursor.fetchone()
+    #         if not artist_row:
+    #             print(f"No se encontró el artista en la base de datos: {artist_name}")
+    #             return
                 
-            artist_id = artist_row['id']
+    #         artist_id = artist_row['id']
             
-            # Buscar el ID del álbum
-            cursor.execute("""
-                SELECT id
-                FROM albums
-                WHERE name = ? AND artist_id = ?
-            """, (album_name, artist_id))
+    #         # Buscar el ID del álbum
+    #         cursor.execute("""
+    #             SELECT id
+    #             FROM albums
+    #             WHERE name = ? AND artist_id = ?
+    #         """, (album_name, artist_id))
             
-            album_row = cursor.fetchone()
-            if not album_row:
-                print(f"No se encontró el álbum en la base de datos: {album_name}")
-                return
+    #         album_row = cursor.fetchone()
+    #         if not album_row:
+    #             print(f"No se encontró el álbum en la base de datos: {album_name}")
+    #             return
                 
-            album_id = album_row['id']
+    #         album_id = album_row['id']
             
-            # Ahora que tenemos los IDs, actualizar la vista
-            # Para mostrar la discografía del artista con el álbum desplegado
-            self.ui_updater.update_artist_view(artist_id)
+    #         # Ahora que tenemos los IDs, actualizar la vista
+    #         # Para mostrar la discografía del artista con el álbum desplegado
+    #         self.ui_updater.update_artist_view(artist_id)
             
-            # Expandir el álbum correspondiente
-            for i in range(self.results_tree_widget.topLevelItemCount()):
-                artist_item = self.results_tree_widget.topLevelItem(i)
-                artist_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
+    #         # Expandir el álbum correspondiente
+    #         for i in range(self.results_tree_widget.topLevelItemCount()):
+    #             artist_item = self.results_tree_widget.topLevelItem(i)
+    #             artist_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
                 
-                if artist_data and artist_data.get('type') == 'artist' and artist_data.get('id') == artist_id:
-                    # Expandir el artista
-                    artist_item.setExpanded(True)
+    #             if artist_data and artist_data.get('type') == 'artist' and artist_data.get('id') == artist_id:
+    #                 # Expandir el artista
+    #                 artist_item.setExpanded(True)
                     
-                    # Buscar y expandir el álbum
-                    for j in range(artist_item.childCount()):
-                        album_item = artist_item.child(j)
-                        album_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+    #                 # Buscar y expandir el álbum
+    #                 for j in range(artist_item.childCount()):
+    #                     album_item = artist_item.child(j)
+    #                     album_data = album_item.data(0, Qt.ItemDataRole.UserRole)
                         
-                        if album_data and album_data.get('type') == 'album' and album_data.get('id') == album_id:
-                            # Expandir el álbum
-                            album_item.setExpanded(True)
+    #                     if album_data and album_data.get('type') == 'album' and album_data.get('id') == album_id:
+    #                         # Expandir el álbum
+    #                         album_item.setExpanded(True)
                             
-                            # Buscar y seleccionar la canción
-                            for k in range(album_item.childCount()):
-                                song_item = album_item.child(k)
-                                song_data = song_item.data(0, Qt.ItemDataRole.UserRole)
+    #                         # Buscar y seleccionar la canción
+    #                         for k in range(album_item.childCount()):
+    #                             song_item = album_item.child(k)
+    #                             song_data = song_item.data(0, Qt.ItemDataRole.UserRole)
                                 
-                                if song_data and song_data.get('type') == 'song' and song_data.get('id') == song_id:
-                                    # Seleccionar la canción
-                                    self.results_tree_widget.setCurrentItem(song_item)
-                                    break
+    #                             if song_data and song_data.get('type') == 'song' and song_data.get('id') == song_id:
+    #                                 # Seleccionar la canción
+    #                                 self.results_tree_widget.setCurrentItem(song_item)
+    #                                 break
                             
-                            break
+    #                         break
                     
-                    break
+    #                 break
             
-            print("Árbol actualizado con la canción actual")
-        except Exception as e:
-            print(f"Error al buscar la canción actual: {e}")
-            import traceback
-            traceback.print_exc()
-        finally:
-            conn.close()
+    #         print("Árbol actualizado con la canción actual")
+    #     except Exception as e:
+    #         print(f"Error al buscar la canción actual: {e}")
+    #         import traceback
+    #         traceback.print_exc()
+    #     finally:
+    #         conn.close()
 
     def _handle_next_button(self):
         """Maneja el clic en el botón de siguiente pista."""

@@ -98,8 +98,7 @@ class SearchHandler:
             self.parent.results_tree_widget.clear()
             return
         
-        # Clear current results
-        self.parent.results_tree_widget.clear()
+        print(f"Ejecutando búsqueda con query: '{query}'")
         
         # Check if "only_local_files" is checked or set via configuration
         only_local = False
@@ -113,12 +112,307 @@ class SearchHandler:
         
         print(f"Realizando búsqueda con filtro 'only_local': {only_local}")
         
-        # Procesar filtros especiales
-        if self._has_special_filters(query):
+        # Verificar si hay operadores de combinación en la consulta
+        if "&" in query:
+            print("Detectado operador '&' - realizando búsqueda combinada")
+            sub_queries = query.split("&")
+            print(f"Sub-consultas: {sub_queries}")
+            
+            # Realizar la primera búsqueda en un árbol temporal
+            self.parent.results_tree_widget.clear()
+            first_query = sub_queries[0].strip()
+            
+            # Si la primera consulta está vacía, no hacer nada
+            if not first_query:
+                return
+                
+            # Realizar la primera búsqueda
+            if self._has_special_filters(first_query):
+                self._perform_filtered_search_combined(first_query, only_local)
+            else:
+                self._perform_simple_search(first_query, only_local)
+            
+            # Para cada sub-consulta adicional, aplicar un filtro adicional
+            for i in range(1, len(sub_queries)):
+                sub_query = sub_queries[i].strip()
+                if not sub_query:
+                    continue
+                    
+                print(f"Aplicando filtro adicional: '{sub_query}'")
+                
+                # Construir una lista de ítems clonados para no perder los originales
+                cloned_items = []
+                for j in range(self.parent.results_tree_widget.topLevelItemCount()):
+                    original_item = self.parent.results_tree_widget.topLevelItem(j)
+                    cloned_items.append(self._clone_tree_item(original_item))
+                
+                # Limpiar el árbol y aplicar el siguiente filtro
+                self.parent.results_tree_widget.clear()
+                
+                # Filtrar los elementos clonados con la subconsulta
+                self._apply_filter_to_items(sub_query, cloned_items, only_local)
+        
+        # Procesar filtros especiales normales o consultas con +
+        elif self._has_special_filters(query):
             self._perform_filtered_search(query, only_local)
         else:
             # Búsqueda normal
             self._perform_simple_search(query, only_local)
+
+
+    def _apply_filter_to_items(self, sub_query, items, only_local=False):
+        """Aplica un filtro a una lista de ítems ya clonados."""
+        print(f"Aplicando filtro '{sub_query}' a {len(items)} ítems")
+        
+        # Extract filter type and value
+        filter_type = None
+        filter_value = sub_query
+        
+        # Check for specific filters
+        filters = {"a:": "artist", "t:": "title", "b:": "album", "g:": "genre"}
+        for prefix, filter_name in filters.items():
+            if sub_query.startswith(prefix):
+                filter_type = filter_name
+                filter_value = sub_query[len(prefix):].strip()
+                break
+        
+        print(f"Tipo de filtro: {filter_type}, valor: '{filter_value}'")
+        
+        # Process each top-level item (artists)
+        for artist_item in items:
+            artist_text = artist_item.text(0).lower()
+            
+            # Check if artist matches the filter
+            if filter_type == "artist" and filter_value.lower() not in artist_text:
+                continue
+            
+            # If we're looking for albums or titles, we need to check children
+            if filter_type in ["album", "title"]:
+                matching_albums = []
+                
+                # Check each album of this artist
+                for a_idx in range(artist_item.childCount()):
+                    album_item = artist_item.child(a_idx)
+                    album_text = album_item.text(0).lower()
+                    
+                    # Check if album matches the filter
+                    if filter_type == "album" and filter_value.lower() not in album_text:
+                        continue
+                    
+                    # If filtering by title, check songs in this album
+                    if filter_type == "title":
+                        matching_songs = []
+                        
+                        for s_idx in range(album_item.childCount()):
+                            song_item = album_item.child(s_idx)
+                            song_text = song_item.text(0).lower()
+                            
+                            if filter_value.lower() in song_text:
+                                # Add this song
+                                matching_songs.append(self._clone_tree_item(song_item))
+                        
+                        # If we found matching songs, add the album with just those songs
+                        if matching_songs:
+                            album_clone = self._clone_tree_item(album_item, include_children=False)
+                            for song in matching_songs:
+                                album_clone.addChild(song)
+                            matching_albums.append(album_clone)
+                    else:
+                        # Not filtering by title, add the whole album
+                        matching_albums.append(self._clone_tree_item(album_item))
+                
+                # If we found matching albums, add the artist with just those albums
+                if matching_albums:
+                    artist_clone = self._clone_tree_item(artist_item, include_children=False)
+                    for album in matching_albums:
+                        artist_clone.addChild(album)
+                    self.parent.results_tree_widget.addTopLevelItem(artist_clone)
+                
+            else:
+                # Not filtering by album or title, check if artist matches genre filter
+                if filter_type == "genre":
+                    # Check if any album or song matches the genre
+                    has_matching_genre = False
+                    
+                    for a_idx in range(artist_item.childCount()):
+                        album_item = artist_item.child(a_idx)
+                        album_genre = album_item.text(2).lower()
+                        
+                        if filter_value.lower() in album_genre:
+                            has_matching_genre = True
+                            break
+                        
+                        # Check songs in this album
+                        for s_idx in range(album_item.childCount()):
+                            song_item = album_item.child(s_idx)
+                            song_genre = song_item.text(2).lower()
+                            
+                            if filter_value.lower() in song_genre:
+                                has_matching_genre = True
+                                break
+                        
+                        if has_matching_genre:
+                            break
+                    
+                    if not has_matching_genre:
+                        continue
+                
+                # Add the artist item to the tree
+                self.parent.results_tree_widget.addTopLevelItem(self._clone_tree_item(artist_item))
+        
+        # Expand top-level items
+        for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+            self.parent.results_tree_widget.topLevelItem(i).setExpanded(True)
+
+
+    # def _filter_existing_results(self, sub_query, initial_results):
+    #     """Filtra los resultados existentes basados en una subconsulta."""
+    #     print(f"Filtrando resultados existentes con subconsulta: '{sub_query}'")
+        
+    #     # Clear the tree first to rebuild it with filtered results
+    #     self.parent.results_tree_widget.clear()
+        
+    #     # Extract filter type and value
+    #     filter_type = None
+    #     filter_value = sub_query
+        
+    #     # Check for specific filters
+    #     filters = {"a:": "artist", "t:": "title", "b:": "album", "g:": "genre"}
+    #     for prefix, filter_name in filters.items():
+    #         if sub_query.startswith(prefix):
+    #             filter_type = filter_name
+    #             filter_value = sub_query[len(prefix):].strip()
+    #             break
+        
+    #     print(f"Tipo de filtro: {filter_type}, valor: '{filter_value}'")
+        
+    #     # Process each top-level item (artists)
+    #     for artist_item in initial_results:
+    #         artist_data = artist_item.data(0, Qt.ItemDataRole.UserRole)
+    #         artist_text = artist_item.text(0).lower()
+            
+    #         # Check if artist matches the filter
+    #         if filter_type == "artist" and filter_value.lower() not in artist_text:
+    #             continue
+            
+    #         # If we're looking for albums or titles, we need to check children
+    #         if filter_type in ["album", "title"]:
+    #             matching_albums = []
+                
+    #             # Check each album of this artist
+    #             for a_idx in range(artist_item.childCount()):
+    #                 album_item = artist_item.child(a_idx)
+    #                 album_text = album_item.text(0).lower()
+    #                 album_data = album_item.data(0, Qt.ItemDataRole.UserRole)
+                    
+    #                 # Check if album matches the filter
+    #                 if filter_type == "album" and filter_value.lower() not in album_text:
+    #                     # If looking for titles, check songs in this album
+    #                     if filter_type == "title":
+    #                         matching_songs = []
+                            
+    #                         for s_idx in range(album_item.childCount()):
+    #                             song_item = album_item.child(s_idx)
+    #                             song_text = song_item.text(0).lower()
+                                
+    #                             if filter_value.lower() in song_text:
+    #                                 # Clone the song item
+    #                                 matching_songs.append(self._clone_tree_item(song_item))
+                            
+    #                         # If we found matching songs, add the album with just those songs
+    #                         if matching_songs:
+    #                             cloned_album = self._clone_tree_item(album_item, include_children=False)
+    #                             for song in matching_songs:
+    #                                 cloned_album.addChild(song)
+    #                             matching_albums.append(cloned_album)
+                        
+    #                     # If not looking for titles or no matches, skip this album
+    #                     continue
+                    
+    #                 # Album matches or we're not filtering by album, check songs if filtering by title
+    #                 if filter_type == "title":
+    #                     matching_songs = []
+                        
+    #                     for s_idx in range(album_item.childCount()):
+    #                         song_item = album_item.child(s_idx)
+    #                         song_text = song_item.text(0).lower()
+                            
+    #                         if filter_value.lower() in song_text:
+    #                             # Clone the song item
+    #                             matching_songs.append(self._clone_tree_item(song_item))
+                        
+    #                     # If we found matching songs, add the album with just those songs
+    #                     if matching_songs:
+    #                         cloned_album = self._clone_tree_item(album_item, include_children=False)
+    #                         for song in matching_songs:
+    #                             cloned_album.addChild(song)
+    #                         matching_albums.append(cloned_album)
+    #                 else:
+    #                     # Not filtering by title, add the whole album
+    #                     matching_albums.append(self._clone_tree_item(album_item))
+                
+    #             # If we found matching albums, add the artist with just those albums
+    #             if matching_albums:
+    #                 cloned_artist = self._clone_tree_item(artist_item, include_children=False)
+    #                 for album in matching_albums:
+    #                     cloned_artist.addChild(album)
+    #                 self.parent.results_tree_widget.addTopLevelItem(cloned_artist)
+                
+    #         else:
+    #             # Not filtering by album or title, check if artist matches genre filter
+    #             if filter_type == "genre":
+    #                 # Check if any album or song matches the genre
+    #                 has_matching_genre = False
+                    
+    #                 for a_idx in range(artist_item.childCount()):
+    #                     album_item = artist_item.child(a_idx)
+    #                     album_genre = album_item.text(2).lower()
+                        
+    #                     if filter_value.lower() in album_genre:
+    #                         has_matching_genre = True
+    #                         break
+                        
+    #                     # Check songs in this album
+    #                     for s_idx in range(album_item.childCount()):
+    #                         song_item = album_item.child(s_idx)
+    #                         song_genre = song_item.text(2).lower()
+                            
+    #                         if filter_value.lower() in song_genre:
+    #                             has_matching_genre = True
+    #                             break
+                        
+    #                     if has_matching_genre:
+    #                         break
+                    
+    #                 if not has_matching_genre:
+    #                     continue
+                
+    #             # Add the artist item to the tree
+    #             self.parent.results_tree_widget.addTopLevelItem(self._clone_tree_item(artist_item))
+        
+    #     # Expand top-level items
+    #     for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+    #         self.parent.results_tree_widget.topLevelItem(i).setExpanded(True)
+
+    def _clone_tree_item(self, item, include_children=True):
+        """Clona un item del árbol, opcionalmente incluyendo sus hijos."""
+        # Create a new item
+        new_item = QTreeWidgetItem()
+        
+        # Copy text from columns
+        for i in range(3):  # Assuming 3 columns
+            new_item.setText(i, item.text(i))
+        
+        # Copy user data
+        new_item.setData(0, Qt.ItemDataRole.UserRole, item.data(0, Qt.ItemDataRole.UserRole))
+        
+        # Recursively clone children if requested
+        if include_children:
+            for i in range(item.childCount()):
+                new_item.addChild(self._clone_tree_item(item.child(i)))
+        
+        return new_item
+
 
     def _perform_simple_search(self, query, only_local=False):
         """Perform a simple search across all entity types with proper local filtering."""
@@ -563,45 +857,73 @@ class SearchHandler:
 
     def _perform_filtered_search(self, query, only_local=False):
         """Realiza una búsqueda con filtros especiales manteniendo la estructura jerárquica."""
+        # Si hay + en la consulta, separar en subconsultas
+        if "+" in query:
+            sub_queries = query.split("+")
+            print(f"Detectado operador '+' - realizando búsquedas independientes: {sub_queries}")
+            
+            # Realizar cada búsqueda independientemente
+            for sub_query in sub_queries:
+                sub_query = sub_query.strip()
+                if sub_query:
+                    self._perform_filtered_search_combined(sub_query, only_local)
+            
+            # Expandir elementos de primer nivel
+            for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+                self.parent.results_tree_widget.topLevelItem(i).setExpanded(True)
+            
+            return
+        
+        # Búsqueda normal con un solo filtro
+        self._perform_filtered_search_combined(query, only_local)
+
+
+    def _perform_filtered_search_combined(self, query, only_local=False):
+        """Realiza una búsqueda con filtros especiales para consultas combinadas."""
+        print(f"Realizando búsqueda filtrada con: '{query}'")
+        
         # Analizar la consulta para extraer los filtros
         filters = self._extract_filters(query)
         
-        print(f"Filtros detectados: {filters}")
-        
         # Aplicar los filtros según su tipo
-        if "title" in filters:  # Filtro para título de canción (t:)
-            # Buscar solo canciones que coincidan con el filtro de título
-            self._search_songs_by_title(filters["title"], only_local)
-        elif "artist" in filters:
+        if "artist" in filters:
             # Buscar artistas que coincidan con el filtro
             artists = self.parent.db_manager.search_artists(filters["artist"], only_local)
             for artist in artists:
                 self._add_filtered_artist(artist, only_local)
+        
         elif "album" in filters:
             # Buscar álbumes que coincidan con el filtro
             self._search_albums_filtered(filters["album"], only_local)
+        
         elif "genre" in filters:
             # Buscar por género manteniendo la estructura
             self._search_by_genre(filters["genre"], only_local)
+        
         elif "year" in filters:
             # Buscar por año manteniendo la estructura
             self._search_by_year(filters["year"], only_local)
+        
         elif "label" in filters:
             # Buscar por sello manteniendo la estructura
             self._search_by_label(filters["label"], only_local)
+        
         elif "recent_weeks" in filters:
             # Buscar por semanas recientes manteniendo la estructura
             self._search_recent(filters["recent_weeks"], "week", only_local)
+        
         elif "recent_months" in filters:
             # Buscar por meses recientes manteniendo la estructura
             self._search_recent(filters["recent_months"], "month", only_local)
+        
         elif "recent_years" in filters:
             # Buscar por años recientes manteniendo la estructura
             self._search_recent(filters["recent_years"], "year", only_local)
         
-        # Expandir elementos de primer nivel
-        for i in range(self.parent.results_tree_widget.topLevelItemCount()):
-            self.parent.results_tree_widget.topLevelItem(i).setExpanded(True)
+        elif "title" in filters:
+            # Buscar canciones por título
+            self._search_songs_by_title(filters["title"], only_local)
+
 
     def _extract_filters(self, query):
         """Extrae los filtros de la consulta."""
