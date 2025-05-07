@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import (QComboBox, QWidget, QTreeWidgetItem, QPushButton,
                              QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox, 
-                             QRadioButton, QSpinBox, QComboBox)
+                             QRadioButton, QSpinBox, QComboBox, QGridLayout, QDialog)
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
 import os
@@ -53,6 +53,9 @@ class MusicFuzzyModule(BaseModule):
         # Initialize player manager with config
         self.player_manager = PlayerManager(kwargs)
         print("PlayerManager inicializado")
+
+        # Load saved button configuration
+        self._load_saved_button_configuration()
 
         # Cargar UI de ajustes avanzados después de inicializar todos los componentes
         # IMPORTANTE: Movido después de la inicialización de search_handler
@@ -175,6 +178,9 @@ class MusicFuzzyModule(BaseModule):
         
         # Intentar conectar botones de filtro de tiempo
         self._connect_time_filter_buttons()
+
+        # Connect edit_buttons button (this is the "pushButton" with an icon in your UI)
+        self._connect_edit_buttons()
 
 
     def _connect_time_filter_buttons(self):
@@ -2224,3 +2230,256 @@ class MusicFuzzyModule(BaseModule):
             self.search_handler._search_by_year_range(year_range, only_local)
         else:
             print("ERROR: search_handler no está disponible")
+
+
+# EDIT BUTTONS 
+    def _connect_edit_buttons(self):
+        """Connect the edit_buttons button to the dialog."""
+        # Find the edit_buttons button (the one with the ghost icon)
+        edit_buttons = self.findChild(QPushButton, "pushButton")
+        if edit_buttons:
+            try:
+                edit_buttons.clicked.disconnect()
+            except:
+                pass
+            edit_buttons.clicked.connect(self._show_button_config_dialog)
+            print("Botón 'edit_buttons' (pushButton) conectado")
+        else:
+            print("WARNING: Button 'pushButton' not found")
+            # Try to find by tooltip
+            for button in self.findChildren(QPushButton):
+                if button.toolTip() == "Personalizar botones":
+                    print(f"Found edit button by tooltip: {button.objectName()}")
+                    try:
+                        button.clicked.disconnect()
+                    except:
+                        pass
+                    button.clicked.connect(self._show_button_config_dialog)
+                    print("Botón 'edit_buttons' conectado by tooltip")
+                    return
+
+    def _show_button_config_dialog(self):
+        """Show the dialog to configure visible buttons."""
+        try:
+            # Import the dialog class
+            from modules.submodules.fuzzy.button_config_dialog import ButtonConfigDialog
+            
+            # Get current button configuration
+            print("Getting current button configuration...")
+            current_config = self._get_current_button_config()
+            print(f"Current configuration: {current_config}")
+            
+            # Create dialog
+            dialog = ButtonConfigDialog(self, current_config)
+            
+            # Get available buttons
+            print("Getting available buttons...")
+            available_buttons = self._get_available_buttons()
+            print(f"Found {len(available_buttons)} available buttons")
+            
+            # Set available buttons in dialog
+            dialog.set_available_buttons(available_buttons)
+            
+            # Show dialog and process result
+            print("Showing dialog...")
+            result = dialog.exec()
+            print(f"Dialog result: {result}")
+            
+            if result == 1:  # QDialog.Accepted (using the value directly)
+                print("Dialog accepted, applying new configuration...")
+                # Get new configuration
+                new_config = dialog.get_button_configuration()
+                print(f"New configuration: {new_config}")
+                # Apply the new configuration
+                self._apply_button_configuration(new_config)
+                # Save the configuration
+                self._save_button_configuration(new_config)
+            else:
+                print("Dialog rejected, keeping current configuration")
+        except Exception as e:
+            print(f"Error showing button config dialog: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def _get_available_buttons(self):
+        """Get list of all available buttons in buttons_container."""
+        buttons = []
+        if hasattr(self, 'buttons_container'):
+            # Find all buttons in the container
+            for button in self.buttons_container.findChildren(QPushButton):
+                # Get button name
+                name = button.objectName()
+                
+                # Skip buttons without proper names
+                if not name or name.isspace():
+                    continue
+                    
+                # Try to create a display name by removing '_button' suffix and capitalizing
+                if name.endswith('_button'):
+                    display_name = name[:-7].capitalize()
+                else:
+                    display_name = name.capitalize()
+                
+                # Special cases for better display names
+                button_display_names = {
+                    'play_button': 'Reproducir',
+                    'add_to_queue': 'Añadir a Cola',
+                    'spotify_button': 'Spotify',
+                    'folder_button': 'Carpeta',
+                    'playing_button': 'Reproduciendo',
+                    'muspy_button': 'Muspy',
+                    'feeds_button': 'Feeds',
+                    'scrobble_button': 'Last.fm',
+                    'muspy_button_2': 'Detener',
+                    'play_button_3': 'Anterior',
+                    'play_button_4': 'Siguiente',
+                    'jaangle_button': 'Juego',
+                    'db_editor_button': 'Editor BD',
+                    'url_playlists_button': 'Playlists URL',
+                    'conciertos_button': 'Conciertos',
+                    'stats_button': 'Estadísticas'
+                }
+                
+                if name in button_display_names:
+                    display_name = button_display_names[name]
+                
+                buttons.append({
+                    'name': name,
+                    'display_name': display_name,
+                    'widget': button
+                })
+                
+        print(f"Found {len(buttons)} available buttons: {[b['name'] for b in buttons]}")
+        return buttons
+
+    def _get_current_button_config(self):
+        """Get current button configuration."""
+        # Try to load config from settings
+        from PyQt6.QtCore import QSettings
+        settings = QSettings("MusicApp", "ButtonConfig")
+        
+        # Check if we have a saved configuration
+        if settings.contains("button_config"):
+            # Load and return the configuration
+            config = settings.value("button_config", [])
+            if isinstance(config, list) and len(config) == 16:
+                return config
+        
+        # Default configuration: build a 4x4 grid reflecting current layout
+        if hasattr(self, 'buttons_container'):
+            # Create an empty grid
+            grid = [["none" for _ in range(4)] for _ in range(4)]
+            
+            # Get layout
+            layout = self.buttons_container.layout()
+            if layout and isinstance(layout, QGridLayout):
+                # Get each button from the layout
+                for i in range(layout.count()):
+                    item = layout.itemAt(i)
+                    if item and item.widget():
+                        widget = item.widget()
+                        if isinstance(widget, QPushButton):
+                            # Try to get position information
+                            pos_info = layout.getItemPosition(i)
+                            if pos_info:
+                                row, col = pos_info[0], pos_info[1]
+                                if 0 <= row < 4 and 0 <= col < 4:
+                                    # Store button name in the grid
+                                    grid[row][col] = widget.objectName()
+            
+            # Flatten grid to a list
+            config = []
+            for row in grid:
+                config.extend(row)
+            
+            # Ensure we have exactly 16 items
+            while len(config) < 16:
+                config.append("none")
+            
+            return config[:16]  # Only take first 16 items if somehow we have more
+        
+        # Fallback: empty configuration
+        return ["none"] * 16
+
+    def _apply_button_configuration(self, config):
+        """Apply button configuration: show/hide buttons and rearrange."""
+        if not hasattr(self, 'buttons_container'):
+            print("ERROR: buttons_container not found")
+            return
+        
+        print(f"Applying button configuration: {config}")
+        
+        # Get all buttons by name
+        all_buttons = {}
+        for button in self.buttons_container.findChildren(QPushButton):
+            button_name = button.objectName()
+            if button_name:  # Skip buttons without names
+                all_buttons[button_name] = button
+                # Initially hide all buttons
+                button.setVisible(False)
+        
+        print(f"Found {len(all_buttons)} buttons in container")
+        
+        # Get grid layout
+        layout = self.buttons_container.layout()
+        if not layout:
+            print("Creating new QGridLayout for buttons_container")
+            layout = QGridLayout(self.buttons_container)
+        elif not isinstance(layout, QGridLayout):
+            print("WARNING: buttons_container layout is not a QGridLayout")
+            # Remove old layout and create new one
+            QWidget().setLayout(self.buttons_container.layout())
+            layout = QGridLayout(self.buttons_container)
+        
+        # Clear the grid layout
+        while layout.count():
+            item = layout.takeAt(0)
+            if item and item.widget():
+                layout.removeWidget(item.widget())
+        
+        # Set some spacing in the layout
+        layout.setSpacing(5)
+        
+        # Apply new configuration
+        for idx, button_name in enumerate(config):
+            if button_name == "none":
+                continue
+                
+            if button_name in all_buttons:
+                button = all_buttons[button_name]
+                row = idx // 4
+                col = idx % 4
+                
+                print(f"Placing {button_name} at position ({row}, {col})")
+                
+                # Make button visible and add to layout
+                button.setVisible(True)
+                layout.addWidget(button, row, col)
+            else:
+                print(f"Button not found: {button_name}")
+        
+        # Update layout
+        self.buttons_container.setLayout(layout)
+        print("Button configuration applied successfully")
+    
+    def _save_button_configuration(self, config):
+        """Save button configuration to settings."""
+        from PyQt6.QtCore import QSettings
+        settings = QSettings("MusicApp", "ButtonConfig")
+        settings.setValue("button_config", config)
+        print("Button configuration saved successfully")
+
+    # This method needs to be added to _connect_additional_signals
+    def _load_saved_button_configuration(self):
+        """Load and apply saved button configuration on startup."""
+        # Try to load config from settings
+        from PyQt6.QtCore import QSettings
+        settings = QSettings("MusicApp", "ButtonConfig")
+        
+        # Check if we have a saved configuration
+        if settings.contains("button_config"):
+            # Load the configuration
+            config = settings.value("button_config", [])
+            # Apply the configuration
+            self._apply_button_configuration(config)
+            print("Loaded saved button configuration")
