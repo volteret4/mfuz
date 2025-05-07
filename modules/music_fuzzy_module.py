@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QTreeWidgetItem, QPushButton, QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox, QRadioButton
+from PyQt6.QtWidgets import (QComboBox, QWidget, QTreeWidgetItem, QPushButton,
+                             QLabel, QVBoxLayout, QCheckBox, QStackedWidget, QGroupBox, 
+                             QRadioButton, QSpinBox, QComboBox)
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QPixmap
 import os
@@ -47,10 +49,15 @@ class MusicFuzzyModule(BaseModule):
         self.search_handler = SearchHandler(self)
         self.ui_updater = UIUpdater(self)
         self.link_manager = LinkManager(self)
-    
+
         # Initialize player manager with config
         self.player_manager = PlayerManager(kwargs)
         print("PlayerManager inicializado")
+
+        # Cargar UI de ajustes avanzados después de inicializar todos los componentes
+        # IMPORTANTE: Movido después de la inicialización de search_handler
+        if hasattr(self, 'advanced_settings_container'):
+            self._load_advanced_settings_ui()
 
         # Conectar señales adicionales después de inicializar todos los componentes
         self._connect_additional_signals()
@@ -70,6 +77,10 @@ class MusicFuzzyModule(BaseModule):
             
             # Ensure the advanced settings container exists
             self._ensure_widget_exists('advanced_settings_container')
+            
+            # Cargar la UI de ajustes avanzados preventivamente
+            if hasattr(self, 'advanced_settings_container'):
+                self._load_advanced_settings_ui()
             
             # Verificar y acceder a todos los widgets importantes
             # Group boxes
@@ -105,10 +116,19 @@ class MusicFuzzyModule(BaseModule):
             # Ensure we have a reference to the feeds groupbox
             self._ensure_widget_exists('feeds_groupbox')
 
-
             # Emitir señal de que la UI está inicializada
             self.ui_initialized.emit()
             
+            # Intentar conectar el botón apply_time_filter directamente
+            apply_time_filter = self.findChild(QPushButton, "apply_time_filter")
+            if apply_time_filter:
+                try:
+                    apply_time_filter.clicked.disconnect()
+                except:
+                    pass
+                apply_time_filter.clicked.connect(self._handle_apply_time_filter)
+                print("Botón apply_time_filter conectado directamente desde init_ui")
+
             return True
         else:
             print(f"Error loading UI file: {ui_file_name}")
@@ -152,6 +172,36 @@ class MusicFuzzyModule(BaseModule):
 
         # Conectar los botones de navegación de feeds
         self._connect_feed_tab_buttons()
+        
+        # Intentar conectar botones de filtro de tiempo
+        self._connect_time_filter_buttons()
+
+
+    def _connect_time_filter_buttons(self):
+        """Conectar los botones de filtro de tiempo directamente."""
+        # Buscar los controles dentro del widget avanzado
+        apply_time_filter = self.findChild(QPushButton, "apply_time_filter")
+        time_value = self.findChild(QSpinBox, "time_value")
+        time_unit = self.findChild(QComboBox, "time_unit")
+        
+        if apply_time_filter and time_value and time_unit:
+            # Guardar referencias a los controles
+            self.time_value = time_value
+            self.time_unit = time_unit
+            
+            # Conectar el botón de aplicar filtro
+            try:
+                apply_time_filter.clicked.disconnect()
+            except:
+                pass
+            
+            if hasattr(self, 'search_handler') and self.search_handler:
+                apply_time_filter.clicked.connect(self.search_handler._apply_time_filter)
+                print("Botón de filtro de tiempo conectado correctamente")
+            else:
+                print("WARNING: search_handler no inicializado, no se puede conectar botón de filtro")
+        else:
+            print("No se encontraron todos los controles de filtro de tiempo")
 
 
     def _connect_feed_tab_buttons(self):
@@ -205,7 +255,7 @@ class MusicFuzzyModule(BaseModule):
                 # Añadir widget al layout
                 layout.addWidget(advanced_widget)
                 
-                # Obtener referencia al radio button (no al checkbox)
+                # Obtener referencia al radio button
                 self.only_local_files = advanced_widget.findChild(QRadioButton, "only_local_files")
                 
                 if self.only_local_files:
@@ -216,15 +266,19 @@ class MusicFuzzyModule(BaseModule):
                     except:
                         pass
                         
-                    # Conectar señales
-                    self.only_local_files.toggled.connect(self.search_handler.perform_search)
-                    self.only_local_files.toggled.connect(self._save_checkbox_state)
+                    # Verificar que search_handler existe antes de usarlo
+                    if hasattr(self, 'search_handler') and self.search_handler:
+                        # Conectar señales
+                        self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                        self.only_local_files.toggled.connect(self._save_checkbox_state)
+                    else:
+                        print("WARNING: search_handler no inicializado, no se pueden conectar señales")
                     
                     # Establecer el estado inicial desde la configuración cargada en __init__
                     print(f"Estableciendo estado inicial del radio button: {self.only_local_files_state}")
                     self.only_local_files.setChecked(bool(self.only_local_files_state))
                     
-                    # También obtener la referencia al botón "show_all" para completar el grupo
+                    # También obtener el show_all para mantener el grupo consistente
                     self.show_all = advanced_widget.findChild(QRadioButton, "show_all")
                     if self.show_all:
                         self.show_all.setChecked(not bool(self.only_local_files_state))
@@ -233,17 +287,84 @@ class MusicFuzzyModule(BaseModule):
                     # Crearlo programáticamente como fallback
                     self.only_local_files = QRadioButton("Mostrar solo archivos locales")
                     layout.addWidget(self.only_local_files)
-                    self.only_local_files.toggled.connect(self.search_handler.perform_search)
+                    # Verificar que search_handler existe antes de usarlo
+                    if hasattr(self, 'search_handler') and self.search_handler:
+                        self.only_local_files.toggled.connect(self.search_handler.perform_search)
                     self.only_local_files.toggled.connect(self._save_checkbox_state)
                     self.only_local_files.setChecked(bool(self.only_local_files_state))
+                    
+                # Conectar el botón apply_time_filter si existe
+                apply_time_filter = advanced_widget.findChild(QPushButton, "apply_time_filter")
+                if apply_time_filter:
+                    try:
+                        apply_time_filter.clicked.disconnect()
+                    except:
+                        pass
+                    
+                    # Conectar DIRECTAMENTE al método en esta clase, no en search_handler
+                    apply_time_filter.clicked.connect(self._handle_apply_time_filter)
+                    print("Botón apply_time_filter conectado directamente a _handle_apply_time_filter")
+                    
+                    # Guardar referencias a los controles de tiempo
+                    self.time_value = advanced_widget.findChild(QSpinBox, "time_value")
+                    self.time_unit = advanced_widget.findChild(QComboBox, "time_unit")
+                    
+                    if self.time_value and self.time_unit:
+                        print("Controles de tiempo encontrados y asignados correctamente")
+                    else:
+                        print("WARNING: No se pudieron encontrar los controles de tiempo")
+
+
+                # Conectar el botón apply_year si existe
+                apply_year = advanced_widget.findChild(QPushButton, "apply_year")
+                if apply_year:
+                    try:
+                        apply_year.clicked.disconnect()
+                    except:
+                        pass
+                    
+                    # Conectar directamente al método en esta clase
+                    apply_year.clicked.connect(self._handle_apply_year)
+                    print("Botón apply_year conectado directamente a _handle_apply_year")
+                    
+                    # Guardar referencia al control year_only_spin
+                    self.year_only_spin = advanced_widget.findChild(QSpinBox, "year_only_spin")
+                    
+                    if self.year_only_spin:
+                        print("Control year_only_spin encontrado y asignado correctamente")
+                    else:
+                        print("WARNING: No se pudo encontrar el control year_only_spin")
+
+
+                # Conectar el botón de décadas (suponiendo que se llama "apply_decade" o similar)
+                apply_decade = advanced_widget.findChild(QPushButton, "apply_decade")
+                if not apply_decade:
+                    # Si no se encuentra, podría ser el botón "apply_month_year" renombrado
+                    apply_decade = advanced_widget.findChild(QPushButton, "apply_month_year")
+
+                if apply_decade:
+                    try:
+                        apply_decade.clicked.disconnect()
+                    except:
+                        pass
+                    
+                    # Conectar directamente al método en esta clase
+                    apply_decade.clicked.connect(self._handle_apply_decade)
+                    print("Botón de décadas conectado directamente a _handle_apply_decade")
+                    
+                    # Guardar referencias a los controles
+                    self.year_spin_begin = advanced_widget.findChild(QSpinBox, "year_spin_begin")
+                    self.year_spin_end = advanced_widget.findChild(QSpinBox, "year_spin_end")
+                    
+                    if self.year_spin_begin and self.year_spin_end:
+                        print("Controles de rango de años encontrados y asignados correctamente")
+                    else:
+                        print("WARNING: No se pudieron encontrar los controles de rango de años")
+
+
             else:
                 print(f"Archivo UI de ajustes avanzados no encontrado: {ui_path}")
                 # Crear una UI básica como fallback
-                self.only_local_files = QRadioButton("Mostrar solo archivos locales")
-                layout.addWidget(self.only_local_files)
-                self.only_local_files.toggled.connect(self.search_handler.perform_search)
-                self.only_local_files.toggled.connect(self._save_checkbox_state)
-                self.only_local_files.setChecked(bool(self.only_local_files_state))
 
             playing_button = advanced_widget.findChild(QPushButton, "playing_button")
             if playing_button:
@@ -318,6 +439,16 @@ class MusicFuzzyModule(BaseModule):
                     print(f"Error loading advanced settings UI: {e}")
                     import traceback
                     traceback.print_exc()
+                
+                # Conectar el botón apply_time_filter
+                apply_time_filter = advanced_widget.findChild(QPushButton, "apply_time_filter")
+                if apply_time_filter:
+                    try:
+                        apply_time_filter.clicked.disconnect()
+                    except:
+                        pass
+                    apply_time_filter.clicked.connect(self._handle_apply_time_filter)
+                    print("Botón apply_time_filter conectado desde _toggle_advanced_settings")
             
             # Show/hide the container based on checkbox state
             self.advanced_settings_container.setVisible(checked)
@@ -1955,3 +2086,141 @@ class MusicFuzzyModule(BaseModule):
             import traceback
             traceback.print_exc()
             return False
+
+    def _handle_apply_time_filter(self):
+        """Manejador directo del botón apply_time_filter."""
+        print("Botón apply_time_filter pulsado - método directo")
+        
+        # Verificar que tenemos referencias a los controles necesarios
+        if not hasattr(self, 'time_value') or not hasattr(self, 'time_unit'):
+            # Intentar encontrarlos directamente
+            time_value = self.findChild(QSpinBox, "time_value")
+            time_unit = self.findChild(QComboBox, "time_unit")
+            
+            if time_value and time_unit:
+                self.time_value = time_value
+                self.time_unit = time_unit
+            else:
+                print("ERROR: No se pudieron encontrar los controles de tiempo")
+                return
+        
+        # Obtener el valor y la unidad de tiempo seleccionados
+        time_value = self.time_value.value()
+        time_unit_index = self.time_unit.currentIndex()
+        
+        # Obtener el estado de only_local
+        only_local = False
+        if hasattr(self, 'only_local_files') and self.only_local_files:
+            only_local = self.only_local_files.isChecked()
+        
+        # Convertir índice a unidad de tiempo
+        time_unit = ""
+        if time_unit_index == 0:
+            time_unit = "week"
+        elif time_unit_index == 1:
+            time_unit = "month"
+        elif time_unit_index == 2:
+            time_unit = "year"
+        
+        print(f"Filtrando por {time_value} {time_unit}(s), only_local: {only_local}")
+        
+        # Llamar directamente al método de búsqueda en search_handler
+        if hasattr(self, 'search_handler') and self.search_handler:
+            # Asegurarnos de que la búsqueda es visible
+            if hasattr(self, 'results_tree_widget'):
+                self.results_tree_widget.clear()
+            
+            # Llamar al método de búsqueda
+            self.search_handler._search_recent(str(time_value), time_unit, only_local)
+        else:
+            print("ERROR: search_handler no está disponible")
+
+
+    def _handle_apply_year(self):
+        """Manejador directo del botón apply_year."""
+        print("Botón apply_year pulsado - método directo")
+        
+        # Verificar que tenemos referencias al control necesario
+        if not hasattr(self, 'year_only_spin'):
+            # Intentar encontrarlo directamente
+            year_only_spin = self.findChild(QSpinBox, "year_only_spin")
+            
+            if year_only_spin:
+                self.year_only_spin = year_only_spin
+            else:
+                print("ERROR: No se pudo encontrar el control year_only_spin")
+                return
+        
+        # Obtener el año seleccionado
+        year_value = self.year_only_spin.value()
+        
+        # Obtener el estado de only_local
+        only_local = False
+        if hasattr(self, 'only_local_files') and self.only_local_files:
+            only_local = self.only_local_files.isChecked()
+        
+        print(f"Filtrando por año: {year_value}, only_local: {only_local}")
+        
+        # Limpiar resultados actuales
+        if hasattr(self, 'results_tree_widget'):
+            self.results_tree_widget.clear()
+        
+        # Realizar la búsqueda por año usando search_handler
+        if hasattr(self, 'search_handler') and self.search_handler:
+            self.search_handler._search_by_year(str(year_value), only_local)
+        else:
+            print("ERROR: search_handler no está disponible")
+
+
+    def _handle_apply_decade(self):
+        """Manejador directo del botón de filtro por décadas."""
+        print("Botón de filtro por décadas pulsado - método directo")
+        
+        # Verificar que tenemos referencias a los controles necesarios
+        if not hasattr(self, 'year_spin_begin'):
+            # Intentar encontrarlo directamente
+            year_spin_begin = self.findChild(QSpinBox, "year_spin_begin")
+            
+            if year_spin_begin:
+                self.year_spin_begin = year_spin_begin
+            else:
+                print("ERROR: No se pudo encontrar el control year_spin_begin")
+                return
+        
+        if not hasattr(self, 'year_spin_end'):
+            # Intentar encontrarlo directamente
+            year_spin_end = self.findChild(QSpinBox, "year_spin_end")
+            
+            if year_spin_end:
+                self.year_spin_end = year_spin_end
+            else:
+                print("ERROR: No se pudo encontrar el control year_spin_end")
+                return
+        
+        # Obtener los años seleccionados
+        year_begin = self.year_spin_begin.value()
+        year_end = self.year_spin_end.value()
+        
+        # Verificar que el rango es válido
+        if year_begin > year_end:
+            print(f"Rango de años inválido: {year_begin}-{year_end}")
+            return
+        
+        # Obtener el estado de only_local
+        only_local = False
+        if hasattr(self, 'only_local_files') and self.only_local_files:
+            only_local = self.only_local_files.isChecked()
+        
+        print(f"Filtrando por rango de años: {year_begin}-{year_end}, only_local: {only_local}")
+        
+        # Limpiar resultados actuales
+        if hasattr(self, 'results_tree_widget'):
+            self.results_tree_widget.clear()
+        
+        # Realizar la búsqueda por rango de años usando search_handler
+        if hasattr(self, 'search_handler') and self.search_handler:
+            # Crear un string con el formato "año_inicio-año_fin"
+            year_range = f"{year_begin}-{year_end}"
+            self.search_handler._search_by_year_range(year_range, only_local)
+        else:
+            print("ERROR: search_handler no está disponible")

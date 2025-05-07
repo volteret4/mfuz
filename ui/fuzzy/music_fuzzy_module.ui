@@ -189,7 +189,7 @@
    <item>
     <widget class="QFrame" name="advanced_settings_container">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -1095,7 +1095,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="info_panel_stacked">
             <property name="currentIndex">
-             <number>0</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="info_page">
              <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -2905,8 +2905,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>84</width>
-                          <height>117</height>
+                          <width>1046</width>
+                          <height>459</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_15">
@@ -2925,7 +2925,7 @@ QPushButton:hover {
                          <item>
                           <widget class="QGroupBox" name="groupBox_artists">
                            <property name="title">
-                            <string>GroupBox</string>
+                            <string/>
                            </property>
                            <layout class="QVBoxLayout" name="verticalLayout_20">
                             <property name="leftMargin">
@@ -3181,7 +3181,7 @@ QPushButton:hover {
               <item>
                <widget class="QGroupBox" name="groupBox">
                 <property name="title">
-                 <string>GroupBox</string>
+                 <string/>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_14">
                  <item>

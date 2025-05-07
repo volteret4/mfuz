@@ -1149,12 +1149,14 @@ class SearchHandler:
 
     def _search_by_year(self, year_query, only_local=False):
         """Busca por año manteniendo la estructura jerárquica completa."""
-        # Procesar el año que puede venir en varios formatos
-        year_range = self._process_year_query(year_query)
-        if not year_range:
-            return
+        print(f"Ejecutando búsqueda por año: {year_query}")
         
-        min_year, max_year = year_range
+        # Intentar convertir a entero para búsqueda exacta
+        try:
+            year_value = int(year_query.strip())
+        except ValueError:
+            print(f"Valor de año inválido: {year_query}")
+            return
         
         conn = self.parent.db_manager._get_connection()
         if not conn:
@@ -1163,14 +1165,16 @@ class SearchHandler:
         try:
             cursor = conn.cursor()
             
-            # Construir la consulta SQL
+            # Construir la consulta SQL para encontrar álbumes por año
+            # Nos aseguramos de buscar tanto el año exacto como años en formato YYYY-MM-DD
             if only_local:
                 sql = """
                     SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label, a.origen,
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE a.origen = 'local' AND 
+                    WHERE (a.year = ? OR a.year LIKE ?) AND a.origen = 'local'
+                    ORDER BY ar.name, a.year DESC
                 """
             else:
                 sql = """
@@ -1178,27 +1182,21 @@ class SearchHandler:
                         ar.id as artist_id, ar.name as artist_name
                     FROM albums a
                     JOIN artists ar ON a.artist_id = ar.id
-                    WHERE 
+                    WHERE a.year = ? OR a.year LIKE ?
+                    ORDER BY ar.name, a.year DESC
                 """
             
-            # Condición para el año
-            if min_year == max_year:
-                # Buscar un año específico
-                sql += "(a.year = ? OR a.year LIKE ?)"
-                year_pattern = f"{min_year}%"
-                params = (str(min_year), year_pattern)
-            else:
-                # Buscar un rango de años
-                sql += "(CAST(substr(a.year, 1, 4) AS INTEGER) BETWEEN ? AND ?)"
-                params = (min_year, max_year)
+            # Usar dos patrones: año exacto y año con formato YYYY-*
+            year_pattern = f"{year_value}-%"
+            params = (str(year_value), year_pattern)
             
-            sql += " ORDER BY ar.name, a.year DESC"
-            
+            print(f"Ejecutando SQL: {sql} con parámetros: {params}")
             cursor.execute(sql, params)
             
             # Diccionario para almacenar los artistas ya añadidos
             artists_added = {}
             
+            # Procesar resultados
             for row in cursor.fetchall():
                 artist_id = row['artist_id']
                 album_id = row['album_id']
@@ -1240,9 +1238,16 @@ class SearchHandler:
                         songs = self.parent.db_manager.get_album_songs(album_id, only_local)
                         for song in songs:
                             self._add_filtered_song(song, album_item, only_local)
+            
+            # Expandir elementos de primer nivel
+            for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+                item = self.parent.results_tree_widget.topLevelItem(i)
+                item.setExpanded(True)
         
         except sqlite3.Error as e:
             print(f"Error en búsqueda por año: {e}")
+            import traceback
+            traceback.print_exc()
         finally:
             conn.close()
 
@@ -1378,202 +1383,166 @@ class SearchHandler:
             print(f"Valor de tiempo inválido: {time_value}")
             return
         
-        conn = self.db_manager._get_connection()
+        # Limpiar resultados actuales
+        self.parent.results_tree_widget.clear()
+        
+        conn = self.parent.db_manager._get_connection()
         if not conn:
             return
         
         try:
             cursor = conn.cursor()
             
-            # Construir la consulta según la unidad de tiempo
+            # Obtener la fecha actual para comparar
+            import datetime
+            now = datetime.datetime.now()
+            
+            # Determinar la columna y valor a usar según la unidad de tiempo
             if time_unit == "week":
                 column = "added_week"
+                current_value = int(now.strftime("%V"))  # Número de semana actual (1-53)
+                compare_value = max(1, current_value - time_value)  # No permitir valores menores a 1
+                
+                # Considerar cambio de año
+                if compare_value > current_value:
+                    # Estamos cruzando al año anterior
+                    where_clause = f"({column} >= {compare_value} OR {column} <= {current_value})"
+                else:
+                    where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
+                    
             elif time_unit == "month":
                 column = "added_month"
+                current_value = now.month
+                compare_value = current_value - time_value
+                
+                # Considerar cambio de año
+                if compare_value <= 0:
+                    # Estamos cruzando al año anterior
+                    months_in_current_year = current_value
+                    months_in_prev_year = abs(compare_value)
+                    year_column = "added_year"
+                    current_year = now.year
+                    prev_year = current_year - 1
+                    
+                    where_clause = f"({column} >= 1 AND {column} <= {current_value} AND {year_column} = {current_year}) OR " \
+                                f"({column} > {12 - months_in_prev_year} AND {year_column} = {prev_year})"
+                else:
+                    where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
+                    
             elif time_unit == "year":
                 column = "added_year"
+                current_value = now.year
+                compare_value = current_value - time_value
+                where_clause = f"{column} >= {compare_value} AND {column} <= {current_value}"
+                
             else:
                 print(f"Unidad de tiempo inválida: {time_unit}")
                 return
             
-            # Construir las consultas para canciones, álbumes y artistas
-            entities_found = {
-                'artists': [],
-                'albums': [],
-                'songs': []
-            }
+            print(f"Filtrando por tiempo: {where_clause}")
             
-            # 1. Consultar canciones recientes
+            # Construir consultas separadas para canciones, álbumes y artistas
+            # 1. Primero, encontrar artistas que tienen elementos recientes
             if only_local:
-                songs_sql = f"""
-                    SELECT DISTINCT s.id as song_id, s.title, s.track_number, s.artist, s.album, s.genre, 
-                        s.file_path, s.duration, s.bitrate, ar.id as artist_id, al.id as album_id,
-                        al.name as album_name, al.year as album_year, al.genre as album_genre
-                    FROM songs s
-                    LEFT JOIN artists ar ON s.artist = ar.name
-                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
-                    WHERE s.{column} <= ? AND s.origen = 'local'
-                    ORDER BY ar.name, al.name, s.track_number
+                artist_sql = f"""
+                    SELECT DISTINCT ar.id, ar.name, ar.formed_year, ar.origin
+                    FROM artists ar
+                    JOIN albums al ON ar.id = al.artist_id
+                    JOIN songs s ON s.album = al.name
+                    WHERE (s.{where_clause}) AND s.origen = 'local'
+                    ORDER BY ar.name
                 """
             else:
-                songs_sql = f"""
-                    SELECT DISTINCT s.id as song_id, s.title, s.track_number, s.artist, s.album, s.genre, 
-                        s.file_path, s.duration, s.bitrate, ar.id as artist_id, al.id as album_id,
-                        al.name as album_name, al.year as album_year, al.genre as album_genre
-                    FROM songs s
-                    LEFT JOIN artists ar ON s.artist = ar.name
-                    LEFT JOIN albums al ON s.album = al.name AND al.artist_id = ar.id
-                    WHERE s.{column} <= ?
-                    ORDER BY ar.name, al.name, s.track_number
+                artist_sql = f"""
+                    SELECT DISTINCT ar.id, ar.name, ar.formed_year, ar.origin
+                    FROM artists ar
+                    JOIN albums al ON ar.id = al.artist_id
+                    JOIN songs s ON s.album = al.name
+                    WHERE s.{where_clause}
+                    ORDER BY ar.name
                 """
             
-            cursor.execute(songs_sql, (time_value,))
-            songs_results = cursor.fetchall()
-            for row in songs_results:
-                if row['artist_id'] and row['artist_id'] not in [a['id'] for a in entities_found['artists']]:
-                    entities_found['artists'].append({
-                        'id': row['artist_id'],
-                        'name': row['artist']
-                    })
-                
-                if row['album_id'] and row['album_id'] not in [a['id'] for a in entities_found['albums']]:
-                    entities_found['albums'].append({
-                        'id': row['album_id'],
-                        'name': row['album_name'],
-                        'artist_id': row['artist_id'],
-                        'year': row['album_year'],
-                        'genre': row['album_genre']
-                    })
-                
-                entities_found['songs'].append({
-                    'id': row['song_id'],
-                    'title': row['title'],
-                    'artist_id': row['artist_id'],
-                    'album_id': row['album_id'],
-                    'track_number': row['track_number'],
-                    'file_path': row['file_path'],
-                    'genre': row['genre'],
-                    'artist': row['artist'],
-                    'album': row['album'],
-                    'duration': row['duration']
-                })
+            cursor.execute(artist_sql)
+            artists = cursor.fetchall()
             
-            # 2. Consultar álbumes recientes (que no se hayan encontrado en la consulta de canciones)
-            try:
-                # Verificar si la columna added_* existe en la tabla albums
-                cursor.execute(f"SELECT * FROM pragma_table_info('albums') WHERE name='{column}'")
-                has_added_column = cursor.fetchone() is not None
+            # Para cada artista, añadirlo al árbol
+            for artist in artists:
+                artist_item = self._add_filtered_artist({
+                    'id': artist['id'],
+                    'name': artist['name'],
+                    'formed_year': artist['formed_year'],
+                    'origin': artist['origin'],
+                }, only_local, load_content=False)
                 
-                if has_added_column:
-                    album_ids = [a['id'] for a in entities_found['albums']]
-                    album_id_filter = ""
-                    if album_ids:
-                        album_id_filter = f" AND id NOT IN ({','.join(['?' for _ in album_ids])})"
-                    
-                    if only_local:
-                        albums_sql = f"""
-                            SELECT id, name, year, genre, artist_id, origen
-                            FROM albums
-                            WHERE {column} <= ? {album_id_filter} AND origen = 'local'
-                            ORDER BY artist_id, year DESC, name
-                        """
-                    else:
-                        albums_sql = f"""
-                            SELECT id, name, year, genre, artist_id, origen
-                            FROM albums
-                            WHERE {column} <= ? {album_id_filter}
-                            ORDER BY artist_id, year DESC, name
-                        """
-                    
-                    params = [time_value] + album_ids if album_ids else [time_value]
-                    cursor.execute(albums_sql, tuple(params))
-                    
-                    for row in cursor.fetchall():
-                        artist_id = row['artist_id']
-                        if artist_id and artist_id not in [a['id'] for a in entities_found['artists']]:
-                            artist = self.db_manager.get_artist_details(artist_id)
-                            if artist:
-                                entities_found['artists'].append({
-                                    'id': artist_id,
-                                    'name': artist['name']
-                                })
-                        
-                        entities_found['albums'].append({
-                            'id': row['id'],
-                            'name': row['name'],
-                            'artist_id': artist_id,
-                            'year': row['year'],
-                            'genre': row['genre'],
-                            'origen': row['origen']
-                        })
-            except sqlite3.Error as e:
-                print(f"Error consultando álbumes recientes: {e}")
-            
-            # 3. Consultar artistas recientes (que no se hayan encontrado en las consultas anteriores)
-            try:
-                # Verificar si la columna added_* existe en la tabla artists
-                cursor.execute(f"SELECT * FROM pragma_table_info('artists') WHERE name='{column}'")
-                has_added_column = cursor.fetchone() is not None
-                
-                if has_added_column:
-                    artist_ids = [a['id'] for a in entities_found['artists']]
-                    artist_id_filter = ""
-                    if artist_ids:
-                        artist_id_filter = f" AND id NOT IN ({','.join(['?' for _ in artist_ids])})"
-                    
-                    if only_local:
-                        artists_sql = f"""
-                            SELECT id, name, formed_year, origin, origen
-                            FROM artists
-                            WHERE {column} <= ? {artist_id_filter} AND origen = 'local'
-                            ORDER BY name
-                        """
-                    else:
-                        artists_sql = f"""
-                            SELECT id, name, formed_year, origin, origen
-                            FROM artists
-                            WHERE {column} <= ? {artist_id_filter}
-                            ORDER BY name
-                        """
-                    
-                    params = [time_value] + artist_ids if artist_ids else [time_value]
-                    cursor.execute(artists_sql, tuple(params))
-                    
-                    for row in cursor.fetchall():
-                        entities_found['artists'].append({
-                            'id': row['id'],
-                            'name': row['name'],
-                            'formed_year': row['formed_year'],
-                            'origin': row['origin'],
-                            'origen': row['origen']
-                        })
-            except sqlite3.Error as e:
-                print(f"Error consultando artistas recientes: {e}")
-            
-            # Ahora construir el árbol con las entidades encontradas
-            # 1. Primero agregar artistas
-            for artist in entities_found['artists']:
-                artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
                 if artist_item:
-                    # 2. Luego añadir álbumes para cada artista
-                    artist_albums = [a for a in entities_found['albums'] if a['artist_id'] == artist['id']]
-                    for album in artist_albums:
-                        album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                    # 2. Encontrar álbumes recientes para este artista
+                    if only_local:
+                        album_sql = f"""
+                            SELECT DISTINCT al.id, al.name, al.year, al.genre
+                            FROM albums al
+                            JOIN songs s ON s.album = al.name
+                            WHERE al.artist_id = ? AND (s.{where_clause}) AND s.origen = 'local'
+                            ORDER BY al.year DESC, al.name
+                        """
+                    else:
+                        album_sql = f"""
+                            SELECT DISTINCT al.id, al.name, al.year, al.genre
+                            FROM albums al
+                            JOIN songs s ON s.album = al.name
+                            WHERE al.artist_id = ? AND s.{where_clause}
+                            ORDER BY al.year DESC, al.name
+                        """
+                    
+                    cursor.execute(album_sql, (artist['id'],))
+                    albums = cursor.fetchall()
+                    
+                    for album in albums:
+                        album_item = self._add_filtered_album({
+                            'id': album['id'],
+                            'name': album['name'],
+                            'year': album['year'],
+                            'genre': album['genre'],
+                        }, artist_item, only_local, load_content=False)
+                        
                         if album_item:
-                            # 3. Finalmente añadir canciones para cada álbum
-                            album_songs = [s for s in entities_found['songs'] if s['album_id'] == album['id']]
-                            for song in album_songs:
-                                self._add_filtered_song(song, album_item, only_local)
+                            # 3. Encontrar canciones recientes para este álbum
+                            if only_local:
+                                song_sql = f"""
+                                    SELECT id, title, track_number, artist, album, genre, file_path, duration, origen
+                                    FROM songs
+                                    WHERE album = ? AND artist = ? AND {where_clause} AND origen = 'local'
+                                    ORDER BY track_number, title
+                                """
+                            else:
+                                song_sql = f"""
+                                    SELECT id, title, track_number, artist, album, genre, file_path, duration, origen
+                                    FROM songs
+                                    WHERE album = ? AND artist = ? AND {where_clause}
+                                    ORDER BY track_number, title
+                                """
+                            
+                            cursor.execute(song_sql, (album['name'], artist['name']))
+                            songs = cursor.fetchall()
+                            
+                            for song in songs:
+                                self._add_filtered_song({
+                                    'id': song['id'],
+                                    'title': song['title'],
+                                    'track_number': song['track_number'],
+                                    'artist': song['artist'],
+                                    'album': song['album'],
+                                    'genre': song['genre'],
+                                    'file_path': song['file_path'],
+                                    'duration': song['duration'],
+                                    'origen': song['origen'],
+                                }, album_item, only_local)
             
-            # Expandir artistas y álbumes para mostrar el contenido
+            # Expandir elementos de nivel superior
             for i in range(self.parent.results_tree_widget.topLevelItemCount()):
                 item = self.parent.results_tree_widget.topLevelItem(i)
                 item.setExpanded(True)
-                
-                for j in range(item.childCount()):
-                    item.child(j).setExpanded(True)
         
-        except sqlite3.Error as e:
+        except Exception as e:
             print(f"Error en búsqueda de elementos recientes: {e}")
             import traceback
             traceback.print_exc()
@@ -1812,8 +1781,15 @@ class SearchHandler:
         # Actualizar referencias locales
         if time_value:
             self.parent.time_value = time_value
+            print("Control time_value encontrado")
+        else:
+            print("WARNING: Control time_value no encontrado")
+            
         if time_unit:
             self.parent.time_unit = time_unit
+            print("Control time_unit encontrado")
+        else:
+            print("WARNING: Control time_unit no encontrado")
         
         # Si tenemos el botón, conectarlo a la función adecuada
         if apply_time_filter:
@@ -1823,7 +1799,14 @@ class SearchHandler:
                 apply_time_filter.clicked.disconnect()
             except:
                 pass
+            
+            # IMPORTANTE: Conectamos la señal al método correcto
+            # El problema estaba aquí, estábamos conectando al método _apply_time_filter
+            # pero ese método está en la clase SearchHandler, no en el parent
             apply_time_filter.clicked.connect(self._apply_time_filter)
+            print("Botón apply_time_filter conectado correctamente")
+        else:
+            print("WARNING: Botón apply_time_filter no encontrado")
             
         # Conectar los radio buttons de origen
         only_local = self.parent.findChild(QRadioButton, "only_local_files")
@@ -1836,6 +1819,7 @@ class SearchHandler:
             
             # Configurar grupo de botones
             if not hasattr(self.parent, 'origin_button_group'):
+                from PyQt6.QtWidgets import QButtonGroup
                 self.parent.origin_button_group = QButtonGroup(self.parent)
                 self.parent.origin_button_group.addButton(only_local)
                 self.parent.origin_button_group.addButton(show_all)
@@ -1866,11 +1850,31 @@ class SearchHandler:
         # Verificar que tenemos acceso a los controles necesarios
         if not hasattr(self.parent, 'time_value') or not hasattr(self.parent, 'time_unit'):
             print("ERROR: No se encontraron los controles de filtro de tiempo")
-            return
+            print("Buscando controles de tiempo directamente...")
+            
+            # Intento de recuperación: buscar los controles directamente
+            time_value = self.parent.findChild(QSpinBox, "time_value")
+            time_unit = self.parent.findChild(QComboBox, "time_unit")
+            
+            if time_value and time_unit:
+                # Guardar referencias para futuras llamadas
+                self.parent.time_value = time_value
+                self.parent.time_unit = time_unit
+                print("Controles de tiempo encontrados y asignados")
+            else:
+                print("No se pudieron encontrar los controles de tiempo")
+                return
         
         # Obtener el valor y la unidad de tiempo seleccionados
         time_value = self.parent.time_value.value()
         time_unit_index = self.parent.time_unit.currentIndex()
+        
+        # Determinar si aplica el filtro de "only_local"
+        only_local = False
+        if hasattr(self, 'only_local_state'):
+            only_local = self.only_local_state
+        elif hasattr(self.parent, 'only_local_files') and self.parent.only_local_files:
+            only_local = self.parent.only_local_files.isChecked()
         
         # Convertir índice a unidad de tiempo
         time_unit = ""
@@ -1881,19 +1885,118 @@ class SearchHandler:
         elif time_unit_index == 2:
             time_unit = "year"
         
-        print(f"Filtrando por {time_value} {time_unit}(s)")
+        print(f"Filtrando por {time_value} {time_unit}(s), only_local: {only_local}")
         
-        # Limpiar el cuadro de búsqueda y establecer el filtro especial
-        self.parent.search_box.clear()
+        # Limpiar resultados actuales y ejecutar la búsqueda
+        self.parent.results_tree_widget.clear()
+        self._search_recent(str(time_value), time_unit, only_local)
+
+
+    def _search_by_year_range(self, year_range, only_local=False):
+        """Busca por rango de años manteniendo la estructura jerárquica completa."""
+        print(f"Ejecutando búsqueda por rango de años: {year_range}")
         
-        # Formar la consulta adecuada según la unidad de tiempo
-        if time_unit == "week":
-            query = f"rs:{time_value}"
-        elif time_unit == "month":
-            query = f"rm:{time_value}"
-        elif time_unit == "year":
-            query = f"ra:{time_value}"
+        # Analizar el rango de años
+        try:
+            year_begin, year_end = map(int, year_range.split('-'))
+            if year_begin > year_end:
+                year_begin, year_end = year_end, year_begin
+        except (ValueError, TypeError):
+            print(f"Formato de rango de años inválido: {year_range}")
+            return
         
-        # Establecer la consulta en el cuadro de búsqueda y ejecutar la búsqueda
-        self.parent.search_box.setText(query)
-        self.perform_search()
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return
+        
+        try:
+            cursor = conn.cursor()
+            
+            # Construir la consulta SQL para encontrar álbumes en el rango de años
+            if only_local:
+                sql = """
+                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label, a.origen,
+                        ar.id as artist_id, ar.name as artist_name
+                    FROM albums a
+                    JOIN artists ar ON a.artist_id = ar.id
+                    WHERE a.origen = 'local' AND (
+                        (CAST(substr(a.year, 1, 4) AS INTEGER) BETWEEN ? AND ?) OR
+                        (a.year BETWEEN ? AND ?)
+                    )
+                    ORDER BY ar.name, a.year DESC
+                """
+            else:
+                sql = """
+                    SELECT DISTINCT a.id as album_id, a.name as album_name, a.year, a.genre, a.label, a.origen,
+                        ar.id as artist_id, ar.name as artist_name
+                    FROM albums a
+                    JOIN artists ar ON a.artist_id = ar.id
+                    WHERE 
+                        (CAST(substr(a.year, 1, 4) AS INTEGER) BETWEEN ? AND ?) OR
+                        (a.year BETWEEN ? AND ?)
+                    ORDER BY ar.name, a.year DESC
+                """
+            
+            # Parámetros para la consulta
+            params = (year_begin, year_end, str(year_begin), str(year_end))
+            
+            print(f"Ejecutando SQL: {sql} con parámetros: {params}")
+            cursor.execute(sql, params)
+            
+            # Diccionario para almacenar los artistas ya añadidos
+            artists_added = {}
+            
+            # Procesar resultados
+            for row in cursor.fetchall():
+                artist_id = row['artist_id']
+                album_id = row['album_id']
+                
+                # Verificar filtro de solo local
+                if only_local and ('origen' in row.keys() and row['origen'] != 'local'):
+                    continue
+                
+                # Si el artista no está en nuestro diccionario, lo añadimos
+                if artist_id not in artists_added:
+                    # Obtener detalles del artista
+                    artist = self.parent.db_manager.get_artist_details(artist_id)
+                    if artist:
+                        # Añadir artista al árbol
+                        artist_item = self._add_filtered_artist(artist, only_local, load_content=False)
+                        artists_added[artist_id] = artist_item
+                
+                # Obtener el item del artista
+                artist_item = artists_added.get(artist_id)
+                
+                if artist_item:
+                    # Crear objeto álbum y añadirlo al artista
+                    album = {}
+                    for key in row.keys():
+                        album[key] = row[key]
+                    
+                    # Renombrar campos para que coincidan con la estructura esperada
+                    if 'album_id' in album:
+                        album['id'] = album['album_id']
+                    if 'album_name' in album:
+                        album['name'] = album['album_name']
+                    
+                    # Añadir álbum al artista
+                    album_item = self._add_filtered_album(album, artist_item, only_local, load_content=False)
+                    
+                    # Asegurarnos de que el álbum se haya añadido correctamente
+                    if album_item:
+                        # Ahora cargar las canciones de este álbum
+                        songs = self.parent.db_manager.get_album_songs(album_id, only_local)
+                        for song in songs:
+                            self._add_filtered_song(song, album_item, only_local)
+            
+            # Expandir elementos de primer nivel
+            for i in range(self.parent.results_tree_widget.topLevelItemCount()):
+                item = self.parent.results_tree_widget.topLevelItem(i)
+                item.setExpanded(True)
+        
+        except sqlite3.Error as e:
+            print(f"Error en búsqueda por rango de años: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            conn.close()
