@@ -1628,3 +1628,171 @@ class UrlPlayer(BaseModule):
             font = item.font()
             font.setBold(True)
             item.setFont(font)
+
+# INTERACCION DESDE MUSIC FUZZY
+    def add_songs_to_queue(self, songs):
+        """
+        Add songs from other modules to the queue
+        
+        Args:
+            songs: List of song dictionaries with at least 'file_path', 'title', and 'artist'
+            
+        Returns:
+            bool: True if songs were added successfully
+        """
+        if not songs:
+            self.log("No songs provided to add_songs_to_queue")
+            return False
+            
+        self.log(f"Received {len(songs)} songs to add to the queue")
+        num_added = 0
+        
+        for song in songs:
+            # Debug info
+            self.log(f"Processing song: {song.get('title', 'Unknown')}")
+            
+            # Verify we have a file_path
+            file_path = song.get('file_path')
+            if not file_path:
+                self.log(f"No file_path for song {song.get('title', 'Unknown')} - trying alternate fields")
+                
+                # Try other possible field names
+                for field in ['path', 'url', 'filepath']:
+                    if field in song and song[field]:
+                        file_path = song[field]
+                        self.log(f"Found alternate path in {field}: {file_path}")
+                        break
+            
+            if not file_path:
+                self.log(f"Skipping song with no valid path: {song.get('title', 'Unknown')}")
+                continue
+                
+            # Verify file exists
+            import os
+            if not os.path.exists(file_path):
+                self.log(f"Skipping song - file does not exist: {file_path}")
+                continue
+            
+            # Get song details - handle different dictionary structures
+            title = song.get('title')
+            if not title:
+                title = song.get('name', os.path.basename(file_path))
+                
+            artist = song.get('artist')
+            if not artist:
+                artist = song.get('artist_name', 'Unknown Artist')
+            
+            # Create the display text
+            display_text = f"{artist} - {title}" if artist else title
+            
+            # Add to the listWidget
+            from PyQt6.QtWidgets import QListWidgetItem
+            from PyQt6.QtCore import Qt
+            
+            item = QListWidgetItem(display_text)
+            item.setData(Qt.ItemDataRole.UserRole, file_path)
+            
+            # Set icon based on source
+            if hasattr(self, 'get_source_icon'):
+                icon = self.get_source_icon(file_path, {'source': 'local'})
+                item.setIcon(icon)
+            elif hasattr(self, 'service_icons') and 'local' in self.service_icons:
+                item.setIcon(self.service_icons['local'])
+            
+            # Add to listWidget
+            self.listWidget.addItem(item)
+            
+            # Add to internal playlist
+            if not hasattr(self, 'current_playlist'):
+                self.current_playlist = []
+                
+            self.current_playlist.append({
+                'title': title,
+                'artist': artist,
+                'url': file_path,
+                'file_path': file_path,
+                'source': 'local',
+                'type': 'track'
+            })
+            
+            num_added += 1
+        
+        # Log the result
+        if num_added > 0:
+            self.log(f"Added {num_added} songs to queue from music browser")
+            return True
+        else:
+            self.log("No valid songs to add to queue")
+            return False
+
+
+# INTERACCION MUSIC FUZZY SPOTIFY
+
+    def add_spotify_songs_to_queue(self, songs):
+        """
+        Add songs with Spotify URLs from another module to the queue
+        
+        Args:
+            songs: List of song dictionaries with Spotify URLs
+        """
+        if not songs:
+            self.log("No songs received to add to queue")
+            return False
+        
+        self.log(f"Received {len(songs)} songs with Spotify URLs to add to queue")
+        songs_added = 0
+        
+        for song in songs:
+            # Create a tree item for the song
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtCore import Qt
+            from PyQt6.QtGui import QIcon
+            
+            item = QTreeWidgetItem()
+            item.setText(0, song.get('title', 'Unknown Track'))
+            item.setText(1, song.get('artist', ''))
+            item.setText(2, "Canción")
+            
+            if 'track_number' in song:
+                item.setText(3, str(song['track_number']))
+                
+            if 'duration' in song:
+                from modules.submodules.url_playlist.ui_helpers import format_duration
+                duration_str = format_duration(song['duration'])
+                item.setText(4, duration_str)
+            
+            # Set Spotify icon
+            if hasattr(self, 'service_icons') and 'spotify' in self.service_icons:
+                item.setIcon(0, self.service_icons['spotify'])
+            
+            # Store data
+            item_data = {
+                'title': song.get('title', 'Unknown Track'),
+                'artist': song.get('artist', ''),
+                'url': song.get('spotify_url', song.get('url', '')),  # This is the Spotify URL
+                'source': 'spotify',
+                'type': 'track',
+                'spotify_url': song.get('spotify_url', song.get('url', ''))  # Duplicate to ensure it's accessible
+            }
+            
+            item.setData(0, Qt.ItemDataRole.UserRole, item_data)
+            
+            # Add to treeWidget temporarily
+            self.treeWidget.addTopLevelItem(item)
+            
+            # Add to queue using the existing method
+            from modules.submodules.url_playlist.media_utils import add_item_to_queue
+            result = add_item_to_queue(self, item)
+            
+            if result:
+                songs_added += 1
+            
+            # Remove from treeWidget (now it's in the queue)
+            self.treeWidget.takeTopLevelItem(self.treeWidget.indexOfTopLevelItem(item))
+        
+        if songs_added > 0:
+            self.log(f"Added {songs_added} Spotify songs to queue")
+            return True
+        else:
+            self.log("No songs could be added to queue")
+            return False

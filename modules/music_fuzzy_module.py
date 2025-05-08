@@ -15,6 +15,7 @@ from modules.submodules.fuzzy.database_manager import DatabaseManager
 from modules.submodules.fuzzy.ui_updater import UIUpdater
 from modules.submodules.fuzzy.link_manager import LinkManager
 from modules.submodules.fuzzy.player_manager import PlayerManager
+from modules.submodules.fuzzy.module_integrations import ModuleIntegrator 
 
 class MusicFuzzyModule(BaseModule):
     """Music browser module with fuzzy search capabilities."""
@@ -56,6 +57,10 @@ class MusicFuzzyModule(BaseModule):
 
         # Load saved button configuration
         self._load_saved_button_configuration()
+
+        # Initialize module integrator
+        self.module_integrator = ModuleIntegrator(self)
+        print("ModuleIntegrator inicializado")
 
         # Cargar UI de ajustes avanzados después de inicializar todos los componentes
         # IMPORTANTE: Movido después de la inicialización de search_handler
@@ -2483,3 +2488,15 @@ class MusicFuzzyModule(BaseModule):
             # Apply the configuration
             self._apply_button_configuration(config)
             print("Loaded saved button configuration")
+
+
+# INTEGRACIONES CON OTROS MODULOS
+
+    def set_tab_manager(self, tab_manager):
+        """Recibir referencia al gestor de pestañas"""
+        self.tab_manager = tab_manager
+        
+        # Also update the module_integrator if it exists
+        if hasattr(self, 'module_integrator') and self.module_integrator:
+            self.module_integrator.parent.tab_manager = tab_manager
+            print("Tab manager reference updated in module_integrator")

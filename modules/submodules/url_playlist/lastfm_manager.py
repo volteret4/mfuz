@@ -709,7 +709,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
             import time
             
             # Create root item
-            root_item = QTreeWidgetItem(separent_instancelf.treeWidget)
+            root_item = QTreeWidgetItem(parent_instance.treeWidget)
             root_item.setText(0, f"Scrobbles: {title}")
             root_item.setText(1, parent_instance.lastfm_user)
             root_item.setText(2, "Last.fm")
@@ -723,7 +723,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
             root_item.setIcon(0, QIcon(":/services/lastfm"))
             
             # Change column headers
-            self.treeWidget.headerItem().setText(4, "Fecha")
+            parent_instance.treeWidget.headerItem().setText(4, "Fecha")
             
             # Add tracks chronologically
             for scrobble in scrobbles:
