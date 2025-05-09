@@ -65,7 +65,7 @@ def get_artists(conn):
     cursor.execute("SELECT id, name, mbid FROM artists")
     return cursor.fetchall()
 
-def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0):
+def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0, retry_count=0):
     """Obtiene los setlists de un artista por MBID de la API de setlist.fm"""
     url = f"https://api.setlist.fm/rest/1.0/search/setlists"
     headers = {
@@ -87,9 +87,13 @@ def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0):
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     if response.status_code == 429:  # Too Many Requests
-        print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos...")
+        if retry_count >= 2:
+            print(f"Rate limit alcanzado para MBID {mbid} después de 2 intentos, saltando al siguiente artista...")
+            return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
+        
+        print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos... (intento {retry_count + 1}/2)")
         time.sleep(60)
-        return fetch_setlists_by_mbid(mbid, api_key, page, year)
+        return fetch_setlists_by_mbid(mbid, api_key, page, year, retry_count + 1)
     
     if response.status_code != 200:
         print(f"Error al obtener setlists para MBID {mbid}: {response.status_code}")
@@ -98,7 +102,7 @@ def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0):
     
     return response.json()
 
-def fetch_setlists_by_name(artist_name, api_key, page=1, year=0):
+def fetch_setlists_by_name(artist_name, api_key, page=1, year=0, retry_count=0):
     """Obtiene los setlists de un artista por nombre de la API de setlist.fm"""
     url = f"https://api.setlist.fm/rest/1.0/search/setlists"
     headers = {
@@ -120,9 +124,13 @@ def fetch_setlists_by_name(artist_name, api_key, page=1, year=0):
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     if response.status_code == 429:  # Too Many Requests
-        print(f"Rate limit alcanzado para {artist_name}, esperando 60 segundos...")
+        if retry_count >= 2:
+            print(f"Rate limit alcanzado para {artist_name} después de 2 intentos, saltando al siguiente artista...")
+            return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
+            
+        print(f"Rate limit alcanzado para {artist_name}, esperando 5 segundos... (intento {retry_count + 1}/2)")
         time.sleep(5)
-        return fetch_setlists_by_name(artist_name, api_key, page, year)
+        return fetch_setlists_by_name(artist_name, api_key, page, year, retry_count + 1)
     
     if response.status_code != 200:
         print(f"Error al obtener setlists para {artist_name}: {response.status_code}")
@@ -130,7 +138,7 @@ def fetch_setlists_by_name(artist_name, api_key, page=1, year=0):
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     return response.json()
-
+    
 def save_setlists(conn, artist_id, artist_name, setlists):
     """Guarda los setlists en la base de datos"""
     cursor = conn.cursor()
@@ -235,8 +243,8 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
                 break
             
             page += 1
-            # Respetar los límites de la API
-            time.sleep(1)
+            # Respetar los límites de la API (máximo 2 llamadas por segundo)
+            time.sleep(0.5)
         
         if found_by_mbid:
             if year > 0:
@@ -275,14 +283,14 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
                 break
             
             page += 1
-            # Respetar los límites de la API
-            time.sleep(1)
+            # Respetar los límites de la API (máximo 2 llamadas por segundo)
+            time.sleep(0.5)
         
         if year > 0:
             print(f"Guardados {total_setlists} setlists para {artist_name} del año {year} mediante nombre")
         else:
             print(f"Guardados {total_setlists} setlists para {artist_name} mediante nombre")
-
+            
 def process_places(conn, force_update=False):
     """Procesa los lugares de conciertos a partir de los setlists"""
     print("\n=== Procesando lugares de conciertos ===")
@@ -370,7 +378,7 @@ def add_setlistfm_id_column(conn):
     except Exception as e:
         print(f"Error al añadir columna setlistfm_id: {e}")
 
-def get_setlistfm_id_by_mbid(mbid, api_key):
+def get_setlistfm_id_by_mbid(mbid, api_key, retry_count=0):
     """Obtiene el setlistfm_id de un artista usando su MBID"""
     url = f"https://api.setlist.fm/rest/1.0/search/artists"
     headers = {
@@ -389,9 +397,13 @@ def get_setlistfm_id_by_mbid(mbid, api_key):
         return None
     
     if response.status_code == 429:  # Too Many Requests
-        print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos...")
+        if retry_count >= 2:
+            print(f"Rate limit alcanzado para MBID {mbid} después de 2 intentos, saltando al siguiente artista...")
+            return None
+            
+        print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos... (intento {retry_count + 1}/2)")
         time.sleep(60)
-        return get_setlistfm_id_by_mbid(mbid, api_key)
+        return get_setlistfm_id_by_mbid(mbid, api_key, retry_count + 1)
     
     if response.status_code != 200:
         print(f"Error al obtener setlistfm_id para MBID {mbid}: {response.status_code}")
@@ -448,11 +460,10 @@ def update_setlistfm_ids(conn, api_key, force_update=False):
         else:
             print(f"  No se encontró ID de setlist.fm para {artist_name}")
         
-        # Respetar límites de la API
-        time.sleep(1)
+        # Respetar límites de la API (máximo 2 llamadas por segundo)
+        time.sleep(0.5)  # Esperar 0.5 segundos para no exceder 2 llamadas por segundo
     
     print(f"Actualizaciones completadas: {updated} de {total_artists} artistas")
-
 
 
 def main(config=None):
@@ -493,39 +504,60 @@ def main(config=None):
     # Verificar si se debe procesar lugares
     process_places_flag = config.get('process_places', False)
     
+    # Verificar si solo se deben actualizar los IDs de setlist.fm
+    setlistfm_id_only = config.get('setlistfm_id', False)
+    
     # Conectar a la base de datos
     conn = sqlite3.connect(db_path)
     
     try:
-        # Crear la tabla si no existe
-        create_table(conn)
-        
-        # Obtener todos los artistas con sus MBIDs
-        artists = get_artists(conn)
-        
-        if limit > 0:
-            artists = artists[:limit]
-        
-        if artist_names:
-            artists = [a for a in artists if a[1] in artist_names]
-        
-        if artist_ids:
-            artists = [a for a in artists if a[0] in artist_ids]
-        
-        # Mostrar mensaje sobre el filtro de año
-        if year > 0:
-            print(f"Filtrando setlists solo para el año {year}")
-        
-        for artist_id, artist_name, artist_mbid in artists:
-            process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_update, interactive, year)
-        
-        # Procesar lugares si se ha especificado
-        if process_places_flag:
-            process_places(conn, force_update)
-        
-        
-        # Actualizar setlistfm_ids si se ha especificado
-        update_setlistfm_ids(conn, api_key, force_update)
+        if setlistfm_id_only:
+            print("Modo: Solo actualización de IDs de setlist.fm")
+            # Crear la tabla si no existe (por si acaso)
+            create_table(conn)
+            # Obtener todos los artistas con sus MBIDs
+            artists = get_artists(conn)
+            
+            if limit > 0:
+                artists = artists[:limit]
+            
+            if artist_names:
+                artists = [a for a in artists if a[1] in artist_names]
+            
+            if artist_ids:
+                artists = [a for a in artists if a[0] in artist_ids]
+                
+            # Actualizar setlistfm_ids
+            update_setlistfm_ids(conn, api_key, force_update)
+        else:
+            # Crear la tabla si no existe
+            create_table(conn)
+            
+            # Obtener todos los artistas con sus MBIDs
+            artists = get_artists(conn)
+            
+            if limit > 0:
+                artists = artists[:limit]
+            
+            if artist_names:
+                artists = [a for a in artists if a[1] in artist_names]
+            
+            if artist_ids:
+                artists = [a for a in artists if a[0] in artist_ids]
+            
+            # Mostrar mensaje sobre el filtro de año
+            if year > 0:
+                print(f"Filtrando setlists solo para el año {year}")
+            
+            for artist_id, artist_name, artist_mbid in artists:
+                process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_update, interactive, year)
+            
+            # Procesar lugares si se ha especificado
+            if process_places_flag:
+                process_places(conn, force_update)
+            
+            # Actualizar setlistfm_ids si se ha especificado
+            update_setlistfm_ids(conn, api_key, force_update)
     
     finally:
         conn.close()

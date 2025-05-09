@@ -374,7 +374,7 @@ class SpotifyService:
         return ''
     
     def scrape_artist_concerts(self, artist_url, artist_name):
-        """Scrapear conciertos de un artista usando Selenium"""
+        """Scrapear conciertos de un artista usando Selenium con mejor extracción de datos"""
         match = re.search(r'/artist/([^/]+)', artist_url)
         if not match:
             return [], "URL de artista inválida"
@@ -385,53 +385,87 @@ class SpotifyService:
         chrome_options = Options()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
+        chrome_options.add_argument('--disable-blink-features=AutomationControlled')  # Prevenir detección de automatización
+        chrome_options.add_argument('--start-maximized')
+        chrome_options.add_argument('--disable-extensions')
+        chrome_options.add_argument('--disable-popup-blocking')
+        
+        # Agregar argumentos adicionales para mejor rendimiento
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
         
         driver = webdriver.Chrome(options=chrome_options)
         try:
             driver.get(concerts_url)
             
-            # ACTUALIZAR: Esperar más tiempo por si la página tarda en cargar
-            WebDriverWait(driver, 15).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '[data-testid="concert-row"]'))
-            )
+            # Aumentar tiempo de espera para asegurar carga completa
+            wait = WebDriverWait(driver, 10)
             
-            # Opcional: añadir wait para asegurar que todo esté cargado
+            # Intentar diferentes selectores para asegurar que encontramos los conciertos
+            concert_selectors = [
+                '[data-testid="concert-row"]',
+                'a[href*="/concert/"]',
+                'div[role="row"]',
+                '.encore-text-body-medium' # Un selector de respaldo general
+            ]
+            
+            for selector in concert_selectors:
+                try:
+                    wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, selector)))
+                    print(f"Selector encontrado: {selector}")
+                    concert_elements = driver.find_elements(By.CSS_SELECTOR, selector)
+                    if concert_elements and len(concert_elements) > 0:
+                        break
+                except Exception as e:
+                    print(f"Selector {selector} no encontrado: {e}")
+                    concert_elements = []
+            
+            if not concert_elements:
+                return [], f"No se encontraron conciertos para {artist_name}"
+            
+            # Pausa para asegurar que todo esté cargado
             time.sleep(2)
             
-            concert_elements = driver.find_elements(By.CSS_SELECTOR, '[data-testid="concert-row"]')
             concerts = []
             
             for element in concert_elements:
                 try:
+                    # Extraer enlace completo del concierto para obtener más detalles
+                    concert_link = element.get_attribute('href')
+                    if not concert_link:
+                        links = element.find_elements(By.TAG_NAME, 'a')
+                        for link in links:
+                            href = link.get_attribute('href')
+                            if href and '/concert/' in href:
+                                concert_link = href
+                                break
+                    
+                    # Datos básicos del concierto
                     date_element = element.find_element(By.TAG_NAME, 'time')
-                    date = date_element.get_attribute('datetime')
+                    date = date_element.get_attribute('datetime') if date_element else ""
                     
-                    # ACTUALIZAR: Selectores más flexibles
+                    # Diferentes intentos para obtener datos
                     try:
-                        # Diferentes intentos para obtener fecha
-                        day = element.find_element(By.CSS_SELECTOR, '.encore-text-body-medium-bold').text
+                        day = self._find_element_safely(element, '.encore-text-body-medium-bold')
                     except:
-                        try:
-                            day = element.find_element(By.CSS_SELECTOR, '[data-encore-type="text"][class*="bold"]').text
-                        except:
-                            day = ""
+                        day = self._find_element_safely(element, '[data-encore-type="text"][class*="bold"]')
                     
                     try:
-                        month = element.find_element(By.CSS_SELECTOR, '.encore-text-body-small').text
+                        month = self._find_element_safely(element, '.encore-text-body-small')
                     except:
                         month = ""
                     
                     try:
-                        city = element.find_element(By.CSS_SELECTOR, '.encore-text-body-medium').text
+                        city = self._find_element_safely(element, '.encore-text-body-medium')
                     except:
-                        city = element.find_element(By.CSS_SELECTOR, '[data-encore-type="text"]').text
+                        city = self._find_element_safely(element, '[data-encore-type="text"]')
                     
                     try:
-                        venue = element.find_element(By.CSS_SELECTOR, '[data-testid="event-venue"]').text
+                        venue = self._find_element_safely(element, '[data-testid="event-venue"]')
                     except:
                         venue = ""
                     
-                    # ACTUALIZAR: Intentar múltiples selectores para el horario
+                    # Obtener horario con múltiples intentos
                     time_str = ""
                     time_selectors = [
                         '.G8sU0RZZT\\*ZhaEv7B26V .encore-text-body-medium',
@@ -448,10 +482,7 @@ class SpotifyService:
                         except:
                             continue
                     
-                    concert_url = element.get_attribute('href')
-                    if concert_url and not concert_url.startswith('http'):
-                        concert_url = f"https://open.spotify.com{concert_url}"
-                    
+                    # Crear objeto básico del concierto
                     concert = {
                         'artist': artist_name,
                         'name': f"{venue} Concert" if venue else "Concert",
@@ -460,20 +491,38 @@ class SpotifyService:
                         'date': date[:10] if date else '',
                         'time': time_str,
                         'image': '',
-                        'url': concert_url,
+                        'url': concert_link,
                         'source': 'Spotify'
                     }
+                    
+                    # Si tenemos un enlace a un concierto específico, obtener más detalles
+                    if concert_link and '/concert/' in concert_link:
+                        try:
+                            # Abrir la página del concierto en una nueva pestaña para obtener más detalles
+                            driver.execute_script("window.open(arguments[0]);", concert_link)
+                            # Cambiar a la nueva pestaña
+                            driver.switch_to.window(driver.window_handles[1])
+                            
+                            # Esperar que cargue la página
+                            time.sleep(3)
+                            
+                            # Obtener detalles adicionales
+                            venue_details = self._extract_concert_details(driver)
+                            
+                            # Cerrar la pestaña y volver a la original
+                            driver.close()
+                            driver.switch_to.window(driver.window_handles[0])
+                            
+                            # Fusionar los detalles obtenidos con el objeto del concierto
+                            if venue_details:
+                                concert.update(venue_details)
+                        except Exception as e:
+                            print(f"Error obteniendo detalles del concierto: {e}")
+                    
                     concerts.append(concert)
                     
                 except Exception as e:
-                    # ACTUALIZAR: Logging más detallado
-                    print(f"Error parsing concert element: {e}")
-                    # Debug: Guardar HTML del elemento para análisis
-                    try:
-                        import logging
-                        logging.debug(f"Element HTML: {element.get_attribute('outerHTML')}")
-                    except:
-                        pass
+                    print(f"Error procesando elemento de concierto: {e}")
                     continue
             
             # Actualizar caché
@@ -486,7 +535,184 @@ class SpotifyService:
             return [], f"Error en scraping: {str(e)}"
         finally:
             driver.quit()
+
+    def _find_element_safely(self, element, selector):
+        """Método auxiliar para encontrar elementos de manera segura"""
+        try:
+            result = element.find_element(By.CSS_SELECTOR, selector)
+            return result.text.strip() if result else ""
+        except:
+            return ""
+
+    def _extract_concert_details(self, driver):
+        """Extrae detalles adicionales de la página de un concierto específico"""
+        try:
+            venue_details = {}
+            
+            # Intentar múltiples selectores para obtener la dirección del venue
+            address_selectors = [
+                "#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw > div > div.main-view-container__scroll-node > div:nth-child(1) > div > main > section > div.gKtc3TdowDTXBaVESi1D > div.VvL91cIRcCi1hJh0K845 > div.LdW0YNvo_Y77hgqhL4zY > a > h2:nth-child(1)",
+                "a[href*='maps'] h2",
+                "h2",
+                ".main-view-container h2:first-of-type"
+            ]
+            
+            for selector in address_selectors:
+                try:
+                    address_element = driver.find_element(By.CSS_SELECTOR, selector)
+                    if address_element and address_element.text:
+                        venue_details['address'] = address_element.text.strip()
+                        break
+                except:
+                    continue
+            
+            # Intentar obtener ubicación precisa
+            try:
+                location_link = driver.find_element(By.CSS_SELECTOR, "a[href*='maps']")
+                if location_link:
+                    map_url = location_link.get_attribute('href')
+                    venue_details['map_url'] = map_url
+                    
+                    # Extraer coordenadas de Google Maps URL si están disponibles
+                    coords_match = re.search(r'@(-?\d+\.\d+),(-?\d+\.\d+)', map_url)
+                    if coords_match:
+                        venue_details['latitude'] = coords_match.group(1)
+                        venue_details['longitude'] = coords_match.group(2)
+            except:
+                pass
+            
+            # Intentar obtener precios si están disponibles
+            try:
+                price_element = driver.find_element(By.CSS_SELECTOR, "[data-testid='ticket-price']")
+                if price_element:
+                    venue_details['price'] = price_element.text.strip()
+            except:
+                pass
+            
+            # Intentar obtener estado (sold out, etc.)
+            try:
+                status_element = driver.find_element(By.CSS_SELECTOR, "[data-testid='ticket-status']")
+                if status_element:
+                    venue_details['status'] = status_element.text.strip()
+            except:
+                pass
+            
+            # Intentar obtener información adicional (descripción)
+            try:
+                description_element = driver.find_element(By.CSS_SELECTOR, ".concert-description")
+                if description_element:
+                    venue_details['description'] = description_element.text.strip()
+            except:
+                pass
+            
+            # Obtener enlace a tickets (específicamente con los selectores proporcionados)
+            ticket_selectors = [
+                "#main > div > div.ZQftYELq0aOsg6tPbVbV > div.jEMA2gVoLgPQqAFrPhFw > div > div.main-view-container__scroll-node.ZjfaJlGQZ42nCWjD3FDm > div:nth-child(1) > div > main > section > div.gKtc3TdowDTXBaVESi1D > div.VvL91cIRcCi1hJh0K845 > div.LdW0YNvo_Y77hgqhL4zY > div.cTkykhjfHxkEGKbxSxXw > a",
+                "div.LdW0YNvo_Y77hgqhL4zY > div.cTkykhjfHxkEGKbxSxXw > a",
+                "p.encore-text-body-medium-bold.encore-internal-color-text-positive",
+                "p.encore-text-body-medium-bold",
+                "a[href*='ticket']"
+            ]
+            
+            for selector in ticket_selectors:
+                try:
+                    ticket_element = driver.find_element(By.CSS_SELECTOR, selector)
+                    if ticket_element:
+                        # Verificar si es el elemento en sí o si contiene el texto "tickets" o similar
+                        element_text = ticket_element.text.lower()
+                        if 'ticket' in element_text or 'comprar' in element_text or 'buy' in element_text:
+                            ticket_url = ticket_element.get_attribute('href')
+                            if ticket_url:
+                                # Guardar el enlace original por si acaso
+                                venue_details['ticket_url_original'] = ticket_url
+                                
+                                # Procesar el enlace para extraer la URL de destino real
+                                processed_url = self._extract_destination_url(ticket_url)
+                                if processed_url:
+                                    venue_details['ticket_url'] = processed_url
+                                
+                                # También guardar el texto del botón/enlace
+                                venue_details['ticket_text'] = element_text
+                                break
+                except:
+                    continue
+            
+            # Si no se encontró con los selectores específicos, intentar una búsqueda más general
+            if 'ticket_url' not in venue_details:
+                try:
+                    # Buscar todos los enlaces en la página
+                    all_links = driver.find_elements(By.TAG_NAME, "a")
+                    for link in all_links:
+                        href = link.get_attribute('href')
+                        if href and ('ticket' in href.lower() or 'buy' in href.lower() or 'comprar' in href.lower()):
+                            # Guardar el enlace original
+                            venue_details['ticket_url_original'] = href
+                            
+                            # Procesar el enlace
+                            processed_url = self._extract_destination_url(href)
+                            if processed_url:
+                                venue_details['ticket_url'] = processed_url
+                            
+                            try:
+                                venue_details['ticket_text'] = link.text
+                            except:
+                                pass
+                            break
+                except:
+                    pass
+
+
+
+            return venue_details
+        
+        except Exception as e:
+            print(f"Error extrayendo detalles del concierto: {e}")
+            return {}
     
+
+    def _extract_destination_url(self, url):
+        """
+        Extrae la URL de destino real desde un enlace de redireccionamiento
+        
+        Args:
+            url (str): URL original que puede contener un parámetro de destino
+            
+        Returns:
+            str: URL de destino extraída o URL original si no se puede extraer
+        """
+        try:
+            # Verificar si es un enlace de redirección con parámetro 'destination'
+            if 'destination=' in url:
+                # Encontrar la posición del parámetro 'destination='
+                dest_pos = url.find('destination=')
+                if dest_pos > -1:
+                    # Extraer todo lo que viene después de 'destination='
+                    dest_value = url[dest_pos + 12:]  # 12 es la longitud de 'destination='
+                    
+                    # Si hay otros parámetros después, cortar en el primer '&'
+                    amp_pos = dest_value.find('&')
+                    if amp_pos > -1:
+                        dest_value = dest_value[:amp_pos]
+                    
+                    # Decodificar la URL (puede estar codificada varias veces)
+                    from urllib.parse import unquote
+                    dest_url = unquote(dest_value)
+                    
+                    # A veces, la URL puede estar codificada múltiples veces
+                    while '%' in dest_url:
+                        new_dest_url = unquote(dest_url)
+                        if new_dest_url == dest_url:  # Si ya no cambia, salir del bucle
+                            break
+                        dest_url = new_dest_url
+                    
+                    return dest_url
+            
+            # Si no se puede extraer el destino, devolver la URL original
+            return url
+        except Exception as e:
+            print(f"Error procesando URL de destino: {e}")
+            return url
+
     def _get_cache_file_path(self, cache_key):
         """Generar ruta al archivo de caché"""
         safe_key = "".join(x for x in cache_key if x.isalnum() or x in " _-").rstrip()
@@ -542,3 +768,40 @@ class SpotifyService:
         else:
             for file in self.cache_dir.glob("spotify_*.json"):
                 file.unlink()
+
+
+# Agregar este nuevo método a la clase SpotifyService en spotify.py
+
+    def get_artist_albums(self, artist_id, limit=10):
+        """
+        Obtener los álbumes de un artista desde Spotify
+        
+        Args:
+            artist_id (str): ID del artista en Spotify
+            limit (int): Límite de álbumes a obtener
+            
+        Returns:
+            dict: Datos de los álbumes o None si hay error
+        """
+        token = self.get_client_credentials()
+        if not token:
+            return None
+        
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        
+        params = {
+            "limit": limit,
+            "include_groups": "album,single"
+        }
+        
+        try:
+            url = f"{self.base_url}/artists/{artist_id}/albums"
+            response = requests.get(url, headers=headers, params=params)
+            response.raise_for_status()
+            
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            print(f"Error obteniendo álbumes: {e}")
+            return None

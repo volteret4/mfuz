@@ -169,7 +169,7 @@ QPushButton[filter_button=true]:hover {
    <item>
     <widget class="QScrollArea" name="scroll_area">
      <property name="frameShape">
-      <enum>QFrame::NoFrame</enum>
+      <enum>QFrame::Shape::NoFrame</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -345,12 +345,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtrar Artistas</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/artist.svg</normaloff>icons/artist.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -359,12 +359,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtrar Álbumes</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/album.svg</normaloff>icons/album.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -373,12 +373,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtrar Carpetas</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/folder.svg</normaloff>icons/folder.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -387,12 +387,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtrar Géneros</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/genre.svg</normaloff>icons/genre.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -401,12 +401,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtros de Sesión ⭐</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/session.svg</normaloff>icons/session.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -415,12 +415,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Limpiar Filtros Sesión</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/clear.svg</normaloff>icons/clear.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -429,12 +429,12 @@ QPushButton[filter_button=true]:hover {
               <property name="text">
                <string>Filtrar Sellos</string>
               </property>
-              <property name="filter_button" stdset="0">
-               <bool>true</bool>
-              </property>
               <property name="icon">
                <iconset>
                 <normaloff>icons/label.svg</normaloff>icons/label.svg</iconset>
+              </property>
+              <property name="filter_button" stdset="0">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -444,101 +444,123 @@ QPushButton[filter_button=true]:hover {
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="timer_layout">
-         <item>
-          <widget class="QLabel" name="countdown_label">
-           <property name="text">
-            <string>30</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-           <property name="font">
-            <font>
-             <family>Arial</family>
-             <pointsize>18</pointsize>
-             <bold>true</bold>
-            </font>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QProgressBar" name="progress_bar">
-           <property name="value">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="toggle_button">
-           <property name="text">
-            <string>Iniciar Quiz</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="config_button">
-           <property name="text">
-            <string>⚙️</string>
-           </property>
-           <property name="fixedWidth" stdset="0">
-            <number>40</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QWidget" name="" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QHBoxLayout" name="timer_layout">
+          <item>
+           <widget class="QLabel" name="countdown_label">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <pointsize>18</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>30</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QProgressBar" name="progress_bar">
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="action_toggle">
+            <property name="text">
+             <string>Iniciar Quiz</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="config_button">
+            <property name="text">
+             <string>⚙️</string>
+            </property>
+            <property name="fixedWidth" stdset="0">
+             <number>40</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
-        <widget class="QWidget" name="options_container">
+        <widget class="QWidget" name="options_container" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <layout class="QGridLayout" name="options_grid">
           <property name="leftMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="topMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="bottomMargin">
-           <number>0</number>
+           <number>1</number>
           </property>
          </layout>
         </widget>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="stats_layout">
-         <item>
-          <widget class="QLabel" name="score_label">
-           <property name="text">
-            <string>Aciertos: 0</string>
-           </property>
-           <property name="fixedHeight" stdset="0">
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="total_label">
-           <property name="text">
-            <string>Total: 0</string>
-           </property>
-           <property name="fixedHeight" stdset="0">
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="accuracy_label">
-           <property name="text">
-            <string>Precisión: 0%</string>
-           </property>
-           <property name="fixedHeight" stdset="0">
-            <number>20</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <widget class="QWidget" name="" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QHBoxLayout" name="stats_layout">
+          <item>
+           <widget class="QLabel" name="score_label">
+            <property name="text">
+             <string>Aciertos: 0</string>
+            </property>
+            <property name="fixedHeight" stdset="0">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="total_label">
+            <property name="text">
+             <string>Total: 0</string>
+            </property>
+            <property name="fixedHeight" stdset="0">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="accuracy_label">
+            <property name="text">
+             <string>Precisión: 0%</string>
+            </property>
+            <property name="fixedHeight" stdset="0">
+             <number>20</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

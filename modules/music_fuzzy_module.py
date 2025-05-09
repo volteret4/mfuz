@@ -172,7 +172,7 @@ class MusicFuzzyModule(BaseModule):
             print("Play button connected")
 
         # Conectar botón de reproducción actual
-        if hasattr(self, 'playing_button'):  # Asumiendo que 'custom_button1' es tu 'playing_button'
+        if hasattr(self, 'playing_button'):  # Asumiendo que 'playing_button' es tu 'playing_button'
             self.playing_button.clicked.connect(self._handle_playing_button)
 
         # Conectar los botones del reproductor
@@ -1170,8 +1170,8 @@ class MusicFuzzyModule(BaseModule):
             self.play_button.clicked.connect(self._handle_play_button)
             print("Botón de reproducción conectado")
         
-        # Botón para añadir a la cola (tiene que ser 'add_to_queue', no 'add_to_queue_button')
-        add_queue_button = self.findChild(QPushButton, "add_to_queue")
+        # Botón para añadir a la cola (tiene que ser 'add_to_queue_button_button', no 'add_to_queue_button')
+        add_queue_button = self.findChild(QPushButton, "add_to_queue_button")
         if add_queue_button:
             try:
                 add_queue_button.clicked.disconnect()
@@ -1210,14 +1210,14 @@ class MusicFuzzyModule(BaseModule):
             stop_button.clicked.connect(self._handle_stop_button)
             print("Botón de detener conectado")
         
-        # Si estamos usando custom_button1 como "Reproduciendo"
-        if hasattr(self, 'custom_button1') and self.custom_button1:
-            if self.custom_button1.text() == "Reproduciendo":
+        # Si estamos usando playing_button como "Reproduciendo"
+        if hasattr(self, 'playing_button') and self.playing_button:
+            if self.playing_button.text() == "Reproduciendo":
                 try:
-                    self.custom_button1.clicked.disconnect()
+                    self.playing_button.clicked.disconnect()
                 except:
                     pass
-                self.custom_button1.clicked.connect(self._handle_playing_button)
+                self.playing_button.clicked.connect(self._handle_playing_button)
                 print("Botón custom 'Reproduciendo' conectado")
                 
         # También conectar el botón "Reproduciendo" en las configuraciones avanzadas

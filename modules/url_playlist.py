@@ -33,8 +33,9 @@ from modules.submodules.url_playlist.spotify_manager import (
 from modules.submodules.url_playlist.lastfm_manager import (
     setup_lastfm_menu_items, sync_lastfm_scrobbles, load_lastfm_scrobbles_period,
     load_lastfm_scrobbles_month, load_lastfm_scrobbles_year, display_scrobbles_in_tree,
-    populate_scrobbles_time_menus, get_track_links_from_db, get_lastfm_cache_path
-)
+    populate_scrobbles_time_menus, get_track_links_from_db, get_lastfm_cache_path, load_lastfm_cache_if_exists,
+    setup_scrobbles_menu, connect_lastfm_controls, force_load_scrobbles_data_from_db, load_lastfm_cache_if_exists) 
+
 from modules.submodules.url_playlist.playlist_manager import (
     parse_pls_file, load_local_playlists, create_local_playlist, save_playlists,
     load_rss_playlists, move_rss_playlist_to_listened, update_playlist_comboboxes,
@@ -46,7 +47,7 @@ from modules.submodules.url_playlist.media_utils import (
 )
 from modules.submodules.url_playlist.ui_helpers import (
     setup_service_icons, get_source_icon, format_duration, 
-    setup_unified_playlist_menu, update_unified_playlist_menu, setup_context_menus,
+    setup_unified_playlist_menu, setup_context_menus,
     display_search_results, display_external_results, on_tree_double_click, on_list_double_click,
     show_advanced_settings, on_tree_selection_changed, on_spotify_playlist_changed,
     on_playlist_rss_changed, on_playlist_local_changed, clear_playlist, show_mark_as_listened_dialog,
@@ -56,19 +57,28 @@ from modules.submodules.url_playlist.db_manager import (
     search_database_links, _process_database_results, perform_search_with_service_filter
 )
 from modules.submodules.url_playlist.rss_manager import (
-    setup_rss_controls
+    setup_rss_controls, update_unified_playlist_menu
 )
+
+from modules.submodules.url_playlist.progress_bar import setup_progress_bar
 
 class UrlPlayer(BaseModule):
     """Módulo para reproducir música desde URLs (YouTube, SoundCloud, Bandcamp)."""
     # Definir señales personalizadas para comunicación entre hilos
     ask_mark_as_listened_signal = pyqtSignal(dict)  # Para preguntar si marcar como escuchada
     show_error_signal = pyqtSignal(str)  # Para mostrar errores desde hilos
+    process_started_signal = pyqtSignal(str)
+    process_progress_signal = pyqtSignal(int, str)
+    process_finished_signal = pyqtSignal(str, int, int)  # message, success_count, total_count
+    process_error_signal = pyqtSignal(str)
 
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         # Extract specific configurations from kwargs with improved defaults
         self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', Path(os.path.expanduser("~"), ".config", "mpv", "_mpv_socket"))
         
+        # Script para obtener posts del servidor freshrss
+        self.script_path = Path(f"{PROJECT_ROOT}/db/posts/crear_playlists_freshrss.py")
+
         # Extract database configuration with better handling
         self.db_path = kwargs.get('db_path')
         if self.db_path and not os.path.isabs(self.db_path):
@@ -176,13 +186,13 @@ class UrlPlayer(BaseModule):
         self.lineEdit = None
         self.searchButton = None
         self.treeWidget = None
-        self.playButton = None
-        self.rewButton = None
-        self.ffButton = None
+        self.play_button = None
+        self.rew_button = None
+        self.ff_button = None
         self.tabWidget = None
         self.listWidget = None
-        self.delButton = None
-        self.addButton = None
+        self.del_button = None
+        self.add_button = None
         self.textEdit = None
         self.info_wiki_textedit = None
         
@@ -203,7 +213,7 @@ class UrlPlayer(BaseModule):
         self.player_manager.track_finished.connect(self.on_track_finished)
         self.player_manager.playback_error.connect(self.on_playback_error)
 
-
+        load_lastfm_cache_if_exists(self)
 
         self.treeWidget.setProperty("controller", self)
         self._is_initializing = True
@@ -245,13 +255,65 @@ class UrlPlayer(BaseModule):
 
         self._is_initializing = False
 
+        # Configurar barra de progreso
+        setup_progress_bar(self)
+
+        self._connect_thread_signals()
+
+    def _connect_thread_signals(self):
+        """Connect signals for thread communication"""
+        self.process_started_signal.connect(self._on_process_started)
+        self.process_progress_signal.connect(self._on_process_progress)
+        self.process_finished_signal.connect(self._on_process_finished)
+        self.process_error_signal.connect(self._on_process_error)
+        
+        # Inicializar variables para el diálogo de progreso
+        self._progress_dialog = None
+
+    def _on_process_started(self, message):
+        """Handle process started signal (runs in main thread)"""
+        from PyQt6.QtWidgets import QProgressDialog
+        from PyQt6.QtCore import Qt
+        
+        self._progress_dialog = QProgressDialog(message, "Cancel", 0, 100, self)
+        self._progress_dialog.setWindowTitle("Processing")
+        self._progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        self._progress_dialog.show()
+
+    def _on_process_progress(self, value, message=None):
+        """Handle process progress signal (runs in main thread)"""
+        if self._progress_dialog:
+            if message:
+                self._progress_dialog.setLabelText(message)
+            self._progress_dialog.setValue(value)
+
+    def _on_process_finished(self, message, success_count, total_count):
+        """Handle process finished signal (runs in main thread)"""
+        if self._progress_dialog:
+            self._progress_dialog.setValue(100)
+            self._progress_dialog.setLabelText(f"{message}\nProcesados: {success_count}/{total_count}")
+            
+            # Keep dialog open briefly
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(3000, self._progress_dialog.close)
+
+    def _on_process_error(self, error_message):
+        """Handle process error signal (runs in main thread)"""
+        from PyQt6.QtWidgets import QMessageBox
+        
+        if self._progress_dialog:
+            self._progress_dialog.close()
+        
+        QMessageBox.critical(self, "Error", error_message)
+
+
     def init_ui(self):
         """Inicializa la interfaz de usuario desde el archivo UI."""
         # Intentar cargar desde archivo UI
         ui_file_loaded = self.load_ui_file("url_player.ui", [
-            "lineEdit", "searchButton", "treeWidget", "playButton", 
-            "rewButton", "ffButton", "tabWidget", "listWidget",
-            "delButton", "addButton", "textEdit", "servicios", "ajustes_avanzados"
+            "lineEdit", "searchButton", "treeWidget", "play_button", 
+            "rew_button", "ff_button", "tabWidget", "listWidget",
+            "del_button", "add_button", "textEdit", "servicios", "ajustes_avanzados"
         ])
         
         if not ui_file_loaded:
@@ -271,20 +333,20 @@ class UrlPlayer(BaseModule):
         # Configurar nombres y tooltips
         self.searchButton.setText("Buscar")
         self.searchButton.setToolTip("Buscar información sobre la URL")
-        self.playButton.setIcon(QIcon(":/services/b_play"))
-        self.playButton.setToolTip("Reproducir/Pausar")
-        self.rewButton.setIcon(QIcon(":/services/b_prev"))
-        self.rewButton.setToolTip("Anterior")
-        self.ffButton.setIcon(QIcon(":/services/b_ff"))
-        self.ffButton.setToolTip("Siguiente")
-        self.delButton.setIcon(QIcon(":/services/b_minus_star"))
-        self.delButton.setToolTip("Eliminar de la cola")
-        self.addButton.setIcon(QIcon(":/services/b_addstar"))
-        self.addButton.setToolTip("Añadir a la cola")
+        self.play_button.setIcon(QIcon(":/services/b_play"))
+        self.play_button.setToolTip("Reproducir/Pausar")
+        self.rew_button.setIcon(QIcon(":/services/b_prev"))
+        self.rew_button.setToolTip("Anterior")
+        self.ff_button.setIcon(QIcon(":/services/b_ff"))
+        self.ff_button.setToolTip("Siguiente")
+        self.del_button.setIcon(QIcon(":/services/b_minus_star"))
+        self.del_button.setToolTip("Eliminar de la cola")
+        self.add_button.setIcon(QIcon(":/services/b_addstar"))
+        self.add_button.setToolTip("Añadir a la cola")
         
         # Configurar el botón unificado de playlists
-        from modules.submodules.url_playlist.ui_helpers import setup_unified_playlist_button
-        setup_unified_playlist_button(self)
+        from modules.submodules.url_playlist.ui_helpers import setup_action_unified_playlist
+        setup_action_unified_playlist(self)
         
         # Aplicar la configuración de vista actual
         self.update_playlist_view()
@@ -333,10 +395,7 @@ class UrlPlayer(BaseModule):
         # Ensure RSS combobox is accessible
         if not hasattr(self, 'playlist_rss_comboBox'):
             self.playlist_rss_comboBox = self.findChild(QComboBox, 'playlist_rss_comboBox')
-        
-        # Set up Last.fm scrobbles menu
-        from modules.submodules.url_playlist.lastfm_manager import setup_scrobbles_menu
-        setup_scrobbles_menu(self)
+
         
         # Connect slider and spinbox in settings
         scrobbles_slider = self.findChild(QSlider, 'scrobbles_slider')
@@ -411,12 +470,12 @@ class UrlPlayer(BaseModule):
         # Panel de botones del reproductor
         player_buttons_frame = QFrame()
         player_buttons_layout = QHBoxLayout(player_buttons_frame)
-        self.rewButton = QPushButton("⏮️")
-        self.ffButton = QPushButton("⏭️")
-        self.playButton = QPushButton("▶️")
-        player_buttons_layout.addWidget(self.rewButton)
-        player_buttons_layout.addWidget(self.ffButton)
-        player_buttons_layout.addWidget(self.playButton)
+        self.rew_button = QPushButton("⏮️")
+        self.ff_button = QPushButton("⏭️")
+        self.play_button = QPushButton("▶️")
+        player_buttons_layout.addWidget(self.rew_button)
+        player_buttons_layout.addWidget(self.ff_button)
+        player_buttons_layout.addWidget(self.play_button)
         
         # Panel de información
         info_frame = QFrame()
@@ -430,10 +489,10 @@ class UrlPlayer(BaseModule):
         
         playlist_buttons_frame = QFrame()
         playlist_buttons_layout = QHBoxLayout(playlist_buttons_frame)
-        self.addButton = QPushButton("➕")
-        self.delButton = QPushButton("➖")
-        playlist_buttons_layout.addWidget(self.addButton)
-        playlist_buttons_layout.addWidget(self.delButton)
+        self.add_button = QPushButton("➕")
+        self.del_button = QPushButton("➖")
+        playlist_buttons_layout.addWidget(self.add_button)
+        playlist_buttons_layout.addWidget(self.del_button)
         
         playlists_layout.addWidget(self.listWidget)
         playlists_layout.addWidget(playlist_buttons_frame)
@@ -465,9 +524,9 @@ class UrlPlayer(BaseModule):
     def check_required_widgets(self):
         """Verifica que todos los widgets requeridos existan."""
         required_widgets = [
-            "lineEdit", "searchButton", "treeWidget", "playButton", 
-            "ffButton", "rewButton", "tabWidget", "listWidget",
-            "addButton", "delButton", "textEdit", "servicios", "ajustes_avanzados"
+            "lineEdit", "searchButton", "treeWidget", "play_button", 
+            "ff_button", "rew_button", "tabWidget", "listWidget",
+            "add_button", "del_button", "textEdit", "servicios", "ajustes_avanzados"
         ]
         
         all_ok = True
@@ -501,19 +560,19 @@ class UrlPlayer(BaseModule):
             if self.searchButton:
                 self.searchButton.clicked.connect(self.perform_search)
                     
-            if self.playButton:
-                self.playButton.clicked.connect(lambda: toggle_play_pause(self))            
-            if self.rewButton:
-                self.rewButton.clicked.connect(lambda: previous_track(self))
+            if self.play_button:
+                self.play_button.clicked.connect(lambda: toggle_play_pause(self))            
+            if self.rew_button:
+                self.rew_button.clicked.connect(lambda: previous_track(self))
             
-            if self.ffButton:
-                self.ffButton.clicked.connect(lambda: next_track(self))
+            if self.ff_button:
+                self.ff_button.clicked.connect(lambda: next_track(self))
             
-            if self.addButton:
-                self.addButton.clicked.connect(lambda: add_to_queue(self))
+            if self.add_button:
+                self.add_button.clicked.connect(lambda: add_to_queue(self))
             
-            if self.delButton:
-                self.delButton.clicked.connect(lambda: remove_from_queue(self))            
+            if self.del_button:
+                self.del_button.clicked.connect(lambda: remove_from_queue(self))            
 
             if self.lineEdit:
                 self.lineEdit.returnPressed.connect(self.perform_search)
@@ -580,17 +639,17 @@ class UrlPlayer(BaseModule):
                 self.playlist_local_comboBox.currentIndexChanged.connect(lambda idx: on_playlist_local_changed(self, idx))
 
             # For the save playlist button
-            if hasattr(self, 'GuardarPlaylist'):
+            if hasattr(self, 'GuardarPlaylist_button'):
                 try:
-                    self.GuardarPlaylist.clicked.disconnect()
+                    self.GuardarPlaylist_button.clicked.disconnect()
                 except TypeError:
                     pass
                 from modules.submodules.url_playlist.playlist_manager import on_guardar_playlist_clicked
-                self.GuardarPlaylist.clicked.connect(lambda: on_guardar_playlist_clicked(self))
+                self.GuardarPlaylist_button.clicked.connect(lambda: on_guardar_playlist_clicked(self))
             
-            if hasattr(self, 'VaciarPlaylist'):
+            if hasattr(self, 'VaciarPlaylist_button'):
                 from modules.submodules.url_playlist.ui_helpers import clear_playlist
-                self.VaciarPlaylist.clicked.connect(lambda: clear_playlist(self))
+                self.VaciarPlaylist_button.clicked.connect(lambda: clear_playlist(self))
             
             # Connect signals for RSS playlist operations
             self.ask_mark_as_listened_signal.connect(lambda data: show_mark_as_listened_dialog(self, data))
@@ -603,15 +662,19 @@ class UrlPlayer(BaseModule):
             # Update RSS playlists automatically at startup
             from modules.submodules.url_playlist.playlist_manager import load_rss_playlists
             load_rss_playlists(self)
+            
+            from modules.submodules.url_playlist.rss_manager import setup_rss_controls
+            # Asegúrese de que todos los atributos necesarios estén disponibles en el módulo rss_manager
+            setup_rss_controls(self)
 
-            if self.playButton:
-                self.playButton.clicked.connect(self.toggle_play_pause)
+            if self.play_button:
+                self.play_button.clicked.connect(self.toggle_play_pause)
             
-            if self.rewButton:
-                self.rewButton.clicked.connect(self.play_previous)
+            if self.rew_button:
+                self.rew_button.clicked.connect(self.play_previous)
             
-            if self.ffButton:
-                self.ffButton.clicked.connect(self.play_next)
+            if self.ff_button:
+                self.ff_button.clicked.connect(self.play_next)
 
 
 
@@ -715,9 +778,9 @@ class UrlPlayer(BaseModule):
             self.unified_page = self.findChild(QWidget, 'unified_page')
             
             # Buscar el botón unificado
-            self.unified_playlist_button = self.findChild(QPushButton, 'unified_playlist_button')
-            if not self.unified_playlist_button:
-                self.log("Error: No se pudo encontrar el botón 'unified_playlist_button'")
+            self.action_unified_playlist = self.findChild(QPushButton, 'action_unified_playlist')
+            if not self.action_unified_playlist:
+                self.log("Error: No se pudo encontrar el botón 'action_unified_playlist'")
                 return False
                 
             # Inicializar el botón unificado
@@ -846,15 +909,15 @@ class UrlPlayer(BaseModule):
                 return False
                 
             # Verificar botón unificado
-            if not hasattr(self, 'unified_playlist_button'):
-                self.log("Error: QPushButton 'unified_playlist_button' no encontrado")
+            if not hasattr(self, 'action_unified_playlist'):
+                self.log("Error: QPushButton 'action_unified_playlist' no encontrado")
                 return False
             
             # Make sure the button is visible first (this is critical)
-            self.unified_playlist_button.setVisible(True)
+            self.action_unified_playlist.setVisible(True)
                 
             # Configurar el botón unificado si aún no tiene menú
-            if not self.unified_playlist_button.menu():
+            if not self.action_unified_playlist.menu():
                 setup_unified_playlist_menu(self)
                 
 
@@ -1502,26 +1565,26 @@ class UrlPlayer(BaseModule):
     def on_playback_started(self):
         """Handle player starting playback"""
         self.is_playing = True
-        self.playButton.setIcon(QIcon(":/services/b_pause"))
+        self.play_button.setIcon(QIcon(":/services/b_pause"))
         self.log("Playback started")
         self.highlight_current_track()
 
     def on_playback_stopped(self):
         """Handle player stopping playback"""
         self.is_playing = False
-        self.playButton.setIcon(QIcon(":/services/b_play"))
+        self.play_button.setIcon(QIcon(":/services/b_play"))
         self.log("Playback stopped")
 
     def on_playback_paused(self):
         """Handle player pausing playback"""
         self.is_playing = False
-        self.playButton.setIcon(QIcon(":/services/b_play"))
+        self.play_button.setIcon(QIcon(":/services/b_play"))
         self.log("Playback paused")
 
     def on_playback_resumed(self):
         """Handle player resuming playback"""
         self.is_playing = True
-        self.playButton.setIcon(QIcon(":/services/b_pause"))
+        self.play_button.setIcon(QIcon(":/services/b_pause"))
         self.log("Playback resumed")
 
     def on_track_finished(self):
@@ -1540,7 +1603,7 @@ class UrlPlayer(BaseModule):
                 # End of playlist
                 self.current_track_index = -1
                 self.is_playing = False
-                self.playButton.setIcon(QIcon(":/services/b_play"))
+                self.play_button.setIcon(QIcon(":/services/b_play"))
                 self.log("End of playlist reached")
 
     def on_playback_error(self, error):

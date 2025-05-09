@@ -435,7 +435,7 @@ QProgressBar::chunk {
                   </size>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="separate_page_stacked">
                   <property name="sizePolicy">
@@ -484,7 +484,7 @@ QProgressBar::chunk {
                          <string>Colecciones MB</string>
                         </property>
                         <property name="icon">
-                         <iconset resource="../images.qrc">
+                         <iconset>
                           <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
                         </property>
                        </widget>
@@ -582,11 +582,11 @@ QProgressBar::chunk {
                        </widget>
                       </item>
                       <item>
-                       <widget class="QPushButton" name="favoritos_menu">
+                       <widget class="QPushButton" name="favoritos_menu_button">
                         <property name="maximumSize">
                          <size>
-                          <width>16777215</width>
-                          <height>30</height>
+                          <width>34</width>
+                          <height>34</height>
                          </size>
                         </property>
                         <property name="text">
@@ -595,6 +595,12 @@ QProgressBar::chunk {
                         <property name="icon">
                          <iconset resource="../images.qrc">
                           <normaloff>:/services/chicken</normaloff>:/services/chicken</iconset>
+                        </property>
+                        <property name="iconSize">
+                         <size>
+                          <width>30</width>
+                          <height>30</height>
+                         </size>
                         </property>
                        </widget>
                       </item>
@@ -645,7 +651,7 @@ QProgressBar::chunk {
                        <number>0</number>
                       </property>
                       <item>
-                       <widget class="QPushButton" name="unified_playlist_button">
+                       <widget class="QPushButton" name="action_unified_playlist">
                         <property name="sizePolicy">
                          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
                           <horstretch>0</horstretch>
@@ -798,7 +804,7 @@ QProgressBar::chunk {
             }}</string>
               </property>
               <property name="currentIndex">
-               <number>2</number>
+               <number>0</number>
               </property>
               <property name="movable">
                <bool>false</bool>
@@ -845,7 +851,7 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>464</width>
+                     <width>489</width>
                      <height>643</height>
                     </rect>
                    </property>
@@ -970,8 +976,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>464</width>
-                     <height>649</height>
+                     <width>86</width>
+                     <height>86</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -1042,8 +1048,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>464</width>
-                     <height>649</height>
+                     <width>86</width>
+                     <height>86</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1153,8 +1159,8 @@ QProgressBar::chunk {
                    <widget class="QPushButton" name="mark_as_listened_button">
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="text">
@@ -1173,7 +1179,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="addButton">
+                   <widget class="QPushButton" name="add_button">
                     <property name="minimumSize">
                      <size>
                       <width>36</width>
@@ -1182,8 +1188,8 @@ QProgressBar::chunk {
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="font">
@@ -1215,7 +1221,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="delButton">
+                   <widget class="QPushButton" name="del_button">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1224,8 +1230,8 @@ QProgressBar::chunk {
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="font">
@@ -1288,7 +1294,7 @@ QProgressBar::chunk {
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="QPushButton" name="rewButton">
+                   <widget class="QPushButton" name="rew_button">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1297,8 +1303,8 @@ QProgressBar::chunk {
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="font">
@@ -1327,7 +1333,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="playButton">
+                   <widget class="QPushButton" name="play_button">
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1336,8 +1342,8 @@ QProgressBar::chunk {
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="font">
@@ -1366,7 +1372,7 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="ffButton">
+                   <widget class="QPushButton" name="ff_button">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                       <horstretch>0</horstretch>
@@ -1381,8 +1387,8 @@ QProgressBar::chunk {
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="font">
@@ -1496,11 +1502,11 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="GuardarPlaylist">
+                   <widget class="QPushButton" name="GuardarPlaylist_button">
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="cursor">
@@ -1525,11 +1531,11 @@ QProgressBar::chunk {
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="VaciarPlaylist">
+                   <widget class="QPushButton" name="VaciarPlaylist_button">
                     <property name="maximumSize">
                      <size>
-                      <width>36</width>
-                      <height>36</height>
+                      <width>34</width>
+                      <height>34</height>
                      </size>
                     </property>
                     <property name="cursor">

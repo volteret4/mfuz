@@ -103,15 +103,15 @@ class Ui_ConfigEditor(object):
 
         self.container_layout.addWidget(self.disabled_modules_group)
 
-        self.save_all_button = QPushButton(self.container)
-        self.save_all_button.setObjectName(u"save_all_button")
+        self.action_save_all = QPushButton(self.container)
+        self.action_save_all.setObjectName(u"action_save_all")
 
-        self.container_layout.addWidget(self.save_all_button)
+        self.container_layout.addWidget(self.action_save_all)
 
-        self.reload_button = QPushButton(self.container)
-        self.reload_button.setObjectName(u"reload_button")
+        self.action_reload = QPushButton(self.container)
+        self.action_reload.setObjectName(u"action_reload")
 
-        self.container_layout.addWidget(self.reload_button)
+        self.container_layout.addWidget(self.action_reload)
 
         self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -141,9 +141,9 @@ class Ui_ConfigEditor(object):
         self.active_modules_group.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"QGroupBox { font-weight: bold; color: #4CAF50; }", None))
         self.disabled_modules_group.setTitle(QCoreApplication.translate("ConfigEditor", u"Disabled Modules", None))
         self.disabled_modules_group.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"QGroupBox { font-weight: bold; color: #F44336; }", None))
-        self.save_all_button.setText(QCoreApplication.translate("ConfigEditor", u"Save All Changes", None))
-        self.save_all_button.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;", None))
-        self.reload_button.setText(QCoreApplication.translate("ConfigEditor", u"Reload Configuration", None))
-        self.reload_button.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #2196F3; color: white; padding: 8px;", None))
+        self.action_save_all.setText(QCoreApplication.translate("ConfigEditor", u"Save All Changes", None))
+        self.action_save_all.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;", None))
+        self.action_reload.setText(QCoreApplication.translate("ConfigEditor", u"Reload Configuration", None))
+        self.action_reload.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #2196F3; color: white; padding: 8px;", None))
     # retranslateUi
 

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>817</width>
     <height>600</height>
    </rect>
   </property>
@@ -53,6 +53,12 @@
           <height>30</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -62,9 +68,12 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>28</width>
-          <height>28</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -187,8 +196,14 @@
           <widget class="QPushButton" name="pushButton">
            <property name="minimumSize">
             <size>
-             <width>0</width>
-             <height>30</height>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
             </size>
            </property>
            <property name="text">
@@ -200,14 +215,29 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>30</width>
+             <height>30</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="add_to_cal">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -217,9 +247,12 @@
            </property>
            <property name="iconSize">
             <size>
-             <width>28</width>
-             <height>28</height>
+             <width>30</width>
+             <height>30</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

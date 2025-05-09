@@ -173,17 +173,17 @@ class DBCreatorModule(BaseModule):
         ui_file = Path(f"{PROJECT_ROOT}/ui/base_datos/db_creator_base.ui")
 
         required_widgets = [
-            "stackedWidget", "progressBar", "anterior_boton", "siguiente_boton", "output_text"
+            "stackedWidget", "progressBar", "anterior_button", "siguiente_button", "output_text"
         ]
         
         if self.load_ui_file(str(ui_file), required_widgets):
             # Asegurarse de que tenemos referencias a los widgets necesarios
             if not hasattr(self, 'stackedWidget') or not self.stackedWidget:
                 self.stackedWidget = self.findChild(QStackedWidget, "stackedWidget")
-            if not hasattr(self, 'anterior_boton') or not self.anterior_boton:
-                self.anterior_boton = self.findChild(QPushButton, "anterior_boton")
-            if not hasattr(self, 'siguiente_boton') or not self.siguiente_boton:
-                self.siguiente_boton = self.findChild(QPushButton, "siguiente_boton")
+            if not hasattr(self, 'anterior_button') or not self.anterior_button:
+                self.anterior_button = self.findChild(QPushButton, "anterior_button")
+            if not hasattr(self, 'siguiente_button') or not self.siguiente_button:
+                self.siguiente_button = self.findChild(QPushButton, "siguiente_button")
             if not hasattr(self, 'progressBar') or not self.progressBar:
                 self.progressBar = self.findChild(QProgressBar, "progressBar")
             if not hasattr(self, 'output_text') or not self.output_text:
@@ -193,8 +193,8 @@ class DBCreatorModule(BaseModule):
 
             # Verificación de widgets encontrados
             print(f"StackedWidget encontrado: {bool(self.stackedWidget)}")
-            print(f"Botón anterior encontrado: {bool(self.anterior_boton)}")
-            print(f"Botón siguiente encontrado: {bool(self.siguiente_boton)}")
+            print(f"Botón anterior encontrado: {bool(self.anterior_button)}")
+            print(f"Botón siguiente encontrado: {bool(self.siguiente_button)}")
             print(f"Output text encontrado: {bool(self.output_text)}")
                 
             self.setup_connections()
@@ -304,28 +304,28 @@ class DBCreatorModule(BaseModule):
         # Progress widget
         progress_widget = QWidget()
         progress_layout = QHBoxLayout(progress_widget)
-        self.anterior_boton = QPushButton()
-        self.anterior_boton.setIcon(QIcon(":/services/b_prev"))
-        self.anterior_boton.setIconSize(QSize(30, 30))
+        self.anterior_button = QPushButton()
+        self.anterior_button.setIcon(QIcon(":/services/b_prev"))
+        self.anterior_button.setIconSize(QSize(30, 30))
         self.progressBar = QProgressBar()
         self.progressBar.setMinimumHeight(30)
-        self.siguiente_boton = QPushButton()
-        self.siguiente_boton.setIcon(QIcon(":/services/b_ff"))
-        self.siguiente_boton.setIconSize(QSize(30, 30))
-        progress_layout.addWidget(self.anterior_boton)
+        self.siguiente_button = QPushButton()
+        self.siguiente_button.setIcon(QIcon(":/services/b_ff"))
+        self.siguiente_button.setIconSize(QSize(30, 30))
+        progress_layout.addWidget(self.anterior_button)
         progress_layout.addWidget(self.progressBar)
-        progress_layout.addWidget(self.siguiente_boton)
+        progress_layout.addWidget(self.siguiente_button)
         main_layout.addWidget(progress_widget)
         
     def setup_connections(self):
         """Setup signal connections."""
         # Navigation buttons
-        self.anterior_boton.clicked.connect(self.go_to_previous_page)
-        self.siguiente_boton.clicked.connect(self.go_to_next_page)
+        self.anterior_button.clicked.connect(self.go_to_previous_page)
+        self.siguiente_button.clicked.connect(self.go_to_next_page)
 
         # Verificación de las conexiones
-        print(f"Botón anterior conectado: {bool(self.anterior_boton.receivers(self.anterior_boton.clicked))}")
-        print(f"Botón siguiente conectado: {bool(self.siguiente_boton.receivers(self.siguiente_boton.clicked))}")
+        print(f"Botón anterior conectado: {bool(self.anterior_button.receivers(self.anterior_button.clicked))}")
+        print(f"Botón siguiente conectado: {bool(self.siguiente_button.receivers(self.siguiente_button.clicked))}")
 
         # Añadir la conexión para ocultar/mostrar el log al hacer clic en la progressBar
         self.progressBar.mousePressEvent = self.toggle_log_visibility
@@ -333,7 +333,7 @@ class DBCreatorModule(BaseModule):
         # File browser button (assuming it's the third pushbutton)
         file_browser_buttons = self.findChildren(QPushButton)
         for button in file_browser_buttons:
-            if button.icon().availableSizes() and button != self.anterior_boton and button != self.siguiente_boton:
+            if button.icon().availableSizes() and button != self.anterior_button and button != self.siguiente_button:
                 button.clicked.connect(self.browse_for_folder)
                 break
                 
@@ -439,8 +439,8 @@ class DBCreatorModule(BaseModule):
             
     def update_navigation_buttons(self):
         """Update the state of navigation buttons based on current page."""
-        self.anterior_boton.setEnabled(self.current_index > 0)
-        self.siguiente_boton.setEnabled(self.current_index < self.total_steps - 1)
+        self.anterior_button.setEnabled(self.current_index > 0)
+        self.siguiente_button.setEnabled(self.current_index < self.total_steps - 1)
         
     def load_config(self, config_file):
         """Load configuration from a file."""

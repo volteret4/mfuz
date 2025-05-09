@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPushB
 from PyQt6.QtWidgets import QLabel, QWidget, QCheckBox, QMenu, QAbstractItemView, QTableWidget, QTableWidgetItem
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl
-from PyQt6.QtGui import QDesktopServices, QPixmap, QAction
+from PyQt6.QtGui import QDesktopServices, QPixmap, QAction, QShortcut, QKeySequence
 from base_module import BaseModule, PROJECT_ROOT
 import os
 import json
@@ -189,6 +189,9 @@ class ConciertosModule(BaseModule):
         # Configurar menús contextuales
         self.setup_context_menus()
 
+        # Configurar atajos de teclado
+        self.setup_keyboard_shortcuts()
+
         # Debug: verificar inicialización de servicios
         self.log_area.append(f"Ticketmaster service exists: {hasattr(self, 'ticketmaster_service')}")
         self.log_area.append(f"Spotify service exists: {hasattr(self, 'spotify_service')}")
@@ -216,6 +219,32 @@ class ConciertosModule(BaseModule):
             print(f"Error cargando UI: {e}")
             traceback.print_exc()
             return False
+
+    def setup_keyboard_shortcuts(self):
+        """
+        Configurar atajos de teclado para la aplicación principal
+        
+        Esta función debe ser llamada después de que la UI esté completamente cargada,
+        típicamente al final del método __init__ o setup_ui de la clase principal.
+        
+        Atajos implementados:
+        - Ctrl+F: Foco en el campo de búsqueda
+        - Enter en lineEdit: Ejecutar búsqueda
+        """
+        # Crear atajo Ctrl+F para foco en campo de búsqueda
+        shortcut_search = QShortcut(QKeySequence("Ctrl+F"), self)
+        shortcut_search.activated.connect(self.focus_search_box)
+        
+        # Conectar evento de Enter en lineEdit para realizar búsqueda
+        if hasattr(self, 'lineEdit'):
+            self.lineEdit.returnPressed.connect(self.search_from_lineedit)
+        
+    def focus_search_box(self):
+        """Establecer foco en el cuadro de búsqueda"""
+        if hasattr(self, 'lineEdit'):
+            self.lineEdit.setFocus()
+            self.lineEdit.selectAll()  # Selecciona todo el texto actual para facilitar reemplazo
+
 
     def connect_signals(self):
         """Conectar señales de la UI a métodos"""
@@ -268,6 +297,8 @@ class ConciertosModule(BaseModule):
         
         if hasattr(self, 'debug_btn_2'):
             self.debug_btn_2.clicked.connect(lambda: self.debug_ticketmaster_response(self.lineEdit.text()))
+
+        
 
     def toggle_advanced_settings(self, state):
         """Toggle visibility of advanced settings based on checkbox state"""
@@ -354,7 +385,7 @@ class ConciertosModule(BaseModule):
                 source_name = source.get('name', 'Unknown')
                 source_url = source.get('url', '')
                 if source_url:
-                    html_info += f"<li><a href=\"{source_url}\">{source_name}</a></li>"
+                    html_info += f"<li><a href=\"{source_url}\" style=\"text-decoration: none; color: #3d59a1;\">{source_name}</a></li>"
                 else:
                     html_info += f"<li>{source_name} (no link available)</li>"
             html_info += "</ul>"

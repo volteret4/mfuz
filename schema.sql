@@ -28,6 +28,9 @@ Estructura de la tabla: songs
 (25, 'album_art_path_denorm', 'TEXT', 0, None, 0)
 (26, 'has_lyrics', 'INTEGER', 0, '0', 0)
 (27, 'origen', 'TEXT', 0, None, 0)
+(28, 'reproducciones', 'INTEGER', 0, '1', 0)
+(29, 'fecha_reproducciones', 'TEXT', 0, None, 0)
+(30, 'scrobbles_ids', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: artists
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -426,3 +429,36 @@ Estructura de la tabla: artists_networks
 (25, 'rateyourmusic', 'TEXT', 0, None, 0)
 (26, 'enlaces', 'TEXT', 0, None, 0)
 (27, 'last_updated', 'TIMESTAMP', 0, None, 0)
+
+Estructura de la tabla: scrobbles_paqueradejere
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'song_id', 'INTEGER', 0, None, 0)
+(2, 'track_name', 'TEXT', 1, None, 0)
+(3, 'artist_name', 'TEXT', 1, None, 0)
+(4, 'album_name', 'TEXT', 0, None, 0)
+(5, 'artist_id', 'INTEGER', 0, None, 0)
+(6, 'album_id', 'INTEGER', 0, None, 0)
+(7, 'timestamp', 'INTEGER', 1, None, 0)
+(8, 'scrobble_date', 'TEXT', 1, None, 0)
+(9, 'lastfm_url', 'TEXT', 0, None, 0)
+(10, 'fecha_adicion', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+(11, 'artist_mbid', 'TEXT', 0, None, 0)
+(12, 'name', 'TEXT', 1, None, 0)
+(13, 'album_mbid', 'TEXT', 0, None, 0)
+(14, 'fecha_scrobble', 'TEXT', 1, None, 0)
+(15, 'reproducciones', 'INTEGER', 0, '1', 0)
+(16, 'fecha_reproducciones', 'TEXT', 0, None, 0)
+(17, 'youtube_url', 'TEXT', 0, None, 0)
+(18, 'spotify_url', 'TEXT', 0, None, 0)
+(19, 'bandcamp_url', 'TEXT', 0, None, 0)
+(20, 'soundcloud_url', 'TEXT', 0, None, 0)
+
+Estructura de la tabla: sqlite_sequence
+(0, 'name', '', 0, None, 0)
+(1, 'seq', '', 0, None, 0)
+
+Estructura de la tabla: lastfm_config_paqueradejere
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'lastfm_username', 'TEXT', 0, None, 0)
+(2, 'last_timestamp', 'INTEGER', 0, None, 0)
+(3, 'last_updated', 'TIMESTAMP', 0, None, 0)

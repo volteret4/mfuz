@@ -177,7 +177,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="save_all_button">
+        <widget class="QPushButton" name="action_save_all">
          <property name="styleSheet">
           <string>background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;</string>
          </property>
@@ -187,7 +187,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="reload_button">
+        <widget class="QPushButton" name="action_reload">
          <property name="styleSheet">
           <string>background-color: #2196F3; color: white; padding: 8px;</string>
          </property>

@@ -140,16 +140,16 @@ class SetlistfmService:
         return None
 
     def get_upcoming_concerts(self, artist_name, country_code="ES"):
-        """Obtiene conciertos próximos mediante web scraping"""
+        """Obtiene conciertos próximos mediante web scraping y enriquece con datos del venue"""
         setlistfm_id = self.get_artist_setlistfm_id(artist_name)
-        current_year = datetime.now().year  # Cambio: usar current_year para ser más claro
+        current_year = datetime.now().year
 
         if not setlistfm_id:
             message = f"No Setlist.fm ID found for {artist_name}"
             self.logger.error(message)
             return [], message
             
-        # Verificar cache - incluir el año en la key para diferenciarlo
+        # Verificar cache
         cache_key = f"setlistfm_upcoming_{setlistfm_id}_{country_code}_{current_year}"
         cache_hash = self._get_cache_hash(cache_key)
         cache_file = self.cache_dir / f"setlistfm_{cache_hash}.json"
@@ -176,15 +176,13 @@ class SetlistfmService:
                 self.logger.info(f"===== SETLIST.FM DEBUG =====")
                 self.logger.info(f"Artist: {artist_name}")
                 self.logger.info(f"Setlistfm ID: {setlistfm_id}")
-                self.logger.info(f"Year: {current_year}")  # Logging del año
+                self.logger.info(f"Year: {current_year}")
                 self.logger.info(f"Page: {page}")
                 self.logger.info(f"URL: {url}")
                 self.logger.info(f"==========================")
                 
                 response = requests.get(url, headers=headers)
                 response.raise_for_status()
-                
-                self.logger.info(f"Response status: {response.status_code}")
                 
                 soup = BeautifulSoup(response.text, 'html.parser')
                 
@@ -243,8 +241,6 @@ class SetlistfmService:
                             artist_span = details.select_one('strong a span')
                             artist_name_concert = artist_span.text.strip() if artist_span else artist_name
                             
-                            self.logger.info(f"Artist found: {artist_name_concert}")
-                            
                             # Tour
                             tour_name = ''
                             tour_span = details.select_one('span:nth-of-type(2)')
@@ -257,12 +253,20 @@ class SetlistfmService:
                             venue_name = ''
                             city = ''
                             country = ''
+                            venue_url = ''
                             
                             venue_span = details.select_one('span:nth-of-type(3)')
                             if venue_span and 'Venue:' in venue_span.text:
-                                venue_link = venue_span.select_one('strong a span')
+                                venue_link = venue_span.select_one('strong a')
+                                venue_span_text = venue_span.select_one('strong a span')
+                                
                                 if venue_link:
-                                    venue_text = venue_link.text.strip()
+                                    venue_url = venue_link.get('href', '')
+                                    if venue_url and not venue_url.startswith('http'):
+                                        venue_url = f"https://www.setlist.fm{venue_url}"
+                                
+                                if venue_span_text:
+                                    venue_text = venue_span_text.text.strip()
                                     parts = venue_text.split(', ')
                                     venue_name = parts[0] if parts else venue_text
                                     if len(parts) > 1:
@@ -270,12 +274,11 @@ class SetlistfmService:
                                     if len(parts) > 2:
                                         country = parts[2]
                             
-                            self.logger.info(f"Venue: {venue_name}, City: {city}, Country: {country}")
-                            
                             # URL del concierto
                             setlist_link = h2 if h2 else block.select_one('a[href*="setlist"]')
-                            concert_url = f"https://www.setlist.fm/{setlist_link['href']}" if setlist_link else ''
+                            concert_url = f"https://www.setlist.fm{setlist_link['href']}" if setlist_link and 'href' in setlist_link.attrs else ''
                             
+                            # Crear el objeto concierto
                             concert = {
                                 'artist': artist_name_concert,
                                 'name': concert_name,
@@ -287,6 +290,15 @@ class SetlistfmService:
                                 'id': setlistfm_id,
                                 'source': 'Setlist.fm'
                             }
+                            
+                            # Si tenemos la URL del venue, obtener detalles adicionales
+                            if venue_url:
+                                # Hacer una pausa breve para no saturar el servidor
+                                time.sleep(0.3)
+                                
+                                venue_details = self.get_venue_details(venue_url)
+                                if venue_details:
+                                    concert['venue_details'] = venue_details
                             
                             self.logger.info(f"Concert extracted: {concert}")
                             all_concerts.append(concert)
@@ -383,54 +395,161 @@ class SetlistfmService:
             return False
 
 
-    def get_setlistfm_id_by_mbid(self, mbid):
+    def get_setlistfm_id_by_mbid(mbid, api_key, retry_count=0):
         """Obtiene el setlistfm_id de un artista usando su MBID"""
-        try:
-            url = f"https://api.setlist.fm/rest/1.0/search/artists"
-            headers = {
-                'Accept': 'application/json',
-                'x-api-key': self.api_key
-            }
-            params = {
-                'artistMbid': mbid,
-                'p': 1,
-                'sort': 'sortName'
-            }
-            
-            response = requests.get(url, headers=headers, params=params)
-            
-            if response.status_code == 404:
-                return None
-            
-            if response.status_code == 429:  # Too Many Requests
-                self.logger.warning(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos...")
-                time.sleep(60)
-                return self.get_setlistfm_id_by_mbid(mbid)
-            
-            if response.status_code != 200:
-                self.logger.error(f"Error al obtener setlistfm_id para MBID {mbid}: {response.status_code}")
-                return None
-            
-            data = response.json()
-            artists = data.get('artist', [])
-            
-            if artists and len(artists) > 0:
-                artist_url = artists[0].get('url')
-                if artist_url:
-                    # Extraer el ID de la URL
-                    # https://www.setlist.fm/setlists/the-beatles-23d6a88b.html
-                    match = re.search(r'-([0-9a-f]+)\.html$', artist_url)
-                    if match:
-                        return match.group(1)
-            
+        url = f"https://api.setlist.fm/rest/1.0/search/artists"
+        headers = {
+            'Accept': 'application/json',
+            'x-api-key': api_key
+        }
+        params = {
+            'artistMbid': mbid,
+            'p': 1,
+            'sort': 'sortName'
+        }
+        
+        response = requests.get(url, headers=headers, params=params)
+        
+        if response.status_code == 404:
             return None
-            
-        except Exception as e:
-            self.logger.error(f"Error obteniendo setlistfm_id para MBID {mbid}: {e}")
+        
+        if response.status_code == 429:  # Too Many Requests
+            if retry_count >= 2:
+                print(f"Rate limit alcanzado para MBID {mbid} después de 2 intentos, saltando al siguiente artista...")
+                return None
+                
+            print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos... (intento {retry_count + 1}/2)")
+            time.sleep(60)
+            return get_setlistfm_id_by_mbid(mbid, api_key, retry_count + 1)
+        
+        if response.status_code != 200:
+            print(f"Error al obtener setlistfm_id para MBID {mbid}: {response.status_code}")
+            print(response.text)
             return None
+        
+        data = response.json()
+        artists = data.get('artist', [])
+        
+        if artists and len(artists) > 0:
+            artist_url = artists[0].get('url')
+            if artist_url:
+                # Extraer el ID de la URL
+                # https://www.setlist.fm/setlists/the-beatles-23d6a88b.html
+                match = re.search(r'-([0-9a-f]+)\.html$', artist_url)
+                if match:
+                    return match.group(1)
+        
+        return None
 
 
     def _get_cache_hash(self, key):
         """Genera un hash para usar como nombre de archivo cache"""
         import hashlib
         return hashlib.md5(key.encode()).hexdigest()
+
+    def get_venue_details(self, venue_url):
+        """
+        Obtiene información detallada de un venue desde su página en Setlist.fm
+        
+        Args:
+            venue_url (str): URL completa del venue en Setlist.fm
+            
+        Returns:
+            dict: Diccionario con los detalles del venue
+        """
+        try:
+            # Verificar formato de URL
+            if not venue_url.startswith('http'):
+                venue_url = f"https://www.setlist.fm{venue_url}"
+                
+            # Hacer la solicitud con headers para evitar bloqueos
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+            
+            self.logger.info(f"Obteniendo detalles del venue: {venue_url}")
+            response = requests.get(venue_url, headers=headers)
+            response.raise_for_status()
+            
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Encontrar el div de información
+            info_div = soup.select_one('div.info')
+            if not info_div:
+                return {}
+                
+            venue_details = {}
+            
+            # Extraer todos los grupos de información
+            form_groups = info_div.select('div.form-group')
+            for group in form_groups:
+                label = group.select_one('span.label')
+                if not label:
+                    continue
+                    
+                label_text = label.text.strip()
+                
+                # Extraer información según el tipo de campo
+                if label_text == "City":
+                    city_span = group.select_one('span:nth-of-type(1)')
+                    if city_span:
+                        venue_details['city'] = city_span.text.strip()
+                        
+                    # Verificar si hay información de cercanía
+                    near_span = group.select_one('span.small')
+                    if near_span:
+                        near_text = near_span.text.strip()
+                        if near_text.startswith('(near ') and near_text.endswith(')'):
+                            venue_details['near'] = near_text[6:-1]  # Extraer texto entre paréntesis
+                    
+                elif label_text == "Address":
+                    address_span = group.select_one('span.address')
+                    if address_span:
+                        # Obtener texto completo de la dirección
+                        venue_details['address'] = address_span.text.strip()
+                        
+                elif label_text == "Opened":
+                    year_span = group.select_one('span > span')
+                    if year_span:
+                        try:
+                            venue_details['opened'] = int(year_span.text.strip())
+                        except ValueError:
+                            venue_details['opened'] = year_span.text.strip()
+                            
+                elif label_text == "Web":
+                    # Extraer todos los enlaces
+                    links = group.select('a.nested')
+                    website_links = []
+                    
+                    for link in links:
+                        url = link.get('href', '')
+                        label = link.select_one('span')
+                        label_text = label.text.strip() if label else ''
+                        
+                        website_links.append({
+                            'url': url,
+                            'label': label_text
+                        })
+                        
+                    venue_details['websites'] = website_links
+                    
+                elif label_text == "Info":
+                    info_span = group.select_one('span')
+                    if info_span:
+                        venue_details['description'] = info_span.text.strip()
+                        
+                elif label_text == "Also known as":
+                    # Extraer todos los nombres alternativos
+                    alt_names = []
+                    for span in group.select('span:not(.label)'):
+                        name = span.text.strip()
+                        if name and name != ',':  # Ignorar comas sueltas
+                            alt_names.append(name.rstrip(',').strip())
+                            
+                    venue_details['alt_names'] = alt_names
+            
+            return venue_details
+            
+        except Exception as e:
+            self.logger.error(f"Error obteniendo detalles del venue: {str(e)}")
+            return {}

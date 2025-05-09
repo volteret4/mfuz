@@ -111,10 +111,10 @@ class ConfigEditorModule(BaseModule):
                 uic.loadUi(ui_file_path, self)
                 
                 # Connect signals to slots
-                self.save_all_button.clicked.connect(lambda: self.save_all_config(
+                self.action_save_all.clicked.connect(lambda: self.save_all_config(
                     self.enable_individual_themes.isChecked()
                 ))
-                self.reload_button.clicked.connect(self.reload_config)
+                self.action_reload.clicked.connect(self.reload_config)
                 self.add_path_button.clicked.connect(self.add_shared_db_path)
                 self.remove_path_button.clicked.connect(self.remove_shared_db_path)
                 self.db_paths_dropdown.currentTextChanged.connect(self.update_db_path_input)
@@ -290,18 +290,18 @@ class ConfigEditorModule(BaseModule):
             container_layout.addWidget(disabled_modules_group)
         
         # Button to save all changes
-        save_all_button = QPushButton("Save All Changes")
-        save_all_button.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;")
-        save_all_button.clicked.connect(lambda: self.save_all_config(
+        action_save_all = QPushButton("Save All Changes")
+        action_save_all.setStyleSheet("background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;")
+        action_save_all.clicked.connect(lambda: self.save_all_config(
             enable_individual_themes.isChecked()
         ))
-        container_layout.addWidget(save_all_button)
+        container_layout.addWidget(action_save_all)
         
         # Button to reload configuration from file
-        reload_button = QPushButton("Reload Configuration")
-        reload_button.setStyleSheet("background-color: #2196F3; color: white; padding: 8px;")
-        reload_button.clicked.connect(self.reload_config)
-        container_layout.addWidget(reload_button)
+        action_reload = QPushButton("Reload Configuration")
+        action_reload.setStyleSheet("background-color: #2196F3; color: white; padding: 8px;")
+        action_reload.clicked.connect(self.reload_config)
+        container_layout.addWidget(action_reload)
         
         # Add flexible space at the end to align everything at the top
         container_layout.addStretch()
@@ -544,9 +544,9 @@ class ConfigEditorModule(BaseModule):
         
         # Apply different styles based on active status
         if is_active:
-            group.setStyleSheet("QGroupBox { border: 1px solid #4CAF50; border-radius: 5px; margin-top: 10px; padding: 5px; }")
+            group.setStyleSheet("QGroupBox { border: 1px solid #3d59a1; border-radius: 5px; margin-top: 10px; padding: 5px; }")
         else:
-            group.setStyleSheet("QGroupBox { border: 1px solid #F44336; border-radius: 5px; margin-top: 10px; padding: 5px; }")
+            group.setStyleSheet("QGroupBox { border: 1px solid #565f89; border-radius: 5px; margin-top: 10px; padding: 5px; }")
         
         group_layout = QVBoxLayout()
         
@@ -633,13 +633,13 @@ class ConfigEditorModule(BaseModule):
         
         # Save button for this module
         save_button = QPushButton(f"Save {module_name}")
-        save_button.setStyleSheet("background-color: #4CAF50; color: white;")
+        save_button.setStyleSheet("background-color: #3d59a1; color: white;")
         save_button.clicked.connect(lambda checked, m=module_name: self.save_module_config(m))
         buttons_layout.addWidget(save_button)
         
         # Reset button for this module
         reset_button = QPushButton("Reset")
-        reset_button.setStyleSheet("background-color: #F44336; color: white;")
+        reset_button.setStyleSheet("background-color: #565f89; color: white;")
         reset_button.clicked.connect(lambda checked, m=module_name: self.reset_module_config(m))
         buttons_layout.addWidget(reset_button)
         

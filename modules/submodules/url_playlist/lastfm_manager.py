@@ -11,6 +11,15 @@ from PyQt6.QtWidgets import QMenu, QProgressDialog, QApplication, QMessageBox, Q
 from PyQt6.QtGui import QIcon
 
 from modules.submodules.url_playlist.ui_helpers import get_service_priority
+from modules.submodules.url_playlist.lastfm_db import (
+    save_scrobbles_to_db,
+    process_scrobbles,
+    load_scrobbles_from_db,
+    create_scrobbles_table,
+    integrate_scrobbles_to_songs,
+    fetch_links_for_scrobbles
+)
+
 # Asegurarse de que PROJECT_ROOT está disponible
 try:
     from base_module import PROJECT_ROOT
@@ -18,25 +27,26 @@ except ImportError:
     import os
     PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", ".."))
 
-def setup_lastfm_menu_items(parent_instance, menu):
+def setup_lastfm_menu_items(self, menu):
     """Set up Last.fm menu items in any menu"""
     try:
         # Add "Sync Scrobbles" option
         sync_action = menu.addAction(QIcon(":/services/refresh"), "Sincronizar scrobbles")
-        sync_action.triggered.connect(lambda: sync_lastfm_scrobbles(parent_instance))
-        
-        menu.addSeparator()
+        sync_action.triggered.connect(lambda: sync_lastfm_scrobbles(self))
         
         # Add "Latest" submenu
         latest_menu = menu.addMenu(QIcon(":/services/lastfm"), "Últimos")
         last_week = latest_menu.addAction("Última semana")
-        last_week.triggered.connect(lambda: load_lastfm_scrobbles_period(parent_instance, "week"))
+        last_week.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "week"))
         
         last_month = latest_menu.addAction("Último mes")
-        last_month.triggered.connect(lambda: load_lastfm_scrobbles_period(parent_instance, "month"))
+        last_month.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "month"))
         
         last_year = latest_menu.addAction("Último año")
-        last_year.triggered.connect(lambda: load_lastfm_scrobbles_period(parent_instance, "year"))
+        last_year.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "year"))
+        
+        # Menu separator
+        menu.addSeparator()
         
         # Add "Months" submenu (will be populated dynamically later)
         months_menu = menu.addMenu(QIcon(":/services/calendar"), "Meses")
@@ -44,22 +54,115 @@ def setup_lastfm_menu_items(parent_instance, menu):
         # Add "Years" submenu (will be populated dynamically later)
         years_menu = menu.addMenu(QIcon(":/services/calendar"), "Años")
         
-        return {
+        # Return the menu references before trying to populate them
+        menu_refs = {
             'months_menu': months_menu,
             'years_menu': years_menu
         }
+        
+        # Try to populate menus immediately if possible
+        try:
+            populate_scrobbles_time_menus(self)
+        except Exception as e:
+            self.log(f"Error pre-populating time menus: {e}")
+            # We'll try to populate them later
+        
+        menu.addSeparator()
+        
+        # Add "Integrate Scrobbles" submenu
+        integrate_menu = menu.addMenu(QIcon(":/services/database"), "Integrar scrobbles")
+        
+        # Add entry for each lastfm username we can find
+        lastfm_users = get_lastfm_users(self)
+        
+        for user in lastfm_users:
+            user_action = integrate_menu.addAction(f"Integrar scrobbles de {user}")
+            user_action.triggered.connect(lambda checked=False, u=user: integrate_scrobbles_to_songs(self, u))
+        
+        # Add "Fetch Links" submenu
+        links_menu = menu.addMenu(QIcon(":/services/link"), "Obtener enlaces")
+        
+        for user in lastfm_users:
+            link_action = links_menu.addAction(f"Obtener enlaces para {user}")
+            link_action.triggered.connect(lambda checked=False, u=user: fetch_links_for_scrobbles(self, u))
+        
+        return menu_refs
     except Exception as e:
         print(f"Error setting up Last.fm menu items: {str(e)}")
         return {}
 
-def get_lastfm_cache_path():
-    """Get the path to the Last.fm scrobbles cache file"""
-    cache_dir = Path(PROJECT_ROOT, ".content", "cache")
+def get_lastfm_cache_path(lastfm_user=None):
+    """
+    Get the path to the Last.fm scrobbles cache file.
+    
+    Args:
+        lastfm_user: Optional Last.fm username to create user-specific cache files
+        
+    Returns:
+        Path to the cache file
+    """
+    try:
+        # Try to import PROJECT_ROOT from base module
+        from base_module import PROJECT_ROOT
+    except ImportError:
+        # Use a fallback if not available
+        PROJECT_ROOT = os.path.abspath(Path(os.path.dirname(__file__), "..", "..", ".."))
+    
+    cache_dir = Path(PROJECT_ROOT, ".content", "cache", "url_playlist")
     os.makedirs(cache_dir, exist_ok=True)
-    return Path(cache_dir, "lastfm_scrobbles.json")
+    
+    # Create user-specific cache file if username is provided
+    if lastfm_user:
+        return Path(cache_dir, f"scrobbles_{lastfm_user}.json")
+    else:
+        return Path(cache_dir, "lastfm_scrobbles.json")
+
+def get_lastfm_users(self):
+    """Get a list of Last.fm users from existing database tables"""
+    try:
+        if not hasattr(self, 'db_path') or not self.db_path:
+            return [getattr(self, 'lastfm_user', 'paqueradejere')] if hasattr(self, 'lastfm_user') and self.lastfm_user else ['paqueradejere']
+            
+        import sqlite3
+        import re
+        
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Get tables starting with "scrobbles_"
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'scrobbles_%'")
+        tables = cursor.fetchall()
+        
+        conn.close()
+        
+        # Extract usernames from table names
+        usernames = []
+        for table in tables:
+            match = re.match(r'scrobbles_(\w+)', table[0])
+            if match:
+                usernames.append(match.group(1))
+        
+        # Add current lastfm_user if set and not in the list
+        if hasattr(self, 'lastfm_user') and self.lastfm_user and self.lastfm_user not in usernames:
+            usernames.append(self.lastfm_user)
+        
+        # Add paqueradejere as fallback if no usernames found
+        if not usernames:
+            usernames.append('paqueradejere')
+            
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_usernames = [u for u in usernames if not (u in seen or seen.add(u))]
+        
+        self.log(f"Found Last.fm users: {', '.join(unique_usernames)}")
+        return unique_usernames
+    except Exception as e:
+        self.log(f"Error getting Last.fm users: {str(e)}")
+        return [getattr(self, 'lastfm_user', 'paqueradejere')] if hasattr(self, 'lastfm_user') and self.lastfm_user else ['paqueradejere']
+
 
 def sync_lastfm_scrobbles(self):
-    """Synchronize Last.fm scrobbles and store them in a cache file"""
+    """Synchronize Last.fm scrobbles and store them in a cache file and database"""
     try:
         # Check if we have valid configuration
         if not self.lastfm_api_key:
@@ -79,41 +182,70 @@ def sync_lastfm_scrobbles(self):
         progress.show()
         QApplication.processEvents()
         
-        # Determine cache file path
-        cache_file = get_lastfm_cache_path()
+        # Determine cache file path - use user-specific path
+        cache_file = get_lastfm_cache_path(self.lastfm_user)
         
-        # Load existing cache if available
-        scrobbles_data = {
-            "last_updated": 0,
-            "scrobbles": []
-        }
+        # Create necessary tables if they don't exist
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        create_scrobbles_table(conn, self.lastfm_user)
+        conn.close()
         
-        if os.path.exists(cache_file):
-            try:
-                with open(cache_file, 'r', encoding='utf-8') as f:
-                    scrobbles_data = json.load(f)
-                    self.log(f"Loaded {len(scrobbles_data.get('scrobbles', []))} cached scrobbles")
-                    progress.setValue(10)
-            except Exception as e:
-                self.log(f"Error loading scrobbles cache: {str(e)}")
-                # Continue with empty cache
+        # Get the latest timestamp from the database - CRITICAL PART
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
         
-        # Get the timestamp of the last update
-        last_updated = scrobbles_data.get("last_updated", 0)
+        # Use the user-specific config table directly instead of the function
+        config_table = f"lastfm_config_{self.lastfm_user}"
+        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{config_table}'")
+        if cursor.fetchone():
+            cursor.execute(f"SELECT last_timestamp FROM {config_table} WHERE id = 1")
+            config_result = cursor.fetchone()
+            if config_result and config_result[0]:
+                db_timestamp = config_result[0]
+                self.log(f"Found last_timestamp in config table: {db_timestamp}")
+            else:
+                db_timestamp = 0
+        else:
+            db_timestamp = 0
+            
+        conn.close()
+        
+        self.log(f"Latest timestamp from database: {db_timestamp}")
+        
+        # Check if we have existing data
+        if db_timestamp > 0:
+            # Add 1 to avoid duplicate scrobbles
+            last_updated = db_timestamp + 1  
+            self.log(f"Using timestamp from database: {last_updated}")
+        else:
+            # No existing data, do a full sync
+            self.log("No existing scrobbles in database, will perform full sync")
+            last_updated = 0
+        
+        # Update progress to 10%
+        progress.setValue(10)
         
         # Prepare for API requests
-        all_new_scrobbles = []
+        all_scrobbles = []
         page = 1
         total_pages = 1
         
         # Update progress to 20%
         progress.setValue(20)
         
+        # Track if we found any new scrobbles
+        new_scrobbles_found = False
+        
+        # Get current time for the "to" parameter
+        import time
+        current_time = int(time.time())
+        
         while page <= total_pages:
             if progress.wasCanceled():
                 break
                 
-            # Request parameters
+            # Request parameters with EXPLICIT from and to
             params = {
                 'method': 'user.getrecenttracks',
                 'user': self.lastfm_user,
@@ -125,25 +257,56 @@ def sync_lastfm_scrobbles(self):
             
             # Add from_timestamp if we have a previous update
             if last_updated > 0:
-                params['from'] = last_updated + 1  # +1 to avoid duplicates
+                params['from'] = last_updated  # Already added +1 above
+                params['to'] = current_time
+                self.log(f"Using time range: from={last_updated} to={current_time}")
             
             # Make the request
             try:
                 url = f"https://ws.audioscrobbler.com/2.0/?{urllib.parse.urlencode(params)}"
+                self.log(f"Making request to Last.fm API: {url}")
                 response = requests.get(url)
+                
+                if response.status_code != 200:
+                    self.log(f"Error: HTTP {response.status_code} from Last.fm API")
+                    if page > 1:  # If we already got some pages, continue with what we have
+                        break
+                    else:
+                        QMessageBox.warning(self, "Error", f"Last.fm API returned error: HTTP {response.status_code}")
+                        return False
+                
                 data = response.json()
                 
                 if 'error' in data:
                     self.log(f"Last.fm API error: {data.get('message', 'Unknown error')}")
-                    break
+                    if page > 1:  # If we already got some pages, continue with what we have
+                        break
+                    else:
+                        QMessageBox.warning(self, "Error", f"Last.fm API error: {data.get('message', 'Unknown error')}")
+                        return False
                 
                 # Get total pages if first request
                 if page == 1:
                     recenttracks = data.get('recenttracks', {})
                     attr = recenttracks.get('@attr', {})
                     total_pages = int(attr.get('totalPages', '1'))
+                    total_results = int(attr.get('total', '0'))
                     
-                    self.log(f"Found {attr.get('total', '0')} new scrobbles across {total_pages} pages")
+                    self.log(f"Found {total_results} scrobbles across {total_pages} pages")
+                    
+                    # If no new scrobbles were found, we can finish early
+                    if total_results == 0:
+                        self.log("No new scrobbles to synchronize")
+                        progress.setValue(100)
+                        QMessageBox.information(
+                            self,
+                            "Sync Complete", 
+                            f"No new scrobbles found for {self.lastfm_user} since last update."
+                        )
+                        return True
+                    
+                    # We found some new scrobbles
+                    new_scrobbles_found = True
                 
                 # Process tracks
                 tracks = data.get('recenttracks', {}).get('track', [])
@@ -155,21 +318,33 @@ def sync_lastfm_scrobbles(self):
                     if '@attr' in track and track['@attr'].get('nowplaying') == 'true':
                         continue
                         
-                    # Create scrobble object
+                    # Create scrobble object matching the format
                     scrobble = {
-                        'artist': track.get('artist', {}).get('#text', ''),
-                        'title': track.get('name', ''),
-                        'album': track.get('album', {}).get('#text', ''),
+                        'artist_name': track.get('artist', {}).get('#text', ''),
+                        'artist_mbid': track.get('artist', {}).get('mbid', ''),
+                        'name': track.get('name', ''),
+                        'album_name': track.get('album', {}).get('#text', ''),
+                        'album_mbid': track.get('album', {}).get('mbid', ''),
                         'timestamp': int(track.get('date', {}).get('uts', '0')),
-                        'url': track.get('url', ''),
-                        'image': track.get('image', [{}])[-1].get('#text', ''),  # Get largest image
-                        'youtube_url': None  # Will be populated later
+                        'fecha_scrobble': track.get('date', {}).get('#text', ''),
+                        'lastfm_url': track.get('url', ''),
+                        'reproducciones': 1,
+                        'fecha_reproducciones': json.dumps([track.get('date', {}).get('#text', '')])
                     }
                     
-                    all_new_scrobbles.append(scrobble)
+                    # Map to alternate field names
+                    scrobble['artist'] = scrobble['artist_name']
+                    scrobble['title'] = scrobble['name']
+                    scrobble['album'] = scrobble['album_name']
+                    
+                    # Only add scrobbles that are after the last_updated timestamp
+                    if scrobble['timestamp'] > last_updated:
+                        all_scrobbles.append(scrobble)
+                    else:
+                        self.log(f"Skipping scrobble with older timestamp: {scrobble['timestamp']} <= {last_updated}")
                 
                 # Update progress
-                progress_value = 20 + int(70 * (page / total_pages))
+                progress_value = 20 + int(70 * (page / (total_pages or 1)))  # Avoid division by zero
                 progress.setValue(progress_value)
                 
                 # Next page
@@ -177,184 +352,149 @@ def sync_lastfm_scrobbles(self):
                 
             except Exception as e:
                 self.log(f"Error fetching scrobbles from Last.fm: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
                 break
         
         # Update progress to 90%
         progress.setValue(90)
         
-        # Merge new scrobbles with existing ones
-        if all_new_scrobbles:
-            # Sorting by timestamp (newest first)
-            all_new_scrobbles.sort(key=lambda s: s['timestamp'], reverse=True)
+        # Save directly to DB
+        if all_scrobbles:
+            self.log(f"Saving {len(all_scrobbles)} new scrobbles to database")
             
-            # Update last_updated timestamp
-            newest_timestamp = all_new_scrobbles[0]['timestamp']
-            if newest_timestamp > scrobbles_data['last_updated']:
-                scrobbles_data['last_updated'] = newest_timestamp
+            # Save to DB - use the user-specific table
+            saved_count = save_scrobbles_to_db(self, all_scrobbles, self.lastfm_user)
+            self.log(f"Saved {saved_count} processed scrobbles to database")
             
-            # Merge with existing scrobbles
-            existing_scrobbles = scrobbles_data.get('scrobbles', [])
+            # Update the last_timestamp in the config table directly
+            newest_timestamp = 0
+            for scrobble in all_scrobbles:
+                if scrobble['timestamp'] > newest_timestamp:
+                    newest_timestamp = scrobble['timestamp']
             
-            # Create a set of existing timestamps for quick lookup
-            existing_timestamps = {s['timestamp'] for s in existing_scrobbles}
+            if newest_timestamp > db_timestamp:
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                cursor.execute(f"""
+                UPDATE {config_table} 
+                SET last_timestamp = ?, last_updated = CURRENT_TIMESTAMP
+                WHERE id = 1
+                """, (newest_timestamp,))
+                conn.commit()
+                conn.close()
+                self.log(f"Updated last_timestamp in config table to {newest_timestamp}")
             
-            # Only add scrobbles with unique timestamps
-            unique_new_scrobbles = [s for s in all_new_scrobbles if s['timestamp'] not in existing_timestamps]
-            
-            # Combine and sort all scrobbles
-            all_scrobbles = existing_scrobbles + unique_new_scrobbles
-            all_scrobbles.sort(key=lambda s: s['timestamp'], reverse=True)
-            
-            scrobbles_data['scrobbles'] = all_scrobbles
-            
-            # Save updated data
-            with open(cache_file, 'w', encoding='utf-8') as f:
-                json.dump(scrobbles_data, f, indent=2)
+            # Update cache if needed
+            try:
+                # Create directory if needed
+                os.makedirs(os.path.dirname(cache_file), exist_ok=True)
                 
-            self.log(f"Saved {len(all_scrobbles)} scrobbles to cache ({len(unique_new_scrobbles)} new)")
-            
-            # Start a background thread to fetch YouTube links
-            if unique_new_scrobbles:
-                self.log(f"Starting background thread to fetch YouTube links for {len(unique_new_scrobbles)} tracks")
-                fetch_thread = threading.Thread(
-                    target=fetch_youtube_links,
-                    args=(self, unique_new_scrobbles, cache_file),
-                    daemon=True
-                )
-                fetch_thread.start()
+                # Load existing cache if available
+                cache_data = {"last_updated": last_updated, "scrobbles": []}
+                if os.path.exists(cache_file):
+                    try:
+                        with open(cache_file, 'r', encoding='utf-8') as f:
+                            cached_content = f.read()
+                            if cached_content.strip():
+                                cache_data = json.loads(cached_content)
+                    except Exception as e:
+                        self.log(f"Error loading cache: {e}, creating new cache")
                 
-            # Populate the year/month menus
-            populate_scrobbles_time_menus(self, all_scrobbles)
+                # Update with new max timestamp
+                if newest_timestamp > 0:
+                    cache_data['last_updated'] = max(newest_timestamp, cache_data.get('last_updated', 0))
+                
+                # Instead of merging, just keep the latest cache_data['scrobbles'] 
+                # and append new scrobbles at the start
+                # This keeps cache manageable by not growing indefinitely
+                MAX_CACHE_SIZE = 1000  # Reasonable number to keep in cache
+                
+                # Add new scrobbles at the start of the list
+                updated_scrobbles = all_scrobbles + cache_data.get('scrobbles', [])
+                
+                # Limit the size
+                if len(updated_scrobbles) > MAX_CACHE_SIZE:
+                    updated_scrobbles = updated_scrobbles[:MAX_CACHE_SIZE]
+                
+                cache_data['scrobbles'] = updated_scrobbles
+                
+                # Save updated cache
+                with open(cache_file, 'w', encoding='utf-8') as f:
+                    json.dump(cache_data, f, indent=2)
+                    self.log(f"Updated cache with {len(all_scrobbles)} new scrobbles (total cache: {len(updated_scrobbles)})")
+            except Exception as e:
+                self.log(f"Error updating cache: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
+            
+            # Skip menu population for now to avoid errors
+            try:
+                # Initialize an empty years_dict
+                years_dict = {}
+                
+                # Process scrobbles into years_dict structure
+                for scrobble in all_scrobbles:
+                    timestamp = scrobble.get('timestamp')
+                    if not timestamp:
+                        continue
+                        
+                    try:
+                        from datetime import datetime
+                        date = datetime.fromtimestamp(int(timestamp))
+                        year = date.year
+                        month = date.month
+                        
+                        if year not in years_dict:
+                            years_dict[year] = set()
+                        
+                        years_dict[year].add(month)
+                    except Exception as e:
+                        self.log(f"Error processing timestamp for menus: {e}")
+                
+                # Only try to populate menus if we have years_dict with data
+                if years_dict:
+                    populate_scrobbles_time_menus(self, years_dict=years_dict)
+            except Exception as e:
+                self.log(f"Error handling menu population: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
         
-        # Complete progress
-        progress.setValue(100)
-        
-        QMessageBox.information(
-            self,
-            "Sync Complete", 
-            f"Synchronized Last.fm scrobbles for {self.lastfm_user}.\n\n" +
-            f"Added {len(unique_new_scrobbles if 'unique_new_scrobbles' in locals() else [])} new scrobbles.\n" +
-            f"Total scrobbles: {len(scrobbles_data.get('scrobbles', []))}"
-        )
-        
-        return True
+            # Complete progress
+            progress.setValue(100)
+            
+            QMessageBox.information(
+                self,
+                "Sync Complete", 
+                f"Synchronized Last.fm scrobbles for {self.lastfm_user}.\n\n" +
+                f"Added {saved_count} new scrobbles."
+            )
+            
+            return True
+        elif new_scrobbles_found:
+            # We found tracks but couldn't process them
+            progress.setValue(100)
+            QMessageBox.warning(
+                self,
+                "Sync Issue", 
+                f"Found scrobbles for {self.lastfm_user} but couldn't process them."
+            )
+            return False
+        else:
+            # No new scrobbles at all
+            progress.setValue(100)
+            QMessageBox.information(
+                self,
+                "Sync Complete", 
+                f"No new scrobbles found for {self.lastfm_user} since last update."
+            )
+            return True
     except Exception as e:
         self.log(f"Error synchronizing Last.fm scrobbles: {str(e)}")
         import traceback
         self.log(traceback.format_exc())
         QMessageBox.warning(self, "Error", f"Error synchronizing Last.fm scrobbles: {str(e)}")
         return False
-
-def fetch_youtube_links(self, scrobbles, cache_file):
-    """Fetch URLs for scrobbles in a background thread, checking database first"""
-    try:
-        self.log(f"Starting link fetching for {len(scrobbles)} scrobbles")
-        
-        # Load the current cache
-        try:
-            with open(cache_file, 'r', encoding='utf-8') as f:
-                cache_data = json.load(f)
-        except Exception as e:
-            self.log(f"Error loading cache file for link updates: {str(e)}")
-            return
-        
-        # Track scrobbles by a unique key for efficient updates
-        all_scrobbles = cache_data.get('scrobbles', [])
-        scrobbles_dict = {f"{s['artist']}|{s['title']}|{s['timestamp']}": s for s in all_scrobbles}
-        
-        # Get service priority from settings
-        service_priority = get_service_priority(self)
-        self.log(f"Service priority: {', '.join(service_priority)}")
-        
-        # Process each scrobble
-        processed_count = 0
-        updated_count = 0
-        
-        for scrobble in scrobbles:
-            # Skip if already has a URL
-            if any(scrobble.get(f'{service}_url') for service in service_priority):
-                continue
-                
-            # Create a unique key
-            key = f"{scrobble['artist']}|{scrobble['title']}|{scrobble['timestamp']}"
-            
-            # Try to get URL from database first
-            links = get_track_links_from_db(self, scrobble['artist'], scrobble['title'], scrobble.get('album', ''))
-            
-            if links:
-                # Check for each service in priority order
-                for service in service_priority:
-                    if service in links and links[service]:
-                        # Update both the local scrobble and the cache dictionary
-                        service_url_key = f'{service}_url'
-                        scrobble[service_url_key] = links[service]
-                        
-                        if key in scrobbles_dict:
-                            scrobbles_dict[key][service_url_key] = links[service]
-                            updated_count += 1
-                            
-                            # Log successful link retrieval
-                            self.log(f"Found {service} link for {scrobble['artist']} - {scrobble['title']} in database")
-                            
-                            # Once we have one service URL, we can skip to the next scrobble
-                            break
-            
-            # If no links were found in the database, try fetching from Last.fm
-            if not any(scrobble.get(f'{service}_url') for service in service_priority):
-                try:
-                    # Check if we have a Last.fm URL
-                    lastfm_url = scrobble.get('url')
-                    if lastfm_url:
-                        # Use the extract_links_from_lastfm function
-                        for service in service_priority:
-                            service_url = extract_link_from_lastfm(self, lastfm_url, service)
-                            
-                            if service_url:
-                                # Update both the local scrobble and the cache dictionary
-                                service_url_key = f'{service}_url'
-                                scrobble[service_url_key] = service_url
-                                
-                                if key in scrobbles_dict:
-                                    scrobbles_dict[key][service_url_key] = service_url
-                                    updated_count += 1
-                                    
-                                    # Log successful link retrieval
-                                    self.log(f"Found {service} link for {scrobble['artist']} - {scrobble['title']} from Last.fm")
-                                    
-                                    # Once we have one service URL, we can skip to the next service
-                                    break
-                except Exception as e:
-                    self.log(f"Error fetching links for {scrobble['artist']} - {scrobble['title']}: {str(e)}")
-            
-            # Update progress periodically
-            processed_count += 1
-            if processed_count % 20 == 0:
-                self.log(f"Processed {processed_count}/{len(scrobbles)} scrobbles, found {updated_count} links")
-                
-                # Save intermediate results
-                try:
-                    # Rebuild the scrobbles list from the dictionary
-                    cache_data['scrobbles'] = list(scrobbles_dict.values())
-                    with open(cache_file, 'w', encoding='utf-8') as f:
-                        json.dump(cache_data, f, indent=2)
-                except Exception as e:
-                    self.log(f"Error saving intermediate link updates: {str(e)}")
-        
-        # Final save
-        try:
-            # Rebuild the scrobbles list from the dictionary
-            cache_data['scrobbles'] = list(scrobbles_dict.values())
-            with open(cache_file, 'w', encoding='utf-8') as f:
-                json.dump(cache_data, f, indent=2)
-                
-            self.log(f"Link fetching complete. Updated {updated_count} scrobbles.")
-        except Exception as e:
-            self.log(f"Error saving final link updates: {str(e)}")
-    
-    except Exception as e:
-        self.log(f"Error in link fetching thread: {str(e)}")
-        import traceback
-        self.log(traceback.format_exc())
 
 def extract_link_from_lastfm(self, lastfm_url, service):
     """Extract service link from a Last.fm page"""
@@ -458,29 +598,18 @@ def extract_soundcloud_from_lastfm_soup(soup):
         print(f"Error extracting SoundCloud from soup: {str(e)}")
         return None
 
-def load_lastfm_scrobbles_period(parent_instance, period):
-    """Load Last.fm scrobbles for a specific time period"""
+
+def load_lastfm_scrobbles_period(self, period):
+    """Load Last.fm scrobbles for a specific time period from database"""
     try:
-        # Determine cache file path
-        cache_file = get_lastfm_cache_path()
-        
-        if not os.path.exists(cache_file):
-            parent_instance.log(f"No cache file found for {parent_instance.lastfm_user}")
-            QMessageBox.warning(parent_instance, "Error", f"No scrobbles data found for {parent_instance.lastfm_user}. Please sync first.")
-            return False
-        
-        # Load the cache
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            cache_data = json.load(f)
-                
-        scrobbles = cache_data.get('scrobbles', [])
-        
-        if not scrobbles:
-            parent_instance.log("No scrobbles found in cache")
-            QMessageBox.information(parent_instance, "No Data", "No scrobbles found in cache. Please sync first.")
+        if not hasattr(self, 'lastfm_user') or not self.lastfm_user:
+            self.log(f"Error: Last.fm username not configured")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Error", "Last.fm username not configured. Please set in settings.")
             return False
         
         # Determine time range
+        import time
         current_time = int(time.time())
         start_time = 0
         title = ""
@@ -495,41 +624,76 @@ def load_lastfm_scrobbles_period(parent_instance, period):
             start_time = current_time - (365 * 24 * 60 * 60)  # 365 days
             title = "Último año"
         
-        # Filter scrobbles by time period
-        filtered_scrobbles = [s for s in scrobbles if s['timestamp'] >= start_time]
+        # Ensure we have a non-zero limit for scrobbles
+        scrobbles_limit = getattr(self, 'scrobbles_limit', 100)
+        if not scrobbles_limit or scrobbles_limit <= 0:
+            scrobbles_limit = 100
+            self.log(f"Using default limit of 100 scrobbles")
         
-        # Limit the number of scrobbles to display
-        max_scrobbles = min(len(filtered_scrobbles), parent_instance.scrobbles_limit)
-        display_scrobbles = filtered_scrobbles[:max_scrobbles]
+        # Load scrobbles from database using corrected function
+        from modules.submodules.url_playlist.lastfm_db import load_scrobbles_from_db
+        scrobbles = load_scrobbles_from_db(
+            self, 
+            self.lastfm_user, 
+            start_time=start_time,
+            limit=scrobbles_limit
+        )
+        
+        # If no scrobbles found, try alternate table names
+        if not scrobbles:
+            self.log(f"No scrobbles found for period {period} in main table, trying alternates")
+            
+            alternate_users = ["paqueradejere"]
+            for alt_user in alternate_users:
+                alt_scrobbles = load_scrobbles_from_db(
+                    self, 
+                    alt_user, 
+                    start_time=start_time,
+                    limit=scrobbles_limit
+                )
+                if alt_scrobbles:
+                    scrobbles = alt_scrobbles
+                    self.log(f"Found {len(scrobbles)} scrobbles in alternate table for {alt_user}")
+                    break
+        
+        if not scrobbles:
+            self.log(f"No scrobbles found for period {period}")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.information(self, "No Data", f"No scrobbles found for {title}. Try syncing first.")
+            return False
         
         # Display in tree
-        display_scrobbles_in_tree(parent_instance, display_scrobbles, title)
+        from modules.submodules.url_playlist.lastfm_db import display_scrobbles_in_tree
+        display_scrobbles_in_tree(self, scrobbles, title)
         
         return True
     except Exception as e:
-        parent_instance.log(f"Error loading scrobbles for period {period}: {str(e)}")
+        self.log(f"Error loading scrobbles for period {period}: {str(e)}")
         import traceback
-        parent_instance.log(traceback.format_exc())
+        self.log(traceback.format_exc())
         return False
 
 def load_lastfm_scrobbles_month(self, year, month):
-    """Load Last.fm scrobbles for a specific year and month"""
-    try:
-        # Determine cache file path
-        cache_file = get_lastfm_cache_path()
+    """
+    Load Last.fm scrobbles for a specific year and month from database with improved table joining.
+    
+    Args:
+        self: The parent object with necessary attributes and methods
+        year: Year to load
+        month: Month to load
         
-        if not os.path.exists(cache_file):
-            self.log(f"No cache file found for {self.lastfm_user}")
-            QMessageBox.warning(self, "Error", f"No scrobbles data found for {self.lastfm_user}. Please sync first.")
+    Returns:
+        Boolean indicating success or failure
+    """
+    try:
+        if not hasattr(self, 'lastfm_user') or not self.lastfm_user:
+            self.log(f"Error: Last.fm username not configured")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Error", "Last.fm username not configured. Please set in settings.")
             return False
         
-        # Load the cache
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            cache_data = json.load(f)
-                
-        scrobbles = cache_data.get('scrobbles', [])
-        
         # Calculate start and end timestamps for the month
+        import datetime
         if month == 12:
             end_year = year + 1
             end_month = 1
@@ -537,22 +701,42 @@ def load_lastfm_scrobbles_month(self, year, month):
             end_year = year
             end_month = month + 1
             
-        start = datetime(year, month, 1, 0, 0, 0).timestamp()
-        end = datetime(end_year, end_month, 1, 0, 0, 0).timestamp()
+        start = datetime.datetime(year, month, 1, 0, 0, 0).timestamp()
+        end = datetime.datetime(end_year, end_month, 1, 0, 0, 0).timestamp()
         
-        # Filter scrobbles for the month
-        month_scrobbles = [s for s in scrobbles if start <= s['timestamp'] < end]
+        # Ensure scrobbles_limit is set
+        if not hasattr(self, 'scrobbles_limit') or not self.scrobbles_limit:
+            self.scrobbles_limit = 100
+        
+        # Load scrobbles from database using the improved function
+        from modules.submodules.url_playlist.lastfm_db import load_scrobbles_from_db
+        scrobbles = load_scrobbles_from_db(self, self.lastfm_user, start_time=start, end_time=end, limit=self.scrobbles_limit)
+        
+        # If no scrobbles found, try alternate table names
+        if not scrobbles:
+            self.log(f"No scrobbles found for {month}/{year} in main table, trying alternates")
+            
+            alternate_users = ["paqueradejere"]
+            for alt_user in alternate_users:
+                alt_scrobbles = load_scrobbles_from_db(self, alt_user, start_time=start, end_time=end, limit=self.scrobbles_limit)
+                if alt_scrobbles:
+                    scrobbles = alt_scrobbles
+                    self.log(f"Found {len(scrobbles)} scrobbles in alternate table for {alt_user}")
+                    break
+        
+        if not scrobbles:
+            self.log(f"No scrobbles found for {month}/{year}")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.information(self, "No Data", f"No scrobbles found for {month}/{year}. Try syncing first.")
+            return False
         
         # Get month name
-        month_name = datetime(year, month, 1).strftime("%B")
+        month_name = datetime.datetime(year, month, 1).strftime("%B")
         title = f"{month_name} {year}"
         
-        # Limit the number of scrobbles to display
-        max_scrobbles = min(len(month_scrobbles), self.scrobbles_limit)
-        display_scrobbles = month_scrobbles[:max_scrobbles]
-        
-        # Display in tree
-        display_scrobbles_in_tree(self, display_scrobbles, title)
+        # Display in tree using the improved display function
+        from modules.submodules.url_playlist.lastfm_db import display_scrobbles_in_tree
+        display_scrobbles_in_tree(self, scrobbles, title)
         
         return True
     except Exception as e:
@@ -560,37 +744,58 @@ def load_lastfm_scrobbles_month(self, year, month):
         import traceback
         self.log(traceback.format_exc())
         return False
-
 def load_lastfm_scrobbles_year(self, year):
-    """Load Last.fm scrobbles for a specific year"""
-    try:
-        # Determine cache file path
-        cache_file = get_lastfm_cache_path()
+    """
+    Load Last.fm scrobbles for a specific year from database with improved table joining.
+    
+    Args:
+        self: The parent object with necessary attributes and methods
+        year: Year to load
         
-        if not os.path.exists(cache_file):
-            self.log(f"No cache file found for {self.lastfm_user}")
-            QMessageBox.warning(self, "Error", f"No scrobbles data found for {self.lastfm_user}. Please sync first.")
+    Returns:
+        Boolean indicating success or failure
+    """
+    try:
+        if not hasattr(self, 'lastfm_user') or not self.lastfm_user:
+            self.log(f"Error: Last.fm username not configured")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Error", "Last.fm username not configured. Please set in settings.")
             return False
         
-        # Load the cache
-        with open(cache_file, 'r', encoding='utf-8') as f:
-            cache_data = json.load(f)
-                
-        scrobbles = cache_data.get('scrobbles', [])
-        
         # Calculate start and end timestamps for the year
-        start = datetime(year, 1, 1, 0, 0, 0).timestamp()
-        end = datetime(year + 1, 1, 1, 0, 0, 0).timestamp()
+        import datetime
+        start = datetime.datetime(year, 1, 1, 0, 0, 0).timestamp()
+        end = datetime.datetime(year + 1, 1, 1, 0, 0, 0).timestamp()
         
-        # Filter scrobbles for the year
-        year_scrobbles = [s for s in scrobbles if start <= s['timestamp'] < end]
+        # Ensure scrobbles_limit is set
+        if not hasattr(self, 'scrobbles_limit') or not self.scrobbles_limit:
+            self.scrobbles_limit = 100
         
-        # Limit the number of scrobbles to display
-        max_scrobbles = min(len(year_scrobbles), self.scrobbles_limit)
-        display_scrobbles = year_scrobbles[:max_scrobbles]
+        # Load scrobbles from database using the improved function
+        from modules.submodules.url_playlist.lastfm_db import load_scrobbles_from_db
+        scrobbles = load_scrobbles_from_db(self, self.lastfm_user, start_time=start, end_time=end, limit=self.scrobbles_limit)
         
-        # Display in tree
-        display_scrobbles_in_tree(self, display_scrobbles, f"Año {year}")
+        # If no scrobbles found, try alternate table names
+        if not scrobbles:
+            self.log(f"No scrobbles found for year {year} in main table, trying alternates")
+            
+            alternate_users = ["paqueradejere"]
+            for alt_user in alternate_users:
+                alt_scrobbles = load_scrobbles_from_db(self, alt_user, start_time=start, end_time=end, limit=self.scrobbles_limit)
+                if alt_scrobbles:
+                    scrobbles = alt_scrobbles
+                    self.log(f"Found {len(scrobbles)} scrobbles in alternate table for {alt_user}")
+                    break
+        
+        if not scrobbles:
+            self.log(f"No scrobbles found for year {year}")
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.information(self, "No Data", f"No scrobbles found for year {year}. Try syncing first.")
+            return False
+        
+        # Display in tree using the improved display function
+        from modules.submodules.url_playlist.lastfm_db import display_scrobbles_in_tree
+        display_scrobbles_in_tree(self, scrobbles, f"Año {year}")
         
         return True
     except Exception as e:
@@ -601,96 +806,137 @@ def load_lastfm_scrobbles_year(self, year):
 
 
 def display_scrobbles_in_tree(parent_instance, scrobbles, title):
-    """Display scrobbles in the tree widget"""
+    """Display scrobbles in the tree widget with improved organization"""
     try:
         # Clear the tree
         parent_instance.treeWidget.clear()
         
-        # Get service priority for icon selection
-        service_priority = get_service_priority(parent_instance)
-
+        # Check if we have scrobbles
+        if not scrobbles:
+            parent_instance.log("No scrobbles to display")
+            return False
+        
+        # Import required classes
+        from PyQt6.QtWidgets import QTreeWidgetItem
+        from PyQt6.QtCore import Qt
+        from PyQt6.QtGui import QIcon
+        
         # Check if we need to reorganize by play count
-        if not parent_instance.scrobbles_by_date:
+        by_play_count = not getattr(parent_instance, 'scrobbles_by_date', True)
+        parent_instance.log(f"Displaying scrobbles by {'play count' if by_play_count else 'date'}")
+        
+        # Create root item
+        root_item = QTreeWidgetItem(parent_instance.treeWidget)
+        root_title = f"{'Top Tracks' if by_play_count else 'Scrobbles'}: {title}"
+        root_item.setText(0, root_title)
+        root_item.setText(1, getattr(parent_instance, 'lastfm_user', 'Unknown User'))
+        root_item.setText(2, "Last.fm")
+        
+        # Format as bold
+        font = root_item.font(0)
+        font.setBold(True)
+        root_item.setFont(0, font)
+        
+        # Add icon
+        root_item.setIcon(0, QIcon(":/services/lastfm"))
+        
+        # Set column headers based on display mode
+        if by_play_count:
+            parent_instance.treeWidget.headerItem().setText(3, "Reproducciones")
+            parent_instance.treeWidget.headerItem().setText(4, "Primer Play")
+        else:
+            parent_instance.treeWidget.headerItem().setText(3, "Álbum")
+            parent_instance.treeWidget.headerItem().setText(4, "Fecha")
+        
+        # Process scrobbles based on display mode
+        if by_play_count:
             # Group by artist and title
             play_counts = {}
             for scrobble in scrobbles:
-                key = f"{scrobble['artist']}|{scrobble['title']}"
+                # Get fields, supporting both naming conventions
+                artist = scrobble.get('artist', scrobble.get('artist_name', ''))
+                title = scrobble.get('title', scrobble.get('name', ''))
+                album = scrobble.get('album', scrobble.get('album_name', ''))
+                
+                if not artist or not title:
+                    continue
+                
+                key = f"{artist.lower()}|{title.lower()}"
                 if key not in play_counts:
                     play_counts[key] = {
-                        'artist': scrobble['artist'],
-                        'title': scrobble['title'],
-                        'album': scrobble['album'],
-                        'youtube_url': scrobble.get('youtube_url'),
+                        'artist': artist,
+                        'title': title,
+                        'album': album,
                         'count': 0,
                         'timestamps': []
                     }
+                    
+                    # Copy all service URLs
+                    for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
+                        service_url_key = f'{service}_url'
+                        if service_url_key in scrobble and scrobble[service_url_key]:
+                            play_counts[key][service_url_key] = scrobble[service_url_key]
                 
                 play_counts[key]['count'] += 1
-                play_counts[key]['timestamps'].append(scrobble['timestamp'])
+                
+                # Add timestamp if available
+                timestamp = scrobble.get('timestamp')
+                if timestamp:
+                    try:
+                        timestamp = int(timestamp)
+                        play_counts[key]['timestamps'].append(timestamp)
+                    except (ValueError, TypeError):
+                        pass
             
             # Convert to list and sort by play count
             sorted_tracks = sorted(
                 play_counts.values(), 
-                key=lambda x: x['count'], 
+                key=lambda x: x.get('count', 0), 
                 reverse=True
             )
             
-            # Create root item
-            from PyQt6.QtWidgets import QTreeWidgetItem
-            from PyQt6.QtCore import Qt
-            from PyQt6.QtGui import QIcon
-            
-            root_item = QTreeWidgetItem(parent_instance.treeWidget)
-            root_item.setText(0, f"Top Tracks: {title}")
-            root_item.setText(1, parent_instance.lastfm_user)
-            root_item.setText(2, "Last.fm")
-            
-            # Format as bold
-            font = root_item.font(0)
-            font.setBold(True)
-            root_item.setFont(0, font)
-            
-            # Add icon
-            root_item.setIcon(0, QIcon(":/services/lastfm"))
-            
-            # Change column headers
-            parent_instance.treeWidget.headerItem().setText(3, "Reproducciones")
-            parent_instance.treeWidget.headerItem().setText(4, "Primer Play")
-            
-            # Add tracks
-            for track in sorted_tracks[:parent_instance.scrobbles_limit]:
+            # Add tracks with limit
+            max_tracks = min(len(sorted_tracks), getattr(parent_instance, 'scrobbles_limit', 100))
+            for track in sorted_tracks[:max_tracks]:
+                # Create track item
                 track_item = QTreeWidgetItem(root_item)
                 track_item.setText(0, track['title'])
                 track_item.setText(1, track['artist'])
                 track_item.setText(2, "Track")
-                track_item.setText(3, str(track['count']))
+                track_item.setText(3, str(track.get('count', 0)))
                 
-                # Format first play date
-                import time
-                first_play = min(track['timestamps'])
-                date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
-                track_item.setText(4, date_str)
+                # Format first play date if we have timestamps
+                if track.get('timestamps'):
+                    import time
+                    try:
+                        first_play = min(track['timestamps'])
+                        date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
+                        track_item.setText(4, date_str)
+                    except:
+                        track_item.setText(4, "Unknown")
                 
-                # Store all available URLs
+                # Store data for playback
                 track_data = {
                     'title': track['title'],
                     'artist': track['artist'],
-                    'album': track['album'],
+                    'album': track.get('album', ''),
                     'type': 'track',
-                    'source': 'lastfm'
+                    'source': 'lastfm',
+                    'origen': 'scrobble'  # Add the origen field for database consistency
                 }
                 
                 # Add service URLs if available
-                for service in service_priority:
+                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
                     service_url_key = f'{service}_url'
                     if service_url_key in track:
                         track_data[service_url_key] = track[service_url_key]
                 
+                # Set data on the item
                 track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
                 
-                # Set icon based on available URLs (use first available service in priority order)
+                # Set icon based on available URLs
                 icon_set = False
-                for service in service_priority:
+                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
                     service_url_key = f'{service}_url'
                     if service_url_key in track and track[service_url_key]:
                         track_item.setIcon(0, QIcon(f":/services/{service}"))
@@ -700,57 +946,61 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                 # Default to Last.fm icon if no other service icons available
                 if not icon_set:
                     track_item.setIcon(0, QIcon(":/services/lastfm"))
-        
         else:
             # Display chronologically (by date)
-            from PyQt6.QtWidgets import QTreeWidgetItem
-            from PyQt6.QtCore import Qt
-            from PyQt6.QtGui import QIcon
             import time
             
-            # Create root item
-            root_item = QTreeWidgetItem(parent_instance.treeWidget)
-            root_item.setText(0, f"Scrobbles: {title}")
-            root_item.setText(1, parent_instance.lastfm_user)
-            root_item.setText(2, "Last.fm")
+            # Sort by timestamp (newest first)
+            def get_timestamp(s):
+                try:
+                    return int(s.get('timestamp', 0))
+                except (ValueError, TypeError):
+                    return 0
+                
+            sorted_scrobbles = sorted(scrobbles, key=get_timestamp, reverse=True)
             
-            # Format as bold
-            font = root_item.font(0)
-            font.setBold(True)
-            root_item.setFont(0, font)
-            
-            # Add icon
-            root_item.setIcon(0, QIcon(":/services/lastfm"))
-            
-            # Change column headers
-            parent_instance.treeWidget.headerItem().setText(4, "Fecha")
-            
-            # Add tracks chronologically
-            for scrobble in scrobbles:
+            # Add tracks chronologically with limit
+            max_scrobbles = min(len(sorted_scrobbles), getattr(parent_instance, 'scrobbles_limit', 100))
+            for scrobble in sorted_scrobbles[:max_scrobbles]:
+                # Get fields, supporting both naming conventions
+                artist = scrobble.get('artist', scrobble.get('artist_name', ''))
+                title = scrobble.get('title', scrobble.get('name', ''))
+                album = scrobble.get('album', scrobble.get('album_name', ''))
+                timestamp = scrobble.get('timestamp', 0)
+                
+                if not artist or not title:
+                    continue
+                
+                # Create track item
                 track_item = QTreeWidgetItem(root_item)
-                track_item.setText(0, scrobble['title'])
-                track_item.setText(1, scrobble['artist'])
+                track_item.setText(0, title)
+                track_item.setText(1, artist)
                 track_item.setText(2, "Track")
                 
-                if scrobble['album']:
-                    track_item.setText(3, scrobble['album'])
+                if album:
+                    track_item.setText(3, album)
                 
                 # Format date
-                date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(scrobble['timestamp']))
-                track_item.setText(4, date_str)
+                if timestamp:
+                    try:
+                        date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(int(timestamp)))
+                        track_item.setText(4, date_str)
+                    except (ValueError, TypeError, OverflowError):
+                        track_item.setText(4, "Unknown date")
                 
                 # Store data for playback
                 track_data = {
-                    'title': scrobble['title'],
-                    'artist': scrobble['artist'],
-                    'album': scrobble['album'],
+                    'title': title,
+                    'artist': artist,
+                    'album': album,
                     'type': 'track',
                     'source': 'lastfm',
-                    'timestamp': scrobble['timestamp']
+                    'origen': 'scrobble',  # Add origen field
+                    'timestamp': timestamp
                 }
                 
                 # Add service URLs if available
-                for service in service_priority:
+                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
                     service_url_key = f'{service}_url'
                     if service_url_key in scrobble:
                         track_data[service_url_key] = scrobble[service_url_key]
@@ -759,9 +1009,9 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                 
                 # Set icon based on available URLs
                 icon_set = False
-                for service in service_priority:
+                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
                     service_url_key = f'{service}_url'
-                    if service_url_key in scrobble:
+                    if service_url_key in scrobble and scrobble[service_url_key]:
                         track_item.setIcon(0, QIcon(f":/services/{service}"))
                         icon_set = True
                         break
@@ -770,11 +1020,15 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                 if not icon_set:
                     track_item.setIcon(0, QIcon(":/services/lastfm"))
         
-        # Expand root item
+        # Expand the root item to show all scrobbles
         root_item.setExpanded(True)
         
+        # Store the displayed data for reference
+        parent_instance.current_scrobbles_data = scrobbles
+        
         # Log summary
-        parent_instance.log(f"Displayed {len(scrobbles)} scrobbles for {title}")
+        scrobble_count = root_item.childCount()
+        parent_instance.log(f"Displayed {scrobble_count} scrobbles for {title}")
         
         return True
     except Exception as e:
@@ -783,34 +1037,182 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         parent_instance.log(traceback.format_exc())
         return False
 
-def populate_scrobbles_time_menus(self, scrobbles):
-    """Populate the year and month menus based on available scrobbles data"""
+
+
+def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
+    """Populate the year and month menus based on available scrobbles in database"""
     try:
-        if not scrobbles:
+        # Gather menu references
+        menus_to_update = []
+        
+        # Add main scrobbles button menus if they exist
+        if hasattr(self, 'months_menu') and hasattr(self, 'years_menu'):
+            menus_to_update.append({
+                'months': self.months_menu, 
+                'years': self.years_menu
+            })
+        
+        # Add unified button menus if they exist
+        if hasattr(self, 'unified_months_menu') and hasattr(self, 'unified_years_menu'):
+            menus_to_update.append({
+                'months': self.unified_months_menu, 
+                'years': self.unified_years_menu
+            })
+        
+        if not menus_to_update:
+            self.log("No menus found to update")
             return False
             
-        # Get menu references
-        menus_to_update = [
-            # Main scrobbles button menus
-            {'months': self.months_menu, 'years': self.years_menu},
-            # Unified button menus
-            {'months': getattr(self, 'unified_months_menu', None), 
-            'years': getattr(self, 'unified_years_menu', None)}
-        ]
+        # If years_dict is provided directly, use it
+        if years_dict:
+            self.log(f"Using provided years_dict with {len(years_dict)} years")
+        # If no years_dict provided and no scrobbles, load from database
+        elif not scrobbles:
+            try:
+                # First check database for available years and months
+                import sqlite3
+                from datetime import datetime
+                
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                years_dict = {}
+                
+                # Try all possible table name variants for this user
+                user = getattr(self, 'lastfm_user', 'paqueradejere')
+                table_names = [
+                    f"scrobbles_{user}",
+                    "scrobbles_paqueradejere",
+                    user
+                ]
+                
+                table_found = False
+                
+                for table_name in table_names:
+                    cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                    
+                    if cursor.fetchone():
+                        table_found = True
+                        self.log(f"Found scrobbles table: {table_name}")
+                        
+                        # Check schema for timestamp column
+                        cursor.execute(f"PRAGMA table_info({table_name})")
+                        columns = [row[1] for row in cursor.fetchall()]
+                        
+                        if 'timestamp' not in columns:
+                            self.log(f"No timestamp column in {table_name}")
+                            continue
+                        
+                        # Get distinct years with count - FIXED QUERY
+                        try:
+                            cursor.execute(f"""
+                            SELECT strftime('%Y', datetime(timestamp, 'unixepoch', 'localtime')) as year, 
+                                   COUNT(*) as count
+                            FROM {table_name}
+                            WHERE timestamp > 0
+                            GROUP BY year
+                            ORDER BY year DESC
+                            """)
+                            
+                            years_results = cursor.fetchall()
+                            
+                            self.log(f"Found {len(years_results)} years in {table_name}")
+                            
+                            for year_row in years_results:
+                                try:
+                                    year = int(year_row[0])
+                                    
+                                    # Check if we have any scrobbles for this year
+                                    if year_row[1] > 0:
+                                        years_dict[year] = set()
+                                        
+                                        # Get months for this year
+                                        cursor.execute(f"""
+                                        SELECT strftime('%m', datetime(timestamp, 'unixepoch', 'localtime')) as month,
+                                               COUNT(*) as count
+                                        FROM {table_name}
+                                        WHERE timestamp > 0 
+                                          AND strftime('%Y', datetime(timestamp, 'unixepoch', 'localtime')) = ?
+                                        GROUP BY month
+                                        ORDER BY month
+                                        """, (str(year),))
+                                        
+                                        months_results = cursor.fetchall()
+                                        
+                                        for month_row in months_results:
+                                            if month_row[1] > 0:
+                                                try:
+                                                    month = int(month_row[0])
+                                                    years_dict[year].add(month)
+                                                except (ValueError, TypeError) as e:
+                                                    self.log(f"Error parsing month: {e}")
+                                except (ValueError, TypeError) as e:
+                                    self.log(f"Error parsing year: {e}")
+                            
+                            self.log(f"Found {len(years_dict)} years with data in {table_name}")
+                            break  # Use the first valid table we find
+                            
+                        except sqlite3.Error as e:
+                            self.log(f"Error querying {table_name}: {e}")
+                            continue
+                
+                if not table_found:
+                    self.log("No valid scrobbles table found")
+                
+                conn.close()
+                
+                if not years_dict:
+                    self.log("No scrobble years/months found in database")
+                    return False
+                    
+            except Exception as e:
+                self.log(f"Error querying database for dates: {str(e)}")
+                years_dict = {}
         
-        # Extract years and months from scrobbles
-        years_dict = {}
+        # If we couldn't load from database and don't have scrobbles parameter, try cache
+        if not years_dict and not scrobbles:
+            try:
+                # Try to load from cache
+                cache_file = get_lastfm_cache_path(getattr(self, 'lastfm_user', None))
+                if os.path.exists(cache_file):
+                    with open(cache_file, 'r', encoding='utf-8') as f:
+                        cache_data = json.load(f)
+                        
+                    scrobbles = cache_data.get('scrobbles', [])
+                    self.log(f"Loaded {len(scrobbles)} scrobbles from cache")
+            except Exception as e:
+                self.log(f"Error loading cache: {str(e)}")
+                scrobbles = []
         
-        for scrobble in scrobbles:
-            timestamp = scrobble['timestamp']
-            date = time.localtime(timestamp)
-            year = date.tm_year
-            month = date.tm_mon
+        # If we have scrobbles but no years_dict, extract years/months
+        if scrobbles and not years_dict:
+            years_dict = {}
             
-            if year not in years_dict:
-                years_dict[year] = set()
-            
-            years_dict[year].add(month)
+            for scrobble in scrobbles:
+                timestamp = scrobble.get('timestamp')
+                if not timestamp:
+                    continue
+                    
+                try:
+                    timestamp = int(timestamp)
+                    from datetime import datetime
+                    date = datetime.fromtimestamp(timestamp)
+                    year = date.year
+                    month = date.month
+                    
+                    if year not in years_dict:
+                        years_dict[year] = set()
+                    
+                    years_dict[year].add(month)
+                except (ValueError, TypeError, OverflowError) as e:
+                    self.log(f"Error processing timestamp {timestamp}: {str(e)}")
+                    continue
+        
+        if not years_dict:
+            self.log("No valid years/months found in scrobbles or database")
+            return False
+        
+        self.log(f"Prepared years dictionary with {len(years_dict)} years")
         
         # Update each set of menus
         for menu_set in menus_to_update:
@@ -828,7 +1230,8 @@ def populate_scrobbles_time_menus(self, scrobbles):
             years = sorted(years_dict.keys(), reverse=True)
             for year in years:
                 year_action = years_menu.addAction(str(year))
-                year_action.triggered.connect(lambda checked, y=year: load_lastfm_scrobbles_year(self, y))
+                # Use lambda with default value to capture the current value
+                year_action.triggered.connect(lambda checked=False, y=year: load_lastfm_scrobbles_year(self, y))
             
             # Populate Months menu (years as submenus, months within each year)
             for year in years:
@@ -839,9 +1242,17 @@ def populate_scrobbles_time_menus(self, scrobbles):
                 
                 # Add month items
                 for month in months:
-                    month_name = time.strftime("%B", time.struct_time((2000, month, 1, 0, 0, 0, 0, 0, 0)))
+                    # Use the current locale for month names
+                    try:
+                        import datetime
+                        date_obj = datetime.datetime(2000, month, 1)
+                        month_name = date_obj.strftime("%B")
+                    except:
+                        month_name = f"Month {month}"
+                        
                     month_action = year_menu.addAction(month_name)
-                    month_action.triggered.connect(lambda checked, y=year, m=month: load_lastfm_scrobbles_month(self, y, m))
+                    # Use lambda with default values to capture the current values
+                    month_action.triggered.connect(lambda checked=False, y=year, m=month: load_lastfm_scrobbles_month(self, y, m))
         
         self.log(f"Populated scrobbles menus with {len(years)} years")
         return True
@@ -850,6 +1261,7 @@ def populate_scrobbles_time_menus(self, scrobbles):
         import traceback
         self.log(traceback.format_exc())
         return False
+
 
 def get_track_links_from_db(self, artist, title, album=None):
     """Get track links from the database"""
@@ -931,7 +1343,11 @@ def setup_scrobbles_menu(self):
         
         # Set the menu for the button
         self.scrobbles_button.setMenu(self.scrobbles_menu)
-        
+        try:
+            force_load_scrobbles_data_from_db(self)
+        except Exception as e:
+            self.log(f"Error in force loading scrobbles data: {str(e)}")
+
         self.log("Scrobbles menu set up")
         return True
     except Exception as e:
@@ -986,10 +1402,22 @@ def connect_lastfm_controls(self):
         return False
 
 
+
 def load_lastfm_cache_if_exists(self):
-    """Load Last.fm cache if it exists and populate menus"""
+    """Load Last.fm data from cache or database and populate menus"""
+    return load_years_months_from_db(self)
     try:
-        cache_file = get_lastfm_cache_path()
+        # Intentar cargar directamente desde la base de datos primero
+        self.log("Attempting to load scrobbles directly from database")
+        db_result = force_load_scrobbles_data_from_db(self)
+        
+        if db_result:
+            self.log("Successfully loaded scrobbles data from database")
+            return True
+            
+        # Si falló la carga desde DB, intentar con caché
+        lastfm_user = getattr(self, 'lastfm_user', None)
+        cache_file = get_lastfm_cache_path(lastfm_user)
         
         if os.path.exists(cache_file):
             self.log(f"Found Last.fm cache file: {cache_file}")
@@ -1011,6 +1439,732 @@ def load_lastfm_cache_if_exists(self):
         
         return False
     except Exception as e:
-        self.log(f"Error checking Last.fm cache: {str(e)}")
+        self.log(f"Error checking Last.fm data: {str(e)}")
         return False
 
+# Crear tabla scrobbles para el usuario
+
+
+
+def get_latest_timestamp_from_db(self, table_name):
+    """
+    Get the latest timestamp from the database for the specified table.
+    
+    Args:
+        table_name: Name of the table to query
+        
+    Returns:
+        Latest timestamp or 0 if no records
+    """
+    try:
+        if not hasattr(self, 'db_path') or not self.db_path:
+            return 0
+            
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Check if table exists
+        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+        if not cursor.fetchone():
+            conn.close()
+            return 0
+        
+        # Get the latest timestamp
+        cursor.execute(f"SELECT MAX(timestamp) FROM {table_name}")
+        result = cursor.fetchone()
+        
+        conn.close()
+        
+        if result and result[0]:
+            self.log(f"Latest timestamp from database: {result[0]}")
+            return result[0]
+        
+        return 0
+    except Exception as e:
+        self.log(f"Error getting latest timestamp: {str(e)}")
+        return 0
+
+
+
+def obtener_scrobbles_lastfm(lastfm_username, lastfm_api_key, desde_timestamp=0, limite=200):
+    """
+    Obtiene todos los scrobbles de Last.fm para un usuario.
+    
+    Args:
+        lastfm_username: Nombre de usuario de Last.fm
+        lastfm_api_key: API key de Last.fm
+        desde_timestamp: Timestamp desde el que obtener scrobbles
+        limite: Número máximo de scrobbles por página
+        
+    Returns:
+        Lista de scrobbles obtenidos
+    """
+    todos_scrobbles = []
+    pagina = 1
+    total_paginas = 1
+    
+    # Mensaje inicial
+    if desde_timestamp > 0:
+        fecha = datetime.fromtimestamp(desde_timestamp).strftime('%Y-%m-%d %H:%M:%S')
+        print(f"Obteniendo scrobbles desde {fecha}")
+    else:
+        print("Obteniendo todos los scrobbles (esto puede tardar bastante)")
+    
+    while pagina <= total_paginas:
+        print(f"Obteniendo página {pagina} de {total_paginas}...")
+        
+        params = {
+            'method': 'user.getrecenttracks',
+            'user': lastfm_username,
+            'api_key': lastfm_api_key,
+            'format': 'json',
+            'limit': limite,
+            'page': pagina,
+            'from': desde_timestamp
+        }
+        
+        try:
+            response = obtener_con_reintentos('http://ws.audioscrobbler.com/2.0/', params)
+            
+            if not response or response.status_code != 200:
+                error_msg = f"Error al obtener scrobbles: {response.status_code if response else 'Sin respuesta'}"
+                print(error_msg)
+                
+                if pagina > 1:  # Si hemos obtenido algunas páginas, devolvemos lo que tenemos
+                    break
+                else:
+                    return []
+            
+            data = response.json()
+            
+        except Exception as e:
+            print(f"Error al procesar página {pagina}: {str(e)}")
+            
+            if pagina > 1:  # Si hemos obtenido algunas páginas, devolvemos lo que tenemos
+                break
+            else:
+                return []
+        
+        # Comprobar si hay tracks
+        if 'recenttracks' not in data or 'track' not in data['recenttracks']:
+            break
+        
+        # Actualizar total_paginas
+        total_paginas = int(data['recenttracks']['@attr']['totalPages'])
+        
+        # Añadir tracks a la lista
+        tracks = data['recenttracks']['track']
+        if not isinstance(tracks, list):
+            tracks = [tracks]
+        
+        # Filtrar tracks que están siendo escuchados actualmente (no tienen date)
+        filtrados = [track for track in tracks if 'date' in track]
+        todos_scrobbles.extend(filtrados)
+        
+        # Reportar progreso
+        print(f"Obtenidos {len(filtrados)} scrobbles en página {pagina}")
+        
+        pagina += 1
+        # Pequeña pausa para no saturar la API
+        time.sleep(0.25)
+    
+    print(f"Obtenidos {len(todos_scrobbles)} scrobbles en total")
+    return todos_scrobbles
+
+
+def obtener_con_reintentos(url, params, max_reintentos=3, tiempo_espera=1, timeout=10):
+    """
+    Realiza una petición HTTP con reintentos en caso de error.
+    
+    Args:
+        url: URL a consultar
+        params: Parámetros para la petición
+        max_reintentos: Número máximo de reintentos
+        tiempo_espera: Tiempo base de espera entre reintentos
+        timeout: Tiempo máximo de espera para la petición
+        
+    Returns:
+        Respuesta HTTP o None si fallan todos los intentos
+    """
+    for intento in range(max_reintentos):
+        try:
+            respuesta = requests.get(url, params=params, timeout=timeout)
+            
+            # Si hay límite de tasa, esperar y reintentar
+            if respuesta.status_code == 429:  # Rate limit
+                tiempo_espera_recomendado = int(respuesta.headers.get('Retry-After', tiempo_espera * 2))
+                print(f"Límite de tasa alcanzado. Esperando {tiempo_espera_recomendado} segundos...")
+                time.sleep(tiempo_espera_recomendado)
+                continue
+            
+            return respuesta
+            
+        except (requests.exceptions.RequestException, requests.exceptions.Timeout) as e:
+            print(f"Error en intento {intento+1}/{max_reintentos}: {e}")
+            if intento < max_reintentos - 1:
+                # Backoff exponencial
+                tiempo_espera_actual = tiempo_espera * (2 ** intento)
+                print(f"Reintentando en {tiempo_espera_actual} segundos...")
+                time.sleep(tiempo_espera_actual)
+    
+    return None
+
+
+def fetch_youtube_links(self, scrobbles, cache_file, table_name=None):
+    """
+    Fetch URLs for scrobbles in a background thread, checking database first
+    and updating both the cache and the song_links table.
+    
+    Args:
+        self: The parent instance with logger
+        scrobbles: List of scrobbles to check
+        cache_file: Path to the cache file to update
+        table_name: Optional name of the scrobbles table
+    """
+    try:
+        self.log(f"Starting link fetching for {len(scrobbles)} scrobbles")
+        
+        # Load the current cache
+        try:
+            with open(cache_file, 'r', encoding='utf-8') as f:
+                cache_data = json.load(f)
+        except Exception as e:
+            self.log(f"Error loading cache file for link updates: {str(e)}")
+            return
+        
+        # Track scrobbles by a unique key for efficient updates
+        all_scrobbles = cache_data.get('scrobbles', [])
+        scrobbles_dict = {}
+        for s in all_scrobbles:
+            # Support both field naming conventions
+            artist = s.get('artist', s.get('artist_name', ''))
+            title = s.get('title', s.get('name', ''))
+            timestamp = s.get('timestamp', 0)
+            key = f"{artist}|{title}|{timestamp}"
+            scrobbles_dict[key] = s
+        
+        # Get service priority from settings
+        service_priority = get_service_priority(self) if hasattr(self, 'get_service_priority') else ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+        self.log(f"Service priority: {', '.join(service_priority)}")
+        
+        # Database connection 
+        db_conn = None
+        db_cursor = None
+        
+        if hasattr(self, 'db_path') and os.path.exists(self.db_path):
+            try:
+                import sqlite3
+                db_conn = sqlite3.connect(self.db_path)
+                db_cursor = db_conn.cursor()
+                self.log(f"Connected to database for updating links")
+            except Exception as e:
+                self.log(f"Error connecting to database: {str(e)}")
+        
+        # Process each scrobble
+        processed_count = 0
+        updated_count = 0
+        
+        for scrobble in scrobbles:
+            # Get fields, handling both naming conventions
+            artist = scrobble.get('artist', scrobble.get('artist_name', ''))
+            title = scrobble.get('title', scrobble.get('name', ''))
+            album = scrobble.get('album', scrobble.get('album_name', ''))
+            timestamp = scrobble.get('timestamp', 0)
+            
+            # Skip if already has a URL for any service
+            if any(scrobble.get(f'{service}_url') for service in service_priority):
+                continue
+                
+            # Create a unique key
+            key = f"{artist}|{title}|{timestamp}"
+            
+            # Try to get URL from database first
+            links = get_track_links_from_db(self, artist, title, album)
+            
+            if links:
+                # Check for each service in priority order
+                for service in service_priority:
+                    if service in links and links[service]:
+                        # Update the scrobble
+                        service_url_key = f'{service}_url'
+                        scrobble[service_url_key] = links[service]
+                        
+                        if key in scrobbles_dict:
+                            scrobbles_dict[key][service_url_key] = links[service]
+                            updated_count += 1
+                            
+                            # Log successful link retrieval
+                            self.log(f"Found {service} link for {artist} - {title} in database")
+                            
+                            # Update the scrobbles table if we have a connection and table name
+                            if db_conn and db_cursor and table_name:
+                                try:
+                                    # Determine the track field name
+                                    db_cursor.execute(f"PRAGMA table_info({table_name})")
+                                    columns = [row[1] for row in db_cursor.fetchall()]
+                                    track_field = 'track_name' if 'track_name' in columns else 'name'
+                                    
+                                    update_sql = f"""
+                                    UPDATE {table_name} 
+                                    SET {service_url_key} = ? 
+                                    WHERE LOWER(artist_name) = LOWER(?) AND LOWER({track_field}) = LOWER(?) AND timestamp = ?
+                                    """
+                                    db_cursor.execute(update_sql, (
+                                        links[service], 
+                                        artist, 
+                                        title, 
+                                        timestamp
+                                    ))
+                                    db_conn.commit()
+                                except Exception as e:
+                                    self.log(f"Error updating link in scrobbles table: {str(e)}")
+                            
+                            # Once we have one service URL, we can skip to the next scrobble
+                            break
+            
+            # If no links were found in the database, try fetching from Last.fm
+            if not any(scrobble.get(f'{service}_url') for service in service_priority):
+                try:
+                    # Check if we have a Last.fm URL
+                    lastfm_url = scrobble.get('url', scrobble.get('lastfm_url', ''))
+                    if lastfm_url:
+                        # Try to extract links from Last.fm page
+                        for service in service_priority:
+                            service_url = extract_link_from_lastfm(self, lastfm_url, service)
+                            
+                            if service_url:
+                                # Update the scrobble and cache
+                                service_url_key = f'{service}_url'
+                                scrobble[service_url_key] = service_url
+                                
+                                if key in scrobbles_dict:
+                                    scrobbles_dict[key][service_url_key] = service_url
+                                    updated_count += 1
+                                    
+                                    # Log successful link retrieval
+                                    self.log(f"Found {service} link for {artist} - {title} from Last.fm")
+                                    
+                                    # Update the scrobbles table if we have a connection and table name
+                                    if db_conn and db_cursor and table_name:
+                                        try:
+                                            # Determine the track field name
+                                            db_cursor.execute(f"PRAGMA table_info({table_name})")
+                                            columns = [row[1] for row in db_cursor.fetchall()]
+                                            track_field = 'track_name' if 'track_name' in columns else 'name'
+                                            
+                                            update_sql = f"""
+                                            UPDATE {table_name} 
+                                            SET {service_url_key} = ? 
+                                            WHERE LOWER(artist_name) = LOWER(?) AND LOWER({track_field}) = LOWER(?) AND timestamp = ?
+                                            """
+                                            db_cursor.execute(update_sql, (
+                                                service_url, 
+                                                artist, 
+                                                title, 
+                                                timestamp
+                                            ))
+                                            db_conn.commit()
+                                        except Exception as e:
+                                            self.log(f"Error updating link in scrobbles table: {str(e)}")
+                                    
+                                    # Once we have one service URL, we can skip to the next service
+                                    break
+                except Exception as e:
+                    self.log(f"Error fetching links for {artist} - {title}: {str(e)}")
+            
+            # If we have links and the database connection, update song_links table
+            if db_conn and db_cursor and any(scrobble.get(f'{service}_url') for service in service_priority):
+                try:
+                    # First, find or create song record
+                    db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='songs'")
+                    if db_cursor.fetchone():
+                        # Check if the song exists
+                        db_cursor.execute("""
+                        SELECT id FROM songs 
+                        WHERE LOWER(artist) = LOWER(?) AND LOWER(title) = LOWER(?)
+                        """, (artist, title))
+                        song_result = db_cursor.fetchone()
+                        
+                        song_id = None
+                        if song_result:
+                            song_id = song_result[0]
+                            self.log(f"Found song ID {song_id} for {artist} - {title}")
+                        else:
+                            # If the song doesn't exist, create it
+                            try:
+                                db_cursor.execute("""
+                                INSERT INTO songs 
+                                (title, album, artist, origen, reproducciones)
+                                VALUES (?, ?, ?, 'scrobble', 1)
+                                """, (title, album, artist))
+                                song_id = db_cursor.lastrowid
+                                self.log(f"Created new song ID {song_id} for {artist} - {title}")
+                            except Exception as e:
+                                self.log(f"Error creating song record: {e}")
+                        
+                        # If we have a song_id, update song_links
+                        if song_id:
+                            db_cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
+                            if db_cursor.fetchone():
+                                # Check if we have a links record for this song
+                                db_cursor.execute("SELECT id FROM song_links WHERE song_id = ?", (song_id,))
+                                link_result = db_cursor.fetchone()
+                                
+                                # Collect all service URLs from the scrobble
+                                urls = {}
+                                for service in service_priority:
+                                    service_url_key = f'{service}_url'
+                                    if service_url_key in scrobble and scrobble[service_url_key]:
+                                        urls[service_url_key] = scrobble[service_url_key]
+                                
+                                if urls:
+                                    if link_result:
+                                        # Update existing links
+                                        update_fields = []
+                                        update_params = []
+                                        
+                                        for service_url_key, url in urls.items():
+                                            update_fields.append(f"{service_url_key} = COALESCE(?, {service_url_key})")
+                                            update_params.append(url)
+                                        
+                                        update_params.append(song_id)
+                                        
+                                        update_sql = f"""
+                                        UPDATE song_links SET 
+                                            {', '.join(update_fields)},
+                                            links_updated = CURRENT_TIMESTAMP
+                                        WHERE song_id = ?
+                                        """
+                                        db_cursor.execute(update_sql, update_params)
+                                        db_conn.commit()
+                                        self.log(f"Updated song_links for song ID {song_id}")
+                                    else:
+                                        # Insert new links record
+                                        insert_cols = ['song_id', 'links_updated']
+                                        insert_vals = ['?', 'CURRENT_TIMESTAMP']
+                                        insert_params = [song_id]
+                                        
+                                        for service_url_key, url in urls.items():
+                                            insert_cols.append(service_url_key)
+                                            insert_vals.append('?')
+                                            insert_params.append(url)
+                                        
+                                        insert_sql = f"""
+                                        INSERT INTO song_links ({', '.join(insert_cols)})
+                                        VALUES ({', '.join(insert_vals)})
+                                        """
+                                        db_cursor.execute(insert_sql, insert_params)
+                                        db_conn.commit()
+                                        self.log(f"Inserted song_links for song ID {song_id}")
+                except Exception as e:
+                    self.log(f"Error updating song_links table: {e}")
+            
+            # Update progress periodically
+            processed_count += 1
+            if processed_count % 20 == 0:
+                self.log(f"Processed {processed_count}/{len(scrobbles)} scrobbles, found {updated_count} links")
+                
+                # Save intermediate results to cache
+                try:
+                    # Rebuild the scrobbles list from the dictionary
+                    cache_data['scrobbles'] = list(scrobbles_dict.values())
+                    with open(cache_file, 'w', encoding='utf-8') as f:
+                        json.dump(cache_data, f, indent=2)
+                except Exception as e:
+                    self.log(f"Error saving intermediate link updates: {str(e)}")
+        
+        # Close database connection if open
+        if db_conn:
+            db_conn.close()
+        
+        # Final save to cache
+        try:
+            # Rebuild the scrobbles list from the dictionary
+            cache_data['scrobbles'] = list(scrobbles_dict.values())
+            with open(cache_file, 'w', encoding='utf-8') as f:
+                json.dump(cache_data, f, indent=2)
+                
+            self.log(f"Link fetching complete. Updated {updated_count} scrobbles.")
+        except Exception as e:
+            self.log(f"Error saving final link updates: {str(e)}")
+    
+    except Exception as e:
+        self.log(f"Error in link fetching thread: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+
+
+def force_load_scrobbles_data_from_db(self):
+    """
+    Carga forzada de datos de scrobbles directamente de la base de datos,
+    independientemente de la sincronización.
+    """
+    try:
+        if not hasattr(self, 'db_path') or not os.path.exists(self.db_path):
+            self.log("Error: No database path configured or database file does not exist")
+            return False
+
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Buscar todas las tablas de scrobbles disponibles
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND (name LIKE 'scrobbles_%' OR name = 'scrobbles')")
+        scrobbles_tables = [row[0] for row in cursor.fetchall()]
+        
+        self.log(f"Found scrobbles tables: {', '.join(scrobbles_tables)}")
+        
+        if not scrobbles_tables:
+            self.log("No scrobbles tables found in database")
+            conn.close()
+            return False
+        
+        # Seleccionar la tabla preferida
+        preferred_table = None
+        
+        # Primero buscar la tabla del usuario actual si está configurado
+        if hasattr(self, 'lastfm_user') and self.lastfm_user:
+            user_table = f"scrobbles_{self.lastfm_user}"
+            if user_table in scrobbles_tables:
+                preferred_table = user_table
+                self.log(f"Using preferred table for current user: {preferred_table}")
+        
+        # Si no hay tabla para el usuario actual, intentar con paqueradejere
+        if not preferred_table and "scrobbles_paqueradejere" in scrobbles_tables:
+            preferred_table = "scrobbles_paqueradejere"
+            self.log(f"Using fallback table: {preferred_table}")
+        
+        # Si no hay tabla específica, usar la primera disponible
+        if not preferred_table and scrobbles_tables:
+            preferred_table = scrobbles_tables[0]
+            self.log(f"Using first available table: {preferred_table}")
+        
+        if not preferred_table:
+            self.log("Could not find a suitable scrobbles table")
+            conn.close()
+            return False
+        
+        # Verificar que la tabla tenga timestamp
+        cursor.execute(f"PRAGMA table_info({preferred_table})")
+        columns = [row[1] for row in cursor.fetchall()]
+        
+        if 'timestamp' not in columns:
+            self.log(f"Table {preferred_table} does not have timestamp column")
+            conn.close()
+            return False
+        
+        # Cargar datos de años directamente
+        years_dict = {}
+        
+        cursor.execute(f"""
+        SELECT 
+            CAST(strftime('%Y', datetime(timestamp, 'unixepoch')) AS INTEGER) as year,
+            COUNT(*) as count
+        FROM {preferred_table}
+        WHERE timestamp > 0
+        GROUP BY year
+        ORDER BY year DESC
+        """)
+        
+        years_results = cursor.fetchall()
+        self.log(f"Found {len(years_results)} years with data in {preferred_table}")
+        
+        for year_row in years_results:
+            if not year_row[0]:
+                continue
+                
+            year = year_row[0]
+            count = year_row[1]
+            
+            if count > 0:
+                years_dict[year] = set()
+                
+                # Obtener meses para este año
+                cursor.execute(f"""
+                SELECT 
+                    CAST(strftime('%m', datetime(timestamp, 'unixepoch')) AS INTEGER) as month,
+                    COUNT(*) as count
+                FROM {preferred_table}
+                WHERE timestamp > 0 
+                AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+                GROUP BY month
+                ORDER BY month
+                """, (str(year),))
+                
+                months_results = cursor.fetchall()
+                
+                for month_row in months_results:
+                    if not month_row[0]:
+                        continue
+                        
+                    month = month_row[0]
+                    month_count = month_row[1]
+                    
+                    if month_count > 0:
+                        years_dict[year].add(month)
+        
+        conn.close()
+        
+        # Si encontramos datos, poblar los menús
+        if years_dict:
+            self.log(f"Loaded data for {len(years_dict)} years with {sum(len(months) for months in years_dict.values())} months total")
+            
+            # Configurar los menus
+            from modules.submodules.url_playlist.lastfm_manager import populate_scrobbles_time_menus
+            result = populate_scrobbles_time_menus(self, years_dict=years_dict)
+            
+            return result
+        else:
+            self.log("No year/month data found in database")
+            return False
+            
+    except Exception as e:
+        self.log(f"Error loading scrobbles data from database: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+        return False
+
+
+def load_years_months_from_db(self):
+    """
+    Cargar directamente años y meses desde la base de datos y crear menús
+    """
+    try:
+        # Verificar que tenemos la conexión a la base de datos
+        if not hasattr(self, 'db_path') or not self.db_path:
+            self.log("Error: No hay configuración de base de datos")
+            return False
+            
+        if not os.path.exists(self.db_path):
+            self.log(f"Error: Archivo de base de datos no encontrado: {self.db_path}")
+            return False
+            
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Encontrar la tabla de scrobbles más adecuada
+        scrobbles_table = None
+        
+        # Primero buscar tabla para el usuario actual
+        if hasattr(self, 'lastfm_user') and self.lastfm_user:
+            user_table = f"scrobbles_{self.lastfm_user}"
+            cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{user_table}'")
+            if cursor.fetchone():
+                scrobbles_table = user_table
+        
+        # Si no hay tabla para el usuario actual, buscar tabla paqueradejere
+        if not scrobbles_table:
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scrobbles_paqueradejere'")
+            if cursor.fetchone():
+                scrobbles_table = "scrobbles_paqueradejere"
+        
+        # Si no se encontraron tablas específicas, buscar cualquier tabla de scrobbles
+        if not scrobbles_table:
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'scrobbles_%'")
+            result = cursor.fetchone()
+            if result:
+                scrobbles_table = result[0]
+        
+        if not scrobbles_table:
+            self.log("No se encontró tabla de scrobbles")
+            conn.close()
+            return False
+            
+        self.log(f"Usando tabla de scrobbles: {scrobbles_table}")
+        
+        # Obtener años en orden descendente
+        cursor.execute(f"""
+        SELECT DISTINCT strftime('%Y', datetime(timestamp, 'unixepoch')) as year 
+        FROM {scrobbles_table} 
+        WHERE timestamp > 0
+        ORDER BY year DESC
+        """)
+        
+        years_result = cursor.fetchall()
+        years = [row[0] for row in years_result if row[0]]
+        
+        self.log(f"Años encontrados: {years}")
+        
+        if not years:
+            self.log("No se encontraron años en la tabla")
+            conn.close()
+            return False
+        
+        # Ahora que tenemos los años, obtener los meses para cada año
+        years_months = {}
+        
+        for year in years:
+            cursor.execute(f"""
+            SELECT DISTINCT strftime('%m', datetime(timestamp, 'unixepoch')) as month 
+            FROM {scrobbles_table} 
+            WHERE timestamp > 0 
+              AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+            ORDER BY month
+            """, (year,))
+            
+            months_result = cursor.fetchall()
+            months = [int(row[0]) for row in months_result if row[0]]
+            
+            if months:
+                years_months[int(year)] = months
+        
+        conn.close()
+        
+        self.log(f"Datos cargados: {len(years_months)} años con meses")
+        
+        # Crear los menús
+        if hasattr(self, 'months_menu') and hasattr(self, 'years_menu'):
+            # Limpiar menús existentes
+            self.months_menu.clear()
+            self.years_menu.clear()
+            
+            # Crear menú de años
+            for year in sorted(years_months.keys(), reverse=True):
+                year_action = self.years_menu.addAction(str(year))
+                year_action.triggered.connect(lambda checked=False, y=year: load_lastfm_scrobbles_year(self, y))
+            
+            # Crear menú de meses
+            for year in sorted(years_months.keys(), reverse=True):
+                year_submenu = self.months_menu.addMenu(str(year))
+                
+                for month in sorted(years_months[year]):
+                    import datetime
+                    date_obj = datetime.datetime(2000, month, 1)
+                    month_name = date_obj.strftime("%B")
+                    
+                    month_action = year_submenu.addAction(month_name)
+                    month_action.triggered.connect(lambda checked=False, y=year, m=month: load_lastfm_scrobbles_month(self, y, m))
+        
+        # Hacer lo mismo con el menu unificado si existe
+        if hasattr(self, 'unified_months_menu') and hasattr(self, 'unified_years_menu'):
+            # Limpiar menús existentes
+            self.unified_months_menu.clear()
+            self.unified_years_menu.clear()
+            
+            # Crear menú de años
+            for year in sorted(years_months.keys(), reverse=True):
+                year_action = self.unified_years_menu.addAction(str(year))
+                year_action.triggered.connect(lambda checked=False, y=year: load_lastfm_scrobbles_year(self, y))
+            
+            # Crear menú de meses
+            for year in sorted(years_months.keys(), reverse=True):
+                year_submenu = self.unified_months_menu.addMenu(str(year))
+                
+                for month in sorted(years_months[year]):
+                    import datetime
+                    date_obj = datetime.datetime(2000, month, 1)
+                    month_name = date_obj.strftime("%B")
+                    
+                    month_action = year_submenu.addAction(month_name)
+                    month_action.triggered.connect(lambda checked=False, y=year, m=month: load_lastfm_scrobbles_month(self, y, m))
+        
+        self.log("Menús de años y meses creados correctamente")
+        return True
+        
+    except Exception as e:
+        self.log(f"Error cargando años y meses: {e}")
+        import traceback
+        self.log(traceback.format_exc())
+        return False

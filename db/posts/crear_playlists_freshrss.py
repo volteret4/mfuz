@@ -32,7 +32,10 @@ logger = logging.getLogger(__name__)
 
 def clean_youtube_url(url):
     """Limpia y normaliza URLs de YouTube"""
-    # Eliminar parámetros innecesarios
+    # Recortar cualquier texto adicional al final de la URL
+    url = url.split('"')[0].split("'")[0].split('>')[0].split('<')[0]
+    
+    # Eliminar parámetros innecesarios y obtener solo el ID de video
     if 'youtube.com/watch' in url:
         video_id = re.search(r'v=([^&]+)', url)
         if video_id:
@@ -47,9 +50,13 @@ def clean_youtube_url(url):
 
 def extract_bandcamp_id(url):
     """Extrae y normaliza URLs de Bandcamp"""
+    # Limpiar cualquier texto HTML adicional
+    url = url.split('"')[0].split("'")[0].split('>')[0].split('<')[0]
+    
     # Asegurarse de que la URL es completa
     if not url.startswith(('http://', 'https://')):
         url = 'https://' + url.lstrip('/')
+    
     return url
 
 def extract_music_urls(url):
@@ -59,30 +66,44 @@ def extract_music_urls(url):
     try:
         response = requests.get(url)
         content = response.text
+        music_urls = set()
+        
+        # Patrones para buscar URLs de música
         music_patterns = [
-            r'(https?://[a-zA-Z0-9-]+\.bandcamp\.com\S*)',
+            # Bandcamp
+            r'(https?://[a-zA-Z0-9-]+\.bandcamp\.com/[^\s"\'<>]+)',
+            # SoundCloud
             r'(https?://(?:www\.)?soundcloud\.com/[^\s"\'<>]+)',
+            # YouTube (varios formatos)
             r'(https?://(?:www\.)?youtube\.com/embed/[^\s"\'<>]+)',
             r'(https?://(?:www\.)?youtube\.com/watch\?[^\s"\'<>]+)',
             r'(https?://(?:www\.)?youtu\.be/[^\s"\'<>]+)'
         ]
-        music_urls = set()
         
         for pattern in music_patterns:
             matches = re.findall(pattern, content)
             for match in matches:
-                extracted_url = match
+                # Limpiar la URL para eliminar cualquier texto HTML
+                # Detectar y cortar en el primer carácter que no debería ser parte de la URL
+                extracted_url = match.split('"')[0].split("'")[0].split('>')[0].split('<')[0]
+                
+                # Normalizar según el tipo de URL
                 if 'bandcamp.com' in extracted_url:
                     if extracted_url.startswith('//'):
                         extracted_url = 'https:' + extracted_url
                     extracted_url = extract_bandcamp_id(extracted_url)
                 else:
                     extracted_url = clean_youtube_url(extracted_url)
-                music_urls.add(extracted_url)
                 
+                # Solo agregar si la URL parece válida
+                if extracted_url and ('youtube.com' in extracted_url or 'youtu.be' in extracted_url or 
+                                     'bandcamp.com' in extracted_url or 'soundcloud.com' in extracted_url):
+                    music_urls.add(extracted_url)
+        
+        logger.info(f"Extraídas {len(music_urls)} URLs de música de {url}")
         return list(music_urls)
     except Exception as e:
-        logger.error(f"Error al extraer URLs: {e}")
+        logger.error(f"Error al extraer URLs de {url}: {e}")
         return []
 
 class FreshRSSReader:
@@ -190,7 +211,7 @@ class FreshRSSReader:
             logger.error(f"Error obteniendo posts de {feed_id}: {str(e)}")
             return []
 
-class PlaylistManager:
+class PlaylistManagerRSS:
     def __init__(self, output_dir: str):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -226,24 +247,31 @@ class PlaylistManager:
             for i, url in enumerate(urls):
                 logger.info(f"Extrayendo título de: {url}")
                 try:
-                    # Usar yt-dlp para obtener el título
+                    # Usar yt-dlp para obtener el título con mejor manejo de errores
                     result = subprocess.run(
                         ['yt-dlp', '--get-title', url],
                         capture_output=True,
                         text=True,
-                        check=True,
-                        timeout=30  # Añadir timeout para evitar cuelgues
+                        timeout=30  # Timeout para evitar cuelgues
                     )
-                    title = result.stdout.strip()
-                    if title:
-                        titles.append(title)
-                        logger.info(f"Título encontrado: {title}")
+                    
+                    # Verificar el código de salida manualmente
+                    if result.returncode == 0:
+                        title = result.stdout.strip()
+                        if title:
+                            titles.append(title)
+                            logger.info(f"Título encontrado: {title}")
+                        else:
+                            titles.append(f"Sin título ({i+1})")
+                            logger.warning(f"No se pudo extraer el título para {url} (stdout vacío)")
                     else:
-                        # Si no se encuentra título, agregar "Sin título"
                         titles.append(f"Sin título ({i+1})")
-                        logger.warning(f"No se pudo extraer el título para {url}, usando 'Sin título ({i+1})'")
+                        logger.error(f"Error de yt-dlp para {url}: {result.stderr.strip()}")
+                        
+                except subprocess.TimeoutExpired:
+                    titles.append(f"Sin título ({i+1})")
+                    logger.error(f"Timeout al extraer título de {url}")
                 except Exception as e:
-                    # En caso de error, agregar "Sin título"
                     titles.append(f"Sin título ({i+1})")
                     logger.error(f"Error extrayendo título de {url}: {str(e)}")
 
@@ -277,7 +305,7 @@ class PlaylistManager:
                 logger.info(f"Archivo de títulos de respaldo creado: {txt_path}")
             except Exception as backup_error:
                 logger.error(f"Error al crear archivo de títulos de respaldo: {str(backup_error)}")
-    
+        
     def process_posts(self, posts: List[Dict[str, str]]):
         """Procesa los posts y crea playlists organizadas por feed y mes"""
         # Organizar posts por feed y luego por mes
@@ -350,9 +378,9 @@ def main():
     parser = argparse.ArgumentParser(description='Genera playlists de música desde feeds de blogs en FreshRSS')
     parser.add_argument('--url', required=True, help='URL de FreshRSS')
     parser.add_argument('--username', required=True, help='Nombre de usuario de FreshRSS')
-    parser.add_argument('--auth_token', required=True, help='Token de API de FreshRSS')
-    parser.add_argument('--output_dir', required=True, help='Directorio para guardar las playlists')
-    parser.add_argument('--playlists_locales', help='Directorio con playlists locales existentes para procesar', default='')
+    parser.add_argument('--auth-token', required=True, help='Token de API de FreshRSS')
+    parser.add_argument('--output-dir', required=True, help='Directorio para guardar las playlists')
+    parser.add_argument('--playlists-locales', help='Directorio con playlists locales existentes para procesar', default='')
     
     args = parser.parse_args()
     
@@ -363,7 +391,7 @@ def main():
         
         # Inicializar objetos
         reader = FreshRSSReader(args.url, args.username, args.auth_token)
-        playlist_manager = PlaylistManager(args.output_dir)
+        playlist_manager_rss = PlaylistManagerRSS(args.output_dir)
         
         # Login
         if not reader.login():
@@ -389,12 +417,12 @@ def main():
                 
         # Crear playlists
         print("Creando playlists...")
-        created_playlists = playlist_manager.process_posts(all_posts)
+        created_playlists = playlist_manager_rss.process_posts(all_posts)
         
         # Procesar playlists locales si se proporcionó un directorio
         if args.playlists_locales:
             print(f"Procesando playlists locales en: {args.playlists_locales}")
-            processed_local = playlist_manager.process_local_playlists(args.playlists_locales)
+            processed_local = playlist_manager_rss.process_local_playlists(args.playlists_locales)
             print(f"Playlists locales procesadas: {len(processed_local)}")
         
         # Mostrar resultados

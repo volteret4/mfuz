@@ -64,7 +64,7 @@ class MusicQuiz(BaseModule):
     
     quiz_completed = pyqtSignal()
     
-    def __init__(self, parent=None, theme='Tokyo Night', db_path=None, config=None):
+    def __init__(self, parent=None, theme='Tokyo Night', db_path=None, config=None, **kwargs):
         self.db_path = db_path
         self.conn = None
         self.cursor = None
@@ -131,7 +131,7 @@ class MusicQuiz(BaseModule):
                 uic.loadUi(ui_file_path, self)
                 
                 # Conectar señales y slots
-                self.toggle_button.clicked.connect(self.toggle_quiz)
+                self.action_toggle.clicked.connect(self.toggle_quiz)
                 self.config_button.clicked.connect(self.toggle_config)
                 self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
                 self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
@@ -323,10 +323,10 @@ class MusicQuiz(BaseModule):
         """Alterna entre iniciar y detener el quiz."""
         if not self.game_active:
             self.start_quiz()
-            self.toggle_button.setText("Detener Quiz")  # Actualizar texto del botón
+            self.action_toggle.setText("Detener Quiz")  # Actualizar texto del botón
         else:
             self.stop_quiz()
-            self.toggle_button.setText("Iniciar Quiz")  # Esto ya está en stop_quiz
+            self.action_toggle.setText("Iniciar Quiz")  # Esto ya está en stop_quiz
 
     def start_quiz(self):
         """Inicia el juego de quiz musical."""

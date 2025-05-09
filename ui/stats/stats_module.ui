@@ -1089,42 +1089,42 @@
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="QPushButton" name="sellos_decade_button">
+                 <widget class="QPushButton" name="action_sellos_decade">
                   <property name="text">
                    <string>década</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sellos_porcentajes_button">
+                 <widget class="QPushButton" name="action_sellos_porcentajes">
                   <property name="text">
                    <string>porcentajes</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sellos_artistas_button">
+                 <widget class="QPushButton" name="action_sellos_artistas">
                   <property name="text">
                    <string>artistas</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sellos_albumes_button">
+                 <widget class="QPushButton" name="action_sellos_albumes">
                   <property name="text">
                    <string>albumes</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sellos_por_genero_button">
+                 <widget class="QPushButton" name="action_sellos_por_genero">
                   <property name="text">
                    <string>géneros</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="sellos_info_button">
+                 <widget class="QPushButton" name="action_sellos_info">
                   <property name="text">
                    <string>info</string>
                   </property>
@@ -1366,8 +1366,8 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>784</width>
-                         <height>218</height>
+                         <width>88</width>
+                         <height>88</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_62">
@@ -1459,49 +1459,49 @@
            <widget class="QWidget" name="widget_21" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_26">
              <item>
-              <widget class="QPushButton" name="time_button_artist">
+              <widget class="QPushButton" name="action_artist">
                <property name="text">
                 <string>artistas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_album">
+              <widget class="QPushButton" name="action_album">
                <property name="text">
                 <string>álbums</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_genres">
+              <widget class="QPushButton" name="action_genres">
                <property name="text">
                 <string>géneros</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_labels">
+              <widget class="QPushButton" name="action_labels">
                <property name="text">
                 <string>sellos</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_feeds">
+              <widget class="QPushButton" name="action_feeds">
                <property name="text">
                 <string>feeds</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_listens">
+              <widget class="QPushButton" name="action_listens">
                <property name="text">
                 <string>escuchas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="time_button_info">
+              <widget class="QPushButton" name="action_info">
                <property name="text">
                 <string>info</string>
                </property>
@@ -1625,6 +1625,9 @@
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="currentIndex">
+                   <number>1</number>
+                  </property>
                   <widget class="QWidget" name="verticalLayout_countries_chart">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -1717,56 +1720,56 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="countries_artists_button">
+              <widget class="QPushButton" name="action_countries_artists">
                <property name="text">
                 <string>artistas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_album_button">
+              <widget class="QPushButton" name="action_countries_album">
                <property name="text">
                 <string>album</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_labels_button">
+              <widget class="QPushButton" name="action_countries_labels">
                <property name="text">
                 <string>sellos</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_feeds_button">
+              <widget class="QPushButton" name="action_countries_feeds">
                <property name="text">
                 <string>feeds</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_genre_button">
+              <widget class="QPushButton" name="action_countries_genre">
                <property name="text">
                 <string>genero</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_time_button">
+              <widget class="QPushButton" name="action_countries_time">
                <property name="text">
                 <string>tiempo</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_listens_button">
+              <widget class="QPushButton" name="action_ountries_listens">
                <property name="text">
                 <string>escuchas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="countries_info_button">
+              <widget class="QPushButton" name="action_countries_info">
                <property name="text">
                 <string>info</string>
                </property>
@@ -2111,49 +2114,49 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="QPushButton" name="feeds_button_artists">
+              <widget class="QPushButton" name="action_feeds_artists">
                <property name="text">
                 <string>artistas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_albums">
+              <widget class="QPushButton" name="action_feeds_albums">
                <property name="text">
                 <string>albums</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_genres">
+              <widget class="QPushButton" name="action_feeds_genres">
                <property name="text">
                 <string>generos</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_labels">
+              <widget class="QPushButton" name="action_feeds_labels">
                <property name="text">
                 <string>sellos</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_time">
+              <widget class="QPushButton" name="action_feeds_time">
                <property name="text">
                 <string>tiempo</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_listens">
+              <widget class="QPushButton" name="action_feeds_listens">
                <property name="text">
                 <string>escuchas</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="feeds_button_info">
+              <widget class="QPushButton" name="action_feeds_info">
                <property name="text">
                 <string>info</string>
                </property>
@@ -2268,14 +2271,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="toolButton">
-        <property name="text">
-         <string>...</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="toolButton_2">
+       <widget class="QToolButton" name="tool_2_button">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>38</horstretch>
@@ -2284,8 +2280,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>38</width>
-          <height>38</height>
+          <width>34</width>
+          <height>34</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>34</width>
+          <height>34</height>
          </size>
         </property>
         <property name="text">
@@ -2297,8 +2299,8 @@
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
         </property>
        </widget>

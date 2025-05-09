@@ -64,6 +64,27 @@ class ModuleIntegrator:
                         pass
                     button.clicked.connect(self.handle_spotify_button)
                     print(f"Connected Spotify button via name/tooltip: {button.objectName()}")
+        
+        # Find and connect the muspy_button
+        muspy_button = self.parent.findChild(QPushButton, "muspy_button")
+        if muspy_button:
+            try:
+                muspy_button.clicked.disconnect()
+            except:
+                pass
+            muspy_button.clicked.connect(self.handle_muspy_button)
+            print("Muspy button connected")
+        else:
+            print("WARNING: Muspy button not found")
+            # Try to find by alternative methods
+            for button in self.parent.findChildren(QPushButton):
+                if button.toolTip() == "Muspy" or "muspy" in button.objectName().lower():
+                    try:
+                        button.clicked.disconnect()
+                    except:
+                        pass
+                    button.clicked.connect(self.handle_muspy_button)
+                    print(f"Connected Muspy button via name/tooltip: {button.objectName()}")
     
     def handle_spotify_button(self):
         """
@@ -718,3 +739,133 @@ class ModuleIntegrator:
                 return item_data['artist']
                 
         return None
+
+
+# MUSPY
+
+    def handle_muspy_button(self):
+        """
+        Maneja el clic en muspy_button - envía el artista seleccionado al módulo muspy_releases
+        """
+        print("Muspy button clicked!")
+        QApplication.processEvents()  # Procesar eventos pendientes
+        
+        # Obtener el elemento seleccionado
+        if not hasattr(self.parent, 'results_tree_widget'):
+            print("results_tree_widget not found")
+            return
+            
+        selected_items = self.parent.results_tree_widget.selectedItems()
+        if not selected_items:
+            QMessageBox.information(
+                self.parent, 
+                "Información", 
+                "No hay artista seleccionado para buscar"
+            )
+            return
+            
+        selected_item = selected_items[0]
+        item_data = selected_item.data(0, Qt.ItemDataRole.UserRole)
+        
+        if not item_data:
+            print("No se encontraron datos del elemento para el elemento seleccionado")
+            return
+            
+        item_type = item_data.get('type')
+        
+        # Determinar el nombre del artista según el tipo de elemento
+        artist_name = None
+        if item_type == 'artist':
+            # Corregido: Primero intentar obtener del item_data, luego del texto del ítem
+            artist_name = item_data.get('name')
+            if not artist_name and hasattr(selected_item, 'text'):
+                artist_name = selected_item.text(0)
+        elif item_type == 'album':
+            # Puede ser del álbum o del padre artista
+            if 'artist' in item_data:
+                artist_name = item_data.get('artist')
+            else:
+                parent_item = selected_item.parent()
+                if parent_item:
+                    artist_name = parent_item.text(0)
+        elif item_type == 'song':
+            # Puede venir del elemento canción o de su jerarquía
+            if 'artist' in item_data:
+                artist_name = item_data.get('artist')
+            else:
+                # Buscar en la jerarquía: canción -> álbum -> artista
+                album_item = selected_item.parent()
+                if album_item:
+                    artist_item = album_item.parent()
+                    if artist_item:
+                        artist_name = artist_item.text(0)
+        
+        # Si aún no encontramos el nombre del artista, intentamos otras alternativas
+        if not artist_name:
+            # Intentar obtener del texto del ítem seleccionado
+            try:
+                artist_name = selected_item.text(0)
+            except:
+                pass
+            
+            # Si todavía no tenemos nombre, intentar buscar por otras propiedades del item_data
+            if not artist_name and isinstance(item_data, dict):
+                # Buscar en cualquier campo que pueda contener el nombre del artista
+                for field in ['artist', 'artist_name', 'nombre', 'nombre_artista']:
+                    if field in item_data and item_data[field]:
+                        artist_name = item_data[field]
+                        break
+        
+        if not artist_name:
+            QMessageBox.warning(
+                self.parent, 
+                "Error", 
+                "No se pudo determinar el nombre del artista"
+            )
+            return
+        
+        print(f"Artista seleccionado: {artist_name}")
+        
+        # Buscar el módulo muspy_releases
+        muspy_tab_name = None
+        for tab_name in self.parent.tab_manager.tabs.keys():
+            if "muspy" in tab_name.lower():
+                muspy_tab_name = tab_name
+                break
+        
+        if not muspy_tab_name:
+            QMessageBox.warning(
+                self.parent, 
+                "Error", 
+                "No se encontró el módulo Muspy Releases"
+            )
+            return
+        
+        # Cambiar a la pestaña muspy y establecer el texto del artista
+        if hasattr(self.parent, 'tab_manager') and self.parent.tab_manager:
+            # Cambiar a la pestaña
+            success = self.parent.tab_manager.switch_to_tab(
+                muspy_tab_name,
+                None  # No llamamos a un método del módulo directamente
+            )
+            
+            if success:
+                # Acceder al módulo después de cambiar a la pestaña
+                muspy_module = self.parent.tab_manager.tabs.get(muspy_tab_name)
+                if muspy_module and hasattr(muspy_module, 'artist_input'):
+                    muspy_module.artist_input.setText(artist_name)
+                    # Opcionalmente, disparar la búsqueda
+                    if hasattr(muspy_module, 'search_button') and muspy_module.search_button:
+                        muspy_module.search_button.click()
+                else:
+                    QMessageBox.warning(
+                        self.parent, 
+                        "Error", 
+                        "El módulo Muspy no tiene un campo de entrada de artista"
+                    )
+            else:
+                QMessageBox.warning(
+                    self.parent, 
+                    "Error", 
+                    "No se pudo cambiar al módulo Muspy"
+                )

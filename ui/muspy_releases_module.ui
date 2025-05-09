@@ -680,7 +680,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <string>Artista</string>
           </property>
           <property name="icon">
-           <iconset resource="../images.qrc">
+           <iconset>
             <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
           </property>
          </column>
@@ -1079,6 +1079,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
    </item>
    <item>
     <widget class="QFrame" name="frame">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>40</height>
+      </size>
+     </property>
      <layout class="QHBoxLayout" name="bottom_layout">
       <property name="leftMargin">
        <number>3</number>
@@ -1094,10 +1100,16 @@ li.checked::marker { content: &quot;\2612&quot;; }
       </property>
       <item>
        <widget class="QPushButton" name="load_artists_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1112,18 +1124,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="sync_artists_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1138,18 +1159,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="get_releases_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1164,18 +1194,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="get_releases_spotify_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1190,18 +1229,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="sync_lastfm_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1216,18 +1264,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="get_releases_musicbrainz">
+       <widget class="QPushButton" name="get_releases_musicbrainz_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1238,22 +1295,31 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="icon">
          <iconset resource="../images.qrc">
-          <normaloff>:/services/mb</normaloff>:/services/mb</iconset>
+          <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="networks_artists_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1271,18 +1337,27 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="get_new_releases_button">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>40</width>
-          <height>40</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -1297,9 +1372,12 @@ li.checked::marker { content: &quot;\2612&quot;; }
         </property>
         <property name="iconSize">
          <size>
-          <width>36</width>
-          <height>36</height>
+          <width>30</width>
+          <height>30</height>
          </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

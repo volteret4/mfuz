@@ -142,23 +142,17 @@
         "ui/url_player.ui",
         "ui/fuzzy/music_fuzzy_module.ui",
         "ui/fuzzy/music_fuzzy_advanced_settings.ui",
-        "ui/music_fuzzy_info_panel.ui",
-        "ui/music_fuzzy_results_tree.ui",
-        "ui/music_fuzzy_metadata_panel.ui",
-        "ui/calendar_module.ui",
+
         "ui/conciertos_module.ui",
         "ui/config_editor.ui",
         "ui/database_editor.ui",
-        "ui/lastfm_scrobbler_module.ui",
-        "ui/menu_blogs_module.ui",
+
         "ui/modulo_enlaces.ui",
         "ui/muspy_releases_module.ui",
-        "ui/script_details_dialog.ui",
-        "ui/script_runner.ui",
-        "ui/script_widget.ui",
+
         "ui/radicale_config_dialog.ui",
         "ui/event_dialog.ui",
-        "ui/spotify_auth_dialog.ui",
+
         "ui/muspy_artists_dialog.ui",
         "ui/muspy_releases_table.ui",
         "ui/url_playlist_advanced_settings_dialog.ui",

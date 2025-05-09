@@ -1276,12 +1276,12 @@ class StatsModule(BaseModule):
                     logging.error(f"Widget sellos_tabla_albumes no es válido: {e}")
             
             # Conectar botones con verificación de existencia
-            self.connect_button_safely('sellos_artistas_button', self.on_show_label_genres)
-            self.connect_button_safely('sellos_albumes_button', self.on_show_label_albums)
-            self.connect_button_safely('sellos_info_button', self.on_show_label_info)
-            self.connect_button_safely('sellos_decade_button', self.on_show_label_decades)
-            self.connect_button_safely('sellos_porcentajes_button', self.on_show_label_percentages)
-            self.connect_button_safely('sellos_por_genero_button', self.on_show_sellos_generos)
+            self.connect_button_safely('action_sellos_artistas', self.on_show_label_genres)
+            self.connect_button_safely('action_sellos_albumes', self.on_show_label_albums)
+            self.connect_button_safely('action_sellos_info', self.on_show_label_info)
+            self.connect_button_safely('action_sellos_decade', self.on_show_label_decades)
+            self.connect_button_safely('action_sellos_porcentajes', self.on_show_label_percentages)
+            self.connect_button_safely('action_sellos_por_genero', self.on_show_sellos_generos)
         except Exception as e:
             logging.error(f"Error al configurar conexiones de sellos: {e}")
             import traceback
@@ -3298,13 +3298,13 @@ class StatsModule(BaseModule):
             
             # Connect all country buttons
             button_mappings = {
-                'countries_artists_button': self.on_countries_artists_clicked,
-                'countries_album_button': self.on_countries_album_clicked,
-                'countries_feeds_button': self.on_countries_feeds_clicked,
-                'countries_genre_button': self.on_countries_genre_clicked,
-                'countries_time_button': self.on_countries_time_clicked,
-                'countries_listens_button': self.on_countries_listens_clicked,
-                'countries_info_button': self.on_countries_info_clicked
+                'action_countries_artists': self.on_countries_artists_clicked,
+                'action_countries_album': self.on_countries_album_clicked,
+                'action_countries_feeds': self.on_countries_feeds_clicked,
+                'action_countries_genre': self.on_countries_genre_clicked,
+                'action_countries_time': self.on_countries_time_clicked,
+                'action_countries_listens': self.on_countries_listens_clicked,
+                'action_countries_info': self.on_countries_info_clicked
             }
             
             for button_name, handler in button_mappings.items():

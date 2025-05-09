@@ -113,9 +113,9 @@ class ThemeTester(QMainWindow):
         self.statusBar.showMessage("Listo")
         
         # Botón para recargar temas
-        reload_button = QPushButton("Recargar Temas (F5 / Ctrl+R)")
-        reload_button.clicked.connect(self.reload_themes)
-        main_layout.addWidget(reload_button)
+        action_reload = QPushButton("Recargar Temas (F5 / Ctrl+R)")
+        action_reload.clicked.connect(self.reload_themes)
+        main_layout.addWidget(action_reload)
         
         # Caja de edición de tema actual
         theme_edit_group = QGroupBox("Editar Tema Actual")

@@ -15,7 +15,7 @@ from modules.submodules.url_playlist.playlist_manager import (determine_source_f
                          create_local_playlist, save_playlists, display_local_playlist,
                          _determine_source_from_url
                          )
-from modules.submodules.url_playlist.rss_manager import load_rss_playlist_content
+from modules.submodules.url_playlist.rss_manager import (load_rss_playlist_content, actualizar_playlists_rss)
 # Asegurarse de que PROJECT_ROOT está disponible
 try:
     from base_module import PROJECT_ROOT
@@ -191,25 +191,25 @@ def setup_context_menus(self):
     self.listWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
     #self.listWidget.customContextMenuRequested.connect(self.show_list_context_menu)
 
-def setup_unified_playlist_button(self):
+def setup_action_unified_playlist(self):
     """Create a unified button that shows a hierarchical menu of all playlist types"""
     try:
         # Create the unified button if it doesn't exist
-        if not hasattr(self, 'unified_playlist_button'):
-            self.unified_playlist_button = self.findChild(QPushButton, 'unified_playlist_button')
+        if not hasattr(self, 'action_unified_playlist'):
+            self.action_unified_playlist = self.findChild(QPushButton, 'action_unified_playlist')
             
-        if not self.unified_playlist_button:
-            self.log("Error: No se pudo encontrar el botón 'unified_playlist_button'")
+        if not self.action_unified_playlist:
+            self.log("Error: No se pudo encontrar el botón 'action_unified_playlist'")
             return False
         
         # Create the menu
-        self.playlist_menu = QMenu(self.unified_playlist_button)
+        self.playlist_menu = QMenu(self.action_unified_playlist)
         
         # Set up the menu
         setup_unified_playlist_menu(self)
         
         # Make sure the button is visible
-        self.unified_playlist_button.setVisible(True)
+        self.action_unified_playlist.setVisible(True)
         
         self.log("Unified playlist button set up")
         return True
@@ -224,7 +224,7 @@ def setup_unified_playlist_menu(self):
     try:
         # Create the main menu
         menu = QMenu(self)
-        self.unified_playlist_button.setMenu(menu)
+        self.action_unified_playlist.setMenu(menu)
         
         from modules.submodules.url_playlist.playlist_manager import count_tracks_in_playlist
 
@@ -328,7 +328,12 @@ def setup_unified_playlist_menu(self):
                         # Connect with specific handler function
                         action.triggered.connect(lambda checked=False, data=playlist_copy: 
                                             on_rss_playlist_menu_clicked(self, playlist_copy))
-        
+
+            # Añadir opción para actualizar RSS justo después de crear el menú RSS
+            refresh_action = rss_menu.addAction(QIcon(":/services/feeds"), "Actualizar Feeds RSS")
+            refresh_action.triggered.connect(lambda: actualizar_playlists_rss(self))
+            rss_menu.addSeparator()
+
         # After setting up the regular menu items, add a separator
         menu.addSeparator()
         
@@ -352,26 +357,7 @@ def setup_unified_playlist_menu(self):
         self.log(traceback.format_exc())
         return False
 
-def update_unified_playlist_menu(self):
-    """Update the hierarchical menu with playlists from all sources"""
-    try:
-        if not hasattr(self, 'playlist_menu') or not self.playlist_menu:
-            self.log("Playlist menu not initialized")
-            return False
-            
-        # Clear the current menu
-        self.playlist_menu.clear()
-        
-        # Rebuild menu
-        setup_unified_playlist_menu(self)
-        
-        self.log("Unified playlist menu updated")
-        return True
-    except Exception as e:
-        self.log(f"Error updating unified playlist menu: {str(e)}")
-        import traceback
-        self.log(traceback.format_exc())
-        return False
+
 
 def display_search_results(self, results, group_by_service=True):
     """Shows search results in the TreeWidget with proper nesting by service."""

@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timedelta
 from pathlib import Path
 import requests
+import sqlite3
 
 class ConcertSearchWorker(QThread):
     """Worker para buscar conciertos en segundo plano con controles de progreso"""
@@ -34,6 +35,136 @@ class ConcertSearchWorker(QThread):
         print(f"Worker: Services received: {services}")
         print(f"Worker: Artists received: {artists}")
         print(f"Worker: Country code: {country_code}")
+    
+    def get_artist_image(self, artist_name, service_name=None, service=None):
+        """
+        Obtener imagen del artista según la jerarquía especificada:
+        1. base de datos, tabla artists, columna img
+        2. spotify api, y la guardaría en dicha columna
+        3. base de datos, tabla albums, columna 'album_art_path'
+        4. spotify api, obteniendo la caratula del album
+        
+        Args:
+            artist_name (str): Nombre del artista
+            service_name (str, optional): Nombre del servicio que se está utilizando
+            service (object, optional): Objeto del servicio para consultas directas
+            
+        Returns:
+            str: URL o ruta de la imagen
+        """
+        try:
+            # Conectar a la base de datos
+            db_conn = sqlite3.connect(self.db_path)
+            cursor = db_conn.cursor()
+            
+            # Verificar si la columna img existe en la tabla artists
+            cursor.execute("PRAGMA table_info(artists)")
+            columns = cursor.fetchall()
+            has_img_column = any(col[1] == 'img' for col in columns)
+            
+            # Si no existe, crearla
+            if not has_img_column:
+                self.log_message.emit("Creando columna 'img' en tabla 'artists'...")
+                cursor.execute("ALTER TABLE artists ADD COLUMN img TEXT")
+                db_conn.commit()
+            
+            # Paso 1: Buscar en la BD (tabla artists, columna img)
+            cursor.execute("SELECT img FROM artists WHERE name = ?", (artist_name,))
+            result = cursor.fetchone()
+            
+            if result and result[0]:
+                self.log_message.emit(f"Imagen para {artist_name} encontrada en base de datos")
+                db_conn.close()
+                return result[0]
+            
+            # Paso 2: Buscar en Spotify API y actualizar BD
+            spotify_service = None
+            for srv_name, srv_obj in self.services:
+                if srv_name == "spotify":
+                    spotify_service = srv_obj
+                    break
+            
+            if spotify_service:
+                self.log_message.emit(f"Buscando imagen de {artist_name} en Spotify...")
+                artist_data = spotify_service.search_artist(artist_name)
+                
+                if artist_data and 'images' in artist_data and artist_data['images']:
+                    # Obtener la primera imagen de tamaño mediano o la primera disponible
+                    img_url = None
+                    for img in artist_data['images']:
+                        if img.get('width', 0) > 200 and img.get('width', 0) < 500:
+                            img_url = img.get('url')
+                            break
+                    
+                    # Si no hay imagen de tamaño mediano, usar la primera
+                    if not img_url and artist_data['images']:
+                        img_url = artist_data['images'][0].get('url')
+                    
+                    if img_url:
+                        # Actualizar BD
+                        cursor.execute("UPDATE artists SET img = ? WHERE name = ?", (img_url, artist_name))
+                        db_conn.commit()
+                        self.log_message.emit(f"Imagen de {artist_name} actualizada en BD desde Spotify")
+                        db_conn.close()
+                        return img_url
+            
+            # Paso 3: Buscar en tabla albums
+            cursor.execute("""
+                SELECT album_art_path FROM albums 
+                WHERE artist_id IN (SELECT id FROM artists WHERE name = ?)
+                AND album_art_path IS NOT NULL
+                LIMIT 1
+            """, (artist_name,))
+            result = cursor.fetchone()
+            
+            if result and result[0]:
+                self.log_message.emit(f"Imagen para {artist_name} encontrada en álbumes")
+                db_conn.close()
+                return result[0]
+            
+            # Paso 4: Obtener carátula de álbum desde Spotify
+            if spotify_service:
+                self.log_message.emit(f"Buscando carátula de álbum para {artist_name} en Spotify...")
+                
+                # Obtener ID del artista en Spotify si está disponible
+                artist_data = spotify_service.search_artist(artist_name)
+                if artist_data and 'id' in artist_data:
+                    spotify_id = artist_data['id']
+                    
+                    # Intentar acceder a los álbumes (Esto puede requerir ajustes en la clase SpotifyService)
+                    # Esta parte depende de la implementación del método get_artist_albums en SpotifyService
+                    try:
+                        # Si el método existe y está disponible
+                        albums = spotify_service.get_artist_albums(spotify_id, limit=1)
+                        if albums and 'items' in albums and albums['items']:
+                            album = albums['items'][0]
+                            if 'images' in album and album['images']:
+                                img_url = album['images'][0].get('url')
+                                if img_url:
+                                    # Actualizar BD si es posible
+                                    cursor.execute("""
+                                        UPDATE albums SET album_art_path = ?
+                                        WHERE id IN (
+                                            SELECT MIN(id) FROM albums
+                                            WHERE artist_id IN (SELECT id FROM artists WHERE name = ?)
+                                        )
+                                    """, (img_url, artist_name))
+                                    db_conn.commit()
+                                    db_conn.close()
+                                    return img_url
+                    except AttributeError:
+                        self.log_message.emit("Método get_artist_albums no disponible en SpotifyService")
+                    except Exception as e:
+                        self.log_message.emit(f"Error obteniendo álbumes: {str(e)}")
+            
+            db_conn.close()
+            
+            # Si llegamos aquí, no se encontró imagen
+            return ""
+            
+        except Exception as e:
+            self.log_message.emit(f"Error buscando imagen para {artist_name}: {str(e)}")
+            return ""
     
     def run(self):
         """Realizar búsqueda en segundo plano"""
@@ -107,6 +238,9 @@ class ConcertSearchWorker(QThread):
                     # Emitir mensaje de log
                     self.log_message.emit(message)
                     
+                    # Buscar imagen del artista si no hay imagen definida en los resultados
+                    artist_image = ""
+                    
                     # Añadir la fuente si no está presente y asegurar campos necesarios
                     for concert in results:
                         if 'source' not in concert:
@@ -127,6 +261,14 @@ class ConcertSearchWorker(QThread):
                             concert['url'] = ''
                         if 'id' not in concert:
                             concert['id'] = ''
+                            
+                        # Verificar si el concierto ya tiene imagen, si no, buscarla
+                        if ('image' not in concert or not concert.get('image')) and not artist_image:
+                            artist_image = self.get_artist_image(artist, service_name, service)
+                            
+                        # Asignar imagen si se encontró y el concierto no tiene
+                        if ('image' not in concert or not concert.get('image')) and artist_image:
+                            concert['image'] = artist_image
                     
                     # Acumular resultados para este artista
                     artist_concerts.extend(results)

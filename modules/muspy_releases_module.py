@@ -721,8 +721,8 @@ class MuspyArtistModule(BaseModule):
         next_shortcut.activated.connect(self.go_to_next_page)  # Cambiado de next_page a go_to_next_page
 
         # Connect MusicBrainz button if found
-        if hasattr(self, 'get_releases_musicbrainz'):
-            self.get_releases_musicbrainz.clicked.connect(self.show_musicbrainz_collection_menu)
+        if hasattr(self, 'get_releases_musicbrainz_button'):
+            self.get_releases_musicbrainz_button.clicked.connect(self.show_musicbrainz_collection_menu)
 
         # Connect Spotify button if enabled
         if hasattr(self, 'get_releases_spotify_button'):
@@ -1217,8 +1217,8 @@ class MuspyArtistModule(BaseModule):
             menu.addAction(clear_cache_action)
         
         # Show the menu at the button position
-        if hasattr(self, 'get_releases_musicbrainz'):
-            pos = self.get_releases_musicbrainz.mapToGlobal(QPoint(0, self.get_releases_musicbrainz.height()))
+        if hasattr(self, 'get_releases_musicbrainz_button'):
+            pos = self.get_releases_musicbrainz_button.mapToGlobal(QPoint(0, self.get_releases_musicbrainz_button.height()))
             menu.exec(pos)
 
 
@@ -2828,8 +2828,13 @@ class MuspyArtistModule(BaseModule):
                     return
 
         # Función de operación con progreso
-        def fetch_releases(update_progress):
-            update_progress(0, 1, "Conectando con Muspy API...", indeterminate=True)
+        def fetch_releases(update_progress, status_callback=None, *args):
+            # Usar el parámetro de actualización de estado
+            if status_callback:
+                status_callback("Conectando con Muspy API...")
+            
+            # O usar un simple valor de progreso
+            update_progress(10)  # 10% de progreso
             
             try:
                 # Use proper endpoint with the user ID
@@ -2840,7 +2845,9 @@ class MuspyArtistModule(BaseModule):
                 
                 if response.status_code == 200:
                     # Procesando datos
-                    update_progress(1, 2, "Procesando resultados...", indeterminate=True)
+                    if status_callback:
+                        status_callback("Procesando resultados...")
+                    update_progress(50)  # 50% de progreso
                     
                     all_releases = response.json()
                     
@@ -2856,7 +2863,9 @@ class MuspyArtistModule(BaseModule):
                     self.cache_manager.cache_manager(cache_key, cache_data, expiry_hours=12)
                     
                     # Actualizar progreso y terminar
-                    update_progress(2, 2, "Generando visualización...")
+                    if status_callback:
+                        status_callback("Generando visualización...")
+                    update_progress(100)  # 100% de progreso
                     
                     return {
                         "success": True,
@@ -2899,7 +2908,6 @@ class MuspyArtistModule(BaseModule):
             else:
                 error_msg = result.get("error", "Unknown error")
                 QMessageBox.warning(self, "Error", error_msg)
-   
 
 
 

@@ -128,7 +128,7 @@ def play_single_url(self, url):
         
         if success:
             self.is_playing = True
-            self.playButton.setIcon(QIcon(":/services/b_pause"))
+            self.play_button.setIcon(QIcon(":/services/b_pause"))
             self.log("Reproducción iniciada correctamente")
         else:
             self.log("Error al iniciar MPV: timeout")
@@ -160,7 +160,7 @@ def stop_playback(self):
             self.player_process.kill()
         
         self.is_playing = False
-        self.playButton.setIcon(QIcon(":/services/b_play"))
+        self.play_button.setIcon(QIcon(":/services/b_play"))
         self.log("Reproducción detenida")
 
 def send_mpv_command(self, command):
@@ -191,10 +191,10 @@ def toggle_play_pause(parent_instance):
     """Alterna entre reproducir y pausar."""
     if not parent_instance.is_playing:
         play_media(parent_instance)
-        parent_instance.playButton.setIcon(QIcon(":/services/b_pause"))
+        parent_instance.play_button.setIcon(QIcon(":/services/b_pause"))
     else:
         parent_instance.pause_media()
-        parent_instance.playButton.setIcon(QIcon(":/services/b_play"))
+        parent_instance.play_button.setIcon(QIcon(":/services/b_play"))
 
 def pause_media(parent_instance):
     """Pausa la reproducción actual."""
@@ -203,7 +203,7 @@ def pause_media(parent_instance):
         
         if success:
             parent_instance.is_playing = False
-            parent_instance.playButton.setIcon(QIcon(":/services/b_play"))
+            parent_instance.play_button.setIcon(QIcon(":/services/b_play"))
             parent_instance.log("Reproducción pausada")
         else:
             parent_instance.log("Error al pausar la reproducción")
@@ -316,7 +316,7 @@ def play_media(parent_instance):
         if parent_instance.player_process and parent_instance.player_process.state() == QProcess.ProcessState.Running:
             send_mpv_command(self, {"command": ["cycle", "pause"]})
             parent_instance.is_playing = True
-            parent_instance.playButton.setIcon(QIcon(":/services/b_pause"))
+            parent_instance.play_button.setIcon(QIcon(":/services/b_pause"))
             return
         
         # Si tenemos un índice actual válido, reproducir desde él

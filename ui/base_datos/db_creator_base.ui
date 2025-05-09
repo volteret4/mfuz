@@ -35,7 +35,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="A_db_path">
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -114,7 +114,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="music_browse">
+              <widget class="QPushButton" name="music_browse_button">
                <property name="text">
                 <string/>
                </property>
@@ -177,7 +177,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_4">
+              <widget class="QPushButton" name="db_path_button">
                <property name="text">
                 <string/>
                </property>
@@ -401,7 +401,7 @@
           <item>
            <widget class="QTabWidget" name="tabWidget">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="escuchas_tab">
              <property name="sizePolicy">
@@ -496,6 +496,12 @@
                  </item>
                  <item>
                   <widget class="QPushButton" name="output_json_button">
+                   <property name="maximumSize">
+                    <size>
+                     <width>32</width>
+                     <height>32</height>
+                    </size>
+                   </property>
                    <property name="text">
                     <string/>
                    </property>
@@ -505,8 +511,8 @@
                    </property>
                    <property name="iconSize">
                     <size>
-                     <width>28</width>
-                     <height>28</height>
+                     <width>30</width>
+                     <height>30</height>
                     </size>
                    </property>
                    <property name="flat">
@@ -879,7 +885,7 @@
            <x>0</x>
            <y>0</y>
            <width>894</width>
-           <height>265</height>
+           <height>269</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -924,7 +930,13 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="anterior_boton">
+          <widget class="QPushButton" name="anterior_button">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -937,6 +949,9 @@
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -954,7 +969,13 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="siguiente_boton">
+          <widget class="QPushButton" name="siguiente_button">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -967,6 +988,9 @@
              <width>30</width>
              <height>30</height>
             </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

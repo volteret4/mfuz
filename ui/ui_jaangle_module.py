@@ -50,17 +50,17 @@ class Ui_MusicQuiz(object):
 "}\n"
 "\n"
 "/* Botones de acci\u00f3n (Iniciar/Detener) */\n"
-"#toggle_button {\n"
+"#action_toggle {\n"
 "    background-color: #4CAF50;\n"
 "    padding: 8px 16px;\n"
 "    font-size: 11pt;\n"
 "}\n"
 "\n"
-"#toggle_button:hover {\n"
+"#action_toggle:hover {\n"
 "    background-color: #66BB6A;\n"
 "}\n"
 "\n"
-"#toggle_button:pressed {\n"
+"#action_toggle:pressed {\n"
 "    background-color: #43A047;\n"
 "}\n"
 "\n"
@@ -330,10 +330,10 @@ class Ui_MusicQuiz(object):
 
         self.timer_layout.addWidget(self.progress_bar)
 
-        self.toggle_button = QPushButton(self.scroll_content)
-        self.toggle_button.setObjectName(u"toggle_button")
+        self.action_toggle = QPushButton(self.scroll_content)
+        self.action_toggle.setObjectName(u"action_toggle")
 
-        self.timer_layout.addWidget(self.toggle_button)
+        self.timer_layout.addWidget(self.action_toggle)
 
         self.config_button = QPushButton(self.scroll_content)
         self.config_button.setObjectName(u"config_button")
@@ -426,7 +426,7 @@ class Ui_MusicQuiz(object):
         self.clear_session_btn.setText(QCoreApplication.translate("MusicQuiz", u"Limpiar Filtros Sesi\u00f3n", None))
         self.filter_sellos_btn.setText(QCoreApplication.translate("MusicQuiz", u"Filtrar Sellos", None))
         self.countdown_label.setText(QCoreApplication.translate("MusicQuiz", u"30", None))
-        self.toggle_button.setText(QCoreApplication.translate("MusicQuiz", u"Iniciar Quiz", None))
+        self.action_toggle.setText(QCoreApplication.translate("MusicQuiz", u"Iniciar Quiz", None))
         self.config_button.setText(QCoreApplication.translate("MusicQuiz", u"\u2699\ufe0f", None))
         self.score_label.setText(QCoreApplication.translate("MusicQuiz", u"Aciertos: 0", None))
         self.total_label.setText(QCoreApplication.translate("MusicQuiz", u"Total: 0", None))

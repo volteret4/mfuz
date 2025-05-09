@@ -1821,8 +1821,8 @@ class SearchHandler:
             if not hasattr(self.parent, 'origin_button_group'):
                 from PyQt6.QtWidgets import QButtonGroup
                 self.parent.origin_button_group = QButtonGroup(self.parent)
-                self.parent.origin_button_group.addButton(only_local)
-                self.parent.origin_button_group.addButton(show_all)
+                self.parent.origin_button_group.add_button(only_local)
+                self.parent.origin_button_group.add_button(show_all)
             
             # Conectar señales de cambio
             try:

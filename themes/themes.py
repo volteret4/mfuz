@@ -7,7 +7,7 @@ THEMES = {
     "Tokyo Night": {
         'bg': '#1a1b26',              # Color de fondo principal
         'fg': '#a9b1d6',              # Color de texto principal
-        'accent': '#7aa2f7',          # Color de acento para elementos destacados
+        'accent': '#3d59a1',          # Color de acento para elementos destacados
         'secondary_bg': '#24283b',    # Color de fondo secundario
         'border': '#414868',          # Color de bordes
         'selection': '#364A82',       # Color para elementos seleccionados
@@ -201,10 +201,8 @@ def get_stylesheet(theme_name):
         background-color: {theme['secondary_bg']};
         color: {theme['fg']};
         border: 1px solid {theme['border']};
-        border-radius: 19px;
+        border-radius: 4;
         padding: 2px 2px;
-        min-height: 38px;
-        min-width: 38px;
     }}
     
     QPushButton:hover {{
@@ -313,15 +311,15 @@ def get_stylesheet(theme_name):
     /* Deslizadores y barras de progreso */
     QScrollBar:vertical {{
         background-color: {theme['bg']};
-        width: 12px;
+        width: 8px;
         margin: 0px;
-        border-radius: 6px;
+        border-radius: 4px;
     }}
     
     QScrollBar::handle:vertical {{
         background-color: {theme['border']};
         min-height: 20px;
-        border-radius: 6px;
+        border-radius: 4px;
     }}
     
     QScrollBar::handle:vertical:hover {{
@@ -334,15 +332,15 @@ def get_stylesheet(theme_name):
     
     QScrollBar:horizontal {{
         background-color: {theme['bg']};
-        height: 12px;
+        height: 8px;
         margin: 0px;
-        border-radius: 6px;
+        border-radius: 4px;
     }}
     
     QScrollBar::handle:horizontal {{
         background-color: {theme['border']};
         min-width: 20px;
-        border-radius: 6px;
+        border-radius: 4px;
     }}
     
     QScrollBar::handle:horizontal:hover {{
@@ -619,6 +617,13 @@ def get_stylesheet(theme_name):
     QLabel[objectName="success_label"] {{
         color: {theme['success']};
     }}
+
+    QLabel a {{
+        color: {theme['accent']};
+    }}
+    QLabel a:hover{{
+        color: {theme['button_hover']};
+    }}
     """
     
     # Estilos específicos para el módulo music_fuzzy_module
@@ -641,17 +646,27 @@ def get_stylesheet(theme_name):
     }}
     
     /* Botones circulares con iconos */
-    #play_button, #folder_button, #spotify_button, #scrobble_button, #jaangle_button, #extra_button {{
-        background-color: {theme['secondary_bg']};
+    QPushButton[objectName*="_button"] {{
+        background-color: {theme['bg']};
         border: none;
-        border-radius: 19px;
-        min-width: 38px;
-        min-height: 38px;
-        max-width: 38px;
-        max-height: 38px;
+        border-radius: 17px;
+        min-width: 34px;
+        min-height: 34px;
+        max-width: 34px;
+        max-height: 34px;
         padding: 0;
     }}
     
+    QPushButton[objectName*="_button"] {{ {{
+        background-color: {theme['button_hover']};
+        border: 1px solid {theme['accent']};
+    }}
+    
+    QPushButton[objectName*="_button"]:pressed {{
+        background-color: {theme['selection']};
+        padding: 1px 0 0 1px;
+    }}
+
 
     /* Card styles for information panels */
     #music_fuzzy_module .info-card {{
@@ -686,11 +701,7 @@ def get_stylesheet(theme_name):
     }}
 
 
-    #play_button:hover, #folder_button:hover, #spotify_button:hover, #scrobble_button:hover, 
-    #jaangle_button:hover, #extra_button:hover {{
-        background-color: {theme['button_hover']};
-        border: 1px solid {theme['accent']};
-    }}
+
     
 
     /* Link buttons styling */
