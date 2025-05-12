@@ -42,9 +42,17 @@ class InfoLoadWorker(QRunnable):
         self.signals = self.Signals()
     
     def log(self, message):
-        """Log method to emit error messages."""
-        print(f"[InfoLoadWorker] {message}")
-        self.signals.error.emit(message)
+        """Método seguro para registrar mensajes en el TextEdit y en la consola."""
+        # Siempre imprimir en la consola
+        print(f"[UrlPlayer] {message}")
+        
+        # Intentar añadir al TextEdit si está disponible
+        if hasattr(self, 'textEdit') and self.textEdit:
+            try:
+                # Simplemente usar append que maneja el cursor internamente
+                self.textEdit.append(str(message))
+            except Exception as e:
+                print(f"[UrlPlayer] Error escribiendo en textEdit: {e}")
     
     @pyqtSlot()
     def run(self):
@@ -158,122 +166,185 @@ class SearchSignals(QObject):
     error = pyqtSignal(str)
     finished = pyqtSignal(dict, dict)  # Changed to accept two dictionaries
 
-class SearchWorker(QRunnable):
+class SearchWorker(QObject):
     """Worker thread for performing searches in different services."""
     
-    def __init__(self, services, query, max_results=10):
+    # Señales
+    finished = pyqtSignal()
+    db_results_ready = pyqtSignal(list)
+    external_results_ready = pyqtSignal(dict)
+    error = pyqtSignal(str)
+
+    def __init__(self, parent, query, only_local):
         super().__init__()
-        self.services = services if isinstance(services, list) else [services]
+        self.parent = parent
         self.query = query
-        self.max_results = max_results
-        self.signals = SearchSignals()
+        self.only_local = only_local
+        self._stop_requested = False
         
     def log(self, message):
-        """Send a log message through the error signal."""
-        print(f"[SearchWorker] {message}")
-        self.signals.error.emit(message)
+        """Método seguro para registrar mensajes en el TextEdit y en la consola."""
+        # Siempre imprimir en la consola
+        print(f"[UrlPlayer] {message}")
+        
+        # Intentar añadir al TextEdit si está disponible
+        if hasattr(self, 'textEdit') and self.textEdit:
+            try:
+                # Simplemente usar append que maneja el cursor internamente
+                self.textEdit.append(str(message))
+            except Exception as e:
+                print(f"[UrlPlayer] Error escribiendo en textEdit: {e}")
     
-    @pyqtSlot()
+
+    def stop(self):
+        """Indicar que se debe detener la búsqueda"""
+        self._stop_requested = True
+    
     def run(self):
-        """Execute the search in the background."""
+        """Método principal que se ejecuta en el hilo"""
         try:
+            # Primero buscar en la base de datos para resultados rápidos
+            from modules.submodules.url_playlist.db_manager import search_database_links
+            db_links = search_database_links(self.parent, self.parent.db_path, self.query, "all")
+            
+            if self._stop_requested:
+                self.finished.emit()
+                return
+            
+            if db_links:
+                try:
+                    # Procesar resultados para la base de datos
+                    results = self._process_database_results(db_links)
+                    
+                    # Emitir señal con resultados
+                    self.db_results_ready.emit(results)
+                    
+                except Exception as proc_error:
+                    self.error.emit(f"Error al procesar resultados de BD: {str(proc_error)}")
+            
+            # Si se solicita detener, no continuar con búsqueda externa
+            if self._stop_requested or self.only_local:
+                self.finished.emit()
+                return
+            
+            # Si llegamos aquí, realizar búsqueda externa
+            try:
+                self._perform_external_search()
+            except Exception as search_error:
+                self.error.emit(f"Error en búsqueda externa: {str(search_error)}")
+                
+        except Exception as e:
+            self.error.emit(f"Error general en búsqueda: {str(e)}")
+        finally:
+            self.finished.emit()
+
+    def _process_database_results(self, db_links):
+        """Procesa los resultados de la base de datos"""
+        try:
+            from modules.submodules.url_playlist.db_manager import _process_database_results
+            return _process_database_results(self.parent, db_links)
+        except Exception as e:
+            self.error.emit(f"Error procesando resultados: {str(e)}")
+            return []
+    
+    def _perform_external_search(self):
+        """Realiza búsquedas en servicios externos"""
+        try:
+            from modules.submodules.url_playlist.db_manager import perform_search_with_service_filter
+            
+            # La función original no está diseñada para hilos QThread
+            # Por ahora, usaremos un enfoque seguro:
+            if hasattr(self.parent, 'included_services'):
+                active_services = [s for s, enabled in self.parent.included_services.items() if enabled]
+                
+                # Aquí deberías implementar la búsqueda servicio por servicio de manera segura
+                # Este código es simplificado y habría que adaptarlo según tus necesidades
+                for service in active_services:
+                    if self._stop_requested:
+                        break
+                    
+                    # Lógica de búsqueda específica para cada servicio
+                    # Este es solo un ejemplo y necesitaría adaptarse
+                    if service == 'soundcloud':
+                        self._search_soundcloud()
+                    elif service == 'youtube':
+                        self._search_youtube()
+                    # etc. para otros servicios
+            
+        except Exception as e:
+            self.error.emit(f"Error en búsqueda externa: {str(e)}")
+    # Implementación segura para SoundCloud
+    def _search_soundcloud(self):
+        """Búsqueda segura en SoundCloud"""
+        try:
+            import requests
+            from bs4 import BeautifulSoup
+            import time
+            
+            # Implementar con mecanismos de timeout y recuperación
+            search_url = f"https://soundcloud.com/search?q={self.query}"
+            
+            # Usar session para mejor manejo
+            session = requests.Session()
+            session.headers.update({
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            })
+            
+            # Usar timeout para evitar bloqueos
+            response = session.get(search_url, timeout=10)
+            
+            if response.status_code != 200:
+                self.error.emit(f"Error en búsqueda SoundCloud: Código {response.status_code}")
+                return
+                
+            # Procesar el HTML de forma segura
+            soup = BeautifulSoup(response.text, 'html.parser')
+            
+            # Resultado mínimo para evitar objetos pesados en memoria
             results = []
             
-            # Get the search type from the parent widget
-            search_type = getattr(self, 'search_type', 'all')
-            self.log(f"Searching with type: {search_type}")
+            # Procesamiento limitado
+            items = soup.select('li.searchItem')[:10]  # Limitar a 10 resultados para evitar sobrecarga
             
-            # Get the database links if available
-            db_links = getattr(self, 'db_links', {})
+            for item in items:
+                if self._stop_requested:
+                    break
+                    
+                # Extraer información básica con manejo de excepciones para cada campo
+                try:
+                    title = item.select_one('.soundTitle__title span') 
+                    title = title.get_text().strip() if title else "Unknown Track"
+                    
+                    artist = item.select_one('.soundTitle__username')
+                    artist = artist.get_text().strip() if artist else "Unknown Artist"
+                    
+                    url = item.select_one('a.soundTitle__title')
+                    url = url.get('href') if url else None
+                    
+                    if url and not url.startswith('http'):
+                        url = f"https://soundcloud.com{url}"
+                    
+                    if url:
+                        results.append({
+                            'title': title,
+                            'artist': artist,
+                            'url': url,
+                            'source': 'soundcloud',
+                            'type': 'track'
+                        })
+                except Exception as item_error:
+                    # Manejar errores por item sin romper el ciclo completo
+                    continue
             
-            # Track which services we've already found in the database
-            db_services_found = set()
-            db_results = []
-            
-            # Check if we already have service-specific links in the database
-            if db_links:
-                # Process each entity type for links
-                for entity_type in ['artists', 'albums', 'tracks']:
-                    for item_key, item_data in db_links.get(entity_type, {}).items():
-                        # Get all links from this item
-                        links = item_data.get('links', {})
-                        
-                        for service, url in links.items():
-                            service_lower = service.lower()
-                            if service_lower in self.services and url:
-                                # Add to services found
-                                db_services_found.add(service_lower)
-                                
-                                # Create a result item for this database link
-                                result_item = {
-                                    "source": service_lower,
-                                    "title": item_data.get('title', ''),
-                                    "artist": item_data.get('artist', ''),
-                                    "url": url,
-                                    "type": item_data.get('type', entity_type[:-1]),  # Remove 's' from entity_type
-                                    "from_database": True
-                                }
-                                
-                                # Add additional data
-                                if entity_type == 'albums' and 'year' in item_data:
-                                    result_item['year'] = item_data['year']
-                                elif entity_type == 'tracks':
-                                    if 'album' in item_data:
-                                        result_item['album'] = item_data['album']
-                                    if 'track_number' in item_data:
-                                        result_item['track_number'] = item_data['track_number']
-                                    if 'duration' in item_data:
-                                        result_item['duration'] = item_data['duration']
-                                
-                                db_results.append(result_item)
-                
-                # Add all db results to the final results list
-                if db_results:
-                    self.log(f"Found {len(db_results)} results in database")
-                    results.extend(db_results)
-            
-            # Log database findings
-            self.log(f"Already have links in database for: {db_services_found}")
-            
-            # Filter services that don't have links in the database
-            services_to_search = [s for s in self.services if s not in db_services_found]
-            # Log database findings
-            self.log(f"Already have links in database for: {db_services_found}")
-            
-            # Filter services that don't have links in the database
-            services_to_search = [s for s in self.services if s not in db_services_found]
-            self.log(f"Will search additional services: {services_to_search}")
-            
-            # Continue with service searches for those not found in database
-            for service in services_to_search:
-                service_results = []
-                
-                if service == "youtube":
-                    service_results = self.search_youtube(self.query)
-                elif service == "soundcloud":
-                    service_results = self.search_soundcloud(self.query)
-                elif service == "bandcamp":
-                    service_results = self.search_bandcamp(self.query, search_type)
-                elif service == "spotify":
-                    service_results = self.search_spotify(self.query, search_type)
-                elif service == "lastfm":
-                    service_results = self.search_lastfm(self.query, search_type)
-                
-                # Apply pagination per service
-                if service_results:
-                    results.extend(service_results[:self.max_results])
-                    self.log(f"Found {len(service_results[:self.max_results])} results in {service}")
-            
-            # Emit results
-            self.signals.results.emit(results)
-            self.signals.finished.emit({}, {})
+            # Emitir resultados de forma segura
+            if results:
+                self.external_results_ready.emit({'soundcloud': results})
         
         except Exception as e:
-            error_msg = f"Error in search: {str(e)}"
-            self.log(error_msg)
-            self.signals.error.emit(error_msg)
-            # Emit finished with error information
-            self.signals.finished.emit({"error": str(e)}, {})
+            # Capturar cualquier error y reportarlo sin romper el hilo
+            self.error.emit(f"Error en búsqueda SoundCloud: {str(e)}")
+
+
 
     def search_finished(self, result=None, basic_data=None):
         """Función llamada cuando termina la búsqueda."""
@@ -293,7 +364,7 @@ class SearchWorker(QRunnable):
                     
                     # Resto del código...
                 else:
-                    print("Búsqueda completada. (No se pudo acceder al método log)")
+                    self.log("Búsqueda completada. (No se pudo acceder al método log)")
             else:
                 # Comportamiento normal si self es la instancia correcta
                 self.log(f"Búsqueda completada.")
@@ -320,9 +391,9 @@ class SearchWorker(QRunnable):
                 QApplication.processEvents()  # Actualiza la UI
                 
         except Exception as e:
-            print(f"Error en search_finished: {str(e)}")
+            self.log(f"Error en search_finished: {str(e)}")
             import traceback
-            print(traceback.format_exc())
+            self.log(traceback.format_exc())
 
 
 

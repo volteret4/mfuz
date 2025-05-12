@@ -52,7 +52,7 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
 
 
 
-        print("Setting up Spotify client...")
+        self.log("Setting up Spotify client...")
         
         # Ensure cache directory exists - usa la ruta que prefieras
         if not cache_path:
@@ -60,7 +60,7 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
             os.makedirs(cache_dir, exist_ok=True)
             cache_path = Path(cache_dir, "spotify_token.txt")
             
-        print(f"Using token cache path: {cache_path}")
+        self.log(f"Using token cache path: {cache_path}")
         
         # Define scope for Spotify permissions
         scope = "playlist-modify-public playlist-modify-private playlist-read-private playlist-read-collaborative"
@@ -90,13 +90,13 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
                 token_info = get_token_or_authenticate(self)
             
             # Create Spotify client with the token
-            print("Creating Spotify client with token")
+            self.log("Creating Spotify client with token")
             self.sp = spotipy.Spotify(auth=token_info['access_token'])
             
-            print("Getting current user info")
+            self.log("Getting current user info")
             user_info = self.sp.current_user()
             self.spotify_user_id = user_info['id']
-            print(f"Authenticated as user: {self.spotify_user_id}")
+            self.log(f"Authenticated as user: {self.spotify_user_id}")
 
             # Resultado exitoso, ahora activamos las señales
             if hasattr(self, 'playlist_spotify_comboBox'):
@@ -107,9 +107,9 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
             return True
             
         except Exception as e:
-            print(f"Spotify setup error: {str(e)}")
+            self.log(f"Spotify setup error: {str(e)}")
             import traceback
-            traceback.print_exc()
+            traceback.self.log_exc()
             self.log(f"Error de autenticación con Spotify: {str(e)}")
             return False
             
@@ -129,30 +129,30 @@ def get_token_or_authenticate(self):
         try:
             cached_token = self.sp_oauth.get_cached_token()
             if cached_token and not self.sp_oauth.is_token_expired(cached_token):
-                print("Using valid cached token")
+                self.log("Using valid cached token")
                 return cached_token
             elif cached_token:
-                print("Cached token is expired, trying to refresh")
+                self.log("Cached token is expired, trying to refresh")
                 try:
                     new_token = self.sp_oauth.refresh_access_token(cached_token['refresh_token'])
-                    print("Token refreshed successfully")
+                    self.log("Token refreshed successfully")
                     return new_token
                 except Exception as e:
-                    print(f"Token refresh failed: {str(e)}")
+                    self.log(f"Token refresh failed: {str(e)}")
                     # If refresh fails, we'll continue to new authentication
             else:
-                print("No valid cached token found")
+                self.log("No valid cached token found")
         except Exception as e:
-            print(f"Error checking cached token: {str(e)}")
+            self.log(f"Error checking cached token: {str(e)}")
             # Continue to new authentication
         
         # If we get here, we need to authenticate from scratch
-        print("Starting new authentication flow")
+        self.log("Starting new authentication flow")
         return perform_new_authentication(self)
     except Exception as e:
-        print(f"Error in get_token_or_authenticate: {str(e)}")
+        self.log(f"Error in get_token_or_authenticate: {str(e)}")
         import traceback
-        traceback.print_exc()
+        traceback.self.log_exc()
         raise
 
 def perform_new_authentication(self):
@@ -197,7 +197,7 @@ def perform_new_authentication(self):
         if '%3A' in redirect_url or '%2F' in redirect_url:
             redirect_url = unquote(redirect_url)
         
-        print(f"Processing redirect URL: {redirect_url[:30]}...")
+        self.log(f"Processing redirect URL: {redirect_url[:30]}...")
         
         # Extract the code from the URL
         code = None
@@ -211,7 +211,7 @@ def perform_new_authentication(self):
         if not code or code == redirect_url:
             raise Exception("No se pudo extraer el código de autorización")
         
-        print(f"Extracted code: {code[:5]}...")
+        self.log(f"Extracted code: {code[:5]}...")
         
         # Get token with the code
         token_info = self.sp_oauth.get_access_token(code)
@@ -219,13 +219,13 @@ def perform_new_authentication(self):
         if not token_info or 'access_token' not in token_info:
             raise Exception("No se pudo obtener el token de acceso")
         
-        print("Authentication successful")
+        self.log("Authentication successful")
         return token_info
         
     except Exception as e:
-        print(f"Error processing authentication: {str(e)}")
+        self.log(f"Error processing authentication: {str(e)}")
         import traceback
-        traceback.print_exc()
+        traceback.self.log_exc()
         
         # Show error and offer retry
         retry = QMessageBox.question(
@@ -260,7 +260,7 @@ def get_spotify_token(self):
                 if expires_at > time.time() + 60:
                     token_expired = False
         except Exception as e:
-            print(f"Error reading Spotify token: {e}")
+            self.log(f"Error reading Spotify token: {e}")
     
     # Refresh token if needed
     if token_expired:
@@ -315,24 +315,24 @@ def refresh_token(self):
     try:
         token_info = self.sp_oauth.get_cached_token()
         if token_info and self.sp_oauth.is_token_expired(token_info):
-            print("Refreshing expired token")
+            self.log("Refreshing expired token")
             token_info = self.sp_oauth.refresh_access_token(token_info['refresh_token'])
             self.sp = spotipy.Spotify(auth=token_info['access_token'])
             return True
         return False
     except Exception as e:
-        print(f"Error refreshing token: {str(e)}")
+        self.log(f"Error refreshing token: {str(e)}")
         import traceback
-        traceback.print_exc()
+        traceback.self.log_exc()
         
         # If refresh fails, try getting a new token
         try:
-            print("Attempting new authentication after refresh failure")
+            self.log("Attempting new authentication after refresh failure")
             token_info = perform_new_authentication(self)
             self.sp = spotipy.Spotify(auth=token_info['access_token'])
             return True
         except Exception as e2:
-            print(f"New authentication also failed: {str(e2)}")
+            self.log(f"New authentication also failed: {str(e2)}")
             self.log(f"Error renovando token: {str(e)}")
             return False
 
@@ -347,18 +347,18 @@ def api_call_with_retry(self, func, *args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            print(f"API call failed (attempt {attempt+1}/{max_retries}): {str(e)}")
+            self.log(f"API call failed (attempt {attempt+1}/{max_retries}): {str(e)}")
             
             if attempt < max_retries - 1:
                 if "token" in str(e).lower():
-                    print("Token error detected, refreshing...")
+                    self.log("Token error detected, refreshing...")
                     if refresh_token(self):
-                        print("Token refreshed, retrying...")
+                        self.log("Token refreshed, retrying...")
                         continue
                     else:
-                        print("Token refresh failed")
+                        self.log("Token refresh failed")
                 else:
-                    print("Non-token error")
+                    self.log("Non-token error")
             
             # Last attempt failed or it's not a token error
             raise
@@ -392,7 +392,7 @@ def create_spotify_playlist(self, name, public=False, description=None):
         self.log(f"Playlist '{name}' creada correctamente")
         
         # Reload playlists to update UI
-        self.load_spotify_playlists(force_update=True)
+        load_spotify_playlists(self, force_update=True)
         
         # Seleccionar la nueva playlist
         if hasattr(self, 'playlist_spotify_comboBox'):
@@ -531,7 +531,7 @@ def load_spotify_playlists(self, force_update=False):
                 self.log("Spotify playlists loaded from cache")
                 return True
 
-        results = self.api_call_with_retry(self.sp.current_user_playlists)
+        results = api_call_with_retry(self, self.sp.current_user_playlists)
         
         # Save to cache
         os.makedirs(os.path.dirname(cache_path), exist_ok=True)
@@ -543,7 +543,7 @@ def load_spotify_playlists(self, force_update=False):
         
     except Exception as e:
         self.log(f"Error loading Spotify playlists: {str(e)}")
-        print(f"Traceback: {traceback.format_exc()}")
+        self.log(f"Traceback: {traceback.format_exc()}")
         return False
 
 

@@ -55,7 +55,7 @@ def get_local_playlist_path(self):
         # Default if not found
         return default_path
     except Exception as e:
-        print(f"Error reading local playlist path from config: {str(e)}")
+        self.log(f"Error reading local playlist path from config: {str(e)}")
         return default_path
 
 def parse_pls_file(file_path):
@@ -113,9 +113,9 @@ def parse_pls_file(file_path):
         return items
             
     except Exception as e:
-        print(f"Error parsing PLS file: {str(e)}")
+        self.log(f"Error parsing PLS file: {str(e)}")
         import traceback
-        print(traceback.format_exc())
+        self.log(traceback.format_exc())
         return []
 
 def determine_source_from_url(url):
@@ -134,28 +134,27 @@ def determine_source_from_url(url):
     return 'unknown'
 
 def load_local_playlists(self):
-    """Carga las playlists locales desde el directorio configurado"""
+    """Versión optimizada para cargar playlists locales con caché"""
+    # Verificar si tenemos caché vigente
+    if hasattr(self, '_local_playlists_cache') and hasattr(self, '_local_playlists_cache_time'):
+        # Usar caché si tiene menos de 5 minutos
+        import time  # Importar aquí para evitar el UnboundLocalError
+        if time.time() - self._local_playlists_cache_time < 300:  # 5 minutos
+            self.log("Usando caché de playlists locales")
+            return self._local_playlists_cache
+    
     try:
-        # Obtener la ruta de las playlists locales de la configuración
+        # Obtener ruta de las playlists locales
         local_playlist_path = get_local_playlist_path(self)
-        self.log(f"Buscando playlists locales en: {local_playlist_path}")
         
         if not os.path.exists(local_playlist_path):
             os.makedirs(local_playlist_path, exist_ok=True)
-            self.log(f"Creado directorio de playlists locales: {local_playlist_path}")
             return []
         
-        # Imprimir todos los archivos en el directorio para debug
+        # Optimización: solo listar archivos una vez
         all_files = os.listdir(local_playlist_path)
-        self.log(f"Archivos en el directorio: {', '.join(all_files)}")
-        
-        # Obtener todos los archivos .json en el directorio
         json_files = [f for f in all_files if f.endswith('.json')]
-        self.log(f"Encontrados {len(json_files)} archivos de playlist JSON")
-        
-        # Obtener archivos .pls también como respaldo
         pls_files = [f for f in all_files if f.endswith('.pls')]
-        self.log(f"Encontrados {len(pls_files)} archivos de playlist PLS")
         
         # Cargar playlists desde archivos JSON
         playlists = []
@@ -165,15 +164,11 @@ def load_local_playlists(self):
                 file_path = Path(local_playlist_path, filename)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    # Imprimir contenido para debugear
-                    #self.log(f"Contenido de {filename}: {content[:100]}...")
-                    
                     playlist_data = json.loads(content)
                     
                 # Validar los datos de la playlist
                 if 'name' in playlist_data and 'items' in playlist_data:
                     playlists.append(playlist_data)
-                    #self.log(f"Playlist cargada: {playlist_data['name']} ({len(playlist_data.get('items', []))} elementos)")
                 else:
                     self.log(f"Archivo {filename} no tiene formato válido de playlist")
             except Exception as e:
@@ -190,6 +185,7 @@ def load_local_playlists(self):
                     items = parse_pls_file(file_path)
                     
                     if items:
+                        import time  # Importar aquí para evitar el error
                         playlist_data = {
                             'name': playlist_name,
                             'items': items,
@@ -201,6 +197,11 @@ def load_local_playlists(self):
                 except Exception as e:
                     self.log(f"Error cargando playlist PLS {pls_file}: {str(e)}")
         
+        # Guardar en caché antes de devolver
+        import time  # Importar aquí para evitar el error
+        self._local_playlists_cache = playlists
+        self._local_playlists_cache_time = time.time()
+
         return playlists
             
     except Exception as e:
@@ -384,7 +385,7 @@ def count_tracks_in_playlist(playlist_path):
     try:
         # Verify path exists
         if not os.path.exists(playlist_path):
-            print(f"ERROR: Cannot count tracks, playlist doesn't exist: {playlist_path}")
+            self.log(f"ERROR: Cannot count tracks, playlist doesn't exist: {playlist_path}")
             return 0
             
         count = 0
@@ -395,10 +396,10 @@ def count_tracks_in_playlist(playlist_path):
                 if line and not line.startswith('#'):
                     count += 1
                     
-        #print(f"Counted {count} tracks in {os.path.basename(playlist_path)}")
+        #self.log(f"Counted {count} tracks in {os.path.basename(playlist_path)}")
         return count
     except Exception as e:
-        print(f"Error counting tracks in {playlist_path}: {str(e)}")
+        self.log(f"Error counting tracks in {playlist_path}: {str(e)}")
         return 0
 
 def move_rss_playlist_to_listened(self, playlist_data):
@@ -476,7 +477,7 @@ def on_guardar_playlist_clicked(self):
         
     combo = self.guardar_playlist_comboBox
     selected = combo.currentText()
-    print(f"selected!!! {selected}")
+    self.log(f"selected!!! {selected}")
     if selected == "Spotify":
         self.save_to_spotify_playlist()
     elif selected == "Playlist local":
@@ -514,7 +515,7 @@ def update_playlist_comboboxes(self):
             
             # Si no hay playlists locales, intentar cargarlas de nuevo
             if not local_playlists:
-                local_playlists = self.load_local_playlists()
+                local_playlists = load_local_playlists(self)
                 if local_playlists:
                     self.playlists['local'] = local_playlists
                     save_playlists(self, )
@@ -638,6 +639,8 @@ def display_local_playlist(self, playlist):
                 duration_str = self.format_duration(item.get('duration'))
                 track_item.setText(4, duration_str)
             
+            # import cochambroso
+            from modules.submodules.url_playlist.ui_helpers import get_source_icon
             # Set track icon based on source
             source_icon = self.get_source_icon(url, {'source': source})
             track_item.setIcon(0, source_icon)

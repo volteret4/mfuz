@@ -6,6 +6,10 @@ import platform
 import socket
 from pathlib import Path
 from PyQt6.QtCore import QProcess, QObject, pyqtSignal, QTimer
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import PROJECT_ROOT
 
 class PlayerManager(QObject):
     """Manages different music players with a unified interface"""
@@ -18,7 +22,9 @@ class PlayerManager(QObject):
     track_finished = pyqtSignal()
     playback_error = pyqtSignal(str)
     
-    def __init__(self, config=None, parent=None):
+    def __init__(self, config=None, parent=None, logger=None):
+        self.parent = parent
+        self._logger = logger or (lambda msg: print(f"[PlayerManager] {msg}"))
         super().__init__(parent)
         
         # Default settings
@@ -39,7 +45,7 @@ class PlayerManager(QObject):
         """Load player configuration from config file"""
         try:
             # Try to find the project root
-            project_root = self._find_project_root()
+            project_root = PROJECT_ROOT
             config_path = Path(project_root, "config", "config.yml")
             
             if os.path.exists(config_path):
@@ -50,11 +56,11 @@ class PlayerManager(QObject):
                 # Extract player configuration
                 if 'music_players' in full_config:
                     self.config = full_config['music_players']
-                    print(f"Loaded player configuration from {config_path}")
+                    self._logger(f"Loaded player configuration from {config_path}")
             else:
-                print(f"Config file not found at: {config_path}")
+                self._logger(f"Config file not found at: {config_path}")
         except Exception as e:
-            print(f"Error loading player configuration: {e}")
+            self._logger(f"Error loading player configuration: {e}")
     
     def _find_project_root(self):
         """Try to find the project root directory"""
@@ -89,7 +95,7 @@ class PlayerManager(QObject):
                 'player_temp_dir': os.path.expanduser('~/.config/mpv/_mpv_socket'),
                 'args': '--input-ipc-server={socket_path}'
             }
-            print("Using default MPV player configuration")
+            self._logger("Using default MPV player configuration")
             return
         
         # Try to get selected player for url_enlaces from config
@@ -101,14 +107,14 @@ class PlayerManager(QObject):
         for player_key, player_config in installed_players.items():
             if player_config.get('player_name') == selected_player_name:
                 self.current_player = player_config
-                print(f"Using configured player: {selected_player_name}")
+                self._logger(f"Using configured player: {selected_player_name}")
                 return
         
         # If selected player not found, use first available
         if installed_players:
             first_player = list(installed_players.values())[0]
             self.current_player = first_player
-            print(f"Selected player not found, using first available: {first_player.get('player_name')}")
+            self._logger(f"Selected player not found, using first available: {first_player.get('player_name')}")
         else:
             # Fallback to mpv
             self.current_player = {
@@ -117,7 +123,7 @@ class PlayerManager(QObject):
                 'player_temp_dir': os.path.expanduser('~/.config/mpv/_mpv_socket'),
                 'args': '--input-ipc-server={socket_path}'
             }
-            print("No player configuration found, using default MPV")
+            self._logger("No player configuration found, using default MPV")
     
     def _find_player_path(self, player_name):
         """Find path to player executable"""
@@ -148,7 +154,7 @@ class PlayerManager(QObject):
             # Return just the name and let the OS resolve it
             return player_name
         except Exception as e:
-            print(f"Error finding player path: {e}")
+            self._logger(f"Error finding player path: {e}")
             return player_name
     
     def play(self, url_or_path):
@@ -184,9 +190,11 @@ class PlayerManager(QObject):
         args = []
         if self.current_player.get('args'):
             player_args = self.current_player['args']
-            # Replace placeholder with actual socket path
+            # Replace placeholder with actual socket path - CONVERTIR A STRING
             if self.socket_path:
-                player_args = player_args.replace('{socket_path}', self.socket_path)
+                # Aquí está la corrección: convertir self.socket_path a string
+                socket_path_str = str(self.socket_path)
+                player_args = player_args.replace('{socket_path}', socket_path_str)
             args = player_args.split()
         
         # Add the URL or path
@@ -199,7 +207,7 @@ class PlayerManager(QObject):
         self.player_process.finished.connect(self.handle_finished)
         
         try:
-            print(f"Starting player: {player_path} {' '.join(args)}")
+            self._logger(f"Starting player: {player_path} {' '.join(args)}")
             self.player_process.start(player_path, args)
             
             # Wait for process to start
@@ -290,7 +298,9 @@ class PlayerManager(QObject):
         try:
             import json
             sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
-            sock.connect(self.socket_path)
+            # Convertir a string en caso de que sea un objeto PosixPath
+            socket_path_str = str(self.socket_path)
+            sock.connect(socket_path_str)
             
             command_str = json.dumps(command) + "\n"
             sock.send(command_str.encode())
@@ -298,7 +308,7 @@ class PlayerManager(QObject):
             
             return True
         except Exception as e:
-            print(f"Error sending command: {e}")
+            self._logger(f"Error sending command: {e}")
             return False
     
     def handle_output(self):
@@ -310,7 +320,7 @@ class PlayerManager(QObject):
         output = bytes(data).decode('utf-8', errors='replace').strip()
         
         if output:
-            print(f"Player output: {output}")
+            self._logger(f"Player output: {output}")
     
     def handle_error(self):
         """Handle standard error from the player process"""
@@ -321,7 +331,7 @@ class PlayerManager(QObject):
         error = bytes(data).decode('utf-8', errors='replace').strip()
         
         if error:
-            print(f"Player error: {error}")
+            self._logger(f"Player error: {error}")
             # Only emit error signal for significant errors, not warnings
             if "error:" in error.lower() or "failed:" in error.lower():
                 self.playback_error.emit(error)

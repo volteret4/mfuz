@@ -34,7 +34,8 @@ from modules.submodules.url_playlist.lastfm_manager import (
     setup_lastfm_menu_items, sync_lastfm_scrobbles, load_lastfm_scrobbles_period,
     load_lastfm_scrobbles_month, load_lastfm_scrobbles_year, display_scrobbles_in_tree,
     populate_scrobbles_time_menus, get_track_links_from_db, get_lastfm_cache_path, load_lastfm_cache_if_exists,
-    setup_scrobbles_menu, connect_lastfm_controls, force_load_scrobbles_data_from_db, load_lastfm_cache_if_exists) 
+    setup_scrobbles_menu, connect_lastfm_controls, force_load_scrobbles_data_from_db, load_lastfm_cache_if_exists
+) 
 
 from modules.submodules.url_playlist.playlist_manager import (
     parse_pls_file, load_local_playlists, create_local_playlist, save_playlists,
@@ -47,7 +48,7 @@ from modules.submodules.url_playlist.media_utils import (
 )
 from modules.submodules.url_playlist.ui_helpers import (
     setup_service_icons, get_source_icon, format_duration, 
-    setup_unified_playlist_menu, setup_context_menus,
+    setup_unified_playlist_menu, setup_context_menus, add_single_result_to_tree,
     display_search_results, display_external_results, on_tree_double_click, on_list_double_click,
     show_advanced_settings, on_tree_selection_changed, on_spotify_playlist_changed,
     on_playlist_rss_changed, on_playlist_local_changed, clear_playlist, show_mark_as_listened_dialog,
@@ -73,34 +74,30 @@ class UrlPlayer(BaseModule):
     process_error_signal = pyqtSignal(str)
 
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
-        # Extract specific configurations from kwargs with improved defaults
+        # Extraer configuraciones específicas de kwargs
         self.mpv_temp_dir = kwargs.pop('mpv_temp_dir', Path(os.path.expanduser("~"), ".config", "mpv", "_mpv_socket"))
-        
-        # Script para obtener posts del servidor freshrss
         self.script_path = Path(f"{PROJECT_ROOT}/db/posts/crear_playlists_freshrss.py")
-
-        # Extract database configuration with better handling
+        
+        # Extraer configuración de la base de datos con mejor manejo
         self.db_path = kwargs.get('db_path')
         if self.db_path and not os.path.isabs(self.db_path):
             self.db_path = Path(PROJECT_ROOT, self.db_path)
         
-        # Extract API credentials from kwargs with explicit handling
+        # Extraer credenciales API
         self.spotify_authenticated = False
         self.spotify_playlists = {}
         self.spotify_user_id = None
         self.spotify_client_id = kwargs.get('spotify_client_id')
         self.spotify_client_secret = kwargs.get('spotify_client_secret')
+        self.spotify_redirect_uri = kwargs.get('spotify_redirect_uri', 'http://localhost:8888/callback')
+        
         self.lastfm_manager_key = kwargs.get('lastfm_manager_key')
         self.lastfm_username = kwargs.get('lastfm_username')
         self.exclude_spotify_from_local = kwargs.get('exclude_spotify_from_local', True)
         self.playlists = {'spotify': [], 'local': [], 'rss': []}
-
-
-
-
-
-        # Credentials
         
+
+
         # Lastfm
         self.lastfm_api_key = os.environ.get("LASTFM_API_KEY") or kwargs.get('lastfm_api_key')
         self.lastfm_username = os.environ.get("LASTFM_USERNAME") or kwargs.get('lastfm_username')
@@ -129,10 +126,19 @@ class UrlPlayer(BaseModule):
         self.spotify_playlist_path = kwargs.get('spotify_playlist_path', Path(PROJECT_ROOT, ".content", "cache", "spotify_playlist_path"))
         self.lastfm_cache_path = kwargs.get('lastfm_cache_path', Path(PROJECT_ROOT, ".content", "cache", "lastfm_cache.json"))
 
+
+        # Credenciales Servidor FreshRss
+        self.freshrss_url = kwargs.pop('freshrss_url', '')
+        self.freshrss_username = kwargs.pop('freshrss_user', '')
+        self.freshrss_auth_token = kwargs.pop('freshrss_api_key', '')
+        
+
         # Log the received configuration
         print(f"[UrlPlayer] Received configs - DB: {self.db_path}, Spotify credentials: {bool(self.spotify_client_id)}, Last.fm credentials: {bool(self.lastfm_manager_key)}")
-        
-        # Initialize other instance variables
+ 
+
+
+        # Inicializar variables esenciales
         self.player_process = None
         self.current_playlist = []
         self.current_track_index = -1
@@ -141,11 +147,6 @@ class UrlPlayer(BaseModule):
         self.is_playing = False
         self.mpv_socket = None
         self.mpv_wid = None
-
-        # Credenciales Servidor FreshRss
-        self.freshrss_url = kwargs.pop('freshrss_url', '')
-        self.freshrss_username = kwargs.pop('freshrss_user', '')
-        self.freshrss_auth_token = kwargs.pop('freshrss_api_key', '')
         
         # Directorios para playlists RSS
         self.rss_pending_dir = kwargs.pop('rss_pending_dir', Path(PROJECT_ROOT, ".content", "playlists", "blogs", "pendiente"))
@@ -155,34 +156,30 @@ class UrlPlayer(BaseModule):
         os.makedirs(self.rss_pending_dir, exist_ok=True)
         os.makedirs(self.rss_listened_dir, exist_ok=True)
 
-        # Define default services
+        # Servicios incluidos
         default_services = {
             'youtube': True,
             'soundcloud': True,
             'bandcamp': True,
-            'spotify': False,  # Will be updated after loading credentials
-            'lastfm': False    # Will be updated after loading credentials
+            'spotify': False,
+            'lastfm': False
         }
         
-        # Get service configuration from kwargs
         included_services = kwargs.pop('included_services', {})
-        
-        # Initialize services dictionary
         self.included_services = {}
         
-        # Ensure all default services are included with boolean values
+        # Configurar servicios incluidos
         for service, default_state in default_services.items():
             if service not in included_services:
                 self.included_services[service] = default_state
             else:
-                # Convert string representation to boolean if needed
                 value = included_services[service]
                 if isinstance(value, str):
                     self.included_services[service] = value.lower() == 'true'
                 else:
                     self.included_services[service] = bool(value)
         
-        # Initialize attributes for widgets
+        # Inicialización de widgets
         self.lineEdit = None
         self.searchButton = None
         self.treeWidget = None
@@ -196,69 +193,34 @@ class UrlPlayer(BaseModule):
         self.textEdit = None
         self.info_wiki_textedit = None
         
-        # Get pagination configuration
+        # Configuración de paginación
         self.num_servicios_spinBox = kwargs.pop('pagination_value', 10)
         
-        # Now call the parent constructor which will call init_ui()
+        # Llamar al constructor padre
         super().__init__(parent, theme, **kwargs)
-
-        from tools.player_manager import PlayerManager
-        self.player_manager = PlayerManager(parent=self)
-
-        # Connect player manager signals
-        self.player_manager.playback_started.connect(self.on_playback_started)
-        self.player_manager.playback_stopped.connect(self.on_playback_stopped)
-        self.player_manager.playback_paused.connect(self.on_playback_paused)
-        self.player_manager.playback_resumed.connect(self.on_playback_resumed)
-        self.player_manager.track_finished.connect(self.on_track_finished)
-        self.player_manager.playback_error.connect(self.on_playback_error)
-
-        load_lastfm_cache_if_exists(self)
-
-        self.treeWidget.setProperty("controller", self)
+        
+        # Flag para indicar inicialización en progreso
         self._is_initializing = True
         
-        # Primero cargar las credenciales con tu método existente
-        self._load_api_credentials_from_env()  # Tu método existente
-
-        # Luego configurar Spotify solo si tenemos credenciales
-        if self.spotify_client_id and self.spotify_client_secret:
-            setup_spotify(self)
-            
-            # Una vez configurado, cargar las playlists
-            if hasattr(self, 'playlist_spotify_comboBox') and self.spotify_authenticated:
-                load_spotify_playlists(self)
-
-        # Ensure these are available in environment variables for imported modules
-        self._set_api_credentials_as_env()
-        
-        # Update service enabled flags based on credentials
-        self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
-        self.lastfm_enabled = bool(self.lastfm_manager_key)
-        
-        # Update included_services based on credentials
-        self.included_services['spotify'] = self.spotify_enabled
-        self.included_services['lastfm'] = self.lastfm_enabled
-        
-        # Log the final configuration
-        print(f"[UrlPlayer] Final config - DB: {self.db_path}, Spotify enabled: {self.spotify_enabled}, Last.fm enabled: {self.lastfm_enabled}")
-
-        # Initialize the "only local" setting with default value of False
-        self.urlplaylist_only_local = kwargs.get('urlplaylist_only_local', False)
-        
-        # Convert to boolean if it's a string
-        if isinstance(self.urlplaylist_only_local, str):
-            self.urlplaylist_only_local = self.urlplaylist_only_local.lower() == 'true'
-            
-        # Set flag as attribute
-        self.log(f"Initialize urlplaylist_only_local: {self.urlplaylist_only_local}")   
-
-        self._is_initializing = False
-
-        # Configurar barra de progreso
+        # Configurar barras de progreso
         setup_progress_bar(self)
-
+        
+        # Conectar señales para comunicación entre hilos
         self._connect_thread_signals()
+
+        # Inicializar PlayerManager
+        from tools.player_manager import PlayerManager
+        self.player_manager = PlayerManager(parent=self, logger=self.log)
+        self._connect_player_signals()
+        
+        # Set up periodic memory cleanup every 5 minutes
+        from PyQt6.QtCore import QTimer
+        self._cleanup_timer = QTimer(self)
+        self._cleanup_timer.timeout.connect(self.perform_memory_cleanup)
+        self._cleanup_timer.start(300000)  # 5 minutes in milliseconds
+
+        # Iniciar los procesos pesados en hilos separados
+        self._start_async_initialization()
 
     def _connect_thread_signals(self):
         """Connect signals for thread communication"""
@@ -269,6 +231,133 @@ class UrlPlayer(BaseModule):
         
         # Inicializar variables para el diálogo de progreso
         self._progress_dialog = None
+
+    def _connect_player_signals(self):
+        """Conecta las señales del player manager"""
+        self.player_manager.playback_started.connect(self.on_playback_started)
+        self.player_manager.playback_stopped.connect(self.on_playback_stopped)
+        self.player_manager.playback_paused.connect(self.on_playback_paused)
+        self.player_manager.playback_resumed.connect(self.on_playback_resumed)
+        self.player_manager.track_finished.connect(self.on_track_finished)
+        self.player_manager.playback_error.connect(self.on_playback_error)
+
+    def _start_async_initialization(self):
+        """Inicia procesos de inicialización en hilos separados"""
+        import threading
+        
+        # Crear hilos con nombres descriptivos para facilitar depuración
+        api_thread = threading.Thread(target=self._initialize_apis, name="_initialize_apis", daemon=True)
+        playlists_thread = threading.Thread(target=self._load_playlists_async, name="_load_playlists", daemon=True)
+        
+        # Iniciar hilos
+        api_thread.start()
+        playlists_thread.start()
+        
+        # Establecer un temporizador para verificar cuando todos los hilos hayan terminado
+        from PyQt6.QtCore import QTimer
+        self._init_check_timer = QTimer(self)
+        self._init_check_timer.timeout.connect(self._check_initialization_complete)
+        self._init_check_timer.start(100)  # Verificar cada 100 ms
+    def _initialize_apis(self):
+        """Inicializa las APIs en un hilo separado"""
+        try:
+            # Cargar credenciales desde el entorno o configuración
+            self._load_api_credentials_from_env()
+            
+            # Configurar las credenciales como variables de entorno 
+            self._set_api_credentials_as_env()
+            
+            # Configurar Spotify solo si hay credenciales
+            if self.spotify_client_id and self.spotify_client_secret:
+                from modules.submodules.url_playlist.spotify_manager import setup_spotify
+                setup_spotify(self)
+                
+                # Cargar playlists de Spotify si la autenticación fue exitosa
+                if hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
+                    from modules.submodules.url_playlist.spotify_manager import load_spotify_playlists
+                    load_spotify_playlists(self)
+            
+            # Cargar caché de Last.fm si existe
+            from modules.submodules.url_playlist.lastfm_manager import load_lastfm_cache_if_exists
+            load_lastfm_cache_if_exists(self)
+            
+            # Actualizar flags de servicios habilitados
+            self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
+            self.lastfm_enabled = bool(self.lastfm_manager_key)
+            
+            # Actualizar included_services según credenciales
+            self.included_services['spotify'] = self.spotify_enabled
+            self.included_services['lastfm'] = self.lastfm_enabled
+            
+            self.log("Inicialización de APIs completada")
+        except Exception as e:
+            self.log(f"Error en inicialización de APIs: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def _load_playlists_async(self):
+        """Carga las playlists en un hilo separado"""
+        try:
+            # Inicializar estructura de playlists si es necesario
+            if not hasattr(self, 'playlists') or not isinstance(self.playlists, dict):
+                self.playlists = {'spotify': [], 'local': [], 'rss': []}
+            
+            # Cargar desde el archivo guardado si existe
+            loaded_playlists = self.load_playlists()
+            if isinstance(loaded_playlists, dict):
+                self.playlists = loaded_playlists
+            
+            # Cargar playlists locales
+            from modules.submodules.url_playlist.playlist_manager import load_local_playlists
+            local_playlists = load_local_playlists(self)
+            if local_playlists:
+                self.playlists['local'] = local_playlists
+            
+            # Cargar playlists RSS
+            if os.path.exists(self.rss_pending_dir):
+                from modules.submodules.url_playlist.playlist_manager import load_rss_playlists
+                load_rss_playlists(self)
+            
+            self.log("Carga de playlists completada")
+        except Exception as e:
+            self.log(f"Error en carga de playlists: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def _check_initialization_complete(self):
+        """Verifica si todos los procesos de inicialización han terminado"""
+        # Implementar lógica para verificar finalización de hilos
+        import threading
+        active_threads = [t for t in threading.enumerate() 
+                        if t.name.startswith("_initialize_") or t.name.startswith("_load_")]
+        
+        if not active_threads:
+            # Todos los hilos han terminado
+            self._init_check_timer.stop()
+            self._is_initializing = False
+            
+            # Actualizar UI en el hilo principal usando un timer de un solo disparo
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(0, self._update_ui_after_initialization)
+
+    def _update_ui_after_initialization(self):
+        """Actualiza la UI después de que todos los procesos de inicialización han terminado"""
+        try:
+            # Actualizar comboboxes con playlists cargadas
+            from modules.submodules.url_playlist.playlist_manager import update_playlist_comboboxes
+            update_playlist_comboboxes(self)
+            
+            # Actualizar vista de playlist
+            self.update_playlist_view()
+            
+            # Actualizar combo de servicios
+            self.update_service_combo()
+            
+            self.log("Inicialización completa, UI actualizada")
+        except Exception as e:
+            self.log(f"Error actualizando UI después de inicialización: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
 
     def _on_process_started(self, message):
         """Handle process started signal (runs in main thread)"""
@@ -308,7 +397,7 @@ class UrlPlayer(BaseModule):
 
 
     def init_ui(self):
-        """Inicializa la interfaz de usuario desde el archivo UI."""
+        """Inicializa la interfaz de usuario con carga diferida para elementos no críticos"""
         # Intentar cargar desde archivo UI
         ui_file_loaded = self.load_ui_file("url_player.ui", [
             "lineEdit", "searchButton", "treeWidget", "play_button", 
@@ -319,9 +408,9 @@ class UrlPlayer(BaseModule):
         if not ui_file_loaded:
             self._fallback_init_ui()
         
-        # Verificar que tenemos todos los widgets necesarios
+        # Verificar widgets críticos
         if not self.check_required_widgets():
-            print("[UrlPlayer] Error: No se pudieron inicializar todos los widgets requeridos")
+            self.log("Error: No se pudieron inicializar todos los widgets requeridos")
             return
         
         # Inicializar referencias a widgets después de cargar la UI
@@ -329,8 +418,17 @@ class UrlPlayer(BaseModule):
         
         # Cargar configuración
         self.load_settings()
+        
+        # Configurar widgets críticos inmediatamente
+        self._setup_critical_widgets()
+        
+        # Programar configuración de elementos no críticos para después
+        from PyQt6.QtCore import QTimer
+        QTimer.singleShot(100, self._setup_non_critical_widgets)
 
-        # Configurar nombres y tooltips
+    def _setup_critical_widgets(self):
+        """Configura los widgets críticos que deben estar listos inmediatamente"""
+        # Configurar nombres y tooltips básicos
         self.searchButton.setText("Buscar")
         self.searchButton.setToolTip("Buscar información sobre la URL")
         self.play_button.setIcon(QIcon(":/services/b_play"))
@@ -344,100 +442,248 @@ class UrlPlayer(BaseModule):
         self.add_button.setIcon(QIcon(":/services/b_addstar"))
         self.add_button.setToolTip("Añadir a la cola")
         
-        # Configurar el botón unificado de playlists
-        from modules.submodules.url_playlist.ui_helpers import setup_action_unified_playlist
-        setup_action_unified_playlist(self)
-        
-        # Aplicar la configuración de vista actual
-        self.update_playlist_view()
-        
-        # Configure TreeWidget for better display
-        if hasattr(self, 'treeWidget') and self.treeWidget:
-            # Set column headers
-            self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Track/Año", "Duración"])
-            
-
-            self.treeWidget.setColumnWidth(0, 250)  # Título
-            self.treeWidget.setColumnWidth(1, 100)  # Artista
-            self.treeWidget.setColumnWidth(2, 80)   # Tipo
-            self.treeWidget.setColumnWidth(3, 70)   # Track/Año
-            self.treeWidget.setColumnWidth(4, 70)   # Duración
-            
-            # Set indentation for hierarchy visualization
-            self.treeWidget.setIndentation(20)
-            
-            # Enable sorting
-            self.treeWidget.setSortingEnabled(True)
-            self.treeWidget.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-            
-            # Enable item expanding/collapsing on single click
-            self.treeWidget.setExpandsOnDoubleClick(False)
-            self.treeWidget.itemClicked.connect(self.on_tree_item_clicked)
-        
-        # Configurar TabWidget
+        # Configurar TabWidget básico
         self.tabWidget.setTabText(0, "Cola de reproducción")
         self.tabWidget.setTabText(1, "Información")
         
-        # Setup services combo
-        self.setup_services_combo()
+        # Conectar señales críticas
+        self.connect_critical_signals()
+
+    def _start_async_initialization(self):
+        """Inicia procesos de inicialización en hilos separados"""
+        import threading
         
-        # Find and setup tipo_combo if it exists
-        if not hasattr(self, 'tipo_combo'):
-            self.tipo_combo = self.findChild(QComboBox, 'tipo_combo')
+        # Crear hilos con nombres descriptivos para facilitar depuración
+        api_thread = threading.Thread(target=self._initialize_apis, name="_initialize_apis", daemon=True)
+        playlists_thread = threading.Thread(target=self._load_playlists_async, name="_load_playlists", daemon=True)
+        
+        # Iniciar hilos
+        api_thread.start()
+        playlists_thread.start()
+        
+        # Establecer un temporizador para verificar cuando todos los hilos hayan terminado
+        from PyQt6.QtCore import QTimer
+        self._init_check_timer = QTimer(self)
+        self._init_check_timer.timeout.connect(self._check_initialization_complete)
+        self._init_check_timer.start(100)  # Verificar cada 100 ms
+
+    def _setup_non_critical_widgets(self):
+        """Configura los widgets no críticos que pueden cargarse después"""
+        try:
+            # Configurar tree widget para mejor visualización
+            if hasattr(self, 'treeWidget') and self.treeWidget:
+                self.treeWidget.setHeaderLabels(["Título", "Artista", "Tipo", "Track/Año", "Duración"])
+                self.treeWidget.setColumnWidth(0, 250)
+                self.treeWidget.setColumnWidth(1, 100)
+                self.treeWidget.setColumnWidth(2, 80)
+                self.treeWidget.setColumnWidth(3, 70)
+                self.treeWidget.setColumnWidth(4, 70)
+                self.treeWidget.setIndentation(20)
+                self.treeWidget.setSortingEnabled(True)
+                from PyQt6.QtCore import Qt
+                self.treeWidget.sortByColumn(0, Qt.SortOrder.AscendingOrder)
+                self.treeWidget.setExpandsOnDoubleClick(False)
+                self.treeWidget.itemClicked.connect(self.on_tree_item_clicked)
             
-        # If tipo_combo exists, set default items if empty
-        if self.tipo_combo and self.tipo_combo.count() == 0:
-            self.tipo_combo.addItem("Todo")
-            self.tipo_combo.addItem("Artista")
-            self.tipo_combo.addItem("Álbum")
-            self.tipo_combo.addItem("Canción")
-
-        # Ensure RSS combobox is accessible
-        if not hasattr(self, 'playlist_rss_comboBox'):
-            self.playlist_rss_comboBox = self.findChild(QComboBox, 'playlist_rss_comboBox')
-
+            # Configurar resto de widgets no críticos en una secuencia de timers
+            from PyQt6.QtCore import QTimer
+            
+            # Usar una función para encadenar las configuraciones
+            def setup_services():
+                self.setup_services_combo()
+                QTimer.singleShot(50, setup_tipo_combo)
+            
+            def setup_tipo_combo():
+                # Configurar tipo_combo si existe
+                if not hasattr(self, 'tipo_combo'):
+                    from PyQt6.QtWidgets import QComboBox
+                    self.tipo_combo = self.findChild(QComboBox, 'tipo_combo')
+                if self.tipo_combo and self.tipo_combo.count() == 0:
+                    self.tipo_combo.addItem("Todo")
+                    self.tipo_combo.addItem("Artista")
+                    self.tipo_combo.addItem("Álbum")
+                    self.tipo_combo.addItem("Canción")
+                QTimer.singleShot(50, setup_lastfm)
+            
+            def setup_lastfm():
+                # Configurar Last.fm
+                from modules.submodules.url_playlist.lastfm_manager import connect_lastfm_controls, setup_scrobbles_menu
+                connect_lastfm_controls(self)
+                setup_scrobbles_menu(self)
+                QTimer.singleShot(50, setup_icons_and_menus)
+                
+            def setup_icons_and_menus():
+                # Configurar iconos y menús
+                from modules.submodules.url_playlist.ui_helpers import setup_service_icons, setup_loading_indicator, setup_context_menus
+                setup_service_icons(self)
+                setup_loading_indicator(self)
+                setup_context_menus(self)
+                QTimer.singleShot(50, setup_playlists)
+                
+            def setup_playlists():
+                # Configurar el botón unificado de playlists
+                from modules.submodules.url_playlist.ui_helpers import setup_action_unified_playlist
+                setup_action_unified_playlist(self)
+                
+                # Aplicar la configuración de vista actual
+                self.update_playlist_view()
+                QTimer.singleShot(50, connect_signals)
+                
+            def connect_signals():
+                # Conectar resto de señales
+                self.connect_remaining_signals()
+                self.log("Configuración diferida de widgets completada")
+            
+            # Iniciar la cadena de configuración
+            QTimer.singleShot(10, setup_services)
         
-        # Connect slider and spinbox in settings
-        scrobbles_slider = self.findChild(QSlider, 'scrobbles_slider')
-        scrobbles_spinbox = self.findChild(QSpinBox, 'scrobblers_spinBox')
+        except Exception as e:
+            self.log(f"Error en configuración diferida: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def connect_critical_signals(self):
+        """Conecta solo las señales críticas para la funcionalidad básica"""
+        # Botones principales
+        if self.searchButton:
+            self.searchButton.clicked.connect(self.perform_search)
+        if self.play_button:
+            from modules.submodules.url_playlist.media_utils import toggle_play_pause
+            self.play_button.clicked.connect(lambda: toggle_play_pause(self))
+        if self.rew_button:
+            from modules.submodules.url_playlist.media_utils import previous_track
+            self.rew_button.clicked.connect(lambda: previous_track(self))
+        if self.ff_button:
+            from modules.submodules.url_playlist.media_utils import next_track
+            self.ff_button.clicked.connect(lambda: next_track(self))
+        if self.add_button:
+            from modules.submodules.url_playlist.media_utils import add_to_queue
+            self.add_button.clicked.connect(lambda: add_to_queue(self))
+        if self.del_button:
+            from modules.submodules.url_playlist.media_utils import remove_from_queue
+            self.del_button.clicked.connect(lambda: remove_from_queue(self))
+        if self.lineEdit:
+            self.lineEdit.returnPressed.connect(self.perform_search)
+            print("LineEdit conectado para búsqueda con Enter")
+
+    def connect_remaining_signals(self):
+        """Conecta el resto de señales después de la inicialización crítica"""
+        try:
+            # Conectar eventos de doble clic para el árbol y la lista
+            if self.treeWidget:
+                try:
+                    self.treeWidget.itemDoubleClicked.disconnect()
+                except:
+                    pass
+                from modules.submodules.url_playlist.ui_helpers import on_tree_double_click
+                self.treeWidget.itemDoubleClicked.connect(on_tree_double_click)
+            
+            if self.listWidget:
+                try:
+                    self.listWidget.itemDoubleClicked.disconnect()
+                except:
+                    pass
+                from modules.submodules.url_playlist.ui_helpers import on_list_double_click
+                self.listWidget.itemDoubleClicked.connect(on_list_double_click)
+            
+            if hasattr(self, 'ajustes_avanzados'):
+                from modules.submodules.url_playlist.ui_helpers import show_advanced_settings
+                self.ajustes_avanzados.clicked.connect(lambda: show_advanced_settings(self))
+
+            # Conectar cambio de selección en el árbol
+            if self.treeWidget:
+                from modules.submodules.url_playlist.ui_helpers import on_tree_selection_changed
+                self.treeWidget.itemSelectionChanged.connect(lambda: on_tree_selection_changed(self))
+                print("[UrlPlayer] Señales conectadas correctamente")
+
+            # Playlist-related connections
+            if hasattr(self, 'playlist_spotify_comboBox'):
+                from modules.submodules.url_playlist.ui_helpers import on_spotify_playlist_changed
+                self.playlist_spotify_comboBox.currentIndexChanged.connect(lambda idx: on_spotify_playlist_changed(self, idx))
+            
+            # Conectar señal del combobox RSS
+            if hasattr(self, 'playlist_rss_comboBox'):
+                try:
+                    self.playlist_rss_comboBox.currentIndexChanged.disconnect()
+                except:
+                    pass
+                from modules.submodules.url_playlist.ui_helpers import on_playlist_rss_changed
+                self.playlist_rss_comboBox.currentIndexChanged.connect(lambda idx: on_playlist_rss_changed(self, idx))
+                    
+            # Set up additional controls for RSS
+            from modules.submodules.url_playlist.rss_manager import setup_rss_controls
+            setup_rss_controls(self)
+            
+            if hasattr(self, 'playlist_local_comboBox'):
+                # First disconnect to avoid multiple connections
+                try:
+                    self.playlist_local_comboBox.currentIndexChanged.disconnect()
+                except:
+                    pass
+                
+                from modules.submodules.url_playlist.ui_helpers import on_playlist_local_changed
+                self.playlist_local_comboBox.currentIndexChanged.connect(lambda idx: on_playlist_local_changed(self, idx))
+
+            # For the save playlist button
+            if hasattr(self, 'GuardarPlaylist_button'):
+                try:
+                    self.GuardarPlaylist_button.clicked.disconnect()
+                except:
+                    pass
+                from modules.submodules.url_playlist.playlist_manager import on_guardar_playlist_clicked
+                self.GuardarPlaylist_button.clicked.connect(lambda: on_guardar_playlist_clicked(self))
+            
+            if hasattr(self, 'VaciarPlaylist_button'):
+                from modules.submodules.url_playlist.ui_helpers import clear_playlist
+                self.VaciarPlaylist_button.clicked.connect(lambda: clear_playlist(self))
+            
+            # Connect signals for RSS playlist operations
+            self.ask_mark_as_listened_signal.connect(lambda data: show_mark_as_listened_dialog(self, data))
+            self.show_error_signal.connect(lambda msg: QMessageBox.critical(self, "Error", msg))
+
+            if self.play_button:
+                self.play_button.clicked.connect(self.toggle_play_pause)
+            
+            if self.rew_button:
+                self.rew_button.clicked.connect(self.play_previous)
+            
+            if self.ff_button:
+                self.ff_button.clicked.connect(self.play_next)
+
+        except Exception as e:
+            self.log(f"Error al conectar señales adicionales: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def _initialize_player_manager(self):
+        """Inicializa y configura el reproductor según la configuración"""
+        from tools.player_manager import PlayerManager
         
-        if scrobbles_slider and scrobbles_spinbox:
-            # Connect them bidirectionally
-            scrobbles_slider.valueChanged.connect(scrobbles_spinbox.setValue)
-            scrobbles_spinbox.valueChanged.connect(scrobbles_slider.setValue)
+        # Obtener la configuración de player desde el config
+        player_config = {}
+        if hasattr(self, 'config') and 'music_players' in self.config:
+            player_config = self.config['music_players']
         
-        # Default service priority indices
-        if not hasattr(self, 'service_priority_indices'):
-            self.service_priority_indices = [0, 1, 3, 2]
-
-        # Set up Last.fm controls and menus
-        from modules.submodules.url_playlist.lastfm_manager import connect_lastfm_controls, setup_scrobbles_menu, load_lastfm_cache_if_exists
-        connect_lastfm_controls(self)
-        setup_scrobbles_menu(self)
-        load_lastfm_cache_if_exists(self)
-
-        # Load playlists at startup
-        self.load_all_playlists()
-
-        # Setup service icons
-        from modules.submodules.url_playlist.ui_helpers import setup_service_icons
-        setup_service_icons(self)
-
-        # Setup loading indicator
-        from modules.submodules.url_playlist.ui_helpers import setup_loading_indicator
-        setup_loading_indicator(self)
-
-        # Update service combo based on configuration
-        self.update_service_combo()
-
-        # Connect signals
-        self.connect_signals()
+        # Crear el PlayerManager con la configuración
+        self.player_manager = PlayerManager(config=player_config, parent=self, logger=self.log)
+        
+        # Conectar las señales
+        self._connect_player_signals()
+        
+        self.log(f"Player Manager inicializado: {self.player_manager.current_player.get('player_name', 'desconocido')}")   
 
     def log(self, message):
-        """Registra un mensaje en el TextEdit y en la consola."""
-        if hasattr(self, 'textEdit') and self.textEdit:
-            self.textEdit.append(message)
+        """Método seguro para registrar mensajes en el TextEdit y en la consola."""
+        # Siempre imprimir en la consola
         print(f"[UrlPlayer] {message}")
+        
+        # Intentar añadir al TextEdit si está disponible
+        if hasattr(self, 'textEdit') and self.textEdit:
+            try:
+                # Simplemente usar append que maneja el cursor internamente
+                self.textEdit.append(str(message))
+            except Exception as e:
+                print(f"[UrlPlayer] Error escribiendo en textEdit: {e}")
 
     # Método para cargar la UI
     def _fallback_init_ui(self):
@@ -540,18 +786,209 @@ class UrlPlayer(BaseModule):
 
 
     def perform_search(self):
-        """Performs a search based on the selected service and query."""
+        """Versión optimizada del buscador con manejo seguro de hilos QThread"""
         query = self.lineEdit.text().strip()
         if not query:
             return
         
-        # Obtener el estado de only_local
-        only_local = False
-        if hasattr(self, 'urlplaylist_only_local'):
-            only_local = self.urlplaylist_only_local
+        # Cancelar búsqueda anterior si está en progreso
+        if hasattr(self, '_current_search_thread') and self._current_search_thread is not None:
+            if isinstance(self._current_search_thread, QThread) and self._current_search_thread.isRunning():
+                self.log("Cancelando búsqueda anterior en QThread")
+                # Indicar a los trabajadores que deben cancelarse
+                if hasattr(self, '_search_worker') and hasattr(self._search_worker, 'stop'):
+                    self._search_worker.stop()
+                # Esperar a que termine
+                self._current_search_thread.quit()
+                self._current_search_thread.wait(500)  # Esperar máximo 500ms
         
-        # Utilizar la nueva función de búsqueda
-        perform_search_with_service_filter(self, query, only_local)
+        # Verificar límite de tiempo entre búsquedas
+        if hasattr(self, '_last_search_time'):
+            import time
+            if time.time() - self._last_search_time < 0.5:  # Mínimo 0.5 segundos entre búsquedas
+                self.log("Búsqueda demasiado frecuente, ignorando")
+                return
+        
+        # Registrar tiempo de búsqueda
+        import time
+        self._last_search_time = time.time()
+        
+        # Mostrar indicador de búsqueda
+        if hasattr(self, 'show_loading_indicator'):
+            self.show_loading_indicator(True)
+        self.searchButton.setEnabled(False)
+        
+        # Obtener el estado de only_local
+        only_local = getattr(self, 'urlplaylist_only_local', False)
+        
+        # Crear QThread y worker para la búsqueda
+        from PyQt6.QtCore import QThread
+        from modules.submodules.url_playlist.search_workers import SearchWorker
+        
+        # Crear un nuevo QThread
+        self._current_search_thread = QThread()
+        
+        # Crear el worker y moverlo al hilo
+        self._search_worker = SearchWorker(self, query, only_local)
+        self._search_worker.moveToThread(self._current_search_thread)
+        
+        # Conectar señales
+        self._current_search_thread.started.connect(self._search_worker.run)
+        self._search_worker.finished.connect(self._current_search_thread.quit)
+        self._search_worker.finished.connect(self._search_worker.deleteLater)
+        self._current_search_thread.finished.connect(self._current_search_thread.deleteLater)
+        self._current_search_thread.finished.connect(self._search_finished)
+        
+        # Conectar señales de resultados
+        self._search_worker.db_results_ready.connect(self._show_db_results_safe)
+        self._search_worker.error.connect(lambda e: self.log(f"Error en búsqueda: {e}"))
+        
+        # Iniciar el hilo
+        self._current_search_thread.start()
+
+    def _perform_search_async(self, query, only_local):
+        """Realiza la búsqueda en un hilo separado con mejor gestión de memoria."""
+        try:
+            # Verificar cancelación
+            if hasattr(self, '_cancel_search') and self._cancel_search:
+                self.log("Búsqueda cancelada")
+                # Actualizar UI en el hilo principal
+                from PyQt6.QtCore import QTimer
+                QTimer.singleShot(0, self._search_finished)
+                return
+            
+            # Primero buscar en la base de datos para resultados rápidos
+            from modules.submodules.url_playlist.db_manager import search_database_links
+            db_links = search_database_links(self, self.db_path, query, "all")
+            
+            if db_links:
+                # Procesar resultados de forma segura
+                results = None
+                try:
+                    # Usar nuestra nueva función de procesamiento
+                    results = self._process_database_results(db_links)
+                    
+                    # Enviar resultados al hilo principal para mostrar
+                    from PyQt6.QtCore import QTimer
+                    QTimer.singleShot(0, lambda: self._show_db_results_safe(results))
+                    
+                    # Liberar memoria
+                    del results
+                    
+                except Exception as proc_error:
+                    self.log(f"Error al procesar resultados de base de datos: {proc_error}")
+                    import traceback
+                    self.log(traceback.format_exc())
+            
+            # Si no se cancela, continuar con la búsqueda externa
+            if not hasattr(self, '_cancel_search') or not self._cancel_search:
+                # Usar un enfoque más seguro que minimice la memoria
+                try:
+                    from modules.submodules.url_playlist.db_manager import perform_search_with_service_filter
+                    perform_search_with_service_filter(self, query, only_local)
+                except Exception as search_error:
+                    self.log(f"Error en búsqueda externa: {search_error}")
+                    import traceback
+                    self.log(traceback.format_exc())
+                
+            # Forzar liberación de memoria
+            import gc
+            gc.collect()
+                    
+        except Exception as e:
+            self.log(f"Error en búsqueda: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+        finally:
+            # Actualizar UI en el hilo principal
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(0, self._search_finished)
+
+    def _show_db_results_safe(self, results):
+        """Muestra los resultados de la base de datos de forma segura con manejo de memoria"""
+        try:
+            if not results:
+                return
+                    
+            self.log(f"Mostrando resultados preliminares de la base de datos ({len(results)} elementos)")
+            
+            # Limitar resultados para evitar sobrecarga
+            if len(results) > 100:
+                results = results[:100]
+                self.log("Limitando a 100 resultados para evitar sobrecarga")
+            
+            # Borrar resultados antiguos
+            self.treeWidget.clear()
+            
+            # Mostrar resultados iniciales en bloques para evitar congelamiento
+            from PyQt6.QtCore import QTimer
+            
+            # Dividir en bloques de 20 para procesar
+            chunk_size = 20
+            for i in range(0, len(results), chunk_size):
+                chunk = results[i:i+chunk_size]
+                # Usar un timer para permitir que la UI respire
+                QTimer.singleShot(i * 10, lambda c=chunk: self._show_result_chunk(c))
+            
+        except Exception as e:
+            self.log(f"Error mostrando resultados preliminares: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def _show_result_chunk(self, results_chunk):
+        """Muestra un subconjunto de resultados para evitar bloquear la UI"""
+        try:
+            from modules.submodules.url_playlist.ui_helpers import display_search_results
+            display_search_results(self, results_chunk, False)  # False para no borrar resultados existentes
+        except Exception as e:
+            self.log(f"Error mostrando bloque de resultados: {str(e)}")
+
+
+    def _show_db_results(self, db_links):
+        """Mostrar resultados de la base de datos mientras se continúa la búsqueda externa"""
+        try:
+            if not db_links:
+                return
+                    
+            self.log(f"Mostrando resultados preliminares de la base de datos")
+            
+            # Procesar y mostrar los resultados
+            from modules.submodules.url_playlist.db_manager import _process_database_results
+            db_results = _process_database_results(self, db_links)
+            
+            if db_results:
+                # Borrar resultados antiguos solo si encontramos nuevos
+                self.treeWidget.clear()
+                
+                # Mostrar resultados iniciales
+                from modules.submodules.url_playlist.ui_helpers import display_search_results
+                display_search_results(self, db_results, True)
+                
+                # Actualizar la UI para mostrar los resultados
+                QApplication.processEvents()
+                    
+        except Exception as e:
+            self.log(f"Error mostrando resultados preliminares: {str(e)}")
+
+    def _search_finished(self):
+        """Actualiza la UI después de terminar la búsqueda con limpieza de memoria"""
+        if hasattr(self, 'show_loading_indicator'):
+            self.show_loading_indicator(False)
+        if hasattr(self, 'searchButton'):
+            self.searchButton.setEnabled(True)
+        
+        # Realizar limpieza explícita de memoria
+        if hasattr(self, '_search_worker'):
+            self._search_worker = None
+        if hasattr(self, '_current_search_thread'):
+            self._current_search_thread = None
+        
+        # Forzar recolección de basura
+        import gc
+        gc.collect()
+        
+        self.log("Búsqueda finalizada y memoria liberada")
+
 
     def connect_signals(self):
         """Conecta las señales de los widgets a sus respectivos slots."""
@@ -1131,9 +1568,9 @@ class UrlPlayer(BaseModule):
             os.environ["LASTFM_API_KEY"] = self.lastfm_api_key.strip()
             print(f"[UrlPlayer] Set LASTFM_API_KEY in environment")
         
-        if self.lastfm_user and isinstance(self.lastfm_user, str) and self.lastfm_user.strip():
-            os.environ["LASTFM_USER"] = self.lastfm_user.strip()
-            print(f"[UrlPlayer] Set LASTFM_USER in environment")
+        if self.lastfm_username and isinstance(self.lastfm_username, str) and self.lastfm_username.strip():
+            os.environ["LASTFM_USERNAME"] = self.lastfm_username.strip()
+            print(f"[UrlPlayer] Set LASTFM_USERNAME in environment")
             
         # Update enabled flags based on credentials
         self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
@@ -1195,8 +1632,8 @@ class UrlPlayer(BaseModule):
                 self.spotify_client_secret = module_args['spotify_client_secret']
             if 'lastfm_api_key' in module_args:
                 self.lastfm_api_key = module_args['lastfm_api_key']
-            if 'lastfm_user' in module_args:
-                self.lastfm_user = module_args['lastfm_user']
+            if 'lastfm_username' in module_args:
+                self.lastfm_username = module_args['lastfm_username']
             
             # Load pagination value
             if 'pagination_value' in module_args:
@@ -1307,10 +1744,10 @@ class UrlPlayer(BaseModule):
                 # Necesitamos encontrar el campo de entrada correcto
                 user_input = dialog.findChild(QLineEdit, 'user_input')
                 if user_input:
-                    lastfm_user = user_input.text().strip()
-                    if lastfm_user:
-                        self.lastfm_user = lastfm_user
-                        self.log(f"Set Last.fm user to: {self.lastfm_user}")
+                    lastfm_username = user_input.text().strip()
+                    if lastfm_username:
+                        self.lastfm_username = lastfm_username
+                        self.log(f"Set Last.fm user to: {self.lastfm_username}")
             
             # Scrobbles limit
             if hasattr(dialog, 'scrobbles_slider') and hasattr(dialog, 'scrobblers_spinBox'):
@@ -1326,12 +1763,12 @@ class UrlPlayer(BaseModule):
             
 
             # Last.fm username - ahora usando QLineEdit
-            lastfm_user_input = dialog.findChild(QLineEdit, 'entrada_usuario')
-            if lastfm_user_input:
-                lastfm_user = lastfm_user_input.text().strip()
-                if lastfm_user:
-                    self.lastfm_user = lastfm_user
-                    self.log(f"Set Last.fm user to: {self.lastfm_user}")
+            lastfm_username_input = dialog.findChild(QLineEdit, 'entrada_usuario')
+            if lastfm_username_input:
+                lastfm_username = lastfm_username_input.text().strip()
+                if lastfm_username:
+                    self.lastfm_username = lastfm_username
+                    self.log(f"Set Last.fm user to: {self.lastfm_username}")
             
             # Scrobbles limit - prioritize spinbox value
             scrobbles_spinbox = dialog.findChild(QSpinBox, 'scrobblers_spinBox')
@@ -1439,7 +1876,7 @@ class UrlPlayer(BaseModule):
 
             # Add Last.fm specific settings
             lastfm_settings = {
-                'lastfm_user': self.lastfm_user,
+                'lastfm_username': self.lastfm_username,
                 'scrobbles_limit': self.scrobbles_limit,
                 'scrobbles_by_date': self.scrobbles_by_date,
                 'service_priority_indices': getattr(self, 'service_priority_indices', [0, 1, 2, 3])
@@ -1470,7 +1907,7 @@ class UrlPlayer(BaseModule):
                 'spotify_client_id': self.spotify_client_id,
                 'spotify_client_secret': self.spotify_client_secret,
                 'lastfm_api_key': self.lastfm_api_key,
-                'lastfm_user': self.lastfm_user,
+                'lastfm_username': self.lastfm_username,
                 
                 # Configuración de vista de playlists
                 'playlist_unified_view': getattr(self, 'playlist_unified_view', False),
@@ -1482,7 +1919,7 @@ class UrlPlayer(BaseModule):
                 'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
                 
                 # lastfm
-                'lastfm_user': lastfm_settings['lastfm_user'],
+                'lastfm_username': lastfm_settings['lastfm_username'],
                 'scrobbles_limit': lastfm_settings['scrobbles_limit'],
                 'scrobbles_by_date': lastfm_settings['scrobbles_by_date'],
                 'service_priority_indices': lastfm_settings['service_priority_indices'],
@@ -1622,9 +2059,10 @@ class UrlPlayer(BaseModule):
 
     def toggle_play_pause(self):
         """Toggle between play and pause"""
+        from modules.submodules.url_playlist.media_utils import play_from_index, add_to_queue
         if not hasattr(self, 'current_playlist') or not self.current_playlist:
             # Nothing in playlist, try to add the selected item
-            self.add_to_queue()
+            add_to_queue(self)
             if not self.current_playlist:
                 self.log("Nothing to play")
                 return
@@ -1635,10 +2073,10 @@ class UrlPlayer(BaseModule):
                 if self.player_manager.is_playing:
                     self.player_manager.resume()
                 else:
-                    self.play_from_index(self.current_track_index)
+                    play_from_index(self, self.current_track_index)
             else:
                 # Start from the beginning
-                self.play_from_index(0)
+                play_from_index(self, 0)
         else:
             # Pause current playback
             self.player_manager.pause()
@@ -1859,3 +2297,44 @@ class UrlPlayer(BaseModule):
         else:
             self.log("No songs could be added to queue")
             return False
+
+
+# CLEAN MEMEORY
+
+    def clear_search_cache(self):
+        """Clear search cache to free memory"""
+        if hasattr(self, '_db_query_cache'):
+            self._db_query_cache.clear()
+            
+        # Clear any other caches
+        if hasattr(self, 'path_cache'):
+            self.path_cache.clear()
+            
+        if hasattr(self, '_info_cache'):
+            self._info_cache.clear()
+        
+        # Force garbage collection
+        import gc
+        gc.collect()
+        
+        self.log("Search cache cleared")
+
+    def perform_memory_cleanup(self):
+        """Perform memory cleanup periodically"""
+        # Clear any caches that are too large
+        if hasattr(self, '_db_query_cache') and len(self._db_query_cache) > 20:
+            # Keep the 10 most recent items only
+            items = list(self._db_query_cache.items())
+            items.sort(key=lambda x: x[1].get('_cache_time', 0), reverse=True)
+            
+            # Create new cache with recent items
+            new_cache = {}
+            for i, (key, value) in enumerate(items):
+                if i < 10:
+                    new_cache[key] = value
+                    
+            self._db_query_cache = new_cache
+            
+        # Force garbage collection
+        import gc
+        gc.collect()

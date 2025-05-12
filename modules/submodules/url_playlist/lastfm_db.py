@@ -9,7 +9,12 @@ from PyQt6.QtWidgets import QApplication
 
 from modules.submodules.url_playlist.ui_helpers import get_service_priority
 
-def get_lastfm_cache_path(lastfm_user=None):
+def log(message):
+    """Registra un mensaje en el TextEdit y en la consola."""
+    print(f"[UrlPlayer-lastfm_db] {message}")  # Using print instead of calling log again
+
+
+def get_lastfm_cache_path(lastfm_username=None):
     """Get the path to the Last.fm scrobbles cache file"""
     try:
         # Try to import PROJECT_ROOT from base module
@@ -21,19 +26,19 @@ def get_lastfm_cache_path(lastfm_user=None):
     cache_dir = Path(PROJECT_ROOT, ".content", "cache", "url_playlist")
     os.makedirs(cache_dir, exist_ok=True)
     
-    if lastfm_user:
-        return Path(cache_dir, f"scrobbles_{lastfm_user}.json")
+    if lastfm_username:
+        return Path(cache_dir, f"scrobbles_{lastfm_username}.json")
     else:
         return Path(cache_dir, "lastfm_scrobbles.json")
 
-def create_scrobbles_table(conn, lastfm_user):
+def create_scrobbles_table(conn, lastfm_username):
     """
     Create or modify the scrobbles tables to match the required schema.
     Respects existing columns and doesn't try to add columns that already exist.
     
     Args:
         conn: Database connection
-        lastfm_user: Last.fm username
+        lastfm_username: Last.fm username
     """
     cursor = conn.cursor()
     
@@ -45,23 +50,23 @@ def create_scrobbles_table(conn, lastfm_user):
         # Get existing columns
         cursor.execute("PRAGMA table_info(songs)")
         songs_columns = [row[1] for row in cursor.fetchall()]
-        print(f"Existing songs table columns: {songs_columns}")
+        log(f"Existing songs table columns: {songs_columns}")
         
         # Add missing columns to songs table if needed
         if 'reproducciones' not in songs_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN reproducciones INTEGER DEFAULT 1")
-            print("Added column reproducciones to songs table")
+            log("Added column reproducciones to songs table")
             
         if 'fecha_reproducciones' not in songs_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN fecha_reproducciones TEXT")
-            print("Added column fecha_reproducciones to songs table")
+            log("Added column fecha_reproducciones to songs table")
             
         if 'scrobbles_ids' not in songs_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN scrobbles_ids TEXT")
-            print("Added column scrobbles_ids to songs table")
+            log("Added column scrobbles_ids to songs table")
     
     # User-specific table name for scrobbles
-    user_table = f"scrobbles_{lastfm_user}"
+    user_table = f"scrobbles_{lastfm_username}"
     
     # Check if user table exists
     cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{user_table}'")
@@ -69,7 +74,7 @@ def create_scrobbles_table(conn, lastfm_user):
     
     # Create user table with the correct schema if it doesn't exist
     if not user_table_exists:
-        print(f"Creating {user_table} table with correct schema")
+        log(f"Creating {user_table} table with correct schema")
         cursor.execute(f"""
         CREATE TABLE IF NOT EXISTS {user_table} (
             id INTEGER PRIMARY KEY,
@@ -94,7 +99,7 @@ def create_scrobbles_table(conn, lastfm_user):
             artist_id INTEGER,
             album_id INTEGER
         """)
-        print(f"Created {user_table} table")
+        log(f"Created {user_table} table")
         
         # Create indexes for the new table
         cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{user_table}_artist ON {user_table}(artist_name)")
@@ -106,7 +111,7 @@ def create_scrobbles_table(conn, lastfm_user):
         # Check existing columns for user table
         cursor.execute(f"PRAGMA table_info({user_table})")
         user_columns = [row[1] for row in cursor.fetchall()]
-        print(f"Existing {user_table} columns: {user_columns}")
+        log(f"Existing {user_table} columns: {user_columns}")
         
         # Add any missing required columns
         required_columns = {
@@ -137,9 +142,9 @@ def create_scrobbles_table(conn, lastfm_user):
             if col_name not in user_columns:
                 try:
                     cursor.execute(f"ALTER TABLE {user_table} ADD COLUMN {col_name} {col_type}")
-                    print(f"Added column {col_name} to {user_table} table")
+                    log(f"Added column {col_name} to {user_table} table")
                 except Exception as e:
-                    print(f"Error adding column {col_name} to {user_table}: {e}")
+                    log(f"Error adding column {col_name} to {user_table}: {e}")
         
         # Make sure the unique index exists
         try:
@@ -148,7 +153,7 @@ def create_scrobbles_table(conn, lastfm_user):
             ON {user_table}(artist_name, name, timestamp)
             """)
         except Exception as e:
-            print(f"Error creating unique index on {user_table}: {e}")
+            log(f"Error creating unique index on {user_table}: {e}")
     
     # Check if song_links table exists
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
@@ -172,7 +177,7 @@ def create_scrobbles_table(conn, lastfm_user):
             boomkat_url TEXT
         )
         """)
-        print("Created song_links table")
+        log("Created song_links table")
         
         # Create index for song_id
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
@@ -195,12 +200,12 @@ def create_scrobbles_table(conn, lastfm_user):
             if col_name not in link_columns:
                 try:
                     cursor.execute(f"ALTER TABLE song_links ADD COLUMN {col_name} {col_type}")
-                    print(f"Added column {col_name} to song_links table")
+                    log(f"Added column {col_name} to song_links table")
                 except Exception as e:
-                    print(f"Error adding column {col_name} to song_links: {e}")
+                    log(f"Error adding column {col_name} to song_links: {e}")
     
     # User-specific LastFM config table
-    config_table = f"lastfm_config_{lastfm_user}"
+    config_table = f"lastfm_config_{lastfm_username}"
     
     # Check if user-specific config table exists
     cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{config_table}'")
@@ -216,16 +221,16 @@ def create_scrobbles_table(conn, lastfm_user):
             last_updated TIMESTAMP
         )
         """)
-        print(f"Created {config_table} table")
+        log(f"Created {config_table} table")
         
         # Initialize with default values
         cursor.execute(f"""
         INSERT INTO {config_table} (id, lastfm_username, last_timestamp, last_updated)
         VALUES (1, ?, 0, CURRENT_TIMESTAMP)
-        """, (lastfm_user,))
+        """, (lastfm_username,))
     
     # Additionally, check for the old global config table and migrate if needed
-    if lastfm_user == "paqueradejere":  # Primary username
+    if lastfm_username== "paqueradejere":  # Primary username
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='lastfm_config'")
         if cursor.fetchone():
             # Check if it has data and we don't already have data in the user table
@@ -244,11 +249,11 @@ def create_scrobbles_table(conn, lastfm_user):
                     SET last_timestamp = ?, last_updated = (SELECT last_updated FROM lastfm_config WHERE id = 1)
                     WHERE id = 1
                     """, (global_result[0],))
-                    print(f"Migrated timestamp {global_result[0]} from global config to {config_table}")
+                    log(f"Migrated timestamp {global_result[0]} from global config to {config_table}")
     
     # Commit changes
     conn.commit()
-    print(f"Tables and indexes created or verified for user {lastfm_user}")
+    log(f"Tables and indexes created or verified for user {lastfm_username}")
 
 def process_scrobbles(self, scrobbles):
     """
@@ -265,7 +270,7 @@ def process_scrobbles(self, scrobbles):
     if not scrobbles:
         return []
     
-    self.log("Processing scrobbles...")
+    log("Processing scrobbles...")
     
     processed = []
     
@@ -316,7 +321,7 @@ def process_scrobbles(self, scrobbles):
             
             # Check for minimum required fields
             if not artist_name or not track_name:
-                self.log(f"Skipping scrobble with missing artist or track: {scrobble}")
+                log(f"Skipping scrobble with missing artist or track: {scrobble}")
                 continue
             
             # Create a standardized scrobble record
@@ -343,21 +348,21 @@ def process_scrobbles(self, scrobbles):
             processed.append(processed_scrobble)
             
         except (KeyError, ValueError, TypeError) as e:
-            self.log(f"Error processing scrobble: {e}, Data: {scrobble}")
+            log(f"Error processing scrobble: {e}, Data: {scrobble}")
             continue
     
-    self.log(f"Processed {len(processed)} scrobbles")
+    log(f"Processed {len(processed)} scrobbles")
     return processed
 
 
-def save_scrobbles_to_db(self, scrobbles, lastfm_user):
+def save_scrobbles_to_db(self, scrobbles, lastfm_username):
     """
     Save the scrobbles to the database without integrating with songs table.
     Just saves to the user-specific scrobbles table.
     
     Args:
         scrobbles: List of processed scrobbles
-        lastfm_user: Name of the Last.fm user
+        lastfm_username: Name of the Last.fm user
         
     Returns:
         Number of scrobbles saved (new + updated)
@@ -366,7 +371,7 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
         return 0
     
     if not hasattr(self, 'db_path') or not self.db_path:
-        self.log("Error: No database path configured")
+        log("Error: No database path configured")
         return 0
     
     try:
@@ -375,10 +380,10 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
         cursor = conn.cursor()
         
         # Table name will be user-specific
-        table_name = f"scrobbles_{lastfm_user}"
+        table_name = f"scrobbles_{lastfm_username}"
         
         # Create table if it doesn't exist
-        create_scrobbles_table(conn, lastfm_user)
+        create_scrobbles_table(conn, lastfm_username)
         
         # Get table columns to understand its structure
         cursor.execute(f"PRAGMA table_info({table_name})")
@@ -391,8 +396,8 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
         uses_scrobble_date = 'scrobble_date' in columns
         uses_fecha_scrobble = 'fecha_scrobble' in columns
         
-        self.log(f"Table columns found: {columns}")
-        self.log(f"Using field mapping - track_name: {uses_track_name}, name: {uses_name}, " + 
+        log(f"Table columns found: {columns}")
+        log(f"Using field mapping - track_name: {uses_track_name}, name: {uses_name}, " + 
                 f"scrobble_date: {uses_scrobble_date}, fecha_scrobble: {uses_fecha_scrobble}")
         
         new_count = 0
@@ -402,7 +407,7 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
         # Create a transaction for better performance
         conn.execute("BEGIN TRANSACTION")
         
-        self.log(f"Saving {len(scrobbles)} scrobbles to {table_name}")
+        log(f"Saving {len(scrobbles)} scrobbles to {table_name}")
         
         # Process in batches for better performance
         batch_size = 100
@@ -441,7 +446,7 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
                 lastfm_url = scrobble.get('lastfm_url', scrobble.get('url', ''))
                 
                 if not artist_name or not name:
-                    self.log(f"Skipping scrobble with missing data: {scrobble}")
+                    log(f"Skipping scrobble with missing data: {scrobble}")
                     continue
                 
                 # Check if this scrobble already exists
@@ -528,13 +533,13 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
                         new_count += 1
                     except sqlite3.Error as e:
                         # More detailed error reporting
-                        self.log(f"Error inserting scrobble: {e}")
-                        self.log(f"SQL: {insert_sql}")
-                        self.log(f"Params: {insert_params}")
+                        log(f"Error inserting scrobble: {e}")
+                        log(f"SQL: {insert_sql}")
+                        log(f"Params: {insert_params}")
                         continue
         
         # Update user-specific Last.fm config
-        config_table = f"lastfm_config_{lastfm_user}"
+        config_table = f"lastfm_config_{lastfm_username}"
         
         # Find the latest timestamp from scrobbles
         latest_timestamp = 0
@@ -553,12 +558,12 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
                         UPDATE {config_table}
                         SET last_timestamp = MAX(last_timestamp, ?), lastfm_username = ?, last_updated = CURRENT_TIMESTAMP
                         WHERE id = 1
-                        """, (latest_timestamp, lastfm_user))
+                        """, (latest_timestamp, lastfm_username))
                     else:
                         cursor.execute(f"""
                         INSERT INTO {config_table} (id, lastfm_username, last_timestamp, last_updated)
                         VALUES (1, ?, ?, CURRENT_TIMESTAMP)
-                        """, (lastfm_user, latest_timestamp))
+                        """, (lastfm_username, latest_timestamp))
                 else:
                     cursor.execute(f"""
                     CREATE TABLE IF NOT EXISTS {config_table} (
@@ -571,21 +576,21 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
                     cursor.execute(f"""
                     INSERT INTO {config_table} (id, lastfm_username, last_timestamp, last_updated)
                     VALUES (1, ?, ?, CURRENT_TIMESTAMP)
-                    """, (lastfm_user, latest_timestamp))
+                    """, (lastfm_username, latest_timestamp))
             except sqlite3.Error as e:
-                self.log(f"Error updating config table: {e}")
+                log(f"Error updating config table: {e}")
         
         # Commit the transaction
         conn.commit()
         conn.close()
         
-        self.log(f"Database update summary: {new_count} new, {updated_count} updated, {duplicate_count} duplicates skipped")
+        log(f"Database update summary: {new_count} new, {updated_count} updated, {duplicate_count} duplicates skipped")
         return new_count + updated_count
         
     except Exception as e:
-        self.log(f"Error saving scrobbles to database: {str(e)}")
+        log(f"Error saving scrobbles to database: {str(e)}")
         import traceback
-        self.log(traceback.format_exc())
+        log(traceback.format_exc())
         
         # Try to rollback if we're in a transaction
         try:
@@ -599,13 +604,13 @@ def save_scrobbles_to_db(self, scrobbles, lastfm_user):
 
 
 
-def load_scrobbles_from_db(self, lastfm_user, start_time=None, end_time=None, limit=None):
+def load_scrobbles_from_db(self, lastfm_username, start_time=None, end_time=None, limit=None):
     """
     Versión mejorada para cargar scrobbles desde la base de datos.
     """
     try:
         if not hasattr(self, 'db_path') or not self.db_path:
-            self.log("Error: No database path configured")
+            log("Error: No database path configured")
             return []
             
         import sqlite3
@@ -615,36 +620,36 @@ def load_scrobbles_from_db(self, lastfm_user, start_time=None, end_time=None, li
         # Si limit es None o 0, usar valor por defecto
         if not limit:
             limit = getattr(self, 'scrobbles_limit', 100)
-            self.log(f"Using default scrobbles limit: {limit}")
+            log(f"Using default scrobbles limit: {limit}")
         
         # Nombre de tabla específico de usuario
-        table_name = f"scrobbles_{lastfm_user}"
+        table_name = f"scrobbles_{lastfm_username}"
         
         # Verificar si la tabla existe
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
         if not cursor.fetchone():
-            self.log(f"Table {table_name} does not exist, checking for paqueradejere")
+            log(f"Table {table_name} does not exist, checking for paqueradejere")
             # Intentar con paqueradejere como fallback
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scrobbles_paqueradejere'")
             if cursor.fetchone():
                 table_name = "scrobbles_paqueradejere"
-                self.log("Using scrobbles_paqueradejere table instead")
+                log("Using scrobbles_paqueradejere table instead")
             else:
                 # También intentar con el nombre sin el prefijo 'scrobbles_'
-                alternate_table_name = lastfm_user
+                alternate_table_name = lastfm_username
                 cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{alternate_table_name}'")
                 if cursor.fetchone():
                     table_name = alternate_table_name
-                    self.log(f"Using {alternate_table_name} table instead")
+                    log(f"Using {alternate_table_name} table instead")
                 else:
-                    self.log("No scrobbles table found")
+                    log("No scrobbles table found")
                     conn.close()
                     return []
         
         # Obtener columnas disponibles
         cursor.execute(f"PRAGMA table_info({table_name})")
         columns = [row[1] for row in cursor.fetchall()]
-        self.log(f"Available columns in {table_name}: {columns}")
+        log(f"Available columns in {table_name}: {columns}")
         
         # Determinar el nombre del campo para la pista
         if 'track_name' in columns:
@@ -659,7 +664,7 @@ def load_scrobbles_from_db(self, lastfm_user, start_time=None, end_time=None, li
             else:
                 track_field = 'name'  # Fallback predeterminado
                 
-        self.log(f"Using track field: {track_field}")
+        log(f"Using track field: {track_field}")
         
         # Construir consulta - incluir tantas URLs de servicios como estén disponibles
         select_cols = [f's.id', 's.artist_name', f's.{track_field} AS name', 's.album_name', 
@@ -707,13 +712,13 @@ def load_scrobbles_from_db(self, lastfm_user, start_time=None, end_time=None, li
             params.append(limit)
         
         # Ejecutar consulta
-        self.log(f"Executing query: {query} with params: {params}")
+        log(f"Executing query: {query} with params: {params}")
         
         try:
             cursor.execute(query, params)
         except sqlite3.OperationalError as e:
             # Si ocurre un error, intentar con una consulta más simple
-            self.log(f"Error with query, trying simpler version: {e}")
+            log(f"Error with query, trying simpler version: {e}")
             query = f"""
             SELECT id, artist_name, {track_field} AS name, album_name, 
                    timestamp
@@ -748,13 +753,13 @@ def load_scrobbles_from_db(self, lastfm_user, start_time=None, end_time=None, li
         
         conn.close()
         
-        self.log(f"Loaded {len(results)} scrobbles from database")
+        log(f"Loaded {len(results)} scrobbles from database")
         return results
         
     except Exception as e:
-        self.log(f"Error loading scrobbles from database: {str(e)}")
+        log(f"Error loading scrobbles from database: {str(e)}")
         import traceback
-        self.log(traceback.format_exc())
+        log(traceback.format_exc())
         return []
 
 
@@ -782,7 +787,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         root_item = QTreeWidgetItem(parent_instance.treeWidget)
         root_title = f"{'Top Tracks' if by_play_count else 'Scrobbles'}: {title}"
         root_item.setText(0, root_title)
-        root_item.setText(1, getattr(parent_instance, 'lastfm_user', 'Unknown User'))
+        root_item.setText(1, getattr(parent_instance, 'lastfm_username', 'Unknown User'))
         root_item.setText(2, "Last.fm")
         
         # Format as bold
@@ -796,7 +801,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         # Store data for the root item
         root_item.setData(0, Qt.ItemDataRole.UserRole, {
             'title': root_title,
-            'artist': getattr(parent_instance, 'lastfm_user', 'Unknown User'),
+            'artist': getattr(parent_instance, 'lastfm_username', 'Unknown User'),
             'type': 'playlist',
             'source': 'lastfm'
         })
@@ -1003,20 +1008,20 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         return False
 
 
-def get_latest_timestamp_from_db(self, lastfm_user):
+def get_latest_timestamp_from_db(self, lastfm_username):
     """
     Get the latest timestamp from the database for the specified user.
     
     Args:
         self: The parent object with log method
-        lastfm_user: Last.fm username
+        lastfm_username: Last.fm username
         
     Returns:
         Latest timestamp or 0 if no records
     """
     try:
         if not hasattr(self, 'db_path') or not self.db_path:
-            self.log("Error: No database path configured")
+            log("Error: No database path configured")
             return 0
             
         import sqlite3
@@ -1024,8 +1029,8 @@ def get_latest_timestamp_from_db(self, lastfm_user):
         cursor = conn.cursor()
         
         # First try user-specific config table
-        config_table = f"lastfm_config_{lastfm_user}"
-        self.log(f"Checking config table {config_table} for timestamp")
+        config_table = f"lastfm_config_{lastfm_username}"
+        log(f"Checking config table {config_table} for timestamp")
         
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{config_table}'")
         if cursor.fetchone():
@@ -1033,12 +1038,12 @@ def get_latest_timestamp_from_db(self, lastfm_user):
             result = cursor.fetchone()
             if result and result[0]:
                 conn.close()
-                self.log(f"Latest timestamp from config table: {result[0]}")
+                log(f"Latest timestamp from config table: {result[0]}")
                 return result[0]
         
         # Then try user-specific scrobbles table 
-        scrobbles_table = f"scrobbles_{lastfm_user}"
-        self.log(f"Checking scrobbles table {scrobbles_table} for timestamp")
+        scrobbles_table = f"scrobbles_{lastfm_username}"
+        log(f"Checking scrobbles table {scrobbles_table} for timestamp")
         
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{scrobbles_table}'")
         if cursor.fetchone():
@@ -1047,11 +1052,11 @@ def get_latest_timestamp_from_db(self, lastfm_user):
             
             if result and result[0]:
                 conn.close()
-                self.log(f"Latest timestamp from {scrobbles_table}: {result[0]}")
+                log(f"Latest timestamp from {scrobbles_table}: {result[0]}")
                 return result[0]
         
         # Finally, check the paqueradejere table (fallback)
-        # self.log("Checking scrobbles_paqueradejere table for timestamp")
+        # log("Checking scrobbles_paqueradejere table for timestamp")
         # cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='scrobbles_paqueradejere'")
         # if cursor.fetchone():
         #     # Make sure the timestamp column exists
@@ -1064,27 +1069,27 @@ def get_latest_timestamp_from_db(self, lastfm_user):
                 
         #         if result and result[0] and result[0] > 0:
         #             conn.close()
-        #             self.log(f"Latest timestamp from scrobbles_paqueradejere: {result[0]}")
+        #             log(f"Latest timestamp from scrobbles_paqueradejere: {result[0]}")
         #             return result[0]
         #     else:
-        #         self.log("No timestamp column found in scrobbles_paqueradejere table")
+        #         log("No timestamp column found in scrobbles_paqueradejere table")
         
-        self.log("No valid timestamp found in any table, will perform full sync")
+        log("No valid timestamp found in any table, will perform full sync")
         conn.close()
         return 0
     except Exception as e:
-        self.log(f"Error getting latest timestamp: {str(e)}")
+        log(f"Error getting latest timestamp: {str(e)}")
         import traceback
-        self.log(traceback.format_exc())
+        log(traceback.format_exc())
         return 0
 
-def integrate_scrobbles_to_songs(self, lastfm_user):
+def integrate_scrobbles_to_songs(self, lastfm_username):
     """
     Integrate scrobbles from user-specific table to songs table.
     Updates songs with scrobble information and creates links in song_links.
     
     Args:
-        lastfm_user: Name of the Last.fm user
+        lastfm_username: Name of the Last.fm user
     
     Returns:
         Tuple of (songs_updated, songs_created)
@@ -1092,17 +1097,17 @@ def integrate_scrobbles_to_songs(self, lastfm_user):
     # Run in a thread
     thread = threading.Thread(
         target=_integrate_scrobbles_to_songs_thread,
-        args=(self, lastfm_user),
+        args=(self, lastfm_username),
         daemon=True
     )
     thread.start()
     return True
 
-def _integrate_scrobbles_to_songs_thread(parent, lastfm_user):
+def _integrate_scrobbles_to_songs_thread(parent, lastfm_username):
     """Thread function for integrating scrobbles into songs table"""
     try:
         # Emitir señal de inicio
-        parent.process_started_signal.emit(f"Integrating scrobbles for {lastfm_user}...")
+        parent.process_started_signal.emit(f"Integrating scrobbles for {lastfm_username}...")
         
         # Conectar a la base de datos
         import sqlite3
@@ -1110,7 +1115,7 @@ def _integrate_scrobbles_to_songs_thread(parent, lastfm_user):
         cursor = conn.cursor()
         
         # Verificar que la tabla específica del usuario existe
-        table_name = f"scrobbles_{lastfm_user}"
+        table_name = f"scrobbles_{lastfm_username}"
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
         if not cursor.fetchone():
             parent.process_error_signal.emit(f"Table {table_name} does not exist")
@@ -1273,7 +1278,7 @@ def _integrate_scrobbles_to_songs_thread(parent, lastfm_user):
                     len(all_scrobble_ids),  # reproducciones = count of unique scrobbles
                     json.dumps(all_dates),  # All dates
                     json.dumps(all_scrobble_ids),  # All scrobble IDs
-                    f"scrobble_{lastfm_user}",  # origen con usuario
+                    f"scrobble_{lastfm_username}",  # origen con usuario
                     song_id
                 ))
                 
@@ -1288,7 +1293,7 @@ def _integrate_scrobbles_to_songs_thread(parent, lastfm_user):
                     title,
                     album,
                     artist,
-                    f"scrobble_{lastfm_user}",  # origen con usuario
+                    f"scrobble_{lastfm_username}",  # origen con usuario
                     len(scrobble_ids),  # reproducciones = count of unique scrobbles
                     json.dumps(scrobble_dates),  # All dates
                     json.dumps([str(id) for id in scrobble_ids])  # All scrobble IDs
@@ -1395,27 +1400,27 @@ def _integrate_scrobbles_to_songs_thread(parent, lastfm_user):
         error_trace = traceback.format_exc()
         parent.process_error_signal.emit(f"Error: {str(e)}\n\n{error_trace}")
         return (0, 0)
-def fetch_links_for_scrobbles(self, lastfm_user):
+def fetch_links_for_scrobbles(self, lastfm_username):
     """
     Fetches service links for scrobbles and updates song_links table.
     
     Args:
-        lastfm_user: Name of the Last.fm user
+        lastfm_username: Name of the Last.fm user
     """
     # Run in a thread
     thread = threading.Thread(
         target=_fetch_links_thread,
-        args=(self, lastfm_user),
+        args=(self, lastfm_username),
         daemon=True
     )
     thread.start()
     return True
 
-def _fetch_links_thread(parent, lastfm_user):
+def _fetch_links_thread(parent, lastfm_username):
     """Thread function for fetching links"""
     try:
         # Emitir señal de inicio
-        parent.process_started_signal.emit(f"Fetching links for {lastfm_user}'s scrobbles...")
+        parent.process_started_signal.emit(f"Fetching links for {lastfm_username}'s scrobbles...")
         
         # Conectar a la base de datos
         import sqlite3
@@ -1423,7 +1428,7 @@ def _fetch_links_thread(parent, lastfm_user):
         cursor = conn.cursor()
         
         # Nombre de tabla específico de usuario
-        table_name = f"scrobbles_{lastfm_user}"
+        table_name = f"scrobbles_{lastfm_username}"
         
         # Verificar que la tabla existe
         cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
