@@ -1,19 +1,23 @@
-from PyQt6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QPushButton, 
-                          QGroupBox, QGridLayout, QSpinBox, QProgressBar,
-                          QComboBox, QWidget, QMessageBox, QScrollArea, QDialog,
+from PyQt6.QtWidgets import (QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QRadioButton,
+                          QGroupBox, QGridLayout, QSpinBox, QProgressBar,  QButtonGroup, QTabWidget,
+                          QComboBox, QWidget, QMessageBox, QScrollArea, QDialog, QTableWidgetItem,
                           QLineEdit, QCheckBox, QTableWidget, QHeaderView)
-from PyQt6.QtCore import Qt, QTimer, pyqtSignal
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal, QUrl
 from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 import random
 import sqlite3
 from pathlib import Path
 import time
 from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-from PyQt6.QtCore import QUrl
 import os
-
-from base_module import BaseModule, PROJECT_ROOT
 import logging
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from base_module import BaseModule, PROJECT_ROOT
+from modules.submodules.jaangle.spotify_player import SpotifyPlayer
+from modules.submodules.jaangle.listenbrainz_player import ListenBrainzPlayer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -65,6 +69,7 @@ class MusicQuiz(BaseModule):
     quiz_completed = pyqtSignal()
     
     def __init__(self, parent=None, theme='Tokyo Night', db_path=None, config=None, **kwargs):
+        # IMPORTANTE: Inicializar todos los atributos al principio
         self.db_path = db_path
         self.conn = None
         self.cursor = None
@@ -85,10 +90,21 @@ class MusicQuiz(BaseModule):
         self.total_played = 0
         self.game_active = False
         self.current_song_path = None
+        self.current_song_id = None
+        self.current_song = None
         
         # Filtros de sesión
         self.session_filters = None
-
+        
+        # Configuración de origen de música - MOVER ESTO AQUÍ
+        self.music_origin = 'local'  # Por defecto, usar canciones locales
+        self.spotify_user = None
+        self.local_radio = None
+        self.spotify_radio = None
+        self.spotify_container = None
+        self.listenbrainz_user = None
+        self.listenbrainz_container = None
+        
         # Si hay configuración personalizada, aplicarla
         if config:
             if 'min_song_duration' in config:
@@ -99,14 +115,12 @@ class MusicQuiz(BaseModule):
                 self.avoid_last_seconds = config['avoid_last_seconds']
             if 'options_count' in config:
                 self.options_count = config['options_count']
-        
-        # Estado del juego
-        self.current_correct_option = None
-        self.remaining_time = 0
-        self.score = 0
-        self.total_played = 0
-        self.game_active = False
-        self.current_song_path = None
+            if 'music_origin' in config:
+                self.music_origin = config['music_origin']
+            if 'spotify_user' in config:
+                self.spotify_user = config['spotify_user']
+            if 'listenbrainz_user' in config:
+                self.listenbrainz_user = config['listenbrainz_user']
         
         # Media player
         self.player = QMediaPlayer()
@@ -116,13 +130,238 @@ class MusicQuiz(BaseModule):
         # Inicializar la UI
         super().__init__(parent, theme)
         
+        self.global_config = self.get_global_config()
+
+        # Spotify player - inicializar antes de super().__init__
+        self.spotify_player = SpotifyPlayer(db_path=self.db_path, parent=self, config=self.global_config)        
+        
+        # ListenBrainz player
+        self.listenbrainz_player = ListenBrainzPlayer(db_path=self.db_path, parent=self, config=self.global_config)
+
+        self.load_config()
+
+        # Configuración de hotkeys
+        self.option_hotkeys = {
+            0: Qt.Key.Key_1,  # Opción 1 -> tecla 1
+            1: Qt.Key.Key_2,  # Opción 2 -> tecla 2
+            2: Qt.Key.Key_3,  # Opción 3 -> tecla 3
+            3: Qt.Key.Key_4,  # Opción 4 -> tecla 4
+            4: Qt.Key.Key_5,  # Opción 5 -> tecla 5
+            5: Qt.Key.Key_6,  # Opción 6 -> tecla 6
+            6: Qt.Key.Key_7,  # Opción 7 -> tecla 7
+            7: Qt.Key.Key_8,  # Opción 8 -> tecla 8
+        }
+        
+        # Si hay configuración de hotkeys en config, aplicarla
+        if config and 'option_hotkeys' in config:
+            self.option_hotkeys.update(config['option_hotkeys'])
+
         # Conectar a la base de datos
         self.connect_to_database()
+
+    def keyPressEvent(self, event):
+        """Maneja eventos de teclado para las hotkeys de opciones."""
+        if not self.game_active:
+            # Si el juego no está activo, ignorar las hotkeys
+            super().keyPressEvent(event)
+            return
+        
+        key = event.key()
+        
+        # Verificar si la tecla presionada coincide con alguna hotkey de opción
+        for option_index, hotkey in self.option_hotkeys.items():
+            if key == hotkey and option_index < len(self.option_buttons):
+                # Simular clic en el botón correspondiente
+                self.option_buttons[option_index].click()
+                return
+        
+        # Si no se manejó la tecla, pasar el evento al padre
+        super().keyPressEvent(event)
+
+
+    def show_hotkey_config_dialog(self):
+        """Muestra un diálogo para configurar las hotkeys de las opciones."""
+        try:
+            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QPushButton, QLabel
+            from PyQt6.QtCore import Qt
+            
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Configurar Hotkeys para Opciones")
+            dialog.setMinimumWidth(350)
+            dialog.setMinimumHeight(300)
+            
+            layout = QVBoxLayout()
+            
+            # Título e instrucciones
+            title_label = QLabel("Configura las teclas para seleccionar opciones")
+            title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            font = title_label.font()
+            font.setBold(True)
+            title_label.setFont(font)
+            
+            instructions = QLabel("Haz clic en un botón y presiona la tecla que quieres asignar a esa opción.")
+            instructions.setWordWrap(True)
+            
+            layout.addWidget(title_label)
+            layout.addWidget(instructions)
+            
+            # Grid para los botones de configuración
+            grid = QGridLayout()
+            hotkey_buttons = {}
+            
+            # Calcular filas y columnas para una distribución similar a las opciones
+            options_count = max(8, self.options_count)  # Permitir hasta 8 opciones
+            if options_count <= 4:
+                cols = 2
+            else:
+                cols = 3
+            
+            # Crear botones para cada opción
+            for i in range(options_count):
+                row, col = divmod(i, cols)
+                
+                # Obtener la tecla actual
+                current_key = self.option_hotkeys.get(i, Qt.Key.Key_unknown)
+                key_text = chr(current_key) if current_key >= Qt.Key.Key_A and current_key <= Qt.Key.Key_Z else f"Tecla {i+1}"
+                
+                # Crear botón
+                button = QPushButton(f"Opción {i+1}: {key_text}")
+                button.setCheckable(True)
+                button.setProperty("option_index", i)
+                hotkey_buttons[i] = button
+                
+                grid.addWidget(button, row, col)
+            
+            layout.addLayout(grid)
+            
+            # Botones de aceptar/cancelar
+            buttons_layout = QHBoxLayout()
+            save_btn = QPushButton("Guardar")
+            cancel_btn = QPushButton("Cancelar")
+            reset_btn = QPushButton("Restablecer")
+            
+            buttons_layout.addWidget(reset_btn)
+            buttons_layout.addWidget(save_btn)
+            buttons_layout.addWidget(cancel_btn)
+            
+            layout.addLayout(buttons_layout)
+            dialog.setLayout(layout)
+            
+            # Variables para el estado de captura de teclas
+            capturing_for = None
+            new_hotkeys = dict(self.option_hotkeys)
+            
+            # Función para capturar teclas
+            def start_capture(button):
+                nonlocal capturing_for
+                # Desmarcar cualquier otro botón marcado
+                for other_button in hotkey_buttons.values():
+                    if other_button != button:
+                        other_button.setChecked(False)
+                
+                # Si el botón fue desmarcado, detener la captura
+                if not button.isChecked():
+                    capturing_for = None
+                    return
+                    
+                # Iniciar captura para este botón
+                option_index = button.property("option_index")
+                capturing_for = option_index
+                button.setText(f"Opción {option_index+1}: Presiona una tecla...")
+            
+            # Función para manejar el evento de tecla en el diálogo
+            def dialog_key_press(event):
+                nonlocal capturing_for
+                if capturing_for is not None:
+                    key = event.key()
+                    
+                    # Actualizar la asignación de tecla
+                    new_hotkeys[capturing_for] = key
+                    
+                    # Actualizar el texto del botón
+                    button = hotkey_buttons[capturing_for]
+                    key_text = chr(key) if key >= Qt.Key.Key_A and key <= Qt.Key.Key_Z else f"Tecla {key}"
+                    button.setText(f"Opción {capturing_for+1}: {key_text}")
+                    
+                    # Desmarcar el botón y detener la captura
+                    button.setChecked(False)
+                    capturing_for = None
+                    
+                    # Consumir el evento
+                    event.accept()
+                    return True
+                    
+                return False
+            
+            # Función para restablecer las hotkeys predeterminadas
+            def reset_hotkeys():
+                nonlocal new_hotkeys
+                # Restablecer a valores predeterminados
+                new_hotkeys = {
+                    0: Qt.Key.Key_1,
+                    1: Qt.Key.Key_2,
+                    2: Qt.Key.Key_3,
+                    3: Qt.Key.Key_4,
+                    4: Qt.Key.Key_5,
+                    5: Qt.Key.Key_6,
+                    6: Qt.Key.Key_7,
+                    7: Qt.Key.Key_8,
+                }
+                
+                # Actualizar los botones
+                for i, button in hotkey_buttons.items():
+                    key = new_hotkeys.get(i, Qt.Key.Key_unknown)
+                    key_text = chr(key) if key >= Qt.Key.Key_A and key <= Qt.Key.Key_Z else f"Tecla {key}"
+                    button.setText(f"Opción {i+1}: {key_text}")
+            
+            # Conectar señales
+            for button in hotkey_buttons.values():
+                button.clicked.connect(lambda checked, b=button: start_capture(b))
+            
+            save_btn.clicked.connect(lambda: dialog.accept())
+            cancel_btn.clicked.connect(lambda: dialog.reject())
+            reset_btn.clicked.connect(reset_hotkeys)
+            
+            # Sobreescribir el método keyPressEvent del diálogo
+            dialog.keyPressEvent = lambda event: dialog_key_press(event) or QDialog.keyPressEvent(dialog, event)
+            
+            # Mostrar el diálogo
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                # Guardar la nueva configuración
+                self.option_hotkeys = new_hotkeys
+                return True
+            
+            return False
+            
+        except Exception as e:
+            print(f"Error al mostrar el diálogo de configuración de hotkeys: {e}")
+            import traceback
+            traceback.print_exc()
+            self.show_error_message("Error", f"Error al mostrar el diálogo: {e}")
+            return False
+
+
+    def get_global_config(self):
+        """Obtiene la configuración global desde el archivo de configuración."""
+        try:
+            import yaml
+            from pathlib import Path
+            
+            config_path = Path(PROJECT_ROOT, "config", "config.yml")
+            if os.path.exists(config_path):
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = yaml.safe_load(f)
+                    return config
+            return {}
+        except Exception as e:
+            print(f"Error al cargar la configuración global: {e}")
+            return {}
+
 
     def init_ui(self):
         """Inicializa la interfaz de usuario del módulo."""
         # Cargar la UI desde el archivo
-        ui_file_path = Path(PROJECT_ROOT, "ui", "jaangle_module.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_module.ui")
         
         if os.path.exists(ui_file_path):
             try:
@@ -141,11 +380,90 @@ class MusicQuiz(BaseModule):
                 self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
                 self.clear_session_btn.clicked.connect(self.clear_session_filters)
                 
+                # Agregar controles para seleccionar el origen de música
+                self.add_music_origin_controls()
+                
                 # Inicializar componentes adicionales que no están en el archivo UI
                 self.init_options_grid()
                 
+                # Inicializar el contenedor del reproductor de Spotify si es posible
+                if hasattr(self, 'spotify_player'):
+                    self.spotify_container = self.spotify_player.create_player_container()
+                    if self.spotify_container:
+                        # Buscar un lugar adecuado para agregar el contenedor
+                        # Primero intentar con un contenedor específico para el reproductor
+                        player_container = None
+                        
+                        if hasattr(self, 'player_container'):
+                            player_container = self.player_container
+                        elif hasattr(self, 'media_container'):
+                            player_container = self.media_container
+                        # Intentar encontrar un contenedor principal si no hay uno específico
+                        elif hasattr(self, 'main_layout'):
+                            # Si hay un layout principal, crear un contenedor
+                            player_container = QWidget()
+                            self.main_layout.addWidget(player_container)
+                        
+                        if player_container and player_container.layout():
+                            player_container.layout().addWidget(self.spotify_container)
+                        elif player_container:
+                            layout = QVBoxLayout(player_container)
+                            layout.addWidget(self.spotify_container)
+                        else:
+                            # En último caso, agregar al widget principal
+                            layout = QVBoxLayout()
+                            layout.addWidget(self.spotify_container)
+                            self.setLayout(layout)
+                        
+                        # Ocultar el contenedor inicialmente
+                        self.spotify_container.hide()
+
+                if hasattr(self, 'listenbrainz_player'):
+                    self.listenbrainz_container = self.listenbrainz_player.create_player_container()
+                    if self.listenbrainz_container:
+                        # Buscar un lugar adecuado para agregar el contenedor
+                        player_container = None
+                        
+                        if hasattr(self, 'player_container'):
+                            player_container = self.player_container
+                        elif hasattr(self, 'media_container'):
+                            player_container = self.media_container
+                        # Intentar encontrar un contenedor principal si no hay uno específico
+                        elif hasattr(self, 'main_layout'):
+                            # Si hay un layout principal, crear un contenedor
+                            player_container = QWidget()
+                            self.main_layout.addWidget(player_container)
+                        
+                        if player_container and player_container.layout():
+                            player_container.layout().addWidget(self.listenbrainz_container)
+                        elif player_container:
+                            layout = QVBoxLayout(player_container)
+                            layout.addWidget(self.listenbrainz_container)
+                        else:
+                            # En último caso, agregar al widget principal
+                            layout = QVBoxLayout()
+                            layout.addWidget(self.listenbrainz_container)
+                            self.setLayout(layout)
+                        
+                        # Ocultar el contenedor inicialmente
+                        self.listenbrainz_container.hide()
+
+                # Añadir botón para configurar hotkeys
+                if hasattr(self, 'config_group'):
+                    # Verificar si hay un layout para el grupo de configuración
+                    config_layout = self.config_group.layout()
+                    if config_layout:
+                        # Crear botón para configurar hotkeys
+                        hotkeys_btn = QPushButton("Configurar Teclas Rápidas")
+                        hotkeys_btn.clicked.connect(self.show_hotkey_config_dialog)
+                        
+                        # Añadir al layout
+                        config_layout.addWidget(hotkeys_btn)
+
+                
             except Exception as e:
                 print(f"Error cargando UI desde archivo: {e}")
+                import traceback
                 traceback.print_exc()
                 self._fallback_init_ui()
         else:
@@ -163,6 +481,62 @@ class MusicQuiz(BaseModule):
         
         # Deshabilitar opciones al inicio
         self.enable_options(False)
+
+    def _fallback_init_ui(self):
+        """Método de respaldo para inicializar la UI si falla la carga del archivo .ui"""
+        # Código existente...
+        
+        # Agregar los controles de origen de música aquí también
+        try:
+            # Crear un GroupBox para las opciones de origen
+            origin_group = QGroupBox("Origen de Música")
+            origin_layout = QHBoxLayout()
+            
+            # Crear radio buttons
+            self.local_radio = QRadioButton("Local")
+            self.spotify_radio = QRadioButton("Spotify")
+            self.listenbrainz_radio = QRadioButton("ListenBrainz")
+            
+            # Establecer el valor por defecto según la configuración
+            if self.music_origin == 'spotify':
+                self.spotify_radio.setChecked(True)
+            elif self.music_origin == 'listenbrainz':
+                self.listenbrainz_radio.setChecked(True)
+            else:
+                self.local_radio.setChecked(True)
+            
+            # Conectar señales
+            self.local_radio.toggled.connect(self.on_music_origin_changed)
+            self.spotify_radio.toggled.connect(self.on_music_origin_changed)
+            self.listenbrainz_radio.toggled.connect(self.on_music_origin_changed)
+            
+            # Añadir a layout
+            origin_layout.addWidget(self.local_radio)
+            origin_layout.addWidget(self.spotify_radio)
+            origin_layout.addWidget(self.listenbrainz_radio)
+            origin_group.setLayout(origin_layout)
+            
+            # Añadir al layout de configuración (si existe)
+            if hasattr(self, 'config_group') and self.config_group.layout():
+                self.config_group.layout().addWidget(origin_group)
+        except Exception as e:
+            print(f"Error al agregar controles de origen de música en fallback: {e}")
+        
+        # Inicializar el contenedor del reproductor de Spotify si es posible
+        if hasattr(self, 'spotify_player'):
+            self.spotify_container = self.spotify_player.create_player_container()
+            if self.spotify_container and hasattr(self, 'player_container'):
+                self.player_container.layout().addWidget(self.spotify_container)
+                self.spotify_container.hide()
+        
+        # Inicializar el contenedor del reproductor de ListenBrainz
+        if hasattr(self, 'listenbrainz_player'):
+            self.listenbrainz_container = self.listenbrainz_player.create_player_container()
+            if self.listenbrainz_container and hasattr(self, 'player_container'):
+                self.player_container.layout().addWidget(self.listenbrainz_container)
+                self.listenbrainz_container.hide()
+
+
 
     def _fallback_init_option(self, i, row, col, options_layout):
         """Método de respaldo para crear una opción si falla la carga de la UI"""
@@ -209,7 +583,62 @@ class MusicQuiz(BaseModule):
         options_layout.addWidget(option_group, row, col)
         self.option_buttons.append(select_button)
 
-  
+
+
+    def add_music_origin_controls(self):
+        """Agrega controles para seleccionar el origen de música."""
+        try:
+            # Verificar si ya existe un layout para los controles de configuración
+            if not hasattr(self, 'config_group'):
+                print("No se encontró config_group para agregar controles de origen")
+                return
+                    
+            config_layout = None
+            if hasattr(self.config_group, 'layout'):
+                config_layout = self.config_group.layout()
+            
+            if not config_layout:
+                # Si no hay layout, crear uno
+                config_layout = QVBoxLayout(self.config_group)
+            
+            # Crear grupo para origen de música
+            origin_group = QGroupBox("Origen de Música")
+            origin_layout = QHBoxLayout()
+            
+            # Crear radio buttons
+            self.local_radio = QRadioButton("Local")
+            self.spotify_radio = QRadioButton("Spotify")
+            self.listenbrainz_radio = QRadioButton("Online")  # Cambiar "ListenBrainz" por "Online"
+            
+            # Establecer el valor por defecto según la configuración
+            if self.music_origin == 'spotify':
+                self.spotify_radio.setChecked(True)
+            elif self.music_origin == 'online':  # Cambiar 'listenbrainz' por 'online'
+                self.listenbrainz_radio.setChecked(True)
+            else:
+                self.local_radio.setChecked(True)
+            
+            # Conectar señales
+            self.local_radio.toggled.connect(self.on_music_origin_changed)
+            self.spotify_radio.toggled.connect(self.on_music_origin_changed)
+            self.listenbrainz_radio.toggled.connect(self.on_music_origin_changed)
+            
+            # Añadir a layout
+            origin_layout.addWidget(self.local_radio)
+            origin_layout.addWidget(self.spotify_radio)
+            origin_layout.addWidget(self.listenbrainz_radio)
+            origin_group.setLayout(origin_layout)
+            
+            # Añadir al layout principal de configuración
+            config_layout.addWidget(origin_group)
+            
+            print("Controles de origen de música agregados correctamente")
+        except Exception as e:
+            print(f"Error al agregar controles de origen de música: {e}")
+            import traceback
+            traceback.print_exc()
+
+
     def init_options_grid(self):
         """Inicializa la cuadrícula de opciones dinámicamente con un número variable de opciones."""
         # Actualizar el número de opciones desde la configuración en la UI
@@ -231,7 +660,7 @@ class MusicQuiz(BaseModule):
             cols = 3
         
         # Ruta al archivo UI de la opción
-        option_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_option_item.ui")
+        option_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_option_item.ui")
         
         for i in range(self.options_count):
             row, col = divmod(i, cols)
@@ -343,6 +772,12 @@ class MusicQuiz(BaseModule):
         if old_options_count != self.options_count:
             self.init_options_grid()
         
+        # Inicializar playlist del juego si es necesario
+        if self.music_origin == 'online':
+            if not self.initialize_game_playlist():
+                self.show_error_message("Error", "No se pudo inicializar la playlist del juego")
+                return
+        
         # Reiniciar estadísticas
         self.score = 0
         self.total_played = 0
@@ -362,22 +797,39 @@ class MusicQuiz(BaseModule):
         # Programar el final del quiz
         total_duration_ms = self.quiz_duration_minutes * 60 * 1000
         self.quiz_timer.start(total_duration_ms)
+   
+   
     def stop_quiz(self):
         """Detiene el juego en curso."""
         self.game_active = False
         
-        # Actualizar estados de botones - elegir una opción:
-        # Opción 1: Si usas botones separados
+        # Actualizar estados de botones
         if hasattr(self, 'start_button') and hasattr(self, 'stop_button'):
             self.start_button.setEnabled(True)
             self.stop_button.setEnabled(False)
+        elif hasattr(self, 'action_toggle'):
+            self.action_toggle.setText("Iniciar Quiz")
         
         # Detener los timers
         self.timer.stop()
         self.quiz_timer.stop()
         
-        # Detener la reproducción
+        # Detener la reproducción local
         self.player.stop()
+        
+        # Detener reproducción de Spotify
+        if hasattr(self, 'spotify_player'):
+            self.spotify_player.stop()
+            
+        # Detener reproducción de ListenBrainz
+        if hasattr(self, 'listenbrainz_player'):
+            self.listenbrainz_player.stop()
+        
+        # Ocultar los contenedores de los reproductores
+        if hasattr(self, 'spotify_container') and self.spotify_container:
+            self.spotify_container.hide()
+        if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
+            self.listenbrainz_container.hide()
         
         # Deshabilitar opciones
         self.enable_options(False)
@@ -385,6 +837,7 @@ class MusicQuiz(BaseModule):
         # Restablecer la visualización
         self.countdown_label.setText("---")
         self.progress_bar.setValue(0)
+
 
     def end_quiz(self):
         """Finaliza el quiz cuando se acaba el tiempo total."""
@@ -402,22 +855,54 @@ class MusicQuiz(BaseModule):
         self.quiz_completed.emit()
 
 
+    # Modificación de get_random_songs() para incluir ListenBrainz
+
     def get_random_songs(self, count=4, max_retries=3):
-        """Versión modificada que incorpora los filtros de sesión con la estructura correcta de la base de datos."""
+        """Versión modificada que incorpora los filtros de sesión y origen de música."""
         retries = 0
         while retries < max_retries:
             try:
                 # Construir la consulta base
                 query = """
                     SELECT s.id, s.title, s.artist, s.album, s.file_path, s.duration, 
-                        a.album_art_path, s.track_number, s.album_art_path_denorm
+                        a.album_art_path, s.track_number, s.album_art_path_denorm, s.origen
                     FROM songs s
                     LEFT JOIN albums a ON s.album = a.name AND s.artist = (
                         SELECT name FROM artists WHERE id = a.artist_id
                     )
-                    WHERE s.duration >= ? AND s.file_path IS NOT NULL
+                    WHERE s.duration >= ?
                 """
                 params = [self.min_song_duration]
+                
+                # Aplicar filtro por origen
+                if self.music_origin == 'local':
+                    query += " AND s.origen = 'local' AND s.file_path IS NOT NULL"
+                elif self.music_origin == 'spotify':
+                    if self.spotify_user:
+                        query += " AND s.origen = ?"
+                        params.append(f"spotify_{self.spotify_user}")
+                    else:
+                        query += " AND s.origen LIKE 'spotify_%'"
+                    
+                    # Asegurarse que hay un enlace de Spotify disponible
+                    query += """ 
+                    AND EXISTS (
+                        SELECT 1 FROM song_links sl 
+                        WHERE sl.song_id = s.id 
+                        AND sl.spotify_url IS NOT NULL
+                    )
+                    """
+                elif self.music_origin == 'online':
+                    # Cambiar para buscar cualquier enlace online (YouTube, SoundCloud, Bandcamp)
+                    query += """ 
+                    AND EXISTS (
+                        SELECT 1 FROM song_links sl 
+                        WHERE sl.song_id = s.id 
+                        AND (sl.youtube_url IS NOT NULL 
+                            OR sl.soundcloud_url IS NOT NULL 
+                            OR sl.bandcamp_url IS NOT NULL)
+                    )
+                    """
                 
                 # Verificar si hay artistas excluidos
                 excluded_artists = self.get_excluded_items("excluded_artists")
@@ -487,15 +972,48 @@ class MusicQuiz(BaseModule):
                 
                 # Agregar orden aleatorio y límite
                 query += " ORDER BY RANDOM() LIMIT ?"
-                params.append(count * 2)  # Obtener el doble para tener margen si algunos archivos no existen
+                params.append(count * 4)  # Obtener más canciones para tener margen
                 
                 self.cursor.execute(query, params)
                 candidates = self.cursor.fetchall()
                 
-                # Verificar que los archivos existen
+                if len(candidates) == 0:
+                    print(f"La consulta no devolvió resultados: {query}")
+                    print(f"Parámetros: {params}")
+                    retries += 1
+                    continue
+                
+                # Verificar las canciones según el origen
                 valid_songs = []
                 for song in candidates:
-                    if song[4] and os.path.exists(song[4]):
+                    valid = False
+                    
+                    if self.music_origin == 'local':
+                        # Para canciones locales, verificar que el archivo existe
+                        if song[4] and os.path.exists(song[4]):
+                            valid = True
+                    elif self.music_origin == 'spotify':
+                        # Para canciones de Spotify, verificar que tengan un enlace válido
+                        self.cursor.execute("""
+                            SELECT spotify_url FROM song_links 
+                            WHERE song_id = ? AND spotify_url IS NOT NULL
+                        """, (song[0],))
+                        
+                        if self.cursor.fetchone():
+                            valid = True
+                    elif self.music_origin == 'online':
+                        # Para canciones online, verificar que tengan un enlace válido
+                        self.cursor.execute("""
+                            SELECT youtube_url, soundcloud_url, bandcamp_url 
+                            FROM song_links 
+                            WHERE song_id = ? 
+                            AND (youtube_url IS NOT NULL OR soundcloud_url IS NOT NULL OR bandcamp_url IS NOT NULL)
+                        """, (song[0],))
+                        
+                        if self.cursor.fetchone():
+                            valid = True
+                    
+                    if valid:
                         valid_songs.append(song)
                         if len(valid_songs) >= count:
                             break
@@ -503,11 +1021,14 @@ class MusicQuiz(BaseModule):
                 if len(valid_songs) >= count:
                     return valid_songs[:count]
                 
-                # Si no hay suficientes canciones válidas, intentar de nuevo con menos filtros
+                # Si no hay suficientes canciones válidas, intentar de nuevo
                 retries += 1
                 print(f"No se encontraron suficientes canciones válidas para {count} opciones. Reintento {retries}/{max_retries}")
+            
             except Exception as e:
                 print(f"Error al obtener canciones aleatorias: {e}")
+                import traceback
+                traceback.print_exc()
                 retries += 1
         
         # Si llegamos aquí, no pudimos obtener suficientes canciones
@@ -518,9 +1039,13 @@ class MusicQuiz(BaseModule):
         """Carga la imagen de la portada del álbum para mostrarla en la UI."""
         if not album_art_path or not os.path.exists(album_art_path):
             # Intentar usar el campo album_art_path_denorm si está disponible
-            if hasattr(self, 'current_song') and self.current_song and self.current_song[28]:
-                album_art_path = self.current_song[28]
-                if not os.path.exists(album_art_path):
+            if hasattr(self, 'current_song') and self.current_song:
+                # Comprobar primero la longitud de la tupla para evitar el error de índice
+                if len(self.current_song) > 8 and self.current_song[8]:
+                    album_art_path = self.current_song[8]
+                    if not os.path.exists(album_art_path):
+                        return None
+                else:
                     return None
             else:
                 return None
@@ -536,13 +1061,34 @@ class MusicQuiz(BaseModule):
         
         return None
 
+    def initialize_game_playlist(self):
+        """Inicializa una playlist de canciones para el juego completo"""
+        try:
+            if self.music_origin == 'online' and hasattr(self, 'listenbrainz_player'):
+                # Crear playlist de 100 canciones
+                self.game_playlist = self.listenbrainz_player.create_game_playlist(100)
+                if self.game_playlist:
+                    logger.info(f"Playlist del juego inicializada con {len(self.game_playlist)} canciones")
+                    return True
+                else:
+                    logger.warning("No se pudo crear playlist del juego")
+                    return False
+            return True  # Para otros modos no necesitamos playlist
+        except Exception as e:
+            logger.error(f"Error al inicializar playlist del juego: {e}")
+            return False
+
     def show_next_question(self):
-        """Muestra la siguiente pregunta del quiz con un número variable de opciones."""
+        """Muestra la siguiente pregunta del quiz con soporte mejorado para reproducción."""
         if not self.game_active:
             return
             
         # Detener la reproducción anterior si existe
         self.player.stop()
+        if hasattr(self, 'spotify_player'):
+            self.spotify_player.stop()
+        if hasattr(self, 'listenbrainz_player'):
+            self.listenbrainz_player.stop()
         
         # Obtener las canciones aleatorias (ahora con número variable)
         songs = self.get_random_songs(self.options_count)
@@ -559,100 +1105,235 @@ class MusicQuiz(BaseModule):
         # Configurar las opciones
         for i, button in enumerate(self.option_buttons):
             song = songs[i]
-            button.song_label.setText(f"Canción: {song[1]}")
-            button.artist_label.setText(f"Artista: {song[2]}")
-            button.album_label.setText(f"Álbum: {song[3]}")
+            song_id, title, artist, album, file_path, duration, album_art_path, track_number, album_art_path_denorm, origen = song
             
-            # Intentar cargar la portada del álbum desde album_art_path primero
-            album_art = None
-            if song[6]:  # album_art_path de la tabla albums
-                album_art = self.load_album_art(song[6])
+            # Actualizar información de la canción
+            button.song_label.setText(f"♪ {title}")
+            button.artist_label.setText(f"👤 {artist}")
+            button.album_label.setText(f"💿 {album}")
             
-            # Si no funciona, intentar con album_art_path_denorm de la tabla songs
-            if not album_art and len(song) > 8 and song[8]:
-                album_art = self.load_album_art(song[8])
-            
-            if album_art:
-                button.album_image.setPixmap(album_art)
-                button.album_image.setText("")
+            # Cargar imagen del álbum
+            pixmap = self.load_album_art(album_art_path_denorm if album_art_path_denorm else album_art_path)
+            if pixmap:
+                button.album_image.setPixmap(pixmap)
             else:
-                button.album_image.setText("Portada")
-                button.album_image.setPixmap(QPixmap())
+                button.album_image.setText("🎵")
+                button.album_image.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
-            # Restablecer el estilo
+            # Restablecer estilo del botón
             button.setStyleSheet("")
-            
+            button.setEnabled(True)
+        
         # Habilitar los botones
         self.enable_options(True)
         
-        # Iniciar la reproducción de la canción correcta
-        correct_song = songs[self.current_correct_option]
-        self.current_song_path = correct_song[4]
+        # Mostrar mensaje de carga
+        if hasattr(self, 'countdown_label'):
+            self.countdown_label.setText("Cargando...")
+        if hasattr(self, 'progress_bar'):
+            self.progress_bar.setValue(10)
         
+        # Obtener los IDs de todas las canciones para una posible playlist
+        song_ids = [song[0] for song in songs if song[0] is not None]
+        
+        # Iniciar la reproducción de la canción correcta según el origen
+        correct_song = songs[self.current_correct_option]
+        self.current_song_id = correct_song[0] if len(correct_song) > 0 else None  # ID de la canción
+
         try:
-            # Verificar que la ruta del archivo exista
-            if not os.path.exists(self.current_song_path):
-                print(f"Error: El archivo de audio no existe: {self.current_song_path}")
-                raise FileNotFoundError(f"Archivo de audio no encontrado: {self.current_song_path}")
-                
-            # Determinar desde dónde empezar a reproducir la canción
-            song_duration = correct_song[5]  # Duración en segundos
-            if not song_duration or song_duration <= 0:
-                song_duration = 60  # Valor predeterminado si la duración no es válida
-                
-            # Calcular los límites de reproducción
-            start_from_beginning = random.random() < 0.3  # 30% de probabilidad de comenzar desde el principio
-            avoid_last_seconds = min(15, int(song_duration * 0.1))  # Evitar los últimos 15 segundos o 10% de la canción
-            
-            # Si la canción tiene suficiente duración, elegir un punto aleatorio para comenzar
-            if start_from_beginning or song_duration <= (self.song_duration_seconds + avoid_last_seconds):
-                start_position = 0
-            else:
-                max_start = max(0, song_duration - self.song_duration_seconds - avoid_last_seconds)
-                if max_start > 0:
-                    start_position = random.randint(10, max_start)
+            if self.music_origin == 'spotify':
+                # Usar el reproductor de Spotify
+                if hasattr(self, 'spotify_container') and self.spotify_container:
+                    self.spotify_container.show()
+                    
+                if self.current_song_id is not None:
+                    QTimer.singleShot(2000, lambda: self._play_spotify_track())
                 else:
-                    start_position = 0
-            
-            # Configurar el reproductor
-            source = QUrl.fromLocalFile(self.current_song_path)
-            self.player.setSource(source)
-            
-            # Verificar si la fuente es válida antes de reproducir
-            QTimer.singleShot(100, lambda: self.play_song_at_position(start_position))
+                    logger.error("ID de canción no válido para reproducción de Spotify, intentando con otra pregunta")
+                    QTimer.singleShot(1000, self.show_next_question)
+                    return
+                    
+            elif self.music_origin == 'online':
+                # Usar el reproductor online (anteriormente listenbrainz)
+                if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
+                    self.listenbrainz_container.show()
+                    
+                if self.current_song_id is not None:
+                    # Añadir un delay para dar tiempo a la carga del reproductor
+                    QTimer.singleShot(2000, lambda: self._play_online_track())
+                else:
+                    logger.error("ID de canción no válido para reproducción online, intentando con otra pregunta")
+                    QTimer.singleShot(1000, self.show_next_question)
+                    return
+            else:
+                # Reproducción local tradicional
+                if len(correct_song) > 4 and correct_song[4]:
+                    self.current_song_path = correct_song[4]  # Ruta del archivo local
+                else:
+                    raise Exception("No hay ruta de archivo disponible para esta canción")
+                
+                # Verificar que la ruta del archivo exista
+                if not os.path.exists(self.current_song_path):
+                    print(f"Error: El archivo de audio no existe: {self.current_song_path}")
+                    raise FileNotFoundError(f"Archivo de audio no encontrado: {self.current_song_path}")
+                    
+                # Añadir un delay para dar tiempo a la carga del reproductor
+                QTimer.singleShot(1500, lambda: self._play_local_track())
+                
         except Exception as e:
             print(f"Error al reproducir la canción: {e}")
+            import traceback
+            traceback.print_exc()
             # Intentar con la siguiente pregunta si hay error
             QTimer.singleShot(500, self.show_next_question)
             return
-            
-        # Configurar el temporizador
-        self.remaining_time = self.song_duration_seconds
-        self.countdown_label.setText(str(self.remaining_time))
-        self.progress_bar.setValue(100)
-        
-        # Iniciar la cuenta regresiva
-        self.timer.start()
 
-    def play_song_at_position(self, position_seconds):
-        """Reproduce la canción desde una posición específica."""
+    def _play_online_track(self):
+        """Método auxiliar para reproducir canción online después del delay inicial."""
         try:
-            if self.player.mediaStatus() in [QMediaPlayer.MediaStatus.InvalidMedia, 
-                                            QMediaPlayer.MediaStatus.NoMedia]:
-                print(f"Error: Fuente de media inválida: {self.current_song_path}")
-                # Intentar reproducir la siguiente canción
-                QTimer.singleShot(500, self.show_next_question)
-                return
-                
-            # Establecer la posición y reproducir
-            self.player.setPosition(int(position_seconds * 1000))  # Convertir a milisegundos enteros
-            self.player.play()
+            if not hasattr(self, 'listenbrainz_player') or not self.current_song_id:
+                raise Exception("Reproductor online no disponible o ID de canción no válido")
             
-            # Verificar después de un breve retraso si la reproducción comenzó
-            QTimer.singleShot(500, self.check_playback_started)
+            # Configurar el reproductor para la duración del quiz
+            self.listenbrainz_player.set_playback_duration(self.song_duration_seconds)
+            
+            # Actualizar la interfaz
+            if hasattr(self, 'progress_bar'):
+                self.progress_bar.setValue(50)
+            
+            # Intentar reproducir la canción
+            success = self.listenbrainz_player.play(self.current_song_id)
+            
+            if success:
+                # Configurar el temporizador para la cuenta regresiva
+                self.remaining_time = self.song_duration_seconds
+                self.countdown_label.setText(str(self.remaining_time))
+                self.progress_bar.setValue(100)
+                
+                # Iniciar la cuenta regresiva
+                self.timer.start()
+            else:
+                raise Exception("No se pudo reproducir la canción online")
+                
         except Exception as e:
-            print(f"Error al establecer la posición de reproducción: {e}")
-            QTimer.singleShot(500, self.show_next_question)
+            print(f"Error al reproducir canción online: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # Intentar con la siguiente pregunta si hay error
+            QTimer.singleShot(1000, self.show_next_question)
+
+    def _play_with_listenbrainz_playlist(self, song_ids):
+        """Método auxiliar para reproducir con ListenBrainz usando playlist."""
+        try:
+            if not hasattr(self, 'listenbrainz_player') or not self.current_song_id:
+                raise Exception("Reproductor online no disponible o ID de canción no válido")
+            
+            # Configurar el reproductor para la duración del quiz
+            self.listenbrainz_player.set_playback_duration(self.song_duration_seconds)
+            
+            # Actualizar la interfaz
+            if hasattr(self, 'progress_bar'):
+                self.progress_bar.setValue(30)
+            
+            # Intentar crear una playlist con todas las canciones
+            urls = self.listenbrainz_player.get_playlist_for_quiz(song_ids)
+            
+            # Si hay al menos una URL, intentar usar playlist
+            if urls:
+                # Buscar la URL correcta
+                correct_url = None
+                success = False
+                
+                # Obtener la URL de la canción correcta
+                correct_url = self.listenbrainz_player.get_listenbrainz_preview_url(self.current_song_id)
+                
+                if correct_url and correct_url in urls:
+                    # Mover la URL correcta al principio para reproducirla primero
+                    urls.remove(correct_url)
+                    urls.insert(0, correct_url)
+                    
+                # Crear la playlist con las URLs disponibles
+                if len(urls) > 0:
+                    success = self.listenbrainz_player.create_playlist(urls)
+                    if success:
+                        # Configurar el temporizador para la cuenta regresiva
+                        self.remaining_time = self.song_duration_seconds
+                        self.countdown_label.setText(str(self.remaining_time))
+                        self.progress_bar.setValue(100)
+                        
+                        # Iniciar la cuenta regresiva
+                        self.timer.start()
+                        return
+            
+            # Si no se pudo usar playlist, intentar reproducir solo la canción correcta
+            success = self.listenbrainz_player.play(self.current_song_id)
+            
+            if success:
+                # Configurar el temporizador para la cuenta regresiva
+                self.remaining_time = self.song_duration_seconds
+                self.countdown_label.setText(str(self.remaining_time))
+                self.progress_bar.setValue(100)
+                
+                # Iniciar la cuenta regresiva
+                self.timer.start()
+            else:
+                raise Exception("No se pudo reproducir la canción online")
+                
+        except Exception as e:
+            print(f"Error al reproducir online: {e}")
+            import traceback
+            traceback.print_exc()
+            
+            # Intentar con reproducción local como fallback
+            if hasattr(self, 'current_song') and len(self.current_song) > 4 and self.current_song[4]:
+                self.current_song_path = self.current_song[4]
+                if os.path.exists(self.current_song_path):
+                    self._play_local_track()
+                    return
+            
+            # Si todo falla, pasar a la siguiente pregunta
+            QTimer.singleShot(1000, self.show_next_question)
+
+    def _get_song_playable_urls(self, song_id):
+        """Obtiene URLs reproducibles para una canción desde la tabla song_links."""
+        try:
+            if not song_id:
+                return []
+                
+            # Consulta para obtener enlaces reproducibles
+            self.cursor.execute("""
+                SELECT youtube_url, bandcamp_url, soundcloud_url, spotify_url
+                FROM song_links
+                WHERE song_id = ?
+            """, (song_id,))
+            
+            result = self.cursor.fetchone()
+            
+            if not result:
+                return []
+                
+            # Recopilar URLs disponibles en orden de preferencia
+            urls = []
+            youtube_url, bandcamp_url, soundcloud_url, spotify_url = result
+            
+            # Añadir URLs en orden de preferencia (puedes cambiar este orden)
+            if youtube_url:
+                urls.append(youtube_url)
+            if bandcamp_url:
+                urls.append(bandcamp_url)
+            if soundcloud_url:
+                urls.append(soundcloud_url)
+            if spotify_url:
+                urls.append(spotify_url)
+                
+            return urls
+            
+        except Exception as e:
+            print(f"Error al obtener URLs reproducibles: {e}")
+            return []
+
+
 
 
     def check_playback_started(self):
@@ -755,12 +1436,17 @@ class MusicQuiz(BaseModule):
         msg_box.setWindowTitle(title)
         msg_box.setText(message)
         msg_box.exec()
-
+    
     def closeEvent(self, event):
         """Limpia los recursos al cerrar el módulo."""
+        self.save_config()
         self.stop_quiz()
         if self.conn:
             self.conn.close()
+        if hasattr(self, 'spotify_player'):
+            self.spotify_player.close()
+        if hasattr(self, 'listenbrainz_player'):
+            self.listenbrainz_player.close()
         super().closeEvent(event)
 
 
@@ -770,7 +1456,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_artist_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -825,7 +1511,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir álbumes a la segunda columna
                     albums_item = QTableWidgetItem(albums_text)
-                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemIsEditable)
+                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 1, albums_item)
                     
                     # Obtener sellos discográficos del artista
@@ -839,7 +1525,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir sellos a la tercera columna
                     labels_item = QTableWidgetItem(labels_text)
-                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
+                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 2, labels_item)
                 
                 # Función para filtrar la tabla según el texto de búsqueda
@@ -902,13 +1588,221 @@ class MusicQuiz(BaseModule):
             print(f"Error al mostrar el diálogo de filtrar artistas: {e}")
             self.show_error_message("Error", f"Error al mostrar el diálogo: {e}")
 
+    def save_excluded_items(self, item_type, excluded_items):
+        """
+        Guarda los elementos excluidos en la base de datos.
+        Los elementos excluidos tendrán jaangle_ready=0, los incluidos jaangle_ready=1.
+        
+        Args:
+            item_type: Tipo de elementos ("excluded_artists", "excluded_albums", etc.)
+            excluded_items: Lista de IDs o nombres de elementos a excluir
+            
+        Returns:
+            bool: True si la operación fue exitosa, False en caso contrario
+        """
+        try:
+            if not hasattr(self, 'db_path') or not self.db_path:
+                print("Error: No database path configured")
+                return False
+                
+            import sqlite3
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Determinar la tabla según el tipo de elemento
+            if item_type == "excluded_artists":
+                table_name = "artists"
+            elif item_type == "excluded_albums":
+                table_name = "albums"
+            else:
+                print(f"Unsupported item type: {item_type}")
+                return False
+            
+            # Verificar si la tabla existe
+            cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+            if not cursor.fetchone():
+                print(f"{table_name} table does not exist, creating it")
+                
+                if table_name == "artists":
+                    cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS artists (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        bio TEXT,
+                        tags TEXT,
+                        jaangle_ready BOOLEAN DEFAULT 1,
+                        lastfm_url TEXT,
+                        spotify_url TEXT,
+                        mbid TEXT,
+                        origin TEXT,
+                        last_updated TIMESTAMP
+                    )
+                    """)
+                    # Crear índice para búsqueda eficiente
+                    cursor.execute("CREATE INDEX IF NOT EXISTS idx_artists_name ON artists(name)")
+                elif table_name == "albums":
+                    cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS albums (
+                        id INTEGER PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        artist_id INTEGER,
+                        year INTEGER,
+                        jaangle_ready BOOLEAN DEFAULT 1,
+                        lastfm_url TEXT,
+                        spotify_url TEXT,
+                        mbid TEXT,
+                        last_updated TIMESTAMP,
+                        FOREIGN KEY (artist_id) REFERENCES artists(id)
+                    )
+                    """)
+                    cursor.execute("CREATE INDEX IF NOT EXISTS idx_albums_name ON albums(name)")
+            
+            # Verificar si la columna jaangle_ready existe
+            cursor.execute(f"PRAGMA table_info({table_name})")
+            columns = [row[1] for row in cursor.fetchall()]
+            
+            if 'jaangle_ready' not in columns:
+                print(f"Adding jaangle_ready column to {table_name} table")
+                cursor.execute(f"ALTER TABLE {table_name} ADD COLUMN jaangle_ready BOOLEAN DEFAULT 1")
+            
+            # Iniciar transacción
+            conn.execute("BEGIN TRANSACTION")
+            
+            # NUEVO ENFOQUE: Primero actualizamos TODOS los elementos a jaangle_ready=1
+            cursor.execute(f"UPDATE {table_name} SET jaangle_ready = 1")
+            print(f"Reset all items in {table_name} to jaangle_ready=1")
+            
+            # Si no hay elementos excluidos, simplemente dejamos todo marcado como incluido
+            if not excluded_items:
+                print(f"No {item_type} to exclude, all items marked as ready")
+                conn.commit()
+                conn.close()
+                return True
+            
+            # Ahora actualizamos solo los elementos excluidos a jaangle_ready=0
+            excluded_count = 0
+            
+            # Determinar si los elementos excluidos son IDs o nombres
+            is_id_list = all(isinstance(item, int) or (isinstance(item, str) and item.isdigit()) for item in excluded_items)
+            
+            if is_id_list:
+                # Convertir a lista de strings para la consulta SQL
+                id_list = ",".join(str(id) for id in excluded_items)
+                
+                if id_list:  # Asegurarse de que no esté vacía
+                    # Actualizar por ID
+                    cursor.execute(f"""
+                    UPDATE {table_name} 
+                    SET jaangle_ready = 0 
+                    WHERE id IN ({id_list})
+                    """)
+                    
+                    excluded_count = cursor.rowcount
+            else:
+                # Actualizar por nombre (uno por uno para evitar problemas con comillas)
+                for item_name in excluded_items:
+                    cursor.execute(f"""
+                    UPDATE {table_name} 
+                    SET jaangle_ready = 0 
+                    WHERE LOWER(name) = LOWER(?)
+                    """, (item_name,))
+                    
+                    excluded_count += cursor.rowcount
+                    
+                    # Si no se actualizó ninguna fila, el elemento no existe, así que lo insertamos
+                    if cursor.rowcount == 0:
+                        if table_name == "artists":
+                            cursor.execute("""
+                            INSERT INTO artists (name, jaangle_ready)
+                            VALUES (?, 0)
+                            """, (item_name,))
+                        elif table_name == "albums":
+                            cursor.execute("""
+                            INSERT INTO albums (name, jaangle_ready)
+                            VALUES (?, 0)
+                            """, (item_name,))
+                        
+                        excluded_count += 1
+            
+            # Guardar cambios
+            conn.commit()
+            conn.close()
+            
+            print(f"Successfully marked {excluded_count} {item_type} as excluded (jaangle_ready=0)")
+            return True
+            
+        except Exception as e:
+            print(f"Error saving excluded items: {str(e)}")
+            import traceback
+            print(traceback.format_exc())
+            
+            # Intentar hacer rollback si es posible
+            try:
+                if conn:
+                    conn.rollback()
+                    conn.close()
+            except:
+                pass
+                
+            return False
+
+
+    def get_excluded_artists(self):
+        """
+        Retrieve a list of artists marked as not ready for processing.
+        
+        Returns:
+            list: Names of artists not ready for processing
+        """
+        try:
+            import sqlite3
+            
+            # Verify database path
+            if not hasattr(self, 'db_path') or not self.db_path:
+                #print("Error: No database path configured")
+                return []
+            
+            # Connect to the database
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Check if artists table and jaangle_ready column exist
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='artists'")
+            if not cursor.fetchone():
+                #print("Error: Artists table does not exist")
+                conn.close()
+                return []
+            
+            # Check if jaangle_ready column exists
+            try:
+                cursor.execute("SELECT jaangle_ready FROM artists LIMIT 1")
+            except sqlite3.OperationalError:
+                # Column does not exist
+                conn.close()
+                return []
+            
+            # Fetch excluded artists
+            cursor.execute("SELECT name FROM artists WHERE jaangle_ready = 0 OR jaangle_ready IS NULL")
+            excluded_artists = [row[0] for row in cursor.fetchall()]
+            
+            conn.close()
+            
+            return excluded_artists
+        
+        except Exception as e:
+            #print(f"Error retrieving excluded artists: {str(e)}")
+            import traceback
+            #print(traceback.format_exc())
+            
+            return []
+
     def show_album_filter_dialog(self):
         """Muestra un diálogo para filtrar álbumes con información de artista, sello y año."""
         try:
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_album_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_album_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -940,10 +1834,10 @@ class MusicQuiz(BaseModule):
                 table = QTableWidget()
                 table.setColumnCount(4)
                 table.setHorizontalHeaderLabels(["Álbum", "Artista", "Sello", "Año"])
-                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeToContents)
-                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeToContents)
-                table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)
                 
                 # Obtener la lista de álbumes con información adicional
                 self.cursor.execute("""
@@ -982,17 +1876,17 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir información del artista
                     artist_item = QTableWidgetItem(artist_name or "")
-                    artist_item.setFlags(artist_item.flags() & ~Qt.ItemIsEditable)
+                    artist_item.setFlags(artist_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 1, artist_item)
                     
                     # Añadir información del sello
                     label_item = QTableWidgetItem(label or "")
-                    label_item.setFlags(label_item.flags() & ~Qt.ItemIsEditable)
+                    label_item.setFlags(label_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 2, label_item)
                     
                     # Añadir información del año
                     year_item = QTableWidgetItem(year or "")
-                    year_item.setFlags(year_item.flags() & ~Qt.ItemIsEditable)
+                    year_item.setFlags(year_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 3, year_item)
                 
                 layout.addWidget(table)
@@ -1082,7 +1976,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
             
             # Cargar la UI del diálogo
-            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_genre_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_genre_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -1115,9 +2009,9 @@ class MusicQuiz(BaseModule):
                 table = QTableWidget()
                 table.setColumnCount(3)
                 table.setHorizontalHeaderLabels(["Género", "Artistas", "Sellos"])
-                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
                 
                 # Obtener la lista de géneros
                 self.cursor.execute("SELECT DISTINCT genre FROM songs WHERE genre IS NOT NULL AND genre != '' ORDER BY genre")
@@ -1163,7 +2057,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir artistas a la segunda columna
                     artists_item = QTableWidgetItem(artists_text)
-                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemIsEditable)
+                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 1, artists_item)
                     
                     # Obtener sellos de este género
@@ -1180,7 +2074,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir sellos a la tercera columna
                     labels_item = QTableWidgetItem(labels_text)
-                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemIsEditable)
+                    labels_item.setFlags(labels_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 2, labels_item)
                 
                 layout.addWidget(table)
@@ -1295,9 +2189,9 @@ class MusicQuiz(BaseModule):
             for table in [include_table, exclude_table]:
                 table.setColumnCount(3)
                 table.setHorizontalHeaderLabels(["Sello", "Artistas", "Álbumes"])
-                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+                table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+                table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+                table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
             
             # Obtener la lista de sellos
             self.cursor.execute("""
@@ -1361,11 +2255,11 @@ class MusicQuiz(BaseModule):
                 
                 # Añadir artistas a ambas tablas
                 artists_item_include = QTableWidgetItem(artists_text)
-                artists_item_include.setFlags(artists_item_include.flags() & ~Qt.ItemIsEditable)
+                artists_item_include.setFlags(artists_item_include.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 include_table.setItem(row, 1, artists_item_include)
                 
                 artists_item_exclude = QTableWidgetItem(artists_text)
-                artists_item_exclude.setFlags(artists_item_exclude.flags() & ~Qt.ItemIsEditable)
+                artists_item_exclude.setFlags(artists_item_exclude.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 exclude_table.setItem(row, 1, artists_item_exclude)
                 
                 # Obtener álbumes de este sello
@@ -1382,11 +2276,11 @@ class MusicQuiz(BaseModule):
                 
                 # Añadir álbumes a ambas tablas
                 albums_item_include = QTableWidgetItem(albums_text)
-                albums_item_include.setFlags(albums_item_include.flags() & ~Qt.ItemIsEditable)
+                albums_item_include.setFlags(albums_item_include.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 include_table.setItem(row, 2, albums_item_include)
                 
                 albums_item_exclude = QTableWidgetItem(albums_text)
-                albums_item_exclude.setFlags(albums_item_exclude.flags() & ~Qt.ItemIsEditable)
+                albums_item_exclude.setFlags(albums_item_exclude.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 exclude_table.setItem(row, 2, albums_item_exclude)
             
             # Añadir tablas a los layouts
@@ -1533,9 +2427,9 @@ class MusicQuiz(BaseModule):
             # Crear un widget de tabla para mostrar años/décadas, artistas y álbumes
             table = QTableWidget()
             table.setColumnCount(3)
-            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeToContents)
-            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
+            table.horizontalHeader().setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+            table.horizontalHeader().setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+            table.horizontalHeader().setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)
             
             # Función para actualizar la tabla según el modo seleccionado
             def update_table_data():
@@ -1598,7 +2492,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir artistas a la segunda columna
                     artists_item = QTableWidgetItem(artists_text)
-                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemIsEditable)
+                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 1, artists_item)
                     
                     # Obtener álbumes de esta década
@@ -1615,7 +2509,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir álbumes a la tercera columna
                     albums_item = QTableWidgetItem(albums_text)
-                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemIsEditable)
+                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 2, albums_item)
                 
                 return checkboxes
@@ -1672,7 +2566,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir artistas a la segunda columna
                     artists_item = QTableWidgetItem(artists_text)
-                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemIsEditable)
+                    artists_item.setFlags(artists_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 1, artists_item)
                     
                     # Obtener álbumes de este año
@@ -1689,7 +2583,7 @@ class MusicQuiz(BaseModule):
                     
                     # Añadir álbumes a la tercera columna
                     albums_item = QTableWidgetItem(albums_text)
-                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemIsEditable)
+                    albums_item.setFlags(albums_item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                     table.setItem(row, 2, albums_item)
                 
                 return checkboxes
@@ -1844,7 +2738,7 @@ class MusicQuiz(BaseModule):
             dialog = QDialog(self)
 
             # Cargar la UI del diálogo
-            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_session_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_session_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -2191,7 +3085,7 @@ class MusicQuiz(BaseModule):
         try:
             dialog = QDialog(self)
 
-            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle_artist_filter_dialog.ui")
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_artist_filter_dialog.ui")
             
             if os.path.exists(dialog_ui_path):
                 from PyQt6 import uic
@@ -2304,3 +3198,232 @@ class MusicQuiz(BaseModule):
         except Exception as e:
             print(f"Error al mostrar el diálogo de filtrar carpetas: {e}")
             self.show_error_message("Error", f"Error al mostrar el diálogo: {e}")
+
+    def on_music_origin_changed(self):
+        """Maneja el cambio de origen de la música (local, Spotify, o Online)."""
+        try:
+            if not hasattr(self, 'local_radio') or not hasattr(self, 'spotify_radio') or not hasattr(self, 'listenbrainz_radio'):
+                print("Radio buttons no inicializados")
+                return
+                    
+            if self.local_radio.isChecked():
+                self.music_origin = 'local'
+                print("Origen de música cambiado a: Local")
+                    
+                # Ocultar reproductores si están visibles
+                if hasattr(self, 'spotify_container') and self.spotify_container:
+                    self.spotify_container.hide()
+                if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
+                    self.listenbrainz_container.hide()
+                    
+            elif self.spotify_radio.isChecked():
+                self.music_origin = 'spotify'
+                # Verificar si necesitamos un usuario de Spotify
+                if not self.spotify_user:
+                    from PyQt6.QtWidgets import QInputDialog
+                    user, ok = QInputDialog.getText(
+                        self, 
+                        "Usuario de Spotify", 
+                        "Introduce tu nombre de usuario de Spotify:"
+                    )
+                    if ok and user:
+                        self.spotify_user = user
+                        print(f"Usuario de Spotify configurado: {user}")
+                    else:
+                        # Si no se proporciona usuario, volver a Local
+                        self.local_radio.setChecked(True)
+                        self.music_origin = 'local'
+                        print("Volviendo a origen local por falta de usuario de Spotify")
+                else:
+                    print(f"Origen de música cambiado a: Spotify (usuario: {self.spotify_user})")
+                    
+                # Ocultar contenedor de ListenBrainz si está visible
+                if hasattr(self, 'listenbrainz_container') and self.listenbrainz_container:
+                    self.listenbrainz_container.hide()
+                    
+            elif self.listenbrainz_radio.isChecked():
+                # Cambiar a "online" en lugar de "listenbrainz"
+                self.music_origin = 'online'
+                # Ya no necesitamos usuario para reproducción online
+                print(f"Origen de música cambiado a: Online")
+                    
+                # Ocultar contenedor de Spotify si está visible
+                if hasattr(self, 'spotify_container') and self.spotify_container:
+                    self.spotify_container.hide()
+                    
+        except Exception as e:
+            print(f"Error en on_music_origin_changed: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def _play_spotify_track(self):
+        """Método auxiliar para reproducir canción de Spotify después del delay inicial."""
+        try:
+            success = self.spotify_player.play(self.current_song_id)
+            if not success:
+                logger.error(f"Error al reproducir canción de Spotify con ID {self.current_song_id}, intentando con otra pregunta")
+                QTimer.singleShot(1000, self.show_next_question)
+                return
+                
+            # Configurar el temporizador para la cuenta regresiva
+            self.remaining_time = self.song_duration_seconds
+            self.countdown_label.setText(str(self.remaining_time))
+            self.progress_bar.setValue(100)
+            
+            # Iniciar la cuenta regresiva
+            self.timer.start()
+        except Exception as e:
+            print(f"Error al reproducir canción de Spotify: {e}")
+            QTimer.singleShot(1000, self.show_next_question)
+
+    def _play_local_track(self):
+        """Método auxiliar para reproducir canción local después del delay inicial."""
+        try:
+            # Obtener la información relevante de la canción actual
+            song_duration = 0
+            if hasattr(self, 'current_song') and self.current_song and len(self.current_song) > 5:
+                song_duration = self.current_song[5]
+            
+            if not song_duration or song_duration <= 0:
+                song_duration = 60  # Valor predeterminado si la duración no es válida
+                
+            # Calcular los límites de reproducción
+            start_from_beginning = random.random() < self.start_from_beginning_chance
+            avoid_last_seconds = min(self.avoid_last_seconds, int(song_duration * 0.1))
+            
+            # Si la canción tiene suficiente duración, elegir un punto aleatorio para comenzar
+            if start_from_beginning or song_duration <= (self.song_duration_seconds + avoid_last_seconds):
+                start_position = 0
+            else:
+                max_start = max(0, song_duration - self.song_duration_seconds - avoid_last_seconds)
+                if max_start > 0:
+                    # Corregir el error: convertir max_start a entero antes de usarlo en randint
+                    max_start_int = int(max_start)
+                    start_position = random.randint(10, max_start_int)
+                else:
+                    start_position = 0
+            
+            # Mostrar progreso de carga
+            if hasattr(self, 'progress_bar'):
+                self.progress_bar.setValue(50)
+                
+            # Configurar el reproductor
+            source = QUrl.fromLocalFile(self.current_song_path)
+            self.player.setSource(source)
+            
+            # Verificar si la fuente es válida antes de reproducir
+            QTimer.singleShot(200, lambda: self.play_song_at_position(start_position))
+            
+            # Configurar el temporizador
+            self.remaining_time = self.song_duration_seconds
+            self.countdown_label.setText(str(self.remaining_time))
+            self.progress_bar.setValue(90)
+            
+            # Iniciar la cuenta regresiva
+            self.timer.start()
+        except Exception as e:
+            print(f"Error al reproducir canción local: {e}")
+            import traceback
+            traceback.print_exc()
+            QTimer.singleShot(1000, self.show_next_question)
+
+    def play_song_at_position(self, position_seconds):
+        """Reproduce la canción desde una posición específica."""
+        try:
+            # Verificar si estamos reproduciendo desde Spotify
+            if self.music_origin == 'spotify' and hasattr(self, 'spotify_player'):
+                # Si estamos usando Spotify, intentar posicionar la reproducción
+                # Nota: esto dependerá de las capacidades del reproductor de Spotify
+                if hasattr(self.spotify_player, 'seek_to_position'):
+                    self.spotify_player.seek_to_position(position_seconds)
+                return
+            
+            # Código para reproducción local
+            if not hasattr(self, 'player') or not self.player:
+                print("Error: Reproductor no disponible")
+                return
+                
+            if self.player.mediaStatus() in [QMediaPlayer.MediaStatus.InvalidMedia, 
+                                            QMediaPlayer.MediaStatus.NoMedia]:
+                print(f"Error: Fuente de media inválida: {self.current_song_path}")
+                # Intentar reproducir la siguiente canción
+                QTimer.singleShot(500, self.show_next_question)
+                return
+                
+            # Establecer la posición y reproducir
+            self.player.setPosition(int(position_seconds * 1000))  # Convertir a milisegundos enteros
+            self.player.play()
+            
+            # Verificar después de un breve retraso si la reproducción comenzó
+            QTimer.singleShot(500, self.check_playback_started)
+        except Exception as e:
+            print(f"Error al establecer la posición de reproducción: {e}")
+            import traceback
+            traceback.print_exc()
+            QTimer.singleShot(500, self.show_next_question)
+
+
+
+    def save_config(self):
+        """Guarda la configuración actual a un archivo."""
+        try:
+            import json
+            import os
+            from pathlib import Path
+            
+            # Crear directorio para configuración si no existe
+            config_dir = Path(PROJECT_ROOT, "config", "jaangle")
+            os.makedirs(config_dir, exist_ok=True)
+            
+            # Preparar datos a guardar
+            config_data = {
+                "option_hotkeys": self.option_hotkeys,
+                "music_origin": self.music_origin,
+                "quiz_duration_minutes": self.quiz_duration_minutes,
+                "song_duration_seconds": self.song_duration_seconds,
+                "pause_between_songs": self.pause_between_songs,
+                "options_count": self.options_count
+            }
+            
+            # Guardar en archivo
+            config_path = Path(config_dir, "config.json")
+            with open(config_path, 'w', encoding='utf-8') as f:
+                json.dump(config_data, f, indent=2)
+                
+            return True
+        except Exception as e:
+            print(f"Error al guardar configuración: {e}")
+            return False
+
+    def load_config(self):
+        """Carga la configuración desde un archivo."""
+        try:
+            import json
+            from pathlib import Path
+            
+            config_path = Path(PROJECT_ROOT, "config", "jaangle", "config.json")
+            if not config_path.exists():
+                return False
+                
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config_data = json.load(f)
+                
+            # Aplicar configuración cargada
+            if "option_hotkeys" in config_data:
+                self.option_hotkeys = config_data["option_hotkeys"]
+            if "music_origin" in config_data:
+                self.music_origin = config_data["music_origin"]
+            if "quiz_duration_minutes" in config_data:
+                self.quiz_duration_minutes = config_data["quiz_duration_minutes"]
+            if "song_duration_seconds" in config_data:
+                self.song_duration_seconds = config_data["song_duration_seconds"]
+            if "pause_between_songs" in config_data:
+                self.pause_between_songs = config_data["pause_between_songs"]
+            if "options_count" in config_data:
+                self.options_count = config_data["options_count"]
+                
+            return True
+        except Exception as e:
+            print(f"Error al cargar configuración: {e}")
+            return False
+

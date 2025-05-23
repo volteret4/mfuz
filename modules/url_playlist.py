@@ -52,7 +52,7 @@ from modules.submodules.url_playlist.ui_helpers import (
     display_search_results, display_external_results, on_tree_double_click, on_list_double_click,
     show_advanced_settings, on_tree_selection_changed, on_spotify_playlist_changed,
     on_playlist_rss_changed, on_playlist_local_changed, clear_playlist, show_mark_as_listened_dialog,
-    _add_result_to_tree, load_rss_playlist_content_to_tree
+    _add_result_to_tree, load_rss_playlist_content_to_tree, show_loading_indicator
 )
 from modules.submodules.url_playlist.db_manager import (
     search_database_links, _process_database_results, perform_search_with_service_filter
@@ -72,6 +72,10 @@ class UrlPlayer(BaseModule):
     process_progress_signal = pyqtSignal(int, str)
     process_finished_signal = pyqtSignal(str, int, int)  # message, success_count, total_count
     process_error_signal = pyqtSignal(str)
+    spotify_albums_loaded_signal = pyqtSignal(object, object)  # Para álbumes cargados
+    spotify_tracks_loaded_signal = pyqtSignal(object, object)  # Para pistas cargadas
+    spotify_error_signal = pyqtSignal(object, str)  # Para errores
+    request_spotify_auth = pyqtSignal()
 
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
         # Extraer configuraciones específicas de kwargs
@@ -125,6 +129,7 @@ class UrlPlayer(BaseModule):
         self.spotify_token_path = kwargs.get('spotify_token_path', Path(PROJECT_ROOT, ".content", "cache", "spotify_token.txt"))
         self.spotify_playlist_path = kwargs.get('spotify_playlist_path', Path(PROJECT_ROOT, ".content", "cache", "spotify_playlist_path"))
         self.lastfm_cache_path = kwargs.get('lastfm_cache_path', Path(PROJECT_ROOT, ".content", "cache", "lastfm_cache.json"))
+
 
 
         # Credenciales Servidor FreshRss
@@ -222,6 +227,206 @@ class UrlPlayer(BaseModule):
         # Iniciar los procesos pesados en hilos separados
         self._start_async_initialization()
 
+        # Conexión de señales Spotify
+        self.spotify_albums_loaded_signal.connect(self._update_ui_with_albums)
+        self.spotify_tracks_loaded_signal.connect(self._update_ui_with_tracks)
+        self.spotify_error_signal.connect(self._show_spotify_error)
+        
+        self.request_spotify_auth.connect(self.authenticate_spotify_main_thread)
+
+
+    def _update_ui_with_albums(self, artist_item, albums_data):
+        """Actualiza la UI con los álbumes cargados por el hilo de Spotify"""
+        try:
+            # Eliminar el ítem de carga
+            if artist_item.childCount() > 0:
+                artist_item.takeChild(0)
+            
+            # Desempaquetar datos
+            albums_by_type = albums_data.get('albums_by_type', {})
+            artist_data = albums_data.get('artist_data', {})
+            
+            # Si no hay álbumes, añadir un mensaje
+            if not any(albums_by_type.values()):
+                from PyQt6.QtWidgets import QTreeWidgetItem
+                no_albums_item = QTreeWidgetItem(artist_item)
+                no_albums_item.setText(0, "No se encontraron álbumes")
+                return
+            
+            # Añadir los álbumes organizados por tipo
+            album_types_names = {
+                'album': 'Álbumes',
+                'single': 'Singles',
+                'compilation': 'Recopilaciones'
+            }
+            
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtCore import Qt
+            from PyQt6.QtGui import QIcon
+            
+            for album_type, albums_list in albums_by_type.items():
+                if not albums_list:
+                    continue
+                
+                # Crear un nodo para el tipo de álbum
+                type_item = QTreeWidgetItem(artist_item)
+                type_item.setText(0, album_types_names.get(album_type, album_type.capitalize()))
+                type_item.setIcon(0, QIcon(":/services/folder"))
+                
+                # Marcar este nodo como un agrupador, no un elemento real
+                type_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'group', 'source': 'spotify'})
+                
+                # Añadir cada álbum
+                for album in albums_list:
+                    album_item = QTreeWidgetItem(type_item)
+                    album_item.setText(0, album['name'])
+                    album_item.setText(1, artist_data.get('artist', ''))
+                    album_item.setText(2, "Álbum")
+                    
+                    # Añadir año si está disponible
+                    if 'release_date' in album:
+                        release_year = album['release_date'][:4] if album['release_date'] else ''
+                        album_item.setText(3, release_year)
+                    
+                    # Añadir icono
+                    album_item.setIcon(0, QIcon(":/services/spotify"))
+                    
+                    # Almacenar datos del álbum
+                    album_data = {
+                        'type': 'album',
+                        'title': album['name'],
+                        'artist': artist_data.get('artist', ''),
+                        'url': album['external_urls']['spotify'],
+                        'source': 'spotify',
+                        'spotify_id': album['id'],
+                        'spotify_uri': album['uri'],
+                        'year': album.get('release_date', '')[:4] if album.get('release_date') else '',
+                        'total_tracks': album.get('total_tracks', 0)
+                    }
+                    album_item.setData(0, Qt.ItemDataRole.UserRole, album_data)
+                    
+                    # Añadir un nodo hijo temporal para que se muestre el signo +
+                    loading_item = QTreeWidgetItem(album_item)
+                    loading_item.setText(0, "Cargando canciones...")
+                    
+                    # Configurar para mostrar indicador de expansión
+                    album_item.setChildIndicatorPolicy(QTreeWidgetItem.ChildIndicatorPolicy.ShowIndicator)
+                
+                # Expandir el nodo de tipo de álbum
+                type_item.setExpanded(True)
+        except Exception as e:
+            self.log(f"Error actualizando UI con álbumes: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+    
+    
+    def authenticate_spotify_main_thread(self):
+        """Esta función inicializa Spotify en el hilo principal"""
+        self.log("Authenticating Spotify from main thread...")
+        
+        # Llamar directamente a la función en el módulo spotify_manager
+        from modules.submodules.url_playlist.spotify_manager import setup_spotify
+        result = setup_spotify(self)
+        
+        if result:
+            self.log("Spotify authentication successful")
+            # Cargar playlists después de la autenticación exitosa
+            from modules.submodules.url_playlist.spotify_manager import load_spotify_playlists
+            load_spotify_playlists(self)
+            
+            # Actualizar UI si es necesario
+            if hasattr(self, 'update_service_combo'):
+                self.update_service_combo()
+        else:
+            self.log("Spotify authentication failed")
+        
+        return result
+
+
+    def _update_ui_with_tracks(self, album_item, tracks_data):
+        """Actualiza la UI con las pistas cargadas por el hilo de Spotify"""
+        try:
+            # Eliminar el ítem de carga
+            if album_item.childCount() > 0:
+                album_item.takeChild(0)
+            
+            # Desempaquetar datos
+            tracks = tracks_data.get('tracks', [])
+            album_data = tracks_data.get('album_data', {})
+            
+            # Si no hay canciones, añadir un mensaje
+            if not tracks:
+                from PyQt6.QtWidgets import QTreeWidgetItem
+                no_tracks_item = QTreeWidgetItem(album_item)
+                no_tracks_item.setText(0, "No se encontraron canciones")
+                return
+            
+            # Añadir cada canción
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtCore import Qt
+            from PyQt6.QtGui import QIcon
+            
+            for track in tracks:
+                track_item = QTreeWidgetItem(album_item)
+                track_item.setText(0, track['name'])
+                
+                # Artistas de la canción (pueden ser diferentes al artista del álbum)
+                artists = [artist['name'] for artist in track['artists']]
+                artist_str = ", ".join(artists)
+                track_item.setText(1, artist_str)
+                
+                track_item.setText(2, "Canción")
+                
+                # Añadir número de pista
+                if 'track_number' in track:
+                    track_item.setText(3, str(track['track_number']))
+                
+                # Añadir duración si está disponible
+                if 'duration_ms' in track:
+                    duration_ms = track['duration_ms']
+                    minutes = int(duration_ms / 60000)
+                    seconds = int((duration_ms % 60000) / 1000)
+                    track_item.setText(4, f"{minutes}:{seconds:02d}")
+                
+                # Añadir icono
+                track_item.setIcon(0, QIcon(":/services/spotify"))
+                
+                # Almacenar datos de la canción
+                track_data = {
+                    'type': 'track',
+                    'title': track['name'],
+                    'artist': artist_str,
+                    'album': album_data.get('title', ''),
+                    'url': track['external_urls']['spotify'],
+                    'source': 'spotify',
+                    'spotify_id': track['id'],
+                    'spotify_uri': track['uri'],
+                    'track_number': track.get('track_number', 0),
+                    'duration': track.get('duration_ms', 0) / 1000  # Convertir a segundos
+                }
+                track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+        except Exception as e:
+            self.log(f"Error actualizando UI con canciones: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+
+    def _show_spotify_error(self, parent_item, error_message):
+        """Muestra un mensaje de error en el árbol de Spotify"""
+        try:
+            # Eliminar el ítem de carga si existe
+            if parent_item.childCount() > 0:
+                parent_item.takeChild(0)
+            
+            # Añadir mensaje de error
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtGui import QIcon
+            error_item = QTreeWidgetItem(parent_item)
+            error_item.setText(0, f"Error: {error_message}")
+            error_item.setIcon(0, QIcon(":/services/wiki"))
+        except Exception as e:
+            self.log(f"Error mostrando mensaje de error: {e}")
+
+
     def _connect_thread_signals(self):
         """Connect signals for thread communication"""
         self.process_started_signal.connect(self._on_process_started)
@@ -258,6 +463,7 @@ class UrlPlayer(BaseModule):
         self._init_check_timer = QTimer(self)
         self._init_check_timer.timeout.connect(self._check_initialization_complete)
         self._init_check_timer.start(100)  # Verificar cada 100 ms
+  
     def _initialize_apis(self):
         """Inicializa las APIs en un hilo separado"""
         try:
@@ -267,23 +473,19 @@ class UrlPlayer(BaseModule):
             # Configurar las credenciales como variables de entorno 
             self._set_api_credentials_as_env()
             
-            # Configurar Spotify solo si hay credenciales
+            # Configurar Spotify usando QTimer para ejecutar en el hilo principal
             if self.spotify_client_id and self.spotify_client_secret:
-                from modules.submodules.url_playlist.spotify_manager import setup_spotify
-                setup_spotify(self)
-                
-                # Cargar playlists de Spotify si la autenticación fue exitosa
-                if hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
-                    from modules.submodules.url_playlist.spotify_manager import load_spotify_playlists
-                    load_spotify_playlists(self)
-            
+                self.log("Scheduling Spotify initialization on main thread...")
+                # Usar la señal en lugar de QTimer
+                self.request_spotify_auth.emit()              
+
             # Cargar caché de Last.fm si existe
             from modules.submodules.url_playlist.lastfm_manager import load_lastfm_cache_if_exists
             load_lastfm_cache_if_exists(self)
             
             # Actualizar flags de servicios habilitados
             self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
-            self.lastfm_enabled = bool(self.lastfm_manager_key)
+            self.lastfm_enabled = bool(self.lastfm_api_key)
             
             # Actualizar included_services según credenciales
             self.included_services['spotify'] = self.spotify_enabled
@@ -294,6 +496,20 @@ class UrlPlayer(BaseModule):
             self.log(f"Error en inicialización de APIs: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+
+    def init_spotify_in_main_thread(self):
+        """Esta función inicializa Spotify en el hilo principal"""
+        from modules.submodules.url_playlist.spotify_manager import setup_spotify
+        
+        # Verificar que estamos en el hilo principal
+        from PyQt6.QtCore import QThread, QCoreApplication
+        if QThread.currentThread() != QCoreApplication.instance().thread():
+            self.log("Error: Spotify initialization must be performed from the main thread")
+            return False
+        
+        self.log("Initializing Spotify from main thread...")
+        
+        return setup_spotify(self)
 
     def _load_playlists_async(self):
         """Carga las playlists en un hilo separado"""
@@ -439,7 +655,7 @@ class UrlPlayer(BaseModule):
         self.ff_button.setToolTip("Siguiente")
         self.del_button.setIcon(QIcon(":/services/b_minus_star"))
         self.del_button.setToolTip("Eliminar de la cola")
-        self.add_button.setIcon(QIcon(":/services/b_addstar"))
+        self.add_button.setIcon(QIcon(":/services/addstar"))
         self.add_button.setToolTip("Añadir a la cola")
         
         # Configurar TabWidget básico
@@ -449,23 +665,6 @@ class UrlPlayer(BaseModule):
         # Conectar señales críticas
         self.connect_critical_signals()
 
-    def _start_async_initialization(self):
-        """Inicia procesos de inicialización en hilos separados"""
-        import threading
-        
-        # Crear hilos con nombres descriptivos para facilitar depuración
-        api_thread = threading.Thread(target=self._initialize_apis, name="_initialize_apis", daemon=True)
-        playlists_thread = threading.Thread(target=self._load_playlists_async, name="_load_playlists", daemon=True)
-        
-        # Iniciar hilos
-        api_thread.start()
-        playlists_thread.start()
-        
-        # Establecer un temporizador para verificar cuando todos los hilos hayan terminado
-        from PyQt6.QtCore import QTimer
-        self._init_check_timer = QTimer(self)
-        self._init_check_timer.timeout.connect(self._check_initialization_complete)
-        self._init_check_timer.start(100)  # Verificar cada 100 ms
 
     def _setup_non_critical_widgets(self):
         """Configura los widgets no críticos que pueden cargarse después"""
@@ -791,6 +990,13 @@ class UrlPlayer(BaseModule):
         if not query:
             return
         
+        # Verificar si estamos buscando específicamente en Spotify
+        if hasattr(self, 'servicios') and self.servicios.currentText() == "Spotify" and hasattr(self, 'search_spotify_content'):
+            # Usar la búsqueda específica de Spotify
+            self.search_spotify_content(query)
+            return
+        
+        # Resto del código original de perform_search para otras búsquedas...
         # Cancelar búsqueda anterior si está en progreso
         if hasattr(self, '_current_search_thread') and self._current_search_thread is not None:
             if isinstance(self._current_search_thread, QThread) and self._current_search_thread.isRunning():
@@ -1197,8 +1403,14 @@ class UrlPlayer(BaseModule):
         self.lineEdit.setPlaceholderText(placeholders.get(service, "Buscar..."))
         
         # Si hay un texto en el campo de búsqueda, realizar la búsqueda con el nuevo servicio
-        if self.lineEdit.text().strip():
-            self.perform_search()
+        query = self.lineEdit.text().strip()
+        if query:
+            if service == "Spotify" and hasattr(self, 'search_spotify_content'):
+                # Usar la búsqueda específica de Spotify
+                self.search_spotify_content(query)
+            else:
+                # Usar la búsqueda general para otros servicios
+                self.perform_search()
 
 
     def initialize_playlist_ui_references(self):
@@ -1269,6 +1481,13 @@ class UrlPlayer(BaseModule):
                 for module in config_data.get('modules', []):
                     if module.get('name') in ['Url Playlists', 'URL Playlist', 'URL Player']:
                         module_args = module.get('args', {})
+                        
+                        # Load scrobbles-related settings
+                        self.scrobbles_limit = module_args.get('scrobbles_limit', 50)  # Default to 50
+                        self.scrobbles_by_date = module_args.get('scrobbles_by_date', True)  # Default to True
+                        
+                        # Set Last.fm username
+                        self.lastfm_username = module_args.get('lastfm_username', '')
                         
                         # Load paths with standardization
                         if 'db_path' in module_args:
@@ -1753,6 +1972,10 @@ class UrlPlayer(BaseModule):
             if hasattr(dialog, 'scrobbles_slider') and hasattr(dialog, 'scrobblers_spinBox'):
                 # Prefer spinbox value over slider for precision
                 scrobbles_limit = dialog.scrobblers_spinBox.value()
+                
+                # Optional: Sync slider with spinbox value if needed
+                dialog.scrobbles_slider.setValue(scrobbles_limit)
+                
                 self.scrobbles_limit = scrobbles_limit
                 self.log(f"Set scrobbles limit to: {self.scrobbles_limit}")
             
@@ -1823,6 +2046,36 @@ class UrlPlayer(BaseModule):
             self.log(traceback.format_exc())
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
 
+    def setup_advanced_settings_dialog(self, dialog):
+        """Set up advanced settings dialog with synchronized controls"""
+        try:
+            # Find scrobbles slider and spinbox
+            scrobbles_slider = dialog.findChild(QSlider, 'scrobbles_slider')
+            scrobblers_spinBox = dialog.findChild(QSpinBox, 'scrobblers_spinBox')
+            
+            if scrobbles_slider and scrobblers_spinBox:
+                # Set ranges to match
+                scrobbles_slider.setRange(10, 5000)  # Reasonable range for scrobbles
+                scrobblers_spinBox.setRange(10, 5000)
+                
+                # Set initial values from object's settings
+                current_limit = getattr(self, 'scrobbles_limit', 50)
+                scrobbles_slider.setValue(current_limit)
+                scrobblers_spinBox.setValue(current_limit)
+                
+                # Connect slider and spinbox for synchronization
+                def sync_slider_spinbox():
+                    scrobblers_spinBox.setValue(scrobbles_slider.value())
+                
+                def sync_spinbox_slider():
+                    scrobbles_slider.setValue(scrobblers_spinBox.value())
+                
+                scrobbles_slider.valueChanged.connect(sync_slider_spinbox)
+                scrobblers_spinBox.valueChanged.connect(sync_spinbox_slider)
+                
+                self.log(f"Synchronized scrobbles limit controls with value: {current_limit}")
+        except Exception as e:
+            self.log(f"Error setting up scrobbles controls: {str(e)}")
 
 
     def save_settings(self):
@@ -2338,3 +2591,416 @@ class UrlPlayer(BaseModule):
         # Force garbage collection
         import gc
         gc.collect()
+
+
+
+
+# Spotify busqueda individual
+
+    def search_spotify_content(self, query):
+        """
+        Realizar búsqueda en Spotify y mostrar resultados jerárquicamente
+        """
+        if not hasattr(self, 'sp') or not self.sp:
+            self.log("Spotify no está inicializado. Intenta autenticarte primero.")
+            return False
+        
+        self.log(f"Buscando en Spotify: {query}")
+        
+        try:
+            # Mostrar indicador de búsqueda - CORREGIDO
+            if hasattr(self, 'show_loading_indicator'):
+                self.show_loading_indicator(True)
+            else:
+                from modules.submodules.url_playlist.ui_helpers import show_loading_indicator
+                show_loading_indicator(self, True)
+            
+            # Realizar búsqueda de artistas
+            results = self.sp.search(q=query, type='artist', limit=5)
+            artists = results['artists']['items']
+            
+            if not artists:
+                self.log(f"No se encontraron artistas para '{query}' en Spotify")
+                # Intentar búsqueda de álbumes y canciones
+                self.search_spotify_albums_tracks(query)
+                return True
+            
+            # Limpiar resultados anteriores
+            self.treeWidget.clear()
+            
+            # Crear nodo raíz para Spotify
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            from PyQt6.QtCore import Qt
+            from PyQt6.QtGui import QIcon
+            
+            spotify_root = QTreeWidgetItem(self.treeWidget)
+            spotify_root.setText(0, "Spotify")
+            spotify_root.setIcon(0, QIcon(":/services/spotify"))
+            
+            # Procesar cada artista encontrado
+            for artist in artists:
+                # Crear nodo para el artista
+                artist_item = QTreeWidgetItem(spotify_root)
+                artist_item.setText(0, artist['name'])
+                artist_item.setText(1, artist['name'])
+                artist_item.setText(2, "Artista")
+                
+                # Almacenar datos del artista
+                artist_data = {
+                    'type': 'artist',
+                    'title': artist['name'],
+                    'artist': artist['name'],
+                    'url': artist['external_urls']['spotify'],
+                    'source': 'spotify',
+                    'spotify_id': artist['id'],
+                    'spotify_uri': artist['uri']
+                }
+                artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data)
+                artist_item.setIcon(0, QIcon(":/services/spotify"))
+                
+                # Añadir un nodo hijo temporal para que se muestre el signo +
+                loading_item = QTreeWidgetItem(artist_item)
+                loading_item.setText(0, "Cargando álbumes...")
+                
+                # Conectar evento de expansión para cargar álbumes bajo demanda
+                artist_item.setChildIndicatorPolicy(QTreeWidgetItem.ChildIndicatorPolicy.ShowIndicator)
+            
+            # Expandir el nodo raíz de Spotify
+            spotify_root.setExpanded(True)
+            
+            # Conectar señal para carga bajo demanda si no está conectada
+            if not hasattr(self, '_spotify_tree_expand_connected'):
+                self.treeWidget.itemExpanded.connect(self.on_spotify_tree_item_expanded)
+                self._spotify_tree_expand_connected = True
+            
+            # Ocultar indicador de búsqueda - CORREGIDO
+            if hasattr(self, 'show_loading_indicator'):
+                self.show_loading_indicator(False)
+            else:
+                from modules.submodules.url_playlist.ui_helpers import show_loading_indicator
+                show_loading_indicator(self, False)
+            
+            self.log(f"Encontrados {len(artists)} artistas en Spotify")
+            return True
+        
+        except Exception as e:
+            self.log(f"Error buscando en Spotify: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            # Ocultar indicador de búsqueda - CORREGIDO
+            if hasattr(self, 'show_loading_indicator'):
+                self.show_loading_indicator(False)
+            else:
+                from modules.submodules.url_playlist.ui_helpers import show_loading_indicator
+                try:
+                    show_loading_indicator(self, False)
+                except:
+                    pass  # Ignorar errores aquí para evitar bucles recursivos
+                    
+            return False
+
+    def on_spotify_tree_item_expanded(self, item):
+        """
+        Carga los álbumes o canciones cuando se expande un ítem del árbol de Spotify
+        """
+        # Verificar que tenemos datos de Spotify
+        item_data = item.data(0, Qt.ItemDataRole.UserRole)
+        if not item_data or not isinstance(item_data, dict) or item_data.get('source') != 'spotify':
+            return
+        
+        # Si ya está cargado (más de un hijo y el primer hijo no es "Cargando..."), no hacer nada
+        if item.childCount() > 0 and item.child(0).text(0) != "Cargando álbumes..." and item.child(0).text(0) != "Cargando canciones...":
+            return
+        
+        # Crear un worker y un hilo para cargar en segundo plano
+        from PyQt6.QtCore import QThread
+        
+        # Crear una clase worker específica para esta tarea
+        class SpotifyWorker(QObject):
+            # Definir señales
+            finished = pyqtSignal()
+            
+            def __init__(self, parent, item, item_data, item_type):
+                super().__init__()
+                self.parent = parent
+                self.item = item
+                self.item_data = item_data
+                self.item_type = item_type
+            
+            def run(self):
+                try:
+                    if self.item_type == 'artist':
+                        self.parent._load_spotify_albums_for_artist(self.item, self.item_data)
+                    elif self.item_type == 'album':
+                        self.parent._load_spotify_tracks_for_album(self.item, self.item_data)
+                except Exception as e:
+                    self.parent.log(f"Error en SpotifyWorker: {e}")
+                finally:
+                    self.finished.emit()
+        
+        # Obtener el tipo de ítem
+        item_type = item_data.get('type')
+        
+        if item_type in ['artist', 'album']:
+            # Limpiar el nodo de carga
+            if item.childCount() > 0:
+                item.takeChild(0)
+            
+            # Crear un elemento temporal de carga
+            from PyQt6.QtWidgets import QTreeWidgetItem
+            loading_item = QTreeWidgetItem(item)
+            loading_item.setText(0, f"Cargando {'álbumes' if item_type == 'artist' else 'canciones'}...")
+            loading_item.setIcon(0, QIcon(":/services/loading"))
+            
+            # Crear el thread y el worker
+            thread = QThread()
+            worker = SpotifyWorker(self, item, item_data, item_type)
+            
+            # Mover el worker al thread
+            worker.moveToThread(thread)
+            
+            # Conectar señales
+            thread.started.connect(worker.run)
+            worker.finished.connect(thread.quit)
+            worker.finished.connect(worker.deleteLater)
+            thread.finished.connect(thread.deleteLater)
+            
+            # Guardar referencias para evitar recolección de basura
+            self._current_spotify_thread = thread
+            self._current_spotify_worker = worker
+            
+            # Iniciar el thread
+            thread.start()
+
+    def _load_spotify_albums_for_artist(self, artist_item, artist_data):
+        """
+        Carga los álbumes de un artista en segundo plano
+        """
+        try:
+            artist_id = artist_data.get('spotify_id')
+            if not artist_id:
+                # Emitir señal de error
+                self.spotify_error_signal.emit(artist_item, "ID de artista no encontrado")
+                return
+            
+            # Usar el cliente Spotify para obtener los álbumes
+            albums = self.sp.artist_albums(
+                artist_id, 
+                album_type='album,single,compilation',
+                limit=50
+            )
+            
+            # Organizar álbumes por tipo
+            albums_by_type = {
+                'album': [],
+                'single': [],
+                'compilation': []
+            }
+            
+            for album in albums['items']:
+                album_type = album.get('album_type', 'album')
+                if album_type in albums_by_type:
+                    albums_by_type[album_type].append(album)
+            
+            # Ordenar cada tipo de álbum por fecha de lanzamiento
+            for album_type in albums_by_type:
+                albums_by_type[album_type].sort(
+                    key=lambda x: x.get('release_date', '0000'),
+                    reverse=True  # Más recientes primero
+                )
+            
+            # Preparar datos para enviar a través de la señal
+            albums_data = {
+                'albums_by_type': albums_by_type,
+                'artist_data': artist_data
+            }
+            
+            # Emitir señal con los datos cargados
+            self.spotify_albums_loaded_signal.emit(artist_item, albums_data)
+            
+        except Exception as e:
+            self.log(f"Error cargando álbumes de Spotify: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            # Emitir señal de error
+            self.spotify_error_signal.emit(artist_item, str(e))
+
+    def _load_spotify_tracks_for_album(self, album_item, album_data):
+        """
+        Carga las canciones de un álbum en segundo plano
+        """
+        try:
+            album_id = album_data.get('spotify_id')
+            if not album_id:
+                # Emitir señal de error
+                self.spotify_error_signal.emit(album_item, "ID de álbum no encontrado")
+                return
+            
+            # Usar el cliente Spotify para obtener las canciones
+            album_info = self.sp.album_tracks(album_id, limit=50)
+            tracks = album_info['items']
+            
+            # Ordenar por número de pista
+            tracks.sort(key=lambda x: x.get('track_number', 0))
+            
+            # Preparar datos para enviar a través de la señal
+            tracks_data = {
+                'tracks': tracks,
+                'album_data': album_data
+            }
+            
+            # Emitir señal con los datos cargados
+            self.spotify_tracks_loaded_signal.emit(album_item, tracks_data)
+            
+        except Exception as e:
+            self.log(f"Error cargando canciones de Spotify: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            # Emitir señal de error
+            self.spotify_error_signal.emit(album_item, str(e))
+
+            
+    def search_spotify_albums_tracks(self, query):
+        """
+        Realizar búsqueda de álbumes y canciones en Spotify cuando no se encuentran artistas
+        """
+        try:
+            # Limpiar resultados anteriores
+            self.treeWidget.clear()
+            
+            # Crear nodo raíz para Spotify
+            spotify_root = QTreeWidgetItem(self.treeWidget)
+            spotify_root.setText(0, "Spotify")
+            spotify_root.setIcon(0, QIcon(":/services/spotify"))
+            
+            # Buscar álbumes
+            self.log(f"Buscando álbumes para '{query}' en Spotify")
+            album_results = self.sp.search(q=query, type='album', limit=10)
+            albums = album_results['albums']['items']
+            
+            if albums:
+                # Crear nodo para álbumes
+                albums_node = QTreeWidgetItem(spotify_root)
+                albums_node.setText(0, "Álbumes")
+                albums_node.setIcon(0, QIcon(":/services/folder"))
+                albums_node.setData(0, Qt.ItemDataRole.UserRole, {'type': 'group', 'source': 'spotify'})
+                
+                # Añadir cada álbum
+                for album in albums:
+                    album_item = QTreeWidgetItem(albums_node)
+                    album_item.setText(0, album['name'])
+                    
+                    # Artistas del álbum
+                    artists = [artist['name'] for artist in album['artists']]
+                    artist_str = ", ".join(artists)
+                    album_item.setText(1, artist_str)
+                    
+                    album_item.setText(2, "Álbum")
+                    
+                    # Añadir año si está disponible
+                    if 'release_date' in album:
+                        release_year = album['release_date'][:4] if album['release_date'] else ''
+                        album_item.setText(3, release_year)
+                    
+                    # Añadir icono
+                    album_item.setIcon(0, QIcon(":/services/spotify"))
+                    
+                    # Almacenar datos del álbum
+                    album_data = {
+                        'type': 'album',
+                        'title': album['name'],
+                        'artist': artist_str,
+                        'url': album['external_urls']['spotify'],
+                        'source': 'spotify',
+                        'spotify_id': album['id'],
+                        'spotify_uri': album['uri'],
+                        'year': album.get('release_date', '')[:4] if album.get('release_date') else '',
+                        'total_tracks': album.get('total_tracks', 0)
+                    }
+                    album_item.setData(0, Qt.ItemDataRole.UserRole, album_data)
+                    
+                    # Añadir un nodo hijo temporal para que se muestre el signo +
+                    loading_item = QTreeWidgetItem(album_item)
+                    loading_item.setText(0, "Cargando canciones...")
+                    
+                    # Configurar para mostrar indicador de expansión
+                    album_item.setChildIndicatorPolicy(QTreeWidgetItem.ChildIndicatorPolicy.ShowIndicator)
+                
+                # Expandir el nodo de álbumes
+                albums_node.setExpanded(True)
+            
+            # Buscar canciones
+            self.log(f"Buscando canciones para '{query}' en Spotify")
+            track_results = self.sp.search(q=query, type='track', limit=20)
+            tracks = track_results['tracks']['items']
+            
+            if tracks:
+                # Crear nodo para canciones
+                tracks_node = QTreeWidgetItem(spotify_root)
+                tracks_node.setText(0, "Canciones")
+                tracks_node.setIcon(0, QIcon(":/services/folder"))
+                tracks_node.setData(0, Qt.ItemDataRole.UserRole, {'type': 'group', 'source': 'spotify'})
+                
+                # Añadir cada canción
+                for track in tracks:
+                    track_item = QTreeWidgetItem(tracks_node)
+                    track_item.setText(0, track['name'])
+                    
+                    # Artistas de la canción
+                    artists = [artist['name'] for artist in track['artists']]
+                    artist_str = ", ".join(artists)
+                    track_item.setText(1, artist_str)
+                    
+                    track_item.setText(2, "Canción")
+                    
+                    # Álbum y número de pista
+                    if track.get('album'):
+                        track_item.setText(3, track['album']['name'])
+                    
+                    # Añadir duración si está disponible
+                    if 'duration_ms' in track:
+                        duration_ms = track['duration_ms']
+                        minutes = int(duration_ms / 60000)
+                        seconds = int((duration_ms % 60000) / 1000)
+                        track_item.setText(4, f"{minutes}:{seconds:02d}")
+                    
+                    # Añadir icono
+                    track_item.setIcon(0, QIcon(":/services/spotify"))
+                    
+                    # Almacenar datos de la canción
+                    track_data = {
+                        'type': 'track',
+                        'title': track['name'],
+                        'artist': artist_str,
+                        'album': track['album']['name'] if track.get('album') else '',
+                        'url': track['external_urls']['spotify'],
+                        'source': 'spotify',
+                        'spotify_id': track['id'],
+                        'spotify_uri': track['uri'],
+                        'track_number': track.get('track_number', 0),
+                        'duration': track.get('duration_ms', 0) / 1000  # Convertir a segundos
+                    }
+                    track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
+                
+                # Expandir el nodo de canciones
+                tracks_node.setExpanded(True)
+            
+            # Expandir el nodo raíz de Spotify
+            spotify_root.setExpanded(True)
+            
+            # Mostrar mensaje si no se encontró nada
+            if not albums and not tracks:
+                no_results_item = QTreeWidgetItem(spotify_root)
+                no_results_item.setText(0, f"No se encontraron resultados para '{query}'")
+                spotify_root.setExpanded(True)
+            
+            return True
+            
+        except Exception as e:
+            self.log(f"Error buscando álbumes y canciones en Spotify: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False

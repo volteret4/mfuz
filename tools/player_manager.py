@@ -176,7 +176,8 @@ class PlayerManager(QObject):
         self.socket_path = None
         if self.current_player.get('player_temp_dir'):
             temp_dir = os.path.expanduser(self.current_player['player_temp_dir'])
-            os.makedirs(temp_dir, exist_ok=True)
+            if not os.path.exists(temp_dir):
+                os.makedirs(temp_dir, exist_ok=True)
             self.socket_path = Path(temp_dir, "player_socket")
             
             # Delete existing socket file if it exists
@@ -345,3 +346,75 @@ class PlayerManager(QObject):
         
         # Emit track finished signal
         self.track_finished.emit()
+
+
+    def create_playlist(self, urls):
+        """Crear una playlist de MPV con múltiples URLs"""
+        if not urls or len(urls) == 0:
+            self._logger("No hay URLs para crear una playlist")
+            return False
+            
+        try:
+            # Detener cualquier reproducción actual
+            self.stop()
+            
+            # Iniciar con la primera URL
+            success = self.play(urls[0])
+            
+            if not success:
+                self._logger("No se pudo iniciar la reproducción de la playlist")
+                return False
+                
+            # Añadir el resto de URLs a la playlist
+            for url in urls[1:]:
+                self.send_command({"command": ["loadfile", url, "append-play"]})
+                
+            self._logger(f"Playlist creada con {len(urls)} elementos")
+            return True
+        except Exception as e:
+            self._logger(f"Error al crear playlist: {e}")
+            self.playback_error.emit(f"Error al crear playlist: {str(e)}")
+            return False
+
+    def playlist_next(self):
+        """Avanzar a la siguiente pista en la playlist"""
+        success = self.send_command({"command": ["playlist-next", "force"]})
+        if success:
+            self._logger("Avanzando a la siguiente pista en la playlist")
+            return True
+        else:
+            self._logger("No se pudo avanzar a la siguiente pista")
+            return False
+            
+    def playlist_prev(self):
+        """Retroceder a la pista anterior en la playlist"""
+        success = self.send_command({"command": ["playlist-prev", "force"]})
+        if success:
+            self._logger("Retrocediendo a la pista anterior en la playlist")
+            return True
+        else:
+            self._logger("No se pudo retroceder a la pista anterior")
+            return False
+
+    def seek_random_position(self, min_percent=10, max_percent=80):
+        """Buscar una posición aleatoria en la canción actual"""
+        if not self.is_playing:
+            self._logger("No hay reproducción activa para buscar posición")
+            return False
+            
+        try:
+            # Generar un porcentaje aleatorio entre min_percent y max_percent
+            random_percent = random.uniform(min_percent, max_percent)
+            
+            # Enviar comando para buscar a esa posición (porcentaje)
+            success = self.send_command({"command": ["seek", str(random_percent), "absolute-percent"]})
+            
+            if success:
+                self._logger(f"Posición establecida aleatoriamente al {random_percent:.1f}%")
+                return True
+            else:
+                self._logger("No se pudo establecer la posición aleatoria")
+                return False
+        except Exception as e:
+            self._logger(f"Error al buscar posición aleatoria: {e}")
+            return False

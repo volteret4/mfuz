@@ -976,8 +976,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>86</height>
+                     <width>489</width>
+                     <height>649</height>
                     </rect>
                    </property>
                    <property name="styleSheet">
@@ -1048,8 +1048,8 @@ QProgressBar::chunk {
                     <rect>
                      <x>0</x>
                      <y>0</y>
-                     <width>86</width>
-                     <height>86</height>
+                     <width>489</width>
+                     <height>649</height>
                     </rect>
                    </property>
                    <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1155,29 +1155,6 @@ QProgressBar::chunk {
                   <property name="bottomMargin">
                    <number>0</number>
                   </property>
-                  <item>
-                   <widget class="QPushButton" name="mark_as_listened_button">
-                    <property name="maximumSize">
-                     <size>
-                      <width>34</width>
-                      <height>34</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                    <property name="icon">
-                     <iconset resource="../images.qrc">
-                      <normaloff>:/services/succes</normaloff>:/services/succes</iconset>
-                    </property>
-                    <property name="iconSize">
-                     <size>
-                      <width>30</width>
-                      <height>30</height>
-                     </size>
-                    </property>
-                   </widget>
-                  </item>
                   <item>
                    <widget class="QPushButton" name="add_button">
                     <property name="minimumSize">
@@ -1499,6 +1476,29 @@ QProgressBar::chunk {
                        <normaloff>:/services/yt</normaloff>:/services/yt</iconset>
                      </property>
                     </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="mark_as_listened_button">
+                    <property name="maximumSize">
+                     <size>
+                      <width>34</width>
+                      <height>34</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                    <property name="icon">
+                     <iconset resource="../images.qrc">
+                      <normaloff>:/services/succes</normaloff>:/services/succes</iconset>
+                    </property>
+                    <property name="iconSize">
+                     <size>
+                      <width>30</width>
+                      <height>30</height>
+                     </size>
+                    </property>
                    </widget>
                   </item>
                   <item>

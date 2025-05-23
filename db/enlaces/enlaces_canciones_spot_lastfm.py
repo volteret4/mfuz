@@ -485,16 +485,24 @@ class MusicLinkUpdater():
                     best_match = track
             
             # Determinar si tenemos una buena coincidencia
-            if best_match and best_score > 0.4:  # Umbral ajustable
+            if best_match and best_score > 0.6:  # Umbral ajustable
                 track_id = best_match['id']
                 track_url = best_match['external_urls']['spotify']
                 artist_name = best_match['artists'][0]['name']
                 
+                # Obtener la URL de previsualización directamente de la respuesta de la API
+                preview_url = best_match.get('preview_url')
+                
                 self.log(f"Encontrado en Spotify: {best_match['name']} por {artist_name} (Score: {best_score:.2f})")
-                return (track_url, track_id)
+                if preview_url:
+                    self.log(f"URL de previsualización encontrada: {preview_url}")
+                else:
+                    self.log(f"No se encontró URL de previsualización para esta canción")
+                
+                return (track_url, track_id, preview_url)
             else:
                 self.log(f"No se encontró coincidencia suficientemente buena en Spotify (Mejor score: {best_score:.2f})")
-                return (None, None)
+                return (None, None, None)
         
         except Exception as e:
             self.log(f"Error al buscar en Spotify: {e}")
@@ -720,7 +728,7 @@ class MusicLinkUpdater():
         
 
     def update_song_links(self, song_id: int, youtube_url: Optional[str] = None, 
-                        spotify_url: Optional[str] = None, spotify_id: Optional[str] = None,
+                        spotify_url: Optional[str] = None, spotify_id: Optional[str] = None, preview_url: Optional[str] = None,
                         bandcamp_url: Optional[str] = None, soundcloud_url: Optional[str] = None,
                         boomkat_url: Optional[str] = None) -> bool:
         """
@@ -765,14 +773,20 @@ class MusicLinkUpdater():
                         if spotify_url is not None:
                             update_fields.append("spotify_url = ?")
                             params.append(spotify_url)
-                        else:
+                        elif self.force_update and self.delete_old:
                             update_fields.append("spotify_url = NULL")
                         
                         if spotify_id is not None:
                             update_fields.append("spotify_id = ?")
                             params.append(spotify_id)
-                        else:
+                        elif self.force_update and self.delete_old:
                             update_fields.append("spotify_id = NULL")
+                        
+                        if preview_url is not None:
+                            update_fields.append("preview_url = ?")
+                            params.append(preview_url)
+                        elif self.force_update and self.delete_old:
+                            update_fields.append("preview_url = NULL")
                     
                     # Bandcamp
                     if 'bandcamp' in self.services:
@@ -822,6 +836,11 @@ class MusicLinkUpdater():
                     if boomkat_url is not None:
                         update_fields.append("boomkat_url = ?")
                         params.append(boomkat_url)
+
+                    if preview_url is not None:
+                        update_fields.append("preview_url = ?")
+                        params.append(preview_url)
+                        
                 
                 if update_fields:
                     update_fields.append("links_updated = ?")
@@ -935,6 +954,7 @@ class MusicLinkUpdater():
         youtube_url = None
         spotify_url = None
         spotify_id = None
+        preview_url = None
         bandcamp_url = None
         soundcloud_url = None
         boomkat_url = None
@@ -953,7 +973,7 @@ class MusicLinkUpdater():
                 self.log(f"Eliminando enlace de YouTube para canción ID {song_id}")
                 
         if 'spotify' in services_to_update or ('spotify' in self.services and self.force_update):
-            spotify_url, spotify_id = self.search_spotify(song, self.spotify_client_id, self.spotify_client_secret)
+            spotify_url, spotify_id, preview_url = self.search_spotify(song, self.spotify_client_id, self.spotify_client_secret)
             if spotify_url:
                 self.stats["by_service"]["spotify"] += 1
                 updated = True
@@ -991,7 +1011,7 @@ class MusicLinkUpdater():
         # Actualizar la base de datos
         if updated or deleted:
             success = self.update_song_links(
-                song_id, youtube_url, spotify_url, spotify_id, bandcamp_url, soundcloud_url, boomkat_url
+                song_id, youtube_url, spotify_url, spotify_id, preview_url, bandcamp_url, soundcloud_url, boomkat_url
             )
             
             if success:
@@ -1010,6 +1030,152 @@ class MusicLinkUpdater():
             self.stats["skipped"] += 1
             self.log(f"No se encontraron enlaces para canción ID {song_id}\n")
             return False
+
+    def add_preview_url_column(db_path):
+        """Añade la columna preview_url a la tabla song_links si no existe."""
+        import sqlite3
+        import os
+        
+        if not os.path.exists(db_path):
+            print(f"Error: La base de datos {db_path} no existe")
+            return False
+        
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            
+            # Verificar si la columna ya existe
+            cursor.execute("PRAGMA table_info(song_links)")
+            columns = [col[1] for col in cursor.fetchall()]
+            
+            if "preview_url" not in columns:
+                print("Añadiendo columna preview_url a la tabla song_links...")
+                cursor.execute("ALTER TABLE song_links ADD COLUMN preview_url TEXT")
+                conn.commit()
+                print("Columna añadida exitosamente")
+            else:
+                print("La columna preview_url ya existe en la tabla song_links")
+                
+            conn.close()
+            return True
+            
+        except Exception as e:
+            print(f"Error al añadir columna preview_url: {e}")
+            return False
+
+    def get_spotify_preview_url(self, song_id):
+        """
+        Intenta obtener la URL de previsualización directa de Spotify para una canción.
+        
+        Args:
+            song_id: ID de la canción en la base de datos
+                
+        Returns:
+            URL de previsualización si está disponible, None en caso contrario
+        """
+        try:
+            # 1. Primero intentar obtener preview_url directamente de la tabla song_links
+            self.cursor.execute("""
+                SELECT preview_url FROM song_links 
+                WHERE song_id = ? AND preview_url IS NOT NULL AND preview_url != ''
+            """, (song_id,))
+            
+            result = self.cursor.fetchone()
+            if result and result['preview_url']:
+                logger.info(f"URL de previsualización encontrada en tabla song_links: {result['preview_url']}")
+                return result['preview_url']
+            
+            # 2. Si no hay preview_url, obtener spotify_id y consultar la API de Spotify
+            self.cursor.execute("""
+                SELECT spotify_id, spotify_url FROM song_links 
+                WHERE song_id = ? AND (spotify_id IS NOT NULL OR spotify_url IS NOT NULL)
+            """, (song_id,))
+            
+            result = self.cursor.fetchone()
+            if not result:
+                logger.warning(f"No se encontró información de Spotify para la canción ID: {song_id}")
+                return None
+            
+            # Intentar obtener el track_id, ya sea directamente o desde la URL
+            track_id = None
+            if result['spotify_id']:
+                track_id = result['spotify_id']
+            elif result['spotify_url']:
+                track_id = self.get_track_id_from_url(result['spotify_url'])
+            
+            if not track_id:
+                logger.warning(f"No se pudo obtener ID de pista para la canción ID: {song_id}")
+                return None
+                
+            # 3. Consultar la API de Spotify para obtener la URL de previsualización
+            try:
+                # Importar spotipy aquí para evitar dependencia global
+                import spotipy
+                from spotipy.oauth2 import SpotifyClientCredentials
+                import os
+                
+                # Obtener credenciales de Spotify del entorno o configuración
+                client_id = os.environ.get('SPOTIPY_CLIENT_ID')
+                client_secret = os.environ.get('SPOTIPY_CLIENT_SECRET')
+                
+                # Si no hay credenciales en el entorno, usar las de config
+                if not client_id or not client_secret:
+                    if self.config and 'spotify' in self.config:
+                        client_id = self.config.get('spotify', {}).get('client_id')
+                        client_secret = self.config.get('spotify', {}).get('client_secret')
+                
+                if not client_id or not client_secret:
+                    logger.error("No se encontraron credenciales para la API de Spotify")
+                    return None
+                    
+                # Configurar cliente de Spotify
+                auth_manager = SpotifyClientCredentials(
+                    client_id=client_id,
+                    client_secret=client_secret
+                )
+                
+                sp = spotipy.Spotify(
+                    client_credentials_manager=auth_manager,
+                    requests_timeout=10
+                )
+                
+                # Obtener información de la pista
+                logger.info(f"Consultando API de Spotify para track_id: {track_id}")
+                track_info = sp.track(track_id)
+                
+                # Extraer la URL de previsualización
+                preview_url = track_info.get('preview_url')
+                
+                if preview_url:
+                    logger.info(f"URL de previsualización obtenida de API: {preview_url}")
+                    
+                    # Guardar la URL para futuras consultas
+                    try:
+                        self.cursor.execute("""
+                            UPDATE song_links SET preview_url = ? WHERE song_id = ?
+                        """, (preview_url, song_id))
+                        self.conn.commit()
+                        logger.info(f"URL de previsualización guardada en base de datos para canción ID: {song_id}")
+                    except Exception as e:
+                        logger.error(f"Error al guardar URL de previsualización: {e}")
+                    
+                    return preview_url
+                else:
+                    logger.warning(f"La API de Spotify no proporcionó URL de previsualización para track_id: {track_id}")
+                    return None
+                    
+            except ImportError:
+                logger.error("No se pudo importar la biblioteca spotipy. Instálela con 'pip install spotipy'")
+                return None
+            except Exception as e:
+                logger.error(f"Error al consultar la API de Spotify: {e}")
+                return None
+            
+        except Exception as e:
+            logger.error(f"Error al obtener URL de previsualización: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return None
 
          
     def run(self) -> Dict:
@@ -1030,6 +1196,7 @@ class MusicLinkUpdater():
                     song_id INTEGER,
                     spotify_url TEXT,
                     spotify_id TEXT,
+                    preview_url TEXT,
                     lastfm_url TEXT,
                     links_updated TIMESTAMP,
                     youtube_url TEXT,
@@ -1042,9 +1209,15 @@ class MusicLinkUpdater():
                 """)
                 self.conn.commit()
             else:
-                # Verificar si bandcamp_url existe en la tabla
+                # Verificar si las columnas necesarias existen en la tabla
                 self.cursor.execute("PRAGMA table_info(song_links)")
                 columns = [col[1] for col in self.cursor.fetchall()]
+                
+                # Añadir columnas que faltan
+                if "preview_url" not in columns:
+                    self.log("Añadiendo columna preview_url a la tabla song_links...")
+                    self.cursor.execute("ALTER TABLE song_links ADD COLUMN preview_url TEXT")
+                    self.conn.commit()
                 
                 if "bandcamp_url" not in columns:
                     self.log("Añadiendo columna bandcamp_url a la tabla song_links...")
@@ -1135,7 +1308,7 @@ def main(config=None):
                 
             # Combinar configuraciones comunes y específicas
             final_config.update(json_config.get("common", {}))
-            final_config.update(json_config.get("enlaces_canciones_spot_lastfm", {}))
+            final_config.update(json_config.get("enlaces/enlaces_canciones_spot_lastfm", {}))
         
         # Los argumentos de línea de comandos tienen mayor prioridad
         arg_dict = vars(args)

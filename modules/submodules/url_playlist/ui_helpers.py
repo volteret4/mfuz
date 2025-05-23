@@ -237,8 +237,6 @@ def setup_unified_playlist_menu(self):
                 if hasattr(self, 'playlists') and isinstance(self.playlists, dict) and 'local' in self.playlists:
                     local_playlists = self.playlists['local']
                 
-                # Rest of your existing code...
-                
                 # Get visibility configuration
                 show_local = self.get_setting_value('show_local_playlists', True)
                 show_spotify = self.get_setting_value('show_spotify_playlists', True) 
@@ -266,27 +264,43 @@ def setup_unified_playlist_menu(self):
                         # Connect with lambdas that have default arguments to capture current value
                         action.triggered.connect(lambda checked=False, p=playlist_copy: display_local_playlist(self,p))
                 
-                # Add Spotify playlists section
-                if show_spotify and hasattr(self, 'spotify_authenticated') and self.spotify_authenticated:
-                    spotify_menu = menu.addMenu(QIcon(":/services/spotify"), "Playlists de Spotify")
+                # Add Spotify playlists section - MODIFICADO PARA ARREGLAR EL PROBLEMA
+                if show_spotify:
+                    # Verificar la autenticación de Spotify de manera más exhaustiva
+                    spotify_authenticated = False
+                    if hasattr(self, 'spotify_authenticated'):
+                        spotify_authenticated = bool(self.spotify_authenticated)
+                    elif hasattr(self, 'sp') and self.sp is not None:
+                        spotify_authenticated = True
                     
-                    # Add option to create new playlist
-                    create_spotify_action = spotify_menu.addAction(QIcon(":/services/b_plus_cross"), "Nueva Playlist de Spotify")
-                    create_spotify_action.triggered.connect(lambda: show_create_playlist_dialog(self, "spotify"))
-                    
-                    spotify_menu.addSeparator()
-                    
-                    # Add existing playlists
-                    if hasattr(self, 'spotify_playlists'):
-                        for name, playlist in self.spotify_playlists.items():
-                            # Create playlist action
-                            action = spotify_menu.addAction(QIcon(":/services/spotify"), name)
-                            # Store playlist ID and name in local variables
-                            playlist_id = playlist['id']
-                            playlist_name = name
-                            # Connect with explicit parameters
-                            action.triggered.connect(lambda checked=False, id=playlist_id, name=playlist_name: 
-                                                show_spotify_playlist_content(self, id, name))
+                    if spotify_authenticated:
+                        spotify_menu = menu.addMenu(QIcon(":/services/spotify"), "Playlists de Spotify")
+                        
+                        # Add option to create new playlist
+                        create_spotify_action = spotify_menu.addAction(QIcon(":/services/b_plus_cross"), "Nueva Playlist de Spotify")
+                        create_spotify_action.triggered.connect(lambda: show_create_playlist_dialog(self, "spotify"))
+                        
+                        spotify_menu.addSeparator()
+                        
+                        # Verificar que spotify_playlists exista y tenga contenido
+                        spotify_playlists = {}
+                        if hasattr(self, 'spotify_playlists') and self.spotify_playlists:
+                            spotify_playlists = self.spotify_playlists
+                        
+                        # Add existing playlists
+                        if spotify_playlists:
+                            for name, playlist in spotify_playlists.items():
+                                # Verify playlist has required data
+                                if isinstance(playlist, dict) and 'id' in playlist:
+                                    # Create playlist action
+                                    action = spotify_menu.addAction(QIcon(":/services/spotify"), name)
+                                    # Store playlist ID and name in local variables to prevent reference issues
+                                    playlist_id = playlist['id']
+                                    playlist_name = name
+                                    # Connect with explicit parameters
+                                    action.triggered.connect(lambda checked=False, id=playlist_id, name=playlist_name: 
+                                                        self.show_spotify_playlist_content(id, name) if hasattr(self, 'show_spotify_playlist_content') else
+                                                        show_spotify_playlist_content(self, id, name))
                 
                 # Add RSS playlists section
                 if show_rss:
@@ -453,7 +467,8 @@ def add_single_result_to_tree(self, result, parent_item):
 def display_search_results(self, results, clear_existing=True):
     """
     Muestra los resultados de búsqueda en el árbol con la estructura jerárquica correcta:
-    servicio > artista > álbum > canción.
+    servicio > artista > álbum > canción,
+    organizando correctamente según origen y source.
     """
     if not results:
         self.log("No hay resultados que mostrar")
@@ -463,79 +478,104 @@ def display_search_results(self, results, clear_existing=True):
     if clear_existing and hasattr(self, 'treeWidget'):
         self.treeWidget.clear()
     
-    # Organizar resultados por servicio, artista, álbum, canción
-    organized = {}
-    
-    for result in results:
-        source = result.get('source', 'unknown')
-        artist = result.get('artist', '')
-        item_type = result.get('type', '')
-        
-        # Inicializar estructura
-        if source not in organized:
-            organized[source] = {}
-        
-        if artist not in organized[source]:
-            organized[source][artist] = {'info': None, 'albums': {}, 'tracks': []}
-        
-        # Almacenar información según el tipo
-        if item_type == 'artist':
-            organized[source][artist]['info'] = result
-        elif item_type in ['album', 'álbum']:
-            album_title = result.get('title', '')
-            if album_title not in organized[source][artist]['albums']:
-                organized[source][artist]['albums'][album_title] = {'info': result, 'tracks': []}
-            else:
-                organized[source][artist]['albums'][album_title]['info'] = result
-        elif item_type in ['track', 'song', 'canción']:
-            album_title = result.get('album', '')
-            
-            if album_title:
-                # Añadir a álbum si existe
-                if album_title not in organized[source][artist]['albums']:
-                    organized[source][artist]['albums'][album_title] = {'info': None, 'tracks': []}
-                organized[source][artist]['albums'][album_title]['tracks'].append(result)
-            else:
-                # Añadir a pistas sin álbum
-                organized[source][artist]['tracks'].append(result)
-    
     from PyQt6.QtWidgets import QTreeWidgetItem
     from PyQt6.QtCore import Qt
     from PyQt6.QtGui import QIcon
     
-    # Crear elementos en el árbol
-    for source, artists in organized.items():
-        # Crear nodo para el servicio
-        source_item = QTreeWidgetItem(self.treeWidget)
-        source_item.setText(0, source.capitalize())
-        source_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'service', 'source': source})
+    # Organizar resultados por servicio, artista, álbum, canción
+    services = {
+        'local': {'name': 'Archivos locales', 'artists': {}},
+        'spotify': {'name': 'Spotify', 'artists': {}},
+        'youtube': {'name': 'YouTube', 'artists': {}},
+        'bandcamp': {'name': 'Bandcamp', 'artists': {}},
+        'soundcloud': {'name': 'SoundCloud', 'artists': {}}
+    }
+    
+    # Asignar cada resultado al servicio correspondiente
+    for result in results:
+        source = result.get('source', 'local').lower()
         
-        # Establecer icono de servicio
-        if hasattr(self, 'service_icons') and source in self.service_icons:
-            source_item.setIcon(0, self.service_icons[source])
-        elif hasattr(self, 'get_source_icon'):
-            source_item.setIcon(0, self.get_source_icon('', {'source': source}))
+        # Si el source no está en nuestros servicios definidos, pasar al siguiente
+        if source not in services:
+            continue
         
-        for artist_name, artist_data in artists.items():
-            # Crear nodo para el artista
-            artist_item = QTreeWidgetItem(source_item)
+        # Obtener el artista (o usar valor por defecto)
+        artist_name = result.get('artist', 'Artista desconocido')
+        item_type = result.get('type', '').lower()
+        
+        # Inicializar estructura del artista si es necesario
+        if artist_name not in services[source]['artists']:
+            services[source]['artists'][artist_name] = {'info': None, 'albums': {}, 'tracks': []}
+        
+        # Añadir según el tipo
+        if item_type == 'artist':
+            # Solo guardar info de artista si aún no hay o si es mejor
+            if services[source]['artists'][artist_name]['info'] is None:
+                services[source]['artists'][artist_name]['info'] = result
+        elif item_type in ['album', 'álbum']:
+            album_title = result.get('title', 'Álbum desconocido')
+            if album_title not in services[source]['artists'][artist_name]['albums']:
+                services[source]['artists'][artist_name]['albums'][album_title] = {'info': result, 'tracks': []}
+            else:
+                # Actualizar info del álbum solo si no hay
+                if services[source]['artists'][artist_name]['albums'][album_title]['info'] is None:
+                    services[source]['artists'][artist_name]['albums'][album_title]['info'] = result
+        elif item_type in ['track', 'song', 'canción']:
+            album_title = result.get('album', '')
+            
+            # Para tracks, siempre añadir (pueden ser múltiples tracks con el mismo nombre)
+            if album_title and album_title != 'null':
+                # Añadir a un álbum específico
+                if album_title not in services[source]['artists'][artist_name]['albums']:
+                    services[source]['artists'][artist_name]['albums'][album_title] = {'info': None, 'tracks': []}
+                
+                services[source]['artists'][artist_name]['albums'][album_title]['tracks'].append(result)
+            else:
+                # Pistas sin álbum
+                services[source]['artists'][artist_name]['tracks'].append(result)
+    
+    # Crear el árbol con los servicios
+    service_order = ['local', 'spotify', 'bandcamp', 'youtube', 'soundcloud']
+    
+    for service_key in service_order:
+        service_data = services[service_key]
+        
+        # Solo crear nodos para servicios que tienen contenido
+        if not service_data['artists']:
+            continue
+        
+        # Crear nodo de servicio
+        service_item = QTreeWidgetItem(self.treeWidget)
+        service_item.setText(0, service_data['name'])
+        service_item.setData(0, Qt.ItemDataRole.UserRole, {'type': 'service', 'source': service_key})
+        
+        # Establecer icono del servicio
+        if hasattr(self, 'service_icons') and service_key in self.service_icons:
+            service_item.setIcon(0, self.service_icons[service_key])
+        
+        # Añadir artistas ordenados alfabéticamente
+        for artist_name, artist_data in sorted(service_data['artists'].items()):
+            # Crear nodo de artista
+            artist_item = QTreeWidgetItem(service_item)
             artist_item.setText(0, artist_name)
-            artist_item.setText(1, artist_name)  # Repetir en columna de artista
+            artist_item.setText(1, artist_name)
             artist_item.setText(2, "Artista")
             
-            # Usar datos del artista si están disponibles
+            # Usar info del artista si está disponible
             if artist_data['info']:
                 artist_item.setData(0, Qt.ItemDataRole.UserRole, artist_data['info'])
             else:
+                # Crear datos mínimos para el artista
                 artist_item.setData(0, Qt.ItemDataRole.UserRole, {
                     'type': 'artist',
                     'title': artist_name,
                     'artist': artist_name,
-                    'source': source
+                    'source': service_key,
+                    'origen': 'local'
                 })
             
-            # Añadir álbumes
-            for album_title, album_data in artist_data['albums'].items():
+            # Añadir álbumes ordenados alfabéticamente
+            for album_title, album_data in sorted(artist_data['albums'].items()):
                 # Crear nodo para el álbum
                 album_item = QTreeWidgetItem(artist_item)
                 album_item.setText(0, album_title)
@@ -550,26 +590,55 @@ def display_search_results(self, results, clear_existing=True):
                 if album_data['info']:
                     album_item.setData(0, Qt.ItemDataRole.UserRole, album_data['info'])
                 else:
+                    # Crear datos mínimos para el álbum
                     album_item.setData(0, Qt.ItemDataRole.UserRole, {
                         'type': 'album',
                         'title': album_title,
                         'artist': artist_name,
-                        'source': source
+                        'source': service_key,
+                        'origen': 'local'
                     })
                 
-                # Añadir pistas del álbum
-                for track in album_data['tracks']:
-                    _add_result_to_tree(self, track, album_item)
+                # Añadir pistas del álbum ordenadas por número de pista
+                tracks = album_data['tracks']
+                
+                # Ordenar por track_number si está disponible
+                try:
+                    tracks.sort(key=lambda t: int(t.get('track_number', 999)) if t.get('track_number') is not None else 999)
+                except:
+                    # Si hay algún error al ordenar, no ordenar
+                    pass
+                
+                for track in tracks:
+                    # Asegurarse de que el track tenga el source correcto
+                    track_data = track.copy()
+                    track_data['source'] = service_key
+                    
+                    # Si es local, asegurarse de que tenga la URL correcta (file_path)
+                    if service_key == 'local' and 'file_path' in track:
+                        track_data['url'] = track['file_path']
+                    
+                    # Añadir pista al álbum
+                    _add_result_to_tree(self, track_data, album_item)
             
             # Añadir pistas sin álbum directamente bajo el artista
             for track in artist_data['tracks']:
-                _add_result_to_tree(self, track, artist_item)
-    
-    # Expandir todos los nodos de servicio
-    for i in range(self.treeWidget.topLevelItemCount()):
-        self.treeWidget.topLevelItem(i).setExpanded(True)
+                # Asegurarse de que el track tenga el source correcto
+                track_data = track.copy()
+                track_data['source'] = service_key
+                
+                # Si es local, asegurarse de que tenga la URL correcta (file_path)
+                if service_key == 'local' and 'file_path' in track:
+                    track_data['url'] = track['file_path']
+                
+                # Añadir pista al artista
+                _add_result_to_tree(self, track_data, artist_item)
+        
+        # Expandir el nodo de servicio para mostrar los artistas
+        service_item.setExpanded(True)
     
     return True
+
 
 def _count_tree_items(item):
     """Cuenta recursivamente el número total de ítems en un árbol."""
@@ -691,6 +760,9 @@ def show_advanced_settings(parent_instance):
             # Set up checkboxes based on current settings
             _setup_service_checkboxes(parent_instance, dialog)
             
+            # Set up scrobbles controls
+            parent_instance.setup_advanced_settings_dialog(dialog)
+
             # Connect the button box
             if hasattr(dialog, 'adv_sett_buttonBox'):
                 # Conecta los botones estándar de QDialogButtonBox
@@ -1232,6 +1304,7 @@ def show_spotify_playlist_content(self, playlist_id, playlist_name):
 def _add_result_to_tree(self, result, parent_item):
     """
     Añade un resultado individual al árbol bajo el ítem padre especificado.
+    Mejorado para manejar correctamente file_path para archivos locales.
     """
     from PyQt6.QtWidgets import QTreeWidgetItem
     from PyQt6.QtCore import Qt
@@ -1257,18 +1330,31 @@ def _add_result_to_tree(self, result, parent_item):
         duration_str = format_duration(result['duration'])
         item.setText(4, duration_str)
     
+    # Crear copia del resultado para modificar
+    result_data = result.copy()
+    
+    # CRÍTICO: Manejar URL correctamente dependiendo del tipo de servicio
+    if result_data.get('source') == 'local':
+        # Para elementos locales, usar file_path como URL
+        if 'file_path' in result_data and result_data['file_path']:
+            result_data['url'] = result_data['file_path']
+    else:
+        # Para otros servicios, buscar las URLs específicas
+        source = result_data.get('source', '')
+        if source and f'{source}_url' in result_data:
+            result_data['url'] = result_data[f'{source}_url']
+    
     # Establecer el icono basado en la fuente
-    source = result.get('source', 'unknown')
+    source = result_data.get('source', 'unknown')
     if hasattr(self, 'service_icons') and source in self.service_icons:
         item.setIcon(0, self.service_icons[source])
     elif hasattr(self, 'get_source_icon'):
-        item.setIcon(0, self.get_source_icon(result.get('url', ''), result))
+        item.setIcon(0, self.get_source_icon(result_data.get('url', ''), result_data))
     
     # Guardar los datos completos en el ítem
-    item.setData(0, Qt.ItemDataRole.UserRole, result)
+    item.setData(0, Qt.ItemDataRole.UserRole, result_data)
     
     return item
-
 
 def load_rss_playlist_content_to_tree(self, playlist_data):
     """Carga el contenido de una playlist RSS en el treeWidget"""

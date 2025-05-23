@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'muspy_artist_selection_dialog.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -59,7 +59,7 @@ class Ui_ArtistSelectionDialog(object):
         self.example_artist = QCheckBox(self.scroll_area)
         self.example_artist.setObjectName(u"example_artist")
         self.example_artist.setCheckable(True)
-        self.example_artist.setChecked(True)
+        self.example_artist.setChecked(False)
 
         self.scroll_layout.addWidget(self.example_artist)
 
@@ -93,11 +93,11 @@ class Ui_ArtistSelectionDialog(object):
 
         self.verticalLayout.addLayout(self.button_layout)
 
-        self.buttons = QDialogButtonBox(ArtistSelectionDialog)
-        self.buttons.setObjectName(u"buttons")
-        self.buttons.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
+        self.buttonBox = QDialogButtonBox(ArtistSelectionDialog)
+        self.buttonBox.setObjectName(u"buttonBox")
+        self.buttonBox.setStandardButtons(QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.Ok)
 
-        self.verticalLayout.addWidget(self.buttons)
+        self.verticalLayout.addWidget(self.buttonBox)
 
 
         self.retranslateUi(ArtistSelectionDialog)

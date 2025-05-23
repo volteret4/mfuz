@@ -38,8 +38,10 @@ except ImportError:
 class StatsModule(BaseModule):
     """Módulo para mostrar estadísticas de la base de datos de música."""
     
-    def __init__(self, db_path=None, **kwargs):
+    def __init__(self, db_path=None, lastfm_username=None, musicbrainz_username=None, **kwargs):
         self.db_path = db_path
+        self.lastfm_username = lastfm_username
+        self.musicbrainz_username = musicbrainz_username
         self.conn = None
         self.current_category = None
         
@@ -151,7 +153,7 @@ class StatsModule(BaseModule):
             # Initialize feeds submodule
             try:
                 # Create FeedsSubmodule instance directly
-                feeds_submodule = FeedsSubmodule(self, self.conn, helper_functions=helper_functions)
+                feeds_submodule = FeedsSubmodule(self, self.conn, self.lastfm_username, self.musicbrainz_username, helper_functions=helper_functions)
                 # Register it with the callback handler
                 self.callback_handler.register_submodule('feeds', feeds_submodule)
                 logging.info("Registered feeds submodule successfully")
@@ -160,11 +162,28 @@ class StatsModule(BaseModule):
                 if hasattr(feeds_submodule, 'setup_connections'):
                     feeds_submodule.setup_connections()
                     logging.info("Set up feeds submodule connections")
-                    
+                   
             except Exception as e:
                 logging.error(f"Error initializing feeds submodule: {e}")
                 import traceback
                 logging.error(traceback.format_exc())
+
+            # Inicializar submódulo de artistas
+            try:
+                from modules.submodules.stats.artistas_submodule import ArtistsSubmodule
+                artists_submodule = ArtistsSubmodule(self, self.conn, self.lastfm_username, self.musicbrainz_username, helper_functions=helper_functions)
+                self.callback_handler.register_submodule('artists', artists_submodule)
+                logging.info("Registro exitoso del submódulo de artistas")
+                
+                # Configurar conexiones del submódulo de artistas
+                if hasattr(artists_submodule, 'setup_connections'):
+                    artists_submodule.setup_connections()
+                    logging.info("Conexiones del submódulo de artistas configuradas")
+            except Exception as e:
+                logging.error(f"Error al inicializar el submódulo de artistas: {e}")
+                import traceback
+                logging.error(traceback.format_exc())
+
         except Exception as e:
             logging.error(f"Error initializing submodules: {e}")
             import traceback
@@ -302,8 +321,7 @@ class StatsModule(BaseModule):
         if not self.db_path:
             # Intentar encontrar la base de datos en ubicaciones típicas
             possible_paths = [
-                Path(os.path.dirname(__file__), "data", "music.db"),
-                Path(PROJECT_ROOT, "data", "music.db"),
+                Path(PROJECT_ROOT, ".db", "sqlite", "music.db"),
                 Path(os.path.expanduser("~"), ".config", "musicapp", "music.db")
             ]
             
@@ -423,6 +441,22 @@ class StatsModule(BaseModule):
                     self.callback_handler.redirect_to_submodule('load_feed_stats', 'feeds')
                 else:
                     logging.error("callback_handler not initialized")
+            elif self.current_category == "Artistas":
+                # Usar el submódulo a través del manejador de callbacks
+                if hasattr(self, 'callback_handler'):
+                    # Primero asegurarse de que estamos en la página correcta del stacked widget
+                    page_artists = self.findChild(QWidget, "page_artists") 
+                    if page_artists:
+                        # Buscar el índice de la página
+                        for i in range(self.stacked_widget.count()):
+                            if self.stacked_widget.widget(i) == page_artists:
+                                self.stacked_widget.setCurrentIndex(i)
+                                break
+                    
+                    # Ahora cargar los datos
+                    self.callback_handler.redirect_to_submodule('load_artist_stats', 'artists')
+                else:
+                    logging.error("callback_handler no inicializado")
             
             # Notify about category change after data is loaded
             if hasattr(self, 'callback_handler'):
@@ -575,25 +609,27 @@ class StatsModule(BaseModule):
         results.append(("feeds", "noticias del artista", completeness))
         
         # Artistas sin escuchas (lastfm)
-        cursor.execute("""
+        query = f"""
             SELECT COUNT(*) 
             FROM artists a
-            LEFT JOIN (SELECT DISTINCT artist_id FROM scrobbles) s 
+            LEFT JOIN (SELECT DISTINCT artist_id FROM scrobbles_{self.lastfm_username}) s 
             ON a.id = s.artist_id
             WHERE s.artist_id IS NULL;
-        """)
+        """
+        cursor.execute(query)
         missing_scrobbles = cursor.fetchone()[0]
         completeness = 100 - ((missing_scrobbles / total_artists) * 100) if total_artists > 0 else 100
         results.append(("scrobbles", "escuchas lastfm", completeness))
         
         # Artistas sin escuchas (listenbrainz)
-        cursor.execute("""
+        query = f"""
             SELECT COUNT(*) 
             FROM artists a
-            LEFT JOIN (SELECT DISTINCT artist_id FROM listens) l 
-            ON a.id = l.artist_id
-            WHERE l.artist_id IS NULL;
-        """)
+            LEFT JOIN (SELECT DISTINCT artist_id FROM listens_{self.musicbrainz_username}) s 
+            ON a.id = s.artist_id
+            WHERE s.artist_id IS NULL;
+        """
+        cursor.execute(query)
         missing_listens = cursor.fetchone()[0]
         completeness = 100 - ((missing_listens / total_artists) * 100) if total_artists > 0 else 100
         results.append(("listens", "escuchas listenbrainz", completeness))
@@ -721,23 +757,25 @@ class StatsModule(BaseModule):
         results.append(("song_links", "enlaces", completeness))
         
         # Canciones sin escuchas (lastfm)
-        cursor.execute("""
+        query = f"""
             SELECT COUNT(*) 
             FROM songs s
-            LEFT JOIN (SELECT DISTINCT song_id FROM scrobbles) sc ON s.id = sc.song_id
+            LEFT JOIN (SELECT DISTINCT song_id FROM scrobbles_{self.lastfm_username}) sc ON s.id = sc.song_id
             WHERE sc.song_id IS NULL;
-        """)
+        """
+        cursor.execute(query)
         missing_scrobbles = cursor.fetchone()[0]
         completeness = 100 - ((missing_scrobbles / total_songs) * 100) if total_songs > 0 else 100
         results.append(("scrobbles", "escuchas lastfm", completeness))
         
         # Canciones sin escuchas (listenbrainz)
-        cursor.execute("""
+        query = f"""
             SELECT COUNT(*) 
             FROM songs s
-            LEFT JOIN (SELECT DISTINCT song_id FROM listens) l ON s.id = l.song_id
+            LEFT JOIN (SELECT DISTINCT song_id FROM listens_{self.musicbrainz_username}) l ON s.id = l.song_id
             WHERE l.song_id IS NULL;
-        """)
+        """
+        cursor.execute(query)
         missing_listens = cursor.fetchone()[0]
         completeness = 100 - ((missing_listens / total_songs) * 100) if total_songs > 0 else 100
         results.append(("listens", "escuchas listenbrainz", completeness))
@@ -2001,11 +2039,13 @@ class StatsModule(BaseModule):
         cursor = self.conn.cursor()
         
         # Verificar si hay datos de scrobbles (LastFM)
-        cursor.execute("SELECT COUNT(*) FROM scrobbles;")
+        query = f"SELECT COUNT(*) FROM scrobbles_{self.lastfm_username};"
+        cursor.execute(query)
         scrobble_count = cursor.fetchone()[0]
         
         # Verificar si hay datos de listens (ListenBrainz)
-        cursor.execute("SELECT COUNT(*) FROM listens;")
+        query = f"SELECT COUNT(*) FROM listens_{self.musicbrainz_username};"
+        cursor.execute(query)
         listen_count = cursor.fetchone()[0]
         
         # Añadir fuentes al combo
@@ -2073,21 +2113,23 @@ class StatsModule(BaseModule):
         cursor = self.conn.cursor()
         
         if source_type == "lastfm":
-            cursor.execute("""
+            query = f"""
                 SELECT artist_name, COUNT(*) as listen_count
-                FROM scrobbles
+                FROM scrobbles_{self.lastfm_username}
                 GROUP BY artist_name
                 ORDER BY listen_count DESC
                 LIMIT 50;
-            """)
+            """
+            cursor.execute(query)
         else:  # listenbrainz
-            cursor.execute("""
+            query = f"""
                 SELECT artist_name, COUNT(*) as listen_count
-                FROM listens
+                FROM listens_{self.musicbrainz_username}
                 GROUP BY artist_name
                 ORDER BY listen_count DESC
                 LIMIT 50;
-            """)
+            """
+            cursor.execute(query)
         
         results = cursor.fetchall()
         
@@ -2190,23 +2232,25 @@ class StatsModule(BaseModule):
         cursor = self.conn.cursor()
         
         if source_type == "lastfm":
-            cursor.execute("""
+            query = f"""
                 SELECT album_name, artist_name, COUNT(*) as listen_count
-                FROM scrobbles
+                FROM scrobbles_{self.lastfm_username}
                 WHERE album_name IS NOT NULL AND album_name != ''
                 GROUP BY album_name, artist_name
                 ORDER BY listen_count DESC
                 LIMIT 50;
-            """)
+            """
+            cursor.execute(query)
         else:  # listenbrainz
-            cursor.execute("""
+            query = f"""
                 SELECT album_name, artist_name, COUNT(*) as listen_count
-                FROM listens
+                FROM listens_{self.musicbrainz_username}
                 WHERE album_name IS NOT NULL AND album_name != ''
                 GROUP BY album_name, artist_name
                 ORDER BY listen_count DESC
                 LIMIT 50;
-            """)
+            """
+            cursor.execute(query)
         
         results = cursor.fetchall()
         
@@ -2276,23 +2320,25 @@ class StatsModule(BaseModule):
         cursor = self.conn.cursor()
         
         if source_type == "lastfm":
-            cursor.execute("""
+            query  = """
                 SELECT s.genre, COUNT(sc.id) as listen_count
-                FROM scrobbles sc
+                FROM scrobbles_{self.lastfm_username} sc
                 JOIN songs s ON sc.track_name = s.title AND sc.artist_name = s.artist
                 WHERE s.genre IS NOT NULL AND s.genre != ''
                 GROUP BY s.genre
                 ORDER BY listen_count DESC;
-            """)
+            """
+            cursor.execute(query)
         else:  # listenbrainz
-            cursor.execute("""
+            query = f"""
                 SELECT s.genre, COUNT(l.id) as listen_count
-                FROM listens l
+                FROM listens_{self.musicbrainz_username} l
                 JOIN songs s ON l.track_name = s.title AND l.artist_name = s.artist
                 WHERE s.genre IS NOT NULL AND s.genre != ''
                 GROUP BY s.genre
                 ORDER BY listen_count DESC;
-            """)
+            """
+            cursor.execute(query)
         
         results = cursor.fetchall()
         
@@ -2361,25 +2407,27 @@ class StatsModule(BaseModule):
         cursor = self.conn.cursor()
         
         if source_type == "lastfm":
-            cursor.execute("""
+            query = f"""
                 SELECT a.label, COUNT(sc.id) as listen_count
-                FROM scrobbles sc
+                FROM scrobbles_{self.lastfm_username} sc
                 JOIN songs s ON sc.track_name = s.title AND sc.artist_name = s.artist
                 JOIN albums a ON s.album = a.name
                 WHERE a.label IS NOT NULL AND a.label != ''
                 GROUP BY a.label
                 ORDER BY listen_count DESC;
-            """)
+            """
+            cursor.execute(query)
         else:  # listenbrainz
-            cursor.execute("""
+            query = f"""
                 SELECT a.label, COUNT(l.id) as listen_count
-                FROM listens l
+                FROM listens_{self.musicbrainz_username} l
                 JOIN songs s ON l.track_name = s.title AND l.artist_name = s.artist
                 JOIN albums a ON s.album = a.name
                 WHERE a.label IS NOT NULL AND a.label != ''
                 GROUP BY a.label
                 ORDER BY listen_count DESC;
-            """)
+            """
+            cursor.execute(query)
         
         results = cursor.fetchall()
         
@@ -2432,10 +2480,10 @@ class StatsModule(BaseModule):
         # Determinar la consulta SQL según la unidad temporal
         if source_type == "lastfm":
             date_field = "scrobble_date"
-            table = "scrobbles"
+            table = f"scrobbles_{self.lastfm_username}"
         else:
             date_field = "listen_date"
-            table = "listens"
+            table = f"listens_{self.musicbrainz_username}"
         
         cursor = self.conn.cursor()
         
@@ -4125,11 +4173,13 @@ class StatsModule(BaseModule):
         # Consultar escuchas por país
         cursor = self.conn.cursor()
         try:
-            # Primero verificamos si hay datos de scrobbles o listens
-            cursor.execute("SELECT COUNT(*) FROM scrobbles;")
+            # Primero verificamos si hay datos de scrobbles_{self.lastfm_username} o listens
+            query = f"SELECT COUNT(*) FROM scrobbles_{self.lastfm_username};"
+            cursor.execute(query)
             scrobble_count = cursor.fetchone()[0]
             
-            cursor.execute("SELECT COUNT(*) FROM listens;")
+            query = f"SELECT COUNT(*) FROM listens_{self.musicbrainz_username};"
+            cursor.execute(query)
             listen_count = cursor.fetchone()[0]
             
             if scrobble_count == 0 and listen_count == 0:
@@ -4140,7 +4190,7 @@ class StatsModule(BaseModule):
                 return
             
             # Determinar qué tabla usar
-            listen_table = "scrobbles" if scrobble_count > 0 else "listens"
+            listen_table = "scrobbles_{self.lastfm_username}" if scrobble_count > 0 else "listens"
             
             # Consultar distribución por país
             cursor.execute(f"""
@@ -4464,29 +4514,30 @@ class StatsModule(BaseModule):
             decades = cursor.fetchall()
             
             # Escuchas por año
-            cursor.execute("""
+            query = f"""
                 SELECT 
                     CASE 
-                        WHEN EXISTS (SELECT 1 FROM scrobbles LIMIT 1) THEN 1
+                        WHEN EXISTS (SELECT 1 FROM scrobbles_{self.lastfm_username} LIMIT 1) THEN 1
                         ELSE 0
                     END as has_scrobbles,
                     CASE 
-                        WHEN EXISTS (SELECT 1 FROM listens LIMIT 1) THEN 1
+                        WHEN EXISTS (SELECT 1 FROM listens_{self.musicbrainz_username} LIMIT 1) THEN 1
                         ELSE 0
                     END as has_listens;
-            """)
+            """
+            cursor.execute(query)
             listen_info = cursor.fetchone()
             has_scrobbles = listen_info[0] == 1
             has_listens = listen_info[1] == 1
             
             listen_years = []
             if has_scrobbles:
-                cursor.execute("""
+                query = f"""
                     SELECT 
                         strftime('%Y', s.scrobble_date) as year,
                         COUNT(*) as listen_count
                     FROM 
-                        scrobbles s
+                        scrobbles_{self.lastfm_username} s
                     JOIN 
                         artists ar ON s.artist_name = ar.name
                     WHERE 
@@ -4495,16 +4546,17 @@ class StatsModule(BaseModule):
                         year
                     ORDER BY 
                         year;
-                """, (self.selected_country,))
+                """
+                cursor.execute(query, (self.selected_country,))
                 listen_years.extend(cursor.fetchall())
             
             if has_listens:
-                cursor.execute("""
+                query = f"""
                     SELECT 
                         strftime('%Y', l.listen_date) as year,
                         COUNT(*) as listen_count
                     FROM 
-                        listens l
+                        listens_{self.musicbrainz_username} l
                     JOIN 
                         artists ar ON l.artist_name = ar.name
                     WHERE 
@@ -4513,7 +4565,8 @@ class StatsModule(BaseModule):
                         year
                     ORDER BY 
                         year;
-                """, (self.selected_country,))
+                """
+                cursor.execute(query, (self.selected_country,))
                 listen_years.extend(cursor.fetchall())
             
             # Construir el texto markdown

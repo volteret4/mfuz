@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 
 # Importar módulos base
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from base_module import PROJECT_ROOT
 from tools.discogs_login import DiscogsClient
 
@@ -466,7 +466,6 @@ class RedesSocialesArtistas:
         
         self.logger.info(f"Procesando artista: {artist_name} (ID: {artist_id})")
         
-        # ... código existente ...
         
         # Variables para ambas URLs de Discogs
         discogs_api_url = None

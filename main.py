@@ -8,12 +8,24 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
                             QVBoxLayout, QTabWidget, QScrollArea,
                             QLabel)
-from PyQt6.QtCore import Qt, QThread
+from PyQt6.QtCore import Qt, QThread, QCoreApplication
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 import traceback
 import sys
 import argparse
 import logging
+
+# Configurar el atributo antes de crear QApplication
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts, True)
+
+# Otros atributos recomendados para WebEngine
+QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL, True)
+#QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
+
+# Crear la aplicación
+app = QApplication(sys.argv)
+
+
 
 def load_config_file(file_path):
     """Carga un archivo de configuración en formato JSON o YAML."""

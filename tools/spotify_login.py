@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import time
 import webbrowser
@@ -126,7 +127,7 @@ class SpotifyAuthManager:
         else:
             cache_dir = self.PROJECT_ROOT / ".content" / "cache"
             os.makedirs(cache_dir, exist_ok=True)
-            self.cache_path = str(cache_dir / ".spotify_token.json")
+            self.cache_path = str(cache_dir / "spotify_token.txt")
         
         # Set up scopes
         self.scopes = selected_scopes if selected_scopes else self.ALL_SCOPES

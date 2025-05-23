@@ -95,8 +95,8 @@ class TimeSubmodule:
         # Genres page widgets
         self.widget_time_genres_top = getattr(self.stats_module, 'widget_time_genres_top', None)
         self.widget_time_genres_bott = getattr(self.stats_module, 'widget_time_genres_bott', None)
-        self.table_time_genres_top = getattr(self.stats_module, 'table_time_genres_top', None)
-        self.table_time_genres_bott = getattr(self.stats_module, 'table_time_genres_bott', None)
+        self.table_time_genres = getattr(self.stats_module, 'table_time_genres', None)
+        #self.table_time_genres_bott = getattr(self.stats_module, 'table_time_genres_bott', None)
         self.chart_time_genres_top = getattr(self.stats_module, 'chart_time_genres_top', None)
         self.chart_time_genres_bott = getattr(self.stats_module, 'chart_time_genres_bott', None)
         
@@ -1045,7 +1045,7 @@ class TimeSubmodule:
             'table_time_albums_top', 'table_time_albums_bott',
             'table_time_labels_top', 'table_time_labels_bott',
             'table_time_genres', 'table_time_feeds', 'table_time_listens',
-            'table_time_info'
+            'table_time_info', 'table_time_feeds_bott'
         ]
         for table_name in tables:
             table = getattr(self, table_name, None)

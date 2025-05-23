@@ -1142,7 +1142,7 @@ class MusicLinksManager:
                                                                 best_score = 0
                                                                 
                                                                 for mb_title, mb_id in track_mbids.items():
-                                                                    score = self._calculate_similarity(normalized_title, mb_title)
+                                                                    score = self._similarity_score(normalized_title, mb_title)
                                                                     if score > 0.8 and score > best_score:  # High threshold for confidence
                                                                         best_score = score
                                                                         best_match = mb_id

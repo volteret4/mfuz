@@ -207,8 +207,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>405</width>
-               <height>440</height>
+               <width>880</width>
+               <height>606</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -373,6 +373,18 @@
                       </widget>
                       <widget class="QWidget" name="genres_charts_page">
                        <layout class="QVBoxLayout" name="verticalLayout_26">
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
                         <item>
                          <widget class="QLabel" name="label_selected_genre_title">
                           <property name="sizePolicy">
@@ -388,7 +400,20 @@
                         </item>
                         <item>
                          <widget class="QWidget" name="chart_container_genres_year" native="true">
-                          <layout class="QVBoxLayout" name="verticalLayout_27"/>
+                          <layout class="QVBoxLayout" name="verticalLayout_27">
+                           <property name="leftMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="topMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="rightMargin">
+                            <number>0</number>
+                           </property>
+                           <property name="bottomMargin">
+                            <number>0</number>
+                           </property>
+                          </layout>
                          </widget>
                         </item>
                        </layout>
@@ -1140,6 +1165,18 @@
         </widget>
         <widget class="QWidget" name="page_time">
          <layout class="QVBoxLayout" name="verticalLayout_time">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="label_time_title">
             <property name="styleSheet">
@@ -1154,6 +1191,18 @@
            <widget class="QStackedWidget" name="stackedWidget_time">
             <widget class="QWidget" name="time_page_inicio">
              <layout class="QVBoxLayout" name="verticalLayout_60">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QSplitter" name="splitter_time">
                 <property name="orientation">
@@ -1173,7 +1222,20 @@
                   </item>
                   <item>
                    <widget class="QWidget" name="chart_container_years" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_13"/>
+                    <layout class="QVBoxLayout" name="verticalLayout_13">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1183,9 +1245,33 @@
                   <item>
                    <widget class="QWidget" name="chart_container_decades" native="true">
                     <layout class="QVBoxLayout" name="verticalLayout_12">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
                      <item>
                       <widget class="QWidget" name="widget_17" native="true">
                        <layout class="QVBoxLayout" name="verticalLayout_58">
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
                         <item>
                          <widget class="QLabel" name="label_decade_dist_title">
                           <property name="styleSheet">
@@ -1218,7 +1304,20 @@
                   </item>
                   <item>
                    <widget class="QWidget" name="widget_20" native="true">
-                    <layout class="QVBoxLayout" name="verticalLayout_59"/>
+                    <layout class="QVBoxLayout" name="verticalLayout_59">
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
+                    </layout>
                    </widget>
                   </item>
                  </layout>
@@ -1228,10 +1327,32 @@
              </layout>
             </widget>
             <widget class="QWidget" name="ads">
-             <layout class="QHBoxLayout" name="horizontalLayout_28"/>
+             <layout class="QHBoxLayout" name="horizontalLayout_28">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+             </layout>
             </widget>
             <widget class="QWidget" name="time_page_artists">
              <layout class="QVBoxLayout" name="verticalLayout_65">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_artists_top" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_36">
@@ -1255,9 +1376,33 @@
               <item>
                <widget class="QWidget" name="widget_time_artists_bott" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_37">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QWidget" name="widget_27" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_78">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTableWidget" name="table_time_artists_bott"/>
                     </item>
@@ -1266,7 +1411,20 @@
                  </item>
                  <item>
                   <widget class="QWidget" name="chart_time_artists_bott" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_79"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_79">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -1276,9 +1434,33 @@
             </widget>
             <widget class="QWidget" name="time_page_info">
              <layout class="QHBoxLayout" name="horizontalLayout_31">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_info" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_71">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_time_info"/>
                  </item>
@@ -1287,16 +1469,53 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_time_info" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_72"/>
+                <layout class="QVBoxLayout" name="verticalLayout_72">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="time_page_listens">
              <layout class="QHBoxLayout" name="horizontalLayout_33">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_listens" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_75">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_time_listens"/>
                  </item>
@@ -1305,16 +1524,53 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_time_listens" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_76"/>
+                <layout class="QVBoxLayout" name="verticalLayout_76">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="time_page_feeds">
              <layout class="QHBoxLayout" name="horizontalLayout_29">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_feeds" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_67">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_time_feeds"/>
                  </item>
@@ -1323,19 +1579,68 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_time_feeds" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_68"/>
+                <layout class="QVBoxLayout" name="verticalLayout_68">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="time_page_labels">
              <layout class="QVBoxLayout" name="verticalLayout_61">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_labels_top" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_40">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QWidget" name="widget_29" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_85">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTableWidget" name="table_time_labels_top"/>
                     </item>
@@ -1344,7 +1649,20 @@
                  </item>
                  <item>
                   <widget class="QWidget" name="chart_time_labels_top" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_86"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_86">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -1353,9 +1671,33 @@
               <item>
                <widget class="QWidget" name="widget_time_labels_bott" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_41">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QWidget" name="widget_30" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_87">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QScrollArea" name="scrollArea_2">
                       <property name="widgetResizable">
@@ -1366,11 +1708,23 @@
                         <rect>
                          <x>0</x>
                          <y>0</y>
-                         <width>88</width>
-                         <height>88</height>
+                         <width>874</width>
+                         <height>285</height>
                         </rect>
                        </property>
                        <layout class="QVBoxLayout" name="verticalLayout_62">
+                        <property name="leftMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                         <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                         <number>0</number>
+                        </property>
                         <item>
                          <widget class="QTableWidget" name="table_time_labels_bott"/>
                         </item>
@@ -1383,7 +1737,20 @@
                  </item>
                  <item>
                   <widget class="QWidget" name="chart_time_labels_bott" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_88"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_88">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -1392,31 +1759,161 @@
              </layout>
             </widget>
             <widget class="QWidget" name="time_page_genres">
-             <layout class="QHBoxLayout" name="horizontalLayout_30">
+             <layout class="QVBoxLayout" name="verticalLayout_74">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
-               <widget class="QWidget" name="widget_time_genres" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_69">
+               <widget class="QWidget" name="widget_33" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_43">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_time_genres"/>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_genres" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_70">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
+                  </widget>
                  </item>
                 </layout>
                </widget>
               </item>
               <item>
-               <widget class="QWidget" name="chart_time_genres" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_70"/>
+               <widget class="QWidget" name="widget_32" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_30">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QWidget" name="widget_time_genres" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_69">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QTableWidget" name="table_time_genre_bott"/>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="chart_time_genres_bott" native="true">
+                   <layout class="QVBoxLayout" name="verticalLayout_92">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="time_page_albums">
              <layout class="QVBoxLayout" name="verticalLayout_66">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_time_albums_top" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_38">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QWidget" name="widget_26" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_81">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTableWidget" name="table_time_albums_top"/>
                     </item>
@@ -1425,7 +1922,20 @@
                  </item>
                  <item>
                   <widget class="QWidget" name="chart_time_albums_top" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_82"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_82">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -1434,9 +1944,33 @@
               <item>
                <widget class="QWidget" name="widget_time_albums_bott" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_39">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QWidget" name="widget_28" native="true">
                    <layout class="QVBoxLayout" name="verticalLayout_83">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
                     <item>
                      <widget class="QTableWidget" name="table_time_albums_bott"/>
                     </item>
@@ -1445,7 +1979,20 @@
                  </item>
                  <item>
                   <widget class="QWidget" name="chart_time_albums_bott" native="true">
-                   <layout class="QVBoxLayout" name="verticalLayout_84"/>
+                   <layout class="QVBoxLayout" name="verticalLayout_84">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                   </layout>
                   </widget>
                  </item>
                 </layout>
@@ -1458,6 +2005,18 @@
           <item>
            <widget class="QWidget" name="widget_21" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_26">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QPushButton" name="action_artist">
                <property name="text">
@@ -1512,6 +2071,260 @@
           </item>
          </layout>
         </widget>
+        <widget class="QWidget" name="page_artists">
+         <layout class="QVBoxLayout" name="verticalLayout_63">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QWidget" name="widget_2" native="true">
+            <layout class="QVBoxLayout" name="verticalLayout_64">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWidget" name="widget_24" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_35">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="artista_label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="text">
+                   <string>Artista</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_23" native="true">
+               <layout class="QHBoxLayout" name="horizontalLayout_32">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QStackedWidget" name="stackedWidget_24">
+                  <widget class="QWidget" name="stackedWidget_24Page1_3">
+                   <layout class="QVBoxLayout" name="verticalLayout_89">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QTableWidget" name="tableWidget_3">
+                      <property name="sortingEnabled">
+                       <bool>true</bool>
+                      </property>
+                      <column>
+                       <property name="text">
+                        <string>Artista</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Origen</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Año</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Albumes</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="widget_31" native="true">
+                  <layout class="QVBoxLayout" name="verticalLayout_90">
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QStackedWidget" name="stackedWidget_artist">
+                     <widget class="QWidget" name="page"/>
+                     <widget class="QWidget" name="page_2"/>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_artists" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_27">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="action_artist_home">
+               <property name="text">
+                <string>artista</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_time">
+               <property name="text">
+                <string>tiempo</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_conciertos">
+               <property name="text">
+                <string>conciertos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_genres">
+               <property name="text">
+                <string>generos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_feeds">
+               <property name="text">
+                <string>feeds</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_label">
+               <property name="text">
+                <string>sellos</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_discog">
+               <property name="text">
+                <string>discografia</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_scrobbles">
+               <property name="text">
+                <string>escuchas</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_prod">
+               <property name="text">
+                <string>productores</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="action_artist_collaborators">
+               <property name="text">
+                <string>colaboradores</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
         <widget class="QWidget" name="page_countries">
          <layout class="QVBoxLayout" name="verticalLayout_countries">
           <property name="leftMargin">
@@ -1545,6 +2358,18 @@
           <item>
            <widget class="QWidget" name="widget_11" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
              <item>
               <widget class="QWidget" name="verticalLayout_countries_table" native="true">
                <layout class="QVBoxLayout" name="verticalLayout_38">
@@ -1626,7 +2451,7 @@
                    </sizepolicy>
                   </property>
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="verticalLayout_countries_chart">
                    <property name="sizePolicy">
@@ -1762,7 +2587,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="action_ountries_listens">
+              <widget class="QPushButton" name="action_countries_listens">
                <property name="text">
                 <string>escuchas</string>
                </property>
@@ -1782,6 +2607,18 @@
         </widget>
         <widget class="QWidget" name="page_feeds">
          <layout class="QVBoxLayout" name="verticalLayout_feeds">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="label_feeds_title">
             <property name="styleSheet">
@@ -1795,7 +2632,7 @@
           <item>
            <widget class="QStackedWidget" name="stackedWidget_2">
             <property name="currentIndex">
-             <number>7</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="feeds_entitys">
              <layout class="QVBoxLayout" name="verticalLayout_44">
@@ -1956,6 +2793,18 @@
             </widget>
             <widget class="QWidget" name="feeds_page_artists">
              <layout class="QHBoxLayout" name="horizontalLayout_17">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="feeds_artist_widget" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_46">
@@ -1990,9 +2839,33 @@
             </widget>
             <widget class="QWidget" name="feed_page_albums">
              <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_16" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_48">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_albums"/>
                  </item>
@@ -2001,16 +2874,53 @@
               </item>
               <item>
                <widget class="QWidget" name="charts_feeds_albums" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_47"/>
+                <layout class="QVBoxLayout" name="verticalLayout_47">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="feeds_page_genres">
              <layout class="QHBoxLayout" name="horizontalLayout_19">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_feeds_genres" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_50">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_genres"/>
                  </item>
@@ -2019,16 +2929,53 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_feeds_genres" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_49"/>
+                <layout class="QVBoxLayout" name="verticalLayout_49">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="feeds_page_labels">
              <layout class="QHBoxLayout" name="horizontalLayout_20">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_feeds_labels" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_51">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_labels"/>
                  </item>
@@ -2037,16 +2984,53 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_feeds_labels" native="true">
-                <layout class="QHBoxLayout" name="horizontalLayout_21"/>
+                <layout class="QHBoxLayout" name="horizontalLayout_21">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="feeds_page_time">
              <layout class="QHBoxLayout" name="horizontalLayout_22">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_feeds_time" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_53">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_time"/>
                  </item>
@@ -2055,16 +3039,53 @@
               </item>
               <item>
                <widget class="QWidget" name="charts_feeds_time" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_52"/>
+                <layout class="QVBoxLayout" name="verticalLayout_52">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="feeds_page_info">
              <layout class="QHBoxLayout" name="horizontalLayout_24">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_feeds_info" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_57">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_info"/>
                  </item>
@@ -2073,16 +3094,53 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_feeds_info" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_56"/>
+                <layout class="QVBoxLayout" name="verticalLayout_56">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
             </widget>
             <widget class="QWidget" name="feeds_page_listens">
              <layout class="QHBoxLayout" name="horizontalLayout_23">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QWidget" name="widget_feeds_listens" native="true">
                 <layout class="QVBoxLayout" name="verticalLayout_55">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
                  <item>
                   <widget class="QTableWidget" name="table_feeds_listens"/>
                  </item>
@@ -2091,7 +3149,20 @@
               </item>
               <item>
                <widget class="QWidget" name="chart_feeds_listens" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_54"/>
+                <layout class="QVBoxLayout" name="verticalLayout_54">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                </layout>
                </widget>
               </item>
              </layout>
@@ -2193,6 +3264,18 @@
    <item>
     <widget class="QWidget" name="widget_22" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_34">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QComboBox" name="category_combo">
         <property name="currentIndex">

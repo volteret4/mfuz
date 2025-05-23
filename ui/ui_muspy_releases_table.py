@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'muspy_releases_table.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.3
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -32,8 +32,8 @@ class Ui_ReleasesTable(object):
         self.verticalLayout.addWidget(self.count_label)
 
         self.table = QTableWidget(ReleasesTable)
-        if (self.table.columnCount() < 5):
-            self.table.setColumnCount(5)
+        if (self.table.columnCount() < 6):
+            self.table.setColumnCount(6)
         __qtablewidgetitem = QTableWidgetItem()
         self.table.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
@@ -44,8 +44,11 @@ class Ui_ReleasesTable(object):
         self.table.setHorizontalHeaderItem(3, __qtablewidgetitem3)
         __qtablewidgetitem4 = QTableWidgetItem()
         self.table.setHorizontalHeaderItem(4, __qtablewidgetitem4)
+        __qtablewidgetitem5 = QTableWidgetItem()
+        self.table.setHorizontalHeaderItem(5, __qtablewidgetitem5)
         self.table.setObjectName(u"table")
-        self.table.setColumnCount(5)
+        self.table.setSortingEnabled(True)
+        self.table.setColumnCount(6)
         self.table.horizontalHeader().setStretchLastSection(True)
 
         self.verticalLayout.addWidget(self.table)
@@ -73,7 +76,9 @@ class Ui_ReleasesTable(object):
         ___qtablewidgetitem3.setText(QCoreApplication.translate("ReleasesTable", u"Date", None));
         ___qtablewidgetitem4 = self.table.horizontalHeaderItem(4)
         ___qtablewidgetitem4.setText(QCoreApplication.translate("ReleasesTable", u"Disambiguation", None));
-        self.add_follow_button.setText(QCoreApplication.translate("ReleasesTable", u"que co\u00f1o har\u00e1 este bot\u00f3n", None))
+        ___qtablewidgetitem5 = self.table.horizontalHeaderItem(5)
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("ReleasesTable", u"Calendario", None));
+        self.add_follow_button.setText(QCoreApplication.translate("ReleasesTable", u"Seguir artista en Muspy", None))
         pass
     # retranslateUi
 

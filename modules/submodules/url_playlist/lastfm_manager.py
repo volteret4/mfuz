@@ -1047,10 +1047,9 @@ def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
         
         # Add main scrobbles button menus if they exist
         if hasattr(self, 'months_menu') and hasattr(self, 'years_menu'):
-            menus_to_update.append({
-                'months': self.months_menu, 
-                'years': self.years_menu
-            })
+            if self.months_menu and self.years_menu:
+                if self.months_menu.actions() and self.years_menu.actions() and not years_dict:
+                    return True
         
         # Add unified button menus if they exist
         if hasattr(self, 'unified_months_menu') and hasattr(self, 'unified_years_menu'):
@@ -1325,7 +1324,7 @@ def setup_scrobbles_menu(self):
     """Configure the scrobbles menu for the Last.fm button"""
     try:
         # Find the scrobbles button
-        self.scrobbles_button = self.findChild(QPushButton, 'scrobbles_menu')  # As named in your UI file
+        self.scrobbles_button = self.findChild(QPushButton, 'scrobbles_menu')
         
         if not self.scrobbles_button:
             self.log("Error: Scrobbles button not found")
@@ -1343,10 +1342,19 @@ def setup_scrobbles_menu(self):
         
         # Set the menu for the button
         self.scrobbles_button.setMenu(self.scrobbles_menu)
-        try:
-            force_load_scrobbles_data_from_db(self)
-        except Exception as e:
-            self.log(f"Error in force loading scrobbles data: {str(e)}")
+
+        # Intentar cargar datos inmediatamente
+        def init_menus():
+            try:
+                force_load_scrobbles_data_from_db(self)
+            except Exception as e:
+                self.log(f"Error in initial scrobbles data load: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
+
+        # Usar QTimer para asegurar que la UI esté lista
+        from PyQt6.QtCore import QTimer
+        QTimer.singleShot(100, init_menus)
 
         self.log("Scrobbles menu set up")
         return True
@@ -1902,37 +1910,105 @@ def force_load_scrobbles_data_from_db(self):
     """
     Carga forzada de datos de scrobbles directamente de la base de datos,
     independientemente de la sincronización.
-    Thread-safe implementation.
     """
     try:
-        # Check if we're in the main thread
-        from PyQt6.QtCore import QThread, QTimer
-        
-        # If we're not in the main thread, use QTimer to call this function in the main thread
-        if QThread.currentThread() != QApplication.instance().thread():
-            self.log("Executing scrobbles data load from background thread, scheduling in main thread")
-            QTimer.singleShot(0, self.force_load_scrobbles_data_from_db)
-            return False
-        
-        # From this point on, we know we're in the main thread
-        
         if not hasattr(self, 'db_path') or not os.path.exists(self.db_path):
             self.log("Error: No database path configured or database file does not exist")
             return False
 
-        # Execute database operations in a separate thread
-        import threading
+        # Buscar todas las tablas de scrobbles disponibles
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
         
-        # We need to define a wrapper function that accepts self
-        def execute_load_scrobbles_db_thread():
-            _execute_load_scrobbles_db_impl(self)
+        # Primero intentar con la tabla del usuario actual
+        years_dict = {}
+        user_tables = []
+        
+        if hasattr(self, 'lastfm_username') and self.lastfm_username:
+            user_tables.append(f"scrobbles_{self.lastfm_username}")
+        
+        # Añadir tabla de paqueradejere como fallback
+        user_tables.append("scrobbles_paqueradejere")
+        
+        found_data = False
+        for table_name in user_tables:
+            cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+            if not cursor.fetchone():
+                continue
+                
+            # Verificar que la tabla tiene timestamps
+            cursor.execute(f"PRAGMA table_info({table_name})")
+            columns = [row[1] for row in cursor.fetchall()]
+            if 'timestamp' not in columns:
+                continue
+                
+            try:
+                # Obtener años únicos
+                cursor.execute(f"""
+                SELECT strftime('%Y', datetime(timestamp, 'unixepoch')) as year,
+                       COUNT(*) as count
+                FROM {table_name}
+                WHERE timestamp > 0
+                GROUP BY year
+                ORDER BY year DESC
+                """)
+                
+                years_results = cursor.fetchall()
+                
+                if years_results:
+                    for year_row in years_results:
+                        try:
+                            year = int(year_row[0])
+                            count = year_row[1]
+                            
+                            if count > 0:
+                                if year not in years_dict:
+                                    years_dict[year] = set()
+                                
+                                # Obtener meses para este año
+                                cursor.execute(f"""
+                                SELECT strftime('%m', datetime(timestamp, 'unixepoch')) as month,
+                                       COUNT(*) as count
+                                FROM {table_name}
+                                WHERE timestamp > 0 
+                                AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+                                GROUP BY month
+                                ORDER BY month
+                                """, (str(year),))
+                                
+                                months_results = cursor.fetchall()
+                                for month_row in months_results:
+                                    if month_row[1] > 0:  # Solo añadir si hay scrobbles
+                                        try:
+                                            month = int(month_row[0])
+                                            years_dict[year].add(month)
+                                        except (ValueError, TypeError):
+                                            continue
+                                            
+                            found_data = True
+                        except (ValueError, TypeError):
+                            continue
+                            
+                    if found_data:
+                        break  # Si encontramos datos, no necesitamos buscar en más tablas
+                        
+            except sqlite3.Error as e:
+                self.log(f"Error querying {table_name}: {e}")
+                continue
+        
+        conn.close()
+        
+        if years_dict:
+            # Actualizar los menús en el hilo principal
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(0, lambda: populate_scrobbles_time_menus(self, years_dict=years_dict))
+            return True
             
-        thread = threading.Thread(target=execute_load_scrobbles_db_thread, daemon=True)
-        thread.start()
-        return True
-            
+        return False
+        
     except Exception as e:
-        self.log(f"Error loading scrobbles data from database: {str(e)}")
+        self.log(f"Error loading scrobbles data: {str(e)}")
         import traceback
         self.log(traceback.format_exc())
         return False

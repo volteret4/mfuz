@@ -293,11 +293,10 @@ def search_database_links(self, db_path, query, search_type="all"):
         self.log(traceback.format_exc())
         return {}
 
-
 def _process_database_results(self, db_links):
     """
-    Versión completamente reescrita para procesar los resultados de la base de datos
-    de manera segura, evitando corrupción de memoria.
+    Versión mejorada para procesar los resultados de la base de datos con mejor
+    organización de archivos locales.
     """
     # Crear lista para almacenar resultados finales
     results = []
@@ -312,7 +311,7 @@ def _process_database_results(self, db_links):
         track_count = len(db_links.get('tracks', {}))
         self.log(f"Procesando resultados de base de datos con {artist_count} artistas, {album_count} álbumes, {track_count} pistas")
         
-        # PASO 1: Procesar artistas (simplificado para evitar estructuras anidadas complejas)
+        # PASO 1: Procesar artistas
         for artist_name, artist_data in db_links.get('artists', {}).items():
             # Crear un ID único para este artista
             artist_id = f"artist_{artist_name}"
@@ -352,7 +351,7 @@ def _process_database_results(self, db_links):
             # Añadir a resultados
             results.append(artist_result)
             
-        # PASO 2: Procesar álbumes (como elementos independientes, no anidados)
+        # PASO 2: Procesar álbumes
         for album_key, album_data in db_links.get('albums', {}).items():
             # Obtener información básica
             album_title = album_data.get('title', '')
@@ -403,7 +402,7 @@ def _process_database_results(self, db_links):
             # Añadir a resultados
             results.append(album_result)
             
-        # PASO 3: Procesar pistas (como elementos independientes, no anidados)
+        # PASO 3: Procesar pistas con especial atención a file_path
         for track_key, track_data in db_links.get('tracks', {}).items():
             # Obtener información básica
             track_title = track_data.get('title', '')
@@ -440,45 +439,57 @@ def _process_database_results(self, db_links):
             if 'duration' in track_data:
                 track_result['duration'] = track_data['duration']
             
-            # Determinar fuente basada en los datos disponibles
-            if track_data.get('origen') == 'local':
+            # Añadir file_path si está disponible (IMPORTANTE para archivos locales)
+            if 'file_path' in track_data and track_data['file_path']:
+                track_result['file_path'] = track_data['file_path']
+                # Si tiene file_path, marcar como local
                 track_result['source'] = 'local'
                 track_result['origen'] = 'local'
-            elif 'links' in track_data:
-                for service in ['spotify', 'youtube', 'bandcamp', 'soundcloud']:
-                    if service in track_data['links'] and track_data['links'][service]:
-                        track_result['source'] = service
-                        # Añadir URL específica de servicio
-                        track_result[f'{service}_url'] = track_data['links'][service]
-                        break
+                # También establecer como URL primaria
+                track_result['url'] = track_data['file_path']
+            else:
+                # Determinar fuente basada en los datos disponibles
+                if track_data.get('origen') == 'local':
+                    track_result['source'] = 'local'
+                    track_result['origen'] = 'local'
+                elif 'links' in track_data:
+                    for service in ['spotify', 'youtube', 'bandcamp', 'soundcloud']:
+                        if service in track_data['links'] and track_data['links'][service]:
+                            track_result['source'] = service
+                            # Añadir URL específica de servicio
+                            track_result[f'{service}_url'] = track_data['links'][service]
+                            
+                            # Si es la primera URL encontrada, usarla como URL primaria
+                            if not track_result.get('url'):
+                                track_result['url'] = track_data['links'][service]
+                            break
             
             # Añadir enlaces si están disponibles
             if 'links' in track_data:
                 track_result['links'] = track_data['links'].copy() if isinstance(track_data['links'], dict) else {}
             
-            # Añadir file_path si está disponible
-            if 'file_path' in track_data:
-                track_result['file_path'] = track_data['file_path']
-                # Si tiene file_path, marcar como local
-                track_result['source'] = 'local'
-                track_result['origen'] = 'local'
-            
             # Añadir a resultados
             results.append(track_result)
         
-        # PASO 4: Agrupar por servicio para el resultado final
-        results_by_service = {}
-        for result in results:
-            source = result.get('source', 'unknown')
-            if source not in results_by_service:
-                results_by_service[source] = []
-            results_by_service[source].append(result)
+        # PASO 4: Asegurar que los resultados locales se agrupen correctamente
+        # Este paso es crucial para la organización en "Archivos locales" > Artista > Álbum > Canción
+        local_results = []
+        other_results = []
         
-        # PASO 5: Reconstruir los resultados agrupados por servicio
-        final_results = []
-        for source, items in results_by_service.items():
-            for item in items:
-                final_results.append(item)
+        for result in results:
+            # Separar los resultados locales del resto
+            if result.get('file_path') or result.get('source') == 'local':
+                # Asegurar que tengan 'origen' establecido a 'local'
+                result['origen'] = 'local'
+                # Si tiene file_path, asegurar que 'source' sea 'local'
+                if result.get('file_path'):
+                    result['source'] = 'local'
+                local_results.append(result)
+            else:
+                other_results.append(result)
+        
+        # Combinar los resultados, poniendo los locales primero
+        final_results = local_results + other_results
         
         return final_results
         
@@ -612,12 +623,11 @@ def display_external_results_with_filter(self, results, group_by_service=False, 
         self.log(f"Se añadieron {len(results)} resultados de servicios externos")
 
 
-        
 def filter_results_by_origen(results, only_local=False, service_grouping=True):
     """
     Filtra resultados según su origen y los agrupa por servicio.
     Si only_local es True, solo se mantienen los resultados con origen 'local'.
-    Asegura una estructura de árbol jerárquica servicio > artista > álbum > canción.
+    Asegura una estructura de árbol jerárquica con una única sección "Archivos locales".
     """
     if not only_local:
         return results
@@ -625,75 +635,40 @@ def filter_results_by_origen(results, only_local=False, service_grouping=True):
     # Solo para depuración
     print(f"[filter_results_by_origen] Filtrando {len(results)} resultados, only_local={only_local}")
     
+    # Resultado final
     filtered_results = []
-    services_by_local = {}  # Almacenará enlaces de servicios para elementos locales
     
-    # Paso 1: Filtrar solo elementos de origen local y organizarlos por servicio
+    # Paso 1: Filtrar solo elementos con origen 'local'
+    local_results = []
     for result in results:
-        item_type = result.get('type', '').lower()
-        origen = result.get('origen')
-        file_path = result.get('file_path')
-        
-        # Verificación estricta de origen local
-        is_local = origen == 'local' or file_path
-        
-        if not is_local:
-            continue  # Saltar si no es local
-        
-        # Determinar el servicio principal para este elemento
-        service = 'local'  # Default
-        
-        # Si tiene file_path, siempre es local
-        if file_path:
-            service = 'local'
-        # Si no, verificar servicios en orden de prioridad
-        elif 'spotify_url' in result and result['spotify_url']:
-            service = 'spotify'
-        elif 'youtube_url' in result and result['youtube_url']:
-            service = 'youtube'
-        elif 'bandcamp_url' in result and result['bandcamp_url']:
-            service = 'bandcamp'
-        elif 'soundcloud_url' in result and result['soundcloud_url']:
-            service = 'soundcloud'
-        
-        # Crear copia del resultado para modificar
-        service_result = result.copy()
-        # Establecer el servicio principal
-        service_result['source'] = service
-        # Mantener origen 'local'
-        service_result['origen'] = 'local'
-        
-        # Crear la URL del servicio si no existe
-        if service != 'local' and f'{service}_url' in service_result:
-            service_result['url'] = service_result[f'{service}_url']
-        
-        # Añadir a la lista de resultados filtrados
-        filtered_results.append(service_result)
-        
-        # Si también tiene enlaces a otros servicios, crear una entrada para cada uno
-        if service_grouping and service != 'local':
-            for alt_service in ['spotify', 'youtube', 'bandcamp', 'soundcloud']:
-                if alt_service != service and f'{alt_service}_url' in result and result[f'{alt_service}_url']:
-                    # Crear clave única para este elemento + servicio
-                    item_key = f"{item_type}|{result.get('artist', '')}|{result.get('title', '')}|{alt_service}"
-                    
-                    if alt_service not in services_by_local:
-                        services_by_local[alt_service] = {}
-                    
-                    if item_key not in services_by_local[alt_service]:
-                        # Crear una copia para este servicio
-                        alt_service_result = result.copy()
-                        alt_service_result['source'] = alt_service
-                        alt_service_result['url'] = result[f'{alt_service}_url']
-                        # Preservar el origen local
-                        alt_service_result['origen'] = 'local'
-                        services_by_local[alt_service][item_key] = alt_service_result
+        origen = result.get('origen', '')
+        if origen == 'local':
+            # Mantener solo los elementos con origen 'local'
+            # Crear una copia profunda para modificar
+            local_result = result.copy()
+            
+            # Asegurarse de que todos tienen source='local' para agruparlos correctamente
+            local_result['source'] = 'local'
+            
+            # Asegurar que la URL es correcta - preferir file_path si existe
+            if local_result.get('file_path'):
+                local_result['url'] = local_result['file_path']
+            
+            # Si todavía no tiene URL pero tiene enlaces a servicios, usar uno de ellos
+            if not local_result.get('url'):
+                for service in ['spotify', 'youtube', 'bandcamp', 'soundcloud']:
+                    service_key = f"{service}_url"
+                    if service_key in local_result and local_result[service_key]:
+                        local_result['url'] = local_result[service_key]
+                        break
+            
+            # Añadir a local_results solo si tiene título (para evitar elementos inválidos)
+            if local_result.get('title'):
+                local_results.append(local_result)
     
-    # Paso 2: Añadir los elementos de servicios adicionales
-    if service_grouping:
-        for service, items_dict in services_by_local.items():
-            for item_key, service_item in items_dict.items():
-                filtered_results.append(service_item)
+    # Añadir todos los resultados locales filtrados
+    for result in local_results:
+        filtered_results.append(result)
     
-    print(f"[filter_results_by_origen] Resultados filtrados finales: {len(filtered_results)}")
+    print(f"[filter_results_by_origen] Resultados locales filtrados: {len(filtered_results)}")
     return filtered_results

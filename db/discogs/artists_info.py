@@ -48,20 +48,21 @@ class DiscogsArtistInfoUpdater:
             
             if self.force_update:
                 # Si force_update es True, obtén todos los artistas con URL de Discogs
+                # de ambas fuentes (artists_networks y artists.discogs_url)
                 query = '''
-                SELECT a.id, a.name, an.discogs 
+                SELECT a.id, a.name, COALESCE(an.discogs, a.discogs_url) as discogs_source
                 FROM artists a
-                JOIN artists_networks an ON a.id = an.artist_id
-                WHERE an.discogs IS NOT NULL
+                LEFT JOIN artists_networks an ON a.id = an.artist_id
+                WHERE an.discogs IS NOT NULL OR a.discogs_url IS NOT NULL
                 '''
             else:
                 # Si force_update es False, obtén solo los artistas sin entrada en artists_discogs_info
                 query = '''
-                SELECT a.id, a.name, an.discogs 
+                SELECT a.id, a.name, COALESCE(an.discogs, a.discogs_url) as discogs_source
                 FROM artists a
-                JOIN artists_networks an ON a.id = an.artist_id
+                LEFT JOIN artists_networks an ON a.id = an.artist_id
                 LEFT JOIN artists_discogs_info adi ON a.id = adi.artist_id
-                WHERE an.discogs IS NOT NULL 
+                WHERE (an.discogs IS NOT NULL OR a.discogs_url IS NOT NULL)
                 AND adi.artist_id IS NULL
                 '''
             
@@ -70,13 +71,20 @@ class DiscogsArtistInfoUpdater:
 
     def fetch_discogs_data(self, discogs_url):
         """Obtiene los datos de un artista desde la API de Discogs"""
+        # Convertir URL de web de Discogs a URL de API
+        if '/artist/' in discogs_url:
+            artist_id = discogs_url.split('/')[-1]
+            api_url = f"https://api.discogs.com/artists/{artist_id}"
+        else:
+            api_url = discogs_url
+        
         # Añadir token para autenticación si está configurado
-        headers = {}
+        headers = {'User-Agent': 'MusicDBUpdater/1.0'}  # User-Agent requerido por Discogs
         if self.token:
             headers['Authorization'] = f'Discogs token={self.token}'
         
         try:
-            response = requests.get(discogs_url, headers=headers)
+            response = requests.get(api_url, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.RequestException as e:

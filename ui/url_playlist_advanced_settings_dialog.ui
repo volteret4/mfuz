@@ -20,65 +20,7 @@
    <string>Filtrar Álbumes</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog {
-	background-color: #FFFFFF;
-}
-
-QLabel {
-	font-family: 'Segoe UI', Arial, sans-serif;
-	font-size: 10pt;
-}
-
-QLineEdit {
-	border: 1px solid #E0E0E0;
-	border-radius: 4px;
-	padding: 5px;
-	background-color: #F5F5F5;
-}
-
-QLineEdit:focus {
-	border: 1px solid #78909C;
-	background-color: #FFFFFF;
-}
-
-QPushButton {
-	background-color: #607D8B;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	padding: 6px 12px;
-	font-weight: bold;
-}
-
-QPushButton:hover {
-	background-color: #78909C;
-}
-
-QPushButton:pressed {
-	background-color: #546E7A;
-}
-
-QTableWidget {
-	border: 1px solid #E0E0E0;
-	background-color: #FFFFFF;
-	alternate-background-color: #F5F5F5;
-	selection-background-color: #CFD8DC;
-}
-
-QTableWidget::item {
-	padding: 4px;
-	border-bottom: 1px solid #E0E0E0;
-}
-
-QHeaderView::section {
-	background-color: #ECEFF1;
-	color: #37474F;
-	padding: 5px;
-	border: none;
-	border-right: 1px solid #E0E0E0;
-	border-bottom: 1px solid #E0E0E0;
-	font-weight: bold;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_12">
    <property name="spacing">
@@ -131,7 +73,7 @@ QHeaderView::section {
            <x>0</x>
            <y>0</y>
            <width>1159</width>
-           <height>897</height>
+           <height>902</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">

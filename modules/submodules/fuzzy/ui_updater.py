@@ -3,6 +3,10 @@ from PyQt6.QtCore import Qt
 import os
 from PyQt6.QtWidgets import QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget, QWidget, QSizePolicy
 from pathlib import Path
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from base_module import PROJECT_ROOT
 
 
 class UIUpdater:
@@ -342,7 +346,7 @@ class UIUpdater:
             if artist_id:
                 # Update artist image
                 artist_image_path = self._get_artist_image_path(artist_name)
-                if artist_image_path and os.path.exists(artist_image_path):
+                if artist_image_path:
                     pixmap = QPixmap(artist_image_path)
                     self.parent.artist_image_label.setPixmap(pixmap.scaled(
                         self.parent.artist_image_label.width(),
@@ -530,15 +534,32 @@ class UIUpdater:
     
     def _get_artist_image_path(self, artist_name):
         """Get the path to the artist's image."""
-        # This is a placeholder - implement according to your image storage strategy
+        conn = self.parent.db_manager._get_connection()
+        cursor = conn.cursor()
+        artist_path = cursor.execute(
+            """
+            SELECT img
+            FROM artists
+            WHERE name = ?
+            """,
+            (artist_name, )
+        )
+        result = cursor.fetchone()
+        img = result[0]
+        conn.close()
+        if img:
+            print(img)
+            return img
+
         # For example, you might look in a specific directory for an image file named after the artist
-        base_path = Path(os.path.expanduser("~"), ".local", "share", "music_app", "images", "artists")
+        base_path = Path(PROJECT_ROOT, ".content", "artistas_img", artist_name)
         
         # Check for various extensions
         for ext in ['jpg', 'jpeg', 'png']:
-            path = Path(base_path, f"{artist_name}.{ext}")
+            path = Path(base_path, f"image_1.{ext}")
+            print(path)
             if os.path.exists(path):
-                return path
+                return str(path)  # Convertir Path a string
         
         return None
     

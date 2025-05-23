@@ -7,9 +7,9 @@ import traceback
 from urllib.parse import unquote
 from pathlib import Path
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QMetaObject
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QMessageBox, QInputDialog, QLineEdit, QDialog
+from PyQt6.QtWidgets import QMessageBox, QInputDialog, QLineEdit, QDialog, QApplication
 
 # Asegurarse de que PROJECT_ROOT está disponible
 try:
@@ -49,8 +49,6 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
 
         if hasattr(self, 'playlist_spotify_comboBox'):
             self.playlist_spotify_comboBox.blockSignals(True)
-
-
 
         self.log("Setting up Spotify client...")
         
@@ -109,7 +107,7 @@ def setup_spotify(self, client_id=None, client_secret=None, cache_path=None, red
         except Exception as e:
             self.log(f"Spotify setup error: {str(e)}")
             import traceback
-            traceback.self.log_exc()
+            self.log(traceback.format_exc())
             self.log(f"Error de autenticación con Spotify: {str(e)}")
             return False
             
@@ -152,11 +150,50 @@ def get_token_or_authenticate(self):
     except Exception as e:
         self.log(f"Error in get_token_or_authenticate: {str(e)}")
         import traceback
-        traceback.self.log_exc()
+        self.log(traceback.format_exc())
         raise
 
 def perform_new_authentication(self):
     """Perform new authentication from scratch"""
+    # Check if we're in the main thread
+    from PyQt6.QtCore import QThread
+    
+    if QThread.currentThread() != QApplication.instance().thread():
+        # We're not in the main thread, so we need to use a different approach
+        self.log("Authentication required from a background thread, switching to main thread")
+        
+        # Para PyQt6 necesitamos otro enfoque en lugar de invokeMethod con función
+        # Usamos una solución alternativa con QTimer
+        from PyQt6.QtCore import QTimer, QEventLoop
+        
+        result = [None]  # Use a list to store the result
+        loop = QEventLoop()
+        
+        # Define a function to run in the main thread
+        def run_auth_in_main_thread():
+            try:
+                result[0] = _perform_auth_in_main_thread(self)
+            except Exception as e:
+                self.log(f"Error in main thread authentication: {str(e)}")
+                import traceback
+                self.log(traceback.format_exc())
+                result[0] = None
+            finally:
+                loop.quit()  # Exit the event loop when done
+        
+        # Use QTimer to execute in the main thread
+        QTimer.singleShot(0, run_auth_in_main_thread)
+        
+        # Wait for the function to complete
+        loop.exec()
+        
+        return result[0]
+    else:
+        # We're already in the main thread
+        return _perform_auth_in_main_thread(self)
+
+def _perform_auth_in_main_thread(self):
+    """Perform authentication in the main thread"""
     # Get the authorization URL
     auth_url = self.sp_oauth.get_authorize_url()
     
@@ -225,7 +262,7 @@ def perform_new_authentication(self):
     except Exception as e:
         self.log(f"Error processing authentication: {str(e)}")
         import traceback
-        traceback.self.log_exc()
+        self.log(traceback.format_exc())
         
         # Show error and offer retry
         retry = QMessageBox.question(
@@ -236,7 +273,7 @@ def perform_new_authentication(self):
         )
         
         if retry == QMessageBox.StandardButton.Yes:
-            return perform_new_authentication(self)
+            return _perform_auth_in_main_thread(self)
         else:
             raise Exception("Autenticación fallida")
 
@@ -323,7 +360,7 @@ def refresh_token(self):
     except Exception as e:
         self.log(f"Error refreshing token: {str(e)}")
         import traceback
-        traceback.self.log_exc()
+        self.log(traceback.format_exc())
         
         # If refresh fails, try getting a new token
         try:
@@ -545,8 +582,6 @@ def load_spotify_playlists(self, force_update=False):
         self.log(f"Error loading Spotify playlists: {str(e)}")
         self.log(f"Traceback: {traceback.format_exc()}")
         return False
-
-
 
 def update_spotify_playlists_ui(self, playlists_data):
     """Update UI with Spotify playlist data"""

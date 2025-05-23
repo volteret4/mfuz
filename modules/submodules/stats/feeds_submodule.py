@@ -12,7 +12,7 @@ from tools.chart_utils import ChartFactory
 
 class FeedsSubmodule:
     """Handles the feeds-related operations for the stats module."""
-    def __init__(self, parent=None, db_connection=None, helper_functions=None):
+    def __init__(self, parent=None, db_connection=None, lastfm_username=None, musicbrainz_username=None, helper_functions=None):
         """
         Initialize the feeds submodule.
         
@@ -24,6 +24,8 @@ class FeedsSubmodule:
         self.parent = parent
         self.conn = db_connection
         self.helper_functions = helper_functions or {}
+        self.lastfm_username = lastfm_username
+        self.musicbrainz_username = musicbrainz_username
         
         # Initialize references to UI elements directly from parent
         self.init_ui_references()
@@ -842,11 +844,12 @@ class FeedsSubmodule:
             cursor = self.conn.cursor()
             
             # Fixed SQL query for checking if listen data exists
-            cursor.execute("""
+            query = f"""
                 SELECT 
-                    (SELECT COUNT(*) FROM scrobbles LIMIT 1) + 
-                    (SELECT COUNT(*) FROM listens LIMIT 1) as has_listens;
-            """)
+                    (SELECT COUNT(*) FROM scrobbles_{self.lastfm_username} LIMIT 1) + 
+                    (SELECT COUNT(*) FROM listens_{self.musicbrainz_username} LIMIT 1) as has_listens;
+            """
+            cursor.execute(query)
             
             has_listens = cursor.fetchone()[0] > 0
             
@@ -863,7 +866,7 @@ class FeedsSubmodule:
             
             # Query data - get artists mentioned in feeds and their listen counts
             # Try with scrobbles first
-            cursor.execute("""
+            query = f"""
                 SELECT 
                     ar.name as artist_name,
                     COUNT(DISTINCT f.id) as feed_count,
@@ -873,19 +876,20 @@ class FeedsSubmodule:
                 JOIN 
                     feeds f ON f.entity_id = ar.id AND f.entity_type = 'artist'
                 LEFT JOIN 
-                    scrobbles s ON s.artist_name = ar.name
+                    scrobbles_{self.lastfm_username} s ON s.artist_name = ar.name
                 GROUP BY 
                     ar.name
                 ORDER BY 
                     listen_count DESC, feed_count DESC
                 LIMIT 30;
-            """)
+            """
+            cursor.execute(query)
             
             results = cursor.fetchall()
             
             # If no results with scrobbles, try with listens
             if not results:
-                cursor.execute("""
+                query = f"""
                     SELECT 
                         ar.name as artist_name,
                         COUNT(DISTINCT f.id) as feed_count,
@@ -895,13 +899,14 @@ class FeedsSubmodule:
                     JOIN 
                         feeds f ON f.entity_id = ar.id AND f.entity_type = 'artist'
                     LEFT JOIN 
-                        listens l ON l.artist_name = ar.name
+                        listens_{self.musicbrainz_username} l ON l.artist_name = ar.name
                     GROUP BY 
                         ar.name
                     ORDER BY 
                         listen_count DESC, feed_count DESC
                     LIMIT 30;
-                """)
+                """
+                cursor.execute(query)
                 
                 results = cursor.fetchall()
             

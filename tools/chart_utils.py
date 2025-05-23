@@ -1,7 +1,7 @@
 # chart_utils.py
 from PyQt6.QtWidgets import QTextEdit, QVBoxLayout, QWidget, QLabel, QSizePolicy
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QColor, QBrush, QPen
+from PyQt6.QtGui import QColor, QBrush, QPen, QPainter
 import logging
 from PyQt6.QtCharts import QChart
 
@@ -36,7 +36,7 @@ class ChartFactory:
     
 
     @staticmethod
-    def create_bar_chart(data, title, x_label="Category", y_label="Value", limit=10):
+    def create_bar_chart(data, title, x_label="Category", y_label="Value", limit=20):
         """Create a bar chart or fallback to text representation"""
         if not ChartFactory.is_charts_available():
             return ChartFactory.create_text_chart(data, title)
@@ -217,6 +217,131 @@ class ChartFactory:
             
             # Return error widget
             return ChartFactory.create_error_widget(str(e))
+
+    @staticmethod
+    def create_multi_line_chart(series_data, title, x_label="", y_label="", legend_position="bottom"):
+        """
+        Crea un gráfico de líneas múltiple.
+        
+        Args:
+            series_data: Lista de tuplas (nombre_serie, [(x1, y1), (x2, y2), ...])
+            title: Título del gráfico
+            x_label: Etiqueta para el eje X
+            y_label: Etiqueta para el eje Y
+            legend_position: Posición de la leyenda ('right', 'bottom', 'top', 'left')
+            
+        Returns:
+            QChartView con el gráfico generado
+        """
+        try:
+            from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QValueAxis, QLegend
+            from PyQt6.QtCore import Qt, QPointF, QMargins
+            from PyQt6.QtGui import QPen, QFont, QColor
+            
+            # Crear gráfico
+            chart = QChart()
+            chart.setTitle(title)
+            chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
+            
+            # Configurar ejes
+            axisX = QValueAxis()
+            axisY = QValueAxis()
+            
+            axisX.setTitleText(x_label)
+            axisY.setTitleText(y_label)
+            
+            chart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
+            chart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
+            
+            # Colores para las series
+            colors = [
+                QColor("#1f77b4"), QColor("#ff7f0e"), QColor("#2ca02c"), 
+                QColor("#d62728"), QColor("#9467bd"), QColor("#8c564b"), 
+                QColor("#e377c2"), QColor("#7f7f7f"), QColor("#bcbd22"), 
+                QColor("#17becf")
+            ]
+            
+            # Añadir las series
+            min_x, max_x = float('inf'), float('-inf')
+            min_y, max_y = float('inf'), float('-inf')
+            
+            for i, (name, points) in enumerate(series_data):
+                series = QLineSeries()
+                series.setName(name)
+                
+                # Establecer color
+                color = colors[i % len(colors)]
+                pen = QPen(color)
+                pen.setWidth(2)
+                series.setPen(pen)
+                
+                # Añadir puntos
+                for x_val, y_val in points:
+                    try:
+                        # Para puntos numéricos
+                        x = float(x_val)
+                        y = float(y_val)
+                        
+                        # Actualizar valores mínimos y máximos
+                        min_x = min(min_x, x)
+                        max_x = max(max_x, x)
+                        min_y = min(min_y, y)
+                        max_y = max(max_y, y)
+                        
+                        series.append(x, y)
+                    except (ValueError, TypeError):
+                        # Ignorar puntos no numéricos
+                        continue
+                
+                chart.addSeries(series)
+                series.attachAxis(axisX)
+                series.attachAxis(axisY)
+            
+            # Ajustar rangos de los ejes
+            if min_x != float('inf') and max_x != float('-inf'):
+                axisX.setRange(min_x, max_x)
+            
+            if min_y != float('inf') and max_y != float('-inf'):
+                # Añadir un poco de margen
+                margin = (max_y - min_y) * 0.1
+                min_y = max(0, min_y - margin)  # No permitir valores negativos para álbumes
+                max_y = max_y + margin
+                axisY.setRange(min_y, max_y)
+            
+            # Configurar leyenda según la posición especificada
+            legend = chart.legend()
+            
+            if legend_position == "right":
+                legend.setAlignment(Qt.AlignmentFlag.AlignRight)
+                chart.setMargins(QMargins(10, 10, 120, 10))  # Dar espacio extra a la derecha
+            elif legend_position == "left":
+                legend.setAlignment(Qt.AlignmentFlag.AlignLeft)
+                chart.setMargins(QMargins(120, 10, 10, 10))  # Dar espacio extra a la izquierda
+            elif legend_position == "top":
+                legend.setAlignment(Qt.AlignmentFlag.AlignTop)
+                chart.setMargins(QMargins(10, 50, 10, 10))  # Dar espacio extra arriba
+            else:  # bottom (por defecto)
+                legend.setAlignment(Qt.AlignmentFlag.AlignBottom)
+                chart.setMargins(QMargins(10, 10, 10, 50))  # Dar espacio extra abajo
+            
+            # Mejorar la visualización de la leyenda
+            font = QFont()
+            font.setPointSize(9)
+            legend.setFont(font)
+            legend.setShowToolTips(True)
+            
+            # Crear view
+            chartView = QChartView(chart)
+            chartView.setRenderHint(QPainter.RenderHint.Antialiasing)
+            
+            background_color = "#1a1b26"
+            text_color = "#a2a6ba"  # As requested
+            ChartFactory.apply_dark_theme(chart, text_color=text_color, background_color=background_color)
+
+            return chartView
+        except Exception as e:
+            logging.error(f"Error al crear gráfico de líneas múltiple: {e}")
+            return None
 
 
     

@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class DatabaseEditor(BaseModule):
     """Módulo para buscar y editar elementos en la base de datos de música."""
     
-    def __init__(self, db_path: str = "music_database.db", parent=None, theme='Tokyo Night', **kwargs):
+    def __init__(self, db_path=None, lastfm_username=None, musicbrainz_username=None, parent=None, theme='Tokyo Night', **kwargs):
         # Definir atributos antes de llamar a super().__init__()
         self.db_path = db_path
         self.current_table = "songs"
@@ -35,6 +35,9 @@ class DatabaseEditor(BaseModule):
         self.search_results = []
         self.column_order = {}  # Diccionario para almacenar el orden de columnas por tabla
         
+        self.lastfm_username = lastfm_username
+        self.musicbrainz_username = musicbrainz_username
+
         self.available_themes = kwargs.pop('temas', [])
         self.selected_theme = kwargs.pop('tema_seleccionado', theme)
         
@@ -76,7 +79,7 @@ class DatabaseEditor(BaseModule):
                 self.results_table.horizontalHeader().sectionMoved.connect(self.column_moved)
                 
                 # Añadir solo las tablas principales, no las tablas FTS internas
-                main_tables = ["songs", "artists", "albums", "genres", "lyrics", "scrobbles", "listens", "song_links"]
+                main_tables = ["songs", "artists", "albums", "genres", "lyrics", "scrobbles_{self.lastfm_username}", "listens_{self.musicbrainz_username}", "song_links"]
                 self.table_selector.addItems(main_tables)
                 
                 # Inicializar campos de búsqueda para la tabla seleccionada
@@ -102,7 +105,7 @@ class DatabaseEditor(BaseModule):
         
         self.table_selector = QComboBox()
         # Añadir solo las tablas principales, no las tablas FTS internas
-        main_tables = ["songs", "artists", "albums", "genres", "lyrics", "scrobbles", "listens", "song_links"]
+        main_tables = ["songs", "artists", "albums", "genres", "lyrics", "scrobbles_{self.lastfm_username}", "listens_{self.musicbrainz_username}", "song_links"]
         self.table_selector.addItems(main_tables)
         self.table_selector.currentTextChanged.connect(self.change_table)
         search_layout.addWidget(QLabel("Tabla:"))
@@ -1027,11 +1030,12 @@ class DatabaseEditor(BaseModule):
                     pass
                 
                 try:
+                    query = f"UPDATE listens_{self.musicbrainz_username} SET artist_name = ? WHERE artist_id = ?"
                     cursor.execute(
-                        "UPDATE listens SET artist_name = ? WHERE artist_id = ?",
+                        query,
                         (new_values["name"], item_id)
                     )
-                    logger.info(f"Actualizado artist_name en {cursor.rowcount} listens")
+                    logger.info(f"Actualizado artist_name en {cursor.rowcount} listens_{self.musicbrainz_username}")
                 except sqlite3.OperationalError:
                     pass
             
@@ -1054,11 +1058,12 @@ class DatabaseEditor(BaseModule):
                     pass
                 
                 try:
+                    query = f"UPDATE listens_{self.musicbrainz_username} SET album_name = ? WHERE album_id = ?"
                     cursor.execute(
-                        "UPDATE listens SET album_name = ? WHERE album_id = ?",
+                        query,
                         (new_values["name"], item_id)
                     )
-                    logger.info(f"Actualizado album_name en {cursor.rowcount} listens")
+                    logger.info(f"Actualizado album_name en {cursor.rowcount} listens_{self.musicbrainz_username}")
                 except sqlite3.OperationalError:
                     pass
             
@@ -1085,8 +1090,9 @@ class DatabaseEditor(BaseModule):
                         pass
                     
                     try:
+                        query = f"UPDATE listens_{self.musicbrainz_username} SET track_name = ? WHERE track_id = ?"
                         cursor.execute(
-                            "UPDATE listens SET track_name = ? WHERE track_id = ?",
+                            query,
                             (new_values["title"], item_id)
                         )
                     except sqlite3.OperationalError:
@@ -1122,8 +1128,9 @@ class DatabaseEditor(BaseModule):
                             pass
                         
                         try:
+                            query = f"UPDATE listens_{self.musicbrainz_username} SET artist_name = ?, artist_id = ? WHERE track_id = ?"
                             cursor.execute(
-                                "UPDATE listens SET artist_name = ?, artist_id = ? WHERE track_id = ?",
+                                query,
                                 (artist_name, new_values["artist_id"], item_id)
                             )
                         except sqlite3.OperationalError:
@@ -1143,16 +1150,18 @@ class DatabaseEditor(BaseModule):
                         
                         # Actualizar en listens y scrobbles
                         try:
+                            query = f"UPDATE scrobbles_{self.lastfm_username} SET album_name = ?, album_id = ? WHERE track_id = ?"
                             cursor.execute(
-                                "UPDATE scrobbles SET album_name = ?, album_id = ? WHERE track_id = ?",
+                                query,
                                 (album_name, new_values["album_id"], item_id)
                             )
                         except sqlite3.OperationalError:
                             pass
                         
                         try:
+                            query =f"UPDATE listens_{self.musicbrainz_username} SET album_name = ?, album_id = ? WHERE track_id = ?"
                             cursor.execute(
-                                "UPDATE listens SET album_name = ?, album_id = ? WHERE track_id = ?",
+                                query,
                                 (album_name, new_values["album_id"], item_id)
                             )
                         except sqlite3.OperationalError:
@@ -1360,7 +1369,8 @@ class DatabaseEditor(BaseModule):
             
             # Verificar referencias en listens o scrobbles
             try:
-                cursor.execute("SELECT COUNT(*) FROM listens WHERE track_id = ?", (item_id,))
+                query = f"SELECT COUNT(*) FROM listens_{self.musicbrainz_username} WHERE track_id = ?"
+                cursor.execute(query, (item_id,))
                 listens_count = cursor.fetchone()[0]
                 if listens_count > 0:
                     dependent_items["listens"] = listens_count
@@ -1428,7 +1438,8 @@ class DatabaseEditor(BaseModule):
                     pass
                 
                 try:
-                    cursor.execute("UPDATE listens SET artist_id = NULL, artist_name = 'Desconocido' WHERE artist_id = ?", (item_id,))
+                    query = f"UPDATE listens_{self.musicbrainz_username} SET artist_id = NULL, artist_name = 'Desconocido' WHERE artist_id = ?"
+                    cursor.execute(query, (item_id,))
                 except sqlite3.OperationalError:
                     pass
             
@@ -1444,7 +1455,8 @@ class DatabaseEditor(BaseModule):
                     pass
                 
                 try:
-                    cursor.execute("UPDATE listens SET album_id = NULL, album_name = 'Desconocido' WHERE album_id = ?", (item_id,))
+                    query = f"UPDATE listens_{self.musicbrainz_username} SET album_id = NULL, album_name = 'Desconocido' WHERE album_id = ?"
+                    cursor.execute(query, (item_id,))
                 except sqlite3.OperationalError:
                     pass
             
@@ -1455,7 +1467,8 @@ class DatabaseEditor(BaseModule):
                 
                 # Eliminar referencias en listens y scrobbles
                 try:
-                    cursor.execute("DELETE FROM listens WHERE track_id = ?", (item_id,))
+                    query = f"DELETE FROM listens_{self.musicbrainz_username} WHERE track_id = ?"
+                    cursor.execute(query, (item_id,))
                     logger.info(f"Eliminados {cursor.rowcount} registros de listens relacionados")
                 except sqlite3.OperationalError:
                     pass

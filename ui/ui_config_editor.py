@@ -31,11 +31,12 @@ class Ui_ConfigEditor(object):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.scroll_area = QScrollArea(ConfigEditor)
         self.scroll_area.setObjectName(u"scroll_area")
+        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.scroll_area.setWidgetResizable(True)
-        self.scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.container = QWidget()
         self.container.setObjectName(u"container")
+        self.container.setGeometry(QRect(0, 0, 798, 598))
         self.container_layout = QVBoxLayout(self.container)
         self.container_layout.setSpacing(10)
         self.container_layout.setObjectName(u"container_layout")
@@ -89,12 +90,26 @@ class Ui_ConfigEditor(object):
 
         self.container_layout.addWidget(self.global_group)
 
+        self.label = QLabel(self.container)
+        self.label.setObjectName(u"label")
+        self.label.setTextFormat(Qt.TextFormat.MarkdownText)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.container_layout.addWidget(self.label)
+
         self.active_modules_group = QGroupBox(self.container)
         self.active_modules_group.setObjectName(u"active_modules_group")
         self.active_modules_layout = QVBoxLayout(self.active_modules_group)
         self.active_modules_layout.setObjectName(u"active_modules_layout")
 
         self.container_layout.addWidget(self.active_modules_group)
+
+        self.label_2 = QLabel(self.container)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setTextFormat(Qt.TextFormat.MarkdownText)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.container_layout.addWidget(self.label_2)
 
         self.disabled_modules_group = QGroupBox(self.container)
         self.disabled_modules_group.setObjectName(u"disabled_modules_group")
@@ -129,21 +144,23 @@ class Ui_ConfigEditor(object):
 
     def retranslateUi(self, ConfigEditor):
         ConfigEditor.setWindowTitle(QCoreApplication.translate("ConfigEditor", u"Configuration Editor", None))
-        self.global_group.setTitle(QCoreApplication.translate("ConfigEditor", u"Global Configuration", None))
         self.global_group.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"QGroupBox { font-weight: bold; }", None))
+        self.global_group.setTitle("")
         self.enable_individual_themes.setText(QCoreApplication.translate("ConfigEditor", u"Enable Individual Module Themes", None))
-        self.shared_db_group.setTitle(QCoreApplication.translate("ConfigEditor", u"Shared Database Paths", None))
+        self.shared_db_group.setTitle("")
         self.db_path_label.setText(QCoreApplication.translate("ConfigEditor", u"Database Path:", None))
         self.db_path_input.setPlaceholderText(QCoreApplication.translate("ConfigEditor", u"Enter database path", None))
         self.add_path_button.setText(QCoreApplication.translate("ConfigEditor", u"Add Path", None))
         self.remove_path_button.setText(QCoreApplication.translate("ConfigEditor", u"Remove Path", None))
-        self.active_modules_group.setTitle(QCoreApplication.translate("ConfigEditor", u"Active Modules", None))
+        self.label.setText(QCoreApplication.translate("ConfigEditor", u"#### M\u00f3dulos Activos", None))
         self.active_modules_group.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"QGroupBox { font-weight: bold; color: #4CAF50; }", None))
-        self.disabled_modules_group.setTitle(QCoreApplication.translate("ConfigEditor", u"Disabled Modules", None))
+        self.active_modules_group.setTitle("")
+        self.label_2.setText(QCoreApplication.translate("ConfigEditor", u"#### M\u00f3dulos Desactivados", None))
         self.disabled_modules_group.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"QGroupBox { font-weight: bold; color: #F44336; }", None))
-        self.action_save_all.setText(QCoreApplication.translate("ConfigEditor", u"Save All Changes", None))
+        self.disabled_modules_group.setTitle("")
         self.action_save_all.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #4CAF50; color: white; font-weight: bold; padding: 8px;", None))
-        self.action_reload.setText(QCoreApplication.translate("ConfigEditor", u"Reload Configuration", None))
+        self.action_save_all.setText(QCoreApplication.translate("ConfigEditor", u"Save All Changes", None))
         self.action_reload.setStyleSheet(QCoreApplication.translate("ConfigEditor", u"background-color: #2196F3; color: white; padding: 8px;", None))
+        self.action_reload.setText(QCoreApplication.translate("ConfigEditor", u"Reload Configuration", None))
     # retranslateUi
 

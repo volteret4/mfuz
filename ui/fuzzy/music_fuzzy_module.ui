@@ -478,6 +478,9 @@
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="toolTip">
+                <string>Previous</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">            QPushButton {{
                 background-color: {theme['bg']};
@@ -536,6 +539,9 @@
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="toolTip">
+                <string>Abrir Carpeta</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -584,6 +590,9 @@ QPushButton:hover {
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="toolTip">
+                <string>Next</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">            QPushButton {{
@@ -640,6 +649,9 @@ QPushButton:hover {
                  <height>32</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Mostrar música en reproducción</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -688,6 +700,9 @@ QPushButton:hover {
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="toolTip">
+                <string>Buscar conciertos</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -784,6 +799,9 @@ QPushButton:hover {
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="toolTip">
+                <string>Buscar discos nuevos</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -833,6 +851,9 @@ QPushButton:hover {
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="toolTip">
+                <string>Enviar a Url_Playlists</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -878,6 +899,9 @@ QPushButton:hover {
                  <width>32</width>
                  <height>32</height>
                 </size>
+               </property>
+               <property name="toolTip">
+                <string>Envar a jaangle</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -928,6 +952,9 @@ QPushButton:hover {
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
                </property>
+               <property name="toolTip">
+                <string>Editar elemento en base de datos</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -975,7 +1002,7 @@ QPushButton:hover {
                 </size>
                </property>
                <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;añadir a playlist spotify&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>Enviar enlaces de spotify a Url_Playlists</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -1028,6 +1055,9 @@ QPushButton:pressed {{
                  <height>32</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Stop</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -1078,7 +1108,7 @@ QPushButton:hover {
                 <enum>Qt::ContextMenuPolicy::PreventContextMenu</enum>
                </property>
                <property name="toolTip">
-                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;añadir a playlist spotify&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                <string>Añadir a la cola</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -1104,7 +1134,7 @@ QPushButton:pressed {{
                </property>
                <property name="icon">
                 <iconset resource="../../images.qrc">
-                 <normaloff>:/services/addstar</normaloff>:/services/addstar</iconset>
+                 <normaloff>:/services/clock</normaloff>:/services/clock</iconset>
                </property>
                <property name="iconSize">
                 <size>
@@ -1133,6 +1163,9 @@ QPushButton:pressed {{
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="toolTip">
+                <string>Play</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">            QPushButton {{
@@ -1189,6 +1222,9 @@ QPushButton:pressed {{
                  <height>32</height>
                 </size>
                </property>
+               <property name="toolTip">
+                <string>Mostrar feeds</string>
+               </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
   border-radius: 25px;
@@ -1237,6 +1273,9 @@ QPushButton:hover {
                </property>
                <property name="focusPolicy">
                 <enum>Qt::FocusPolicy::NoFocus</enum>
+               </property>
+               <property name="toolTip">
+                <string>Mostrar estadísticas para el elemento</string>
                </property>
                <property name="styleSheet">
                 <string notr="true">QPushButton {{
@@ -1294,7 +1333,7 @@ QPushButton:hover {
           <item>
            <widget class="QStackedWidget" name="info_panel_stacked">
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="info_page">
              <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1308,7 +1347,7 @@ QPushButton:hover {
                   <rect>
                    <x>0</x>
                    <y>0</y>
-                   <width>1028</width>
+                   <width>1037</width>
                    <height>471</height>
                   </rect>
                  </property>
@@ -3104,7 +3143,7 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>1046</width>
+                          <width>1055</width>
                           <height>459</height>
                          </rect>
                         </property>
@@ -3147,7 +3186,11 @@ QPushButton:hover {
                              </widget>
                             </item>
                             <item>
-                             <widget class="QTextEdit" name="artistas_textEdit"/>
+                             <widget class="QTextEdit" name="artistas_textEdit">
+                              <property name="textInteractionFlags">
+                               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable|Qt::TextInteractionFlag::TextEditorInteraction|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                              </property>
+                             </widget>
                             </item>
                            </layout>
                           </widget>
@@ -3182,8 +3225,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>84</width>
-                          <height>118</height>
+                          <width>1055</width>
+                          <height>459</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_17">
@@ -3228,7 +3271,11 @@ QPushButton:hover {
                              </widget>
                             </item>
                             <item>
-                             <widget class="QTextEdit" name="albums_textEdit"/>
+                             <widget class="QTextEdit" name="albums_textEdit">
+                              <property name="textInteractionFlags">
+                               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable|Qt::TextInteractionFlag::TextEditorInteraction|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                              </property>
+                             </widget>
                             </item>
                            </layout>
                           </widget>
@@ -3263,8 +3310,8 @@ QPushButton:hover {
                          <rect>
                           <x>0</x>
                           <y>0</y>
-                          <width>145</width>
-                          <height>117</height>
+                          <width>1055</width>
+                          <height>459</height>
                          </rect>
                         </property>
                         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -3306,7 +3353,11 @@ QPushButton:hover {
                              </widget>
                             </item>
                             <item>
-                             <widget class="QTextEdit" name="menciones_textEdit"/>
+                             <widget class="QTextEdit" name="menciones_textEdit">
+                              <property name="textInteractionFlags">
+                               <set>Qt::TextInteractionFlag::LinksAccessibleByMouse|Qt::TextInteractionFlag::TextEditable|Qt::TextInteractionFlag::TextEditorInteraction|Qt::TextInteractionFlag::TextSelectableByKeyboard|Qt::TextInteractionFlag::TextSelectableByMouse</set>
+                              </property>
+                             </widget>
                             </item>
                            </layout>
                           </widget>

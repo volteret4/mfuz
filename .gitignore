@@ -42,3 +42,4 @@ db/sqlite/**
 config/db_creator_config.json
 config/FLAC_config_database_creator.json
 config/config_database_creator.json
+content/artistas_img/
