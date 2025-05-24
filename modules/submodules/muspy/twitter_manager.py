@@ -2179,7 +2179,7 @@ class TwitterManager:
             
             # Crear el diálogo usando el archivo UI
             dialog = QDialog(self.parent)
-            ui_file_path = Path(self.project_root, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(self.project_root, "ui", "muspy", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2240,8 +2240,8 @@ class TwitterManager:
                     dialog.search_input.textChanged.connect(
                         lambda text: filter_fn(text, checkboxes) if filter_fn else generic_filter_artists(text, checkboxes)
                     )
-                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
-                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
+                    dialog.action_select_all.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
+                    dialog.action_deselect_all.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
                     
                 except Exception as e:
                     self.ui_callback.append(f"Error cargando UI para selección de artistas: {e}")

@@ -62,7 +62,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="add_follow_button">
+    <widget class="QPushButton" name="action_add_follow">
      <property name="text">
       <string>Seguir artista en Muspy</string>
      </property>

@@ -149,16 +149,16 @@
         "ui/database_editor.ui",
 
         "ui/modulo_enlaces.ui",
-        "ui/muspy_releases_module.ui",
+        "ui/muspy/muspy_releases_module.ui",
 
         "ui/radicale_config_dialog.ui",
         "ui/event_dialog.ui",
 
-        "ui/muspy_artists_dialog.ui",
-        "ui/muspy_releases_table.ui",
+        "ui/muspy/muspy_artists_dialog.ui",
+        "ui/muspy/muspy_releases_table.ui",
         "ui/url_playlist_advanced_settings_dialog.ui",
         "ui/url_playlist_create_playlist_dialog.ui",
-        "ui/muspy_artist_selection_dialog.ui",
+        "ui/muspy/muspy_artist_selection_dialog.ui",
         "modules/spotify_module.py",
         "modules/music_fuzzy_module.py",
         "modules/jaangle_module.py",

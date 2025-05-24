@@ -31,12 +31,15 @@ from modules.submodules.url_playlist.spotify_manager import (
     create_spotify_playlist, add_tracks_to_spotify_playlist, load_spotify_playlists
 )
 from modules.submodules.url_playlist.lastfm_manager import (
-    setup_lastfm_menu_items, sync_lastfm_scrobbles, load_lastfm_scrobbles_period,
-    load_lastfm_scrobbles_month, load_lastfm_scrobbles_year, display_scrobbles_in_tree,
+    setup_lastfm_menu_items, sync_lastfm_scrobbles, load_lastfm_scrobbles_period, sync_lastfm_scrobbles_safe,
+    load_lastfm_scrobbles_month, load_lastfm_scrobbles_year, 
     populate_scrobbles_time_menus, get_track_links_from_db, get_lastfm_cache_path, load_lastfm_cache_if_exists,
     setup_scrobbles_menu, connect_lastfm_controls, force_load_scrobbles_data_from_db, load_lastfm_cache_if_exists
 ) 
 
+from modules.submodules.url_playlist.lastfm_db import (
+    display_scrobbles_in_tree
+)
 from modules.submodules.url_playlist.playlist_manager import (
     parse_pls_file, load_local_playlists, create_local_playlist, save_playlists,
     load_rss_playlists, move_rss_playlist_to_listened, update_playlist_comboboxes,
@@ -483,6 +486,9 @@ class UrlPlayer(BaseModule):
             from modules.submodules.url_playlist.lastfm_manager import load_lastfm_cache_if_exists
             load_lastfm_cache_if_exists(self)
             
+            # NUEVA LÍNEA: Cargar menús de scrobbles existentes desde la base de datos
+            self._load_existing_scrobbles_menus()
+            
             # Actualizar flags de servicios habilitados
             self.spotify_enabled = bool(self.spotify_client_id and self.spotify_client_secret)
             self.lastfm_enabled = bool(self.lastfm_api_key)
@@ -494,6 +500,148 @@ class UrlPlayer(BaseModule):
             self.log("Inicialización de APIs completada")
         except Exception as e:
             self.log(f"Error en inicialización de APIs: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
+
+    def _load_existing_scrobbles_menus(self):
+        """Carga los menús de scrobbles con datos existentes en la base de datos"""
+        try:
+            if not hasattr(self, 'db_path') or not self.db_path:
+                return False
+                
+            # Ejecutar en un hilo separado para no bloquear la UI
+            import threading
+            thread = threading.Thread(
+                target=self._load_scrobbles_menus_from_db_thread,
+                name="LoadScrobblesMenus",
+                daemon=True
+            )
+            thread.start()
+            
+        except Exception as e:
+            self.log(f"Error iniciando carga de menús de scrobbles: {str(e)}")
+
+    def _load_scrobbles_menus_from_db_thread(self):
+        """Carga los menús de scrobbles desde la base de datos en un hilo separado"""
+        try:
+            import sqlite3
+            import os
+            from datetime import datetime
+            
+            if not os.path.exists(self.db_path):
+                self.log("Base de datos no encontrada para cargar menús de scrobbles")
+                return
+                
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Buscar tabla de scrobbles del usuario actual
+            lastfm_username = getattr(self, 'lastfm_username', 'paqueradejere')
+            possible_tables = [
+                f"scrobbles_{lastfm_username}",
+                "scrobbles_paqueradejere"
+            ]
+            
+            scrobbles_table = None
+            for table in possible_tables:
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table}'")
+                if cursor.fetchone():
+                    scrobbles_table = table
+                    break
+            
+            if not scrobbles_table:
+                self.log("No se encontró tabla de scrobbles")
+                conn.close()
+                return
+                
+            self.log(f"Cargando menús desde tabla: {scrobbles_table}")
+            
+            # Verificar que la tabla tiene timestamp
+            cursor.execute(f"PRAGMA table_info({scrobbles_table})")
+            columns = [row[1] for row in cursor.fetchall()]
+            
+            if 'timestamp' not in columns:
+                self.log(f"Tabla {scrobbles_table} no tiene columna timestamp")
+                conn.close()
+                return
+            
+            # Obtener años con datos
+            cursor.execute(f"""
+            SELECT 
+                CAST(strftime('%Y', datetime(timestamp, 'unixepoch')) AS INTEGER) as year,
+                COUNT(*) as count
+            FROM {scrobbles_table}
+            WHERE timestamp > 0
+            GROUP BY year
+            ORDER BY year DESC
+            """)
+            
+            years_results = cursor.fetchall()
+            
+            if not years_results:
+                self.log("No se encontraron años con scrobbles")
+                conn.close()
+                return
+            
+            years_dict = {}
+            
+            for year_row in years_results:
+                if not year_row[0]:
+                    continue
+                    
+                year = year_row[0]
+                count = year_row[1]
+                
+                if count > 0:
+                    years_dict[year] = set()
+                    
+                    # Obtener meses para este año
+                    cursor.execute(f"""
+                    SELECT 
+                        CAST(strftime('%m', datetime(timestamp, 'unixepoch')) AS INTEGER) as month,
+                        COUNT(*) as count
+                    FROM {scrobbles_table}
+                    WHERE timestamp > 0 
+                    AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+                    GROUP BY month
+                    ORDER BY month
+                    """, (str(year),))
+                    
+                    months_results = cursor.fetchall()
+                    
+                    for month_row in months_results:
+                        if not month_row[0]:
+                            continue
+                            
+                        month = month_row[0]
+                        month_count = month_row[1]
+                        
+                        if month_count > 0:
+                            years_dict[year].add(month)
+            
+            conn.close()
+            
+            if years_dict:
+                self.log(f"Encontrados {len(years_dict)} años con scrobbles en la base de datos")
+                
+                # Programar actualización de menús en el hilo principal
+                from PyQt6.QtCore import QTimer
+                
+                def update_menus_main_thread():
+                    try:
+                        from modules.submodules.url_playlist.lastfm_manager import populate_scrobbles_time_menus
+                        populate_scrobbles_time_menus(self, years_dict=years_dict)
+                        self.log("Menús de scrobbles cargados desde base de datos existente")
+                    except Exception as e:
+                        self.log(f"Error actualizando menús desde base de datos: {e}")
+                
+                QTimer.singleShot(0, update_menus_main_thread)
+            else:
+                self.log("No se encontraron datos válidos de años/meses en la base de datos")
+                
+        except Exception as e:
+            self.log(f"Error cargando menús de scrobbles desde base de datos: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
 
@@ -731,6 +879,7 @@ class UrlPlayer(BaseModule):
             def connect_signals():
                 # Conectar resto de señales
                 self.connect_remaining_signals()
+                self._check_and_run_auto_sync()
                 self.log("Configuración diferida de widgets completada")
             
             # Iniciar la cadena de configuración
@@ -853,6 +1002,120 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al conectar señales adicionales: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+
+    def _check_and_run_auto_sync(self):
+        """Verifica si debe ejecutar sincronización automática al iniciar"""
+        try:
+            # Verificar si está habilitada la sincronización automática
+            sync_at_boot = getattr(self, 'sync_at_boot', False)
+            
+            if not sync_at_boot:
+                self.log("Sincronización automática al inicio deshabilitada")
+                return
+            
+            # Verificar que tenemos las credenciales necesarias
+            if not self.lastfm_api_key or not self.lastfm_username:
+                self.log("No se puede sincronizar automáticamente: faltan credenciales de Last.fm")
+                return
+            
+            self.log("Iniciando sincronización automática de Last.fm al arranque...")
+            
+            # Ejecutar sincronización en un hilo separado con un pequeño retraso
+            # para asegurar que la UI esté completamente inicializada
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(2000, self._run_auto_sync)  # 2 segundos de retraso
+            
+        except Exception as e:
+            self.log(f"Error verificando sincronización automática: {str(e)}")
+
+
+    def _run_auto_sync(self):
+        """Ejecuta la sincronización automática de forma segura entre hilos"""
+        try:
+            # Usar la versión segura sin diálogos
+            import threading
+            sync_thread = threading.Thread(
+                target=lambda: sync_lastfm_scrobbles_safe(self, show_dialogs=False),
+                name="SafeAutoSyncLastFM",
+                daemon=True
+            )
+            sync_thread.start()
+            
+            self.log("Sincronización automática de Last.fm iniciada de forma segura")
+            
+        except Exception as e:
+            self.log(f"Error ejecutando sincronización automática: {str(e)}")
+
+    def _execute_sync_in_main_thread(self):
+        """Ejecuta la sincronización en el hilo principal"""
+        try:
+            from modules.submodules.url_playlist.lastfm_manager import sync_lastfm_scrobbles
+            
+            # Ahora que estamos en el hilo principal, podemos crear un nuevo hilo para la tarea larga
+            # pero evitando diálogos para no causar problemas de hilos
+            import threading
+            sync_thread = threading.Thread(
+                target=lambda: sync_lastfm_scrobbles(self, show_dialogs=False),
+                name="AutoSyncLastFM",
+                daemon=True
+            )
+            sync_thread.start()
+            
+        except Exception as e:
+            self.log(f"Error ejecutando sincronización en hilo principal: {str(e)}")
+
+
+    def _safe_sync_lastfm(self):
+        """Versión segura de sincronización que evita manipular UI directamente"""
+        try:
+            from modules.submodules.url_playlist.lastfm_manager import sync_lastfm_scrobbles
+            
+            # Usar una variable de instancia para indicar que estamos sincronizando
+            self._is_syncing_lastfm = True
+            
+            # Ejecutar sincronización sin diálogos de progreso (evita manipulación de UI)
+            # Modifica la función sync_lastfm_scrobbles para tener un parámetro show_dialogs=True
+            result = sync_lastfm_scrobbles(self, show_dialogs=False)
+            
+            # Limpiar la marca de sincronización
+            self._is_syncing_lastfm = False
+            
+            # Notificar resultado en el hilo principal
+            from PyQt6.QtCore import QTimer, QCoreApplication
+            QTimer.singleShot(0, lambda: self._notify_sync_result(result))
+            
+        except Exception as e:
+            self.log(f"Error en sincronización segura: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            
+            # Limpiar la marca de sincronización
+            self._is_syncing_lastfm = False
+            
+            # Notificar error en el hilo principal
+            from PyQt6.QtCore import QTimer
+            QTimer.singleShot(0, lambda: self._notify_sync_error(str(e)))
+
+    def _notify_sync_result(self, success):
+        """Notifica el resultado de la sincronización en el hilo principal"""
+        from PyQt6.QtWidgets import QMessageBox
+        if success:
+            self.log("Sincronización automática completada exitosamente")
+            # Opcional: mostrar mensaje de éxito
+            # QMessageBox.information(self, "Sincronización Completa", "Sincronización de Last.fm completada exitosamente")
+        else:
+            self.log("Sincronización automática no completada correctamente")
+            # Opcional: mostrar mensaje de error
+            # QMessageBox.warning(self, "Sincronización Incompleta", "La sincronización de Last.fm no se completó correctamente")
+
+    def _notify_sync_error(self, error_msg):
+        """Notifica un error de sincronización en el hilo principal"""
+        self.log(f"Error en sincronización automática: {error_msg}")
+        # Opcional: mostrar mensaje de error
+        # from PyQt6.QtWidgets import QMessageBox
+        # QMessageBox.critical(self, "Error de Sincronización", f"Error en sincronización de Last.fm: {error_msg}")
+
+
 
     def _initialize_player_manager(self):
         """Inicializa y configura el reproductor según la configuración"""
@@ -1444,6 +1707,227 @@ class UrlPlayer(BaseModule):
             return False
 
 
+    def save_settings(self):
+        """Guarda la configuración del módulo en el archivo de configuración general."""
+        try:
+            # Try multiple config paths
+            config_paths = [
+                Path(PROJECT_ROOT, "config", "config.yml"),
+                Path(PROJECT_ROOT, "config", "config_placeholder.yaml"),
+                Path(PROJECT_ROOT, ".content", "config", "config.yml")
+            ]
+            
+            config_path = None
+            for path in config_paths:
+                if os.path.exists(path):
+                    config_path = path
+                    break
+            
+            if not config_path:
+                self.log(f"No configuration file found. Creating new one at: {config_paths[0]}")
+                # Create directory if it doesn't exist
+                os.makedirs(os.path.dirname(config_paths[0]), exist_ok=True)
+                config_path = config_paths[0]
+                
+                # Create empty config
+                config_data = {
+                    'modules': [],
+                    'modulos_desactivados': []
+                }
+            else:
+                # Load existing config
+                try:
+                    # Try to use function from main module
+                    try:
+                        from main import load_config_file
+                        config_data = load_config_file(config_path)
+                    except ImportError:
+                        # Fallback method
+                        extension = os.path.splitext(config_path)[1].lower()
+                        if extension in ['.yml', '.yaml']:
+                            import yaml
+                            with open(config_path, 'r', encoding='utf-8') as f:
+                                config_data = yaml.safe_load(f)
+                        else:  # Assume JSON
+                            with open(config_path, 'r', encoding='utf-8') as f:
+                                config_data = json.load(f)
+                except Exception as e:
+                    self.log(f"Error loading config file: {e}")
+                    return
+
+            # Helper function to convert Path objects to relative strings
+            def path_to_relative_string(path_value):
+                """Convert Path objects or absolute paths to relative strings"""
+                if path_value is None:
+                    return ''
+                
+                # Convert to string first
+                path_str = str(path_value)
+                
+                # If it's an absolute path, try to make it relative to PROJECT_ROOT
+                if os.path.isabs(path_str):
+                    try:
+                        rel_path = os.path.relpath(path_str, PROJECT_ROOT)
+                        # Only use relative path if it doesn't go up directories
+                        if not rel_path.startswith('..'):
+                            return rel_path
+                        else:
+                            return path_str
+                    except ValueError:
+                        return path_str
+                
+                return path_str
+
+            # Add Last.fm specific settings
+            lastfm_settings = {
+                'lastfm_username': getattr(self, 'lastfm_username', ''),
+                'scrobbles_limit': getattr(self, 'scrobbles_limit', 50),
+                'scrobbles_by_date': getattr(self, 'scrobbles_by_date', True),
+                'service_priority_indices': getattr(self, 'service_priority_indices', [0, 1, 2, 3])
+            }
+
+            # Asegurar que pagination_value esté sincronizado con num_servicios_spinBox
+            self.pagination_value = getattr(self, 'num_servicios_spinBox', 10)
+            
+            # Store current database path - convert to relative string
+            db_path_to_save = path_to_relative_string(getattr(self, 'db_path', ''))
+            
+            # Convert all paths to simple relative strings
+            spotify_token_path = path_to_relative_string(getattr(self, 'spotify_token_path', '.content/cache/spotify_token.txt'))
+            spotify_playlist_path = path_to_relative_string(getattr(self, 'spotify_playlist_path', '.content/cache/spotify_playlist_path'))
+            lastfm_cache_path = path_to_relative_string(getattr(self, 'lastfm_cache_path', '.content/cache/lastfm_cache.json'))
+            rss_pending_dir = path_to_relative_string(getattr(self, 'rss_pending_dir', '.content/playlists/blogs/pendiente'))
+            rss_listened_dir = path_to_relative_string(getattr(self, 'rss_listened_dir', '.content/playlists/blogs/escuchado'))
+            local_playlist_path = path_to_relative_string(getattr(self, 'local_playlist_path', '.content/playlists/locales'))
+            mpv_temp_dir = path_to_relative_string(getattr(self, 'mpv_temp_dir', '.content/mpv/_mpv_socket'))
+            
+            # Preparar configuración de este módulo - TODAS LAS RUTAS COMO STRINGS SIMPLES
+            new_settings = {
+                'mpv_temp_dir': mpv_temp_dir,
+                'pagination_value': self.pagination_value,
+                'included_services': getattr(self, 'included_services', {}),
+                'db_path': db_path_to_save,
+                'spotify_client_id': getattr(self, 'spotify_client_id', ''),
+                'spotify_client_secret': getattr(self, 'spotify_client_secret', ''),
+                'lastfm_api_key': getattr(self, 'lastfm_api_key', ''),
+                'lastfm_username': getattr(self, 'lastfm_username', ''),
+                
+                # Configuración de vista de playlists
+                'playlist_unified_view': getattr(self, 'playlist_unified_view', False),
+                'show_local_playlists': getattr(self, 'show_local_playlists', True),
+                'show_spotify_playlists': getattr(self, 'show_spotify_playlists', True),
+                'show_rss_playlists': getattr(self, 'show_rss_playlists', True),
+                
+                # Añadir configuración de urlplaylist_only_local
+                'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
+                
+                # Añadir configuración de sincronización automática
+                'sync_at_boot': getattr(self, 'sync_at_boot', False),
+                
+                # lastfm specific settings
+                'scrobbles_limit': lastfm_settings['scrobbles_limit'],
+                'scrobbles_by_date': lastfm_settings['scrobbles_by_date'],
+                'service_priority_indices': lastfm_settings['service_priority_indices'],
+                
+                # freshrss
+                'freshrss_url': getattr(self, 'freshrss_url', ''),
+                'freshrss_user': getattr(self, 'freshrss_username', ''),
+                'freshrss_api_key': getattr(self, 'freshrss_auth_token', ''),
+                
+                # Paths as simple strings - NO MORE Path objects
+                'spotify_token_path': spotify_token_path,
+                'spotify_playlist_path': spotify_playlist_path,
+                'lastfm_cache_path': lastfm_cache_path,
+                'rss_pending_dir': rss_pending_dir,
+                'rss_listened_dir': rss_listened_dir,
+                'local_playlist_path': local_playlist_path,
+                
+                # Additional settings
+                'exclude_spotify_from_local': getattr(self, 'exclude_spotify_from_local', True),
+                'show_lastfm_scrobbles': getattr(self, 'show_lastfm_scrobbles', True)
+            }
+            
+            # Añadir valores de depuración
+            self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
+            self.log(f"Guardando configuración - Only local: {new_settings['urlplaylist_only_local']}")
+            self.log(f"Guardando configuración - Sync at boot: {new_settings['sync_at_boot']}")
+            self.log(f"Guardando configuración - Paths convertidas a strings simples")
+            
+            # Bandera para saber si se encontró y actualizó el módulo
+            module_updated = False
+            
+            # Try all possible module names
+            module_names = ['Url Playlists', 'URL Playlist', 'URL Player']
+            
+            # Actualizar la configuración en el módulo correspondiente
+            for module in config_data.get('modules', []):
+                if module.get('name') in module_names:
+                    # Reemplazar completamente los argumentos para evitar duplicados
+                    module['args'] = new_settings
+                    module_updated = True
+                    self.log(f"Updated existing module: {module.get('name')}")
+                    break
+            
+            # Si no se encontró en los módulos activos, buscar en los desactivados
+            if not module_updated:
+                for module in config_data.get('modulos_desactivados', []):
+                    if module.get('name') in module_names:
+                        # Reemplazar completamente los argumentos para evitar duplicados
+                        module['args'] = new_settings
+                        module_updated = True
+                        self.log(f"Updated existing disabled module: {module.get('name')}")
+                        break
+            
+            # Si no se encontró el módulo, añadirlo a los módulos activos
+            if not module_updated:
+                self.log("Module not found in config, adding it to active modules")
+                # Make sure the modules list exists
+                if 'modules' not in config_data:
+                    config_data['modules'] = []
+                    
+                # Add new module entry
+                config_data['modules'].append({
+                    'name': 'URL Playlist',
+                    'path': 'modules/url_playlist.py',
+                    'args': new_settings
+                })
+            
+            # Guardar la configuración actualizada con configuración específica de YAML
+            try:
+                # Try to use save function from main module
+                try:
+                    from main import save_config_file
+                    save_config_file(config_path, config_data)
+                except ImportError:
+                    # Fallback method with specific YAML configuration
+                    extension = os.path.splitext(config_path)[1].lower()
+                    if extension in ['.yml', '.yaml']:
+                        import yaml
+                        # Configure YAML to avoid complex object serialization
+                        with open(config_path, 'w', encoding='utf-8') as f:
+                            yaml.dump(
+                                config_data, 
+                                f, 
+                                sort_keys=False, 
+                                default_flow_style=False, 
+                                indent=2,
+                                allow_unicode=True,
+                                width=1000  # Avoid line wrapping
+                            )
+                    else:  # Assume JSON
+                        import json
+                        with open(config_path, 'w', encoding='utf-8') as f:
+                            json.dump(config_data, f, indent=2, ensure_ascii=False)
+            except Exception as e:
+                self.log(f"Error saving config: {e}")
+                return
+                
+            self.log(f"Configuración guardada correctamente en {config_path}")
+        except Exception as e:
+            self.log(f"Error al guardar configuración: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+
     def load_settings(self):
         """Loads module configuration with standard paths"""
         try:
@@ -1542,6 +2026,8 @@ class UrlPlayer(BaseModule):
         self.spotify_enabled = False
         self.lastfm_enabled = False
         
+        self.sync_at_boot = False
+
         # Create necessary directories
         os.makedirs(os.path.dirname(self.spotify_token_path), exist_ok=True)
         os.makedirs(os.path.dirname(self.spotify_playlist_path), exist_ok=True)
@@ -1896,6 +2382,17 @@ class UrlPlayer(BaseModule):
                 self.log(f"Usando ruta de playlists locales por defecto: {self.local_playlist_path}")
 
 
+            if 'sync_at_boot' in module_args:
+                value = module_args['sync_at_boot']
+                if isinstance(value, str):
+                    self.sync_at_boot = value.lower() == 'true'
+                else:
+                    self.sync_at_boot = bool(value)
+                self.log(f"Loaded sync_at_boot: {self.sync_at_boot}")
+            else:
+                self.sync_at_boot = False
+
+
             # Load MPV temp directory
             if 'mpv_temp_dir' in module_args:
                 mpv_temp_dir = module_args['mpv_temp_dir']
@@ -2024,9 +2521,16 @@ class UrlPlayer(BaseModule):
                 self.log(f"Saved service priority indices: {service_priority_indices}")
 
 
+           
+            sync_at_boot_checkbox = dialog.findChild(QCheckBox, 'sync_at_boot')
+            if sync_at_boot_checkbox:
+                self.sync_at_boot = sync_at_boot_checkbox.isChecked()
+                self.log(f"Set sync_at_boot to: {self.sync_at_boot}")
+            else:
+                self.log("sync_at_boot checkbox not found in dialog")
+
             # Save settings to file
             self.save_settings()
-
 
             # Update the playlist view based on the new settings
             self.update_playlist_view()
@@ -2036,7 +2540,6 @@ class UrlPlayer(BaseModule):
             
             # Actualizar UI o estado si es necesario
             self.update_service_combo()
-
             
             # Cerrar el diálogo
             dialog.accept()
@@ -2045,6 +2548,7 @@ class UrlPlayer(BaseModule):
             import traceback
             self.log(traceback.format_exc())
             QMessageBox.warning(self, "Error", f"Error al guardar la configuración: {str(e)}")
+
 
     def setup_advanced_settings_dialog(self, dialog):
         """Set up advanced settings dialog with synchronized controls"""
@@ -2078,84 +2582,11 @@ class UrlPlayer(BaseModule):
             self.log(f"Error setting up scrobbles controls: {str(e)}")
 
 
-    def save_settings(self):
-        """Guarda la configuración del módulo en el archivo de configuración general."""
-        try:
-            # Try multiple config paths
-            config_paths = [
-                Path(PROJECT_ROOT, "config", "config.yml"),
-                Path(PROJECT_ROOT, "config", "config_placeholder.yaml"),
-                Path(PROJECT_ROOT, ".content", "config", "config.yml")
-            ]
-            
-        
-            config_path = None
-            for path in config_paths:
-                if os.path.exists(path):
-                    config_path = path
-                    break
-            
-            if not config_path:
-                self.log(f"No configuration file found. Creating new one at: {config_paths[0]}")
-                # Create directory if it doesn't exist
-                os.makedirs(os.path.dirname(config_paths[0]), exist_ok=True)
-                config_path = config_paths[0]
-                
-                # Create empty config
-                config_data = {
-                    'modules': [],
-                    'modulos_desactivados': []
-                }
-            else:
-                # Load existing config
-                try:
-                    # Try to use function from main module
-                    try:
-                        from main import load_config_file
-                        config_data = load_config_file(config_path)
-                    except ImportError:
-                        # Fallback method
-                        extension = os.path.splitext(config_path)[1].lower()
-                        if extension in ['.yml', '.yaml']:
-                            import yaml
-                            with open(config_path, 'r', encoding='utf-8') as f:
-                                config_data = yaml.safe_load(f)
-                        else:  # Assume JSON
-                            with open(config_path, 'r', encoding='utf-8') as f:
-                                config_data = json.load(f)
-                except Exception as e:
-                    self.log(f"Error loading config file: {e}")
-                    return
-
-            # Add Last.fm specific settings
-            lastfm_settings = {
-                'lastfm_username': self.lastfm_username,
-                'scrobbles_limit': self.scrobbles_limit,
-                'scrobbles_by_date': self.scrobbles_by_date,
-                'service_priority_indices': getattr(self, 'service_priority_indices', [0, 1, 2, 3])
-            }
-
-            # Asegurar que pagination_value esté sincronizado con num_servicios_spinBox
-            self.pagination_value = self.num_servicios_spinBox
-            
-            # Store current database path - relative to PROJECT_ROOT if possible
-            db_path_to_save = self.db_path
-            if db_path_to_save and os.path.isabs(db_path_to_save):
-                try:
-                    # Convert to relative path if inside PROJECT_ROOT
-                    rel_path = os.path.relpath(db_path_to_save, PROJECT_ROOT)
-                    # Only use relative path if it doesn't go up directories
-                    if not rel_path.startswith('..'):
-                        db_path_to_save = rel_path
-                except ValueError:
-                    # Keep using absolute path if there's an error
-                    pass
-            
-            # Preparar configuración de este módulo
+        # Preparar configuración de este módulo
             new_settings = {
-                'mpv_temp_dir': '.config/mpv/_mpv_socket',  # Mantener valor existente o usar por defecto
+                'mpv_temp_dir': mpv_socket,
                 'pagination_value': self.pagination_value,
-                'included_services': self.included_services,  # Now storing actual boolean values
+                'included_services': self.included_services,
                 'db_path': db_path_to_save,
                 'spotify_client_id': self.spotify_client_id,
                 'spotify_client_secret': self.spotify_client_secret,
@@ -2170,6 +2601,9 @@ class UrlPlayer(BaseModule):
                 
                 # Añadir configuración de urlplaylist_only_local
                 'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
+                
+                # NUEVA LÍNEA: Añadir configuración de sincronización automática
+                'sync_at_boot': getattr(self, 'sync_at_boot', False),
                 
                 # lastfm
                 'lastfm_username': lastfm_settings['lastfm_username'],
@@ -2186,6 +2620,8 @@ class UrlPlayer(BaseModule):
             # Añadir valores de depuración
             self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
             self.log(f"Guardando configuración - Only local: {new_settings['urlplaylist_only_local']}")
+            self.log(f"Guardando configuración - Sync at boot: {new_settings['sync_at_boot']}")
+            
             
             # Bandera para saber si se encontró y actualizó el módulo
             module_updated = False

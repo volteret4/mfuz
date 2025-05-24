@@ -6,7 +6,7 @@ import urllib.parse
 import requests
 from datetime import datetime
 from pathlib import Path
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer, QMetaObject
 from PyQt6.QtWidgets import QMenu, QProgressDialog, QApplication, QMessageBox, QPushButton, QSlider, QSpinBox
 from PyQt6.QtGui import QIcon
 
@@ -17,7 +17,8 @@ from modules.submodules.url_playlist.lastfm_db import (
     load_scrobbles_from_db,
     create_scrobbles_table,
     integrate_scrobbles_to_songs,
-    fetch_links_for_scrobbles
+    fetch_links_for_scrobbles,
+    extract_link_from_lastfm
 )
 
 # Asegurarse de que PROJECT_ROOT está disponible
@@ -32,18 +33,27 @@ def setup_lastfm_menu_items(self, menu):
     try:
         # Add "Sync Scrobbles" option
         sync_action = menu.addAction(QIcon(":/services/refresh"), "Sincronizar scrobbles")
-        sync_action.triggered.connect(lambda: sync_lastfm_scrobbles(self))
+        sync_action.triggered.connect(lambda: sync_lastfm_scrobbles_safe(self))
         
         # Add "Latest" submenu
         latest_menu = menu.addMenu(QIcon(":/services/lastfm"), "Últimos")
+        
+        # NUEVA LÍNEA: Añadir opción para últimas 24 horas
+        last_24h = latest_menu.addAction("Últimas 24 horas")
+        last_24h.triggered.connect(lambda checked=False, instance=self: 
+            QTimer.singleShot(0, lambda: load_lastfm_scrobbles_period(instance, "24h")))
+        
         last_week = latest_menu.addAction("Última semana")
-        last_week.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "week"))
+        last_week.triggered.connect(lambda checked=False, instance=self:
+            QTimer.singleShot(0, lambda: load_lastfm_scrobbles_period(instance, "week")))
         
         last_month = latest_menu.addAction("Último mes")
-        last_month.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "month"))
+        last_month.triggered.connect(lambda checked=False, instance=self:
+            QTimer.singleShot(0, lambda: load_lastfm_scrobbles_period(instance, "month")))
         
         last_year = latest_menu.addAction("Último año")
-        last_year.triggered.connect(lambda: load_lastfm_scrobbles_period(self, "year"))
+        last_year.triggered.connect(lambda checked=False, instance=self:
+            QTimer.singleShot(0, lambda: load_lastfm_scrobbles_period(instance, "year")))
         
         # Menu separator
         menu.addSeparator()
@@ -77,13 +87,15 @@ def setup_lastfm_menu_items(self, menu):
         
         for user in lastfm_usernames:
             user_action = integrate_menu.addAction(f"Integrar scrobbles de {user}")
+            # FIX: Capturar la variable user correctamente
             user_action.triggered.connect(lambda checked=False, u=user: integrate_scrobbles_to_songs(self, u))
         
-        # Add "Fetch Links" submenu
+        # Add "Fetch Links" submenu - AQUÍ ESTÁ EL FIX PRINCIPAL
         links_menu = menu.addMenu(QIcon(":/services/link"), "Obtener enlaces")
         
         for user in lastfm_usernames:
             link_action = links_menu.addAction(f"Obtener enlaces para {user}")
+            # FIX: Usar parámetro por defecto para capturar la variable del bucle
             link_action.triggered.connect(lambda checked=False, u=user: fetch_links_for_scrobbles(self, u))
         
         return menu_refs
@@ -161,26 +173,370 @@ def get_lastfm_usernames(self):
         return [getattr(self, 'lastfm_username', 'paqueradejere')] if hasattr(self, 'lastfm_username') and self.lastfm_username else ['paqueradejere']
 
 
-def sync_lastfm_scrobbles(self):
+
+def sync_lastfm_scrobbles_safe(self, show_dialogs=True):
+    """Versión segura de sincronización de Last.fm que evita problemas de memoria"""
+    try:
+        # Verificar que no estamos ya sincronizando
+        if hasattr(self, '_is_syncing') and self._is_syncing:
+            self.log("Ya hay una sincronización en progreso, ignorando solicitud")
+            return False
+            
+        # Marcar que estamos sincronizando
+        self._is_syncing = True
+            
+        # Verificar credenciales básicas sin acceder a la UI
+        if not hasattr(self, 'lastfm_api_key') or not self.lastfm_api_key:
+            self.log("Error: Last.fm API key not configured")
+            self._is_syncing = False
+            return False
+                
+        if not hasattr(self, 'lastfm_username') or not self.lastfm_username:
+            self.log("Error: Last.fm username not configured")
+            self._is_syncing = False
+            return False
+        
+        # Obtener timestamp más reciente de la base de datos
+        try:
+            import sqlite3
+            import time
+            
+            # Obtener el timestamp más reciente
+            db_timestamp = 0
+            
+            if hasattr(self, 'db_path') and os.path.exists(self.db_path):
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                # Comprobar tabla de configuración
+                config_table = f"lastfm_config_{self.lastfm_username}"
+                cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{config_table}'")
+                if cursor.fetchone():
+                    cursor.execute(f"SELECT last_timestamp FROM {config_table} WHERE id = 1")
+                    result = cursor.fetchone()
+                    if result and result[0]:
+                        db_timestamp = int(result[0])
+                
+                conn.close()
+            
+            # Añadir 1 al timestamp para evitar duplicados
+            last_updated = db_timestamp + 1 if db_timestamp > 0 else 0
+            current_time = int(time.time())
+            
+            self.log(f"Timestamp más reciente: {db_timestamp}, usando {last_updated}")
+            
+            # Petición única a Last.fm para minimizar problemas
+            all_scrobbles = []
+            
+            # Crear parámetros básicos
+            params = {
+                'method': 'user.getrecenttracks',
+                'user': self.lastfm_username,
+                'api_key': self.lastfm_api_key,
+                'format': 'json',
+                'limit': 50  # Limitar a menos resultados para seguridad
+            }
+            
+            # Añadir rango de tiempo si tenemos un timestamp anterior
+            if last_updated > 0:
+                params['from'] = last_updated
+                params['to'] = current_time
+            
+            # Hacer la petición de forma segura
+            import urllib.parse
+            url = f"https://ws.audioscrobbler.com/2.0/?{urllib.parse.urlencode(params)}"
+            self.log(f"Petición segura a Last.fm: {url}")
+            
+            import requests
+            response = requests.get(url, timeout=10)
+            
+            if response.status_code != 200:
+                self.log(f"Error en petición a Last.fm: {response.status_code}")
+                self._is_syncing = False
+                return False
+            
+            # Procesar respuesta
+            data = response.json()
+            
+            if 'error' in data:
+                self.log(f"Error de Last.fm API: {data.get('message', 'Unknown error')}")
+                self._is_syncing = False
+                return False
+            
+            # Verificar que hay resultados
+            recenttracks = data.get('recenttracks', {})
+            total_results = int(recenttracks.get('@attr', {}).get('total', '0'))
+            
+            if total_results == 0:
+                self.log("No hay nuevos scrobbles para sincronizar")
+                self._is_syncing = False
+                return True
+            
+            # Procesar tracks de forma segura
+            tracks = recenttracks.get('track', [])
+            if not isinstance(tracks, list):
+                tracks = [tracks]
+            
+            for track in tracks:
+                # Omitir 'now playing'
+                if '@attr' in track and track['@attr'].get('nowplaying') == 'true':
+                    continue
+                
+                # Crear objeto de scrobble básico
+                try:
+                    timestamp = int(track.get('date', {}).get('uts', '0'))
+                    
+                    # Solo procesar si es más reciente que el último guardado
+                    if timestamp > db_timestamp:
+                        scrobble = {
+                            'artist_name': track.get('artist', {}).get('#text', ''),
+                            'artist_mbid': track.get('artist', {}).get('mbid', ''),
+                            'name': track.get('name', ''),
+                            'album_name': track.get('album', {}).get('#text', ''),
+                            'album_mbid': track.get('album', {}).get('mbid', ''),
+                            'timestamp': timestamp,
+                            'fecha_scrobble': track.get('date', {}).get('#text', ''),
+                            'lastfm_url': track.get('url', ''),
+                            'reproducciones': 1,
+                            'fecha_reproducciones': json.dumps([track.get('date', {}).get('#text', '')])
+                        }
+                        
+                        # Campos alternativos
+                        scrobble['artist'] = scrobble['artist_name']
+                        scrobble['title'] = scrobble['name']
+                        scrobble['album'] = scrobble['album_name']
+                        
+                        all_scrobbles.append(scrobble)
+                except Exception as e:
+                    self.log(f"Error procesando track: {e}")
+                    continue
+            
+            # Guardar en la base de datos de forma segura
+            if all_scrobbles:
+                self.log(f"Guardando {len(all_scrobbles)} scrobbles nuevos")
+                
+                # Importar función para guardar pero sin usarla directamente
+                # Esto es para evitar problemas con importaciones circulares
+                try:
+                    # Crear tablas primero
+                    if hasattr(self, 'db_path') and os.path.exists(self.db_path):
+                        conn = sqlite3.connect(self.db_path)
+                        
+                        # Crear tabla de scrobbles si no existe
+                        table_name = f"scrobbles_{self.lastfm_username}"
+                        cursor = conn.cursor()
+                        
+                        # Verificar si la tabla existe
+                        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}'")
+                        if not cursor.fetchone():
+                            # Crear tabla
+                            cursor.execute(f"""
+                            CREATE TABLE IF NOT EXISTS {table_name} (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                song_id INTEGER,
+                                track_name TEXT NOT NULL,
+                                artist_name TEXT NOT NULL,
+                                album_name TEXT,
+                                artist_id INTEGER,
+                                album_id INTEGER,
+                                timestamp INTEGER NOT NULL,
+                                scrobble_date TEXT NOT NULL,
+                                lastfm_url TEXT,
+                                fecha_adicion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                artist_mbid TEXT,
+                                name TEXT NOT NULL,
+                                album_mbid TEXT,
+                                fecha_scrobble TEXT NOT NULL,
+                                reproducciones INTEGER DEFAULT 1,
+                                fecha_reproducciones TEXT,
+                                youtube_url TEXT,
+                                spotify_url TEXT,
+                                bandcamp_url TEXT,
+                                soundcloud_url TEXT
+                            )
+                            """)
+                            
+                            # Crear índices para búsqueda rápida
+                            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_timestamp ON {table_name}(timestamp)")
+                            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_artist ON {table_name}(artist_name)")
+                            cursor.execute(f"CREATE INDEX IF NOT EXISTS idx_{table_name}_track ON {table_name}(track_name)")
+                            
+                            self.log(f"Tabla {table_name} creada")
+                        
+                        # Crear tabla de configuración si no existe
+                        config_table = f"lastfm_config_{self.lastfm_username}"
+                        cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{config_table}'")
+                        if not cursor.fetchone():
+                            cursor.execute(f"""
+                            CREATE TABLE IF NOT EXISTS {config_table} (
+                                id INTEGER PRIMARY KEY,
+                                lastfm_username TEXT,
+                                last_timestamp INTEGER,
+                                last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                            )
+                            """)
+                            
+                            # Insertar registro inicial
+                            cursor.execute(f"""
+                            INSERT INTO {config_table} (id, lastfm_username, last_timestamp, last_updated)
+                            VALUES (1, ?, 0, CURRENT_TIMESTAMP)
+                            """, (self.lastfm_username,))
+                            
+                            self.log(f"Tabla {config_table} creada")
+                        
+                        conn.commit()
+                        
+                        # Insertar scrobbles uno por uno de forma segura
+                        for scrobble in all_scrobbles:
+                            try:
+                                # Verificar si ya existe (para evitar duplicados)
+                                cursor.execute(f"""
+                                SELECT id FROM {table_name}
+                                WHERE artist_name = ? AND track_name = ? AND timestamp = ?
+                                """, (scrobble['artist_name'], scrobble['name'], scrobble['timestamp']))
+                                
+                                if not cursor.fetchone():
+                                    # Insertar nuevo scrobble
+                                    cursor.execute(f"""
+                                    INSERT INTO {table_name} (
+                                        track_name, artist_name, album_name, 
+                                        timestamp, scrobble_date, lastfm_url, 
+                                        artist_mbid, name, album_mbid, 
+                                        fecha_scrobble, reproducciones, fecha_reproducciones
+                                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                    """, (
+                                        scrobble['name'], scrobble['artist_name'], scrobble['album_name'],
+                                        scrobble['timestamp'], scrobble['fecha_scrobble'], scrobble['lastfm_url'],
+                                        scrobble['artist_mbid'], scrobble['name'], scrobble['album_mbid'],
+                                        scrobble['fecha_scrobble'], 1, scrobble['fecha_reproducciones']
+                                    ))
+                            except Exception as e:
+                                self.log(f"Error insertando scrobble: {e}")
+                                continue
+                        
+                        # Actualizar timestamp más reciente
+                        newest_timestamp = max([s['timestamp'] for s in all_scrobbles]) if all_scrobbles else 0
+                        
+                        if newest_timestamp > db_timestamp:
+                            cursor.execute(f"""
+                            UPDATE {config_table}
+                            SET last_timestamp = ?, last_updated = CURRENT_TIMESTAMP
+                            WHERE id = 1
+                            """, (newest_timestamp,))
+                            
+                            self.log(f"Timestamp actualizado a {newest_timestamp}")
+                        
+                        conn.commit()
+                        conn.close()
+                        
+                        self.log(f"Sincronización completada con éxito")
+                        
+                        # Programar actualización de menús para el hilo principal
+                        from PyQt6.QtCore import QTimer
+                        QTimer.singleShot(500, lambda: self._update_lastfm_menus_after_sync())
+                        
+                        self._is_syncing = False
+                        return True
+                    else:
+                        self.log("Error: No se puede acceder a la base de datos")
+                        self._is_syncing = False
+                        return False
+                        
+                except Exception as e:
+                    self.log(f"Error guardando scrobbles: {e}")
+                    import traceback
+                    self.log(traceback.format_exc())
+                    self._is_syncing = False
+                    return False
+            else:
+                self.log("No hay nuevos scrobbles para guardar")
+                self._is_syncing = False
+                return True
+                
+        except Exception as e:
+            self.log(f"Error en sincronización: {e}")
+            import traceback
+            self.log(traceback.format_exc())
+            self._is_syncing = False
+            return False
+            
+    except Exception as e:
+        self.log(f"Error general en sincronización: {e}")
+        import traceback
+        self.log(traceback.format_exc())
+        if hasattr(self, '_is_syncing'):
+            self._is_syncing = False
+        return False
+
+def _update_lastfm_menus_after_sync(self):
+    """Actualiza los menús de Last.fm después de una sincronización exitosa"""
+    try:
+        # Cargar años y meses de forma segura
+        years_dict = load_years_months_from_db_direct(self)
+        if years_dict:
+            populate_scrobbles_time_menus(self, years_dict=years_dict)
+            self.log("Menús de Last.fm actualizados después de sincronización")
+    except Exception as e:
+        self.log(f"Error actualizando menús después de sincronización: {e}")
+
+
+def sync_lastfm_scrobbles(self, show_dialogs=True):
     """Synchronize Last.fm scrobbles and store them in a cache file and database"""
     try:
         # Check if we have valid configuration
         if not self.lastfm_api_key:
             self.log("Error: Last.fm API key not configured")
-            QMessageBox.warning(self, "Error", "Last.fm API key not configured. Check settings.")
+            if show_dialogs:
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                
+                # Verificar si estamos en el hilo principal
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    QMessageBox.warning(self, "Error", "Last.fm API key not configured. Check settings.")
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, lambda: QMessageBox.warning(self, "Error", "Last.fm API key not configured. Check settings."))
             return False
                 
         if not self.lastfm_username:
             self.log("Error: Last.fm username not configured")
-            QMessageBox.warning(self, "Error", "Last.fm username not configured. Check settings.")
+            if show_dialogs:
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                
+                # Verificar si estamos en el hilo principal
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    QMessageBox.warning(self, "Error", "Last.fm username not configured. Check settings.")
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, lambda: QMessageBox.warning(self, "Error", "Last.fm username not configured. Check settings."))
             return False
         
-        # Show progress dialog
-        progress = QProgressDialog("Syncing Last.fm scrobbles...", "Cancel", 0, 100, self)
-        progress.setWindowTitle("Last.fm Sync")
-        progress.setWindowModality(Qt.WindowModality.WindowModal)
-        progress.show()
-        QApplication.processEvents()
+        # Show progress dialog if requested
+        progress = None
+        if show_dialogs:
+            from PyQt6.QtWidgets import QProgressDialog
+            from PyQt6.QtCore import Qt, QCoreApplication, QThread, QTimer
+            
+            # Función segura para crear el diálogo de progreso
+            def create_progress_dialog():
+                nonlocal progress
+                progress = QProgressDialog("Syncing Last.fm scrobbles...", "Cancel", 0, 100, self)
+                progress.setWindowTitle("Last.fm Sync")
+                progress.setWindowModality(Qt.WindowModality.WindowModal)
+                progress.show()
+                from PyQt6.QtWidgets import QApplication
+                QApplication.processEvents()
+            
+            # Asegurarse de estar en el hilo principal
+            if QThread.currentThread() == QCoreApplication.instance().thread():
+                create_progress_dialog()
+            else:
+                # Si no estamos en el hilo principal, programar para el hilo principal
+                QTimer.singleShot(0, create_progress_dialog)
+                # Esperar un poco para que se cree el diálogo
+                import time
+                time.sleep(0.2)
         
         # Determine cache file path - use user-specific path
         cache_file = get_lastfm_cache_path(self.lastfm_username)
@@ -223,8 +579,23 @@ def sync_lastfm_scrobbles(self):
             self.log("No existing scrobbles in database, will perform full sync")
             last_updated = 0
         
+        # Update progress safely
+        def update_progress(value, message=None):
+            if progress and show_dialogs:
+                # Verificar que estamos en el hilo principal
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    progress.setValue(value)
+                    if message:
+                        progress.setLabelText(message)
+                    from PyQt6.QtWidgets import QApplication
+                    QApplication.processEvents()
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, lambda: update_progress(value, message))
+        
         # Update progress to 10%
-        progress.setValue(10)
+        update_progress(10, "Iniciando sincronización...")
         
         # Prepare for API requests
         all_scrobbles = []
@@ -232,7 +603,7 @@ def sync_lastfm_scrobbles(self):
         total_pages = 1
         
         # Update progress to 20%
-        progress.setValue(20)
+        update_progress(20, "Conectando con Last.fm...")
         
         # Track if we found any new scrobbles
         new_scrobbles_found = False
@@ -242,7 +613,7 @@ def sync_lastfm_scrobbles(self):
         current_time = int(time.time())
         
         while page <= total_pages:
-            if progress.wasCanceled():
+            if progress and show_dialogs and progress.wasCanceled():
                 break
                 
             # Request parameters with EXPLICIT from and to
@@ -272,7 +643,22 @@ def sync_lastfm_scrobbles(self):
                     if page > 1:  # If we already got some pages, continue with what we have
                         break
                     else:
-                        QMessageBox.warning(self, "Error", f"Last.fm API returned error: HTTP {response.status_code}")
+                        # Show error safely
+                        if show_dialogs:
+                            from PyQt6.QtWidgets import QMessageBox
+                            from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                            
+                            error_msg = f"Last.fm API returned error: HTTP {response.status_code}"
+                            
+                            def show_error():
+                                QMessageBox.warning(self, "Error", error_msg)
+                            
+                            # Verificar si estamos en el hilo principal
+                            if QThread.currentThread() == QCoreApplication.instance().thread():
+                                show_error()
+                            else:
+                                # Si no estamos en el hilo principal, programar para el hilo principal
+                                QTimer.singleShot(0, show_error)
                         return False
                 
                 data = response.json()
@@ -282,7 +668,22 @@ def sync_lastfm_scrobbles(self):
                     if page > 1:  # If we already got some pages, continue with what we have
                         break
                     else:
-                        QMessageBox.warning(self, "Error", f"Last.fm API error: {data.get('message', 'Unknown error')}")
+                        # Show error safely
+                        if show_dialogs:
+                            from PyQt6.QtWidgets import QMessageBox
+                            from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                            
+                            error_msg = f"Last.fm API error: {data.get('message', 'Unknown error')}"
+                            
+                            def show_error():
+                                QMessageBox.warning(self, "Error", error_msg)
+                            
+                            # Verificar si estamos en el hilo principal
+                            if QThread.currentThread() == QCoreApplication.instance().thread():
+                                show_error()
+                            else:
+                                # Si no estamos en el hilo principal, programar para el hilo principal
+                                QTimer.singleShot(0, show_error)
                         return False
                 
                 # Get total pages if first request
@@ -297,12 +698,24 @@ def sync_lastfm_scrobbles(self):
                     # If no new scrobbles were found, we can finish early
                     if total_results == 0:
                         self.log("No new scrobbles to synchronize")
-                        progress.setValue(100)
-                        QMessageBox.information(
-                            self,
-                            "Sync Complete", 
-                            f"No new scrobbles found for {self.lastfm_username} since last update."
-                        )
+                        update_progress(100, "No new scrobbles found")
+                        
+                        # Show completion message safely
+                        if show_dialogs:
+                            from PyQt6.QtWidgets import QMessageBox
+                            from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                            
+                            completion_msg = f"No new scrobbles found for {self.lastfm_username} since last update."
+                            
+                            def show_completion():
+                                QMessageBox.information(self, "Sync Complete", completion_msg)
+                            
+                            # Verificar si estamos en el hilo principal
+                            if QThread.currentThread() == QCoreApplication.instance().thread():
+                                show_completion()
+                            else:
+                                # Si no estamos en el hilo principal, programar para el hilo principal
+                                QTimer.singleShot(0, show_completion)
                         return True
                     
                     # We found some new scrobbles
@@ -345,7 +758,7 @@ def sync_lastfm_scrobbles(self):
                 
                 # Update progress
                 progress_value = 20 + int(70 * (page / (total_pages or 1)))  # Avoid division by zero
-                progress.setValue(progress_value)
+                update_progress(progress_value, f"Procesando página {page} de {total_pages}...")
                 
                 # Next page
                 page += 1
@@ -357,7 +770,7 @@ def sync_lastfm_scrobbles(self):
                 break
         
         # Update progress to 90%
-        progress.setValue(90)
+        update_progress(90, "Guardando scrobbles en la base de datos...")
         
         # Save directly to DB
         if all_scrobbles:
@@ -427,176 +840,326 @@ def sync_lastfm_scrobbles(self):
                 self.log(f"Error updating cache: {str(e)}")
                 import traceback
                 self.log(traceback.format_exc())
-            
-            # Skip menu population for now to avoid errors
+
             try:
-                # Initialize an empty years_dict
+                # Obtener TODOS los años y meses de la base de datos actualizada
+                table_name = f"scrobbles_{self.lastfm_username}"
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
                 years_dict = {}
                 
-                # Process scrobbles into years_dict structure
-                for scrobble in all_scrobbles:
-                    timestamp = scrobble.get('timestamp')
-                    if not timestamp:
+                cursor.execute(f"""
+                SELECT 
+                    CAST(strftime('%Y', datetime(timestamp, 'unixepoch')) AS INTEGER) as year,
+                    COUNT(*) as count
+                FROM {table_name}
+                WHERE timestamp > 0
+                GROUP BY year
+                ORDER BY year DESC
+                """)
+                
+                years_results = cursor.fetchall()
+                
+                for year_row in years_results:
+                    if not year_row[0]:
                         continue
                         
-                    try:
-                        from datetime import datetime
-                        date = datetime.fromtimestamp(int(timestamp))
-                        year = date.year
-                        month = date.month
+                    year = year_row[0]
+                    count = year_row[1]
+                    
+                    if count > 0:
+                        years_dict[year] = set()
                         
-                        if year not in years_dict:
-                            years_dict[year] = set()
+                        # Obtener meses para este año
+                        cursor.execute(f"""
+                        SELECT 
+                            CAST(strftime('%m', datetime(timestamp, 'unixepoch')) AS INTEGER) as month,
+                            COUNT(*) as count
+                        FROM {table_name}
+                        WHERE timestamp > 0 
+                        AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+                        GROUP BY month
+                        ORDER BY month
+                        """, (str(year),))
                         
-                        years_dict[year].add(month)
-                    except Exception as e:
-                        self.log(f"Error processing timestamp for menus: {e}")
+                        months_results = cursor.fetchall()
+                        
+                        for month_row in months_results:
+                            if not month_row[0]:
+                                continue
+                                
+                            month = month_row[0]
+                            month_count = month_row[1]
+                            
+                            if month_count > 0:
+                                years_dict[year].add(month)
                 
-                # Only try to populate menus if we have years_dict with data
+                conn.close()
+                
+                # Actualizar menús con TODOS los datos de forma segura
                 if years_dict:
-                    populate_scrobbles_time_menus(self, years_dict=years_dict)
+                    # Verificar si estamos en el hilo principal
+                    from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                    
+                    if QThread.currentThread() == QCoreApplication.instance().thread():
+                        # Estamos en el hilo principal, podemos actualizar directamente
+                        populate_scrobbles_time_menus(self, years_dict=years_dict)
+                        self.log(f"Menús actualizados con {len(years_dict)} años total después de sincronización")
+                    else:
+                        # No estamos en el hilo principal, programar para el hilo principal
+                        self._pending_years_dict = years_dict
+                        QTimer.singleShot(0, lambda: populate_scrobbles_time_menus(self, years_dict=self._pending_years_dict))
+                        self.log(f"Programada actualización de menús con {len(years_dict)} años")
+                    
             except Exception as e:
-                self.log(f"Error handling menu population: {str(e)}")
+                self.log(f"Error actualizando menús después de sincronización: {str(e)}")
                 import traceback
                 self.log(traceback.format_exc())
-        
+
             # Complete progress
-            progress.setValue(100)
+            update_progress(100, f"Sincronización completada. Añadidos {saved_count} scrobbles.")
             
-            QMessageBox.information(
-                self,
-                "Sync Complete", 
-                f"Synchronized Last.fm scrobbles for {self.lastfm_username}.\n\n" +
-                f"Added {saved_count} new scrobbles."
-            )
+            # Show completion message safely
+            if show_dialogs:
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                
+                completion_msg = f"Synchronized Last.fm scrobbles for {self.lastfm_username}.\n\n" + \
+                                 f"Added {saved_count} new scrobbles."
+                
+                def show_completion():
+                    QMessageBox.information(self, "Sync Complete", completion_msg)
+                
+                # Verificar si estamos en el hilo principal
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    show_completion()
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, show_completion)
             
             return True
         elif new_scrobbles_found:
             # We found tracks but couldn't process them
-            progress.setValue(100)
-            QMessageBox.warning(
-                self,
-                "Sync Issue", 
-                f"Found scrobbles for {self.lastfm_username} but couldn't process them."
-            )
+            update_progress(100, "Scrobbles encontrados pero no se pudieron procesar.")
+            
+            # Show warning safely
+            if show_dialogs:
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                
+                warning_msg = f"Found scrobbles for {self.lastfm_username} but couldn't process them."
+                
+                def show_warning():
+                    QMessageBox.warning(self, "Sync Issue", warning_msg)
+                # Verificar si estamos en el hilo principal
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    show_warning()
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, show_warning)
+            
             return False
         else:
             # No new scrobbles at all
-            progress.setValue(100)
-            QMessageBox.information(
-                self,
-                "Sync Complete", 
-                f"No new scrobbles found for {self.lastfm_username} since last update."
-            )
+            update_progress(100, "No hay nuevos scrobbles.")
+            
+            # Show info safely
+            if show_dialogs:
+                from PyQt6.QtWidgets import QMessageBox
+                from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+                
+                info_msg = f"No new scrobbles found for {self.lastfm_username} since last update."
+                
+                def show_info():
+                    QMessageBox.information(self, "Sync Complete", info_msg)
+                
+                # Verificar si estamos en el hilo principal
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    show_info()
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    QTimer.singleShot(0, show_info)
+            
             return True
     except Exception as e:
         self.log(f"Error synchronizing Last.fm scrobbles: {str(e)}")
         import traceback
         self.log(traceback.format_exc())
-        QMessageBox.warning(self, "Error", f"Error synchronizing Last.fm scrobbles: {str(e)}")
+        
+        # Show error safely
+        if show_dialogs:
+            from PyQt6.QtWidgets import QMessageBox
+            from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+            
+            error_msg = f"Error synchronizing Last.fm scrobbles: {str(e)}"
+            
+            def show_error():
+                QMessageBox.warning(self, "Error", error_msg)
+            
+            # Verificar si estamos en el hilo principal
+            if QThread.currentThread() == QCoreApplication.instance().thread():
+                show_error()
+            else:
+                # Si no estamos en el hilo principal, programar para el hilo principal
+                QTimer.singleShot(0, show_error)
+        
         return False
 
-def extract_link_from_lastfm(self, lastfm_url, service):
-    """Extract service link from a Last.fm page"""
-    try:
-        # Check if we have BeautifulSoup
-        try:
-            from bs4 import BeautifulSoup
-        except ImportError:
-            self.log("BeautifulSoup not installed, cannot extract links")
-            return None
-            
-        # Make request to Last.fm page
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
-        response = requests.get(lastfm_url, headers=headers, timeout=10)
-        
-        if response.status_code != 200:
-            return None
-            
-        # Parse the HTML
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Service-specific extractors
-        if service == 'youtube':
-            return extract_youtube_from_lastfm_soup(soup)
-        elif service == 'spotify':
-            return extract_spotify_from_lastfm_soup(soup)
-        elif service == 'bandcamp':
-            return extract_bandcamp_from_lastfm_soup(soup)
-        elif service == 'soundcloud':
-            return extract_soundcloud_from_lastfm_soup(soup)
-        else:
-            return None
-            
-    except Exception as e:
-        self.log(f"Error extracting {service} link from Last.fm: {str(e)}")
-        return None
 
-def extract_youtube_from_lastfm_soup(soup):
-    """Extract YouTube URL from a Last.fm page soup"""
-    try:
-        # Try different methods to find YouTube links
-        
-        # Method 1: Look for elements with data-youtube-id or data-youtube-url
-        youtube_elements = soup.select('[data-youtube-id], [data-youtube-url]')
-        for element in youtube_elements:
-            if 'data-youtube-url' in element.attrs:
-                return element['data-youtube-url']
-            elif 'data-youtube-id' in element.attrs:
-                return f"https://www.youtube.com/watch?v={element['data-youtube-id']}"
-        
-        # Method 2: Look for standard YouTube links
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            if 'youtube.com/watch' in href or 'youtu.be/' in href:
-                return href
-        
-        return None
-    except Exception as e:
-        self.log(f"Error extracting YouTube from soup: {str(e)}")
-        return None
 
-def extract_spotify_from_lastfm_soup(soup):
-    """Extract Spotify URL from a Last.fm page soup"""
-    try:
-        # Look for Spotify links
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            if 'open.spotify.com' in href:
-                return href
+# def extract_youtube_from_lastfm_soup(self, soup, lastfm_url):
+#     """Extract YouTube URL from a Last.fm page soup with multiple strategies"""
+#     try:
+#         self.log("Searching for YouTube links in Last.fm page...")
         
-        return None
-    except Exception as e:
-        self.log(f"Error extracting Spotify from soup: {str(e)}")
-        return None
+#         # Strategy 1: Look for data-youtube-id and data-youtube-url attributes
+#         youtube_elements = soup.find_all(attrs={'data-youtube-id': True})
+#         for element in youtube_elements:
+#             youtube_id = element.get('data-youtube-id')
+#             if youtube_id:
+#                 youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+#                 self.log(f"Found YouTube ID via data-youtube-id: {youtube_id}")
+#                 return youtube_url
+        
+#         youtube_elements = soup.find_all(attrs={'data-youtube-url': True})
+#         for element in youtube_elements:
+#             youtube_url = element.get('data-youtube-url')
+#             if youtube_url and ('youtube.com/watch' in youtube_url or 'youtu.be/' in youtube_url):
+#                 self.log(f"Found YouTube URL via data-youtube-url: {youtube_url}")
+#                 return youtube_url
+        
+#         # Strategy 2: Look for standard YouTube links in href attributes
+#         for link in soup.find_all('a', href=True):
+#             href = link['href']
+#             if 'youtube.com/watch' in href or 'youtu.be/' in href:
+#                 # Convert relative URLs to absolute
+#                 if href.startswith('/'):
+#                     href = urljoin('https://youtube.com', href)
+#                 elif href.startswith('//'):
+#                     href = 'https:' + href
+                    
+#                 self.log(f"Found YouTube URL via href: {href}")
+#                 return href
+        
+#         # Strategy 3: Look for YouTube URLs in onclick attributes or JavaScript
+#         onclick_elements = soup.find_all(attrs={'onclick': True})
+#         for element in onclick_elements:
+#             onclick = element.get('onclick', '')
+#             youtube_match = re.search(r'youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', onclick)
+#             if youtube_match:
+#                 youtube_id = youtube_match.group(1)
+#                 youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+#                 self.log(f"Found YouTube ID via onclick: {youtube_id}")
+#                 return youtube_url
+        
+#         # Strategy 4: Search in script tags for YouTube references
+#         script_tags = soup.find_all('script')
+#         for script in script_tags:
+#             if script.string:
+#                 # Look for YouTube video IDs in JavaScript
+#                 youtube_matches = re.findall(r'youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', script.string)
+#                 if youtube_matches:
+#                     youtube_id = youtube_matches[0]  # Take the first match
+#                     youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+#                     self.log(f"Found YouTube ID in script: {youtube_id}")
+#                     return youtube_url
+                    
+#                 # Look for YouTube video IDs in a different format
+#                 youtube_id_matches = re.findall(r'"([a-zA-Z0-9_-]{11})"', script.string)
+#                 for potential_id in youtube_id_matches:
+#                     # YouTube video IDs are typically 11 characters
+#                     if len(potential_id) == 11 and re.match(r'^[a-zA-Z0-9_-]+$', potential_id):
+#                         youtube_url = f"https://www.youtube.com/watch?v={potential_id}"
+#                         self.log(f"Found potential YouTube ID in script: {potential_id}")
+#                         return youtube_url
+        
+#         self.log("No YouTube links found in Last.fm page")
+#         return None
+        
+#     except Exception as e:
+#         self.log(f"Error extracting YouTube from soup: {str(e)}")
+#         import traceback
+#         self.log(traceback.format_exc())
+#         return None
 
-def extract_bandcamp_from_lastfm_soup(soup):
-    """Extract Bandcamp URL from a Last.fm page soup"""
-    try:
-        # Look for Bandcamp links
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            if 'bandcamp.com' in href:
-                return href
+# def extract_spotify_from_lastfm_soup(self, soup, lastfm_url):
+#     """Extract Spotify URL from a Last.fm page soup"""
+#     try:
+#         self.log("Searching for Spotify links in Last.fm page...")
         
-        return None
-    except Exception as e:
-        self.log(f"Error extracting Bandcamp from soup: {str(e)}")
-        return None
+#         # Strategy 1: Look for data-spotify-id or similar attributes
+#         spotify_elements = soup.find_all(attrs={'data-spotify-id': True})
+#         for element in spotify_elements:
+#             spotify_id = element.get('data-spotify-id')
+#             if spotify_id:
+#                 spotify_url = f"https://open.spotify.com/track/{spotify_id}"
+#                 self.log(f"Found Spotify ID via data-spotify-id: {spotify_id}")
+#                 return spotify_url
+        
+#         # Strategy 2: Look for Spotify links in href attributes
+#         for link in soup.find_all('a', href=True):
+#             href = link['href']
+#             if 'open.spotify.com' in href:
+#                 self.log(f"Found Spotify URL via href: {href}")
+#                 return href
+        
+#         # Strategy 3: Look in script tags for Spotify references
+#         script_tags = soup.find_all('script')
+#         for script in script_tags:
+#             if script.string:
+#                 spotify_matches = re.findall(r'open\.spotify\.com/track/([a-zA-Z0-9]+)', script.string)
+#                 if spotify_matches:
+#                     spotify_id = spotify_matches[0]
+#                     spotify_url = f"https://open.spotify.com/track/{spotify_id}"
+#                     self.log(f"Found Spotify ID in script: {spotify_id}")
+#                     return spotify_url
+        
+#         self.log("No Spotify links found in Last.fm page")
+#         return None
+        
+#     except Exception as e:
+#         self.log(f"Error extracting Spotify from soup: {str(e)}")
+#         return None
 
-def extract_soundcloud_from_lastfm_soup(soup):
-    """Extract SoundCloud URL from a Last.fm page soup"""
-    try:
-        # Look for SoundCloud links
-        for link in soup.find_all('a', href=True):
-            href = link['href']
-            if 'soundcloud.com' in href:
-                return href
+# def extract_bandcamp_from_lastfm_soup(self, soup, lastfm_url):
+#     """Extract Bandcamp URL from a Last.fm page soup"""
+#     try:
+#         self.log("Searching for Bandcamp links in Last.fm page...")
         
-        return None
-    except Exception as e:
-        self.log(f"Error extracting SoundCloud from soup: {str(e)}")
-        return None
+#         # Look for Bandcamp links
+#         for link in soup.find_all('a', href=True):
+#             href = link['href']
+#             if 'bandcamp.com' in href and '/track/' in href:
+#                 self.log(f"Found Bandcamp URL via href: {href}")
+#                 return href
+        
+#         self.log("No Bandcamp links found in Last.fm page")
+#         return None
+        
+#     except Exception as e:
+#         self.log(f"Error extracting Bandcamp from soup: {str(e)}")
+#         return None
+
+# def extract_soundcloud_from_lastfm_soup(self, soup, lastfm_url):
+#     """Extract SoundCloud URL from a Last.fm page soup"""
+#     try:
+#         self.log("Searching for SoundCloud links in Last.fm page...")
+        
+#         # Look for SoundCloud links
+#         for link in soup.find_all('a', href=True):
+#             href = link['href']
+#             if 'soundcloud.com' in href and not href.endswith('/soundcloud.com'):
+#                 self.log(f"Found SoundCloud URL via href: {href}")
+#                 return href
+        
+#         self.log("No SoundCloud links found in Last.fm page")
+#         return None
+        
+#     except Exception as e:
+#         self.log(f"Error extracting SoundCloud from soup: {str(e)}")
+#         return None
+
 
 
 def load_lastfm_scrobbles_period(self, period):
@@ -614,7 +1177,10 @@ def load_lastfm_scrobbles_period(self, period):
         start_time = 0
         title = ""
 
-        if period == "week":
+        if period == "24h":  # NUEVA OPCIÓN
+            start_time = current_time - (24 * 60 * 60)  # 24 horas
+            title = "Últimas 24 horas"
+        elif period == "week":
             start_time = current_time - (7 * 24 * 60 * 60)  # 7 days
             title = "Última semana"
         elif period == "month":
@@ -661,6 +1227,10 @@ def load_lastfm_scrobbles_period(self, period):
             from PyQt6.QtWidgets import QMessageBox
             QMessageBox.information(self, "No Data", f"No scrobbles found for {title}. Try syncing first.")
             return False
+        
+        # Add a flag to indicate if this is 24h data (to show time in display)
+        for scrobble in scrobbles:
+            scrobble['show_time'] = (period == "24h")
         
         # Display in tree
         from modules.submodules.url_playlist.lastfm_db import display_scrobbles_in_tree
@@ -805,243 +1375,22 @@ def load_lastfm_scrobbles_year(self, year):
         return False
 
 
-def display_scrobbles_in_tree(parent_instance, scrobbles, title):
-    """Display scrobbles in the tree widget with improved organization"""
-    try:
-        # Clear the tree
-        parent_instance.treeWidget.clear()
-        
-        # Check if we have scrobbles
-        if not scrobbles:
-            parent_instance.log("No scrobbles to display")
-            return False
-        
-        # Import required classes
-        from PyQt6.QtWidgets import QTreeWidgetItem
-        from PyQt6.QtCore import Qt
-        from PyQt6.QtGui import QIcon
-        
-        # Check if we need to reorganize by play count
-        by_play_count = not getattr(parent_instance, 'scrobbles_by_date', True)
-        parent_instance.log(f"Displaying scrobbles by {'play count' if by_play_count else 'date'}")
-        
-        # Create root item
-        root_item = QTreeWidgetItem(parent_instance.treeWidget)
-        root_title = f"{'Top Tracks' if by_play_count else 'Scrobbles'}: {title}"
-        root_item.setText(0, root_title)
-        root_item.setText(1, getattr(parent_instance, 'lastfm_username', 'Unknown User'))
-        root_item.setText(2, "Last.fm")
-        
-        # Format as bold
-        font = root_item.font(0)
-        font.setBold(True)
-        root_item.setFont(0, font)
-        
-        # Add icon
-        root_item.setIcon(0, QIcon(":/services/lastfm"))
-        
-        # Set column headers based on display mode
-        if by_play_count:
-            parent_instance.treeWidget.headerItem().setText(3, "Reproducciones")
-            parent_instance.treeWidget.headerItem().setText(4, "Primer Play")
-        else:
-            parent_instance.treeWidget.headerItem().setText(3, "Álbum")
-            parent_instance.treeWidget.headerItem().setText(4, "Fecha")
-        
-        # Process scrobbles based on display mode
-        if by_play_count:
-            # Group by artist and title
-            play_counts = {}
-            for scrobble in scrobbles:
-                # Get fields, supporting both naming conventions
-                artist = scrobble.get('artist', scrobble.get('artist_name', ''))
-                title = scrobble.get('title', scrobble.get('name', ''))
-                album = scrobble.get('album', scrobble.get('album_name', ''))
-                
-                if not artist or not title:
-                    continue
-                
-                key = f"{artist.lower()}|{title.lower()}"
-                if key not in play_counts:
-                    play_counts[key] = {
-                        'artist': artist,
-                        'title': title,
-                        'album': album,
-                        'count': 0,
-                        'timestamps': []
-                    }
-                    
-                    # Copy all service URLs
-                    for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
-                        service_url_key = f'{service}_url'
-                        if service_url_key in scrobble and scrobble[service_url_key]:
-                            play_counts[key][service_url_key] = scrobble[service_url_key]
-                
-                play_counts[key]['count'] += 1
-                
-                # Add timestamp if available
-                timestamp = scrobble.get('timestamp')
-                if timestamp:
-                    try:
-                        timestamp = int(timestamp)
-                        play_counts[key]['timestamps'].append(timestamp)
-                    except (ValueError, TypeError):
-                        pass
-            
-            # Convert to list and sort by play count
-            sorted_tracks = sorted(
-                play_counts.values(), 
-                key=lambda x: x.get('count', 0), 
-                reverse=True
-            )
-            
-            # Add tracks with limit
-            max_tracks = min(len(sorted_tracks), getattr(parent_instance, 'scrobbles_limit', 100))
-            for track in sorted_tracks[:max_tracks]:
-                # Create track item
-                track_item = QTreeWidgetItem(root_item)
-                track_item.setText(0, track['title'])
-                track_item.setText(1, track['artist'])
-                track_item.setText(2, "Track")
-                track_item.setText(3, str(track.get('count', 0)))
-                
-                # Format first play date if we have timestamps
-                if track.get('timestamps'):
-                    import time
-                    try:
-                        first_play = min(track['timestamps'])
-                        date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
-                        track_item.setText(4, date_str)
-                    except:
-                        track_item.setText(4, "Unknown")
-                
-                # Store data for playback
-                track_data = {
-                    'title': track['title'],
-                    'artist': track['artist'],
-                    'album': track.get('album', ''),
-                    'type': 'track',
-                    'source': 'lastfm',
-                    'origen': 'scrobble'  # Add the origen field for database consistency
-                }
-                
-                # Add service URLs if available
-                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
-                    service_url_key = f'{service}_url'
-                    if service_url_key in track:
-                        track_data[service_url_key] = track[service_url_key]
-                
-                # Set data on the item
-                track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
-                
-                # Set icon based on available URLs
-                icon_set = False
-                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
-                    service_url_key = f'{service}_url'
-                    if service_url_key in track and track[service_url_key]:
-                        track_item.setIcon(0, QIcon(f":/services/{service}"))
-                        icon_set = True
-                        break
-                
-                # Default to Last.fm icon if no other service icons available
-                if not icon_set:
-                    track_item.setIcon(0, QIcon(":/services/lastfm"))
-        else:
-            # Display chronologically (by date)
-            import time
-            
-            # Sort by timestamp (newest first)
-            def get_timestamp(s):
-                try:
-                    return int(s.get('timestamp', 0))
-                except (ValueError, TypeError):
-                    return 0
-                
-            sorted_scrobbles = sorted(scrobbles, key=get_timestamp, reverse=True)
-            
-            # Add tracks chronologically with limit
-            max_scrobbles = min(len(sorted_scrobbles), getattr(parent_instance, 'scrobbles_limit', 100))
-            for scrobble in sorted_scrobbles[:max_scrobbles]:
-                # Get fields, supporting both naming conventions
-                artist = scrobble.get('artist', scrobble.get('artist_name', ''))
-                title = scrobble.get('title', scrobble.get('name', ''))
-                album = scrobble.get('album', scrobble.get('album_name', ''))
-                timestamp = scrobble.get('timestamp', 0)
-                
-                if not artist or not title:
-                    continue
-                
-                # Create track item
-                track_item = QTreeWidgetItem(root_item)
-                track_item.setText(0, title)
-                track_item.setText(1, artist)
-                track_item.setText(2, "Track")
-                
-                if album:
-                    track_item.setText(3, album)
-                
-                # Format date
-                if timestamp:
-                    try:
-                        date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(int(timestamp)))
-                        track_item.setText(4, date_str)
-                    except (ValueError, TypeError, OverflowError):
-                        track_item.setText(4, "Unknown date")
-                
-                # Store data for playback
-                track_data = {
-                    'title': title,
-                    'artist': artist,
-                    'album': album,
-                    'type': 'track',
-                    'source': 'lastfm',
-                    'origen': 'scrobble',  # Add origen field
-                    'timestamp': timestamp
-                }
-                
-                # Add service URLs if available
-                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
-                    service_url_key = f'{service}_url'
-                    if service_url_key in scrobble:
-                        track_data[service_url_key] = scrobble[service_url_key]
-                
-                track_item.setData(0, Qt.ItemDataRole.UserRole, track_data)
-                
-                # Set icon based on available URLs
-                icon_set = False
-                for service in ['youtube', 'spotify', 'bandcamp', 'soundcloud']:
-                    service_url_key = f'{service}_url'
-                    if service_url_key in scrobble and scrobble[service_url_key]:
-                        track_item.setIcon(0, QIcon(f":/services/{service}"))
-                        icon_set = True
-                        break
-                
-                # Default to Last.fm icon if no other service icons available
-                if not icon_set:
-                    track_item.setIcon(0, QIcon(":/services/lastfm"))
-        
-        # Expand the root item to show all scrobbles
-        root_item.setExpanded(True)
-        
-        # Store the displayed data for reference
-        parent_instance.current_scrobbles_data = scrobbles
-        
-        # Log summary
-        scrobble_count = root_item.childCount()
-        parent_instance.log(f"Displayed {scrobble_count} scrobbles for {title}")
-        
-        return True
-    except Exception as e:
-        parent_instance.log(f"Error displaying scrobbles: {str(e)}")
-        import traceback
-        parent_instance.log(traceback.format_exc())
-        return False
-
 
 
 def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
     """Populate the year and month menus based on available scrobbles in database"""
     try:
+        # Verificar que estamos en el hilo principal
+        from PyQt6.QtCore import QThread, QCoreApplication, QTimer
+        
+        if QThread.currentThread() != QCoreApplication.instance().thread():
+            # Si no estamos en el hilo principal, guardar datos y programar
+            self._pending_populate_data = (scrobbles, years_dict)
+            QTimer.singleShot(0, lambda: self._safe_populate_menus())
+            return True
+            
+        # Continuamos solo si estamos en el hilo principal
+        
         # Gather menu references
         menus_to_update = []
         
@@ -1106,7 +1455,7 @@ def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
                         try:
                             cursor.execute(f"""
                             SELECT strftime('%Y', datetime(timestamp, 'unixepoch', 'localtime')) as year, 
-                                   COUNT(*) as count
+                                COUNT(*) as count
                             FROM {table_name}
                             WHERE timestamp > 0
                             GROUP BY year
@@ -1128,10 +1477,10 @@ def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
                                         # Get months for this year
                                         cursor.execute(f"""
                                         SELECT strftime('%m', datetime(timestamp, 'unixepoch', 'localtime')) as month,
-                                               COUNT(*) as count
+                                            COUNT(*) as count
                                         FROM {table_name}
                                         WHERE timestamp > 0 
-                                          AND strftime('%Y', datetime(timestamp, 'unixepoch', 'localtime')) = ?
+                                        AND strftime('%Y', datetime(timestamp, 'unixepoch', 'localtime')) = ?
                                         GROUP BY month
                                         ORDER BY month
                                         """, (str(year),))
@@ -1261,6 +1610,20 @@ def populate_scrobbles_time_menus(self, scrobbles=None, years_dict=None):
         self.log(traceback.format_exc())
         return False
 
+def _safe_populate_menus(self):
+    """Versión segura para poblar menús en el hilo principal"""
+    try:
+        # Recuperar datos pendientes
+        scrobbles, years_dict = getattr(self, '_pending_populate_data', (None, None))
+        # Limpiar datos pendientes
+        if hasattr(self, '_pending_populate_data'):
+            del self._pending_populate_data
+            
+        # Llamar a la función original ahora que estamos en el hilo principal
+        populate_scrobbles_time_menus(self, scrobbles, years_dict)
+    except Exception as e:
+        self.log(f"Error en _safe_populate_menus: {str(e)}")
+
 
 def get_track_links_from_db(self, artist, title, album=None):
     """Get track links from the database"""
@@ -1343,18 +1706,30 @@ def setup_scrobbles_menu(self):
         # Set the menu for the button
         self.scrobbles_button.setMenu(self.scrobbles_menu)
 
-        # Intentar cargar datos inmediatamente
-        def init_menus():
+        # Asegurarnos de que los menús se carguen inmediatamente
+        def load_existing_data():
             try:
-                force_load_scrobbles_data_from_db(self)
+                # Verificar que estamos en el hilo principal
+                from PyQt6.QtCore import QThread, QCoreApplication
+                if QThread.currentThread() == QCoreApplication.instance().thread():
+                    # Intentar cargar datos existentes directamente
+                    force_load_scrobbles_data_from_db(self)
+                    
+                    # Como respaldo, intentar también llenar los menús directamente
+                    if hasattr(self, 'db_path') and os.path.exists(self.db_path):
+                        years_dict = load_years_months_from_db_direct(self)
+                        if years_dict:
+                            populate_scrobbles_time_menus(self, years_dict=years_dict)
+                else:
+                    # Si no estamos en el hilo principal, programar para el hilo principal
+                    from PyQt6.QtCore import QTimer
+                    QTimer.singleShot(0, load_existing_data)
             except Exception as e:
-                self.log(f"Error in initial scrobbles data load: {str(e)}")
-                import traceback
-                self.log(traceback.format_exc())
+                self.log(f"Error loading existing scrobbles data: {str(e)}")
 
         # Usar QTimer para asegurar que la UI esté lista
         from PyQt6.QtCore import QTimer
-        QTimer.singleShot(100, init_menus)
+        QTimer.singleShot(500, load_existing_data)  # Aumentar el delay a 500ms
 
         self.log("Scrobbles menu set up")
         return True
@@ -1364,6 +1739,105 @@ def setup_scrobbles_menu(self):
         self.log(traceback.format_exc())
         return False
 
+
+def load_years_months_from_db_direct(self):
+    """
+    Cargar directamente años y meses desde la base de datos sin usar hilos
+    """
+    try:
+        import sqlite3
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        years_dict = {}
+        
+        # Buscar todas las tablas de scrobbles
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND (name LIKE 'scrobbles_%' OR name = 'scrobbles')")
+        all_tables = cursor.fetchall()
+        scrobbles_tables = [row[0] for row in all_tables]
+        
+        self.log(f"Found tables: {', '.join(scrobbles_tables)}")
+        
+        # Priorizar la tabla del usuario actual
+        user = getattr(self, 'lastfm_username', 'paqueradejere')
+        user_table = f"scrobbles_{user}"
+        
+        if user_table in scrobbles_tables:
+            table_name = user_table
+        elif "scrobbles_paqueradejere" in scrobbles_tables:
+            table_name = "scrobbles_paqueradejere"
+        elif scrobbles_tables:
+            table_name = scrobbles_tables[0]
+        else:
+            self.log("No scrobbles tables found")
+            conn.close()
+            return {}
+        
+        self.log(f"Using scrobbles table: {table_name}")
+        
+        # Verificar que tiene timestamp
+        cursor.execute(f"PRAGMA table_info({table_name})")
+        columns = [row[1] for row in cursor.fetchall()]
+        
+        if 'timestamp' not in columns:
+            self.log(f"Table {table_name} has no timestamp column")
+            conn.close()
+            return {}
+        
+        # Obtener años
+        cursor.execute(f"""
+        SELECT strftime('%Y', datetime(timestamp, 'unixepoch')) as year, COUNT(*) as count
+        FROM {table_name}
+        WHERE timestamp > 0
+        GROUP BY year
+        ORDER BY year DESC
+        """)
+        
+        years_results = cursor.fetchall()
+        
+        for year_row in years_results:
+            if not year_row[0]:
+                continue
+                
+            try:
+                year = int(year_row[0])
+                count = year_row[1]
+                
+                if count > 0:
+                    years_dict[year] = set()
+                    
+                    # Obtener meses para este año
+                    cursor.execute(f"""
+                    SELECT strftime('%m', datetime(timestamp, 'unixepoch')) as month, COUNT(*) as count
+                    FROM {table_name}
+                    WHERE timestamp > 0 
+                    AND strftime('%Y', datetime(timestamp, 'unixepoch')) = ?
+                    GROUP BY month
+                    ORDER BY month
+                    """, (str(year),))
+                    
+                    months_results = cursor.fetchall()
+                    
+                    for month_row in months_results:
+                        if month_row[1] > 0:
+                            try:
+                                month = int(month_row[0])
+                                years_dict[year].add(month)
+                            except (ValueError, TypeError):
+                                pass
+            except (ValueError, TypeError):
+                pass
+        
+        conn.close()
+        
+        self.log(f"Loaded {len(years_dict)} years with months from database")
+        return years_dict
+        
+    except Exception as e:
+        self.log(f"Error in load_years_months_from_db_direct: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+        return {}
 
 def connect_lastfm_controls(self):
     """Connect Last.fm controls (slider and spinbox) bidirectionally"""
@@ -2263,7 +2737,7 @@ def _execute_load_scrobbles_db(self):
             
             # Define a function to run in the main thread
             def update_menus_in_main_thread():
-                from modules.submodules.url_playlist.lastfm_manager import populate_scrobbles_time_menus
+                
                 populate_scrobbles_time_menus(self, years_dict=self._pending_years_dict)
             
             # Schedule it to run in the main thread
@@ -2433,8 +2907,8 @@ def load_years_months_from_db(self):
                 self.log(traceback.format_exc())
         
         # Check if we're in the main thread
-        from PyQt6.QtCore import QThread, QTimer
-        if QThread.currentThread() == QApplication.instance().thread():
+        from PyQt6.QtCore import QThread, QTimer, QCoreApplication
+        if QThread.currentThread() == QCoreApplication.instance().thread():
             # We're in the main thread, update menus directly
             update_lastfm_menus_with_data()
             return True
@@ -2443,8 +2917,10 @@ def load_years_months_from_db(self):
             # Store the data as an instance variable for access in the main thread
             self._pending_years_months = years_months
             
-            # Schedule execution in the main thread
-            QTimer.singleShot(0, update_lastfm_menus_with_data)
+            # SOLUCIÓN: Usar movido a contexto de método para evitar captura de 'self'
+            QMetaObject.invokeMethod(QCoreApplication.instance(), 
+                                     lambda: update_lastfm_menus_with_data(),
+                                     Qt.ConnectionType.QueuedConnection)
             return True
         
     except Exception as e:

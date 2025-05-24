@@ -11,11 +11,13 @@ import json
 import requests
 from urllib.parse import urljoin
 from functools import lru_cache
+import random
 
 # Importar PlayerManager para usar MPV
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from tools.player_manager import PlayerManager
+from base_module import PROJECT_ROOT
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -72,14 +74,48 @@ class ListenBrainzPlayer(QObject):
         self.player.playbackStateChanged.connect(self.on_playback_state_changed)
         self.player.errorOccurred.connect(self.on_player_error)
         
-        # Instanciar PlayerManager para usar MPV con YouTube
-        self.player_manager = PlayerManager(config=self.config, parent=self, logger=self.log_message)
+        # MODIFICACIÓN: Crear configuración específica para forzar mpv_no_video
+        mpv_config = {}
+        
+        # Crear configuración específica para mpv_no_video basada en el config original
+        if 'music_players' in self.config:
+            mpv_config['music_players'] = self.config['music_players'].copy()
+            
+            # Forzar el uso de mpv_no_video para este reproductor
+            mpv_config['music_players']['selected_player'] = {
+                'url_enlaces': 'mpv_no_video'
+            }
+            
+            logger.info("Forzando uso de mpv_no_video para ListenBrainzPlayer")
+        else:
+            mpv_socket = os.path.expanduser(f"{PROJECT_ROOT}/.content/mpv/_mpv_socket")
+            args = f"--no-video --input-ipc-server={mpv_socket}"
+            # Configuración por defecto si no existe music_players
+            mpv_config['music_players'] = {
+                'selected_player': {
+                    'url_enlaces': 'mpv_no_video'
+                },
+                'installed_players': {
+                    'player_2': {
+                        'player_name': 'mpv_no_video',
+                        'player_path': '/usr/bin/mpv',
+                        'player_temp_dir': mpv_socket,
+                        'player_config': '.config/mpv/mpv.conf',
+                        'args': args,
+                    }
+                }
+            }
+            logger.info("Creando configuración por defecto para mpv_no_video")
+        
+        # Instanciar PlayerManager con la configuración modificada
+        self.player_manager = PlayerManager(config=mpv_config, parent=self, logger=self.log_message)
         
         # Conectar señales del player_manager
         self.player_manager.playback_started.connect(self.on_mpv_playback_started)
         self.player_manager.playback_stopped.connect(self.on_mpv_playback_stopped)
         self.player_manager.playback_error.connect(self.on_mpv_playback_error)
         self.player_manager.track_finished.connect(self.on_mpv_track_finished)
+        
         
         # Conectar a la base de datos
         self.connect_to_database()
@@ -767,7 +803,7 @@ class ListenBrainzPlayer(QObject):
             logger.error(f"Error al avanzar en la playlist: {e}")
             return False
 
-    def seek_random_position(self, percent_range=(5, 70)):
+    def seek_random_position(self, percent_range=(15, 70)):
         """
         Busca una posición aleatoria en la canción actual.
         
@@ -792,17 +828,13 @@ class ListenBrainzPlayer(QObject):
                 max_percent = float(max_percent)
             except (ValueError, TypeError):
                 logger.error("Valores de rango de porcentaje inválidos")
-                min_percent, max_percent = 5.0, 70.0
+                min_percent, max_percent = 15.0, 70.0
             
             # Generar un valor aleatorio dentro del rango
             random_percent = random.uniform(min_percent, max_percent)
             
-            # Formatear el valor para el comando MPV
-            # MPV acepta valores float así que no hay problema con decimales
-            percent_str = f"{random_percent:.1f}"
-            
             # Enviar comando para buscar a ese porcentaje
-            command = {"command": ["seek", percent_str, "absolute-percent"]}
+            command = {"command": ["seek", str(int(random_percent)), "absolute-percent"]}
             success = self.player_manager.send_command(command)
             
             if success:
@@ -822,25 +854,48 @@ class ListenBrainzPlayer(QObject):
             
             # Actualizar la interfaz
             if self.message_label:
-                self.message_label.setText("Reproduciendo canción...")
+                self.message_label.setText("Cargando canción...")
             if self.progress_bar:
-                self.progress_bar.setValue(50)
+                self.progress_bar.setValue(30)
             
             # Verificar si es una URL de YouTube - usar PlayerManager
             if 'youtube.com' in preview_url or 'youtu.be' in preview_url:
-                logger.info("Usando MPV para reproducir URL de YouTube (solo audio)")
+                logger.info("Usando MPV (modo sin video) para reproducir URL de YouTube")
                 self.using_mpv = True
                 self.current_youtube_url = preview_url
                 
-                # Configurar MPV para solo audio ANTES de reproducir
-                self.configure_mpv_audio_only()
+                # Verificar que el PlayerManager está configurado correctamente
+                if hasattr(self.player_manager, 'current_player'):
+                    current_player = self.player_manager.current_player
+                    if current_player:
+                        player_name = current_player.get('player_name', 'unknown')
+                        args = current_player.get('args', 'none')
+                        logger.info(f"Reproductor actual: {player_name}")
+                        logger.info(f"Argumentos del reproductor: {args}")
+                        
+                        # Verificar si tiene --no-video
+                        if '--no-video' not in args and '--vid=no' not in args:
+                            logger.warning("⚠️  ADVERTENCIA: El reproductor no tiene configurado --no-video")
+                            logger.warning("⚠️  Esto mostrará la ventana de video de YouTube")
+                            # Intentar forzar la configuración correcta
+                            self.force_mpv_no_video_config()
+                        else:
+                            logger.info("✓ Reproductor configurado correctamente para solo audio")
+                    else:
+                        logger.warning("No se encontró configuración de reproductor actual")
                 
                 # Usar PlayerManager para reproducir con MPV
                 success = self.player_manager.play(preview_url)
                 
-                # Si se inició correctamente, intentar establecer una posición aleatoria tras 2 segundos
                 if success:
-                    QTimer.singleShot(2000, lambda: self.seek_random_position())
+                    # Actualizar interfaz durante la carga
+                    if self.message_label:
+                        self.message_label.setText("Cargando audio (sin video)...")
+                    if self.progress_bar:
+                        self.progress_bar.setValue(70)
+                    
+                    # Programar posición aleatoria tras 4 segundos (más tiempo para carga)
+                    QTimer.singleShot(4000, self._delayed_seek_setup)
                 
                 return success
             else:
@@ -858,6 +913,40 @@ class ListenBrainzPlayer(QObject):
             logger.error(f"Error al reproducir: {e}")
             logger.error(traceback.format_exc())
             return False
+
+    def _delayed_seek_setup(self):
+        """Configuración retrasada para buscar posición aleatoria"""
+        try:
+            # Establecer posición aleatoria
+            self.seek_random_position()
+            
+            # Actualizar interfaz
+            if self.message_label:
+                self.message_label.setText("Reproduciendo audio...")
+            if self.progress_bar:
+                self.progress_bar.setValue(100)
+                
+        except Exception as e:
+            logger.error(f"Error en configuración retrasada: {e}")
+
+
+    def _delayed_setup(self):
+        """Configuración retrasada después de que MPV haya cargado el video"""
+        try:
+            # Reconfigurar para solo audio por si acaso
+            self.configure_mpv_audio_only()
+            
+            # Establecer posición aleatoria
+            self.seek_random_position()
+            
+            # Actualizar interfaz
+            if self.message_label:
+                self.message_label.setText("Reproduciendo audio...")
+            if self.progress_bar:
+                self.progress_bar.setValue(100)
+                
+        except Exception as e:
+            logger.error(f"Error en configuración retrasada: {e}")
 
 
     def send_command(self, command):
@@ -1182,6 +1271,144 @@ class ListenBrainzPlayer(QObject):
         """
         self.playback_duration = duration_seconds
         logger.info(f"Duración de reproducción establecida a {duration_seconds} segundos")
+
+
+
+    def configure_mpv_audio_only(self):
+        """Configura MPV para reproducir solo audio sin ventana de video"""
+        try:
+            if hasattr(self.player_manager, 'send_command'):
+                # Configurar MPV para solo audio
+                commands = [
+                    {"command": ["--no-video"]},
+                    {"command": ["set", "vid", "no"]},
+                    {"command": ["set", "force-window", "no"]},
+                    {"command": ["set", "terminal", "yes"]},
+                    {"command": ["set", "no-video", ""]},
+                ]
+                
+                for cmd in commands:
+                    self.player_manager.send_command(cmd)
+                    
+                logger.info("MPV configurado para solo audio")
+                return True
+        except Exception as e:
+            logger.error(f"Error al configurar MPV para solo audio: {e}")
+            return False
+
+    def create_game_playlist(self, song_count=100):
+        """
+        Crea una playlist de URLs para el juego con múltiples canciones.
+        
+        Args:
+            song_count: Número de canciones a incluir en la playlist
+            
+        Returns:
+            Lista de URLs válidas para el juego
+        """
+        try:
+            if not self.cursor:
+                logger.error("No hay conexión a la base de datos")
+                return []
+            
+            # Obtener canciones con URLs online disponibles
+            self.cursor.execute("""
+                SELECT DISTINCT s.id, s.title, s.artist, sl.youtube_url, sl.soundcloud_url, sl.bandcamp_url
+                FROM songs s
+                JOIN song_links sl ON s.id = sl.song_id
+                WHERE (sl.youtube_url IS NOT NULL AND sl.youtube_url != '')
+                OR (sl.soundcloud_url IS NOT NULL AND sl.soundcloud_url != '')
+                OR (sl.bandcamp_url IS NOT NULL AND sl.bandcamp_url != '')
+                ORDER BY RANDOM()
+                LIMIT ?
+            """, (song_count * 2,))  # Obtener el doble por si algunas URLs fallan
+            
+            results = self.cursor.fetchall()
+            playlist_urls = []
+            
+            for row in results:
+                song_id, title, artist, youtube_url, soundcloud_url, bandcamp_url = row
+                
+                # Priorizar YouTube, luego SoundCloud, luego Bandcamp
+                url = None
+                if youtube_url and youtube_url.strip():
+                    url = youtube_url.strip()
+                elif soundcloud_url and soundcloud_url.strip():
+                    url = soundcloud_url.strip()
+                elif bandcamp_url and bandcamp_url.strip():
+                    url = bandcamp_url.strip()
+                
+                if url:
+                    playlist_urls.append({
+                        'song_id': song_id,
+                        'title': title,
+                        'artist': artist,
+                        'url': url
+                    })
+                    
+                    if len(playlist_urls) >= song_count:
+                        break
+            
+            logger.info(f"Playlist creada con {len(playlist_urls)} canciones")
+            return playlist_urls
+            
+        except Exception as e:
+            logger.error(f"Error al crear playlist del juego: {e}")
+            return []
+
+
+    def validate_mpv_config(self):
+        """Valida que MPV esté configurado correctamente para modo sin video"""
+        try:
+            if not hasattr(self.player_manager, 'current_player') or not self.player_manager.current_player:
+                logger.warning("PlayerManager no tiene configuración de reproductor")
+                return False
+            
+            current_player = self.player_manager.current_player
+            player_name = current_player.get('player_name', '')
+            args = current_player.get('args', '')
+            
+            logger.info(f"Validando configuración MPV:")
+            logger.info(f"  - Nombre del reproductor: {player_name}")
+            logger.info(f"  - Argumentos: {args}")
+            
+            # Verificar que es MPV y tiene argumentos para modo sin video
+            if player_name in ['mpv', 'mpv_no_video']:
+                if '--no-video' in args or '--vid=no' in args:
+                    logger.info("✓ MPV configurado correctamente para modo sin video")
+                    return True
+                else:
+                    logger.warning(f"✗ MPV no está configurado para modo sin video. Args: {args}")
+                    # Intentar reconfigurar
+                    self.force_mpv_no_video_config()
+                    return False
+            else:
+                logger.warning(f"✗ Reproductor no es MPV: {player_name}")
+                return False
+                
+        except Exception as e:
+            logger.error(f"Error al validar configuración de MPV: {e}")
+            return False
+
+    def force_mpv_no_video_config(self):
+        """Fuerza la configuración de MPV sin video si no está configurado correctamente"""
+        try:
+            logger.info("Forzando reconfiguración de MPV para modo sin video")
+            
+            # Configurar manualmente el reproductor actual
+            if hasattr(self.player_manager, 'current_player'):
+                self.player_manager.current_player = {
+                    'player_name': 'mpv_no_video',
+                    'player_path': '/usr/bin/mpv',
+                    'player_temp_dir': '.content/mpv/_mpv_socket',
+                    'args': '--no-video --input-ipc-server={socket_path}'
+                }
+                logger.info("Configuración de MPV forzada a modo sin video")
+                return True
+        except Exception as e:
+            logger.error(f"Error al forzar configuración de MPV: {e}")
+            return False
+
 
 class ListenBrainzPlaylist:
     """
@@ -1566,85 +1793,4 @@ class ListenBrainzPlaylist:
             logger.error(f"Error al crear playlist: {e}")
             return False
 
-
-    def configure_mpv_audio_only(self):
-        """Configura MPV para reproducir solo audio sin ventana de video"""
-        try:
-            if hasattr(self.player_manager, 'send_command'):
-                # Configurar MPV para solo audio
-                commands = [
-                    {"command": ["set", "video", "no"]},
-                    {"command": ["set", "vid", "no"]},
-                    {"command": ["set", "force-window", "no"]},
-                    {"command": ["set", "terminal", "yes"]},
-                    {"command": ["set", "no-video", ""]},
-                ]
-                
-                for cmd in commands:
-                    self.player_manager.send_command(cmd)
-                    
-                logger.info("MPV configurado para solo audio")
-                return True
-        except Exception as e:
-            logger.error(f"Error al configurar MPV para solo audio: {e}")
-            return False
-
-    def create_game_playlist(self, song_count=100):
-        """
-        Crea una playlist de URLs para el juego con múltiples canciones.
-        
-        Args:
-            song_count: Número de canciones a incluir en la playlist
-            
-        Returns:
-            Lista de URLs válidas para el juego
-        """
-        try:
-            if not self.cursor:
-                logger.error("No hay conexión a la base de datos")
-                return []
-            
-            # Obtener canciones con URLs online disponibles
-            self.cursor.execute("""
-                SELECT DISTINCT s.id, s.title, s.artist, sl.youtube_url, sl.soundcloud_url, sl.bandcamp_url
-                FROM songs s
-                JOIN song_links sl ON s.id = sl.song_id
-                WHERE (sl.youtube_url IS NOT NULL AND sl.youtube_url != '')
-                OR (sl.soundcloud_url IS NOT NULL AND sl.soundcloud_url != '')
-                OR (sl.bandcamp_url IS NOT NULL AND sl.bandcamp_url != '')
-                ORDER BY RANDOM()
-                LIMIT ?
-            """, (song_count * 2,))  # Obtener el doble por si algunas URLs fallan
-            
-            results = self.cursor.fetchall()
-            playlist_urls = []
-            
-            for row in results:
-                song_id, title, artist, youtube_url, soundcloud_url, bandcamp_url = row
-                
-                # Priorizar YouTube, luego SoundCloud, luego Bandcamp
-                url = None
-                if youtube_url and youtube_url.strip():
-                    url = youtube_url.strip()
-                elif soundcloud_url and soundcloud_url.strip():
-                    url = soundcloud_url.strip()
-                elif bandcamp_url and bandcamp_url.strip():
-                    url = bandcamp_url.strip()
-                
-                if url:
-                    playlist_urls.append({
-                        'song_id': song_id,
-                        'title': title,
-                        'artist': artist,
-                        'url': url
-                    })
-                    
-                    if len(playlist_urls) >= song_count:
-                        break
-            
-            logger.info(f"Playlist creada con {len(playlist_urls)} canciones")
-            return playlist_urls
-            
-        except Exception as e:
-            logger.error(f"Error al crear playlist del juego: {e}")
-            return []
+ 

@@ -95,14 +95,14 @@
    <item>
     <layout class="QHBoxLayout" name="button_layout">
      <item>
-      <widget class="QPushButton" name="select_all_button">
+      <widget class="QPushButton" name="action_select_all">
        <property name="text">
         <string>Seleccionar Todos</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="deselect_all_button">
+      <widget class="QPushButton" name="action_deselect_all">
        <property name="text">
         <string>Deseleccionar Todos</string>
        </property>

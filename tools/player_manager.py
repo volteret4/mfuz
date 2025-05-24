@@ -187,18 +187,34 @@ class PlayerManager(QObject):
                 except:
                     pass
         
-        # Build command line arguments
+        # Build command line arguments - ORDEN CORRECTO
         args = []
+        
+        # Primero añadir las opciones globales antes de la URL
         if self.current_player.get('args'):
             player_args = self.current_player['args']
-            # Replace placeholder with actual socket path - CONVERTIR A STRING
+            # Replace placeholder with actual socket path
             if self.socket_path:
-                # Aquí está la corrección: convertir self.socket_path a string
                 socket_path_str = str(self.socket_path)
                 player_args = player_args.replace('{socket_path}', socket_path_str)
-            args = player_args.split()
+            
+            # Separar argumentos y asegurar que --no-video esté al principio
+            arg_list = player_args.split()
+            
+            # Reorganizar para poner --no-video al principio si existe
+            no_video_args = []
+            other_args = []
+            
+            for arg in arg_list:
+                if arg.startswith('--no-video') or arg.startswith('--vid=no') or arg.startswith('--force-window=no'):
+                    no_video_args.append(arg)
+                else:
+                    other_args.append(arg)
+            
+            # Construir lista final: opciones de video primero, luego el resto
+            args = no_video_args + other_args
         
-        # Add the URL or path
+        # Add the URL or path DESPUÉS de todas las opciones
         args.append(url_or_path)
         
         # Start the player process

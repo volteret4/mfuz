@@ -53,10 +53,10 @@ class Ui_ReleasesTable(object):
 
         self.verticalLayout.addWidget(self.table)
 
-        self.add_follow_button = QPushButton(ReleasesTable)
-        self.add_follow_button.setObjectName(u"add_follow_button")
+        self.action_add_follow = QPushButton(ReleasesTable)
+        self.action_add_follow.setObjectName(u"action_add_follow")
 
-        self.verticalLayout.addWidget(self.add_follow_button)
+        self.verticalLayout.addWidget(self.action_add_follow)
 
 
         self.retranslateUi(ReleasesTable)
@@ -78,7 +78,7 @@ class Ui_ReleasesTable(object):
         ___qtablewidgetitem4.setText(QCoreApplication.translate("ReleasesTable", u"Disambiguation", None));
         ___qtablewidgetitem5 = self.table.horizontalHeaderItem(5)
         ___qtablewidgetitem5.setText(QCoreApplication.translate("ReleasesTable", u"Calendario", None));
-        self.add_follow_button.setText(QCoreApplication.translate("ReleasesTable", u"Seguir artista en Muspy", None))
+        self.action_add_follow.setText(QCoreApplication.translate("ReleasesTable", u"Seguir artista en Muspy", None))
         pass
     # retranslateUi
 

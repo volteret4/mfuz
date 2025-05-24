@@ -1581,7 +1581,15 @@ def _setup_service_checkboxes(parent_instance, dialog):
             show_rss = show_rss.lower() == 'true'
         dialog.blogs_checkbox.setChecked(show_rss)
 
-
+    sync_at_boot_checkbox = dialog.findChild(QCheckBox, 'sync_at_boot')
+    if sync_at_boot_checkbox:
+        sync_at_boot = getattr(parent_instance, 'sync_at_boot', False)
+        if isinstance(sync_at_boot, str):
+            sync_at_boot = sync_at_boot.lower() == 'true'
+        sync_at_boot_checkbox.setChecked(sync_at_boot)
+        parent_instance.log(f"Setting sync_at_boot checkbox to: {sync_at_boot}")
+    else:
+        parent_instance.log("sync_at_boot checkbox not found in dialog")
 
 def display_wiki_info(self, result_data):
     """Muestra información detallada del elemento en el panel info_wiki de forma asíncrona"""

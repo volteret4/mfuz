@@ -4,7 +4,12 @@ import time
 import sqlite3
 import datetime
 from pathlib import Path
+import requests
+from urllib.parse import urljoin, urlparse
+import re
+
 import threading
+import requests
 from PyQt6.QtWidgets import QApplication
 
 from modules.submodules.url_playlist.ui_helpers import get_service_priority
@@ -763,6 +768,7 @@ def load_scrobbles_from_db(self, lastfm_username, start_time=None, end_time=None
         return []
 
 
+
 def display_scrobbles_in_tree(parent_instance, scrobbles, title):
     """Display scrobbles in the tree widget with improved organization"""
     try:
@@ -798,14 +804,6 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         # Add icon
         root_item.setIcon(0, QIcon(":/services/lastfm"))
         
-        # Store data for the root item
-        root_item.setData(0, Qt.ItemDataRole.UserRole, {
-            'title': root_title,
-            'artist': getattr(parent_instance, 'lastfm_username', 'Unknown User'),
-            'type': 'playlist',
-            'source': 'lastfm'
-        })
-        
         # Set column headers based on display mode
         if by_play_count:
             parent_instance.treeWidget.headerItem().setText(3, "Reproducciones")
@@ -813,6 +811,13 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         else:
             parent_instance.treeWidget.headerItem().setText(3, "Álbum")
             parent_instance.treeWidget.headerItem().setText(4, "Fecha")
+        
+        # Modificación: Detectar si estamos mostrando las últimas 24 horas
+        show_time = "24h" in title.lower() or "horas" in title.lower()
+        
+        # También verificar si los scrobbles tienen el flag show_time
+        if scrobbles and any(s.get('show_time') for s in scrobbles):
+            show_time = True
         
         # Process scrobbles based on display mode
         if by_play_count:
@@ -834,8 +839,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                         'title': title,
                         'album': album,
                         'count': 0,
-                        'timestamps': [],
-                        'song_id': scrobble.get('song_id')
+                        'timestamps': []
                     }
                     
                     # Copy all service URLs
@@ -877,7 +881,11 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                     import time
                     try:
                         first_play = min(track['timestamps'])
-                        date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
+                        # Usar formato con hora si estamos en las últimas 24 horas
+                        if show_time:
+                            date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(first_play))
+                        else:
+                            date_str = time.strftime("%Y-%m-%d", time.localtime(first_play))
                         track_item.setText(4, date_str)
                     except:
                         track_item.setText(4, "Unknown")
@@ -889,8 +897,7 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                     'album': track.get('album', ''),
                     'type': 'track',
                     'source': 'lastfm',
-                    'origen': 'scrobble',  # Add origen field
-                    'song_id': track.get('song_id')
+                    'origen': 'scrobble'  # Add the origen field for database consistency
                 }
                 
                 # Add service URLs if available
@@ -935,7 +942,6 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                 title = scrobble.get('title', scrobble.get('name', ''))
                 album = scrobble.get('album', scrobble.get('album_name', ''))
                 timestamp = scrobble.get('timestamp', 0)
-                song_id = scrobble.get('song_id')
                 
                 if not artist or not title:
                     continue
@@ -949,10 +955,14 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                 if album:
                     track_item.setText(3, album)
                 
-                # Format date
+                # Format date - MODIFICADO para mostrar hora en las últimas 24 horas
                 if timestamp:
                     try:
-                        date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(int(timestamp)))
+                        # Usar formato con hora si estamos en las últimas 24 horas o tiene flag show_time
+                        if show_time:
+                            date_str = time.strftime("%Y-%m-%d %H:%M", time.localtime(int(timestamp)))
+                        else:
+                            date_str = time.strftime("%Y-%m-%d", time.localtime(int(timestamp)))
                         track_item.setText(4, date_str)
                     except (ValueError, TypeError, OverflowError):
                         track_item.setText(4, "Unknown date")
@@ -964,9 +974,8 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
                     'album': album,
                     'type': 'track',
                     'source': 'lastfm',
-                    'origen': 'scrobble',
-                    'timestamp': timestamp,
-                    'song_id': song_id
+                    'origen': 'scrobble',  # Add origen field
+                    'timestamp': timestamp
                 }
                 
                 # Add service URLs if available
@@ -1006,7 +1015,6 @@ def display_scrobbles_in_tree(parent_instance, scrobbles, title):
         import traceback
         parent_instance.log(traceback.format_exc())
         return False
-
 
 def get_latest_timestamp_from_db(self, lastfm_username):
     """
@@ -1402,12 +1410,10 @@ def _integrate_scrobbles_to_songs_thread(parent, lastfm_username):
         return (0, 0)
 def fetch_links_for_scrobbles(self, lastfm_username):
     """
-    Fetches service links for scrobbles and updates song_links table.
-    
-    Args:
-        lastfm_username: Name of the Last.fm user
+    Improved version of fetch_links_for_scrobbles with better debugging and error handling
     """
     # Run in a thread
+    import threading
     thread = threading.Thread(
         target=_fetch_links_thread,
         args=(self, lastfm_username),
@@ -1417,7 +1423,7 @@ def fetch_links_for_scrobbles(self, lastfm_username):
     return True
 
 def _fetch_links_thread(parent, lastfm_username):
-    """Thread function for fetching links"""
+    """Improved thread function for fetching links with better debugging"""
     try:
         # Emitir señal de inicio
         parent.process_started_signal.emit(f"Fetching links for {lastfm_username}'s scrobbles...")
@@ -1436,126 +1442,108 @@ def _fetch_links_thread(parent, lastfm_username):
             parent.process_error_signal.emit(f"Table {table_name} does not exist")
             return 0
         
-        # Obtener prioridad de servicio
-        service_priority = get_service_priority(parent) if hasattr(parent, 'get_service_priority') else ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+        # Verificar columnas disponibles
+        cursor.execute(f"PRAGMA table_info({table_name})")
+        columns_info = cursor.fetchall()
+        columns = [col[1] for col in columns_info]
+        parent.log(f"Available columns in {table_name}: {columns}")
         
-        # Contar scrobbles totales
-        cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
-        total_scrobbles = cursor.fetchone()[0]
+        # Verificar si existen URLs de Last.fm
+        cursor.execute(f"SELECT COUNT(*) FROM {table_name} WHERE lastfm_url IS NOT NULL AND lastfm_url != ''")
+        lastfm_urls_count = cursor.fetchone()[0]
+        parent.log(f"Found {lastfm_urls_count} scrobbles with Last.fm URLs")
         
-        if total_scrobbles == 0:
-            parent.process_error_signal.emit(f"No scrobbles found in {table_name}")
+        if lastfm_urls_count == 0:
+            parent.process_error_signal.emit("No scrobbles have Last.fm URLs to extract links from")
             return 0
         
+        # Obtener prioridad de servicio
+        try:
+            from modules.submodules.url_playlist.ui_helpers import get_service_priority
+            service_priority = get_service_priority(parent)
+        except:
+            service_priority = ['youtube', 'spotify', 'bandcamp', 'soundcloud']
+        
+        parent.log(f"Service priority: {service_priority}")
+        
         # Contar scrobbles sin enlaces de servicio
-        link_conditions = []
+        service_conditions = []
         for service in service_priority:
             service_field = f"{service}_url"
-            link_conditions.append(f"{service_field} IS NULL")
+            if service_field in columns:
+                service_conditions.append(f"({service_field} IS NULL OR {service_field} = '')")
         
-        cursor.execute(f"""
-        SELECT COUNT(*) FROM {table_name} 
-        WHERE {' AND '.join(link_conditions)}
-        """)
-        unlinked_count = cursor.fetchone()[0]
+        if not service_conditions:
+            parent.process_error_signal.emit("No service URL columns found in scrobbles table")
+            return 0
         
-        parent.process_progress_signal.emit(5, f"Found {unlinked_count} scrobbles without links out of {total_scrobbles} total")
+        # Modificar la consulta para incluir lastfm_url
+        conditions = " AND ".join(service_conditions)
+        query = f"""
+        SELECT id, artist_name, track_name, name, album_name, lastfm_url, song_id
+        FROM {table_name} 
+        WHERE ({conditions}) 
+        AND lastfm_url IS NOT NULL 
+        AND lastfm_url != ''
+        ORDER BY id DESC
+        LIMIT 100
+        """
         
-        # Obtener los scrobbles sin enlaces
-        cursor.execute(f"""
-        SELECT * FROM {table_name} 
-        WHERE {' AND '.join(link_conditions)}
-        LIMIT 1000  /* Limitar para evitar procesar demasiados a la vez */
-        """)
+        parent.log(f"Executing query: {query}")
+        cursor.execute(query)
         unlinked_rows = cursor.fetchall()
         
-        # Obtener nombres de columnas
-        cursor.execute(f"PRAGMA table_info({table_name})")
-        column_info = cursor.fetchall()
-        column_names = [col[1] for col in column_info]
+        parent.log(f"Found {len(unlinked_rows)} scrobbles without service links")
         
-        # Convertir a lista de diccionarios
-        unlinked_scrobbles = []
-        for row in unlinked_rows:
-            scrobble = dict(zip(column_names, row))
-            unlinked_scrobbles.append(scrobble)
+        if not unlinked_rows:
+            parent.process_finished_signal.emit("No scrobbles found that need link extraction", 0, 0)
+            return 0
         
         # Procesar scrobbles
         links_found = 0
+        processed = 0
         
-        for i, scrobble in enumerate(unlinked_scrobbles):                
+        parent.process_progress_signal.emit(5, f"Processing {len(unlinked_rows)} scrobbles...")
+        
+        for i, row in enumerate(unlinked_rows):
+            scrobble_id, artist_name, track_name, name, album_name, lastfm_url, song_id = row
+            
+            # Usar el campo correcto para el nombre de la pista
+            track_title = track_name if track_name else name
+            
             # Calcular progreso
-            prog_value = 5 + int(90 * (i / len(unlinked_scrobbles)))
-            if i % 10 == 0:
-                parent.process_progress_signal.emit(prog_value, f"Processing scrobble {i+1}/{len(unlinked_scrobbles)}, found {links_found} links")
+            progress = 5 + int(90 * (i / len(unlinked_rows)))
+            if i % 5 == 0:  # Actualizar cada 5 elementos
+                parent.process_progress_signal.emit(
+                    progress, 
+                    f"Processing {i+1}/{len(unlinked_rows)}: {artist_name} - {track_title} (found {links_found} links)"
+                )
             
-            # Obtener información básica
-            scrobble_id = scrobble.get('id')
-            artist_name = scrobble.get('artist_name', '')
-            track_name = scrobble.get('track_name', scrobble.get('name', ''))
-            album_name = scrobble.get('album_name', '')
-            lastfm_url = scrobble.get('lastfm_url', '')
-            song_id = scrobble.get('song_id')
+            parent.log(f"Processing: {artist_name} - {track_title}")
+            parent.log(f"Last.fm URL: {lastfm_url}")
             
-            # Primero intentar obtener enlaces de fuentes existentes
-            links = None
+            # Intentar extraer enlaces para cada servicio
+            found_link_for_this_track = False
             
-            # Método 1: Verificar si tenemos la misma pista en otro scrobble con enlaces
             for service in service_priority:
                 service_field = f"{service}_url"
                 
-                cursor.execute(f"""
-                SELECT {service_field} FROM {table_name}
-                WHERE LOWER(artist_name) = LOWER(?) AND LOWER(track_name) = LOWER(?)
-                AND {service_field} IS NOT NULL
-                LIMIT 1
-                """, (artist_name, track_name))
+                # Verificar si ya tiene enlace para este servicio
+                if service_field in columns:
+                    cursor.execute(f"SELECT {service_field} FROM {table_name} WHERE id = ?", (scrobble_id,))
+                    existing_link = cursor.fetchone()
+                    if existing_link and existing_link[0]:
+                        continue  # Ya tiene enlace para este servicio
                 
-                result = cursor.fetchone()
-                if result and result[0]:
-                    # Actualizar este scrobble con el enlace encontrado
-                    cursor.execute(f"""
-                    UPDATE {table_name}
-                    SET {service_field} = ?
-                    WHERE id = ?
-                    """, (result[0], scrobble_id))
+                # Intentar extraer enlace
+                try:
+                    service_url = extract_link_from_lastfm(parent, lastfm_url, service)
                     
-                    links_found += 1
-                    
-                    # Si tenemos un song_id, también actualizar song_links
-                    if song_id:
-                        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
-                        if cursor.fetchone():
-                            cursor.execute("SELECT id FROM song_links WHERE song_id = ?", (song_id,))
-                            if cursor.fetchone():
-                                # Actualizar registro existente
-                                cursor.execute(f"""
-                                UPDATE song_links
-                                SET {service_field} = COALESCE(?, {service_field}),
-                                    links_updated = CURRENT_TIMESTAMP
-                                WHERE song_id = ?
-                                """, (result[0], song_id))
-                            else:
-                                # Insertar nuevo registro
-                                cursor.execute(f"""
-                                INSERT INTO song_links (song_id, {service_field}, links_updated)
-                                VALUES (?, ?, CURRENT_TIMESTAMP)
-                                """, (song_id, result[0]))
-                    
-                    # Encontramos un enlace, eso es suficiente por ahora
-                    links = {service: result[0]}
-                    break
-            
-            # Si no encontramos enlaces y tenemos una lastfm_url, intentar extraer de ahí
-            if not links and lastfm_url:
-                for service in service_priority:
-                    try:
-                        from modules.submodules.url_playlist.lastfm_manager import extract_link_from_lastfm
-                        service_url = extract_link_from_lastfm(parent, lastfm_url, service)
-                        if service_url:
-                            service_field = f"{service}_url"
-                            
-                            # Actualizar el scrobble
+                    if service_url:
+                        parent.log(f"Found {service} link: {service_url}")
+                        
+                        # Actualizar el scrobble
+                        if service_field in columns:
                             cursor.execute(f"""
                             UPDATE {table_name}
                             SET {service_field} = ?
@@ -1563,8 +1551,9 @@ def _fetch_links_thread(parent, lastfm_username):
                             """, (service_url, scrobble_id))
                             
                             links_found += 1
+                            found_link_for_this_track = True
                             
-                            # Si tenemos un song_id, también actualizar song_links
+                            # También actualizar song_links si tenemos song_id
                             if song_id:
                                 cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='song_links'")
                                 if cursor.fetchone():
@@ -1584,21 +1573,34 @@ def _fetch_links_thread(parent, lastfm_username):
                                         VALUES (?, ?, CURRENT_TIMESTAMP)
                                         """, (song_id, service_url))
                             
-                            # Encontramos un enlace, eso es suficiente por ahora
-                            links = {service: service_url}
+                            # Hacer commit cada 10 enlaces encontrados
+                            if links_found % 10 == 0:
+                                conn.commit()
+                                parent.log(f"Committed {links_found} links to database")
+                            
+                            # Solo buscar un enlace por pista para ser eficiente
                             break
-                    except Exception as e:
-                        parent.log(f"Error extracting {service} link: {e}")
+                            
+                except Exception as e:
+                    parent.log(f"Error extracting {service} link for {artist_name} - {track_title}: {str(e)}")
+                    continue
             
-            # Si procesamos un lote de scrobbles, hacer commit periódicamente
-            if i % 50 == 0:
-                conn.commit()
+            processed += 1
+            
+            # Pequeña pausa para no sobrecargar Last.fm
+            if found_link_for_this_track:
+                time.sleep(0.5)  # Pausa más corta si encontramos enlace
+            else:
+                time.sleep(0.1)  # Pausa mínima si no encontramos nada
         
         # Commit final
         conn.commit()
         
-        # Actualización final
-        parent.process_finished_signal.emit(f"Complete! Found {links_found} links for {len(unlinked_scrobbles)} scrobbles", links_found, len(unlinked_scrobbles))
+        # Mensaje final
+        result_message = f"Completed! Found {links_found} links out of {processed} processed scrobbles"
+        parent.process_finished_signal.emit(result_message, links_found, processed)
+        
+        parent.log(f"Link extraction complete: {links_found}/{processed} success rate")
         
         conn.close()
         return links_found
@@ -1606,5 +1608,229 @@ def _fetch_links_thread(parent, lastfm_username):
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        parent.process_error_signal.emit(f"Error: {str(e)}\n\n{error_trace}")
+        parent.log(f"Error in _fetch_links_thread_improved: {str(e)}")
+        parent.log(error_trace)
+        parent.process_error_signal.emit(f"Error: {str(e)}")
         return 0
+
+
+def extract_link_from_lastfm(self, lastfm_url, service):
+    """Extract service link from a Last.fm page with improved error handling and debugging"""
+    if not lastfm_url or not lastfm_url.strip():
+        self.log(f"No Last.fm URL provided for {service} extraction")
+        return None
+        
+    try:
+        # Check if we have BeautifulSoup
+        try:
+            from bs4 import BeautifulSoup
+        except ImportError:
+            self.log("BeautifulSoup not installed, cannot extract links. Install with: pip install beautifulsoup4")
+            return None
+            
+        self.log(f"Extracting {service} link from: {lastfm_url}")
+        
+        # Make request to Last.fm page with proper headers
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+        }
+        
+        try:
+            response = requests.get(lastfm_url, headers=headers, timeout=15)
+            self.log(f"Last.fm response status: {response.status_code}")
+            
+            if response.status_code != 200:
+                self.log(f"Failed to fetch Last.fm page: HTTP {response.status_code}")
+                return None
+                
+        except requests.exceptions.Timeout:
+            self.log(f"Timeout fetching Last.fm page: {lastfm_url}")
+            return None
+        except requests.exceptions.RequestException as e:
+            self.log(f"Error fetching Last.fm page: {str(e)}")
+            return None
+            
+        # Parse the HTML
+        try:
+            soup = BeautifulSoup(response.text, 'html.parser')
+        except Exception as e:
+            self.log(f"Error parsing HTML: {str(e)}")
+            return None
+        
+        # Service-specific extractors
+        if service == 'youtube':
+            return extract_youtube_from_lastfm_soup(self, soup, lastfm_url)
+        elif service == 'spotify':
+            return extract_spotify_from_lastfm_soup(self, soup, lastfm_url)
+        elif service == 'bandcamp':
+            return extract_bandcamp_from_lastfm_soup(self, soup, lastfm_url)
+        elif service == 'soundcloud':
+            return extract_soundcloud_from_lastfm_soup(self, soup, lastfm_url)
+        else:
+            self.log(f"Unknown service for extraction: {service}")
+            return None
+            
+    except Exception as e:
+        self.log(f"Unexpected error extracting {service} link from Last.fm: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+        return None
+
+
+
+def extract_youtube_from_lastfm_soup(self, soup, lastfm_url):
+    """Extract YouTube URL from a Last.fm page soup with multiple strategies"""
+    try:
+        self.log("Searching for YouTube links in Last.fm page...")
+        
+        # Strategy 1: Look for data-youtube-id and data-youtube-url attributes
+        youtube_elements = soup.find_all(attrs={'data-youtube-id': True})
+        for element in youtube_elements:
+            youtube_id = element.get('data-youtube-id')
+            if youtube_id:
+                youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+                self.log(f"Found YouTube ID via data-youtube-id: {youtube_id}")
+                return youtube_url
+        
+        youtube_elements = soup.find_all(attrs={'data-youtube-url': True})
+        for element in youtube_elements:
+            youtube_url = element.get('data-youtube-url')
+            if youtube_url and ('youtube.com/watch' in youtube_url or 'youtu.be/' in youtube_url):
+                self.log(f"Found YouTube URL via data-youtube-url: {youtube_url}")
+                return youtube_url
+        
+        # Strategy 2: Look for standard YouTube links in href attributes
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            if 'youtube.com/watch' in href or 'youtu.be/' in href:
+                # Convert relative URLs to absolute
+                if href.startswith('/'):
+                    href = urljoin('https://youtube.com', href)
+                elif href.startswith('//'):
+                    href = 'https:' + href
+                    
+                self.log(f"Found YouTube URL via href: {href}")
+                return href
+        
+        # Strategy 3: Look for YouTube URLs in onclick attributes or JavaScript
+        onclick_elements = soup.find_all(attrs={'onclick': True})
+        for element in onclick_elements:
+            onclick = element.get('onclick', '')
+            youtube_match = re.search(r'youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', onclick)
+            if youtube_match:
+                youtube_id = youtube_match.group(1)
+                youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+                self.log(f"Found YouTube ID via onclick: {youtube_id}")
+                return youtube_url
+        
+        # Strategy 4: Search in script tags for YouTube references
+        script_tags = soup.find_all('script')
+        for script in script_tags:
+            if script.string:
+                # Look for YouTube video IDs in JavaScript
+                youtube_matches = re.findall(r'youtube\.com/watch\?v=([a-zA-Z0-9_-]+)', script.string)
+                if youtube_matches:
+                    youtube_id = youtube_matches[0]  # Take the first match
+                    youtube_url = f"https://www.youtube.com/watch?v={youtube_id}"
+                    self.log(f"Found YouTube ID in script: {youtube_id}")
+                    return youtube_url
+                    
+                # Look for YouTube video IDs in a different format
+                youtube_id_matches = re.findall(r'"([a-zA-Z0-9_-]{11})"', script.string)
+                for potential_id in youtube_id_matches:
+                    # YouTube video IDs are typically 11 characters
+                    if len(potential_id) == 11 and re.match(r'^[a-zA-Z0-9_-]+$', potential_id):
+                        youtube_url = f"https://www.youtube.com/watch?v={potential_id}"
+                        self.log(f"Found potential YouTube ID in script: {potential_id}")
+                        return youtube_url
+        
+        self.log("No YouTube links found in Last.fm page")
+        return None
+        
+    except Exception as e:
+        self.log(f"Error extracting YouTube from soup: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+        return None
+
+def extract_spotify_from_lastfm_soup(self, soup, lastfm_url):
+    """Extract Spotify URL from a Last.fm page soup"""
+    try:
+        self.log("Searching for Spotify links in Last.fm page...")
+        
+        # Strategy 1: Look for data-spotify-id or similar attributes
+        spotify_elements = soup.find_all(attrs={'data-spotify-id': True})
+        for element in spotify_elements:
+            spotify_id = element.get('data-spotify-id')
+            if spotify_id:
+                spotify_url = f"https://open.spotify.com/track/{spotify_id}"
+                self.log(f"Found Spotify ID via data-spotify-id: {spotify_id}")
+                return spotify_url
+        
+        # Strategy 2: Look for Spotify links in href attributes
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            if 'open.spotify.com' in href:
+                self.log(f"Found Spotify URL via href: {href}")
+                return href
+        
+        # Strategy 3: Look in script tags for Spotify references
+        script_tags = soup.find_all('script')
+        for script in script_tags:
+            if script.string:
+                spotify_matches = re.findall(r'open\.spotify\.com/track/([a-zA-Z0-9]+)', script.string)
+                if spotify_matches:
+                    spotify_id = spotify_matches[0]
+                    spotify_url = f"https://open.spotify.com/track/{spotify_id}"
+                    self.log(f"Found Spotify ID in script: {spotify_id}")
+                    return spotify_url
+        
+        self.log("No Spotify links found in Last.fm page")
+        return None
+        
+    except Exception as e:
+        self.log(f"Error extracting Spotify from soup: {str(e)}")
+        return None
+
+def extract_bandcamp_from_lastfm_soup(self, soup, lastfm_url):
+    """Extract Bandcamp URL from a Last.fm page soup"""
+    try:
+        self.log("Searching for Bandcamp links in Last.fm page...")
+        
+        # Look for Bandcamp links
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            if 'bandcamp.com' in href and '/track/' in href:
+                self.log(f"Found Bandcamp URL via href: {href}")
+                return href
+        
+        self.log("No Bandcamp links found in Last.fm page")
+        return None
+        
+    except Exception as e:
+        self.log(f"Error extracting Bandcamp from soup: {str(e)}")
+        return None
+
+def extract_soundcloud_from_lastfm_soup(self, soup, lastfm_url):
+    """Extract SoundCloud URL from a Last.fm page soup"""
+    try:
+        self.log("Searching for SoundCloud links in Last.fm page...")
+        
+        # Look for SoundCloud links
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            if 'soundcloud.com' in href and not href.endswith('/soundcloud.com'):
+                self.log(f"Found SoundCloud URL via href: {href}")
+                return href
+        
+        self.log("No SoundCloud links found in Last.fm page")
+        return None
+        
+    except Exception as e:
+        self.log(f"Error extracting SoundCloud from soup: {str(e)}")
+        return None

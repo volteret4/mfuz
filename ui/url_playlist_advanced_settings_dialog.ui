@@ -456,14 +456,14 @@
                    <item>
                     <widget class="QRadioButton" name="pl_unidas">
                      <property name="text">
-                      <string>Listas de reproducción &amp;unidas</string>
+                      <string>Un solo menú para gobernarlos a todos</string>
                      </property>
                     </widget>
                    </item>
                    <item>
                     <widget class="QRadioButton" name="pl_separadas">
                      <property name="text">
-                      <string>Listas de reproducción por &amp;separado</string>
+                      <string>Varios botones</string>
                      </property>
                     </widget>
                    </item>
@@ -636,6 +636,13 @@
                       <property name="bottomMargin">
                        <number>0</number>
                       </property>
+                      <item>
+                       <widget class="QCheckBox" name="sync_at_boot">
+                        <property name="text">
+                         <string>Sincronizar al iniciar</string>
+                        </property>
+                       </widget>
+                      </item>
                       <item>
                        <widget class="QRadioButton" name="scrobbles_reproducciones">
                         <property name="text">

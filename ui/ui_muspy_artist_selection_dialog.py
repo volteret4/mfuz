@@ -80,15 +80,15 @@ class Ui_ArtistSelectionDialog(object):
 
         self.button_layout = QHBoxLayout()
         self.button_layout.setObjectName(u"button_layout")
-        self.select_all_button = QPushButton(ArtistSelectionDialog)
-        self.select_all_button.setObjectName(u"select_all_button")
+        self.action_select_all = QPushButton(ArtistSelectionDialog)
+        self.action_select_all.setObjectName(u"action_select_all")
 
-        self.button_layout.addWidget(self.select_all_button)
+        self.button_layout.addWidget(self.action_select_all)
 
-        self.deselect_all_button = QPushButton(ArtistSelectionDialog)
-        self.deselect_all_button.setObjectName(u"deselect_all_button")
+        self.action_deselect_all = QPushButton(ArtistSelectionDialog)
+        self.action_deselect_all.setObjectName(u"action_deselect_all")
 
-        self.button_layout.addWidget(self.deselect_all_button)
+        self.button_layout.addWidget(self.action_deselect_all)
 
 
         self.verticalLayout.addLayout(self.button_layout)
@@ -111,7 +111,7 @@ class Ui_ArtistSelectionDialog(object):
         self.search_label.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Buscar:", None))
         self.example_artist.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Ejemplo de Artista (a1b2c3d4-e5f6-7890-1234-567890abcdef)", None))
         self.example_artist_2.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Otro Artista (12345678-9abc-def0-1234-56789abcdef0)", None))
-        self.select_all_button.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Seleccionar Todos", None))
-        self.deselect_all_button.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Deseleccionar Todos", None))
+        self.action_select_all.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Seleccionar Todos", None))
+        self.action_deselect_all.setText(QCoreApplication.translate("ArtistSelectionDialog", u"Deseleccionar Todos", None))
     # retranslateUi
 

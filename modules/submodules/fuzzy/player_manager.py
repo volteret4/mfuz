@@ -4,6 +4,11 @@ import platform
 import logging
 from pathlib import Path
 import traceback
+import random
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from base_module import PROJECT_ROOT
 
 class PlayerManager:
     """
@@ -56,10 +61,10 @@ class PlayerManager:
         print(f"Configuración music_players encontrada: {player_config}")
         
         # Obtener el reproductor seleccionado
-        selected_players = player_config.get('selelected_player', {})
+        selected_players = player_config.get('selected_player', {})
         
         if not selected_players:
-            print("ADVERTENCIA: No se encontró la sección 'selelected_player'")
+            print("ADVERTENCIA: No se encontró la sección 'selected_player'")
         else:
             self.selected_player = selected_players.get('fuzzy', 'deadbeef')
         
@@ -99,7 +104,49 @@ class PlayerManager:
         }
         
         print(f"Configuraciones predeterminadas creadas: {list(self.player_configs.keys())}")
+
+
+    def setup_player(self):
+        """Set up player based on configuration"""
+        if not self.config:
+            # Default to MPV player
+            self.current_player = {
+                'player_name': 'mpv',
+                'player_path': self._find_player_path('mpv'),
+                'player_temp_dir': os.path.expanduser(f"{PROJECT_ROOT}/.content/mpv/_mpv_socket"),
+                'args': '--input-ipc-server={socket_path} --no-video'
+            }
+            self._logger("Using default MPV player configuration")
+            return
         
+        # Try to get selected player for url_enlaces from config
+        selected_player_name = self.config.get('selected_player', {}).get('url_enlaces', 'mpv_no_video')
+        
+        # Find matching player in installed_players
+        installed_players = self.config.get('installed_players', {})
+        
+        for player_key, player_config in installed_players.items():
+            if player_config.get('player_name') == selected_player_name:
+                self.current_player = player_config
+                self._logger(f"Using configured player: {selected_player_name}")
+                return
+        
+        # If selected player not found, use mpv_no_video as fallback
+        for player_key, player_config in installed_players.items():
+            if player_config.get('player_name') == 'mpv_no_video':
+                self.current_player = player_config
+                self._logger(f"Selected player not found, using mpv_no_video")
+                return
+        
+        # Final fallback to mpv with no-video
+        self.current_player = {
+            'player_name': 'mpv',
+            'player_path': self._find_player_path('mpv'),
+            'player_temp_dir': os.path.expanduser(f"{PROJECT_ROOT}/.content/mpv/_mpv_socket"),
+            'args': '--input-ipc-server={socket_path} --no-video'
+        }
+        self._logger("No mpv_no_video configuration found, using default MPV with --no-video")
+
     def _get_player_path(self, player_name=None):
         """Obtiene la ruta al ejecutable del reproductor seleccionado."""
         player_name = player_name or self.selected_player

@@ -1599,7 +1599,7 @@ class DisplayManager:
         menu.exec(table.mapToGlobal(position))
 
 
-    def add_follow_button_to_results_page(self, artist_name):
+    def action_add_follow_to_results_page(self, artist_name):
         """
         Añade un botón para seguir al artista actual en la página de resultados
         
@@ -1752,7 +1752,7 @@ class DisplayManager:
                 widget = item.widget()
                 if widget is not None and (isinstance(widget, QTreeWidget) or 
                                         isinstance(widget, QTableWidget) or 
-                                        (hasattr(self, 'add_follow_button') and widget == self.add_follow_button)):
+                                        (hasattr(self, 'action_add_follow') and widget == self.action_add_follow)):
                     self.layout().removeItem(item)
                     widget.deleteLater()
         

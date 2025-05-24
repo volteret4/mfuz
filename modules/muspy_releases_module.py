@@ -466,14 +466,6 @@ class MuspyArtistModule(BaseModule):
         except Exception as e:
             self.logger.error(f"Error iniciando autenticación en segundo plano de Twitter: {e}", exc_info=True)
 
-    def _on_twitter_auth_completed(self, success):
-        """Maneja la finalización de la autenticación de Twitter"""
-        if success:
-            self.logger.info("Autenticación de Twitter completada con éxito")
-        else:
-            self.logger.warning("Autenticación de Twitter no completada")
-
-
 
     def init_ui(self):
         """Initialize the user interface for Muspy artist management"""
@@ -486,7 +478,7 @@ class MuspyArtistModule(BaseModule):
         ]
         
         # Intentar cargar desde archivo UI
-        ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_releases_module.ui")
+        ui_file_path = Path(PROJECT_ROOT, "ui", "muspy", "muspy_releases_module.ui")
         
         if os.path.exists(ui_file_path):
             try:
@@ -2149,7 +2141,7 @@ class MuspyArtistModule(BaseModule):
             
             # Create the dialog using the UI file
             dialog = QDialog(self)
-            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2187,8 +2179,8 @@ class MuspyArtistModule(BaseModule):
                     
                     # Connect signals
                     dialog.search_input.textChanged.connect(lambda text: self.filter_artists(text, checkboxes))
-                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
-                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
+                    dialog.action_select_all.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
+                    dialog.action_deselect_all.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
                     
                 except Exception as e:
                     self.results_text.append(f"Error loading UI for artist selection: {e}")
@@ -2347,7 +2339,7 @@ class MuspyArtistModule(BaseModule):
             
             # Create the dialog using the UI file
             dialog = QDialog(self)
-            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy_artist_selection_dialog.ui")
+            ui_file_path = Path(PROJECT_ROOT, "ui", "muspy", "muspy_artist_selection_dialog.ui")
             
             if os.path.exists(ui_file_path):
                 try:
@@ -2439,8 +2431,8 @@ class MuspyArtistModule(BaseModule):
                     
                     # Connect signals
                     dialog.search_input.textChanged.connect(lambda text: self.filter_albums_tree(text, tree, checkboxes))
-                    dialog.select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
-                    dialog.deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
+                    dialog.action_select_all.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if not cb.isHidden()])
+                    dialog.action_deselect_all.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes])
                     
                     # Store references for access from other functions
                     dialog.tree = tree
@@ -3577,9 +3569,9 @@ class MuspyArtistModule(BaseModule):
                         self.logger.debug("Updated follow button in results widget")
             
             # Also update any standalone button
-            if hasattr(self, 'add_follow_button'):
-                self.add_follow_button.setText(f"Siguiendo a {self.current_artist.get('name')} en Muspy")
-                self.add_follow_button.setEnabled(False)
+            if hasattr(self, 'action_add_follow'):
+                self.action_add_follow.setText(f"Siguiendo a {self.current_artist.get('name')} en Muspy")
+                self.action_add_follow.setEnabled(False)
                 self.logger.debug("Updated standalone follow button")
             
             QMessageBox.information(self, "Success", f"Now following {self.current_artist.get('name')} on Muspy")
@@ -3630,7 +3622,7 @@ class MuspyArtistModule(BaseModule):
                 self.display_releases_in_muspy_results_page(future_releases, artist_name)
                 
                 # Add a button to follow this artist
-                self.add_follow_button_to_results_page(artist_name)
+                self.action_add_follow_to_results_page(artist_name)
             else:
                 self.results_text.append(f"Error retrieving releases: {response.status_code} - {response.text}")
         
@@ -3704,9 +3696,9 @@ class MuspyArtistModule(BaseModule):
                         self.current_artist = {"name": artist_name, "mbid": artist_mbid}
                         
                         # Add a button to follow this artist
-                        self.add_follow_button = QPushButton(f"Follow {artist_name} on Muspy")
-                        self.add_follow_button.clicked.connect(self.follow_current_artist)
-                        self.layout().insertWidget(self.layout().count() - 1, self.add_follow_button)
+                        self.action_add_follow = QPushButton(f"Follow {artist_name} on Muspy")
+                        self.action_add_follow.clicked.connect(self.follow_current_artist)
+                        self.layout().insertWidget(self.layout().count() - 1, self.action_add_follow)
             else:
                 self.results_text.append(f"Error retrieving releases: {response.status_code} - {response.text}")
         
@@ -3767,10 +3759,10 @@ class MuspyArtistModule(BaseModule):
         
         # Botones de selección
         button_layout = QHBoxLayout()
-        select_all_button = QPushButton("Seleccionar Todos")
-        deselect_all_button = QPushButton("Deseleccionar Todos")
-        button_layout.addWidget(select_all_button)
-        button_layout.addWidget(deselect_all_button)
+        action_select_all = QPushButton("Seleccionar Todos")
+        action_deselect_all = QPushButton("Deseleccionar Todos")
+        button_layout.addWidget(action_select_all)
+        button_layout.addWidget(action_deselect_all)
         layout.addLayout(button_layout)
         
         # Botones de aceptar/cancelar
@@ -3780,14 +3772,14 @@ class MuspyArtistModule(BaseModule):
         # Guardamos referencias para acceder a ellos desde otras funciones
         dialog.scroll_layout = scroll_layout
         dialog.search_input = search_input
-        dialog.select_all_button = select_all_button
-        dialog.deselect_all_button = deselect_all_button
+        dialog.action_select_all = action_select_all
+        dialog.action_deselect_all = action_deselect_all
         dialog.buttons = buttons
         
         # Conectar señales
         search_input.textChanged.connect(lambda text: self.filter_artists(text, checkboxes))
-        select_all_button.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
-        deselect_all_button.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
+        action_select_all.clicked.connect(lambda: [cb.setChecked(True) for cb in checkboxes if cb.isVisible()])
+        action_deselect_all.clicked.connect(lambda: [cb.setChecked(False) for cb in checkboxes if cb.isVisible()])
         buttons.accepted.connect(dialog.accept)
         buttons.rejected.connect(dialog.reject)
 
@@ -3965,9 +3957,9 @@ class MuspyArtistModule(BaseModule):
         """Delegación al método implementado en display_utils"""
         return self.display_manager.display_releases_in_muspy_results_page(releases, artist_name)
 
-    def add_follow_button_to_results_page(self, artist_name):
+    def action_add_follow_to_results_page(self, artist_name):
         """Delegación al método implementado en display_utils"""
-        return self.display_manager.add_follow_button_to_results_page(artist_name)
+        return self.display_manager.action_add_follow_to_results_page(artist_name)
 
     def display_releases_tree(self, releases, group_by_artist=True):
         """Delegación al método implementado en display_utils"""
