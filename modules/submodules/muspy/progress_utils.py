@@ -1,6 +1,7 @@
 # submodules/muspy/progress_utils.py
 import sys
 import os
+import logging  
 
 from PyQt6.QtWidgets import (QProgressDialog, QApplication, QVBoxLayout, QHBoxLayout, 
                            QPushButton, QWidget, QSizePolicy, QMessageBox, QDialog)
@@ -17,21 +18,54 @@ class ProgressWorker(QObject):
         super().__init__()
         self.function = function
         self.args = args or {}
+        self._canceled = False
         
     def run(self):
         try:
-            result = self.function(self.progress_callback, self.status_callback, **self.args)
+            # Pasar solo el callback de progreso a la función
+            result = self.function(self.progress_callback)
             self.finished.emit(result)
         except Exception as e:
             self.error.emit(e)
             self.status_update.emit(f"Error: {str(e)}")
             self.finished.emit(None)
     
-    def progress_callback(self, value):
-        self.progress.emit(value)
+    def progress_callback(self, current, total=None, status="", indeterminate=False):
+        """
+        Callback de progreso mejorado que acepta múltiples formatos
         
-    def status_callback(self, text):
-        self.status_update.emit(text)
+        Args:
+            current (int): Valor actual del progreso
+            total (int, optional): Valor total para calcular porcentaje
+            status (str, optional): Mensaje de estado
+            indeterminate (bool, optional): Si usar modo indeterminado
+        
+        Returns:
+            bool: True para continuar, False si se canceló
+        """
+        if self._canceled:
+            return False
+            
+        if indeterminate:
+            # En modo indeterminado, emitir señal especial
+            self.progress.emit(-1)  # -1 indica modo indeterminado
+        elif total is not None and total > 0:
+            # Convertir a porcentaje si se proporciona total
+            percentage = min(100, int((current / total) * 100))
+            self.progress.emit(percentage)
+        else:
+            # Usar valor directo
+            self.progress.emit(current)
+        
+        if status:
+            self.status_update.emit(status)
+        
+        # Retornar True para indicar que debe continuar
+        return not self._canceled
+    
+    def cancel(self):
+        """Marcar el worker como cancelado"""
+        self._canceled = True
 
 
 class AuthWorker(QObject):
@@ -59,6 +93,26 @@ class AuthWorker(QObject):
         self.finished.emit(success)
 
 
+class ProgressUtils:
+    """Utility class for progress operations"""
+    
+    def __init__(self, parent_module):
+        self.parent = parent_module
+        self.logger = getattr(parent_module, 'logger', logging.getLogger())
+    
+    def show_progress_operation(self, operation_function, operation_args=None, 
+                               title="Operación en progreso", 
+                               label_format="{current}/{total} - {status}", 
+                               cancel_button_text="Cancelar", 
+                               finish_message=None):
+        """Wrapper for the show_progress_operation function"""
+        return show_progress_operation(
+            self.parent, operation_function, operation_args, 
+            title, label_format, cancel_button_text, finish_message
+        )
+
+
+
 class FloatingNavigationButtons(QObject):
     """
     Class to manage floating navigation buttons for a stacked widget.
@@ -66,12 +120,25 @@ class FloatingNavigationButtons(QObject):
     """
     def __init__(self, stacked_widget, parent=None):
         super().__init__(parent)
+        
+        # VALIDACIÓN CRÍTICA: Verificar que realmente es un QStackedWidget
+        from PyQt6.QtWidgets import QStackedWidget
+        if not isinstance(stacked_widget, QStackedWidget):
+            raise TypeError(f"Expected QStackedWidget, got {type(stacked_widget).__name__}")
+        
         self.stacked_widget = stacked_widget
         self.parent_widget = parent if parent else stacked_widget.parent()
         
-        # Create buttons
-        self.prev_button = QPushButton(self.parent_widget)
-        self.next_button = QPushButton(self.parent_widget)
+        # Verificar que no hay botones flotantes existentes en este widget
+        self._cleanup_existing_buttons()
+        
+        # Create buttons con el stacked_widget como parent
+        self.prev_button = QPushButton(self.stacked_widget)
+        self.next_button = QPushButton(self.stacked_widget)
+        
+        # Establecer nombres únicos
+        self.prev_button.setObjectName("floating_prev_button")
+        self.next_button.setObjectName("floating_next_button")
         
         # Configure buttons
         self.setup_buttons()
@@ -98,6 +165,19 @@ class FloatingNavigationButtons(QObject):
         self.last_pos = None
         self.current_state = {'left': False, 'right': False}
         
+
+    def _cleanup_existing_buttons(self):
+        """Limpia botones flotantes existentes en el stacked_widget"""
+        try:
+            existing_buttons = self.stacked_widget.findChildren(QPushButton)
+            for button in existing_buttons:
+                if (button.objectName() in ["floating_prev_button", "floating_next_button"] or
+                    button.text() in ["←", "→"]):
+                    button.deleteLater()
+        except Exception as e:
+            print(f"Error limpiando botones existentes: {e}")
+
+
     def setup_buttons(self):
         """Set up button appearance and positioning"""
         # Set fixed size
@@ -169,18 +249,27 @@ class FloatingNavigationButtons(QObject):
         # Get the size of the stacked widget
         widget_rect = self.stacked_widget.rect()
         widget_height = widget_rect.height()
+        widget_width = widget_rect.width()
+        
+        # Asegurar que los botones tienen el tamaño correcto
+        button_size = 40
+        if self.prev_button.size() != (button_size, button_size):
+            self.prev_button.setFixedSize(button_size, button_size)
+            self.next_button.setFixedSize(button_size, button_size)
         
         # Position buttons vertically centered, on the edges
-        y_position = (widget_height - self.prev_button.height()) // 2
+        y_position = max(0, (widget_height - button_size) // 2)
         
         # Position the previous button on the left edge
         self.prev_button.move(10, y_position)
         
-        # Position the next button on the right edge
-        self.next_button.move(
-            self.stacked_widget.width() - self.next_button.width() - 10, 
-            y_position
-        )
+        # Position the next button on the right edge  
+        x_position = max(0, widget_width - button_size - 10)
+        self.next_button.move(x_position, y_position)
+        
+        # Asegurar que los botones están dentro del widget padre
+        self.prev_button.raise_()  # Traer al frente
+        self.next_button.raise_()  # Traer al frente
         
     def connect_signals(self):
         """Connect button signals to navigation functions"""
@@ -203,21 +292,39 @@ class FloatingNavigationButtons(QObject):
     
     def go_to_previous_page(self):
         """Navigate to the previous page in the stacked widget"""
-        current_index = self.stacked_widget.currentIndex()
-        if current_index > 0:
-            self.stacked_widget.setCurrentIndex(current_index - 1)
-        else:
-            # Wrap around to the last page
-            self.stacked_widget.setCurrentIndex(self.stacked_widget.count() - 1)
-            
+        # VALIDACIÓN: Verificar que tenemos un QStackedWidget válido
+        from PyQt6.QtWidgets import QStackedWidget
+        if not isinstance(self.stacked_widget, QStackedWidget):
+            print(f"Error: stacked_widget es {type(self.stacked_widget).__name__}, no QStackedWidget")
+            return
+        
+        try:
+            current_index = self.stacked_widget.currentIndex()
+            if current_index > 0:
+                self.stacked_widget.setCurrentIndex(current_index - 1)
+            else:
+                # Wrap around to the last page
+                self.stacked_widget.setCurrentIndex(self.stacked_widget.count() - 1)
+        except Exception as e:
+            print(f"Error en go_to_previous_page: {e}")
+
     def go_to_next_page(self):
         """Navigate to the next page in the stacked widget"""
-        current_index = self.stacked_widget.currentIndex()
-        if current_index < self.stacked_widget.count() - 1:
-            self.stacked_widget.setCurrentIndex(current_index + 1)
-        else:
-            # Wrap around to the first page
-            self.stacked_widget.setCurrentIndex(0)
+        # VALIDACIÓN: Verificar que tenemos un QStackedWidget válido
+        from PyQt6.QtWidgets import QStackedWidget
+        if not isinstance(self.stacked_widget, QStackedWidget):
+            print(f"Error: stacked_widget es {type(self.stacked_widget).__name__}, no QStackedWidget")
+            return
+        
+        try:
+            current_index = self.stacked_widget.currentIndex()
+            if current_index < self.stacked_widget.count() - 1:
+                self.stacked_widget.setCurrentIndex(current_index + 1)
+            else:
+                # Wrap around to the first page
+                self.stacked_widget.setCurrentIndex(0)
+        except Exception as e:
+            print(f"Error en go_to_next_page: {e}")
     
     def update_button_visibility(self):
         """Update the visibility of buttons based on current state"""
@@ -270,23 +377,11 @@ class FloatingNavigationButtons(QObject):
 
 
 def show_progress_operation(parent, operation_function, operation_args=None, title="Operación en progreso", 
-                         label_format="{current}/{total} - {status}", 
-                         cancel_button_text="Cancelar", 
-                         finish_message=None):
+                        label_format="{current}/{total} - {status}", 
+                        cancel_button_text="Cancelar", 
+                        finish_message=None):
     """
-    Muestra un diálogo de progreso para operaciones largas
-    
-    Args:
-        parent: Widget padre
-        operation_function: Función a ejecutar (debe aceptar una función update_progress)
-        operation_args: Argumentos adicionales para la función
-        title: Título del diálogo
-        label_format: Formato para la etiqueta de progreso
-        cancel_button_text: Texto del botón de cancelar
-        finish_message: Mensaje a mostrar al terminar (opcional)
-        
-    Returns:
-        Resultado de la operación o None si se canceló
+    Muestra un diálogo de progreso para operaciones largas - VERSION CORREGIDA
     """
     # Crear worker y thread para la operación
     thread = QThread()
@@ -296,71 +391,75 @@ def show_progress_operation(parent, operation_function, operation_args=None, tit
     # Crear diálogo de progreso
     progress_dialog = QProgressDialog(title, cancel_button_text, 0, 100, parent)
     progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
-    progress_dialog.setMinimumDuration(0)  # Mostrar inmediatamente
+    progress_dialog.setMinimumDuration(0)
     progress_dialog.setValue(0)
     progress_dialog.setAutoClose(False)
     progress_dialog.setAutoReset(False)
     
-    # Variable para almacenar el resultado
+    # Variables para control
     result = [None]
     canceled = [False]
     
-    # Función para actualizar el progreso
-    def update_progress(current, total, status="", indeterminate=False):
-        # Verificar si se canceló
-        if progress_dialog.wasCanceled() or canceled[0]:
-            canceled[0] = True
-            return False
-        
-        # Actualizar la barra de progreso
-        if indeterminate:
-            progress_dialog.setRange(0, 0)  # Modo indeterminado
+    def handle_progress_signal(value):
+        if canceled[0]:
+            return
+            
+        if value == -1:  # Modo indeterminado
+            progress_dialog.setRange(0, 0)
         else:
-            progress_dialog.setRange(0, total)
-            progress_dialog.setValue(current)
+            if progress_dialog.maximum() == 0:  # Si estaba en modo indeterminado
+                progress_dialog.setRange(0, 100)
+            progress_dialog.setValue(value)
         
-        # Actualizar etiqueta
-        progress_dialog.setLabelText(label_format.format(
-            current=current,
-            total=total,
-            status=status
-        ))
-        
-        # Mantener la UI responsiva
         QApplication.processEvents()
-        return True
     
-    # Conectar señales
-    worker.progress.connect(lambda value: progress_dialog.setValue(value))
-    worker.status_update.connect(lambda text: progress_dialog.setLabelText(text))
-    thread.started.connect(worker.run)
-    worker.finished.connect(lambda res: handle_finished(res))
-    worker.error.connect(lambda err: handle_error(err))
-    progress_dialog.canceled.connect(lambda: set_canceled())
+    def handle_status_update(text):
+        if not canceled[0]:
+            progress_dialog.setLabelText(text)
+            QApplication.processEvents()
     
     def set_canceled():
         canceled[0] = True
+        worker.cancel()  # Cancelar el worker
         thread.quit()
+        thread.wait(1000)
     
     def handle_finished(res):
         result[0] = res
         thread.quit()
         progress_dialog.close()
-        if finish_message and not canceled[0]:
+        if finish_message and not canceled[0] and res:
             QMessageBox.information(parent, "Operación completada", finish_message)
     
     def handle_error(err):
         thread.quit()
         progress_dialog.close()
-        QMessageBox.critical(parent, "Error", f"Error en la operación: {str(err)}")
+        if not canceled[0]:  # Solo mostrar error si no se canceló
+            QMessageBox.critical(parent, "Error", f"Error en la operación: {str(err)}")
     
-    # Iniciar thread y mostrar diálogo
+    # Conectar señales
+    worker.progress.connect(handle_progress_signal)
+    worker.status_update.connect(handle_status_update)
+    worker.finished.connect(handle_finished)
+    worker.error.connect(handle_error)
+    thread.started.connect(worker.run)
+    progress_dialog.canceled.connect(set_canceled)
+    
+    # Limpiar al terminar
+    def cleanup():
+        worker.deleteLater()
+        thread.deleteLater()
+    
+    thread.finished.connect(cleanup)
+    
+    # Iniciar
     thread.start()
     progress_dialog.exec()
     
-    # Esperar a que termine el hilo si no se ha cancelado
-    if not canceled[0] and thread.isRunning():
-        thread.wait(5000)  # Esperar hasta 5 segundos
+    # Asegurar limpieza
+    if thread.isRunning():
+        thread.quit()
+        thread.wait(2000)
     
     return result[0]
 

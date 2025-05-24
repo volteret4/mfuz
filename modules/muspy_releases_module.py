@@ -37,10 +37,11 @@ from modules.submodules.muspy.lastfm_manager import LastFMManager
 from modules.submodules.muspy.spotify_manager import SpotifyManager
 from modules.submodules.muspy.mb_manager import MusicBrainzManager
 from modules.submodules.muspy.bluesky_manager import BlueskyManager
+from modules.submodules.muspy.progress_utils import ProgressWorker  # Si necesitas esto
 
 from modules.submodules.muspy.utils import MuspyUtils
 from modules.submodules.muspy.twitter_manager import TwitterManager
-
+from modules.submodules.muspy.progress_utils import show_progress_operation
 
 # Intentar importar módulos específicos que podrían no estar disponibles
 try:
@@ -251,6 +252,7 @@ class MuspyArtistModule(BaseModule):
         self.twitter_client_secret = twitter_client_secret
         self.twitter_redirect_uri = twitter_redirect_uri
         
+        self.show_progress_operation = show_progress_operation
 
         
         # Inicializar managers
@@ -324,8 +326,10 @@ class MuspyArtistModule(BaseModule):
         self.utils = MuspyUtils(self)            
         self.ui_callback = UICallback(self.results_text)
         self.ui_callback.append(f"MusicBrainz Username: {self.musicbrainz_username}")
-
-        self.progress_utils = FloatingNavigationButtons(self)
+        
+        from modules.submodules.muspy.progress_utils import ProgressUtils
+        self.progress_utils=ProgressUtils(self)
+        
         # Initialize managers (AFTER super init)
         self.display_manager = DisplayManager(
             self,
@@ -414,17 +418,21 @@ class MuspyArtistModule(BaseModule):
             utils=self.utils,
             display_manager=self.display_manager,
             cache_manager=self.cache_manager,
-            muspy_manager=self.muspy_manager
+            muspy_manager=self.muspy_manager,
+            progress_utils=self.progress_utils  # Asegúrate de que esta línea existe
         )
 
         self.display_manager.set_muspy_manager(self.muspy_manager)
         self.display_manager.set_spotify_manager(self.spotify_manager)
         self.display_manager.set_lastfm_manager(self.lastfm_manager)
         self.display_manager.set_bluesky_manager(self.bluesky_manager)
-
-        if hasattr(self, 'stackedWidget'):
-            # Asegúrate de crear solo una instancia, almacenada en un atributo
-            self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
+        
+        
+        # Añadir logging después de la inicialización:
+        self.logger.info(f"TwitterManager inicializado con credenciales:")
+        self.logger.info(f"  twitter_client_id: {self.twitter_client_id}")
+        self.logger.info(f"  twitter_client_secret: {self.twitter_client_secret[:10] if self.twitter_client_secret else 'None'}...")
+        self.twitter_manager._debug_twitter_credentials()
 
     def _start_background_twitter_auth(self):
         """Inicia la autenticación de Twitter en segundo plano"""
@@ -726,12 +734,64 @@ class MuspyArtistModule(BaseModule):
 
         self.get_releases_button.clicked.connect(self.show_releases_menu)
 
-        # Solo crear si no existe ya
-        if hasattr(self, 'stackedWidget') and not hasattr(self, 'floating_nav'):
-            self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
 
 
+        # Limpiar botones existentes antes de crear nuevos
+        if hasattr(self, 'floating_nav'):
+            try:
+                self.floating_nav.prev_button.deleteLater()
+                self.floating_nav.next_button.deleteLater()
+                del self.floating_nav
+            except:
+                pass
+        
+         # LIMPIEZA COMPLETA antes de crear nuevos botones
+        self._cleanup_all_floating_navigation()
+        
+        # Crear FloatingNavigationButtons SOLO UNA VEZ y con validación
+        if hasattr(self, 'stackedWidget') and self.stackedWidget is not None:
+            try:
+                from PyQt6.QtWidgets import QStackedWidget
+                
+                # Verificar que realmente es un QStackedWidget
+                if isinstance(self.stackedWidget, QStackedWidget):
+                    # AQUÍ es donde debe crearse, NO en __init__
+                    self.floating_nav = FloatingNavigationButtons(self.stackedWidget, self)
+                    self.logger.info("FloatingNavigationButtons creado exitosamente")
+                else:
+                    self.logger.error(f"stackedWidget no es QStackedWidget: {type(self.stackedWidget)}")
+            except Exception as e:
+                self.logger.error(f"Error creando FloatingNavigationButtons: {e}")
 
+    def _cleanup_all_floating_navigation(self):
+        """Limpia todas las instancias de navegación flotante"""
+        try:
+            # Limpiar instancia existente
+            if hasattr(self, 'floating_nav'):
+                try:
+                    if hasattr(self.floating_nav, 'prev_button'):
+                        self.floating_nav.prev_button.deleteLater()
+                    if hasattr(self.floating_nav, 'next_button'):
+                        self.floating_nav.next_button.deleteLater()
+                    del self.floating_nav
+                except:
+                    pass
+            
+            # Buscar y eliminar TODOS los botones flotantes huérfanos
+            all_widgets = [self] + self.findChildren(type(self))
+            for widget in all_widgets:
+                try:
+                    buttons = widget.findChildren(QPushButton)
+                    for button in buttons:
+                        if (button.objectName() in ["floating_prev_button", "floating_next_button"] or
+                            button.text() in ["←", "→"]):
+                            self.logger.info(f"Eliminando botón huérfano: {button.objectName()}")
+                            button.deleteLater()
+                except:
+                    pass
+                    
+        except Exception as e:
+            self.logger.error(f"Error en limpieza completa: {e}")
 
     def go_to_previous_page(self):
         """Navigate to the previous page in the stacked widget"""
@@ -2040,9 +2100,9 @@ class MuspyArtistModule(BaseModule):
 
 
     def show_progress_operation(self, operation_function, operation_args=None, title="Operación en progreso", 
-                            label_format="{current}/{total} - {status}", 
-                            cancel_button_text="Cancelar", 
-                            finish_message=None):
+                                label_format="{current}/{total} - {status}", 
+                                cancel_button_text="Cancelar", 
+                                finish_message=None):
         """Delegación al método implementado en progress_utils"""
         from modules.submodules.muspy.progress_utils import show_progress_operation
         return show_progress_operation(self, operation_function, operation_args, title, 
@@ -2826,7 +2886,8 @@ class MuspyArtistModule(BaseModule):
                 status_callback("Conectando con Muspy API...")
             
             # O usar un simple valor de progreso
-            update_progress(10)  # 10% de progreso
+            if not update_progress(10, 100, "Connecting to Muspy API..."):
+                return {"success": False, "error": "Canceled"}
             
             try:
                 # Use proper endpoint with the user ID
@@ -2839,7 +2900,8 @@ class MuspyArtistModule(BaseModule):
                     # Procesando datos
                     if status_callback:
                         status_callback("Procesando resultados...")
-                    update_progress(50)  # 50% de progreso
+                    if not update_progress(50, 100, "Processing results..."):
+                        return {"success": False, "error": "Canceled"}
                     
                     all_releases = response.json()
                     
@@ -2857,7 +2919,7 @@ class MuspyArtistModule(BaseModule):
                     # Actualizar progreso y terminar
                     if status_callback:
                         status_callback("Generando visualización...")
-                    update_progress(100)  # 100% de progreso
+                    update_progress(100, 100, "Generando visualización...")  # 100% de progreso
                     
                     return {
                         "success": True,

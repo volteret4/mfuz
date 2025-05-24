@@ -8,6 +8,7 @@ import argparse
 import traceback
 from bs4 import BeautifulSoup
 from urllib.parse import quote
+import sys
 
 # MusicBrainz API base URL
 MUSICBRAINZ_API_URL = "https://musicbrainz.org/ws/2"
@@ -1262,12 +1263,6 @@ def fetch_discogs_label_data(discogs_url):
 def save_label_data(db_path, label_info, label_relationships, release_relationships):
     """
     Save the label data to the database with improved error handling and retries
-    
-    Args:
-        db_path (str): Path to SQLite database
-        label_info (dict): Basic label information
-        label_relationships (list): List of label relationships
-        release_relationships (list): List of release relationships
     """
     max_retries = 3
     retry_delay = 2
@@ -1282,9 +1277,6 @@ def save_label_data(db_path, label_info, label_relationships, release_relationsh
             for key, value in label_info.items():
                 if value and key in ['wikipedia_content', 'profile', 'subsidiary_labels']:
                     print(f"Field {key} has {len(str(value))} characters to save")
-            
-            # Para manejar mejor contenido grande como Wikipedia, usaremos ?
-            # para los parámetros en lugar de insertar directamente en la consulta SQL
             
             # Basic label data that should always be present
             mbid = label_info.get('mbid')
@@ -1323,7 +1315,10 @@ def save_label_data(db_path, label_info, label_relationships, release_relationsh
             cursor.execute("SELECT id FROM labels WHERE mbid = ?", (mbid,))
             existing = cursor.fetchone()
             
+            label_id = None  # INICIALIZAR AQUÍ
+            
             if existing:
+                label_id = existing[0]  # OBTENER ID DEL REGISTRO EXISTENTE
                 # Update existing label
                 cursor.execute("""
                 UPDATE labels SET
@@ -1353,6 +1348,7 @@ def save_label_data(db_path, label_info, label_relationships, release_relationsh
                     signed_artists, subsidiary_labels,
                     mbid
                 ))
+                print(f"Updated existing label: {name}")
             else:
                 # Insert new label
                 cursor.execute("""
@@ -1382,22 +1378,26 @@ def save_label_data(db_path, label_info, label_relationships, release_relationsh
                     founder_info, creative_persons,
                     signed_artists, subsidiary_labels
                 ))
+                label_id = cursor.lastrowid  # OBTENER ID DEL NUEVO REGISTRO
+                print(f"Inserted new label: {name}")
             
             conn.commit()
             
             # Debug: Verify the data was saved
-            cursor.execute("SELECT id, wikipedia_content, profile FROM labels WHERE mbid = ?", (mbid,))
+            cursor.execute("SELECT id, wikipedia_content, profile, subsidiary_labels, social_links FROM labels WHERE mbid = ?", (mbid,))
             result = cursor.fetchone()
             if result:
-                label_id, wiki_content_saved, profile_saved = result
-                print(f"Label ID: {label_id}")
+                saved_id, wiki_content_saved, profile_saved, subsidiary_saved, social_saved = result
+                print(f"Label ID: {saved_id}")
                 print(f"Wikipedia content saved in DB: {len(wiki_content_saved) if wiki_content_saved else 0} characters")
                 print(f"Discogs profile saved in DB: {len(profile_saved) if profile_saved else 0} characters")
+                print(f"Subsidiary labels saved: {len(subsidiary_saved) if subsidiary_saved else 0} characters")
+                print(f"Social links saved: {len(social_saved) if social_saved else 0} characters")
             else:
                 print(f"Error: Could not find label with MBID {mbid} after insert/update")
                 return False
             
-            # Process relationships
+            # Process relationships (resto del código igual...)
             for rel in label_relationships:
                 # Get or create the target label
                 target_mbid = rel['target_mbid']
@@ -1521,170 +1521,674 @@ def search_labels(query, limit=10):
         print(f"Error searching for labels: {str(e)}")
         return []
 
-def fetch_label_by_album(db_path, album_mbid, existing_conn=None):
+def fetch_label_by_album(db_path, album_mbid, conn=None):
     """
-    Fetch all labels associated with an album
+    Fetch label information for an album from MusicBrainz with improved error handling
     
     Args:
         db_path (str): Path to SQLite database
         album_mbid (str): MusicBrainz ID of the album
-        existing_conn (sqlite3.Connection, optional): Existing database connection
-    
+        conn: Optional database connection to reuse
+        
     Returns:
-        bool: Success status
+        bool: True if successful, False otherwise
     """
-    url = f"{MUSICBRAINZ_API_URL}/release/{album_mbid}"
-    
-    params = {
-        "inc": "labels",
-        "fmt": "json"
-    }
-    
-    headers = {
-        "User-Agent": USER_AGENT
-    }
+    should_close_conn = False
     
     try:
-        response = requests.get(url, params=params, headers=headers)
+        if conn is None:
+            conn = sqlite3.connect(db_path, timeout=60)
+            should_close_conn = True
         
-        # Respect the rate limit
-        time.sleep(RATE_LIMIT)
-        
-        if response.status_code != 200:
-            print(f"Error fetching album {album_mbid}: {response.status_code} - {response.text}")
+        # Validate album_mbid
+        if not album_mbid or not isinstance(album_mbid, str):
+            print(f"Invalid album MBID: {album_mbid}")
             return False
-            
-        data = response.json()
         
-        # Determine if we should close the connection at the end
-        should_close = existing_conn is None
+        print(f"Fetching label information for album: {album_mbid}")
         
-        # Use existing connection or create a new one with longer timeout
-        conn = existing_conn if existing_conn else sqlite3.connect(db_path, timeout=60)
-        cursor = conn.cursor()
+        # Rate limiting
+        time.sleep(1.1)
+        
+        # Fetch release information from MusicBrainz
+        url = f"https://musicbrainz.org/ws/2/release/{album_mbid}?inc=labels+label-rels&fmt=json"
+        headers = {
+            'User-Agent': 'YourMusicApp/1.0 (frodobolson@disroot.org)'
+        }
         
         try:
-            # Get album ID from database
-            cursor.execute("SELECT id FROM albums WHERE mbid = ?", (album_mbid,))
-            result = cursor.fetchone()
-            
-            if not result:
-                print(f"Album with MBID {album_mbid} not found in database")
-                # if should_close:
-                #     conn.close()
-                # return False
-            
-            album_id = result[0]
-            
-            # Process labels
-            if 'label-info' in data:
-                for label_info in data['label-info']:
-                    if 'label' in label_info:
-                        label_mbid = label_info['label']['id']
-                        
-                        # Check if we already have this label
-                        cursor.execute("SELECT id FROM labels WHERE mbid = ?", (label_mbid,))
-                        label_result = cursor.fetchone()
-                        
-                        label_id = None
-                        if not label_result:
-                            # Fetch and save the label
-                            label_data = fetch_label_data(label_mbid)
-                            if label_data:
-                                label_info_dict, label_rels, release_rels = extract_label_info(label_data)
-                                
-                                # Insert the label with retry mechanism
-                                retry_count = 0
-                                max_retries = 3
-                                while retry_count < max_retries:
-                                    try:
-                                        # Insert the label directly without relationships first
-                                        cursor.execute('''
-                                        INSERT OR REPLACE INTO labels (
-                                            mbid, name, country, founded_year, 
-                                            official_website, wikipedia_url, discogs_url, bandcamp_url,
-                                            mb_type, mb_code, last_updated, mb_last_updated
-                                        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                                        ''', (
-                                            label_info_dict['mbid'], label_info_dict['name'], 
-                                            label_info_dict['country'], label_info_dict['founded_year'],
-                                            label_info_dict['official_website'], label_info_dict['wikipedia_url'], 
-                                            label_info_dict['discogs_url'], label_info_dict['bandcamp_url'],
-                                            label_info_dict['mb_type'], label_info_dict['mb_code'], 
-                                            label_info_dict['last_updated'], label_info_dict['mb_last_updated']
-                                        ))
-                                        conn.commit()
-                                        break
-                                    except sqlite3.OperationalError as e:
-                                        if "database is locked" in str(e) and retry_count < max_retries - 1:
-                                            retry_count += 1
-                                            print(f"Database locked, retrying in {retry_count*2} seconds... (attempt {retry_count}/{max_retries})")
-                                            time.sleep(retry_count * 2)
-                                        else:
-                                            print(f"Failed to insert label after {max_retries} attempts: {e}")
-                                            raise
-                                
-                                # Get the new label ID
-                                cursor.execute("SELECT id FROM labels WHERE mbid = ?", (label_mbid,))
-                                label_result = cursor.fetchone()
-                        
-                        if label_result:
-                            label_id = label_result[0]
-                            
-                            # Save the relationship with retry mechanism
-                            if label_id and album_id:
-                                catalog_number = label_info.get('catalog-number')
-                                
-                                max_retries = 3
-
-                                retry_count = 0
-                                while retry_count < max_retries:
-                                    try:
-                                        cursor.execute('''
-                                        INSERT OR REPLACE INTO label_release_relationships (
-                                            label_id, album_id, relationship_type, catalog_number, last_updated
-                                        ) VALUES (?, ?, ?, ?, ?)
-                                        ''', (
-                                            label_id, album_id, 'published', catalog_number, 
-                                            datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                                        ))
-                                        conn.commit()
-                                        break
-                                    except sqlite3.OperationalError as e:
-                                        if "database is locked" in str(e) and retry_count < max_retries - 1:
-                                            retry_count += 1
-                                            print(f"Database locked, retrying in {retry_count*2} seconds... (attempt {retry_count}/{max_retries})")
-                                            time.sleep(retry_count * 2)
-                                        else:
-                                            print(f"Failed to insert relationship after {max_retries} attempts: {e}")
-                                            raise
-            
-            # if should_close:
-            #     conn.close()
-            return True
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching album data from MusicBrainz: {e}")
+            return False
         
-        except Exception as e:
-            # Handle any other exceptions
-            print(f"Error processing album {album_mbid}: {str(e)}")
-            # if should_close:
-            #     try:
-            #         conn.close()
-            #     except:
-            #         pass
-            # return False
-    
+        try:
+            data = response.json()
+        except json.JSONDecodeError as e:
+            print(f"Error parsing JSON response: {e}")
+            return False
+        
+        # Check if we have valid data
+        if not data or 'error' in data:
+            print(f"No valid data returned for album {album_mbid}")
+            return False
+        
+        # Extract label information
+        labels_processed = 0
+        
+        # Process direct labels
+        if 'label-info' in data and data['label-info']:
+            for label_info in data['label-info']:
+                if 'label' not in label_info or not label_info['label']:
+                    continue
+                    
+                label_data = label_info['label']
+                if 'id' not in label_data:
+                    continue
+                
+                label_mbid = label_data['id']
+                
+                try:
+                    success = fetch_label_by_mbid(db_path, label_mbid, conn)
+                    if success:
+                        labels_processed += 1
+                        
+                        # Create release relationship
+                        cursor = conn.cursor()
+                        cursor.execute("SELECT id FROM albums WHERE mbid = ?", (album_mbid,))
+                        album_result = cursor.fetchone()
+                        
+                        if album_result:
+                            album_id = album_result[0]
+                            
+                            cursor.execute("SELECT id FROM labels WHERE mbid = ?", (label_mbid,))
+                            label_result = cursor.fetchone()
+                            
+                            if label_result:
+                                label_id = label_result[0]
+                                
+                                # Insert relationship
+                                cursor.execute("""
+                                INSERT OR REPLACE INTO label_release_relationships (
+                                    label_id, album_id, relationship_type, catalog_number,
+                                    last_updated
+                                ) VALUES (?, ?, ?, ?, ?)
+                                """, (
+                                    label_id, album_id, 'release',
+                                    label_info.get('catalog-number'),
+                                    datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                ))
+                                conn.commit()
+                                print(f"Created relationship: Label {label_mbid} -> Album {album_mbid}")
+                            else:
+                                print(f"Warning: Label {label_mbid} not found in database after fetch")
+                        else:
+                            print(f"Warning: Album {album_mbid} not found in local database")
+                            
+                except Exception as e:
+                    print(f"Error processing label {label_mbid}: {e}")
+                    continue
+        
+        # Process label relationships
+        if 'relations' in data and data['relations']:
+            for relation in data['relations']:
+                if (relation.get('type') == 'label' and 
+                    'label' in relation and 
+                    relation['label'] and 
+                    'id' in relation['label']):
+                    
+                    label_mbid = relation['label']['id']
+                    
+                    try:
+                        success = fetch_label_by_mbid(db_path, label_mbid, conn)
+                        if success:
+                            labels_processed += 1
+                    except Exception as e:
+                        print(f"Error processing label relationship {label_mbid}: {e}")
+                        continue
+        
+        if labels_processed > 0:
+            print(f"Successfully processed {labels_processed} labels for album {album_mbid}")
+            return True
+        else:
+            print(f"No labels found for album {album_mbid}")
+            return True  # Not an error, just no labels
+            
     except Exception as e:
-        print(f"Exception during API request for album {album_mbid}: {str(e)}")
+        print(f"Unexpected error in fetch_label_by_album: {e}")
+        import traceback
+        traceback.print_exc()
         return False
+        
+    finally:
+        if should_close_conn and conn:
+            try:
+                conn.close()
+            except:
+                pass
 
 
 
-def update_all_albums_with_labels(db_path):
+
+def fetch_label_by_mbid(db_path, label_mbid, conn=None):
+    """
+    Fetch comprehensive label information from MusicBrainz with improved error handling
+    
+    Args:
+        db_path (str): Path to SQLite database
+        label_mbid (str): MusicBrainz ID of the label
+        conn: Optional database connection to reuse
+        
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    should_close_conn = False
+    
+    try:
+        if conn is None:
+            conn = sqlite3.connect(db_path, timeout=60)
+            should_close_conn = True
+        
+        # Validate label_mbid
+        if not label_mbid or not isinstance(label_mbid, str):
+            print(f"Invalid label MBID: {label_mbid}")
+            return False
+        
+        print(f"Fetching label information for: {label_mbid}")
+        
+        # Check if we already have this label
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, name, last_updated FROM labels WHERE mbid = ?", (label_mbid,))
+        existing = cursor.fetchone()
+        
+        if existing:
+            label_id, name, last_updated = existing
+            print(f"Label already exists: {name} (ID: {label_id})")
+            
+            # Check if it's recent (less than 30 days old)
+            if last_updated:
+                try:
+                    last_update_date = datetime.strptime(last_updated, '%Y-%m-%d %H:%M:%S')
+                    if (datetime.now() - last_update_date).days < 30:
+                        print(f"Label {name} was updated recently, skipping")
+                        return True
+                except ValueError:
+                    pass  # Continue with update if date parsing fails
+        
+        # Rate limiting
+        time.sleep(1.1)
+        
+        # Fetch basic label information
+        url = f"https://musicbrainz.org/ws/2/label/{label_mbid}?inc=url-rels+aliases&fmt=json"
+        headers = {
+            'User-Agent': 'YourMusicApp/1.0 (frodobolson@disroot.org)'
+        }
+        
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching label data from MusicBrainz: {e}")
+            return False
+        
+        try:
+            data = response.json()
+        except json.JSONDecodeError as e:
+            print(f"Error parsing JSON response: {e}")
+            return False
+        
+        # Check if we have valid data
+        if not data or 'error' in data:
+            print(f"No valid data returned for label {label_mbid}")
+            return False
+        
+        # Validate required fields
+        if 'name' not in data or not data['name']:
+            print(f"Label {label_mbid} has no name, skipping")
+            return False
+        
+        # Extract basic label information with safe access
+        label_info = {
+            'mbid': label_mbid,
+            'name': data.get('name', ''),
+            'country': data.get('country'),
+            'founded_year': None,
+            'official_website': None,
+            'wikipedia_url': None,
+            'discogs_url': None,
+            'bandcamp_url': None,
+            'mb_type': data.get('type'),
+            'mb_code': data.get('label-code'),
+            'last_updated': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'mb_last_updated': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+        
+        # Extract founded year from life-span
+        if 'life-span' in data and data['life-span'] and 'begin' in data['life-span']:
+            begin_date = data['life-span']['begin']
+            if begin_date and len(begin_date) >= 4:
+                try:
+                    label_info['founded_year'] = int(begin_date[:4])
+                except (ValueError, TypeError):
+                    pass
+        
+        # Extract URLs with safe access
+        social_links = []
+        streaming_links = []
+        purchase_links = []
+        blog_links = []
+        
+        if 'relations' in data and data['relations']:
+            for relation in data['relations']:
+                if not relation or 'type' not in relation or 'url' not in relation:
+                    continue
+                
+                url_data = relation['url']
+                if not url_data or 'resource' not in url_data:
+                    continue
+                
+                url = url_data['resource']
+                rel_type = relation['type']
+                
+                # Categorize URLs
+                if rel_type == 'official homepage':
+                    label_info['official_website'] = url
+                elif 'wikipedia' in url.lower():
+                    label_info['wikipedia_url'] = url
+                elif 'discogs' in url.lower():
+                    label_info['discogs_url'] = url
+                elif 'bandcamp' in url.lower():
+                    label_info['bandcamp_url'] = url
+                elif rel_type in ['social network', 'social media']:
+                    social_links.append({'type': rel_type, 'url': url})
+                elif rel_type in ['streaming', 'streaming music']:
+                    streaming_links.append({'type': rel_type, 'url': url})
+                elif rel_type in ['purchase for download', 'purchase for mail-order']:
+                    purchase_links.append({'type': rel_type, 'url': url})
+                elif rel_type in ['blog', 'review']:
+                    blog_links.append({'type': rel_type, 'url': url})
+        
+        # Serialize link collections
+        label_info['social_links'] = json.dumps(social_links) if social_links else None
+        label_info['streaming_links'] = json.dumps(streaming_links) if streaming_links else None
+        label_info['purchase_links'] = json.dumps(purchase_links) if purchase_links else None
+        label_info['blog_links'] = json.dumps(blog_links) if blog_links else None
+        
+        # Initialize other fields
+        label_info['profile'] = None
+        label_info['parent_label'] = None
+        label_info['contact_info'] = None
+        label_info['founder_info'] = None
+        label_info['creative_persons'] = None
+        label_info['signed_artists'] = None
+        label_info['subsidiary_labels'] = None
+        label_info['wikipedia_content'] = None
+        label_info['wikipedia_updated'] = None
+        
+        print(f"Found {len(social_links)} social links")
+        print(f"Found {len(streaming_links)} streaming links")
+        
+        # Fetch additional information if we have URLs
+        try:
+            if label_info['wikipedia_url']:
+                wikipedia_content = fetch_wikipedia_content(label_info['wikipedia_url'])
+                if wikipedia_content:
+                    label_info['wikipedia_content'] = wikipedia_content
+                    label_info['wikipedia_updated'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        except Exception as e:
+            print(f"Error fetching Wikipedia content: {e}")
+        
+        try:
+            if label_info['discogs_url']:
+                discogs_data = fetch_discogs_label_info(label_info['discogs_url'])
+                if discogs_data:
+                    label_info.update(discogs_data)
+        except Exception as e:
+            print(f"Error fetching Discogs data: {e}")
+        
+        # Save the label data
+        try:
+            success = save_label_data(db_path, label_info, [], [])
+            if success:
+                print(f"Successfully saved label: {label_info['name']}")
+                return True
+            else:
+                print(f"Failed to save label: {label_info['name']}")
+                return False
+        except Exception as e:
+            print(f"Error saving label data: {e}")
+            return False
+            
+    except Exception as e:
+        print(f"Unexpected error in fetch_label_by_mbid: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+        
+    finally:
+        if should_close_conn and conn:
+            try:
+                conn.close()
+            except:
+                pass
+
+# DISCOGS
+
+def init_discogs_config(config):
+    """
+    Initialize Discogs configuration from config dict
+    
+    Args:
+        config (dict): Configuration dictionary
+    """
+    global DISCOGS_TOKEN, USER_AGENT
+    
+    # Get Discogs token from config
+    DISCOGS_TOKEN = config.get('discogs_token')
+    
+    # Get user agent from config if available
+    if 'user_agent' in config:
+        USER_AGENT = config['user_agent']
+    
+    if DISCOGS_TOKEN:
+        print(f"Discogs API token configured")
+    else:
+        print("Warning: No Discogs token configured. API requests will be limited.")
+        print("Get a token at: https://www.discogs.com/settings/developers")
+
+
+def fetch_discogs_label_info(discogs_url):
+    """
+    Fetch additional label information from Discogs
+    
+    Args:
+        discogs_url (str): Discogs URL for the label
+        
+    Returns:
+        dict: Dictionary with additional label information or None if error
+    """
+    try:
+        if not discogs_url:
+            return None
+        
+        # Extract label ID from URL
+        # URLs like: https://www.discogs.com/label/1234-Label-Name
+        import re
+        match = re.search(r'/label/(\d+)', discogs_url)
+        if not match:
+            print(f"Could not extract label ID from Discogs URL: {discogs_url}")
+            return None
+        
+        label_id = match.group(1)
+        
+        # Rate limiting for Discogs API
+        time.sleep(1.5)
+        
+        # Discogs API endpoint
+        api_url = f"https://api.discogs.com/labels/{label_id}"
+        
+        headers = {
+            'User-Agent': USER_AGENT
+        }
+        
+        # Add authorization if token is available
+        if DISCOGS_TOKEN:
+            headers['Authorization'] = f'Discogs token={DISCOGS_TOKEN}'
+        
+        print(f"Fetching Discogs data for label ID: {label_id}")
+        
+        try:
+            response = requests.get(api_url, headers=headers, timeout=30)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching from Discogs API: {e}")
+            # If API fails, try scraping the page directly
+            return scrape_discogs_label_page(discogs_url)
+        
+        try:
+            data = response.json()
+        except json.JSONDecodeError as e:
+            print(f"Error parsing Discogs JSON response: {e}")
+            return None
+        
+        # Check for API errors
+        if 'message' in data and 'error' in data.get('message', '').lower():
+            print(f"Discogs API error: {data.get('message')}")
+            return scrape_discogs_label_page(discogs_url)
+        
+        # Extract information from Discogs API response
+        discogs_info = {}
+        
+        # Basic information
+        if 'profile' in data and data['profile']:
+            discogs_info['profile'] = data['profile']
+        
+        if 'contact_info' in data and data['contact_info']:
+            discogs_info['contact_info'] = data['contact_info']
+        
+        # Parent label information
+        if 'parent_label' in data and data['parent_label']:
+            parent = data['parent_label']
+            if isinstance(parent, dict) and 'name' in parent:
+                discogs_info['parent_label'] = parent['name']
+        
+        # Extract URLs and social links
+        urls = data.get('urls', [])
+        social_links = []
+        streaming_links = []
+        purchase_links = []
+        blog_links = []
+        
+        for url in urls:
+            if not url:
+                continue
+                
+            url_lower = url.lower()
+            
+            # Categorize URLs
+            if any(social in url_lower for social in ['facebook', 'twitter', 'instagram', 'youtube']):
+                social_links.append({'type': 'social', 'url': url})
+            elif any(stream in url_lower for stream in ['spotify', 'soundcloud', 'bandcamp']):
+                streaming_links.append({'type': 'streaming', 'url': url})
+            elif any(shop in url_lower for shop in ['shop', 'store', 'buy', 'purchase']):
+                purchase_links.append({'type': 'purchase', 'url': url})
+            elif any(blog in url_lower for blog in ['blog', 'news', 'press']):
+                blog_links.append({'type': 'blog', 'url': url})
+        
+        # Serialize URL collections (combine with existing if present)
+        if social_links:
+            discogs_info['social_links'] = json.dumps(social_links)
+        if streaming_links:
+            discogs_info['streaming_links'] = json.dumps(streaming_links)
+        if purchase_links:
+            discogs_info['purchase_links'] = json.dumps(purchase_links)
+        if blog_links:
+            discogs_info['blog_links'] = json.dumps(blog_links)
+        
+        # Extract sublabels/subsidiaries
+        sublabels = data.get('sublabels', [])
+        if sublabels:
+            subsidiary_list = []
+            for sublabel in sublabels:
+                if isinstance(sublabel, dict) and 'name' in sublabel:
+                    subsidiary_list.append({
+                        'name': sublabel['name'],
+                        'id': sublabel.get('id'),
+                        'resource_url': sublabel.get('resource_url')
+                    })
+            
+            if subsidiary_list:
+                discogs_info['subsidiary_labels'] = json.dumps(subsidiary_list)
+                print(f"Found {len(subsidiary_list)} sublabels")
+        
+        # Extract founder/key personnel information
+        if 'data_quality' in data:  # This often contains founder info in the notes
+            discogs_info['founder_info'] = data.get('data_quality')
+        
+        print(f"Successfully extracted Discogs data for {data.get('name', 'Unknown Label')}")
+        return discogs_info
+        
+    except Exception as e:
+        print(f"Error fetching Discogs label info: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+def scrape_discogs_label_page(discogs_url):
+    """
+    Scrape Discogs label page when API is not available
+    
+    Args:
+        discogs_url (str): Discogs URL for the label
+        
+    Returns:
+        dict: Dictionary with scraped label information or None if error
+    """
+    try:
+        print(f"Scraping Discogs page: {discogs_url}")
+        
+        # Rate limiting
+        time.sleep(2)
+        
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        response = requests.get(discogs_url, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        scraped_info = {}
+        
+        # Try to extract profile/description
+        profile_section = soup.find('div', {'class': 'profile'})
+        if profile_section:
+            profile_text = profile_section.get_text(strip=True)
+            if profile_text and len(profile_text) > 10:
+                scraped_info['profile'] = profile_text
+        
+        # Try to extract contact info
+        contact_section = soup.find('div', {'class': 'section_contact'})
+        if contact_section:
+            contact_text = contact_section.get_text(strip=True)
+            if contact_text:
+                scraped_info['contact_info'] = contact_text
+        
+        # Extract URLs from the page
+        social_links = []
+        links = soup.find_all('a', href=True)
+        
+        for link in links:
+            href = link['href']
+            if any(social in href.lower() for social in ['facebook', 'twitter', 'instagram', 'youtube']):
+                social_links.append({'type': 'social', 'url': href})
+        
+        if social_links:
+            scraped_info['social_links'] = json.dumps(social_links)
+        
+        print(f"Successfully scraped Discogs page")
+        return scraped_info if scraped_info else None
+        
+    except Exception as e:
+        print(f"Error scraping Discogs page: {e}")
+        return None
+
+def fetch_wikipedia_content(wikipedia_url):
+    """
+    Fetch content from Wikipedia page
+    
+    Args:
+        wikipedia_url (str): Wikipedia URL
+        
+    Returns:
+        str: Wikipedia content or None if error
+    """
+    try:
+        if not wikipedia_url:
+            return None
+        
+        print(f"Fetching Wikipedia content from: {wikipedia_url}")
+        
+        # Rate limiting
+        time.sleep(1)
+        
+        headers = {
+            'User-Agent': USER_AGENT
+        }
+        
+        response = requests.get(wikipedia_url, headers=headers, timeout=30)
+        response.raise_for_status()
+        
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+        
+        # Extract main content
+        content_div = soup.find('div', {'id': 'mw-content-text'})
+        if not content_div:
+            return None
+        
+        # Remove unwanted elements
+        for unwanted in content_div.find_all(['script', 'style', 'table', 'div.navbox']):
+            unwanted.decompose()
+        
+        # Get text content
+        paragraphs = content_div.find_all('p')
+        content_parts = []
+        
+        for p in paragraphs[:10]:  # Limit to first 10 paragraphs
+            text = p.get_text(strip=True)
+            if text and len(text) > 20:  # Only meaningful paragraphs
+                content_parts.append(text)
+        
+        if content_parts:
+            content = '\n\n'.join(content_parts)
+            print(f"Successfully extracted Wikipedia content ({len(content)} characters)")
+            return content[:5000]  # Limit content length
+        
+        return None
+        
+    except Exception as e:
+        print(f"Error fetching Wikipedia content: {e}")
+        return None
+
+def get_albums_without_labels(conn, limit=None):
+    """
+    Get albums that don't have label relationships
+    
+    Args:
+        conn: Database connection
+        limit (int): Maximum number of albums to return
+        
+    Returns:
+        list: List of (album_id, album_mbid, album_name) tuples
+    """
+    query = """
+        SELECT a.id, a.mbid, a.name 
+        FROM albums a
+        WHERE a.mbid IS NOT NULL 
+        AND NOT EXISTS (
+            SELECT 1 FROM label_release_relationships lrr 
+            WHERE lrr.album_id = a.id
+        )
+    """
+    
+    if limit:
+        query += f" LIMIT {limit}"
+    
+    results = safe_db_query(conn, query)
+    return results if results else []
+
+
+def update_all_albums_with_labels(db_path, skip_existing=True):
     """
     Update all albums in the database with label information
     
     Args:
         db_path (str): Path to SQLite database
+        skip_existing (bool): Skip albums that already have label relationships
     """
     # Enable WAL mode for better concurrency
     conn = sqlite3.connect(db_path, timeout=60)
@@ -1692,43 +2196,122 @@ def update_all_albums_with_labels(db_path):
         conn.execute("PRAGMA journal_mode=WAL")
         conn.execute("PRAGMA busy_timeout=60000")  # 60 second timeout
         
-        cursor = conn.cursor()
+        if skip_existing:
+            print("Buscando álbumes sin información de sello...")
+            albums = get_albums_without_labels(conn)
+        else:
+            print("Buscando todos los álbumes con MusicBrainz ID...")
+            albums = safe_db_query(conn, "SELECT id, mbid, name FROM albums WHERE mbid IS NOT NULL")
         
-        # Get all albums with MusicBrainz IDs
-        cursor.execute("SELECT id, mbid FROM albums WHERE mbid IS NOT NULL")
-        albums = cursor.fetchall()
+        if not albums:
+            print("No albums found to process")
+            return
         
         total = len(albums)
-        print(f"Found {total} albums with MusicBrainz IDs")
+        print(f"Found {total} albums {'without label information' if skip_existing else 'with MusicBrainz IDs'}")
         
-        for i, (album_id, album_mbid) in enumerate(albums):
-            print(f"Processing album {i+1}/{total}: {album_mbid}")
+        processed = 0
+        errors = 0
+        skipped = 0
+        
+        for i, album_data in enumerate(albums):
+            if len(album_data) >= 3:
+                album_id, album_mbid, album_name = album_data[:3]
+            else:
+                album_id, album_mbid = album_data
+                album_name = "Unknown"
+            
+            print(f"Processing album {i+1}/{total}: {album_name} ({album_mbid})")
+            
+            # Validate album data
+            if not album_mbid or album_mbid.strip() == '':
+                print(f"Skipping album with empty MBID: {album_name}")
+                skipped += 1
+                continue
+            
             try:
                 success = fetch_label_by_album(db_path, album_mbid, conn)
-                if not success:
-                    print(f"Skipping album {album_mbid} due to errors")
+                if success:
+                    processed += 1
+                elif success is False:  # Explicitly False (not None)
+                    errors += 1
+                    print(f"Failed to process album {album_mbid}")
+                else:
+                    skipped += 1
+                    print(f"Skipped album {album_mbid}")
+                    
             except Exception as e:
+                errors += 1
                 print(f"Error processing album {album_mbid}: {str(e)}")
+                import traceback
+                traceback.print_exc()
                 # Continue with next album
+        
+        print(f"\nProcessing completed:")
+        print(f"  Total albums: {total}")
+        print(f"  Successfully processed: {processed}")
+        print(f"  Errors: {errors}")
+        print(f"  Skipped: {skipped}")
+        
+    except Exception as e:
+        print(f"Critical error in update_all_albums_with_labels: {e}")
+        import traceback
+        traceback.print_exc()
     finally:
         try:
-            print("evitando que se cierre")
-            #conn.close()
+            conn.close()
         except:
             pass
 
     # Print summary statistics
-    with sqlite3.connect(db_path) as conn:
+    try:
+        with sqlite3.connect(db_path) as conn:
+            label_count = safe_db_query(conn, "SELECT COUNT(*) FROM labels", fetch_one=True)
+            label_with_content = safe_db_query(conn, "SELECT COUNT(*) FROM labels WHERE wikipedia_content IS NOT NULL", fetch_one=True)
+            relationships_count = safe_db_query(conn, "SELECT COUNT(*) FROM label_release_relationships", fetch_one=True)
+            
+            print(f"\nDatabase summary:")
+            print(f"  Total labels: {label_count[0] if label_count else 0}")
+            print(f"  Labels with Wikipedia content: {label_with_content[0] if label_with_content else 0}")
+            print(f"  Label-album relationships: {relationships_count[0] if relationships_count else 0}")
+    except Exception as e:
+        print(f"Error getting database summary: {e}")
+
+
+
+def safe_db_query(conn, query, params=None, fetch_one=False):
+    """
+    Execute a database query safely with proper error handling
+    
+    Args:
+        conn: Database connection
+        query (str): SQL query
+        params (tuple): Query parameters
+        fetch_one (bool): Whether to fetch only one result
+        
+    Returns:
+        Query result or None if error
+    """
+    try:
         cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM labels")
-        label_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM labels WHERE wikipedia_content IS NOT NULL")
-        label_with_content = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM label_release_relationships")
-        relationships_count = cursor.fetchone()[0]
-        #conn.close()
-
-
+        if params:
+            cursor.execute(query, params)
+        else:
+            cursor.execute(query)
+        
+        if fetch_one:
+            return cursor.fetchone()
+        else:
+            return cursor.fetchall()
+            
+    except sqlite3.Error as e:
+        print(f"Database query error: {e}")
+        print(f"Query: {query}")
+        print(f"Params: {params}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error in database query: {e}")
+        return None
 
 def repair_database_schema(db_path):
     """
@@ -1948,31 +2531,96 @@ def check_wikipedia_content(db_path, label_mbid=None):
 
 
 def main(config=None):
-    parser = argparse.ArgumentParser(description='Extract MusicBrainz links and reviews for albums')
-    parser.add_argument('--config', help='Path to json config ')
-    parser.add_argument('--db-path', help='Path to the SQLite database')
-    args = parser.parse_args()
-
-    with open(args.config, 'r') as f:
-        config_data = json.load(f)
-        
-    # Combinar configuraciones
-    config = {}
-    config.update(config_data.get("common", {}))
-    config.update(config_data.get("mb_sellos", {}))
-
-    db_path = args.db_path or config.get('db_path')
+    """
+    Función principal que puede recibir configuración del orquestador
     
+    Args:
+        config (dict): Configuración desde el archivo JSON
+    """
+    # Si no hay configuración, usar argumentos de línea de comandos
+    if config is None:
+        parser = argparse.ArgumentParser(description='Extract MusicBrainz label information')
+        parser.add_argument('--config', help='Path to json config')
+        parser.add_argument('--db-path', help='Path to the SQLite database')
+        parser.add_argument('--mode', choices=['interactive', 'auto'], default='interactive',
+                          help='Execution mode: interactive or auto')
+        parser.add_argument('--skip-existing', action='store_true', 
+                          help='Skip albums that already have label relationships')
+        parser.add_argument('--update-wikipedia', action='store_true',
+                          help='Update Wikipedia content for labels')
+        args = parser.parse_args()
+
+        # Cargar configuración si se proporciona
+        if args.config:
+            with open(args.config, 'r') as f:
+                config_data = json.load(f)
+            
+            # Combinar configuraciones
+            config = {}
+            config.update(config_data.get("common", {}))
+            config.update(config_data.get("musicbrainz/mb_sellos", {}))
+        else:
+            config = {}
+        
+        # Sobrescribir con argumentos de línea de comandos
+        if args.db_path:
+            config['db_path'] = args.db_path
+        if args.mode:
+            config['mode'] = args.mode
+        if args.skip_existing:
+            config['skip_existing'] = True
+        if args.update_wikipedia:
+            config['update_wikipedia'] = True
+
+    # Inicializar configuración de Discogs
+    init_discogs_config(config)
+    
+    # Obtener configuración
+    db_path = config.get('db_path')
+    mode = config.get('mode', 'interactive')
+    skip_existing = config.get('skip_existing', True)
+    update_wikipedia = config.get('update_wikipedia', False)
+    force_update = config.get('force_update', False)
+    batch_size = config.get('batch_size', 50)
+    
+    # Validar db_path
     if not db_path:
-        db_path = input("Enter the path to your SQLite database file: ")
+        if mode == 'interactive':
+            db_path = input("Enter the path to your SQLite database file: ")
+        else:
+            print("Error: db_path is required")
+            return 1
     
     if not os.path.exists(db_path):
         print(f"Database file {db_path} doesn't exist.")
-        return
+        return 1
         
     # Initialize database tables
     create_label_tables(db_path)
     
+    # Modo automático - procesar todos los álbumes
+    if mode == 'auto':
+        print(f"Running in automatic mode...")
+        print(f"Configuration:")
+        print(f"  Database: {db_path}")
+        print(f"  Skip existing: {skip_existing}")
+        print(f"  Force update: {force_update}")
+        print(f"  Batch size: {batch_size}")
+        print(f"  Update Wikipedia: {update_wikipedia}")
+        
+        # Actualizar álbumes con información de sellos
+        update_all_albums_with_labels(db_path, skip_existing=skip_existing)
+        
+        # Actualizar contenido de Wikipedia si se solicita
+        if update_wikipedia:
+            print("\nUpdating Wikipedia content...")
+            updated = update_wikipedia_content(db_path)
+            print(f"Wikipedia content updated for {updated} labels.")
+        
+        print("Automatic processing completed.")
+        return 0
+    
+    # Modo interactivo (código existente)
     while True:
         print("\nMusicBrainz Label Data Fetcher")
         print("1. Search for a label")
@@ -1981,14 +2629,15 @@ def main(config=None):
         print("4. Update all albums with label information")
         print("5. Show label details")
         print("6. Show database statistics")
-        print("7. Update Wikipedia URLs from MusicBrainz")  # Nueva opción
+        print("7. Update Wikipedia URLs from MusicBrainz")
         print("8. Update Wikipedia content for labels with URLs")
         print("9. Update all missing information for labels")
         print("10. Verify Wikipedia content")
         print("11. Repair database schema")
         print("12. Exit")
         
-        choice = input("Enter your choice (1-7): ")
+        choice = input("Enter your choice (1-12): ")
+        
         
         if choice == '1':
             query = input("Enter search query: ")
@@ -2061,12 +2710,14 @@ def main(config=None):
                 print("Error processing album.")
         
         elif choice == '4':
-            batch_size = int(input("Enter batch size (number of albums per batch, default 50): ") or "50")
-            confirm = input(f"This will update all albums with label information using batches of {batch_size}. This may take a while. Continue? (y/n): ")
+            skip_choice = input("Skip albums that already have label relationships? (y/n, default: y): ")
+            skip_existing_albums = skip_choice.lower() != 'n'
+            
+            confirm = input(f"This will update albums with label information (skip_existing={skip_existing_albums}). Continue? (y/n): ")
             
             if confirm.lower() == 'y':
-                update_all_albums_with_labels(db_path)
-                print("All albums updated with label information.")
+                update_all_albums_with_labels(db_path, skip_existing=skip_existing_albums)
+                print("Albums updated with label information.")
                 
         elif choice == '5':
             # Show label details by MBID or search

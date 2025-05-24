@@ -43,3 +43,5 @@ config/db_creator_config.json
 config/FLAC_config_database_creator.json
 config/config_database_creator.json
 content/artistas_img/
+billboard_data/
+uk_charts_data/

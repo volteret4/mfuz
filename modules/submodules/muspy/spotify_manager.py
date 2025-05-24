@@ -281,7 +281,6 @@ class SpotifyManager:
             self.ui_callback.append(f"Error authenticating with Spotify: {e}")
             return False
 
-
     def show_spotify_followed_artists(self):
         """
         Show a list of artists the user follows on Spotify with caching
@@ -312,20 +311,25 @@ class SpotifyManager:
             return
         
         # Function to fetch artists with progress dialog
-        def fetch_spotify_artists(update_progress):
+        def fetch_spotify_artists(update_progress, *args, **kwargs):
             try:
-                update_progress(0, 100, "Connecting to Spotify API...")
+                # Usar el patrón: update_progress(current, total, message)
+                if not update_progress(0, 100, "Connecting to Spotify API..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 all_artists = []
                 offset = 0
-                limit = 50  # Spotify's maximum
-                total = 1  # Will be updated after first request
+                limit = 50
+                total = 1
                 
-                # Paginate through all followed artists
                 while offset < total:
-                    # Update progress
-                    progress_percent = min(100, int((offset / max(1, total)) * 100))
-                    update_progress(progress_percent, 100, f"Fetching artists ({offset}/{total})...")
+                    if total > 1:
+                        progress_percent = min(95, int((offset / max(1, total)) * 95))
+                        if not update_progress(progress_percent, 100, f"Fetching artists ({offset}/{total})..."):
+                            return {"success": False, "error": "Canceled"}
+                    else:
+                        if not update_progress(10, 100, "Fetching artists..."):
+                            return {"success": False, "error": "Canceled"}
                     
                     # Fetch current page of artists
                     results = spotify_client.current_user_followed_artists(limit=limit, after=None if offset == 0 else all_artists[-1]['id'])
@@ -349,7 +353,8 @@ class SpotifyManager:
                         break
                 
                 # Process artists data
-                update_progress(95, 100, "Processing artist data...")
+                if not update_progress(95, 100, "Processing artist data..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 processed_artists = []
                 for artist in all_artists:
@@ -366,6 +371,9 @@ class SpotifyManager:
                 self.cache_manager.spotify_cache_manager(cache_key, processed_artists)
                 
                 update_progress(100, 100, "Complete!")
+                
+                if not update_progress(100, 100, "Complete!"):
+                    return {"success": False, "error": "Canceled"}
                 
                 return {
                     "success": True,
@@ -433,43 +441,39 @@ class SpotifyManager:
             return
         
         # Function to fetch new releases with progress dialog
-        def fetch_spotify_releases(update_progress):
+        def fetch_spotify_releases(update_progress, *args, **kwargs):
             try:
-                update_progress(0, 100, "Connecting to Spotify API...")
+                if not update_progress(0, 100, "Connecting to Spotify API..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 # First get all artists the user follows
-                update_progress(10, 100, "Getting artists you follow...")
+                if not update_progress(10, 100, "Getting artists you follow..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 followed_artists = []
                 offset = 0
-                limit = 50  # Spotify's maximum
-                total = 1  # Will be updated after first request
+                limit = 50
+                total = 1
                 
                 # Paginate through all followed artists
                 while offset < total:
-                    # Fetch current page of artists
                     results = spotify_client.current_user_followed_artists(limit=limit, after=None if offset == 0 else followed_artists[-1]['id'])
                     
                     if 'artists' in results and 'items' in results['artists']:
-                        # Get artists from this page
                         artists_page = results['artists']['items']
                         followed_artists.extend(artists_page)
-                        
-                        # Update total count
                         total = results['artists']['total']
                         
-                        # If we got fewer than requested, we're done
                         if len(artists_page) < limit:
                             break
                             
-                        # Update offset
                         offset += len(artists_page)
                     else:
-                        # No more results or error
                         break
                 
                 # We have all followed artists, now get their recent releases
-                update_progress(30, 100, f"Found {len(followed_artists)} artists. Getting their recent releases...")
+                if not update_progress(30, 100, f"Found {len(followed_artists)} artists. Getting their recent releases..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 all_releases = []
                 artist_count = len(followed_artists)
@@ -483,7 +487,8 @@ class SpotifyManager:
                     artist_name = artist['name']
                     
                     progress = 30 + int((i / max_artists_to_process) * 60)
-                    update_progress(progress, 100, f"Getting releases for {artist_name} ({i+1}/{max_artists_to_process})...")
+                    if not update_progress(progress, 100, f"Getting releases for {artist_name} ({i+1}/{max_artists_to_process})..."):
+                        return {"success": False, "error": "Canceled"}
                     
                     # Get albums for this artist
                     try:
@@ -507,11 +512,11 @@ class SpotifyManager:
                                         all_releases.append(album)
                     except Exception as e:
                         self.logger.error(f"Error getting albums for {artist_name}: {e}")
-                        # Continue with next artist
                         continue
                 
                 # Process releases data
-                update_progress(95, 100, "Processing release data...")
+                if not update_progress(95, 100, "Processing release data..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 # Sort by release date (newest first)
                 all_releases.sort(key=lambda x: x.get('release_date', '0000-00-00'), reverse=True)
@@ -533,7 +538,8 @@ class SpotifyManager:
                 # Cache the processed releases
                 self.cache_manager.spotify_cache_manager(cache_key, processed_releases)
                 
-                update_progress(100, 100, "Complete!")
+                if not update_progress(100, 100, "Complete!"):
+                    return {"success": False, "error": "Canceled"}
                 
                 return {
                     "success": True,
@@ -602,20 +608,24 @@ class SpotifyManager:
             return
         
         # Function to fetch saved tracks with progress dialog
-        def fetch_spotify_saved_tracks(update_progress):
+        def fetch_spotify_saved_tracks(update_progress, *args, **kwargs):
             try:
-                update_progress(0, 100, "Connecting to Spotify API...")
+                if not update_progress(0, 100, "Connecting to Spotify API..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 all_tracks = []
                 offset = 0
-                limit = 50  # Spotify's maximum for this endpoint
-                total = 1  # Will be updated after first request
+                limit = 50
+                total = 1
                 
-                # Paginate through all saved tracks
                 while offset < total:
-                    # Update progress
-                    progress_percent = min(95, int((offset / max(1, total)) * 100))
-                    update_progress(progress_percent, 100, f"Fetching tracks ({offset}/{total})...")
+                    if total > 1:
+                        progress_percent = min(95, int((offset / max(1, total)) * 95))
+                        if not update_progress(progress_percent, 100, f"Fetching tracks ({offset}/{total})..."):
+                            return {"success": False, "error": "Canceled"}
+                    else:
+                        if not update_progress(10, 100, "Fetching tracks..."):
+                            return {"success": False, "error": "Canceled"}
                     
                     # Fetch current page of tracks
                     results = spotify_client.current_user_saved_tracks(limit=limit, offset=offset)
@@ -666,13 +676,14 @@ class SpotifyManager:
                         # No more results or error
                         break
                 
-                # Process the final results
-                update_progress(98, 100, "Processing track data...")
+                if not update_progress(98, 100, "Processing track data..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 # Cache the processed tracks
                 self.cache_manager.spotify_cache_manager(cache_key, all_tracks)
                 
-                update_progress(100, 100, "Complete!")
+                if not update_progress(100, 100, "Complete!"):
+                    return {"success": False, "error": "Canceled"}
                 
                 return {
                     "success": True,
@@ -820,12 +831,13 @@ class SpotifyManager:
             return
         
         # Function to fetch top items with progress dialog
-        def fetch_top_items(update_progress):
+        def fetch_top_items(update_progress, *args, **kwargs):
             try:
-                update_progress(0, 100, "Connecting to Spotify API...")
+                if not update_progress(0, 100, "Connecting to Spotify API..."):
+                    return {"success": False, "error": "Canceled"}
                 
-                # Get top items
-                update_progress(30, 100, f"Fetching top {item_type}...")
+                if not update_progress(30, 100, f"Fetching top {item_type}..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 if item_type == "artists":
                     results = spotify_client.current_user_top_artists(
@@ -836,7 +848,8 @@ class SpotifyManager:
                     items = results.get("items", [])
                     
                     # Process artists
-                    update_progress(70, 100, "Processing artist data...")
+                    if not update_progress(70, 100, f"Processing {item_type} data..."):
+                        return {"success": False, "error": "Canceled"}
                     processed_items = []
                     
                     for artist in items:
@@ -859,7 +872,7 @@ class SpotifyManager:
                     items = results.get("items", [])
                     
                     # Process tracks
-                    update_progress(70, 100, "Processing track data...")
+                    update_progress(70, "Processing track data...")
                     processed_items = []
                     
                     for track in items:
@@ -886,7 +899,8 @@ class SpotifyManager:
                 # Cache the processed items
                 self.cache_manager.spotify_cache_manager(cache_key, processed_items)
                 
-                update_progress(100, 100, "Complete!")
+                if not update_progress(100, 100, "Complete!"):
+                    return {"success": False, "error": "Canceled"}
                 
                 return {
                     "success": True,
@@ -1254,20 +1268,22 @@ class SpotifyManager:
             return
         
         # Function to fetch albums with progress dialog
-        def fetch_artist_albums(update_progress):
+        def fetch_artist_albums(update_progress, *args, **kwargs):
             try:
-                update_progress(0, 100, "Connecting to Spotify API...")
+                if not update_progress(0, 100, "Connecting to Spotify API..."):
+                    return {"success": False, "error": "Canceled"}
                 
                 all_albums = []
                 album_types = ['album', 'single', 'compilation']
                 
                 for i, album_type in enumerate(album_types):
                     progress = i * 30
-                    update_progress(progress, 100, f"Fetching {album_type}s...")
+                    if not update_progress(progress, 100, f"Fetching {album_type}s..."):
+                        return {"success": False, "error": "Canceled"}
                     
                     offset = 0
-                    limit = 50  # Spotify's maximum
-                    total = 1  # Will be updated after first request
+                    limit = 50
+                    total = 1
                     
                     # Paginate through all albums of this type
                     while offset < total:
@@ -1280,39 +1296,33 @@ class SpotifyManager:
                         )
                         
                         if 'items' in results:
-                            # Get albums from this page
                             albums_page = results['items']
                             
                             # Add albums to our list
                             for album in albums_page:
-                                # Add album type for filtering
                                 album['fetch_type'] = album_type
                                 all_albums.append(album)
                             
-                            # Update total count
                             total = results['total']
                             
-                            # If we got fewer than requested, we're done
                             if len(albums_page) < limit:
                                 break
                                 
-                            # Update offset
                             offset += len(albums_page)
                         else:
-                            # No more results or error
                             break
                 
                 # Process albums data
-                update_progress(95, 100, "Processing album data...")
+                if not update_progress(95, 100, "Processing album data..."):
+                    return {"success": False, "error": "Canceled"}
                 
-                # Remove duplicates (sometimes the same album appears in different categories)
+                # Remove duplicates and process
                 unique_albums = {}
                 for album in all_albums:
                     album_id = album.get('id')
                     if album_id and album_id not in unique_albums:
                         unique_albums[album_id] = album
                 
-                # Convert to list and sort by release date (newest first)
                 processed_albums = list(unique_albums.values())
                 processed_albums.sort(key=lambda x: x.get('release_date', '0000-00-00'), reverse=True)
                 
@@ -1331,7 +1341,8 @@ class SpotifyManager:
                         'image_url': album.get('images', [{}])[0].get('url', '') if album.get('images') else ''
                     })
                 
-                update_progress(100, 100, "Complete!")
+                if not update_progress(100, 100, "Complete!"):
+                    return {"success": False, "error": "Canceled"}
                 
                 return {
                     "success": True,

@@ -956,17 +956,10 @@ class MusicBrainzAuthManager:
             return []
 
 
-   
-    def get_collection_contents_ngs(self, collection_id, entity_type="release"):
+    
+    def get_collection_contents_ngs(self, collection_id, entity_type="release", progress_callback=None):
         """
-        Obtener el contenido de una colección de MusicBrainz usando musicbrainzngs con paginación adecuada
-        
-        Args:
-            collection_id (str): ID de la colección
-            entity_type (str): Tipo de entidad en la colección (release, artist, etc.)
-                
-        Returns:
-            list: Lista de entidades en la colección
+        Obtener el contenido de una colección con callback opcional para progreso
         """
         if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
             if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
@@ -974,28 +967,30 @@ class MusicBrainzAuthManager:
                 return []
         
         try:
-            # Obtener contenido de colección con paginación
             releases = []
             offset = 0
-            limit = 100  # Tamaño máximo de página para MusicBrainz
+            limit = 100
             total_items = None
-            
-            # Actualizamos la UI para mostrar estado de paginación
-            if hasattr(self, 'ui_callback'):
-                self.ui_callback.append(f"Obteniendo colección con paginación (tamaño de página: {limit})...")
-                QApplication.processEvents()
             
             # Bucle de paginación
             while True:
+                # Verificar cancelación si tenemos callback
+                if progress_callback and not progress_callback(
+                    len(releases), total_items or 1, 
+                    f"Obteniendo página {offset//limit + 1} (offset: {offset})...", 
+                    total_items is None
+                ):
+                    self.logger.info("Operación cancelada por el usuario")
+                    break
+                
                 # Aplicamos rate limiting
                 self.rate_limiter.wait_if_needed()
                 
-                # Mensaje de progreso
+                # Actualizar UI callback si existe
                 if hasattr(self, 'ui_callback'):
                     self.ui_callback.append(f"Obteniendo página {offset//limit + 1} (offset: {offset})...")
                     QApplication.processEvents()
                 
-                # Obtener una página de resultados
                 try:
                     # Usar la API de musicbrainzngs para obtener la página
                     result = self.musicbrainz_auth.mb_ngs.get_releases_in_collection(
@@ -1015,7 +1010,7 @@ class MusicBrainzAuthManager:
                             self.ui_callback.append(f"Total de items a recuperar: {total_items}")
                             QApplication.processEvents()
                     
-                    # Procesar cada release de esta página
+                    # Procesar cada release... (resto del código igual)
                     for release in page_releases:
                         processed_release = {
                             'mbid': release.get('id', ''),

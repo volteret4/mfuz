@@ -88,11 +88,6 @@ class MusicBrainzManager:
     def show_musicbrainz_collection(self, collection_id, collection_name):
         """
         Mostrar el contenido de una colección de MusicBrainz en la tabla
-        con caché y rate limiting, evitando autenticación si ya está autenticado
-        
-        Args:
-            collection_id (str): ID de la colección a mostrar
-            collection_name (str): Nombre de la colección para mostrar
         """
         # Asegurarnos de que estamos mostrando la página de texto durante la carga
         self.display_manager.show_text_page()
@@ -101,26 +96,15 @@ class MusicBrainzManager:
         self.ui_callback.append("Por favor espere mientras se recuperan los datos...")
         QApplication.processEvents()
         
-        # Verificar autenticación sin intentar autenticar de nuevo
-        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth.is_authenticated():
-            # No estamos autenticados, informar y salir
-            self.ui_callback.append("No autenticado con MusicBrainz. Se requiere iniciar sesión primero.")
-            QApplication.processEvents()
-            
-            # Ofrecer opción de iniciar sesión
-            reply = QMessageBox.question(
-                self.parent, 
-                "Authentication Required", 
-                "You need to be logged in to MusicBrainz to view collections. Log in now?",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-            )
-            
-            if reply == QMessageBox.StandardButton.Yes:
-                if not self.authenticate_musicbrainz_silently():
-                    QMessageBox.warning(self.parent, "Error", "Authentication failed. Please try again.")
-                    return
-            else:
-                return
+        # Verificar autenticación básica primero
+        if not hasattr(self, 'musicbrainz_auth') or not self.musicbrainz_auth:
+            QMessageBox.warning(self.parent, "Error", "MusicBrainz authentication manager not available")
+            return
+        
+        # Verificar si tenemos credenciales
+        if not self.musicbrainz_username or not self.musicbrainz_password:
+            QMessageBox.warning(self.parent, "Error", "MusicBrainz credentials not configured")
+            return
         
         # Intentar usar la caché primero
         cache_dir = Path(self.project_root, ".content", "cache", "musicbrainz")
@@ -147,35 +131,70 @@ class MusicBrainzManager:
                 self.logger.error(f"Error leyendo caché de colección: {e}")
         
         # Crear función para obtener datos de colección con barra de progreso
-        def fetch_collection_data(update_progress):
-            update_progress(0, 3, "Conectando con MusicBrainz...", indeterminate=True)
-            
+        def fetch_collection_data(progress_callback):
+            """Función interna para obtener datos de colección"""
             try:
-                # Mostrar progreso mientras trabajamos
-                update_progress(1, 3, "Recuperando datos de colección...", indeterminate=True)
+                # Paso 1: Verificar autenticación básica
+                if not progress_callback(10, 100, "Verificando autenticación básica..."):
+                    return {"success": False, "error": "Operación cancelada"}
+                
+                # Verificar si ya estamos autenticados básicamente
+                if not self.musicbrainz_auth.is_authenticated():
+                    if not progress_callback(20, 100, "Autenticando con MusicBrainz (sesión web)..."):
+                        return {"success": False, "error": "Operación cancelada"}
+                    
+                    # Intentar autenticación básica
+                    if not self.musicbrainz_auth.authenticate(silent=True):
+                        return {
+                            "success": False,
+                            "error": "No se pudo autenticar con MusicBrainz (sesión web)"
+                        }
+                
+                # Paso 2: Configurar musicbrainzngs
+                if not progress_callback(40, 100, "Configurando musicbrainzngs..."):
+                    return {"success": False, "error": "Operación cancelada"}
+                
+                # Verificar si musicbrainzngs está disponible
+                if not hasattr(self.musicbrainz_auth, 'mb_ngs') or not self.musicbrainz_auth.mb_ngs:
+                    if not progress_callback(50, 100, "Inicializando musicbrainzngs..."):
+                        return {"success": False, "error": "Operación cancelada"}
+                    
+                    # Intentar configurar musicbrainzngs
+                    try:
+                        import musicbrainzngs
+                        
+                        # Configurar musicbrainzngs
+                        musicbrainzngs.set_useragent("MuspyReleasesModule", "1.0")
+                        musicbrainzngs.auth(self.musicbrainz_username, self.musicbrainz_password)
+                        
+                        # Almacenar referencia
+                        self.musicbrainz_auth.mb_ngs = musicbrainzngs
+                        
+                        self.logger.info("musicbrainzngs configurado correctamente")
+                    except ImportError:
+                        return {
+                            "success": False,
+                            "error": "musicbrainzngs no está instalado. Instala con: pip install musicbrainzngs"
+                        }
+                    except Exception as e:
+                        return {
+                            "success": False,
+                            "error": f"Error configurando musicbrainzngs: {str(e)}"
+                        }
+                
+                # Paso 3: Obtener datos de colección
+                if not progress_callback(60, 100, "Obteniendo datos de colección..."):
+                    return {"success": False, "error": "Operación cancelada"}
                 
                 # Aplicar rate limiting
                 self.rate_limiter.wait_if_needed()
                 
-                # Usar la función de paginación mejorada
-                releases = []
-                
-                # Verificar si tenemos musicbrainzngs configurado
-                if hasattr(self.musicbrainz_auth, 'mb_ngs'):
-                    releases = self.get_collection_contents_ngs(collection_id)
-                else:
-                    # Intentar autenticar con musicbrainzngs
-                    if self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
-                        releases = self.get_collection_contents_ngs(collection_id)
-                    else:
-                        # Fallar con un mensaje claro
-                        return {
-                            "success": False,
-                            "error": "No se pudo autenticar con musicbrainzngs para obtener la colección"
-                        }
+                # Obtener releases usando musicbrainzngs directamente
+                releases = self._get_collection_contents_direct(collection_id, progress_callback)
                         
                 if releases:
-                    update_progress(2, 3, f"Procesando {len(releases)} releases...")
+                    if not progress_callback(90, 100, f"Procesando {len(releases)} releases..."):
+                        return {"success": False, "error": "Operación cancelada"}
                     
                     # Actualizar caché
                     try:
@@ -190,7 +209,7 @@ class MusicBrainzManager:
                     except Exception as e:
                         self.logger.error(f"Error caching collection contents: {e}")
                     
-                    update_progress(3, 3, "Datos procesados con éxito")
+                    progress_callback(100, 100, "Datos procesados con éxito")
                     
                     return {
                         "success": True,
@@ -199,7 +218,7 @@ class MusicBrainzManager:
                 else:
                     return {
                         "success": False,
-                        "error": "No se encontraron releases en la colección o error al obtener datos"
+                        "error": "No se encontraron releases en la colección"
                     }
             
             except Exception as e:
@@ -221,26 +240,530 @@ class MusicBrainzManager:
             releases = result.get("releases", [])
             
             if not releases:
-                # Seguir mostrando texto en lugar de tabla vacía
                 self.display_manager.show_text_page()
                 self.ui_callback.append(f"La colección '{collection_name}' está vacía.")
                 QMessageBox.information(self.parent, "Colección Vacía", f"La colección '{collection_name}' está vacía.")
                 return
             
-            # Mostrar todo el texto de procesamiento antes de intentar cambiar a vista de tabla
+            # Mostrar releases en la tabla
             self.display_manager.show_text_page()
             self.ui_callback.append(f"Se recuperaron con éxito {len(releases)} releases.")
             self.ui_callback.append("Preparando visualización de tabla...")
             QApplication.processEvents()
             
-            # Mostrar releases en la tabla
             self.display_musicbrainz_collection_table(releases, collection_name, collection_id)
         else:
-            # Seguir mostrando texto para caso de error
             self.display_manager.show_text_page()
             error_msg = result.get("error", "Error desconocido") if result else "La operación falló"
             self.ui_callback.append(f"Error: {error_msg}")
             QMessageBox.warning(self.parent, "Error", f"No se pudo cargar la colección: {error_msg}")
+
+
+    def _get_collection_contents_direct(self, collection_id, progress_callback=None):
+        """
+        Obtener contenido de colección usando musicbrainzngs directamente
+        
+        Args:
+            collection_id (str): ID de la colección
+            progress_callback: Función de callback para progreso
+            
+        Returns:
+            list: Lista de releases procesados
+        """
+        if not hasattr(self.musicbrainz_auth, 'mb_ngs') or not self.musicbrainz_auth.mb_ngs:
+            self.logger.error("musicbrainzngs no está configurado")
+            return []
+        
+        try:
+            releases = []
+            offset = 0
+            limit = 100
+            total_items = None
+            page_num = 1
+            
+            while True:
+                # Verificar cancelación
+                if progress_callback and not progress_callback(
+                    60 + min(30, int((len(releases) / max(total_items or 1, 1)) * 30)), 
+                    100, 
+                    f"Obteniendo página {page_num} (releases: {len(releases)})..."
+                ):
+                    self.logger.info("Operación cancelada por el usuario")
+                    break
+                
+                # Aplicar rate limiting
+                self.rate_limiter.wait_if_needed()
+                
+                try:
+                    # Llamada directa a musicbrainzngs (sin includes ya que no es compatible)
+                    result = self.musicbrainz_auth.mb_ngs.get_releases_in_collection(
+                        collection_id,
+                        limit=limit,
+                        offset=offset
+                    )
+                    
+                    # Procesar respuesta
+                    collection_data = result.get('collection', {})
+                    page_releases = collection_data.get('release-list', [])
+                    
+                    # Obtener total si no lo tenemos
+                    if total_items is None:
+                        total_items = collection_data.get('release-count', len(page_releases))
+                        self.logger.info(f"Total releases en colección: {total_items}")
+                    
+                    # Procesar cada release con información mejorada
+                    for release in page_releases:
+                        processed_release = {
+                            'mbid': release.get('id', ''),
+                            'title': release.get('title', 'Título Desconocido'),
+                            'artist': "",
+                            'artist_mbid': "",
+                            'type': "",
+                            'date': release.get('date', ''),
+                            'status': release.get('status', ''),
+                            'country': release.get('country', '')
+                        }
+                        
+                        # CORREGIDO: Procesar tipo de release desde release-group
+                        if 'release-group' in release:
+                            rg = release['release-group']
+                            if isinstance(rg, dict):
+                                # Si release-group es un diccionario completo
+                                processed_release['type'] = rg.get('primary-type', '')
+                                
+                                # También podemos obtener tipos secundarios si existen
+                                secondary_types = rg.get('secondary-type-list', [])
+                                if secondary_types:
+                                    processed_release['type'] += f" ({', '.join(secondary_types)})"
+                            elif isinstance(rg, str):
+                                # Si release-group es solo un ID, hacer una llamada separada para obtener info
+                                try:
+                                    # Aplicar rate limiting para llamada adicional
+                                    self.rate_limiter.wait_if_needed()
+                                    rg_info = self.musicbrainz_auth.mb_ngs.get_release_group_by_id(rg)
+                                    if 'release-group' in rg_info:
+                                        rg_data = rg_info['release-group']
+                                        processed_release['type'] = rg_data.get('primary-type', '')
+                                except Exception as e:
+                                    self.logger.debug(f"No se pudo obtener info del release-group {rg}: {e}")
+                                    # Como fallback, intentar usar la API web directamente
+                                    try:
+                                        import requests
+                                        rg_url = f"https://musicbrainz.org/ws/2/release-group/{rg}"
+                                        params = {'fmt': 'json'}
+                                        headers = {"User-Agent": "MuspyReleasesModule/1.0"}
+                                        
+                                        rg_response = requests.get(rg_url, params=params, headers=headers)
+                                        if rg_response.status_code == 200:
+                                            rg_data = rg_response.json()
+                                            processed_release['type'] = rg_data.get('primary-type', '')
+                                    except Exception as e2:
+                                        self.logger.debug(f"Fallback API call también falló: {e2}")
+                        
+                        
+                        # CORREGIDO: Procesar información de artistas desde artist-credit
+                        artist_names = []
+                        artist_mbids = []
+                        
+                        if 'artist-credit' in release:
+                            artist_credits = release['artist-credit']
+                            
+                            for credit in artist_credits:
+                                if isinstance(credit, dict):
+                                    # Buscar información del artista en diferentes estructuras
+                                    artist_info = None
+                                    
+                                    if 'artist' in credit:
+                                        artist_info = credit['artist']
+                                    elif 'name' in credit and 'id' in credit:
+                                        # El crédito tiene información directa del artista
+                                        artist_info = credit
+                                    
+                                    if artist_info and isinstance(artist_info, dict):
+                                        name = artist_info.get('name', '')
+                                        mbid = artist_info.get('id', '')
+                                        
+                                        if name:
+                                            artist_names.append(name)
+                                        if mbid:
+                                            artist_mbids.append(mbid)
+                                    
+                                    # También manejar joinphrase para separadores
+                                    joinphrase = credit.get('joinphrase', '')
+                                    if joinphrase and artist_names:
+                                        artist_names[-1] += joinphrase
+                                
+                                elif isinstance(credit, str):
+                                    # Si artist-credit es una lista de strings
+                                    artist_names.append(credit)
+                        
+                        # Si no obtuvimos artistas de artist-credit, intentar otros campos
+                        if not artist_names:
+                            # Buscar en campos alternativos
+                            for field in ['artist', 'artist-name']:
+                                if field in release:
+                                    artist_field = release[field]
+                                    if isinstance(artist_field, str) and artist_field:
+                                        artist_names.append(artist_field)
+                                        break
+                                    elif isinstance(artist_field, dict) and 'name' in artist_field:
+                                        artist_names.append(artist_field['name'])
+                                        if 'id' in artist_field:
+                                            artist_mbids.append(artist_field['id'])
+                                        break
+                        
+                        # Construir resultado final para artistas
+                        if artist_names:
+                            processed_release['artist'] = "".join(artist_names).strip()
+                        else:
+                            processed_release['artist'] = "Unknown Artist"
+                            
+                        # Usar el primer MBID de artista si está disponible
+                        if artist_mbids:
+                            processed_release['artist_mbid'] = artist_mbids[0]
+                        
+                        # Debug logging para los primeros releases
+                        if len(releases) < 3:
+                            self.logger.debug(f"Release #{len(releases) + 1}:")
+                            self.logger.debug(f"  Title: {processed_release['title']}")
+                            self.logger.debug(f"  Artist: {processed_release['artist']}")
+                            self.logger.debug(f"  Artist MBID: {processed_release['artist_mbid']}")
+                            self.logger.debug(f"  Type: {processed_release['type']}")
+                            self.logger.debug(f"  Original artist-credit: {release.get('artist-credit', 'None')}")
+                            self.logger.debug(f"  Original release-group: {release.get('release-group', 'None')}")
+                        
+                        releases.append(processed_release)
+                    
+                    # Verificar si terminamos
+                    if len(page_releases) < limit or (total_items and len(releases) >= total_items):
+                        break
+                    
+                    # Siguiente página
+                    offset += len(page_releases)
+                    page_num += 1
+                    
+                    # Safeguard contra bucles infinitos
+                    if page_num > 100:  # Máximo 10,000 releases
+                        self.logger.warning("Alcanzado límite máximo de páginas")
+                        break
+                        
+                except Exception as e:
+                    self.logger.error(f"Error en página {page_num}: {e}", exc_info=True)
+                    # Log más detalles sobre el error
+                    if hasattr(e, 'response'):
+                        self.logger.error(f"Response status: {e.response.status_code}")
+                        self.logger.error(f"Response text: {e.response.text}")
+                    break
+            
+            self.logger.info(f"Obtenidos {len(releases)} releases de la colección")
+            return releases
+            
+        except Exception as e:
+            self.logger.error(f"Error obteniendo contenido de colección: {e}", exc_info=True)
+            return []
+
+
+    def show_musicbrainz_collection_improved(self, collection_id, collection_name):
+        """
+        Versión mejorada que usa la API web directamente como método primario
+        """
+        # Asegurarnos de que estamos mostrando la página de texto durante la carga
+        self.display_manager.show_text_page()
+        self.ui_callback.clear()
+        self.ui_callback.append(f"Cargando colección: {collection_name}...")
+        self.ui_callback.append("Por favor espere mientras se recuperan los datos...")
+        QApplication.processEvents()
+        
+        # Función para obtener datos de colección con barra de progreso
+        def fetch_collection_data(progress_callback):
+            """Función interna para obtener datos de colección"""
+            try:
+                # Paso 1: Verificar autenticación básica
+                if not progress_callback(10, 100, "Verificando autenticación básica..."):
+                    return {"success": False, "error": "Operación cancelada"}
+                
+                # Verificar si ya estamos autenticados básicamente
+                if not self.musicbrainz_auth.is_authenticated():
+                    if not progress_callback(20, 100, "Autenticando con MusicBrainz..."):
+                        return {"success": False, "error": "Operación cancelada"}
+                    
+                    # Intentar autenticación básica
+                    if not self.musicbrainz_auth.authenticate(silent=True):
+                        return {
+                            "success": False,
+                            "error": "No se pudo autenticar con MusicBrainz"
+                        }
+                
+                # Paso 2: Obtener datos usando API web directamente (método primario)
+                if not progress_callback(40, 100, "Obteniendo datos via API web..."):
+                    return {"success": False, "error": "Operación cancelada"}
+                
+                # Usar API web como método primario
+                releases = self._get_collection_contents_web_api_improved(collection_id, progress_callback)
+                
+                # Si no obtenemos datos con API web, intentar con musicbrainzngs como fallback
+                if not releases:
+                    if not progress_callback(70, 100, "Intentando método alternativo (musicbrainzngs)..."):
+                        return {"success": False, "error": "Operación cancelada"}
+                    
+                    try:
+                        releases = self._get_collection_contents_direct(collection_id, progress_callback)
+                    except Exception as e:
+                        self.logger.error(f"Fallback con musicbrainzngs también falló: {e}")
+                
+                if releases:
+                    if not progress_callback(90, 100, f"Procesando {len(releases)} releases..."):
+                        return {"success": False, "error": "Operación cancelada"}
+                    
+                    # Actualizar caché
+                    try:
+                        cache_dir = Path(self.project_root, ".content", "cache", "musicbrainz")
+                        os.makedirs(cache_dir, exist_ok=True)
+                        cache_file = Path(cache_dir, f"mb_collection_{collection_id}.json")
+                        
+                        cache_data = {
+                            "timestamp": time.time(),
+                            "data": releases
+                        }
+                        
+                        with open(cache_file, 'w', encoding='utf-8') as f:
+                            json.dump(cache_data, f, ensure_ascii=False, indent=2)
+                        self.logger.debug(f"Cached collection {collection_id} contents")
+                    except Exception as e:
+                        self.logger.error(f"Error caching collection contents: {e}")
+                    
+                    progress_callback(100, 100, "Datos procesados con éxito")
+                    
+                    return {
+                        "success": True,
+                        "releases": releases
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "error": "No se encontraron releases en la colección"
+                    }
+            
+            except Exception as e:
+                self.logger.error(f"Error obteniendo colección: {e}", exc_info=True)
+                return {
+                    "success": False,
+                    "error": f"Error obteniendo colección: {str(e)}"
+                }
+        
+        # Ejecutar con diálogo de progreso
+        result = self.parent.show_progress_operation(
+            fetch_collection_data,
+            title=f"Cargando Colección: {collection_name}",
+            label_format="{status}"
+        )
+        
+        # Procesar resultados
+        if result and result.get("success"):
+            releases = result.get("releases", [])
+            
+            if not releases:
+                self.display_manager.show_text_page()
+                self.ui_callback.append(f"La colección '{collection_name}' está vacía.")
+                QMessageBox.information(self.parent, "Colección Vacía", f"La colección '{collection_name}' está vacía.")
+                return
+            
+            # Mostrar releases en la tabla
+            self.display_manager.show_text_page()
+            self.ui_callback.append(f"Se recuperaron con éxito {len(releases)} releases.")
+            self.ui_callback.append("Preparando visualización de tabla...")
+            QApplication.processEvents()
+            
+            self.display_musicbrainz_collection_table(releases, collection_name, collection_id)
+        else:
+            self.display_manager.show_text_page()
+            error_msg = result.get("error", "Error desconocido") if result else "La operación falló"
+            self.ui_callback.append(f"Error: {error_msg}")
+            QMessageBox.warning(self.parent, "Error", f"No se pudo cargar la colección: {error_msg}")
+
+    def _get_collection_contents_web_api_improved(self, collection_id, progress_callback=None):
+        """
+        Método mejorado usando la API web de MusicBrainz directamente para obtener datos completos
+        """
+        try:
+            releases = []
+            offset = 0
+            limit = 100
+            total_items = None
+            page_num = 1
+            
+            base_url = "https://musicbrainz.org/ws/2/release"
+            headers = {
+                "User-Agent": "MuspyReleasesModule/1.0",
+                "Accept": "application/json"
+            }
+            
+            while True:
+                if progress_callback and not progress_callback(
+                    60 + min(30, int((len(releases) / max(total_items or 1, 1)) * 30)), 
+                    100, 
+                    f"Obteniendo página {page_num} via API web (releases: {len(releases)})..."
+                ):
+                    break
+                
+                # Aplicar rate limiting
+                self.rate_limiter.wait_if_needed()
+                
+                params = {
+                    'collection': collection_id,
+                    'limit': limit,
+                    'offset': offset,
+                    'fmt': 'json',
+                    'inc': 'artist-credits+release-groups'  # Incluir información completa
+                }
+                
+                try:
+                    response = self.musicbrainz_auth.session.get(base_url, params=params, headers=headers)
+                    
+                    if response.status_code != 200:
+                        self.logger.error(f"API error: {response.status_code} - {response.text}")
+                        break
+                    
+                    data = response.json()
+                    page_releases = data.get('releases', [])
+                    
+                    if total_items is None:
+                        total_items = data.get('release-count', len(page_releases))
+                        self.logger.info(f"Total releases en colección (API web): {total_items}")
+                    
+                    # Procesar releases con información completa de la API web
+                    for release in page_releases:
+                        processed_release = {
+                            'mbid': release.get('id', ''),
+                            'title': release.get('title', 'Título Desconocido'),
+                            'artist': "",
+                            'artist_mbid': "",
+                            'type': "",
+                            'date': release.get('date', ''),
+                            'status': release.get('status', ''),
+                            'country': release.get('country', '')
+                        }
+                        
+                        # Debug: Imprimir la estructura real para los primeros releases
+                        if len(releases) < 2:
+                            self.logger.debug(f"=== DEBUG Release #{len(releases) + 1} ===")
+                            self.logger.debug(f"Raw release keys: {list(release.keys())}")
+                            if 'artist-credit' in release:
+                                self.logger.debug(f"Artist-credit structure: {release['artist-credit']}")
+                                self.logger.debug(f"Artist-credit type: {type(release['artist-credit'])}")
+                                if isinstance(release['artist-credit'], list) and len(release['artist-credit']) > 0:
+                                    self.logger.debug(f"First artist-credit item: {release['artist-credit'][0]}")
+                                    self.logger.debug(f"First item keys: {list(release['artist-credit'][0].keys()) if isinstance(release['artist-credit'][0], dict) else 'Not a dict'}")
+                            if 'release-group' in release:
+                                self.logger.debug(f"Release-group structure: {release['release-group']}")
+                            self.logger.debug(f"=== END DEBUG ===")
+                        
+                        # CORREGIDO: Procesar artist-credit con la estructura correcta de la API
+                        if 'artist-credit' in release and release['artist-credit']:
+                            artist_parts = []
+                            artist_mbids = []
+                            
+                            for credit in release['artist-credit']:
+                                if isinstance(credit, dict):
+                                    # Estructura: {"artist": {"id": "...", "name": "..."}, "joinphrase": "..."}
+                                    if 'artist' in credit and isinstance(credit['artist'], dict):
+                                        artist = credit['artist']
+                                        name = artist.get('name', '')
+                                        if name:
+                                            artist_parts.append(name)
+                                        
+                                        mbid = artist.get('id', '')
+                                        if mbid:
+                                            artist_mbids.append(mbid)
+                                    
+                                    # Añadir joinphrase (separadores como " feat. ", " & ", etc.)
+                                    joinphrase = credit.get('joinphrase', '')
+                                    if joinphrase:
+                                        artist_parts.append(joinphrase)
+                                    
+                                    # Estructura alternativa: {"name": "...", "artist": {"id": "..."}}
+                                    elif 'name' in credit:
+                                        name = credit.get('name', '')
+                                        if name:
+                                            artist_parts.append(name)
+                                        
+                                        # Buscar MBID en sub-estructura
+                                        if 'artist' in credit and isinstance(credit['artist'], dict):
+                                            mbid = credit['artist'].get('id', '')
+                                            if mbid:
+                                                artist_mbids.append(mbid)
+                                
+                                elif isinstance(credit, str):
+                                    # Si es directamente un string
+                                    artist_parts.append(credit)
+                            
+                            if artist_parts:
+                                processed_release['artist'] = ''.join(artist_parts).strip()
+                            if artist_mbids:
+                                processed_release['artist_mbid'] = artist_mbids[0]
+                        
+                        # Procesar release-group desde la API web
+                        if 'release-group' in release and isinstance(release['release-group'], dict):
+                            rg = release['release-group']
+                            primary_type = rg.get('primary-type', '')
+                            if primary_type:
+                                processed_release['type'] = primary_type
+                                
+                                # Añadir tipos secundarios si existen
+                                secondary_types = rg.get('secondary-type-list', [])
+                                if secondary_types and isinstance(secondary_types, list):
+                                    processed_release['type'] += f" ({', '.join(secondary_types)})"
+                        
+                        # Si no tenemos artista después de procesar artist-credit, intentar alternativas
+                        if not processed_release['artist'] or processed_release['artist'] == "":
+                            # Buscar en campos alternativos del release
+                            for field_name in ['artist-name', 'artist', 'credited-name']:
+                                if field_name in release:
+                                    alt_artist = release[field_name]
+                                    if isinstance(alt_artist, str) and alt_artist.strip():
+                                        processed_release['artist'] = alt_artist.strip()
+                                        break
+                                    elif isinstance(alt_artist, dict) and 'name' in alt_artist:
+                                        processed_release['artist'] = alt_artist['name']
+                                        if 'id' in alt_artist:
+                                            processed_release['artist_mbid'] = alt_artist['id']
+                                        break
+                            
+                            # Si aún no tenemos artista, usar "Unknown Artist" solo como último recurso
+                            if not processed_release['artist']:
+                                processed_release['artist'] = "Unknown Artist"
+                        
+                        # Debug final para los primeros releases
+                        if len(releases) < 2:
+                            self.logger.debug(f"Final processed release:")
+                            self.logger.debug(f"  Artist: '{processed_release['artist']}'")
+                            self.logger.debug(f"  Artist MBID: '{processed_release['artist_mbid']}'")
+                            self.logger.debug(f"  Type: '{processed_release['type']}'")
+                            self.logger.debug(f"  Title: '{processed_release['title']}'")
+                        
+                        releases.append(processed_release)
+                    
+                    if len(page_releases) < limit or (total_items and len(releases) >= total_items):
+                        break
+                    
+                    offset += len(page_releases)
+                    page_num += 1
+                    
+                    if page_num > 100:
+                        self.logger.warning("Alcanzado límite máximo de páginas")
+                        break
+                        
+                except Exception as e:
+                    self.logger.error(f"Error en página {page_num} via API web: {e}")
+                    break
+            
+            self.logger.info(f"Obtenidos {len(releases)} releases de la colección via API web")
+            return releases
+            
+        except Exception as e:
+            self.logger.error(f"Error usando API web: {e}", exc_info=True)
+            return []
+
 
 
 
@@ -1663,16 +2186,9 @@ class MusicBrainzManager:
         
         return files_removed
 
-    def get_collection_contents_ngs(self, collection_id, entity_type="release"):
+    def get_collection_contents_ngs(self, collection_id, entity_type="release", progress_callback=None):
         """
-        Obtener el contenido de una colección de MusicBrainz usando musicbrainzngs con paginación
-        
-        Args:
-            collection_id (str): ID de la colección
-            entity_type (str): Tipo de entidad en la colección (release, artist, etc.)
-                
-        Returns:
-            list: Lista de entidades en la colección
+        Obtener el contenido de una colección con callback opcional para progreso
         """
         if not hasattr(self.musicbrainz_auth, 'mb_ngs'):
             if not self.musicbrainz_auth.authenticate_with_musicbrainzngs(silent=True):
@@ -1680,28 +2196,30 @@ class MusicBrainzManager:
                 return []
         
         try:
-            # Obtener contenido de colección con paginación
             releases = []
             offset = 0
-            limit = 100  # Tamaño máximo de página para MusicBrainz
+            limit = 100
             total_items = None
-            
-            # Actualizamos la UI para mostrar estado de paginación
-            if hasattr(self, 'ui_callback'):
-                self.ui_callback.append(f"Obteniendo colección con paginación (tamaño de página: {limit})...")
-                QApplication.processEvents()
             
             # Bucle de paginación
             while True:
+                # Verificar cancelación si tenemos callback
+                if progress_callback and not progress_callback(
+                    len(releases), total_items or 1, 
+                    f"Obteniendo página {offset//limit + 1} (offset: {offset})...", 
+                    total_items is None
+                ):
+                    self.logger.info("Operación cancelada por el usuario")
+                    break
+                
                 # Aplicamos rate limiting
                 self.rate_limiter.wait_if_needed()
                 
-                # Mensaje de progreso
+                # Actualizar UI callback si existe
                 if hasattr(self, 'ui_callback'):
                     self.ui_callback.append(f"Obteniendo página {offset//limit + 1} (offset: {offset})...")
                     QApplication.processEvents()
                 
-                # Obtener una página de resultados
                 try:
                     # Usar la API de musicbrainzngs para obtener la página
                     result = self.musicbrainz_auth.mb_ngs.get_releases_in_collection(
@@ -1721,7 +2239,7 @@ class MusicBrainzManager:
                             self.ui_callback.append(f"Total de items a recuperar: {total_items}")
                             QApplication.processEvents()
                     
-                    # Procesar cada release de esta página
+                    # Procesar cada release... (resto del código igual)
                     for release in page_releases:
                         processed_release = {
                             'mbid': release.get('id', ''),
@@ -1786,4 +2304,5 @@ class MusicBrainzManager:
         except Exception as e:
             self.logger.error(f"Error obteniendo contenido de colección: {e}", exc_info=True)
             return []
+
 

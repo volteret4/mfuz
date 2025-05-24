@@ -55,21 +55,21 @@ class NumericTableWidgetItem(QTableWidgetItem):
 
 class TwitterManager:
     def __init__(self, 
-                parent, 
-                project_root, 
-                twitter_client_id=None,
-                twitter_client_secret=None, 
-                twitter_redirect_uri=None, 
-                ui_callback=None, 
-                progress_utils=None,
-                display_manager=None,
-                cache_manager=None,
-                muspy_manager=None,
-                spotify_manager=None,
-                lastfm_manager=None,
-                musicbrainz_manager=None,
-                utils=None
-                ):
+            parent, 
+            project_root, 
+            twitter_client_id=None,
+            twitter_client_secret=None, 
+            twitter_redirect_uri=None, 
+            ui_callback=None, 
+            progress_utils=None,
+            display_manager=None,
+            cache_manager=None,
+            muspy_manager=None,
+            spotify_manager=None,
+            lastfm_manager=None,
+            musicbrainz_manager=None,
+            utils=None
+            ):
         self.parent = parent
         self.project_root = project_root
         self.twitter_client_id = twitter_client_id
@@ -77,6 +77,19 @@ class TwitterManager:
         self.twitter_redirect_uri = twitter_redirect_uri
         self.logger = logging.getLogger(__name__)
         self.twitter_auth = None
+        
+        # DIAGNÓSTICO: Mostrar credenciales recibidas
+        self.logger.info("=== CREDENCIALES RECIBIDAS EN TwitterManager ===")
+        self.logger.info(f"twitter_client_id recibido: {twitter_client_id}")
+        self.logger.info(f"twitter_client_secret recibido: {twitter_client_secret[:10] if twitter_client_secret else 'None'}...")
+        self.logger.info(f"twitter_redirect_uri recibido: {twitter_redirect_uri}")
+        
+        # Verificar credenciales en el parent también
+        if hasattr(parent, 'twitter_client_id'):
+            self.logger.info(f"parent.twitter_client_id: {parent.twitter_client_id}")
+        if hasattr(parent, 'twitter_client_secret'):
+            self.logger.info(f"parent.twitter_client_secret: {parent.twitter_client_secret[:10] if parent.twitter_client_secret else 'None'}...")
+        
         # Inicializar twitter_auth
         try:
             # Verificar y configurar credenciales
@@ -85,6 +98,23 @@ class TwitterManager:
             # Importar y crear el gestor de autenticación
             sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
             from tools.twitter_login import TwitterAuthManager
+            
+            # ASEGURAR que usamos las credenciales correctas
+            if not self.twitter_client_id or not self.twitter_client_secret:
+                self.logger.warning("Credenciales faltantes, usando las del parent si están disponibles")
+                if hasattr(parent, 'twitter_client_id') and parent.twitter_client_id:
+                    self.twitter_client_id = parent.twitter_client_id
+                if hasattr(parent, 'twitter_client_secret') and parent.twitter_client_secret:
+                    self.twitter_client_secret = parent.twitter_client_secret
+                if hasattr(parent, 'twitter_redirect_uri') and parent.twitter_redirect_uri:
+                    self.twitter_redirect_uri = parent.twitter_redirect_uri
+            
+            # Verificar una vez más antes de crear TwitterAuthManager
+            self.logger.info(f"Credenciales finales para TwitterAuthManager:")
+            self.logger.info(f"  client_id: {self.twitter_client_id}")
+            self.logger.info(f"  client_secret: {self.twitter_client_secret[:10] if self.twitter_client_secret else 'None'}...")
+            self.logger.info(f"  redirect_uri: {self.twitter_redirect_uri}")
+            
             self.twitter_auth = TwitterAuthManager(
                 client_id=self.twitter_client_id,
                 client_secret=self.twitter_client_secret,
@@ -93,11 +123,16 @@ class TwitterManager:
                 project_root=self.project_root
             )
             self.twitter_enabled = self.twitter_auth is not None and bool(self.twitter_client_id and self.twitter_client_secret)
+            
+            # Diagnóstico final
+            self._debug_twitter_credentials()
+            
         except ImportError as e:
             self.logger.error(f"Error importando TwitterAuthManager: {e}")
             self.twitter_auth = None
             self.twitter_enabled = False
 
+        # Resto de inicializaciones...
         self.ui_callback = ui_callback
         self.progress_utils = progress_utils
         self.display_manager = display_manager
@@ -115,8 +150,7 @@ class TwitterManager:
             self.logger.info(f"Twitter no habilitado o auth manager no inicializado correctamente")
             if not self.twitter_client_id or not self.twitter_client_secret:
                 self.logger.info(f"Faltan credenciales: client_id={bool(self.twitter_client_id)}, client_secret={bool(self.twitter_client_secret)}")
-
-
+                
     def _check_and_setup_credentials(self):
         """
         Verifica si se tienen las credenciales necesarias para Twitter
@@ -295,8 +329,12 @@ class TwitterManager:
         Reinicializa el gestor de autenticación de Twitter con las nuevas credenciales
         """
         try:
-            twitter_login_script = PROJECT_ROOT / "tools/twitter_login.py"
-            from twitter_login_script import TwitterAuthManager
+            # Diagnóstico antes de reinicializar
+            self.logger.info("=== REINICIALIZANDO TWITTER AUTH ===")
+            self.logger.info(f"Usando client_id: {self.twitter_client_id}")
+            self.logger.info(f"Usando client_secret: {self.twitter_client_secret[:10] if self.twitter_client_secret else 'None'}...")
+            
+            from tools.twitter_login import TwitterAuthManager
             self.twitter_auth = TwitterAuthManager(
                 client_id=self.twitter_client_id,
                 client_secret=self.twitter_client_secret,
@@ -305,6 +343,11 @@ class TwitterManager:
                 project_root=self.project_root
             )
             self.twitter_enabled = self.twitter_auth is not None and bool(self.twitter_client_id and self.twitter_client_secret)
+            
+            # Verificar que TwitterAuthManager tiene las credenciales correctas
+            if hasattr(self.twitter_auth, 'client_id'):
+                self.logger.info(f"TwitterAuthManager inicializado con client_id: {self.twitter_auth.client_id}")
+            
             self.logger.info("TwitterAuthManager reinicializado correctamente")
             return True
         except Exception as e:
@@ -395,36 +438,133 @@ class TwitterManager:
         
         if is_authenticated:
             self.logger.info("Twitter ya autenticado con token existente")
-            return True
+            # NUEVA VALIDACIÓN: Probar que el token funciona con una petición simple
+            try:
+                twitter_client = self.twitter_auth.get_client()
+                if twitter_client:
+                    # Hacer una petición de prueba para verificar que las credenciales funcionan
+                    test_result = twitter_client.get_user_info()
+                    if test_result and "data" in test_result:
+                        self.logger.info("Token de Twitter validado correctamente")
+                        return True
+                    else:
+                        self.logger.warning("Token existe pero no funciona correctamente")
+                        is_authenticated = False
+            except Exception as e:
+                self.logger.error(f"Error validando token de Twitter: {e}")
+                is_authenticated = False
         
-        # Si no hay token válido, intentar autenticación completa
-        # Independientemente del modo silencioso, necesitamos autenticación interactiva
-        # debido al error 403 del cliente no autorizado
-        self.logger.info("Iniciando autenticación explícita de Twitter...")
+        # Si no hay token válido o falló la validación, intentar autenticación completa
+        if not is_authenticated:
+            self.logger.info("Iniciando autenticación explícita de Twitter...")
+            try:
+                result = self.twitter_auth.authenticate(silent=False)
+                if result:
+                    self.logger.info("Autenticación de Twitter exitosa")
+                    # Validar nuevamente después de la autenticación
+                    try:
+                        twitter_client = self.twitter_auth.get_client()
+                        if twitter_client:
+                            test_result = twitter_client.get_user_info()
+                            if test_result and "data" in test_result:
+                                return True
+                            else:
+                                self.logger.error("Autenticación exitosa pero el token no funciona")
+                                if not silent:
+                                    self._show_project_association_error()
+                                return False
+                    except Exception as e:
+                        self.logger.error(f"Error validando token después de autenticación: {e}")
+                        if not silent:
+                            self._show_project_association_error()
+                        return False
+                else:
+                    self.logger.warning("Autenticación de Twitter fallida")
+                    if not silent:
+                        self._show_project_association_error()
+                    return False
+            except Exception as e:
+                self.logger.error(f"Error en authenticate: {e}")
+                if not silent:
+                    self._show_project_association_error()
+                return False
+        
+        return True
+
+    def _show_project_association_error(self):
+        """
+        Muestra un mensaje específico sobre el error de asociación de proyecto
+        """
+        QMessageBox.critical(
+            self.parent,
+            "Error de configuración de Twitter",
+            "Error: Tu aplicación de Twitter no está asociada a un Proyecto.\n\n"
+            "Para solucionarlo:\n"
+            "1. Ve al Developer Portal de Twitter\n"
+            "2. Busca tu proyecto (Default project-1913964885072830464)\n"
+            "3. Asocia tu aplicación a este proyecto\n"
+            "4. O crea un nuevo proyecto y asocia la aplicación\n\n"
+            "La API v2 de Twitter requiere que las aplicaciones estén asociadas a un proyecto."
+        )
+
+    def _validate_twitter_token(self):
+        """
+        Valida que el token de Twitter funcione correctamente
+        
+        Returns:
+            bool: True si el token es válido y funciona
+        """
         try:
-            result = self.twitter_auth.authenticate(silent=False)
-            if result:
-                self.logger.info("Autenticación de Twitter exitosa")
+            if not hasattr(self, 'twitter_auth') or not self.twitter_auth:
+                return False
+                
+            twitter_client = self.twitter_auth.get_client()
+            if not twitter_client:
+                return False
+                
+            # Hacer una petición simple para probar el token
+            test_result = twitter_client.get_user_info()
+            
+            if test_result and "data" in test_result:
                 return True
             else:
-                self.logger.warning("Autenticación de Twitter fallida")
-                if not silent:
-                    QMessageBox.warning(
-                        self.parent,
-                        "Autenticación fallida",
-                        "No se pudo autenticar con Twitter. Verifica tus credenciales y asegúrate de que tu aplicación tiene el nivel adecuado de acceso a la API."
-                    )
+                self.logger.warning("Token de Twitter no devuelve datos válidos")
                 return False
+                
         except Exception as e:
-            self.logger.error(f"Error en authenticate: {e}")
-            if not silent:
-                QMessageBox.warning(
-                    self.parent,
-                    "Error de Twitter",
-                    f"Error durante la autenticación: {str(e)}"
-                )
+            # Verificar si es el error específico de proyecto
+            if "client-not-enrolled" in str(e) or "Client Forbidden" in str(e):
+                self.logger.error(f"Error de asociación de proyecto: {e}")
+            else:
+                self.logger.error(f"Error validando token de Twitter: {e}")
             return False
+
+    def _debug_twitter_credentials(self):
+        """
+        Función de diagnóstico para verificar qué credenciales se están usando
+        """
+        self.logger.info("=== DIAGNÓSTICO DE CREDENCIALES TWITTER ===")
+        self.logger.info(f"twitter_client_id en self: {self.twitter_client_id}")
+        self.logger.info(f"twitter_client_secret en self: {self.twitter_client_secret[:10]}... (truncado)")
+        self.logger.info(f"twitter_redirect_uri en self: {self.twitter_redirect_uri}")
+        
+        # Verificar en twitter_auth si existe
+        if hasattr(self, 'twitter_auth') and self.twitter_auth:
+            self.logger.info(f"twitter_auth.client_id: {getattr(self.twitter_auth, 'client_id', 'NO DISPONIBLE')}")
+            self.logger.info(f"twitter_auth.client_secret: {getattr(self.twitter_auth, 'client_secret', 'NO DISPONIBLE')[:10] if getattr(self.twitter_auth, 'client_secret', None) else 'NO DISPONIBLE'}...")
             
+            # Verificar cliente interno
+            try:
+                client = self.twitter_auth.get_client()
+                if hasattr(client, 'client_id'):
+                    self.logger.info(f"client.client_id: {client.client_id}")
+            except Exception as e:
+                self.logger.error(f"Error obteniendo cliente para diagnóstico: {e}")
+        else:
+            self.logger.info("twitter_auth no existe o es None")
+        
+        self.logger.info("=== FIN DIAGNÓSTICO ===")
+
     def get_twitter_client(self):
         """Obtiene un cliente de Twitter autenticado bajo demanda"""
         if hasattr(self, 'twitter_auth'):
@@ -509,7 +649,7 @@ class TwitterManager:
             self.ui_callback.append("Failed to get Twitter client. Please check authentication.")
             return
         
-        # Function to fetch users with progress dialog
+        # Función de operación con progreso
         def fetch_twitter_users(update_progress):
             try:
                 update_progress(0, 100, "Connecting to Twitter API...")
@@ -607,7 +747,14 @@ class TwitterManager:
             label_format="{status}"
         )
         
-        # Process results
+        progress_function = self._get_progress_function()
+        result = progress_function(
+            fetch_twitter_users,
+            title="Loading Twitter Users",
+            label_format="{status}"
+        )
+        
+        # Process results (mantén el resto igual)
         if result and result.get("success"):
             users = result.get("users", [])
             
@@ -3256,7 +3403,8 @@ class TwitterManager:
             return self._search_lastfm_artists_on_twitter_worker(update_progress)
         
         # Execute with progress dialog
-        result = self.progress_utils.show_progress_operation(
+        progress_function = self._get_progress_function()
+        result = progress_function(
             worker_function,
             title="Buscando Artistas de LastFM en Twitter",
             label_format="{status}"
@@ -3647,3 +3795,84 @@ class TwitterManager:
             # View profile action
             _, username = url_str.split(":", 1)
             self.utils.open_url(f"https://twitter.com/{username}")
+
+
+    def _get_progress_function(self):
+        """
+        Obtiene la función de progreso disponible, con fallbacks
+        
+        Returns:
+            function: Función para mostrar progreso
+        """
+        # Opción 1: Usar progress_utils si está disponible
+        if hasattr(self, 'progress_utils') and self.progress_utils is not None:
+            return self.progress_utils.show_progress_operation
+        
+        # Opción 2: Usar el método del parent si está disponible
+        if hasattr(self.parent, 'show_progress_operation'):
+            return self.parent.show_progress_operation
+        
+        # Opción 3: Importar directamente desde el módulo
+        try:
+            from modules.submodules.muspy.progress_utils import show_progress_operation
+            return lambda *args, **kwargs: show_progress_operation(self.parent, *args, **kwargs)
+        except ImportError:
+            pass
+        
+        # Opción 4: Fallback manual
+        return self._manual_progress_dialog
+
+    def _manual_progress_dialog(self, operation_function, **kwargs):
+        """
+        Fallback manual para diálogo de progreso
+        
+        Args:
+            operation_function: Función a ejecutar
+            **kwargs: Argumentos adicionales
+            
+        Returns:
+            Resultado de la operación
+        """
+        from PyQt6.QtWidgets import QProgressDialog
+        from PyQt6.QtCore import Qt
+        
+        title = kwargs.get('title', 'Processing...')
+        
+        progress_dialog = QProgressDialog(
+            title,
+            "Cancel",
+            0, 100,
+            self.parent
+        )
+        progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        progress_dialog.setMinimumDuration(0)
+        progress_dialog.setValue(0)
+        progress_dialog.setAutoClose(True)
+        progress_dialog.setAutoReset(False)
+        progress_dialog.show()
+        
+        # Función para actualizar progreso
+        def update_progress(current, total=100, status="", indeterminate=False):
+            if progress_dialog.wasCanceled():
+                return False
+                
+            if indeterminate:
+                progress_dialog.setRange(0, 0)
+            else:
+                progress_dialog.setRange(0, 100)
+                progress_percent = int((current / total) * 100) if total > 0 else current
+                progress_dialog.setValue(progress_percent)
+                
+            if status:
+                progress_dialog.setLabelText(status)
+            QApplication.processEvents()
+            return True
+            
+        try:
+            # Ejecutar la operación
+            result = operation_function(update_progress)
+            progress_dialog.close()
+            return result
+        except Exception as e:
+            progress_dialog.close()
+            raise e

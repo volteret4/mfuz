@@ -13,6 +13,10 @@ from PyQt6.QtWidgets import (QMessageBox, QInputDialog, QLineEdit, QDialog,
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
 from base_module import PROJECT_ROOT
+import sys 
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+from modules.submodules.muspy.progress_utils import show_progress_operation
 
 class BlueskyManager:
     def __init__(self, 
@@ -407,10 +411,11 @@ class BlueskyManager:
         # Execute with progress dialog
         result = self.parent.show_progress_operation(
             search_spotify_artists_on_bluesky,
+            operation_args=None,
             title="Buscando Artistas de Spotify en Bluesky",
             label_format="{status}"
         )
-        
+
         # Process results
         if result and result.get("success"):
             artists = result.get("artists", [])
@@ -483,9 +488,7 @@ class BlueskyManager:
                     
                 # Update progress
                 progress_value = int((i / total_artists) * 100)
-                update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})...")
-                
-                # Check if user canceled
+                # La función update_progress ahora debe retornar True/False para continuar/cancelar
                 if not update_progress(progress_value, 100, f"Buscando {artist_name} ({i+1}/{total_artists})..."):
                     return {"success": False, "message": "Búsqueda cancelada por el usuario"}
                 
@@ -513,10 +516,12 @@ class BlueskyManager:
                 "artists": found_artists,
                 "total_searched": total_artists
             }
-        
-        # Execute with progress dialog
+
+        # Execute with progress dialog - CORREGIDO: pasar operation_args
         result = self.parent.show_progress_operation(
+            self.parent,
             search_artists_on_bluesky,
+            operation_args=None,  # Añadir este parámetro
             title="Buscando en Bluesky",
             label_format="{status}"
         )
@@ -714,6 +719,7 @@ class BlueskyManager:
         # Execute with progress dialog
         result = self.parent.show_progress_operation(
             search_lastfm_artists_on_bluesky_worker,
+            operation_args=None,
             title="Buscando Artistas de LastFM en Bluesky",
             label_format="{status}"
         )
@@ -858,6 +864,7 @@ class BlueskyManager:
         # Execute with progress dialog
         result = self.parent.show_progress_operation(
             search_mb_collection_on_bluesky,
+            operation_args=None,
             title=f"Buscando Artistas de '{collection['name']}' en Bluesky",
             label_format="{status}"
         )
