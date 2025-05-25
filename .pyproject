@@ -74,6 +74,7 @@
         "ui/jaangle/jaangle_session_filter_dialog.ui",
         "ui/jaangle/jaangle_genre_filter_dialog.ui",
         "ui/jaangle/jaangle_album_filter_dialog.ui",
+        "ui/jaangle/jaangle_advanced_settings_dialog.ui",
         "ui/svg/chicken(1).svg",
         "ui/svg/chicken.svg",
         "ui/svg/vinyl.svg",

@@ -7,7 +7,7 @@ import importlib.util
 from PyQt6 import uic
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, 
                             QVBoxLayout, QTabWidget, QScrollArea,
-                            QLabel)
+                            QLabel, QSizePolicy)
 from PyQt6.QtCore import Qt, QThread, QCoreApplication
 from base_module import BaseModule, THEMES, PROJECT_ROOT
 import traceback
@@ -267,24 +267,31 @@ class TabManager(QMainWindow):
         self.init_ui()
         self.load_modules()     
 
+
     def init_ui(self):
         """Inicializa la interfaz principal."""
         # Cargar la UI desde el archivo
-        ui_file_path = Path(PROJECT_ROOT, "ui", "tab_manager.ui")
+        ui_file_path = os.path.join(PROJECT_ROOT, "ui", "tab_manager.ui")
         if os.path.exists(ui_file_path):
             try:
                 # Cargar el archivo UI
                 from PyQt6 import uic
                 uic.loadUi(ui_file_path, self)
                 
-                # Asegurarse de que tenemos referencia al widget de pestañas
-                if not hasattr(self, 'tab_widget'):
-                    # Si el nombre no coincide exactamente, intenta buscarlo
-                    tab_widgets = self.findChildren(QTabWidget)
-                    if tab_widgets:
-                        self.tab_widget = tab_widgets[0]
-                    else:
-                        raise AttributeError("No se pudo encontrar QTabWidget en el archivo UI")
+                # SOLUCIÓN SIMPLE: Hacer el QTabWidget existente arrastrables
+                if hasattr(self, 'tab_widget'):
+                    # Hacer las pestañas movibles
+                    self.tab_widget.setMovable(True)
+                    self.tab_widget.setTabsClosable(False)
+                    
+                    # Conectar señal de movimiento nativa de Qt
+                    self.tab_widget.tabBar().tabMoved.connect(self.on_tab_moved)
+                    
+                    print("QTabWidget configurado como arrastrables")
+                else:
+                    print("No se encontró tab_widget, usando fallback")
+                    self._fallback_init_ui()
+                    return
                 
                 print(f"UI cargada desde {ui_file_path}")
             except Exception as e:
@@ -298,7 +305,27 @@ class TabManager(QMainWindow):
         # Aplicar el tema
         self.apply_theme(self.font_size)
 
+        self.add_simple_animations()
 
+    def on_tab_moved(self, from_index, to_index):
+        """Manejar el movimiento de tabs y actualizar configuración"""
+        try:
+            # Cargar configuración actual
+            config = load_config_file(self.config_path)
+            
+            if 'modules' in config and len(config['modules']) > max(from_index, to_index):
+                # Mover el módulo en la configuración
+                modules = config['modules']
+                moved_module = modules.pop(from_index)
+                modules.insert(to_index, moved_module)
+                
+                # Guardar configuración actualizada
+                save_config_file(self.config_path, config)
+                
+                print(f"Tab moved from {from_index} to {to_index} - Configuration updated")
+                
+        except Exception as e:
+            print(f"Error updating configuration after tab move: {e}")
 
 
 
@@ -313,9 +340,45 @@ class TabManager(QMainWindow):
         self.setCentralWidget(main_widget)
         layout = QVBoxLayout(main_widget)
 
-        # Crear el widget de pestañas
+        # Crear el widget de pestañas NORMAL
         self.tab_widget = QTabWidget()
+        
+        # Hacer las pestañas movibles
+        self.tab_widget.setMovable(True)
+        self.tab_widget.setTabsClosable(False)
+        
+        # Conectar señal de movimiento
+        self.tab_widget.tabBar().tabMoved.connect(self.on_tab_moved)
+        
         layout.addWidget(self.tab_widget)
+
+    def add_simple_animations(self):
+        """Añade animaciones simples al tab widget existente"""
+        if not hasattr(self, 'tab_widget'):
+            return
+            
+        try:
+            # Animación simple al cambiar de pestaña
+            original_setCurrentIndex = self.tab_widget.setCurrentIndex
+            
+            def animated_tab_change(index):
+                # Cambio normal sin animaciones complejas por ahora
+                original_setCurrentIndex(index)
+                
+                # Efecto visual simple
+                current_widget = self.tab_widget.currentWidget()
+                if current_widget:
+                    # Aplicar efecto de opacidad muy sutil
+                    current_widget.setStyleSheet(
+                        current_widget.styleSheet() + 
+                        "QWidget { background-color: rgba(0,0,0,0); }"
+                    )
+            
+            self.tab_widget.setCurrentIndex = animated_tab_change
+            
+            print("Animaciones simples aplicadas al tab widget")
+        except Exception as e:
+            print(f"Error aplicando animaciones: {e}")
 
 
     def load_modules(self):

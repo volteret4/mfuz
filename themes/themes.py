@@ -1,6 +1,6 @@
 import os
-from PyQt6.QtWidgets import QWidget, QApplication, QPushButton
-from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QSize, Qt, QPoint, QVariantAnimation
+from PyQt6.QtWidgets import QWidget, QApplication, QPushButton, QTabBar
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QSize, Qt, QPoint, QVariantAnimation, pyqtSignal
 
 # Definición de temas con variables de color
 THEMES = {
@@ -372,24 +372,52 @@ def get_stylesheet(theme_name):
         top: -1px;
     }}
     
+    QTabBar {{
+        qproperty-drawBase: 0;
+        background-color: transparent;
+    }}
+    
     QTabBar::tab {{
         background-color: {theme['secondary_bg']};
         color: {theme['fg']};
         border: 1px solid {theme['border']};
         border-bottom: none;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        padding: 8px 12px;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        padding: 8px 16px;
         min-width: 80px;
+        margin-right: 2px;
     }}
     
     QTabBar::tab:selected {{
         background-color: {theme['bg']};
         border-bottom: 1px solid {theme['bg']};
+        border-top: 2px solid {theme['accent']};
     }}
     
     QTabBar::tab:hover:!selected {{
-        background-color: {theme['button_hover']};
+        background-color: {theme['accent']};
+        border-top: 2px solid {theme['button_hover']};
+    }}
+    
+    QTabBar::tab:!selected {{
+        margin-top: 2px;
+    }}
+    
+    /* Indicador visual mientras se arrastra */
+    QTabBar::tab:selected:active {{
+        background-color: {theme['selection']};
+        border: 2px solid {theme['accent']};
+    }}
+    
+    /* Hacer que las pestañas sean más fáciles de agarrar */
+    QTabBar::tab {{
+        min-height: 15px;
+        font-weight: normal;
+    }}
+    
+    QTabBar::tab:selected {{
+        font-weight: bold;
     }}
     
     /* Checkboxes y radio buttons */
@@ -423,16 +451,12 @@ def get_stylesheet(theme_name):
     }}
     
     /* Combobox */
-    QComboBox {{
-        background-color: {theme['secondary_bg']};
-        color: {theme['fg']};
-        border: 1px solid {theme['border']};
-        border-radius: 4px;
-        padding: 5px;
-        min-height: 28px;
+
+    QComboBox:hover {{
+        border: 1px solid {theme['accent']};
     }}
     
-    QComboBox:hover {{
+    QComboBox:focus {{
         border: 1px solid {theme['accent']};
     }}
     
@@ -440,9 +464,21 @@ def get_stylesheet(theme_name):
         subcontrol-origin: padding;
         subcontrol-position: top right;
         width: 20px;
-        border-left: 1px solid {theme['border']};
+        border: none;
+        background-color: {theme['secondary_bg']};
         border-top-right-radius: 3px;
         border-bottom-right-radius: 3px;
+    }}
+    
+    QComboBox::down-arrow {{
+        image: none;
+        border: none;
+        width: 0px;
+        height: 0px;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        border-top: 6px solid {theme['fg']};
+        margin: 0px;
     }}
     
     QComboBox QAbstractItemView {{
@@ -452,6 +488,17 @@ def get_stylesheet(theme_name):
         selection-background-color: {theme['selection']};
         selection-color: {theme['fg']};
         outline: 0;
+        border-radius: 4px;
+    }}
+    
+    QComboBox QAbstractItemView::item {{
+        padding: 6px;
+        border: none;
+    }}
+    
+    QComboBox QAbstractItemView::item:selected {{
+        background-color: {theme['selection']};
+        color: {theme['fg']};
     }}
     
     /* Spinbox */
@@ -966,15 +1013,14 @@ def apply_theme(widget, theme_name):
 
 
 def apply_effects(widget):
-    """
-    Aplica efectos especiales a widgets específicos
+    """Aplica efectos simples a widgets específicos"""
+    from PyQt6.QtWidgets import QPushButton
     
-    Args:
-        widget: QWidget raíz donde buscar widgets para aplicar efectos
-    """
-    # Obtener todos los botones con objectName específico para animaciones
-    for button in widget.findChildren(QPushButton, "animated_button*"):
-        ThemeEffects.apply_button_hover_animation(button)
+    # Solo aplicar hover a botones por ahora
+    for button in widget.findChildren(QPushButton):
+        if not hasattr(button, '_hover_effect_applied'):
+            ThemeEffects.apply_button_hover_animation(button)
+            button._hover_effect_applied = True
 
 
 # Función auxiliar para reemplazar rutas de recursos en la hoja de estilos
@@ -1010,6 +1056,331 @@ def init_theme_system(app, initial_theme='Tokyo Night'):
     # Aplicar a toda la aplicación
     app.setStyleSheet(stylesheet)
 
+
+# AÑADIR estas clases al final de themes.py, antes de las funciones principales:
+
+class DraggableTabBar(QTabBar):
+    """TabBar que permite reordenar tabs arrastrando"""
+    
+    tab_moved_signal = pyqtSignal(int, int)  # from_index, to_index
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setMovable(True)
+        self.setTabsClosable(False)
+        self.drag_start_position = None
+        
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.drag_start_position = event.position().toPoint()
+        super().mousePressEvent(event)
+        
+    def mouseMoveEvent(self, event):
+        if not (event.buttons() & Qt.MouseButton.LeftButton):
+            super().mouseMoveEvent(event)
+            return
+            
+        if not self.drag_start_position:
+            super().mouseMoveEvent(event)
+            return
+            
+        # Calcular distancia del arrastre
+        distance = (event.position().toPoint() - self.drag_start_position).manhattanLength()
+        
+        if distance < QApplication.startDragDistance():
+            super().mouseMoveEvent(event)
+            return
+            
+        # Permitir el arrastre nativo de PyQt6
+        super().mouseMoveEvent(event)
+        
+    def tabMoved(self, from_index, to_index):
+        """Evento cuando se mueve una tab"""
+        super().tabMoved(from_index, to_index)
+        self.tab_moved_signal.emit(from_index, to_index)
+
+
+
+class AnimatedTabWidget(QWidget):
+    """Widget de pestañas con animaciones suaves que reemplaza completamente QTabWidget"""
+    
+    # Señales compatibles con QTabWidget
+    currentChanged = pyqtSignal(int)
+    tabCloseRequested = pyqtSignal(int)
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.tab_bar = DraggableTabBar(self)
+        self.stack_widget = None 
+        self._tabs_data = []  # Para almacenar información de las pestañas
+        self.setup_ui()
+        
+    def setup_ui(self):
+        from PyQt6.QtWidgets import QVBoxLayout, QStackedWidget
+        
+        # Layout principal sin márgenes
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        
+        # Configurar tab bar
+        self.tab_bar.setExpanding(False)
+        self.tab_bar.setUsesScrollButtons(True)
+        
+        # Añadir tab bar
+        layout.addWidget(self.tab_bar)
+        
+        # Añadir stacked widget
+        self.stack_widget = QStackedWidget(self)
+        layout.addWidget(self.stack_widget)
+        
+        # Conectar señales
+        self.tab_bar.currentChanged.connect(self._on_current_changed)
+        
+        # Establecer política de tamaño
+        from PyQt6.QtWidgets import QSizePolicy
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        self.stack_widget.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+        
+    def _on_current_changed(self, index):
+        """Manejar cambio de pestaña actual"""
+        if self.stack_widget and 0 <= index < self.stack_widget.count():
+            self.change_tab_with_animation(index)
+            self.currentChanged.emit(index)
+        
+    def change_tab_with_animation(self, index):
+        """Cambiar tab con animación suave"""
+        if self.stack_widget and index >= 0 and index < self.stack_widget.count():
+            self.stack_widget.setCurrentIndex(index)
+            
+    def addTab(self, widget, label):
+        """Añadir una nueva pestaña - Compatible con QTabWidget"""
+        if not self.stack_widget:
+            return -1
+            
+        # Añadir widget al stack
+        stack_index = self.stack_widget.addWidget(widget)
+        
+        # Añadir tab al tab bar
+        tab_index = self.tab_bar.addTab(label)
+        
+        # Almacenar datos de la pestaña
+        self._tabs_data.append({
+            'widget': widget,
+            'text': label,
+            'enabled': True,
+            'visible': True
+        })
+        
+        return tab_index
+        
+    def insertTab(self, index, widget, label):
+        """Insertar pestaña en posición específica"""
+        if not self.stack_widget:
+            return -1
+            
+        # Insertar en stack widget
+        self.stack_widget.insertWidget(index, widget)
+        
+        # Insertar en tab bar
+        self.tab_bar.insertTab(index, label)
+        
+        # Insertar en datos
+        self._tabs_data.insert(index, {
+            'widget': widget,
+            'text': label, 
+            'enabled': True,
+            'visible': True
+        })
+        
+        return index
+        
+    def removeTab(self, index):
+        """Remover una pestaña - Compatible con QTabWidget"""
+        if not (0 <= index < self.count()):
+            return
+            
+        # Obtener widget antes de remover
+        widget = self.stack_widget.widget(index)
+        
+        # Remover del stack widget
+        self.stack_widget.removeWidget(widget)
+        
+        # Remover del tab bar  
+        self.tab_bar.removeTab(index)
+        
+        # Remover de datos
+        if index < len(self._tabs_data):
+            self._tabs_data.pop(index)
+            
+    def setCurrentIndex(self, index):
+        """Establecer pestaña actual - Compatible con QTabWidget"""
+        if 0 <= index < self.count():
+            self.tab_bar.setCurrentIndex(index)
+            
+    def setCurrentWidget(self, widget):
+        """Establecer widget actual"""
+        index = self.indexOf(widget)
+        if index >= 0:
+            self.setCurrentIndex(index)
+            
+    def currentIndex(self):
+        """Obtener índice de pestaña actual - Compatible con QTabWidget"""
+        return self.tab_bar.currentIndex()
+        
+    def currentWidget(self):
+        """Obtener widget actual - Compatible con QTabWidget"""
+        if self.stack_widget:
+            return self.stack_widget.currentWidget()
+        return None
+        
+    def count(self):
+        """Obtener número de pestañas - Compatible con QTabWidget"""
+        return self.tab_bar.count()
+        
+    def indexOf(self, widget):
+        """Obtener índice de un widget"""
+        if self.stack_widget:
+            return self.stack_widget.indexOf(widget)
+        return -1
+        
+    def tabText(self, index):
+        """Obtener texto de una pestaña - Compatible con QTabWidget"""
+        if 0 <= index < len(self._tabs_data):
+            return self._tabs_data[index]['text']
+        return ""
+        
+    def setTabText(self, index, text):
+        """Establecer texto de una pestaña"""
+        if 0 <= index < len(self._tabs_data):
+            self._tabs_data[index]['text'] = text
+            self.tab_bar.setTabText(index, text)
+            
+    def widget(self, index):
+        """Obtener widget de una pestaña - Compatible con QTabWidget"""
+        if self.stack_widget and 0 <= index < self.stack_widget.count():
+            return self.stack_widget.widget(index)
+        return None
+        
+    def setTabEnabled(self, index, enabled):
+        """Habilitar/deshabilitar pestaña"""
+        if 0 <= index < len(self._tabs_data):
+            self._tabs_data[index]['enabled'] = enabled
+            self.tab_bar.setTabEnabled(index, enabled)
+            
+    def isTabEnabled(self, index):
+        """Verificar si pestaña está habilitada"""
+        if 0 <= index < len(self._tabs_data):
+            return self._tabs_data[index]['enabled']
+        return False
+        
+    def setTabVisible(self, index, visible):
+        """Mostrar/ocultar pestaña"""
+        if 0 <= index < len(self._tabs_data):
+            self._tabs_data[index]['visible'] = visible
+            self.tab_bar.setTabVisible(index, visible)
+            
+    def isTabVisible(self, index):
+        """Verificar si pestaña es visible"""
+        if 0 <= index < len(self._tabs_data):
+            return self._tabs_data[index]['visible']
+        return False
+
+
+class ThemeEffects:
+    @staticmethod
+    def apply_button_hover_animation(button):
+        """Aplica una animación de hover simple a un botón"""
+        original_stylesheet = button.styleSheet()
+        
+        def enterEvent(event):
+            # Cambio de color simple al hacer hover
+            button.setStyleSheet(
+                original_stylesheet + 
+                """
+                QPushButton {
+                    background-color: rgba(61, 89, 161, 0.8);
+                    transform: scale(1.02);
+                }
+                """
+            )
+            if hasattr(type(button), "enterEvent"):
+                type(button).enterEvent(button, event)
+        
+        def leaveEvent(event):
+            # Restaurar estilo original
+            button.setStyleSheet(original_stylesheet)
+            if hasattr(type(button), "leaveEvent"):
+                type(button).leaveEvent(button, event)
+        
+        button.enterEvent = enterEvent
+        button.leaveEvent = leaveEvent
+
+    @staticmethod
+    def apply_smooth_scroll_animation(scroll_area):
+        """
+        Aplica animación suave al scroll
+        """
+        def wheelEvent(event):
+            # Animación suave del scroll vertical
+            scroll_bar = scroll_area.verticalScrollBar()
+            current_value = scroll_bar.value()
+            
+            # Calcular nuevo valor
+            delta = event.angleDelta().y()
+            new_value = current_value - (delta // 8)  # Suavizar el movimiento
+            
+            # Crear animación
+            animation = QPropertyAnimation(scroll_bar, b"value")
+            animation.setDuration(150)
+            animation.setStartValue(current_value)
+            animation.setEndValue(max(0, min(scroll_bar.maximum(), new_value)))
+            animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+            animation.start()
+            
+            # Guardar referencia para evitar que se elimine
+            scroll_area._scroll_animation = animation
+        
+        scroll_area.wheelEvent = wheelEvent
+
+    @staticmethod
+    def apply_tab_switch_animation(tab_widget):
+        """
+        Aplica animación al cambiar de pestaña
+        """
+        original_setCurrentIndex = tab_widget.setCurrentIndex
+        
+        def animated_setCurrentIndex(index):
+            # Solo animar si el índice es diferente
+            if tab_widget.currentIndex() != index:
+                current_widget = tab_widget.currentWidget()
+                
+                if current_widget:
+                    # Fade out
+                    fade_out = QPropertyAnimation(current_widget, b"windowOpacity")
+                    fade_out.setDuration(100)
+                    fade_out.setStartValue(1.0)
+                    fade_out.setEndValue(0.5)
+                    
+                    def complete_transition():
+                        original_setCurrentIndex(index)
+                        new_widget = tab_widget.currentWidget()
+                        if new_widget:
+                            # Fade in
+                            fade_in = QPropertyAnimation(new_widget, b"windowOpacity")
+                            fade_in.setDuration(100)
+                            fade_in.setStartValue(0.5)
+                            fade_in.setEndValue(1.0)
+                            fade_in.start()
+                    
+                    fade_out.finished.connect(complete_transition)
+                    fade_out.start()
+                else:
+                    original_setCurrentIndex(index)
+            else:
+                original_setCurrentIndex(index)
+        
+        tab_widget.setCurrentIndex = animated_setCurrentIndex
 
 if __name__ == "__main__":
     # Ejemplo de uso

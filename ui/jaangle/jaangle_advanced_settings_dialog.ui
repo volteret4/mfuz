@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdvancedSettingsDialog</class>
+ <widget class="QDialog" name="AdvancedSettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Configuración Avanzada - Jaangle</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="main_layout">
+   <item>
+    <widget class="QScrollArea" name="scroll_area">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scroll_content">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>530</width>
+        <height>900</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="content_layout">
+       <item>
+        <widget class="QGroupBox" name="filters_group">
+         <property name="title">
+          <string>Filtros de Contenido</string>
+         </property>
+         <layout class="QGridLayout" name="filters_layout">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="filter_artists_btn">
+            <property name="text">
+             <string>Filtrar Artistas</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="filter_albums_btn">
+            <property name="text">
+             <string>Filtrar Álbumes</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="filter_genres_btn">
+            <property name="text">
+             <string>Filtrar Géneros</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="filter_folders_btn">
+            <property name="text">
+             <string>Filtrar Carpetas</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QPushButton" name="filter_sellos_btn">
+            <property name="text">
+             <string>Filtrar Sellos</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="session_filters_btn">
+            <property name="text">
+             <string>Filtros de Sesión</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QPushButton" name="clear_session_btn">
+            <property name="text">
+             <string>Limpiar Filtros de Sesión</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QLabel" name="session_status_label">
+            <property name="text">
+             <string>Estado de filtros: Sin filtros activos</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="styleSheet">
+             <string>color: #666; font-style: italic;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="playback_group">
+         <property name="title">
+          <string>Configuración de Reproducción</string>
+         </property>
+         <layout class="QGridLayout" name="playback_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="min_duration_label">
+            <property name="text">
+             <string>Duración mínima de canción (seg):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="min_duration_spin">
+            <property name="suffix">
+             <string> seg</string>
+            </property>
+            <property name="minimum">
+             <number>30</number>
+            </property>
+            <property name="maximum">
+             <number>600</number>
+            </property>
+            <property name="value">
+             <number>60</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="avoid_last_label">
+            <property name="text">
+             <string>Evitar últimos segundos:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="avoid_last_spin">
+            <property name="suffix">
+             <string> seg</string>
+            </property>
+            <property name="minimum">
+             <number>5</number>
+            </property>
+            <property name="maximum">
+             <number>60</number>
+            </property>
+            <property name="value">
+             <number>15</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="beginning_chance_label">
+            <property name="text">
+             <string>Probabilidad de empezar desde el inicio:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDoubleSpinBox" name="beginning_chance_spin">
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="decimals">
+             <number>1</number>
+            </property>
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>30</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="spotify_group">
+         <property name="title">
+          <string>Configuración de Spotify</string>
+         </property>
+         <layout class="QGridLayout" name="spotify_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="spotify_user_label">
+            <property name="text">
+             <string>Usuario de Spotify:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="spotify_user_edit">
+            <property name="placeholderText">
+             <string>Introduce tu nombre de usuario</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="spotify_auto_login_check">
+            <property name="text">
+             <string>Iniciar sesión automáticamente</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="listenbrainz_group">
+         <property name="title">
+          <string>Configuración Online</string>
+         </property>
+         <layout class="QGridLayout" name="listenbrainz_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="listenbrainz_user_label">
+            <property name="text">
+             <string>Usuario de ListenBrainz:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="listenbrainz_user_edit">
+            <property name="placeholderText">
+             <string>Usuario de ListenBrainz (opcional)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="online_source_label">
+            <property name="text">
+             <string>Fuente preferida online:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="online_source_combo">
+            <item>
+             <property name="text">
+              <string>YouTube</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bandcamp</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>SoundCloud</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="ui_group">
+         <property name="title">
+          <string>Configuración de Interfaz</string>
+         </property>
+         <layout class="QGridLayout" name="ui_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="font_size_label">
+            <property name="text">
+             <string>Tamaño de fuente mínimo:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="min_font_size_spin">
+            <property name="suffix">
+             <string> pt</string>
+            </property>
+            <property name="minimum">
+             <number>6</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+            <property name="value">
+             <number>8</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="max_font_size_label">
+            <property name="text">
+             <string>Tamaño de fuente máximo:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="max_font_size_spin">
+            <property name="suffix">
+             <string> pt</string>
+            </property>
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>32</number>
+            </property>
+            <property name="value">
+             <number>16</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="show_album_art_check">
+            <property name="text">
+             <string>Mostrar portadas de álbumes</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="2">
+           <widget class="QCheckBox" name="show_progress_details_check">
+            <property name="text">
+             <string>Mostrar detalles de progreso</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="database_group">
+         <property name="title">
+          <string>Configuración de Base de Datos</string>
+         </property>
+         <layout class="QGridLayout" name="database_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="db_path_label">
+            <property name="text">
+             <string>Ruta de base de datos:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="db_path_edit">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QPushButton" name="browse_db_btn">
+            <property name="text">
+             <string>Examinar...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" colspan="3">
+           <widget class="QCheckBox" name="auto_backup_check">
+            <property name="text">
+             <string>Crear copia de seguridad automática</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="performance_group">
+         <property name="title">
+          <string>Configuración de Rendimiento</string>
+         </property>
+         <layout class="QGridLayout" name="performance_layout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="cache_size_label">
+            <property name="text">
+             <string>Tamaño de caché (MB):</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="cache_size_spin">
+            <property name="suffix">
+             <string> MB</string>
+            </property>
+            <property name="minimum">
+             <number>50</number>
+            </property>
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+            <property name="value">
+             <number>200</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="preload_songs_label">
+            <property name="text">
+             <string>Precargar canciones:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="preload_songs_spin">
+            <property name="suffix">
+             <string> canciones</string>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>20</number>
+            </property>
+            <property name="value">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QCheckBox" name="enable_debug_check">
+            <property name="text">
+             <string>Habilitar modo debug</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="hotkeys_group">
+         <property name="title">
+          <string>Teclas Rápidas</string>
+         </property>
+         <layout class="QHBoxLayout" name="hotkeys_layout">
+          <item>
+           <widget class="QPushButton" name="configure_hotkeys_btn">
+            <property name="text">
+             <string>Configurar Teclas Rápidas...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="hotkeys_spacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="vertical_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="button_box">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>button_box</sender>
+   <signal>accepted()</signal>
+   <receiver>AdvancedSettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>button_box</sender>
+   <signal>rejected()</signal>
+   <receiver>AdvancedSettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

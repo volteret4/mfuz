@@ -165,7 +165,148 @@ class MusicQuiz(BaseModule):
         # Cargar configuración después de inicializar UI
         self.load_config()
 
+        self.init_ui_additions()
 
+        self.complete_ui_setup()
+
+        self.add_advanced_settings_button()
+
+    def init_ui_additions(self):
+        """Adiciones al método init_ui para añadir el progressbar total."""
+        try:
+            # Buscar el layout donde están las estadísticas
+            stats_parent = None
+            if hasattr(self, 'score_label') and self.score_label.parent():
+                stats_parent = self.score_label.parent()
+            
+            if stats_parent and stats_parent.layout():
+                # Crear el progressbar para el tiempo total del quiz
+                self.total_quiz_progressbar = QProgressBar()
+                self.total_quiz_progressbar.setMinimum(0)
+                self.total_quiz_progressbar.setMaximum(100)
+                self.total_quiz_progressbar.setValue(0)
+                self.total_quiz_progressbar.setTextVisible(True)
+                self.total_quiz_progressbar.setFormat("Tiempo restante: %p%")
+                
+                # Estilo del progressbar
+                self.total_quiz_progressbar.setStyleSheet("""
+                    QProgressBar {
+                        border: 2px;
+                        border-radius: 5px;
+                        text-align: center;
+                    }
+                    QProgressBar::chunk {
+                        border-radius: 3px;
+                    }
+                """)
+                
+                # Label para mostrar tiempo restante en formato legible
+                self.total_time_label = QLabel("Tiempo restante: --:--")
+                self.total_time_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                font = self.total_time_label.font()
+                font.setBold(True)
+                self.total_time_label.setFont(font)
+                
+                # Añadir al layout
+                stats_parent.layout().addWidget(self.total_time_label)
+                stats_parent.layout().addWidget(self.total_quiz_progressbar)
+                
+                print("Progress bar del quiz total añadido correctamente")
+            else:
+                print("No se pudo encontrar el layout de estadísticas para añadir el progressbar")
+                
+        except Exception as e:
+            print(f"Error al añadir progressbar total: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def format_time(self, seconds):
+        """Convierte segundos a formato MM:SS."""
+        minutes = seconds // 60
+        secs = seconds % 60
+        return f"{minutes:02d}:{secs:02d}"
+
+
+    def update_total_quiz_progress(self):
+        """Actualiza el progressbar del tiempo total del quiz."""
+        try:
+            if not self.game_active:
+                return
+                
+            self.remaining_total_time -= 1
+            
+            if self.remaining_total_time <= 0:
+                self.remaining_total_time = 0
+                print("Tiempo del quiz agotado, finalizando...")
+                # Detener reproducción inmediatamente
+                self.stop_all_playback()
+                # Si se acabó el tiempo, finalizar el quiz
+                self.end_quiz()
+                return
+                
+            # Calcular porcentaje
+            progress_percent = (self.remaining_total_time / self.total_quiz_duration_seconds) * 100
+            
+            # Actualizar progressbar
+            if hasattr(self, 'total_quiz_progressbar'):
+                self.total_quiz_progressbar.setValue(int(progress_percent))
+                self.total_quiz_progressbar.setFormat(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
+                
+                # Cambiar color cuando queda poco tiempo
+                if progress_percent <= 10:  # Menos del 10%
+                    self.total_quiz_progressbar.setStyleSheet("""
+                        QProgressBar {
+                            border: 2px solid grey;
+                            border-radius: 5px;
+                            text-align: center;
+                        }
+                        QProgressBar::chunk {
+                            background-color: #f44336;
+                            border-radius: 3px;
+                        }
+                    """)
+                elif progress_percent <= 25:  # Menos del 25%
+                    self.total_quiz_progressbar.setStyleSheet("""
+                        QProgressBar {
+                            border: 2px solid grey;
+                            border-radius: 5px;
+                            text-align: center;
+                        }
+                        QProgressBar::chunk {
+                            background-color: #FF9800;
+                            border-radius: 3px;
+                        }
+                    """)
+                else:
+                    # Estilo normal
+                    self.total_quiz_progressbar.setStyleSheet("""
+                        QProgressBar {
+                            border: 2px solid grey;
+                            border-radius: 5px;
+                            text-align: center;
+                        }
+                        QProgressBar::chunk {
+                            background-color: #4CAF50;
+                            border-radius: 3px;
+                        }
+                    """)
+            
+            # Actualizar label
+            if hasattr(self, 'total_time_label'):
+                self.total_time_label.setText(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
+                
+                # Cambiar color del texto cuando queda poco tiempo
+                if progress_percent <= 10:
+                    self.total_time_label.setStyleSheet("color: #f44336; font-weight: bold;")
+                elif progress_percent <= 25:
+                    self.total_time_label.setStyleSheet("color: #FF9800; font-weight: bold;")
+                else:
+                    self.total_time_label.setStyleSheet("font-weight: bold;")
+            
+        except Exception as e:
+            print(f"Error al actualizar progressbar total: {e}")
+            import traceback
+            traceback.print_exc()
 
     def keyPressEvent(self, event):
         """Maneja eventos de teclado para las hotkeys de opciones."""
@@ -220,13 +361,13 @@ class MusicQuiz(BaseModule):
                 # Conectar señales y slots
                 self.action_toggle.clicked.connect(self.toggle_quiz)
                 self.config_button.clicked.connect(self.toggle_config)
-                self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
-                self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
-                self.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
-                self.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
-                self.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
-                self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
-                self.clear_session_btn.clicked.connect(self.clear_session_filters)
+                # self.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
+                # self.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
+                # self.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
+                # self.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
+                # self.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
+                # self.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
+                # self.clear_session_btn.clicked.connect(self.clear_session_filters)
                 
                 # Agregar controles para seleccionar el origen de música
                 self.add_music_origin_controls()
@@ -332,6 +473,42 @@ class MusicQuiz(BaseModule):
         # Deshabilitar opciones al inicio
         self.enable_options(False)
 
+    def show_basic_config(self):
+        """Muestra u oculta la sección de configuración básica (método alternativo)."""
+        if hasattr(self, 'config_group'):
+            self.config_group.setVisible(not self.config_group.isVisible())
+
+    def add_hotkeys_button_to_basic_config(self):
+        """Añade solo el botón de hotkeys a la configuración básica si se mantiene visible."""
+        try:
+            if hasattr(self, 'config_group'):
+                config_layout = self.config_group.layout()
+                if config_layout:
+                    # Crear botón para configurar hotkeys
+                    hotkeys_btn = QPushButton("Configurar Teclas Rápidas")
+                    hotkeys_btn.clicked.connect(self.show_hotkey_config_dialog)
+                    
+                    # Añadir al layout
+                    config_layout.addWidget(hotkeys_btn)
+                    
+                    print("Botón de hotkeys añadido a configuración básica")
+            
+        except Exception as e:
+            print(f"Error al añadir botón de hotkeys: {e}")
+
+
+    def complete_ui_setup(self):
+        """Completa la configuración de la UI después de la inicialización."""
+        try:
+            # Solo añadir botón de hotkeys a configuración básica si existe
+            if hasattr(self, 'config_group'):
+                self.add_hotkeys_button_to_basic_config()
+            
+            # El resto de filtros se manejan en el diálogo avanzado
+            print("Configuración de UI completada - filtros movidos a diálogo avanzado")
+            
+        except Exception as e:
+            print(f"Error al completar configuración de UI: {e}")
 
 
     def _fallback_init_ui(self):
@@ -597,8 +774,8 @@ class MusicQuiz(BaseModule):
                               f"No se pudo conectar a la base de datos: {e}")
 
     def toggle_config(self):
-        """Muestra u oculta la sección de configuración."""
-        self.config_group.setVisible(not self.config_group.isVisible())
+        """Abre directamente el diálogo de configuración avanzada."""
+        self.show_advanced_settings_dialog()
 
     def toggle_quiz(self):
         """Alterna entre iniciar y detener el quiz."""
@@ -635,20 +812,43 @@ class MusicQuiz(BaseModule):
         self.total_played = 0
         self.update_stats_display()
         
-        # Activar el juego
+        # Inicializar tiempo total del quiz
+        self.total_quiz_duration_seconds = self.quiz_duration_minutes * 60
+        self.remaining_total_time = self.total_quiz_duration_seconds
+        
+        # Configurar progressbar total
+        if hasattr(self, 'total_quiz_progressbar'):
+            self.total_quiz_progressbar.setValue(100)
+            self.total_quiz_progressbar.setFormat(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
+        
+        if hasattr(self, 'total_time_label'):
+            self.total_time_label.setText(f"Tiempo restante: {self.format_time(self.remaining_total_time)}")
+        
+        # Activar el estado del juego
         self.game_active = True
         
-        # Actualizar estados de botones
-        if hasattr(self, 'start_button') and hasattr(self, 'stop_button'):
-            self.start_button.setEnabled(False)
-            self.stop_button.setEnabled(True)
+        # Configurar el timer del quiz completo
+        try:
+            self.quiz_timer.timeout.disconnect()  # Desconectar señales previas
+        except TypeError:
+            pass  # No hay conexiones previas
+        self.quiz_timer.timeout.connect(self.end_quiz)
+        self.quiz_timer.start(self.total_quiz_duration_seconds * 1000)  # En milisegundos
         
-        # Iniciar el primer turno
+        # Timer para actualizar el progreso total cada segundo
+        if not hasattr(self, 'total_progress_timer'):
+            self.total_progress_timer = QTimer()
+            self.total_progress_timer.setInterval(1000)  # 1 segundo
+        
+        try:
+            self.total_progress_timer.timeout.disconnect()  # Desconectar señales previas
+        except TypeError:
+            pass  # No hay conexiones previas
+        self.total_progress_timer.timeout.connect(self.update_total_quiz_progress)
+        self.total_progress_timer.start()
+        
+        # Iniciar la primera pregunta
         self.show_next_question()
-        
-        # Programar el final del quiz
-        total_duration_ms = self.quiz_duration_minutes * 60 * 1000
-        self.quiz_timer.start(total_duration_ms)
    
    
     def stop_quiz(self):
@@ -662,20 +862,16 @@ class MusicQuiz(BaseModule):
         elif hasattr(self, 'action_toggle'):
             self.action_toggle.setText("Iniciar Quiz")
         
-        # Detener los timers
-        self.timer.stop()
-        self.quiz_timer.stop()
+        # Detener TODOS los timers
+        if hasattr(self, 'timer'):
+            self.timer.stop()
+        if hasattr(self, 'quiz_timer'):
+            self.quiz_timer.stop()
+        if hasattr(self, 'total_progress_timer'):
+            self.total_progress_timer.stop()
         
-        # Detener la reproducción local
-        self.player.stop()
-        
-        # Detener reproducción de Spotify
-        if hasattr(self, 'spotify_player'):
-            self.spotify_player.stop()
-            
-        # Detener reproducción de ListenBrainz
-        if hasattr(self, 'listenbrainz_player'):
-            self.listenbrainz_player.stop()
+        # MODIFICADO: Usar el nuevo método para detener toda la reproducción
+        self.stop_all_playback()
         
         # Ocultar los contenedores de los reproductores
         if hasattr(self, 'spotify_container') and self.spotify_container:
@@ -687,12 +883,48 @@ class MusicQuiz(BaseModule):
         self.enable_options(False)
         
         # Restablecer la visualización
-        self.countdown_label.setText("---")
-        self.progress_bar.setValue(0)
+        if hasattr(self, 'countdown_label'):
+            self.countdown_label.setText("---")
+        if hasattr(self, 'progress_bar'):
+            self.progress_bar.setValue(0)
+        
+        # Restablecer el progressbar total
+        if hasattr(self, 'total_quiz_progressbar'):
+            self.total_quiz_progressbar.setValue(0)
+            self.total_quiz_progressbar.setFormat("Tiempo restante: --:--")
+            self.total_quiz_progressbar.setStyleSheet("""
+                QProgressBar {
+                    border: 2px;
+                    border-radius: 5px;
+                    text-align: center;
+                }
+                QProgressBar::chunk {
+                    border-radius: 3px;
+                }
+            """)
+        
+        if hasattr(self, 'total_time_label'):
+            self.total_time_label.setText("Tiempo restante: --:--")
+            self.total_time_label.setStyleSheet("font-weight: bold;")
 
 
     def end_quiz(self):
         """Finaliza el quiz cuando se acaba el tiempo total."""
+        print("Finalizando quiz...")
+        
+        # Detener el timer de progreso total
+        if hasattr(self, 'total_progress_timer'):
+            self.total_progress_timer.stop()
+        
+        # Detener reproducción ANTES de todo lo demás
+        self.stop_all_playback()
+        
+        # Pequeña pausa para asegurar que la reproducción se ha detenido
+        QTimer.singleShot(500, self._show_final_results)
+
+    def _show_final_results(self):
+        """Muestra los resultados finales después de asegurar que la música se ha detenido."""
+        # Llamar a stop_quiz para limpiar todo
         self.stop_quiz()
         
         # Mostrar resultados finales
@@ -701,13 +933,52 @@ class MusicQuiz(BaseModule):
         msg.setWindowTitle("Quiz completado")
         msg.setText(f"¡Quiz completado!\n\nPuntuación: {self.score}/{self.total_played}\nPrecisión: {score_percent:.1f}%")
         msg.setIcon(QMessageBox.Icon.Information)
+        
+        # NUEVO: Asegurar que no hay reproducción antes de mostrar el diálogo
+        self.stop_all_playback()
+        
         msg.exec()
         
         # Emitir señal de quiz completado
         self.quiz_completed.emit()
-
-
-    # Modificación de get_random_songs() para incluir ListenBrainz
+    def stop_all_playback(self):
+        """Detiene toda la reproducción de música activa de forma más agresiva."""
+        try:
+            print("Deteniendo toda la reproducción...")
+            
+            # Detener reproducción local - método más agresivo
+            if hasattr(self, 'player') and self.player:
+                # Primero pausar
+                self.player.pause()
+                # Luego detener
+                self.player.stop()
+                # Limpiar la fuente completamente
+                self.player.setSource(QUrl())
+                # Establecer posición a 0
+                self.player.setPosition(0)
+                print("Reproductor local detenido")
+            
+            # Detener audio output si existe
+            if hasattr(self, 'audio_output') and self.audio_output:
+                self.audio_output.setVolume(0.0)  # Silenciar inmediatamente
+                print("Audio output silenciado")
+            
+            # Detener reproducción de Spotify
+            if hasattr(self, 'spotify_player') and self.spotify_player:
+                self.spotify_player.stop()
+                print("Reproductor Spotify detenido")
+                
+            # Detener reproducción de ListenBrainz/Online
+            if hasattr(self, 'listenbrainz_player') and self.listenbrainz_player:
+                self.listenbrainz_player.stop()
+                print("Reproductor online detenido")
+            
+            print("Toda la reproducción ha sido detenida")
+            
+        except Exception as e:
+            print(f"Error al detener reproducción: {e}")
+            import traceback
+            traceback.print_exc()
 
     def get_random_songs(self, count=4, max_retries=3):
         """Versión modificada que incorpora los filtros de sesión y origen de música."""
@@ -930,11 +1201,24 @@ class MusicQuiz(BaseModule):
             logger.error(f"Error al inicializar playlist del juego: {e}")
             return False
 
+
+    def restore_audio_volume(self):
+        """Restaura el volumen del audio output después de silenciarlo."""
+        try:
+            if hasattr(self, 'audio_output') and self.audio_output:
+                self.audio_output.setVolume(1.0)  # Volumen completo por defecto
+                print("Volumen del audio output restaurado")
+        except Exception as e:
+            print(f"Error al restaurar volumen: {e}")
+
     def show_next_question(self):
         """Muestra la siguiente pregunta del quiz con soporte mejorado para reproducción."""
         if not self.game_active:
             return
-            
+
+        # Restaurar volumen si fue silenciado
+        self.restore_audio_volume()
+    
         # Detener la reproducción anterior si existe
         self.player.stop()
         if hasattr(self, 'spotify_player'):
@@ -1225,6 +1509,9 @@ class MusicQuiz(BaseModule):
             # Se acabó el tiempo
             self.timer.stop()
             
+            # NUEVO: Detener reproducción cuando se acaba el tiempo de la canción
+            self.stop_all_playback()
+            
             # Marcar como incorrecto (sin respuesta)
             self.total_played += 1
             self.update_stats_display()
@@ -1249,6 +1536,9 @@ class MusicQuiz(BaseModule):
         
         # Detener el timer
         self.timer.stop()
+        
+        # NUEVO: Detener reproducción cuando se selecciona una opción
+        self.stop_all_playback()
         
         # Actualizar estadísticas
         self.total_played += 1
@@ -1293,6 +1583,11 @@ class MusicQuiz(BaseModule):
         """Limpia los recursos al cerrar el módulo."""
         self.save_config()
         self.stop_quiz()
+        
+        # NUEVO: Limpiar timer de progreso total
+        if hasattr(self, 'total_progress_timer'):
+            self.total_progress_timer.stop()
+        
         if self.conn:
             self.conn.close()
         if hasattr(self, 'spotify_player'):
@@ -3217,7 +3512,7 @@ class MusicQuiz(BaseModule):
 
 
     def save_config(self):
-        """Guarda la configuración actual a un archivo."""
+        """Guarda la configuración actual a un archivo (versión mejorada)."""
         try:
             import json
             import os
@@ -3258,8 +3553,9 @@ class MusicQuiz(BaseModule):
                     key_value = int(qt_key)
                 serializable_hotkeys[str(option_index)] = key_value
             
-            # Preparar datos a guardar
+            # Usar el nuevo método para obtener configuración completa
             config_data = {
+                # Configuración básica
                 "option_hotkeys": serializable_hotkeys,
                 "music_origin": self.music_origin,
                 "spotify_user": getattr(self, 'spotify_user', None),
@@ -3270,13 +3566,29 @@ class MusicQuiz(BaseModule):
                 "options_count": self.options_count,
                 "min_song_duration": self.min_song_duration,
                 "start_from_beginning_chance": self.start_from_beginning_chance,
-                "avoid_last_seconds": self.avoid_last_seconds
+                "avoid_last_seconds": self.avoid_last_seconds,
+                
+                # Configuración avanzada
+                "spotify_auto_login": getattr(self, 'spotify_auto_login', False),
+                "preferred_online_source": getattr(self, 'preferred_online_source', 'youtube'),
+                "min_font_size": getattr(self, 'min_font_size', 8),
+                "max_font_size": getattr(self, 'max_font_size', 16),
+                "show_album_art": getattr(self, 'show_album_art', True),
+                "show_progress_details": getattr(self, 'show_progress_details', True),
+                "cache_size": getattr(self, 'cache_size', 200),
+                "preload_songs": getattr(self, 'preload_songs', 5),
+                "auto_backup": getattr(self, 'auto_backup', False),
+                "enable_debug": getattr(self, 'enable_debug', False),
             }
+            
+            # Agregar ruta de base de datos si existe
+            if hasattr(self, 'db_path') and self.db_path:
+                config_data["db_path"] = str(self.db_path)
             
             # Guardar en archivo
             config_path = Path(config_dir, "config.json")
             with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(config_data, f, indent=2)
+                json.dump(config_data, f, indent=2, ensure_ascii=False)
             
             print(f"Configuración guardada correctamente en: {config_path}")
             print(f"Hotkeys guardadas: {serializable_hotkeys}")
@@ -3286,9 +3598,36 @@ class MusicQuiz(BaseModule):
             import traceback
             traceback.print_exc()
             return False
+    
 
+    def add_advanced_settings_button(self):
+        """Añade un botón para acceder a la configuración avanzada en la UI principal."""
+        try:
+            # Buscar el grupo de configuración existente
+            if hasattr(self, 'config_group'):
+                config_layout = self.config_group.layout()
+                if config_layout:
+                    # Crear botón para configuración avanzada
+                    advanced_btn = QPushButton("Configuración Avanzada...")
+                    advanced_btn.clicked.connect(self.show_advanced_settings_dialog)
+                    
+                    # Añadir al layout de configuración
+                    config_layout.addWidget(advanced_btn)
+                    
+                    print("Botón de configuración avanzada añadido")
+                    return True
+                else:
+                    print("No se encontró layout de configuración")
+            else:
+                print("No se encontró grupo de configuración")
+                
+        except Exception as e:
+            print(f"Error al añadir botón de configuración avanzada: {e}")
+            return False
+
+    
     def load_config(self):
-        """Carga la configuración desde un archivo."""
+        """Carga la configuración desde un archivo (versión mejorada)."""
         try:
             import json
             from pathlib import Path
@@ -3297,6 +3636,8 @@ class MusicQuiz(BaseModule):
             config_path = Path(PROJECT_ROOT, "config", "jaangle", "config.json")
             if not config_path.exists():
                 print(f"Archivo de configuración no encontrado: {config_path}")
+                # Establecer valores por defecto para configuración avanzada
+                self.set_advanced_defaults()
                 return False
                 
             with open(config_path, 'r', encoding='utf-8') as f:
@@ -3304,7 +3645,7 @@ class MusicQuiz(BaseModule):
                 
             print(f"Cargando configuración desde: {config_path}")
             
-            # Aplicar configuración cargada
+            # Aplicar configuración básica cargada
             if "option_hotkeys" in config_data:
                 # Convertir hotkeys de vuelta a objetos Qt.Key
                 loaded_hotkeys = {}
@@ -3323,20 +3664,23 @@ class MusicQuiz(BaseModule):
             if "listenbrainz_user" in config_data:
                 self.listenbrainz_user = config_data["listenbrainz_user"]
             if "quiz_duration_minutes" in config_data:
-                self.quiz_duration_minutes = config_data["quiz_duration_minutes"]
+                self.quiz_duration_minutes = int(float(str(config_data["quiz_duration_minutes"])))
             if "song_duration_seconds" in config_data:
-                self.song_duration_seconds = config_data["song_duration_seconds"]
+                self.song_duration_seconds = int(float(str(config_data["song_duration_seconds"])))
             if "pause_between_songs" in config_data:
-                self.pause_between_songs = config_data["pause_between_songs"]
+                self.pause_between_songs = int(float(str(config_data["pause_between_songs"])))
             if "options_count" in config_data:
-                self.options_count = config_data["options_count"]
+                self.options_count = int(float(str(config_data["options_count"])))
             if "min_song_duration" in config_data:
-                self.min_song_duration = config_data["min_song_duration"]
+                self.min_song_duration = int(float(str(config_data["min_song_duration"])))
             if "start_from_beginning_chance" in config_data:
-                self.start_from_beginning_chance = config_data["start_from_beginning_chance"]
+                self.start_from_beginning_chance = float(str(config_data["start_from_beginning_chance"]))
             if "avoid_last_seconds" in config_data:
-                self.avoid_last_seconds = config_data["avoid_last_seconds"]
+                self.avoid_last_seconds = int(float(str(config_data["avoid_last_seconds"])))
                 
+            # Cargar configuración avanzada
+            self.load_advanced_config_from_data(config_data)
+            
             # Actualizar UI con valores cargados
             self.update_ui_from_config()
             
@@ -3346,7 +3690,74 @@ class MusicQuiz(BaseModule):
             print(f"Error al cargar configuración: {e}")
             import traceback
             traceback.print_exc()
+            # Establecer valores por defecto en caso de error
+            self.set_advanced_defaults()
             return False
+
+    def load_advanced_config_from_data(self, config_data):
+        """Carga la configuración avanzada desde los datos del archivo."""
+        try:
+            # Configuración de Spotify
+            self.spotify_auto_login = config_data.get("spotify_auto_login", False)
+            
+            # Configuración Online
+            self.preferred_online_source = config_data.get("preferred_online_source", "youtube")
+            
+            # Configuración de UI
+            self.min_font_size = int(float(str(config_data.get("min_font_size", 8))))
+            self.max_font_size = int(float(str(config_data.get("max_font_size", 16))))
+            self.show_album_art = config_data.get("show_album_art", True)
+            self.show_progress_details = config_data.get("show_progress_details", True)
+            
+            # Configuración de base de datos
+            if "db_path" in config_data and config_data["db_path"]:
+                new_db_path = Path(config_data["db_path"])
+                if new_db_path.exists():
+                    self.db_path = new_db_path
+                else:
+                    print(f"Advertencia: La base de datos configurada no existe: {new_db_path}")
+            
+            # Configuración de rendimiento
+            self.cache_size = int(float(str(config_data.get("cache_size", 200))))
+            self.preload_songs = int(float(str(config_data.get("preload_songs", 5))))
+            self.auto_backup = config_data.get("auto_backup", False)
+            self.enable_debug = config_data.get("enable_debug", False)
+            
+            # Aplicar configuraciones que requieren acción inmediata
+            if hasattr(self, 'enable_debug') and self.enable_debug:
+                import logging
+                logging.getLogger(__name__).setLevel(logging.DEBUG)
+                print("Modo debug habilitado")
+            
+        except Exception as e:
+            print(f"Error al cargar configuración avanzada: {e}")
+            self.set_advanced_defaults()
+
+    def set_advanced_defaults(self):
+        """Establece los valores por defecto para la configuración avanzada."""
+        try:
+            # Configuración de Spotify
+            self.spotify_auto_login = False
+            
+            # Configuración Online
+            self.preferred_online_source = "youtube"
+            
+            # Configuración de UI
+            self.min_font_size = 8
+            self.max_font_size = 16
+            self.show_album_art = True
+            self.show_progress_details = True
+            
+            # Configuración de rendimiento
+            self.cache_size = 200
+            self.preload_songs = 5
+            self.auto_backup = False
+            self.enable_debug = False
+            
+            print("Configuración avanzada establecida a valores por defecto")
+            
+        except Exception as e:
+            print(f"Error al establecer valores por defecto: {e}")
 
     def get_key_display_name(self, qt_key):
         """Obtiene el nombre descriptivo de una tecla Qt."""
@@ -3645,3 +4056,390 @@ class MusicQuiz(BaseModule):
             self.config_save_timer.start(1000)  # Guardar después de 1 segundo de inactividad
         except Exception as e:
             print(f"Error en on_config_changed: {e}")
+
+
+# ADVANCED SETTINGS
+
+    def show_advanced_settings_dialog(self):
+        """Muestra el diálogo de configuración avanzada."""
+        try:
+            from PyQt6 import uic
+            from PyQt6.QtWidgets import QDialog, QFileDialog
+            
+            dialog = QDialog(self)
+            
+            # Cargar la UI del diálogo
+            dialog_ui_path = Path(PROJECT_ROOT, "ui", "jaangle", "jaangle_advanced_settings_dialog.ui")
+            
+            if os.path.exists(dialog_ui_path):
+                print("Cargando UI del diálogo...")
+                uic.loadUi(dialog_ui_path, dialog)
+                
+                print("UI cargada, iniciando carga de configuración...")
+                # Cargar valores actuales en la UI
+                self.load_advanced_settings_to_ui(dialog)
+                
+                print("Configuración cargada, conectando señales...")
+                # Conectar señales
+                self.connect_advanced_settings_signals(dialog)
+                
+                print("Mostrando diálogo...")
+                # Mostrar el diálogo
+                result = dialog.exec()
+                
+                if result == QDialog.DialogCode.Accepted:
+                    # Aplicar cambios
+                    self.apply_advanced_settings_from_ui(dialog)
+                    # Guardar configuración
+                    self.save_config()
+                    return True
+            else:
+                self.show_error_message("Error", f"No se encontró el archivo UI: {dialog_ui_path}")
+                
+        except Exception as e:
+            print(f"Error al mostrar configuración avanzada: {e}")
+            import traceback
+            traceback.print_exc()
+            self.show_error_message("Error", f"Error al mostrar configuración avanzada: {e}")
+        
+        return False
+    def safe_int_conversion(self, value, default=0):
+        """Convierte un valor a entero de forma segura."""
+        try:
+            if value is None:
+                return default
+            # Si es string, verificar si contiene punto decimal
+            if isinstance(value, str) and '.' in value:
+                return int(float(value))
+            # Convertir directamente a float primero, luego a int
+            return int(float(value))
+        except (ValueError, TypeError):
+            print(f"Advertencia: No se pudo convertir '{value}' a entero, usando valor por defecto: {default}")
+            return default
+
+    def safe_float_conversion(self, value, default=0.0):
+        """Convierte un valor a float de forma segura."""
+        try:
+            if value is None:
+                return default
+            return float(value)
+        except (ValueError, TypeError):
+            print(f"Advertencia: No se pudo convertir '{value}' a float, usando valor por defecto: {default}")
+            return default
+
+    def load_advanced_settings_to_ui(self, dialog):
+        """Carga los valores actuales de configuración en la UI del diálogo."""
+        try:
+            print("Iniciando carga de configuración avanzada...")
+            
+            # Debug: mostrar valores actuales
+            print(f"min_song_duration: {getattr(self, 'min_song_duration', 'NO EXISTE')} (tipo: {type(getattr(self, 'min_song_duration', None))})")
+            print(f"avoid_last_seconds: {getattr(self, 'avoid_last_seconds', 'NO EXISTE')} (tipo: {type(getattr(self, 'avoid_last_seconds', None))})")
+            print(f"start_from_beginning_chance: {getattr(self, 'start_from_beginning_chance', 'NO EXISTE')} (tipo: {type(getattr(self, 'start_from_beginning_chance', None))})")
+            
+            # Configuración de reproducción - usar conversiones seguras
+            print("Configurando min_duration_spin...")
+            min_duration_value = self.safe_int_conversion(getattr(self, 'min_song_duration', 60), 60)
+            print(f"Valor convertido min_duration: {min_duration_value}")
+            dialog.min_duration_spin.setValue(min_duration_value)
+            
+            print("Configurando avoid_last_spin...")
+            avoid_last_value = self.safe_int_conversion(getattr(self, 'avoid_last_seconds', 15), 15)
+            print(f"Valor convertido avoid_last: {avoid_last_value}")
+            dialog.avoid_last_spin.setValue(avoid_last_value)
+            
+            print("Configurando beginning_chance_spin...")
+            beginning_chance_value = self.safe_float_conversion(getattr(self, 'start_from_beginning_chance', 0.3), 0.3) * 100
+            print(f"Valor convertido beginning_chance: {beginning_chance_value}")
+            dialog.beginning_chance_spin.setValue(beginning_chance_value)
+            
+            # Configuración de Spotify
+            print("Configurando Spotify...")
+            if hasattr(self, 'spotify_user') and self.spotify_user:
+                dialog.spotify_user_edit.setText(str(self.spotify_user))
+            
+            # Configuración Online/ListenBrainz
+            print("Configurando Online/ListenBrainz...")
+            if hasattr(self, 'listenbrainz_user') and self.listenbrainz_user:
+                dialog.listenbrainz_user_edit.setText(str(self.listenbrainz_user))
+            
+            # Configuración de UI - usar conversiones seguras
+            print("Configurando UI...")
+            min_font_value = self.safe_int_conversion(getattr(self, 'min_font_size', 8), 8)
+            print(f"Valor convertido min_font: {min_font_value}")
+            dialog.min_font_size_spin.setValue(min_font_value)
+            
+            max_font_value = self.safe_int_conversion(getattr(self, 'max_font_size', 16), 16)
+            print(f"Valor convertido max_font: {max_font_value}")
+            dialog.max_font_size_spin.setValue(max_font_value)
+            
+            # Configuración de base de datos
+            print("Configurando base de datos...")
+            if hasattr(self, 'db_path') and self.db_path:
+                dialog.db_path_edit.setText(str(self.db_path))
+            
+            # Configuración de rendimiento - usar conversiones seguras
+            print("Configurando rendimiento...")
+            cache_size_value = self.safe_int_conversion(getattr(self, 'cache_size', 200), 200)
+            print(f"Valor convertido cache_size: {cache_size_value}")
+            dialog.cache_size_spin.setValue(cache_size_value)
+            
+            preload_value = self.safe_int_conversion(getattr(self, 'preload_songs', 5), 5)
+            print(f"Valor convertido preload: {preload_value}")
+            dialog.preload_songs_spin.setValue(preload_value)
+            
+            # Checkboxes
+            print("Configurando checkboxes...")
+            dialog.show_album_art_check.setChecked(getattr(self, 'show_album_art', True))
+            dialog.show_progress_details_check.setChecked(getattr(self, 'show_progress_details', True))
+            dialog.auto_backup_check.setChecked(getattr(self, 'auto_backup', False))
+            dialog.spotify_auto_login_check.setChecked(getattr(self, 'spotify_auto_login', False))
+            dialog.enable_debug_check.setChecked(getattr(self, 'enable_debug', False))
+            
+            print("Configuración avanzada cargada correctamente")
+            
+        except Exception as e:
+            print(f"Error al cargar configuración avanzada en UI: {e}")
+            import traceback
+            traceback.print_exc()
+
+    def connect_advanced_settings_signals(self, dialog):
+        """Conecta las señales del diálogo de configuración avanzada."""
+        try:
+            # Conectar botón de examinar base de datos
+            dialog.browse_db_btn.clicked.connect(lambda: self.browse_database_path(dialog))
+            
+            # Conectar botones de filtros
+            dialog.filter_artists_btn.clicked.connect(self.show_artist_filter_dialog)
+            dialog.filter_albums_btn.clicked.connect(self.show_album_filter_dialog)
+            dialog.filter_genres_btn.clicked.connect(self.show_genre_filter_dialog)
+            dialog.filter_folders_btn.clicked.connect(self.show_folder_filter_dialog)
+            dialog.filter_sellos_btn.clicked.connect(self.show_sellos_filter_dialog)
+            dialog.session_filters_btn.clicked.connect(self.show_session_filter_dialog)
+            dialog.clear_session_btn.clicked.connect(lambda: self.clear_session_filters_and_update_status(dialog))
+            
+            # Conectar botón de hotkeys
+            dialog.configure_hotkeys_btn.clicked.connect(self.show_hotkey_config_dialog)
+            
+            # Actualizar estado de filtros de sesión
+            self.update_session_status_in_dialog(dialog)
+            
+            # Conectar botón de restaurar valores por defecto
+            if hasattr(dialog.button_box, 'button'):
+                restore_btn = dialog.button_box.button(dialog.button_box.StandardButton.RestoreDefaults)
+                if restore_btn:
+                    restore_btn.clicked.connect(lambda: self.restore_advanced_defaults(dialog))
+            
+            # Conectar botón de aplicar
+            if hasattr(dialog.button_box, 'button'):
+                apply_btn = dialog.button_box.button(dialog.button_box.StandardButton.Apply)
+                if apply_btn:
+                    apply_btn.clicked.connect(lambda: self.apply_advanced_settings_from_ui(dialog))
+            
+        except Exception as e:
+            print(f"Error al conectar señales de configuración avanzada: {e}")
+
+    def clear_session_filters_and_update_status(self, dialog):
+        """Limpia los filtros de sesión y actualiza el estado en el diálogo."""
+        self.clear_session_filters()
+        self.update_session_status_in_dialog(dialog)
+
+    def update_session_status_in_dialog(self, dialog):
+        """Actualiza el estado de los filtros de sesión en el diálogo."""
+        try:
+            if hasattr(self, 'session_filters') and self.session_filters:
+                # Contar filtros activos
+                filters = self.session_filters.get('filters', {})
+                total_filters = sum(len(items) for items in filters.values() if items)
+                
+                if total_filters > 0:
+                    session_name = self.session_filters.get('name', 'Sesión sin nombre')
+                    dialog.session_status_label.setText(f"Filtros activos: {session_name} ({total_filters} elementos)")
+                    dialog.session_status_label.setStyleSheet("color: #4CAF50; font-weight: bold;")
+                else:
+                    dialog.session_status_label.setText("Estado de filtros: Sin filtros activos")
+                    dialog.session_status_label.setStyleSheet("color: #666; font-style: italic;")
+            else:
+                dialog.session_status_label.setText("Estado de filtros: Sin filtros activos")
+                dialog.session_status_label.setStyleSheet("color: #666; font-style: italic;")
+        except Exception as e:
+            print(f"Error al actualizar estado de sesión: {e}")
+
+
+    def browse_database_path(self, dialog):
+        """Permite al usuario seleccionar la ruta de la base de datos."""
+        try:
+            from PyQt6.QtWidgets import QFileDialog
+            
+            file_path, _ = QFileDialog.getOpenFileName(
+                dialog,
+                "Seleccionar Base de Datos",
+                str(Path.home()),
+                "Archivos de Base de Datos (*.db *.sqlite *.sqlite3);;Todos los archivos (*)"
+            )
+            
+            if file_path:
+                dialog.db_path_edit.setText(file_path)
+                
+        except Exception as e:
+            print(f"Error al examinar ruta de base de datos: {e}")
+
+    def restore_advanced_defaults(self, dialog):
+        """Restaura los valores por defecto de la configuración avanzada."""
+        try:
+            # Valores por defecto de reproducción
+            dialog.min_duration_spin.setValue(60)
+            dialog.avoid_last_spin.setValue(15)
+            dialog.beginning_chance_spin.setValue(30.0)
+            
+            # Limpiar campos de usuario
+            dialog.spotify_user_edit.clear()
+            dialog.listenbrainz_user_edit.clear()
+            
+            # Valores por defecto de UI
+            dialog.min_font_size_spin.setValue(8)
+            dialog.max_font_size_spin.setValue(16)
+            
+            # Valores por defecto de rendimiento
+            dialog.cache_size_spin.setValue(200)
+            dialog.preload_songs_spin.setValue(5)
+            
+            # Checkboxes por defecto
+            dialog.show_album_art_check.setChecked(True)
+            dialog.show_progress_details_check.setChecked(True)
+            dialog.auto_backup_check.setChecked(False)
+            dialog.spotify_auto_login_check.setChecked(False)
+            dialog.enable_debug_check.setChecked(False)
+            
+            # Fuente online por defecto
+            dialog.online_source_combo.setCurrentIndex(0)  # YouTube
+            
+        except Exception as e:
+            print(f"Error al restaurar valores por defecto: {e}")
+
+    def apply_advanced_settings_from_ui(self, dialog):
+        """Aplica la configuración avanzada desde la UI."""
+        try:
+            # Configuración de reproducción
+            self.min_song_duration = dialog.min_duration_spin.value()
+            self.avoid_last_seconds = dialog.avoid_last_spin.value()
+            self.start_from_beginning_chance = dialog.beginning_chance_spin.value() / 100.0
+            
+            # Configuración de Spotify
+            self.spotify_user = dialog.spotify_user_edit.text().strip() or None
+            self.spotify_auto_login = dialog.spotify_auto_login_check.isChecked()
+            
+            # Configuración Online/ListenBrainz
+            self.listenbrainz_user = dialog.listenbrainz_user_edit.text().strip() or None
+            self.preferred_online_source = dialog.online_source_combo.currentText().lower()
+            
+            # Configuración de UI
+            self.min_font_size = dialog.min_font_size_spin.value()
+            self.max_font_size = dialog.max_font_size_spin.value()
+            self.show_album_art = dialog.show_album_art_check.isChecked()
+            self.show_progress_details = dialog.show_progress_details_check.isChecked()
+            
+            # Configuración de base de datos
+            new_db_path = dialog.db_path_edit.text().strip()
+            if new_db_path and new_db_path != str(self.db_path):
+                # Cambiar base de datos requiere reconexión
+                self.change_database_path(new_db_path)
+            
+            # Configuración de rendimiento
+            self.cache_size = dialog.cache_size_spin.value()
+            self.preload_songs = dialog.preload_songs_spin.value()
+            self.auto_backup = dialog.auto_backup_check.isChecked()
+            self.enable_debug = dialog.enable_debug_check.isChecked()
+            
+            # Aplicar cambios inmediatos en la UI
+            self.apply_ui_changes()
+            
+            print("Configuración avanzada aplicada correctamente")
+            
+        except Exception as e:
+            print(f"Error al aplicar configuración avanzada: {e}")
+            self.show_error_message("Error", f"Error al aplicar configuración: {e}")
+
+    def change_database_path(self, new_path):
+        """Cambia la ruta de la base de datos y reconecta."""
+        try:
+            # Cerrar conexión actual
+            if hasattr(self, 'conn') and self.conn:
+                self.conn.close()
+            
+            # Establecer nueva ruta
+            self.db_path = Path(new_path)
+            
+            # Reconectar
+            self.connect_to_database()
+            
+            print(f"Base de datos cambiada a: {self.db_path}")
+            
+        except Exception as e:
+            print(f"Error al cambiar base de datos: {e}")
+            self.show_error_message("Error", f"Error al cambiar base de datos: {e}")
+
+    def apply_ui_changes(self):
+        """Aplica cambios inmediatos en la interfaz de usuario."""
+        try:
+            # Actualizar tamaños de fuente en los labels escalables
+            if hasattr(self, 'option_buttons'):
+                for button in self.option_buttons:
+                    if hasattr(button, 'song_label') and hasattr(button.song_label, 'set_font_range'):
+                        button.song_label.set_font_range(self.min_font_size, self.max_font_size)
+                    if hasattr(button, 'artist_label') and hasattr(button.artist_label, 'set_font_range'):
+                        button.artist_label.set_font_range(self.min_font_size, self.max_font_size)
+                    if hasattr(button, 'album_label') and hasattr(button.album_label, 'set_font_range'):
+                        button.album_label.set_font_range(self.min_font_size, self.max_font_size)
+            
+            # Configurar modo debug
+            if hasattr(self, 'enable_debug') and self.enable_debug:
+                import logging
+                logging.getLogger(__name__).setLevel(logging.DEBUG)
+            else:
+                import logging
+                logging.getLogger(__name__).setLevel(logging.INFO)
+            
+        except Exception as e:
+            print(f"Error al aplicar cambios de UI: {e}")
+
+    def save_advanced_config(self):
+        """Guarda la configuración avanzada adicional al archivo de configuración."""
+        try:
+            # Extender el método save_config existente para incluir configuración avanzada
+            config_data = {
+                # Configuración básica (ya existente)
+                "option_hotkeys": getattr(self, 'option_hotkeys', {}),
+                "music_origin": getattr(self, 'music_origin', 'local'),
+                "spotify_user": getattr(self, 'spotify_user', None),
+                "listenbrainz_user": getattr(self, 'listenbrainz_user', None),
+                "quiz_duration_minutes": getattr(self, 'quiz_duration_minutes', 5),
+                "song_duration_seconds": getattr(self, 'song_duration_seconds', 30),
+                "pause_between_songs": getattr(self, 'pause_between_songs', 5),
+                "options_count": getattr(self, 'options_count', 4),
+                "min_song_duration": getattr(self, 'min_song_duration', 60),
+                "start_from_beginning_chance": getattr(self, 'start_from_beginning_chance', 0.3),
+                "avoid_last_seconds": getattr(self, 'avoid_last_seconds', 15),
+                
+                # Configuración avanzada nueva
+                "spotify_auto_login": getattr(self, 'spotify_auto_login', False),
+                "preferred_online_source": getattr(self, 'preferred_online_source', 'youtube'),
+                "min_font_size": getattr(self, 'min_font_size', 8),
+                "max_font_size": getattr(self, 'max_font_size', 16),
+                "show_album_art": getattr(self, 'show_album_art', True),
+                "show_progress_details": getattr(self, 'show_progress_details', True),
+                "cache_size": getattr(self, 'cache_size', 200),
+                "preload_songs": getattr(self, 'preload_songs', 5),
+                "auto_backup": getattr(self, 'auto_backup', False),
+                "enable_debug": getattr(self, 'enable_debug', False),
+            }
+            
+            # Agregar ruta de base de datos si existe
+            if hasattr(self, 'db_path') and self.db_path:
+                config_data["db_path"] = str(self.db_path)
+            
+            return config_data
+            
+        except Exception as e:
+            print(f"Error al preparar configuración avanzada: {e}")
+            return {}

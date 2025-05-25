@@ -20,85 +20,7 @@
    <string>Filtros de Sesión</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog {
-	background-color: #FFFFFF;
-}
-
-QLabel {
-	font-family: 'Segoe UI', Arial, sans-serif;
-	font-size: 10pt;
-}
-
-QLineEdit, QComboBox {
-	border: 1px solid #E0E0E0;
-	border-radius: 4px;
-	padding: 5px;
-	background-color: #F5F5F5;
-}
-
-QLineEdit:focus, QComboBox:focus {
-	border: 1px solid #78909C;
-	background-color: #FFFFFF;
-}
-
-QComboBox::drop-down {
-	border: none;
-	border-left: 1px solid #E0E0E0;
-	width: 20px;
-}
-
-QComboBox::down-arrow {
-	image: url(icons/down_arrow.png);
-	width: 12px;
-	height: 12px;
-}
-
-QPushButton {
-	background-color: #607D8B;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	padding: 6px 12px;
-	font-weight: bold;
-}
-
-QPushButton:hover {
-	background-color: #78909C;
-}
-
-QPushButton:pressed {
-	background-color: #546E7A;
-}
-
-QCheckBox {
-	spacing: 8px;
-}
-
-QCheckBox::indicator {
-	width: 18px;
-	height: 18px;
-}
-
-QCheckBox::indicator:unchecked {
-	border: 2px solid #B0BEC5;
-	background-color: #FFFFFF;
-	border-radius: 3px;
-}
-
-QCheckBox::indicator:checked {
-	border: 2px solid #607D8B;
-	background-color: #607D8B;
-	border-radius: 3px;
-}
-
-QScrollArea {
-	border: 1px solid #E0E0E0;
-	background-color: #FFFFFF;
-}
-
-QWidget#scrollAreaContent {
-	background-color: #FFFFFF;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -183,11 +105,8 @@ QWidget#scrollAreaContent {
         <x>0</x>
         <y>0</y>
         <width>466</width>
-        <height>392</height>
+        <height>356</height>
        </rect>
-      </property>
-      <property name="objectName">
-       <string>scrollAreaContent</string>
       </property>
       <layout class="QVBoxLayout" name="checkboxLayout">
        <property name="spacing">
@@ -205,7 +124,6 @@ QWidget#scrollAreaContent {
        <property name="bottomMargin">
         <number>12</number>
        </property>
-       <!-- Los checkboxes se añadirán dinámicamente aquí -->
       </layout>
      </widget>
     </widget>
