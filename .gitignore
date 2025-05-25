@@ -45,3 +45,4 @@ config/config_database_creator.json
 content/artistas_img/
 billboard_data/
 uk_charts_data/
+uk_indie_nme_charts_data/

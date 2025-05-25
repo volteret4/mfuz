@@ -23,7 +23,7 @@ class MusicBrainzReleaseGroups:
         self.conn.row_factory = sqlite3.Row
         self.cursor = self.conn.cursor()
         
-        # Modo de operación: 'auto' o 'manual'
+        # Modo de operación: 'auto', 'manual', o 'schema-only'
         self.mode = self.config.get('mode', 'auto')
         self.cache_file = self.config.get('cache_file', 'mb_release_groups_cache.json')
         
@@ -34,6 +34,12 @@ class MusicBrainzReleaseGroups:
         self.approved_columns = set(self.cache.get('approved_columns', []))
         self.rejected_columns = set(self.cache.get('rejected_columns', []))
         
+        # Nuevo: obtener columnas existentes de la tabla en modo schema-only
+        self.existing_columns = set()
+        if self.mode == 'schema-only':
+            self.existing_columns = self.get_existing_table_columns('mb_release_group')
+            print(f"Modo schema-only: usando solo columnas existentes: {', '.join(sorted(self.existing_columns))}")
+        
         # Estadísticas para reporting
         self.stats = self.cache.get('stats', {
             "total_releases": 0,
@@ -43,7 +49,8 @@ class MusicBrainzReleaseGroups:
             "failed_fetch": 0,
             "skipped": 0,
             "new_columns_added": 0,
-            "columns_rejected": 0
+            "columns_rejected": 0,
+            "columns_ignored": 0  # Nueva estadística para columnas ignoradas
         })
         
         # Rastrear el último ID procesado
@@ -562,8 +569,20 @@ class MusicBrainzReleaseGroups:
         
         return processed_value, value_type, is_link
 
+    def get_existing_table_columns(self, table_name: str) -> set:
+        """Obtener el conjunto de columnas existentes en una tabla."""
+        try:
+            self.cursor.execute(f"PRAGMA table_info({table_name})")
+            columns = {row[1] for row in self.cursor.fetchall()}  # row[1] es el nombre de la columna
+            return columns
+        except Exception as e:
+            print(f"Error obteniendo columnas de {table_name}: {str(e)}")
+            return set()
+
+
+
     def process_special_property(self, property_id: str, property_label: str, 
-                                value: str, album_id: int, release_group_mbid: str) -> Optional[Tuple[str, str]]:
+                            value: str, album_id: int, release_group_mbid: str) -> Optional[Tuple[str, str]]:
         """
         Procesar propiedades especiales como etiquetas discográficas o seguidores en redes sociales.
         
@@ -624,7 +643,17 @@ class MusicBrainzReleaseGroups:
                 service_name = match.group(1).lower()
                 column_name = f"{service_name}_url"
                 
-                # Verificar si la columna ya está aprobada o rechazada
+                # En modo schema-only, solo usar si la columna ya existe
+                if self.mode == 'schema-only':
+                    if column_name in self.existing_columns:
+                        self.update_release_group_column(release_group_mbid, column_name, value)
+                        return None
+                    else:
+                        # Columna no existe, ignorar
+                        self.stats["columns_ignored"] += 1
+                        return None
+                
+                # Verificar si la columna ya está aprobada o rechazada (otros modos)
                 if column_name in self.approved_columns:
                     self.update_release_group_column(release_group_mbid, column_name, value)
                     return None
@@ -670,7 +699,18 @@ class MusicBrainzReleaseGroups:
         if property_id in known_platforms:
             column_name, value_transformer = known_platforms[property_id]
             
-            # Verificar si la columna ya está aprobada o rechazada
+            # En modo schema-only, solo usar si la columna ya existe
+            if self.mode == 'schema-only':
+                if column_name in self.existing_columns:
+                    transformed_value = value_transformer(value)
+                    self.update_release_group_column(release_group_mbid, column_name, transformed_value)
+                    return None
+                else:
+                    # Columna no existe, ignorar
+                    self.stats["columns_ignored"] += 1
+                    return None
+            
+            # Verificar si la columna ya está aprobada o rechazada (otros modos)
             if column_name in self.approved_columns:
                 transformed_value = value_transformer(value)
                 
@@ -689,7 +729,17 @@ class MusicBrainzReleaseGroups:
         if property_label and property_label != property_id:
             column_name = self.safe_column_name(property_label)
             
-            # Verificar si ya está aprobada o rechazada
+            # En modo schema-only, solo usar si la columna ya existe
+            if self.mode == 'schema-only':
+                if column_name in self.existing_columns:
+                    self.update_release_group_column(release_group_mbid, column_name, value)
+                    return None
+                else:
+                    # Columna no existe, ignorar
+                    self.stats["columns_ignored"] += 1
+                    return None
+            
+            # Verificar si ya está aprobada o rechazada (otros modos)
             if column_name in self.approved_columns:
                 self.update_release_group_column(release_group_mbid, column_name, value)
                 return None
@@ -872,7 +922,7 @@ class MusicBrainzReleaseGroups:
 
 
     def process_wikidata_entity(self, wikidata_id: str, release_group_mbid: str, 
-                                album_id: int, artist_id: int) -> List[Dict]:
+                            album_id: int, artist_id: int) -> List[Dict]:
         """Process a Wikidata entity and extract properties with improved data quality."""
         entity_data = self.fetch_wikidata_entities(wikidata_id)
         if not entity_data or 'entities' not in entity_data or wikidata_id not in entity_data['entities']:
@@ -881,7 +931,7 @@ class MusicBrainzReleaseGroups:
         entity = entity_data['entities'][wikidata_id]
         wikidata_entries = []
         
-        # Consultar posibles nuevas columnas en modo manual
+        # Consultar posibles nuevas columnas solo en modo manual
         new_columns = []
         
         # Extraer enlaces a sitios externos (Wikipedia, etc.)
@@ -892,8 +942,12 @@ class MusicBrainzReleaseGroups:
                     title = site_data['title']
                     wiki_url = f"https://es.wikipedia.org/wiki/{title.replace(' ', '_')}"
                     
+                    # En modo schema-only, solo usar si la columna existe
+                    if self.mode == 'schema-only':
+                        if 'wikipedia_url' in self.existing_columns:
+                            self.update_release_group_column(release_group_mbid, 'wikipedia_url', wiki_url)
                     # En modo manual, comprobar si wikipedia_url está aprobada
-                    if self.mode == 'manual' and 'wikipedia_url' not in self.approved_columns and 'wikipedia_url' not in self.rejected_columns:
+                    elif self.mode == 'manual' and 'wikipedia_url' not in self.approved_columns and 'wikipedia_url' not in self.rejected_columns:
                         new_columns.append(('wikipedia_url', wiki_url))
                     elif 'wikipedia_url' in self.approved_columns:
                         # Actualizar directamente
@@ -903,8 +957,18 @@ class MusicBrainzReleaseGroups:
                     title = site_data['title']
                     wiki_url = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
                     
+                    # En modo schema-only, solo usar si la columna existe
+                    if self.mode == 'schema-only':
+                        if 'wikipedia_url' in self.existing_columns:
+                            # Consultar si ya hay una URL en español
+                            self.cursor.execute("""
+                            SELECT wikipedia_url FROM mb_release_group WHERE mbid = ?
+                            """, (release_group_mbid,))
+                            result = self.cursor.fetchone()
+                            if not result or not result[0]:
+                                self.update_release_group_column(release_group_mbid, 'wikipedia_url', wiki_url)
                     # Solo si no encontramos una versión en español
-                    if self.mode == 'manual' and 'wikipedia_url' not in self.approved_columns and 'wikipedia_url' not in self.rejected_columns:
+                    elif self.mode == 'manual' and 'wikipedia_url' not in self.approved_columns and 'wikipedia_url' not in self.rejected_columns:
                         new_columns.append(('wikipedia_url', wiki_url))
                     elif 'wikipedia_url' in self.approved_columns:
                         # Consultar si ya hay una URL en español
@@ -931,13 +995,20 @@ class MusicBrainzReleaseGroups:
                     processed_value, value_type, is_link = self.get_value_or_link(claim, entity_data)
                     
                     # En modo manual, recopilar posibles nuevas columnas
-                    column_info = self.process_special_property(
-                        property_id, property_label, processed_value, 
-                        album_id, release_group_mbid
-                    )
-                    
-                    if column_info and self.mode == 'manual':
-                        new_columns.append(column_info)
+                    if self.mode == 'manual':
+                        column_info = self.process_special_property(
+                            property_id, property_label, processed_value, 
+                            album_id, release_group_mbid
+                        )
+                        
+                        if column_info:
+                            new_columns.append(column_info)
+                    # En modo schema-only, procesar directamente sin preguntar
+                    elif self.mode == 'schema-only':
+                        self.process_special_property(
+                            property_id, property_label, processed_value, 
+                            album_id, release_group_mbid
+                        )
                     
                     # Crear entrada para la tabla mb_wikidata (sin importar el modo)
                     entry = {
@@ -1249,10 +1320,12 @@ class MusicBrainzReleaseGroups:
         print(f"Failed fetches: {self.stats['failed_fetch']}")
         print(f"Skipped (already exists): {self.stats['skipped']}")
         
-        # Estadísticas de columnas en modo manual
+        # Estadísticas de columnas según el modo
         if self.mode == 'manual':
             print(f"New columns added: {self.stats['new_columns_added']}")
             print(f"Columns rejected: {self.stats['columns_rejected']}")
+        elif self.mode == 'schema-only':
+            print(f"Columns ignored (not in schema): {self.stats['columns_ignored']}")
         
         print("----------------------------\n")
         
@@ -1270,8 +1343,8 @@ def main(config=None):
         parser.add_argument('--db-path', help='Path to SQLite database')
         parser.add_argument('--limit', type=int, help='Limit the number of releases to process')
         parser.add_argument('--force-update', action='store_true', help='Force update existing entries')
-        parser.add_argument('--mode', choices=['auto', 'manual'], default='auto', 
-                          help='Mode of operation: auto or manual (for new columns)')
+        parser.add_argument('--mode', choices=['auto', 'manual', 'schema-only'], default='auto', 
+                          help='Mode of operation: auto, manual (for new columns), or schema-only (existing columns only)')
         parser.add_argument('--cache-file', help='Path to cache file to resume processing')
         parser.add_argument('--skip-properties', nargs='+', help='List of Wikidata property IDs to skip')
         
@@ -1349,7 +1422,8 @@ def main(config=None):
                     "failed_fetch": 0,
                     "skipped": 0,
                     "new_columns_added": 0,
-                    "columns_rejected": 0
+                    "columns_rejected": 0,
+                    "columns_ignored": 0
                 }
                 processor.save_cache()
         

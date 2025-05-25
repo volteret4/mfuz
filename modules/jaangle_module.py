@@ -38,6 +38,8 @@ class ScalableLabel(QLabel):
         # Permitir que el texto se ajuste
         self.setWordWrap(True)
         self.setScaledContents(True)
+
+        
         
     def resizeEvent(self, event):
         """Ajustar tamaño de fuente al redimensionar"""
@@ -159,6 +161,12 @@ class MusicQuiz(BaseModule):
         # Conectar a la base de datos
         self.connect_to_database()
 
+            
+        # Cargar configuración después de inicializar UI
+        self.load_config()
+
+
+
     def keyPressEvent(self, event):
         """Maneja eventos de teclado para las hotkeys de opciones."""
         if not self.game_active:
@@ -179,166 +187,6 @@ class MusicQuiz(BaseModule):
         super().keyPressEvent(event)
 
 
-    def show_hotkey_config_dialog(self):
-        """Muestra un diálogo para configurar las hotkeys de las opciones."""
-        try:
-            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QPushButton, QLabel
-            from PyQt6.QtCore import Qt
-            
-            dialog = QDialog(self)
-            dialog.setWindowTitle("Configurar Hotkeys para Opciones")
-            dialog.setMinimumWidth(350)
-            dialog.setMinimumHeight(300)
-            
-            layout = QVBoxLayout()
-            
-            # Título e instrucciones
-            title_label = QLabel("Configura las teclas para seleccionar opciones")
-            title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            font = title_label.font()
-            font.setBold(True)
-            title_label.setFont(font)
-            
-            instructions = QLabel("Haz clic en un botón y presiona la tecla que quieres asignar a esa opción.")
-            instructions.setWordWrap(True)
-            
-            layout.addWidget(title_label)
-            layout.addWidget(instructions)
-            
-            # Grid para los botones de configuración
-            grid = QGridLayout()
-            hotkey_buttons = {}
-            
-            # Calcular filas y columnas para una distribución similar a las opciones
-            options_count = max(8, self.options_count)  # Permitir hasta 8 opciones
-            if options_count <= 4:
-                cols = 2
-            else:
-                cols = 3
-            
-            # Crear botones para cada opción
-            for i in range(options_count):
-                row, col = divmod(i, cols)
-                
-                # Obtener la tecla actual
-                current_key = self.option_hotkeys.get(i, Qt.Key.Key_unknown)
-                key_text = chr(current_key) if current_key >= Qt.Key.Key_A and current_key <= Qt.Key.Key_Z else f"Tecla {i+1}"
-                
-                # Crear botón
-                button = QPushButton(f"Opción {i+1}: {key_text}")
-                button.setCheckable(True)
-                button.setProperty("option_index", i)
-                hotkey_buttons[i] = button
-                
-                grid.addWidget(button, row, col)
-            
-            layout.addLayout(grid)
-            
-            # Botones de aceptar/cancelar
-            buttons_layout = QHBoxLayout()
-            save_btn = QPushButton("Guardar")
-            cancel_btn = QPushButton("Cancelar")
-            reset_btn = QPushButton("Restablecer")
-            
-            buttons_layout.addWidget(reset_btn)
-            buttons_layout.addWidget(save_btn)
-            buttons_layout.addWidget(cancel_btn)
-            
-            layout.addLayout(buttons_layout)
-            dialog.setLayout(layout)
-            
-            # Variables para el estado de captura de teclas
-            capturing_for = None
-            new_hotkeys = dict(self.option_hotkeys)
-            
-            # Función para capturar teclas
-            def start_capture(button):
-                nonlocal capturing_for
-                # Desmarcar cualquier otro botón marcado
-                for other_button in hotkey_buttons.values():
-                    if other_button != button:
-                        other_button.setChecked(False)
-                
-                # Si el botón fue desmarcado, detener la captura
-                if not button.isChecked():
-                    capturing_for = None
-                    return
-                    
-                # Iniciar captura para este botón
-                option_index = button.property("option_index")
-                capturing_for = option_index
-                button.setText(f"Opción {option_index+1}: Presiona una tecla...")
-            
-            # Función para manejar el evento de tecla en el diálogo
-            def dialog_key_press(event):
-                nonlocal capturing_for
-                if capturing_for is not None:
-                    key = event.key()
-                    
-                    # Actualizar la asignación de tecla
-                    new_hotkeys[capturing_for] = key
-                    
-                    # Actualizar el texto del botón
-                    button = hotkey_buttons[capturing_for]
-                    key_text = chr(key) if key >= Qt.Key.Key_A and key <= Qt.Key.Key_Z else f"Tecla {key}"
-                    button.setText(f"Opción {capturing_for+1}: {key_text}")
-                    
-                    # Desmarcar el botón y detener la captura
-                    button.setChecked(False)
-                    capturing_for = None
-                    
-                    # Consumir el evento
-                    event.accept()
-                    return True
-                    
-                return False
-            
-            # Función para restablecer las hotkeys predeterminadas
-            def reset_hotkeys():
-                nonlocal new_hotkeys
-                # Restablecer a valores predeterminados
-                new_hotkeys = {
-                    0: Qt.Key.Key_1,
-                    1: Qt.Key.Key_2,
-                    2: Qt.Key.Key_3,
-                    3: Qt.Key.Key_4,
-                    4: Qt.Key.Key_5,
-                    5: Qt.Key.Key_6,
-                    6: Qt.Key.Key_7,
-                    7: Qt.Key.Key_8,
-                }
-                
-                # Actualizar los botones
-                for i, button in hotkey_buttons.items():
-                    key = new_hotkeys.get(i, Qt.Key.Key_unknown)
-                    key_text = chr(key) if key >= Qt.Key.Key_A and key <= Qt.Key.Key_Z else f"Tecla {key}"
-                    button.setText(f"Opción {i+1}: {key_text}")
-            
-            # Conectar señales
-            for button in hotkey_buttons.values():
-                button.clicked.connect(lambda checked, b=button: start_capture(b))
-            
-            save_btn.clicked.connect(lambda: dialog.accept())
-            cancel_btn.clicked.connect(lambda: dialog.reject())
-            reset_btn.clicked.connect(reset_hotkeys)
-            
-            # Sobreescribir el método keyPressEvent del diálogo
-            dialog.keyPressEvent = lambda event: dialog_key_press(event) or QDialog.keyPressEvent(dialog, event)
-            
-            # Mostrar el diálogo
-            if dialog.exec() == QDialog.DialogCode.Accepted:
-                # Guardar la nueva configuración
-                self.option_hotkeys = new_hotkeys
-                return True
-            
-            return False
-            
-        except Exception as e:
-            print(f"Error al mostrar el diálogo de configuración de hotkeys: {e}")
-            import traceback
-            traceback.print_exc()
-            self.show_error_message("Error", f"Error al mostrar el diálogo: {e}")
-            return False
 
 
     def get_global_config(self):
@@ -470,6 +318,8 @@ class MusicQuiz(BaseModule):
             print(f"Archivo UI no encontrado: {ui_file_path}, usando creación manual")
             self._fallback_init_ui()
         
+        self.add_config_change_handlers()
+        
         # Timer para countdown
         self.timer = QTimer()
         self.timer.setInterval(1000)  # 1 segundo
@@ -481,6 +331,8 @@ class MusicQuiz(BaseModule):
         
         # Deshabilitar opciones al inicio
         self.enable_options(False)
+
+
 
     def _fallback_init_ui(self):
         """Método de respaldo para inicializar la UI si falla la carga del archivo .ui"""
@@ -3375,24 +3227,64 @@ class MusicQuiz(BaseModule):
             config_dir = Path(PROJECT_ROOT, "config", "jaangle")
             os.makedirs(config_dir, exist_ok=True)
             
+            # Actualizar valores desde la UI antes de guardar
+            if hasattr(self, 'quiz_duration_combo'):
+                self.quiz_duration_minutes = int(self.quiz_duration_combo.currentText().split()[0])
+            if hasattr(self, 'song_duration_combo'):
+                self.song_duration_seconds = int(self.song_duration_combo.currentText().split()[0])
+            if hasattr(self, 'pause_duration_combo'):
+                self.pause_between_songs = int(self.pause_duration_combo.currentText().split()[0])
+            if hasattr(self, 'options_count_combo'):
+                self.options_count = int(self.options_count_combo.currentText())
+            
+            # Obtener origen de música desde los radio buttons
+            if hasattr(self, 'local_radio') and hasattr(self, 'spotify_radio') and hasattr(self, 'listenbrainz_radio'):
+                if self.spotify_radio.isChecked():
+                    self.music_origin = 'spotify'
+                elif self.listenbrainz_radio.isChecked():
+                    self.music_origin = 'online'
+                else:
+                    self.music_origin = 'local'
+            
+            # Convertir hotkeys a formato serializable
+            serializable_hotkeys = {}
+            for option_index, qt_key in self.option_hotkeys.items():
+                # Convertir el Qt.Key a su valor numérico
+                if hasattr(qt_key, 'value'):
+                    key_value = qt_key.value
+                elif isinstance(qt_key, int):
+                    key_value = qt_key
+                else:
+                    key_value = int(qt_key)
+                serializable_hotkeys[str(option_index)] = key_value
+            
             # Preparar datos a guardar
             config_data = {
-                "option_hotkeys": self.option_hotkeys,
+                "option_hotkeys": serializable_hotkeys,
                 "music_origin": self.music_origin,
+                "spotify_user": getattr(self, 'spotify_user', None),
+                "listenbrainz_user": getattr(self, 'listenbrainz_user', None),
                 "quiz_duration_minutes": self.quiz_duration_minutes,
                 "song_duration_seconds": self.song_duration_seconds,
                 "pause_between_songs": self.pause_between_songs,
-                "options_count": self.options_count
+                "options_count": self.options_count,
+                "min_song_duration": self.min_song_duration,
+                "start_from_beginning_chance": self.start_from_beginning_chance,
+                "avoid_last_seconds": self.avoid_last_seconds
             }
             
             # Guardar en archivo
             config_path = Path(config_dir, "config.json")
             with open(config_path, 'w', encoding='utf-8') as f:
                 json.dump(config_data, f, indent=2)
-                
+            
+            print(f"Configuración guardada correctamente en: {config_path}")
+            print(f"Hotkeys guardadas: {serializable_hotkeys}")
             return True
         except Exception as e:
             print(f"Error al guardar configuración: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     def load_config(self):
@@ -3400,19 +3292,36 @@ class MusicQuiz(BaseModule):
         try:
             import json
             from pathlib import Path
+            from PyQt6.QtCore import Qt
             
             config_path = Path(PROJECT_ROOT, "config", "jaangle", "config.json")
             if not config_path.exists():
+                print(f"Archivo de configuración no encontrado: {config_path}")
                 return False
                 
             with open(config_path, 'r', encoding='utf-8') as f:
                 config_data = json.load(f)
                 
+            print(f"Cargando configuración desde: {config_path}")
+            
             # Aplicar configuración cargada
             if "option_hotkeys" in config_data:
-                self.option_hotkeys = config_data["option_hotkeys"]
+                # Convertir hotkeys de vuelta a objetos Qt.Key
+                loaded_hotkeys = {}
+                for option_str, key_value in config_data["option_hotkeys"].items():
+                    option_index = int(option_str)
+                    # Crear el objeto Qt.Key desde el valor numérico
+                    qt_key = Qt.Key(key_value)
+                    loaded_hotkeys[option_index] = qt_key
+                self.option_hotkeys = loaded_hotkeys
+                print(f"Hotkeys cargadas: {self.option_hotkeys}")
+                
             if "music_origin" in config_data:
                 self.music_origin = config_data["music_origin"]
+            if "spotify_user" in config_data:
+                self.spotify_user = config_data["spotify_user"]
+            if "listenbrainz_user" in config_data:
+                self.listenbrainz_user = config_data["listenbrainz_user"]
             if "quiz_duration_minutes" in config_data:
                 self.quiz_duration_minutes = config_data["quiz_duration_minutes"]
             if "song_duration_seconds" in config_data:
@@ -3421,9 +3330,318 @@ class MusicQuiz(BaseModule):
                 self.pause_between_songs = config_data["pause_between_songs"]
             if "options_count" in config_data:
                 self.options_count = config_data["options_count"]
+            if "min_song_duration" in config_data:
+                self.min_song_duration = config_data["min_song_duration"]
+            if "start_from_beginning_chance" in config_data:
+                self.start_from_beginning_chance = config_data["start_from_beginning_chance"]
+            if "avoid_last_seconds" in config_data:
+                self.avoid_last_seconds = config_data["avoid_last_seconds"]
                 
+            # Actualizar UI con valores cargados
+            self.update_ui_from_config()
+            
+            print("Configuración cargada correctamente")
             return True
         except Exception as e:
             print(f"Error al cargar configuración: {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
+    def get_key_display_name(self, qt_key):
+        """Obtiene el nombre descriptivo de una tecla Qt."""
+        try:
+            # Mapear las teclas más comunes a nombres legibles
+            key_names = {
+                Qt.Key.Key_1: "1",
+                Qt.Key.Key_2: "2", 
+                Qt.Key.Key_3: "3",
+                Qt.Key.Key_4: "4",
+                Qt.Key.Key_5: "5",
+                Qt.Key.Key_6: "6",
+                Qt.Key.Key_7: "7",
+                Qt.Key.Key_8: "8",
+                Qt.Key.Key_A: "A",
+                Qt.Key.Key_B: "B",
+                Qt.Key.Key_C: "C",
+                Qt.Key.Key_D: "D",
+                Qt.Key.Key_E: "E",
+                Qt.Key.Key_F: "F",
+                Qt.Key.Key_G: "G",
+                Qt.Key.Key_H: "H",
+                Qt.Key.Key_I: "I",
+                Qt.Key.Key_J: "J",
+                Qt.Key.Key_K: "K",
+                Qt.Key.Key_L: "L",
+                Qt.Key.Key_M: "M",
+                Qt.Key.Key_N: "N",
+                Qt.Key.Key_O: "O",
+                Qt.Key.Key_P: "P",
+                Qt.Key.Key_Q: "Q",
+                Qt.Key.Key_R: "R",
+                Qt.Key.Key_S: "S",
+                Qt.Key.Key_T: "T",
+                Qt.Key.Key_U: "U",
+                Qt.Key.Key_V: "V",
+                Qt.Key.Key_W: "W",
+                Qt.Key.Key_X: "X",
+                Qt.Key.Key_Y: "Y",
+                Qt.Key.Key_Z: "Z",
+                Qt.Key.Key_Space: "Espacio",
+                Qt.Key.Key_Return: "Enter",
+                Qt.Key.Key_Enter: "Enter",
+                Qt.Key.Key_Escape: "Escape",
+                Qt.Key.Key_Tab: "Tab",
+                Qt.Key.Key_Backspace: "Backspace"
+            }
+            
+            return key_names.get(qt_key, f"Tecla {qt_key.value}")
+        except:
+            return f"Tecla {qt_key}"
+
+    def show_hotkey_config_dialog(self):
+        """Muestra un diálogo para configurar las hotkeys de las opciones."""
+        try:
+            from PyQt6.QtWidgets import QDialog, QVBoxLayout, QGridLayout, QPushButton, QLabel, QHBoxLayout
+            from PyQt6.QtCore import Qt
+            
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Configurar Hotkeys para Opciones")
+            dialog.setMinimumWidth(350)
+            dialog.setMinimumHeight(300)
+            
+            layout = QVBoxLayout()
+            
+            # Título e instrucciones
+            title_label = QLabel("Configura las teclas para seleccionar opciones")
+            title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            font = title_label.font()
+            font.setBold(True)
+            title_label.setFont(font)
+            
+            instructions = QLabel("Haz clic en un botón y presiona la tecla que quieres asignar a esa opción.")
+            instructions.setWordWrap(True)
+            
+            layout.addWidget(title_label)
+            layout.addWidget(instructions)
+            
+            # Grid para los botones de configuración
+            grid = QGridLayout()
+            hotkey_buttons = {}
+            
+            # Calcular filas y columnas para una distribución similar a las opciones
+            options_count = max(8, self.options_count)  # Permitir hasta 8 opciones
+            if options_count <= 4:
+                cols = 2
+            else:
+                cols = 3
+            
+            # Crear botones para cada opción
+            for i in range(options_count):
+                row, col = divmod(i, cols)
+                
+                # Obtener la tecla actual
+                current_key = self.option_hotkeys.get(i, Qt.Key.Key_unknown)
+                key_text = self.get_key_display_name(current_key)
+                
+                # Crear botón
+                button = QPushButton(f"Opción {i+1}: {key_text}")
+                button.setCheckable(True)
+                button.setProperty("option_index", i)
+                hotkey_buttons[i] = button
+                
+                grid.addWidget(button, row, col)
+            
+            layout.addLayout(grid)
+            
+            # Botones de aceptar/cancelar
+            buttons_layout = QHBoxLayout()
+            save_btn = QPushButton("Guardar")
+            cancel_btn = QPushButton("Cancelar")
+            reset_btn = QPushButton("Restablecer")
+            
+            buttons_layout.addWidget(reset_btn)
+            buttons_layout.addWidget(save_btn)
+            buttons_layout.addWidget(cancel_btn)
+            
+            layout.addLayout(buttons_layout)
+            dialog.setLayout(layout)
+            
+            # Variables para el estado de captura de teclas
+            capturing_for = None
+            new_hotkeys = dict(self.option_hotkeys)
+            
+            # Función para capturar teclas
+            def start_capture(button):
+                nonlocal capturing_for
+                # Desmarcar cualquier otro botón marcado
+                for other_button in hotkey_buttons.values():
+                    if other_button != button:
+                        other_button.setChecked(False)
+                
+                # Si el botón fue desmarcado, detener la captura
+                if not button.isChecked():
+                    capturing_for = None
+                    return
+                    
+                # Iniciar captura para este botón
+                option_index = button.property("option_index")
+                capturing_for = option_index
+                button.setText(f"Opción {option_index+1}: Presiona una tecla...")
+            
+            # Función para manejar el evento de tecla en el diálogo
+            def dialog_key_press(event):
+                nonlocal capturing_for
+                if capturing_for is not None:
+                    key = event.key()
+                    
+                    # Actualizar la asignación de tecla
+                    new_hotkeys[capturing_for] = Qt.Key(key)
+                    
+                    # Actualizar el texto del botón
+                    button = hotkey_buttons[capturing_for]
+                    key_text = self.get_key_display_name(Qt.Key(key))
+                    button.setText(f"Opción {capturing_for+1}: {key_text}")
+                    
+                    # Desmarcar el botón y detener la captura
+                    button.setChecked(False)
+                    capturing_for = None
+                    
+                    # Consumir el evento
+                    event.accept()
+                    return True
+                    
+                return False
+            
+            # Función para restablecer las hotkeys predeterminadas
+            def reset_hotkeys():
+                nonlocal new_hotkeys
+                # Restablecer a valores predeterminados
+                new_hotkeys = {
+                    0: Qt.Key.Key_1,
+                    1: Qt.Key.Key_2,
+                    2: Qt.Key.Key_3,
+                    3: Qt.Key.Key_4,
+                    4: Qt.Key.Key_5,
+                    5: Qt.Key.Key_6,
+                    6: Qt.Key.Key_7,
+                    7: Qt.Key.Key_8,
+                }
+                
+                # Actualizar los botones
+                for i, button in hotkey_buttons.items():
+                    key = new_hotkeys.get(i, Qt.Key.Key_unknown)
+                    key_text = self.get_key_display_name(key)
+                    button.setText(f"Opción {i+1}: {key_text}")
+            
+            # Conectar señales
+            for button in hotkey_buttons.values():
+                button.clicked.connect(lambda checked, b=button: start_capture(b))
+            
+            save_btn.clicked.connect(lambda: dialog.accept())
+            cancel_btn.clicked.connect(lambda: dialog.reject())
+            reset_btn.clicked.connect(reset_hotkeys)
+            
+            # Sobreescribir el método keyPressEvent del diálogo
+            dialog.keyPressEvent = lambda event: dialog_key_press(event) or QDialog.keyPressEvent(dialog, event)
+            
+            # Mostrar el diálogo
+            if dialog.exec() == QDialog.DialogCode.Accepted:
+                # Guardar la nueva configuración
+                self.option_hotkeys = new_hotkeys
+                print(f"Nuevas hotkeys configuradas: {self.option_hotkeys}")
+                # Guardar automáticamente
+                self.save_config()
+                return True
+            
+            return False
+            
+        except Exception as e:
+            print(f"Error al mostrar el diálogo de configuración de hotkeys: {e}")
+            import traceback
+            traceback.print_exc()
+            self.show_error_message("Error", f"Error al mostrar el diálogo: {e}")
+            return False
+
+    def update_ui_from_config(self):
+        """Actualiza la UI con los valores de configuración cargados."""
+        try:
+            # Actualizar combos si existen
+            if hasattr(self, 'quiz_duration_combo'):
+                # Encontrar el índice que corresponde a la duración configurada
+                for i in range(self.quiz_duration_combo.count()):
+                    if int(self.quiz_duration_combo.itemText(i).split()[0]) == self.quiz_duration_minutes:
+                        self.quiz_duration_combo.setCurrentIndex(i)
+                        break
+            
+            if hasattr(self, 'song_duration_combo'):
+                for i in range(self.song_duration_combo.count()):
+                    if int(self.song_duration_combo.itemText(i).split()[0]) == self.song_duration_seconds:
+                        self.song_duration_combo.setCurrentIndex(i)
+                        break
+            
+            if hasattr(self, 'pause_duration_combo'):
+                for i in range(self.pause_duration_combo.count()):
+                    if int(self.pause_duration_combo.itemText(i).split()[0]) == self.pause_between_songs:
+                        self.pause_duration_combo.setCurrentIndex(i)
+                        break
+            
+            if hasattr(self, 'options_count_combo'):
+                for i in range(self.options_count_combo.count()):
+                    if int(self.options_count_combo.itemText(i)) == self.options_count:
+                        self.options_count_combo.setCurrentIndex(i)
+                        break
+            
+            # Actualizar radio buttons de origen de música
+            if hasattr(self, 'local_radio') and hasattr(self, 'spotify_radio') and hasattr(self, 'listenbrainz_radio'):
+                if self.music_origin == 'spotify':
+                    self.spotify_radio.setChecked(True)
+                elif self.music_origin == 'online':
+                    self.listenbrainz_radio.setChecked(True)
+                else:
+                    self.local_radio.setChecked(True)
+            
+            print("UI actualizada con la configuración cargada")
+        except Exception as e:
+            print(f"Error al actualizar UI desde configuración: {e}")
+            import traceback
+            traceback.print_exc()
+
+
+    def add_config_change_handlers(self):
+        """Añade handlers para guardar automáticamente cuando cambia la configuración."""
+        try:
+            # Conectar señales de cambio en los combos
+            if hasattr(self, 'quiz_duration_combo'):
+                self.quiz_duration_combo.currentIndexChanged.connect(self.on_config_changed)
+            if hasattr(self, 'song_duration_combo'):
+                self.song_duration_combo.currentIndexChanged.connect(self.on_config_changed)
+            if hasattr(self, 'pause_duration_combo'):
+                self.pause_duration_combo.currentIndexChanged.connect(self.on_config_changed)
+            if hasattr(self, 'options_count_combo'):
+                self.options_count_combo.currentIndexChanged.connect(self.on_config_changed)
+            
+            # Conectar señales de los radio buttons (ya están conectadas en on_music_origin_changed)
+            if hasattr(self, 'local_radio'):
+                self.local_radio.toggled.connect(self.on_config_changed)
+            if hasattr(self, 'spotify_radio'):
+                self.spotify_radio.toggled.connect(self.on_config_changed)
+            if hasattr(self, 'listenbrainz_radio'):
+                self.listenbrainz_radio.toggled.connect(self.on_config_changed)
+                
+            print("Handlers de configuración añadidos")
+        except Exception as e:
+            print(f"Error al añadir handlers de configuración: {e}")
+
+    def on_config_changed(self):
+        """Maneja cambios en la configuración y guarda automáticamente."""
+        try:
+            # Pequeño delay para evitar guardar múltiples veces seguidas
+            if not hasattr(self, 'config_save_timer'):
+                self.config_save_timer = QTimer()
+                self.config_save_timer.setSingleShot(True)
+                self.config_save_timer.timeout.connect(self.save_config)
+            
+            self.config_save_timer.start(1000)  # Guardar después de 1 segundo de inactividad
+        except Exception as e:
+            print(f"Error en on_config_changed: {e}")

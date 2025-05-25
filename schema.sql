@@ -32,6 +32,10 @@ Estructura de la tabla: songs
 (29, 'fecha_reproducciones', 'TEXT', 0, None, 0)
 (30, 'scrobbles_ids', 'TEXT', 0, None, 0)
 (31, 'added_day', 'INTEGER', 0, None, 0)
+(32, 'musicbrainz_artistid', 'TEXT', 0, None, 0)
+(33, 'musicbrainz_recordingid', 'TEXT', 0, None, 0)
+(34, 'musicbrainz_albumartistid', 'TEXT', 0, None, 0)
+(35, 'musicbrainz_releasegroupid', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: artists
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -67,6 +71,7 @@ Estructura de la tabla: artists
 (30, 'img', 'TEXT', 0, None, 0)
 (31, 'img_urls', 'TEXT', 0, None, 0)
 (32, 'img_paths', 'TEXT', 0, None, 0)
+(33, 'jaangle_ready', 'BOOLEAN', 0, '1', 0)
 
 Estructura de la tabla: albums
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -104,6 +109,14 @@ Estructura de la tabla: albums
 (32, 'added_month', 'INTEGER', 0, None, 0)
 (33, 'added_year', 'INTEGER', 0, None, 0)
 (34, 'album_art_urls', 'TEXT', 0, None, 0)
+(35, 'musicbrainz_albumid', 'TEXT', 0, None, 0)
+(36, 'musicbrainz_albumartistid', 'TEXT', 0, None, 0)
+(37, 'musicbrainz_releasegroupid', 'TEXT', 0, None, 0)
+(38, 'catalognumber', 'TEXT', 0, None, 0)
+(39, 'media', 'TEXT', 0, None, 0)
+(40, 'discnumber', 'TEXT', 0, None, 0)
+(41, 'releasecountry', 'TEXT', 0, None, 0)
+(42, 'originalyear', 'INTEGER', 0, None, 0)
 
 Estructura de la tabla: genres
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -132,6 +145,8 @@ Estructura de la tabla: song_links
 (9, 'bandcamp_url', 'TEXT', 0, None, 0)
 (10, 'soundcloud_url', 'TEXT', 0, None, 0)
 (11, 'boomkat_url', 'TEXT', 0, None, 0)
+(12, 'preview_url', 'TEXT', 0, None, 0)
+(13, 'listenbrainz_preview_url', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: songs_fts
 (0, 'title', '', 0, None, 0)
@@ -246,26 +261,6 @@ Estructura de la tabla: album_fts_config
 (0, 'k', '', 1, None, 1)
 (1, 'v', '', 0, None, 0)
 
-Estructura de la tabla: lyrics_fts
-(0, 'lyrics', '', 0, None, 0)
-
-Estructura de la tabla: lyrics_fts_data
-(0, 'id', 'INTEGER', 0, None, 1)
-(1, 'block', 'BLOB', 0, None, 0)
-
-Estructura de la tabla: lyrics_fts_idx
-(0, 'segid', '', 1, None, 1)
-(1, 'term', '', 1, None, 2)
-(2, 'pgno', '', 0, None, 0)
-
-Estructura de la tabla: lyrics_fts_docsize
-(0, 'id', 'INTEGER', 0, None, 1)
-(1, 'sz', 'BLOB', 0, None, 0)
-
-Estructura de la tabla: lyrics_fts_config
-(0, 'k', '', 1, None, 1)
-(1, 'v', '', 0, None, 0)
-
 Estructura de la tabla: scrobbles
 (0, 'id', 'INTEGER', 0, None, 1)
 (1, 'track_name', 'TEXT', 1, None, 0)
@@ -301,6 +296,18 @@ Estructura de la tabla: labels
 (13, 'mb_type', 'TEXT', 0, None, 0)
 (14, 'mb_code', 'TEXT', 0, None, 0)
 (15, 'mb_last_updated', 'TIMESTAMP', 0, None, 0)
+(16, 'profile', 'TEXT', 0, None, 0)
+(17, 'parent_label', 'TEXT', 0, None, 0)
+(18, 'contact_info', 'TEXT', 0, None, 0)
+(19, 'social_links', 'TEXT', 0, None, 0)
+(20, 'streaming_links', 'TEXT', 0, None, 0)
+(21, 'purchase_links', 'TEXT', 0, None, 0)
+(22, 'blog_links', 'TEXT', 0, None, 0)
+(23, 'founder_info', 'TEXT', 0, None, 0)
+(24, 'creative_persons', 'TEXT', 0, None, 0)
+(25, 'signed_artists', 'TEXT', 0, None, 0)
+(26, 'subsidiary_labels', 'TEXT', 0, None, 0)
+(27, 'lastfm_url', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: label_relationships
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -326,12 +333,6 @@ Estructura de la tabla: listenbrainz_config
 (1, 'username', 'TEXT', 0, None, 0)
 (2, 'last_timestamp', 'INTEGER', 0, None, 0)
 (3, 'last_updated', 'TIMESTAMP', 0, None, 0)
-
-Estructura de la tabla: normalized_songs
-(0, 'song_id', 'INTEGER', 0, None, 1)
-(1, 'normalized_title', 'TEXT', 0, None, 0)
-(2, 'normalized_artist', 'TEXT', 0, None, 0)
-(3, 'normalized_album', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: mb_data_songs
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -387,6 +388,16 @@ Estructura de la tabla: mb_release_group
 (29, 'offiziellecharts_url', 'TEXT', 0, None, 0)
 (30, 'anydecentmusic_url', 'TEXT', 0, None, 0)
 (31, 'albumoftheyear_url', 'TEXT', 0, None, 0)
+(32, 'fecha_de_grabación', 'TEXT', 0, None, 0)
+(33, 'grabado_en', 'TEXT', 0, None, 0)
+(34, 'productor', 'TEXT', 0, None, 0)
+(35, 'billboard_url', 'TEXT', 0, None, 0)
+(36, 'colaborador', 'TEXT', 0, None, 0)
+(37, 'genius_url', 'TEXT', 0, None, 0)
+(38, 'britannica_url', 'TEXT', 0, None, 0)
+(39, 'yandex_url', 'TEXT', 0, None, 0)
+(40, 'pandora_url', 'TEXT', 0, None, 0)
+(41, 'metal_archives_url', 'TEXT', 0, None, 0)
 
 Estructura de la tabla: mb_wikidata
 (0, 'id', 'INTEGER', 0, None, 1)
@@ -545,15 +556,142 @@ Estructura de la tabla: artists_discogs_info
 (9, 'discogs_id', 'INTEGER', 0, None, 0)
 (10, 'last_updated', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
 
-Estructura de la tabla: listens_guevifrito
-(0, 'id', 'INT', 0, None, 0)
-(1, 'track_name', 'TEXT', 0, None, 0)
+Estructura de la tabla: listens
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'track_name', 'TEXT', 1, None, 0)
 (2, 'album_name', 'TEXT', 0, None, 0)
-(3, 'artist_name', 'TEXT', 0, None, 0)
-(4, 'timestamp', 'INT', 0, None, 0)
-(5, 'listen_date', 'NUM', 0, None, 0)
+(3, 'artist_name', 'TEXT', 1, None, 0)
+(4, 'timestamp', 'INTEGER', 1, None, 0)
+(5, 'listen_date', 'TIMESTAMP', 1, None, 0)
 (6, 'listenbrainz_url', 'TEXT', 0, None, 0)
-(7, 'song_id', 'INT', 0, None, 0)
-(8, 'album_id', 'INT', 0, None, 0)
-(9, 'artist_id', 'INT', 0, None, 0)
+(7, 'song_id', 'INTEGER', 0, None, 0)
+(8, 'album_id', 'INTEGER', 0, None, 0)
+(9, 'artist_id', 'INTEGER', 0, None, 0)
 (10, 'additional_data', 'TEXT', 0, None, 0)
+
+Estructura de la tabla: listens_guevifrito
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'track_name', 'TEXT', 1, None, 0)
+(2, 'album_name', 'TEXT', 0, None, 0)
+(3, 'artist_name', 'TEXT', 1, None, 0)
+(4, 'timestamp', 'INTEGER', 1, None, 0)
+(5, 'listen_date', 'TIMESTAMP', 1, None, 0)
+(6, 'listenbrainz_url', 'TEXT', 0, None, 0)
+(7, 'song_id', 'INTEGER', 0, None, 0)
+(8, 'album_id', 'INTEGER', 0, None, 0)
+(9, 'artist_id', 'INTEGER', 0, None, 0)
+(10, 'listen_id', 'TEXT', 0, None, 0)
+(11, 'additional_data', 'TEXT', 0, None, 0)
+
+Estructura de la tabla: listenbrainz_backfill
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'username', 'TEXT', 0, None, 0)
+(2, 'backfill_timestamp', 'INTEGER', 0, None, 0)
+(3, 'last_updated', 'TIMESTAMP', 0, None, 0)
+
+Estructura de la tabla: normalized_songs
+(0, 'song_id', 'INTEGER', 0, None, 1)
+(1, 'normalized_title', 'TEXT', 0, None, 0)
+(2, 'normalized_artist', 'TEXT', 0, None, 0)
+(3, 'normalized_album', 'TEXT', 0, None, 0)
+
+Estructura de la tabla: uk_charts_singles
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'año', 'INTEGER', 1, None, 0)
+(2, 'posición', 'INTEGER', 0, None, 0)
+(3, 'título', 'TEXT', 1, None, 0)
+(4, 'artista', 'TEXT', 1, None, 0)
+(5, 'fecha_pico', 'TEXT', 0, None, 0)
+(6, 'género', 'TEXT', 0, None, 0)
+(7, 'artist_id', 'INTEGER', 0, None, 0)
+(8, 'song_id', 'INTEGER', 0, None, 0)
+(9, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+
+Estructura de la tabla: uk_charts_bestselling
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'tipo', 'TEXT', 1, None, 0)
+(2, 'década', 'TEXT', 0, None, 0)
+(3, 'año', 'TEXT', 0, None, 0)
+(4, 'posición', 'TEXT', 0, None, 0)
+(5, 'título', 'TEXT', 1, None, 0)
+(6, 'artista', 'TEXT', 1, None, 0)
+(7, 'ventas', 'TEXT', 0, None, 0)
+(8, 'género', 'TEXT', 0, None, 0)
+(9, 'artist_id', 'INTEGER', 0, None, 0)
+(10, 'song_id', 'INTEGER', 0, None, 0)
+(11, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+
+Estructura de la tabla: lyrics_fts
+(0, 'lyrics', '', 0, None, 0)
+
+Estructura de la tabla: lyrics_fts_data
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'block', 'BLOB', 0, None, 0)
+
+Estructura de la tabla: lyrics_fts_idx
+(0, 'segid', '', 1, None, 1)
+(1, 'term', '', 1, None, 2)
+(2, 'pgno', '', 0, None, 0)
+
+Estructura de la tabla: lyrics_fts_docsize
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'sz', 'BLOB', 0, None, 0)
+
+Estructura de la tabla: lyrics_fts_config
+(0, 'k', '', 1, None, 1)
+(1, 'v', '', 0, None, 0)
+
+Estructura de la tabla: label_artist_relationships
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'label_id', 'INTEGER', 1, None, 0)
+(2, 'artist_id', 'INTEGER', 1, None, 0)
+(3, 'relationship_type', 'TEXT', 1, None, 0)
+(4, 'begin_date', 'TEXT', 0, None, 0)
+(5, 'end_date', 'TEXT', 0, None, 0)
+(6, 'last_updated', 'TIMESTAMP', 0, None, 0)
+
+Estructura de la tabla: label_external_catalog
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'label_id', 'INTEGER', 1, None, 0)
+(2, 'entity_type', 'TEXT', 1, None, 0)
+(3, 'entity_mbid', 'TEXT', 0, None, 0)
+(4, 'entity_name', 'TEXT', 0, None, 0)
+(5, 'relationship_type', 'TEXT', 0, None, 0)
+(6, 'last_updated', 'TIMESTAMP', 0, None, 0)
+
+Estructura de la tabla: billboard_yearend_singles
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'año', 'INTEGER', 1, None, 0)
+(2, 'posición', 'INTEGER', 0, None, 0)
+(3, 'título', 'TEXT', 1, None, 0)
+(4, 'artista', 'TEXT', 1, None, 0)
+(5, 'género', 'TEXT', 0, None, 0)
+(6, 'artist_id', 'INTEGER', 0, None, 0)
+(7, 'song_id', 'INTEGER', 0, None, 0)
+(8, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+
+Estructura de la tabla: billboard_hot100_topten
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'año', 'INTEGER', 1, None, 0)
+(2, 'título', 'TEXT', 1, None, 0)
+(3, 'artista', 'TEXT', 1, None, 0)
+(4, 'posición_pico', 'INTEGER', 0, None, 0)
+(5, 'fecha_entrada', 'TEXT', 0, None, 0)
+(6, 'semanas_chart', 'INTEGER', 0, None, 0)
+(7, 'género', 'TEXT', 0, None, 0)
+(8, 'artist_id', 'INTEGER', 0, None, 0)
+(9, 'song_id', 'INTEGER', 0, None, 0)
+(10, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+
+Estructura de la tabla: billboard_country_albums
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'año', 'INTEGER', 1, None, 0)
+(2, 'fecha', 'TEXT', 0, None, 0)
+(3, 'álbum', 'TEXT', 1, None, 0)
+(4, 'artista', 'TEXT', 1, None, 0)
+(5, 'semanas_en_1', 'INTEGER', 0, None, 0)
+(6, 'posición', 'INTEGER', 0, None, 0)
+(7, 'género', 'TEXT', 0, None, 0)
+(8, 'artist_id', 'INTEGER', 0, None, 0)
+(9, 'album_id', 'INTEGER', 0, None, 0)
+(10, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)

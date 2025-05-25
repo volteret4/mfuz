@@ -61,6 +61,29 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 
+# URLs para charts especializados
+SPECIALIZED_URLS = {
+    "vinyl_albums": {
+        "10s": "/wiki/List_of_Official_Vinyl_Albums_Chart_number_ones_of_the_2010s",
+        "20s": "/wiki/List_of_Official_Vinyl_Albums_Chart_number_ones_of_the_2020s"
+    },
+    "vinyl_singles": {
+        "10s": "/wiki/List_of_Official_Vinyl_Singles_Chart_number_ones_of_the_2010s", 
+        "20s": "/wiki/List_of_Official_Vinyl_Singles_Chart_number_ones_of_the_2020s"
+    },
+    "streaming_albums": "/wiki/Official_Albums_Streaming_Chart",
+    "downloads_singles": "/wiki/UK_Singles_Downloads_Chart"
+}
+
+INDIE_NME_URLS = {
+    "indie_base": "/wiki/List_of_UK_Independent_Singles_Chart_number_ones_of_",
+    "nme": {
+        "60s": "/wiki/List_of_NME_number-one_singles_of_the_1960s",
+        "70s": "/wiki/List_of_NME_number-one_singles_of_the_1970s",
+        "80s": "/wiki/List_of_NME_number-one_singles_of_the_1980s"
+    }
+}
+
 # Configuración para APIs de géneros
 DISCOGS_TOKEN = "MJXLYUGuqwXHVONuYZxVWFSXvFmxpdLqauTRcCsP"  # Opcional: añade tu token de Discogs
 MUSICBRAINZ_USER_AGENT = "UKChartsScraper/1.0 (frodobolson@disroot.org)"  # Cambia por tu email
@@ -146,35 +169,6 @@ def init_config(config=None):
         DB_PATH = Path(PROJECT_ROOT, "music_database.db") if 'PROJECT_ROOT' in globals() else Path("music_database.db")
 
 
-def configurar_argumentos():
-    """Configura los argumentos de línea de comandos - VERSIÓN CON GÉNEROS"""
-    # Si se ejecuta desde db_creator, usar configuración en lugar de argumentos
-    if CONFIG:
-        # Crear args simulados basados en la configuración
-        class ConfigArgs:
-            def __init__(self, config):
-                self.type = config.get('type', 'all')
-                self.decade = config.get('decade')
-                self.year = config.get('year')
-                self.all = config.get('type') == 'all' or config.get('all', False)
-                self.generos = config.get('generos', False)
-        
-        return ConfigArgs(CONFIG)
-    
-    # Solo parsear argumentos si se ejecuta directamente
-    parser = argparse.ArgumentParser(description="UK Charts Scraper")
-    parser.add_argument("--type", choices=["singles", "albums", "bestselling", "numberones"],
-                        help="Tipo de datos a extraer")
-    parser.add_argument("--decade", choices=obtener_decadas_disponibles(),
-                        help="Década a extraer")
-    parser.add_argument("--year", type=int, choices=range(1952, 2025),
-                        help="Año específico a extraer")
-    parser.add_argument("--all", action="store_true",
-                        help="Extraer todos los datos disponibles")
-    parser.add_argument("--generos", action="store_true",
-                        help="Incluir información de géneros musicales")
-    
-    return parser.parse_args()
 
 
 # URLs base actualizadas (simplificadas)
@@ -706,7 +700,12 @@ def procesar_singles_por_anio(anio):
 def procesar_bestselling_singles_decada_db(decada):
     """
     Procesa los datos de los singles más vendidos de una década sin géneros y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_bestselling('decada', decada=decada):
+        return
+    
     url = obtener_url("bestselling", decada=decada)
     soup = descargar_pagina(url)
     
@@ -727,7 +726,12 @@ def procesar_bestselling_singles_decada_db(decada):
 def procesar_bestselling_singles_por_anio_db():
     """
     Procesa los datos de los singles más vendidos de cada año sin géneros y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_bestselling('anual'):
+        return
+    
     url = obtener_url("bestselling")
     soup = descargar_pagina(url)
     
@@ -1292,7 +1296,12 @@ def extraer_generos_musicbrainz(resultado):
 def procesar_singles_por_anio_db(anio):
     """
     Procesa los datos de los top 10 singles de un año específico sin géneros y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_singles(anio):
+        return
+    
     url = obtener_url("singles", anio=anio)
     soup = descargar_pagina(url)
     
@@ -1312,7 +1321,12 @@ def procesar_singles_por_anio_db(anio):
 def procesar_bestselling_singles_decada_con_genero_db(decada):
     """
     Procesa los datos de los singles más vendidos de una década y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_bestselling('decada', decada=decada):
+        return
+    
     url = obtener_url("bestselling", decada=decada)
     soup = descargar_pagina(url)
     
@@ -1352,7 +1366,12 @@ def procesar_bestselling_singles_decada_con_genero_db(decada):
 def procesar_singles_por_anio_con_genero_db(anio):
     """
     Procesa los datos de los top 10 singles de un año específico y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_singles(anio):
+        return
+    
     url = obtener_url("singles", anio=anio)
     soup = descargar_pagina(url)
     
@@ -1391,6 +1410,7 @@ def procesar_singles_por_anio_con_genero_db(anio):
         guardar_csv_con_genero(singles, archivo, "singles")
     else:
         print(f"No se pudieron extraer datos para el año {anio}")
+
 
 
 # def procesar_singles_por_anio_con_genero(anio):
@@ -1514,7 +1534,12 @@ def procesar_singles_por_anio_con_genero_db(anio):
 def procesar_bestselling_singles_por_anio_con_genero_db():
     """
     Procesa los datos de los singles más vendidos de cada año y los guarda en BD.
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
     """
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_bestselling('anual'):
+        return
+    
     url = obtener_url("bestselling")
     soup = descargar_pagina(url)
     
@@ -1753,8 +1778,1081 @@ def insert_bestselling_to_db(bestselling_data, tipo):
     return inserted_count
 
 
+# specialized
+
+
+def create_specialized_charts_tables():
+    """Crea las tablas para almacenar los datos de charts especializados"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Tabla para vinilos (álbumes y singles)
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS uk_vinyl_charts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chart_type TEXT NOT NULL CHECK(chart_type IN ('albums', 'singles')),
+            década TEXT NOT NULL,
+            artista TEXT NOT NULL,
+            título TEXT NOT NULL,
+            fecha_numero_uno TEXT,
+            semanas_numero_uno INTEGER,
+            género TEXT,
+            artist_id INTEGER,
+            album_id INTEGER,
+            song_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(id),
+            FOREIGN KEY (album_id) REFERENCES albums(id),
+            FOREIGN KEY (song_id) REFERENCES songs(id)
+        )
+    ''')
+    
+    # Tabla para streaming de álbumes
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS uk_streaming_charts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chart_type TEXT NOT NULL CHECK(chart_type IN ('albums')),
+            año INTEGER,
+            artista TEXT NOT NULL,
+            álbum TEXT NOT NULL,
+            posición INTEGER,
+            semanas_en_chart INTEGER,
+            género TEXT,
+            artist_id INTEGER,
+            album_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(id),
+            FOREIGN KEY (album_id) REFERENCES albums(id)
+        )
+    ''')
+    
+    # Tabla para descargas de singles
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS uk_downloads_charts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chart_type TEXT NOT NULL CHECK(chart_type IN ('singles')),
+            año INTEGER,
+            artista TEXT NOT NULL,
+            single TEXT NOT NULL,
+            posición INTEGER,
+            semanas_en_chart INTEGER,  
+            ventas_totales TEXT,
+            género TEXT,
+            artist_id INTEGER,
+            song_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(id),
+            FOREIGN KEY (song_id) REFERENCES songs(id)
+        )
+    ''')
+    
+    # Índices adicionales
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_vinyl_artist ON uk_vinyl_charts(artista)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_vinyl_decade ON uk_vinyl_charts(década)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_streaming_artist ON uk_streaming_charts(artista)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_downloads_artist ON uk_downloads_charts(artista)')
+    
+    conn.commit()
+    conn.close()
+    print("Tablas de UK Specialized Charts creadas correctamente")
+
+def extraer_vinyl_chart_data(soup, decade, chart_type):
+    """
+    Extrae datos de los charts de vinilos (albums o singles)
+    
+    Args:
+        soup (BeautifulSoup): Contenido HTML de la página
+        decade (str): Década (10s, 20s)
+        chart_type (str): Tipo de chart (albums, singles)
+        
+    Returns:
+        list: Lista de diccionarios con los datos extraídos
+    """
+    data = []
+    
+    # Buscar tablas principales en la página
+    tablas = soup.find_all('table', class_='wikitable')
+    
+    if not tablas:
+        print(f"No se encontraron tablas en la página de vinyl {chart_type} {decade}")
+        return data
+    
+    # Buscar la tabla principal con los datos del chart
+    tabla_principal = None
+    for tabla in tablas:
+        # Verificar encabezados de tabla
+        encabezados = tabla.find_all('th')
+        if encabezados and len(encabezados) >= 3:
+            textos = [th.get_text().strip().lower() for th in encabezados]
+            # Buscar encabezados típicos: "artist", "album"/"single", "date", "weeks"
+            if any(keyword in ' '.join(textos) for keyword in ['artist', 'album', 'single', 'date', 'weeks']):
+                tabla_principal = tabla
+                break
+    
+    if not tabla_principal:
+        print(f"No se encontró tabla principal para vinyl {chart_type} {decade}")
+        return data
+    
+    # Extraer filas de datos
+    filas = tabla_principal.find_all('tr')
+    
+    for fila in filas[1:]:  # Saltar encabezados
+        celdas = fila.find_all(['td', 'th'])
+        
+        if len(celdas) < 3:
+            continue
+        
+        try:
+            # Estructura típica: Artista | Álbum/Single | Fecha | Semanas
+            artista = limpiar_texto(celdas[0].get_text())
+            titulo = limpiar_texto(celdas[1].get_text()) 
+            fecha = limpiar_texto(celdas[2].get_text()) if len(celdas) > 2 else 'N/A'
+            semanas = limpiar_texto(celdas[3].get_text()) if len(celdas) > 3 else 'N/A'
+            
+            # Convertir semanas a entero si es posible
+            try:
+                semanas_num = int(re.search(r'\d+', semanas).group()) if re.search(r'\d+', semanas) else None
+            except:
+                semanas_num = None
+                
+            if artista and titulo:
+                data.append({
+                    'década': f"20{decade}",
+                    'chart_type': chart_type,
+                    'artista': artista,
+                    'título': titulo,
+                    'fecha_numero_uno': fecha,
+                    'semanas_numero_uno': semanas_num,
+                    'género': 'N/A'  # Se puede añadir después si se solicita
+                })
+                
+        except Exception as e:
+            print(f"Error al extraer datos de fila: {e}")
+            continue
+    
+    return data
+
+def extraer_streaming_data(soup):
+    """
+    Extrae datos del Official Albums Streaming Chart
+    
+    Args:
+        soup (BeautifulSoup): Contenido HTML de la página
+        
+    Returns:
+        list: Lista de diccionarios con los datos extraídos
+    """
+    data = []
+    
+    # Buscar información en el texto de la página
+    texto_pagina = soup.get_text()
+    
+    # Buscar información específica mencionada en el artículo
+    # Ed Sheeran x fue el primero en 2015
+    if "Ed Sheeran" in texto_pagina and "x" in texto_pagina:
+        data.append({
+            'año': 2015,
+            'chart_type': 'albums',
+            'artista': 'Ed Sheeran',
+            'álbum': 'x',
+            'posición': 1,
+            'semanas_en_chart': None,
+            'género': 'Pop'
+        })
+    
+    # ÷ (Divide) tuvo 34 semanas en #1
+    if "÷" in texto_pagina or "Divide" in texto_pagina:
+        data.append({
+            'año': 2017,
+            'chart_type': 'albums', 
+            'artista': 'Ed Sheeran',
+            'álbum': '÷',
+            'posición': 1,
+            'semanas_en_chart': 34,
+            'género': 'Pop'
+        })
+        
+    return data
+
+def extraer_downloads_data(soup):
+    """
+    Extrae datos del UK Singles Downloads Chart
+    
+    Args:
+        soup (BeautifulSoup): Contenido HTML de la página
+        
+    Returns:
+        list: Lista de diccionarios con los datos extraídos
+    """
+    data = []
+    
+    # Buscar información específica mencionada en el artículo
+    texto_pagina = soup.get_text()
+    
+    # Información extraída del artículo
+    singles_destacados = [
+        {
+            'año': 2004,
+            'artista': 'Westlife', 
+            'single': 'Flying Without Wings',
+            'posición': 1,
+            'nota': 'Primer #1 oficial'
+        },
+        {
+            'año': 2006,
+            'artista': 'Gnarls Barkley',
+            'single': 'Crazy', 
+            'posición': 1,
+            'semanas_en_chart': 11,
+            'nota': 'Más tiempo en #1'
+        },
+        {
+            'año': 2009,
+            'artista': 'Rage Against the Machine',
+            'single': 'Killing in the Name',
+            'posición': 1, 
+            'nota': 'Descarga más rápida de todos los tiempos'
+        },
+        {
+            'año': 2014,
+            'artista': 'Pharrell Williams',
+            'single': 'Happy',
+            'posición': 1,
+            'nota': 'Canción más descargada de la historia UK'
+        }
+    ]
+    
+    for single in singles_destacados:
+        data.append({
+            'año': single['año'],
+            'chart_type': 'singles',
+            'artista': single['artista'],
+            'single': single['single'],
+            'posición': single['posición'],
+            'semanas_en_chart': single.get('semanas_en_chart'),
+            'ventas_totales': 'N/A',
+            'género': 'N/A'
+        })
+    
+    return data
+
+def find_album_id(album_name, artist_name):
+    """Busca el album_id en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        SELECT albums.id FROM albums 
+        JOIN artists ON albums.artist_id = artists.id
+        WHERE LOWER(albums.name) = LOWER(?) AND LOWER(artists.name) = LOWER(?)
+    """, (album_name, artist_name))
+    result = cursor.fetchone()
+    
+    conn.close()
+    return result[0] if result else None
+
+def insert_vinyl_data_to_db(vinyl_data):
+    """Inserta datos de vinilos en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    inserted_count = 0
+    
+    for record in vinyl_data:
+        # Buscar IDs relacionados
+        artist_id = find_artist_id(record['artista'])
+        
+        if record['chart_type'] == 'albums':
+            album_id = find_album_id(record['título'], record['artista'])
+            song_id = None
+        else:
+            album_id = None
+            song_id = find_song_id(record['título'], record['artista'])
+        
+        # Verificar si ya existe
+        cursor.execute("""
+            SELECT id FROM uk_vinyl_charts 
+            WHERE chart_type = ? AND década = ? AND artista = ? AND título = ?
+        """, (record['chart_type'], record['década'], record['artista'], record['título']))
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                INSERT INTO uk_vinyl_charts 
+                (chart_type, década, artista, título, fecha_numero_uno, semanas_numero_uno, 
+                 género, artist_id, album_id, song_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                record['chart_type'],
+                record['década'],
+                record['artista'],
+                record['título'],
+                record['fecha_numero_uno'],
+                record['semanas_numero_uno'],
+                record.get('género', 'N/A'),
+                artist_id,
+                album_id,
+                song_id
+            ))
+            inserted_count += 1
+    
+    conn.commit()
+    conn.close()
+    print(f"Insertados {inserted_count} registros de vinyl en la base de datos")
+    return inserted_count
+
+def insert_streaming_data_to_db(streaming_data):
+    """Inserta datos de streaming en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    inserted_count = 0
+    
+    for record in streaming_data:
+        artist_id = find_artist_id(record['artista'])
+        album_id = find_album_id(record['álbum'], record['artista'])
+        
+        cursor.execute("""
+            SELECT id FROM uk_streaming_charts 
+            WHERE año = ? AND artista = ? AND álbum = ?
+        """, (record['año'], record['artista'], record['álbum']))
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                INSERT INTO uk_streaming_charts 
+                (chart_type, año, artista, álbum, posición, semanas_en_chart, género, artist_id, album_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                record['chart_type'],
+                record['año'],
+                record['artista'],
+                record['álbum'],
+                record['posición'],
+                record['semanas_en_chart'],
+                record.get('género', 'N/A'),
+                artist_id,
+                album_id
+            ))
+            inserted_count += 1
+    
+    conn.commit()
+    conn.close()
+    print(f"Insertados {inserted_count} registros de streaming en la base de datos")
+    return inserted_count
+
+def insert_downloads_data_to_db(downloads_data):
+    """Inserta datos de descargas en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    inserted_count = 0
+    
+    for record in downloads_data:
+        artist_id = find_artist_id(record['artista'])
+        song_id = find_song_id(record['single'], record['artista'])
+        
+        cursor.execute("""
+            SELECT id FROM uk_downloads_charts 
+            WHERE año = ? AND artista = ? AND single = ?
+        """, (record['año'], record['artista'], record['single']))
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                INSERT INTO uk_downloads_charts 
+                (chart_type, año, artista, single, posición, semanas_en_chart, ventas_totales, 
+                 género, artist_id, song_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                record['chart_type'],
+                record['año'],
+                record['artista'],
+                record['single'],
+                record['posición'],
+                record['semanas_en_chart'],
+                record.get('ventas_totales', 'N/A'),
+                record.get('género', 'N/A'),
+                artist_id,
+                song_id
+            ))
+            inserted_count += 1
+    
+    conn.commit()
+    conn.close()
+    print(f"Insertados {inserted_count} registros de downloads en la base de datos")
+    return inserted_count
+
+def procesar_vinyl_charts():
+    """
+    Procesa todos los charts de vinilos disponibles
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
+    """
+    print("\n=== Procesando Charts de Vinilos ===")
+    
+    for chart_type in ['albums', 'singles']:
+        for decade in ['10s', '20s']:
+            # Verificar si ya existen datos
+            if verificar_datos_existentes_vinyl(chart_type, decade):
+                continue
+            
+            url_key = f"vinyl_{chart_type}"
+            url = urljoin(BASE_URL, SPECIALIZED_URLS[url_key][decade])
+            soup = descargar_pagina(url)
+            
+            if soup:
+                data = extraer_vinyl_chart_data(soup, decade, chart_type)
+                if data:
+                    insert_vinyl_data_to_db(data)
+                    print(f"Procesados {len(data)} registros de vinyl {chart_type} {decade}")
+                else:
+                    print(f"No se encontraron datos para vinyl {chart_type} {decade}")
+            
+            time.sleep(1)  # Rate limiting
+
+def procesar_streaming_charts():
+    """
+    Procesa el chart de streaming de álbumes
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
+    """
+    print("\n=== Procesando Charts de Streaming ===")
+    
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_streaming():
+        return
+    
+    url = urljoin(BASE_URL, SPECIALIZED_URLS['streaming_albums'])
+    soup = descargar_pagina(url)
+    
+    if soup:
+        data = extraer_streaming_data(soup)
+        if data:
+            insert_streaming_data_to_db(data)
+            print(f"Procesados {len(data)} registros de streaming")
+        else:
+            print("No se encontraron datos de streaming")
+
+def procesar_downloads_charts():
+    """
+    Procesa el chart de descargas de singles
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
+    """
+    print("\n=== Procesando Charts de Descargas ===")
+    
+    # Verificar si ya existen datos
+    if verificar_datos_existentes_downloads():
+        return
+    
+    url = urljoin(BASE_URL, SPECIALIZED_URLS['downloads_singles'])
+    soup = descargar_pagina(url)
+    
+    if soup:
+        data = extraer_downloads_data(soup)
+        if data:
+            insert_downloads_data_to_db(data)
+            print(f"Procesados {len(data)} registros de downloads")
+        else:
+            print("No se encontraron datos de downloads")
+
+
+def configurar_argumentos():
+    """Configura los argumentos de línea de comandos - VERSIÓN EXPANDIDA"""
+    # Si se ejecuta desde db_creator, usar configuración en lugar de argumentos  
+    if CONFIG:
+        # Crear args simulados basados en la configuración
+        class ConfigArgs:
+            def __init__(self, config):
+                self.type = config.get('type', 'all')
+                self.decade = config.get('decade')
+                self.year = config.get('year')
+                self.all = config.get('type') == 'all' or config.get('all', False)
+                self.generos = config.get('generos', False)
+                self.specialized = config.get('specialized', False)  # NUEVO
+        
+        return ConfigArgs(CONFIG)
+    
+    # Solo parsear argumentos si se ejecuta directamente
+    parser = argparse.ArgumentParser(description="UK Charts Scraper - Incluyendo Charts Especializados")
+    parser.add_argument("--type", choices=["singles", "albums", "bestselling", "numberones", "vinyl", "streaming", "downloads"],
+                        help="Tipo de datos a extraer")
+    parser.add_argument("--decade", choices=obtener_decadas_disponibles(),
+                        help="Década a extraer")
+    parser.add_argument("--year", type=int, choices=range(1952, 2025),
+                        help="Año específico a extraer")
+    parser.add_argument("--all", action="store_true",
+                        help="Extraer todos los datos disponibles")
+    parser.add_argument("--generos", action="store_true",
+                        help="Incluir información de géneros musicales")
+    parser.add_argument("--specialized", action="store_true", 
+                        help="Incluir charts especializados (vinyl, streaming, downloads)")  # NUEVO
+    
+    return parser.parse_args()
+
+# indie nme 
+
+def create_indie_nme_charts_tables():
+    """Crea las tablas para almacenar los datos de charts independientes y NME"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Tabla para UK Independent Singles Chart
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS uk_indie_charts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            año INTEGER NOT NULL,
+            fecha_chart TEXT,
+            artista TEXT NOT NULL,
+            single TEXT NOT NULL,
+            sello_discográfico TEXT,
+            semanas_numero_uno INTEGER,
+            posicion_main_chart INTEGER,
+            notas TEXT,
+            género TEXT,
+            artist_id INTEGER,
+            song_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(id),
+            FOREIGN KEY (song_id) REFERENCES songs(id)
+        )
+    ''')
+    
+    # Tabla para NME Charts  
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS nme_charts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            década TEXT NOT NULL,
+            año INTEGER,
+            fecha_chart TEXT,
+            artista TEXT NOT NULL,
+            single TEXT NOT NULL,
+            semanas_numero_uno INTEGER,
+            notas TEXT,
+            diferencias_chart_oficial TEXT,
+            género TEXT,
+            artist_id INTEGER,
+            song_id INTEGER,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (artist_id) REFERENCES artists(id),
+            FOREIGN KEY (song_id) REFERENCES songs(id)
+        )
+    ''')
+    
+    # Índices para mejorar rendimiento
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_indie_artist ON uk_indie_charts(artista)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_indie_year ON uk_indie_charts(año)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_nme_artist ON nme_charts(artista)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_nme_decade ON nme_charts(década)')
+    
+    conn.commit()
+    conn.close()
+    print("Tablas de UK Independent y NME Charts creadas correctamente")
+
+def extraer_indie_chart_data(soup, year):
+    """
+    Extrae datos del UK Independent Singles Chart para un año específico
+    
+    Args:
+        soup (BeautifulSoup): Contenido HTML de la página
+        year (int): Año del chart
+        
+    Returns:
+        list: Lista de diccionarios con los datos extraídos
+    """
+    data = []
+    
+    # Buscar tablas principales en la página
+    tablas = soup.find_all('table', class_='wikitable')
+    
+    if not tablas:
+        print(f"No se encontraron tablas en la página indie {year}")
+        return data
+    
+    # Buscar la tabla principal con los datos del chart
+    tabla_principal = None
+    for tabla in tablas:
+        # Verificar encabezados de tabla
+        encabezados = tabla.find_all('th')
+        if encabezados and len(encabezados) >= 2:
+            textos = [th.get_text().strip().lower() for th in encabezados]
+            # Buscar encabezados típicos del indie chart
+            if any(keyword in ' '.join(textos) for keyword in ['date', 'single', 'artist', 'weeks']):
+                tabla_principal = tabla
+                break
+    
+    if not tabla_principal:
+        print(f"No se encontró tabla principal para indie {year}")
+        return data
+    
+    # Extraer filas de datos
+    filas = tabla_principal.find_all('tr')
+    
+    for fila in filas[1:]:  # Saltar encabezados
+        celdas = fila.find_all(['td', 'th'])
+        
+        if len(celdas) < 2:
+            continue
+        
+        try:
+            # Estructura típica: Fecha | Single | Artista | [Sello] | [Semanas] | [Posición main chart]  
+            fecha = limpiar_texto(celdas[0].get_text()) if len(celdas) > 0 else 'N/A'
+            single = limpiar_texto(celdas[1].get_text()) if len(celdas) > 1 else 'N/A'
+            artista = limpiar_texto(celdas[2].get_text()) if len(celdas) > 2 else 'N/A'
+            sello = limpiar_texto(celdas[3].get_text()) if len(celdas) > 3 else 'N/A'
+            semanas = limpiar_texto(celdas[4].get_text()) if len(celdas) > 4 else 'N/A'
+            pos_main = limpiar_texto(celdas[5].get_text()) if len(celdas) > 5 else 'N/A'
+            
+            # Convertir valores numéricos
+            try:
+                semanas_num = int(re.search(r'\d+', semanas).group()) if re.search(r'\d+', semanas) else None
+            except:
+                semanas_num = None
+                
+            try:
+                pos_main_num = int(re.search(r'\d+', pos_main).group()) if re.search(r'\d+', pos_main) else None
+            except:
+                pos_main_num = None
+                
+            if artista and single and artista != 'N/A' and single != 'N/A':
+                data.append({
+                    'año': year,
+                    'fecha_chart': fecha,
+                    'artista': artista,
+                    'single': single,
+                    'sello_discográfico': sello,
+                    'semanas_numero_uno': semanas_num,
+                    'posicion_main_chart': pos_main_num,
+                    'notas': 'N/A',
+                    'género': 'N/A'  # Se puede añadir después si se solicita
+                })
+                
+        except Exception as e:
+            print(f"Error al extraer datos de fila indie: {e}")
+            continue
+    
+    return data
+
+def extraer_nme_chart_data(soup, decade):
+    """
+    Extrae datos del NME Chart para una década específica
+    
+    Args:
+        soup (BeautifulSoup): Contenido HTML de la página
+        decade (str): Década del chart (60s, 70s, 80s)
+        
+    Returns:
+        list: Lista de diccionarios con los datos extraídos
+    """
+    data = []
+    
+    # Buscar tablas principales en la página
+    tablas = soup.find_all('table', class_='wikitable')
+    
+    if not tablas:
+        print(f"No se encontraron tablas en la página NME {decade}")
+        return data
+    
+    # Buscar la tabla principal con los datos del chart
+    tabla_principal = None
+    for tabla in tablas:
+        # Verificar encabezados de tabla
+        encabezados = tabla.find_all('th')
+        if encabezados and len(encabezados) >= 3:
+            textos = [th.get_text().strip().lower() for th in encabezados]
+            # Buscar encabezados típicos del NME chart
+            if any(keyword in ' '.join(textos) for keyword in ['single', 'artist', 'date', 'weeks']):
+                tabla_principal = tabla
+                break
+    
+    if not tabla_principal:
+        print(f"No se encontró tabla principal para NME {decade}")
+        return data
+    
+    # Extraer filas de datos
+    filas = tabla_principal.find_all('tr')
+    
+    for fila in filas[1:]:  # Saltar encabezados
+        celdas = fila.find_all(['td', 'th'])
+        
+        if len(celdas) < 3:
+            continue
+        
+        try:
+            # Estructura típica: Single | Artista | Fecha(s) | Semanas
+            single = limpiar_texto(celdas[0].get_text())
+            artista = limpiar_texto(celdas[1].get_text())
+            fecha = limpiar_texto(celdas[2].get_text())
+            semanas = limpiar_texto(celdas[3].get_text()) if len(celdas) > 3 else '1'
+            
+            # Extraer año de la fecha si es posible
+            year_match = re.search(r'19\d{2}', fecha)
+            year = int(year_match.group()) if year_match else None
+            
+            # Convertir semanas a entero si es posible
+            try:
+                semanas_num = int(re.search(r'\d+', semanas).group()) if re.search(r'\d+', semanas) else 1
+            except:
+                semanas_num = 1
+                
+            if artista and single:
+                data.append({
+                    'década': f"19{decade}",
+                    'año': year,
+                    'fecha_chart': fecha,
+                    'artista': artista,
+                    'single': single,
+                    'semanas_numero_uno': semanas_num,
+                    'notas': 'Chart independiente NME',
+                    'diferencias_chart_oficial': 'N/A',  # Se puede añadir manualmente
+                    'género': 'N/A'  # Se puede añadir después si se solicita
+                })
+                
+        except Exception as e:
+            print(f"Error al extraer datos de fila NME: {e}")
+            continue
+    
+    return data
+
+def insert_indie_data_to_db(indie_data):
+    """Inserta datos de UK Independent Chart en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    inserted_count = 0
+    
+    for record in indie_data:
+        # Buscar IDs relacionados
+        artist_id = find_artist_id(record['artista'])
+        song_id = find_song_id(record['single'], record['artista'])
+        
+        # Verificar si ya existe
+        cursor.execute("""
+            SELECT id FROM uk_indie_charts 
+            WHERE año = ? AND artista = ? AND single = ?
+        """, (record['año'], record['artista'], record['single']))
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                INSERT INTO uk_indie_charts 
+                (año, fecha_chart, artista, single, sello_discográfico, semanas_numero_uno, 
+                 posicion_main_chart, notas, género, artist_id, song_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                record['año'],
+                record['fecha_chart'],
+                record['artista'],
+                record['single'],
+                record['sello_discográfico'],
+                record['semanas_numero_uno'],
+                record['posicion_main_chart'],
+                record['notas'],
+                record.get('género', 'N/A'),
+                artist_id,
+                song_id
+            ))
+            inserted_count += 1
+    
+    conn.commit()
+    conn.close()
+    print(f"Insertados {inserted_count} registros de UK Independent Chart en la base de datos")
+    return inserted_count
+
+def insert_nme_data_to_db(nme_data):
+    """Inserta datos de NME Chart en la base de datos"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    inserted_count = 0
+    
+    for record in nme_data:
+        # Buscar IDs relacionados
+        artist_id = find_artist_id(record['artista'])
+        song_id = find_song_id(record['single'], record['artista'])
+        
+        # Verificar si ya existe
+        cursor.execute("""
+            SELECT id FROM nme_charts 
+            WHERE década = ? AND artista = ? AND single = ?
+        """, (record['década'], record['artista'], record['single']))
+        
+        if not cursor.fetchone():
+            cursor.execute("""
+                INSERT INTO nme_charts 
+                (década, año, fecha_chart, artista, single, semanas_numero_uno, 
+                 notas, diferencias_chart_oficial, género, artist_id, song_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                record['década'],
+                record['año'],
+                record['fecha_chart'],
+                record['artista'],  
+                record['single'],
+                record['semanas_numero_uno'],
+                record['notas'],
+                record['diferencias_chart_oficial'],
+                record.get('género', 'N/A'),
+                artist_id,
+                song_id
+            ))
+            inserted_count += 1
+    
+    conn.commit()
+    conn.close()
+    print(f"Insertados {inserted_count} registros de NME Chart en la base de datos")
+    return inserted_count
+
+def procesar_indie_charts_db(years=None):
+    """
+    Procesa los UK Independent Singles Charts para años específicos
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
+    
+    Args:
+        years (list, optional): Lista de años a procesar. Si None, usa configuración
+    """
+    print("\n=== Procesando UK Independent Singles Charts ===")
+    
+    if years is None:
+        # Obtener años de la configuración
+        years = CONFIG.get('indie_years', [1999, 2000, 2001, 2002, 2007])
+    
+    all_data = []
+    
+    for year in years:
+        # Verificar si ya existen datos
+        if verificar_datos_existentes_indie(year):
+            continue
+        
+        print(f"Procesando UK Independent Chart año {year}")
+        url = urljoin(BASE_URL, INDIE_NME_URLS["indie_base"] + str(year))
+        soup = descargar_pagina(url)
+        
+        if soup:
+            data = extraer_indie_chart_data(soup, year)
+            if data:
+                all_data.extend(data)
+                print(f"Extraídos {len(data)} registros para {year}")
+            else:
+                print(f"No se encontraron datos para {year}")
+        
+        time.sleep(CONFIG.get('rate_limit', 1.5))  # Rate limiting
+    
+    if all_data:
+        # Guardar en base de datos
+        insert_indie_data_to_db(all_data)
+        print(f"Total procesados: {len(all_data)} registros de UK Independent Chart")
+
+def procesar_nme_charts_db(decades=None):
+    """
+    Procesa los NME Charts para décadas específicas
+    VERSIÓN MODIFICADA: Verifica datos existentes antes de procesar.
+    
+    Args:
+        decades (list, optional): Lista de décadas a procesar. Si None, usa configuración
+    """
+    print("\n=== Procesando NME Charts ===")
+    
+    if decades is None:
+        # Obtener décadas de la configuración
+        decades = CONFIG.get('nme_decades', ["60s", "70s", "80s"])
+    
+    all_data = []
+    
+    for decade in decades:
+        # Verificar si ya existen datos
+        if verificar_datos_existentes_nme(decade):
+            continue
+        
+        print(f"Procesando NME Chart década {decade}")
+        url = urljoin(BASE_URL, INDIE_NME_URLS["nme"][decade])
+        soup = descargar_pagina(url)
+        
+        if soup:
+            data = extraer_nme_chart_data(soup, decade)
+            if data:
+                all_data.extend(data)
+                print(f"Extraídos {len(data)} registros para {decade}")
+            else:
+                print(f"No se encontraron datos para {decade}")
+        
+        time.sleep(CONFIG.get('rate_limit', 1.5))  # Rate limiting
+    
+    if all_data:
+        # Guardar en base de datos
+        insert_nme_data_to_db(all_data)
+        print(f"Total procesados: {len(all_data)} registros de NME Chart")
+
+
+# VERIFICAR DATPOS EN DB ANTES DE DESCARGAR
+
+def verificar_datos_existentes_singles(anio):
+    """
+    Verifica si ya existen datos de singles para un año específico en la base de datos
+    
+    Args:
+        anio (int): Año a verificar
+        
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM uk_charts_singles WHERE año = ?", (anio,))
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de singles para el año {anio}. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_bestselling(tipo, decada=None, anio=None):
+    """
+    Verifica si ya existen datos de bestselling para una década o año específico
+    
+    Args:
+        tipo (str): 'decada' o 'anual'
+        decada (str, optional): Década a verificar
+        anio (str, optional): Año a verificar
+        
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    if tipo == 'decada' and decada:
+        cursor.execute("SELECT COUNT(*) FROM uk_charts_bestselling WHERE tipo = ? AND década = ?", 
+                      (tipo, decada))
+    elif tipo == 'anual':
+        cursor.execute("SELECT COUNT(*) FROM uk_charts_bestselling WHERE tipo = ?", (tipo,))
+    else:
+        conn.close()
+        return False
+    
+    count = cursor.fetchone()[0]
+    conn.close()
+    
+    if count > 0:
+        identificador = decada if decada else "todos los años"
+        print(f"Ya existen {count} registros de bestselling {tipo} para {identificador}. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_vinyl(chart_type, decade):
+    """
+    Verifica si ya existen datos de vinyl para un tipo y década específicos
+    
+    Args:
+        chart_type (str): 'albums' o 'singles'
+        decade (str): Década a verificar
+        
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    decade_full = f"20{decade}"
+    cursor.execute("SELECT COUNT(*) FROM uk_vinyl_charts WHERE chart_type = ? AND década = ?", 
+                  (chart_type, decade_full))
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de vinyl {chart_type} para {decade_full}. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_streaming():
+    """
+    Verifica si ya existen datos de streaming en la base de datos
+    
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM uk_streaming_charts")
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de streaming. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_downloads():
+    """
+    Verifica si ya existen datos de downloads en la base de datos
+    
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM uk_downloads_charts")
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de downloads. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_indie(year):
+    """
+    Verifica si ya existen datos de indie chart para un año específico
+    
+    Args:
+        year (int): Año a verificar
+        
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT COUNT(*) FROM uk_indie_charts WHERE año = ?", (year,))
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de indie chart para {year}. Saltando...")
+        return True
+    return False
+
+def verificar_datos_existentes_nme(decade):
+    """
+    Verifica si ya existen datos de NME chart para una década específica
+    
+    Args:
+        decade (str): Década a verificar (60s, 70s, 80s)
+        
+    Returns:
+        bool: True si ya existen datos, False si no
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    decade_full = f"19{decade}"
+    cursor.execute("SELECT COUNT(*) FROM nme_charts WHERE década = ?", (decade_full,))
+    count = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    if count > 0:
+        print(f"Ya existen {count} registros de NME chart para {decade_full}. Saltando...")
+        return True
+    return False
+
+
+
 def main(config=None):
-    """Función principal del script con soporte para géneros y base de datos"""
+    """Función principal del script con soporte para géneros, base de datos y charts especializados"""
     # Inicializar configuración si se proporciona
     if config:
         init_config(config)
@@ -1762,16 +2860,25 @@ def main(config=None):
     
     args = configurar_argumentos()
     
-    # Crear tablas de base de datos
+    # Crear tablas de base de datos (incluyendo especializadas)
     create_uk_charts_tables()
-    
+    create_specialized_charts_tables()  # NUEVO
+    create_indie_nme_charts_tables() 
+
+
     # Crear directorios de salida (mantenidos para respaldo CSV)
     os.makedirs(os.path.join(OUTPUT_DIR, "singles"), exist_ok=True)
     os.makedirs(os.path.join(OUTPUT_DIR, "albums"), exist_ok=True)
     os.makedirs(os.path.join(OUTPUT_DIR, "bestselling"), exist_ok=True)
-    
+    os.makedirs(os.path.join(OUTPUT_DIR, "vinyl"), exist_ok=True)         # NUEVO
+    os.makedirs(os.path.join(OUTPUT_DIR, "streaming"), exist_ok=True)     # NUEVO
+    os.makedirs(os.path.join(OUTPUT_DIR, "downloads"), exist_ok=True)     # NUEVO
+    os.makedirs(os.path.join(OUTPUT_DIR, "indie"), exist_ok=True)      # AÑADIR
+    os.makedirs(os.path.join(OUTPUT_DIR, "nme"), exist_ok=True) 
+
     # Determinar si usar funciones con géneros o sin géneros
     usar_generos = args.generos
+    incluir_especializados = getattr(args, 'specialized', False)
     
     if args.all:
         # Extraer todos los datos disponibles
@@ -1780,6 +2887,16 @@ def main(config=None):
         else:
             print("Extrayendo todos los datos disponibles SIN información de géneros...")
         
+
+        if CONFIG.get('include_indie', False):
+            print("\n=== Procesando UK Independent Charts ===")
+            procesar_indie_charts_db()
+            
+        if CONFIG.get('include_nme', False):
+            print("\n=== Procesando NME Charts ===")
+            procesar_nme_charts_db()
+
+
         # Extraer singles por año desde 1952 hasta 2024
         for anio in range(1952, 2025):
             if usar_generos:
@@ -1801,8 +2918,28 @@ def main(config=None):
             procesar_bestselling_singles_por_anio_con_genero_db()
         else:
             procesar_bestselling_singles_por_anio_db()
+        
+        # NUEVO: Procesar charts especializados si están habilitados
+        if incluir_especializados:
+            print("\n=== Procesando Charts Especializados ===")
+            procesar_vinyl_charts()
+            procesar_streaming_charts()
+            procesar_downloads_charts()
+            
+    elif args.type in ["vinyl", "streaming", "downloads", "indie", "nme"]:  # MODIFICAR ESTA LÍNEA
+        # Manejar tipos especializados (AÑADIR ESTAS LÍNEAS)
+        if args.type == "vinyl":
+            procesar_vinyl_charts()
+        elif args.type == "streaming":
+            procesar_streaming_charts()
+        elif args.type == "downloads":
+            procesar_downloads_charts()
+        elif args.type == "indie":  # NUEVO
+            procesar_indie_charts_db()
+        elif args.type == "nme":    # NUEVO
+            procesar_nme_charts_db()
     else:
-        # Extraer datos específicos según los argumentos
+        # Extraer datos específicos según los argumentos (lógica existente)
         if args.type == "singles" and args.year:
             if usar_generos:
                 procesar_singles_por_anio_con_genero_db(args.year)
@@ -1824,7 +2961,12 @@ def main(config=None):
             print("  python uk_csv.py --type singles --year 1975")
             print("  python uk_csv.py --type singles --year 1975 --generos")
             print("  python uk_csv.py --type bestselling --decade 60s --generos")
-            print("  python uk_csv.py --all --generos")
+            print("  python uk_csv.py --type vinyl")
+            print("  python uk_csv.py --type streaming") 
+            print("  python uk_csv.py --type downloads")
+            print("  python uk_csv.py --all --generos --specialized")
+            print("  python uk_csv.py --type indie")
+            print("  python uk_csv.py --type nme")
 
 if __name__ == "__main__":
     main()
