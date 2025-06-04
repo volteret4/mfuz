@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, 
-                             QTableWidgetItem, QLabel, QPushButton)
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidget, QFrame,
+                             QTableWidgetItem, QLabel, QPushButton, QSplitter, QScrollArea)
 from PyQt6.QtCore import Qt
 import logging
 import os
@@ -49,14 +49,14 @@ class TimeSubmodule:
         # Main stacked widget
         self.stackedWidget_time = getattr(self.stats_module, 'stackedWidget_time', None)
         
-        # Button references
-        self.time_button_artist = getattr(self.stats_module, 'time_button_artist', None)
-        self.time_button_album = getattr(self.stats_module, 'time_button_album', None)
-        self.time_button_labels = getattr(self.stats_module, 'time_button_labels', None)
-        self.time_button_genres = getattr(self.stats_module, 'time_button_genres', None)
-        self.time_button_feeds = getattr(self.stats_module, 'time_button_feeds', None)
-        self.time_button_listens = getattr(self.stats_module, 'time_button_listens', None)
-        self.time_button_info = getattr(self.stats_module, 'time_button_info', None)
+        # Button references - usar los nombres correctos del UI
+        self.time_button_artist = getattr(self.stats_module, 'action_artist', None)
+        self.time_button_album = getattr(self.stats_module, 'action_album', None)
+        self.time_button_labels = getattr(self.stats_module, 'action_labels', None)
+        self.time_button_genres = getattr(self.stats_module, 'action_genres', None)
+        self.time_button_feeds = getattr(self.stats_module, 'action_feeds', None)
+        self.time_button_listens = getattr(self.stats_module, 'action_listens', None)
+        self.time_button_info = getattr(self.stats_module, 'action_info', None)
         
         # Page references
         self.time_page_inicio = getattr(self.stats_module, 'time_page_inicio', None)
@@ -68,47 +68,45 @@ class TimeSubmodule:
         self.time_page_listens = getattr(self.stats_module, 'time_page_listens', None)
         self.time_page_info = getattr(self.stats_module, 'time_page_info', None)
         
-        # Artists page widgets
-        self.widget_time_artists_top = getattr(self.stats_module, 'widget_time_artists_top', None)
-        self.widget_time_artists_bott = getattr(self.stats_module, 'widget_time_artists_bott', None)
-        self.table_time_artists_top = getattr(self.stats_module, 'table_time_artists_top', None)
-        self.table_time_artists_bott = getattr(self.stats_module, 'table_time_artists_bott', None)
-        self.chart_time_artists_top = getattr(self.stats_module, 'chart_time_artists_top', None)
-        self.chart_time_artists_bott = getattr(self.stats_module, 'chart_time_artists_bott', None)
+        # NO usar getattr para los contenedores de gráficos - los encontraremos dinámicamente
+        # Artists page widgets - ESTOS SON LOS QUE CAUSAN PROBLEMAS
+        # self.widget_time_artists_top = getattr(self.stats_module, 'widget_time_artists_top', None)
+        # self.widget_time_artists_bott = getattr(self.stats_module, 'widget_time_artists_bott', None)
+        # self.table_time_artists_top = getattr(self.stats_module, 'table_time_artists_top', None)
+        # self.table_time_artists_bott = getattr(self.stats_module, 'table_time_artists_bott', None)
+        # self.chart_time_artists_top = getattr(self.stats_module, 'chart_time_artists_top', None)
+        # self.chart_time_artists_bott = getattr(self.stats_module, 'chart_time_artists_bott', None)
         
-        # Albums page widgets
-        self.widget_time_albums_top = getattr(self.stats_module, 'widget_time_albums_top', None) 
-        self.widget_time_albums_bott = getattr(self.stats_module, 'widget_time_albums_bott', None)
-        self.table_time_albums_top = getattr(self.stats_module, 'table_time_albums_top', None)
-        self.table_time_albums_bott = getattr(self.stats_module, 'table_time_albums_bott', None)
-        self.chart_time_albums_top = getattr(self.stats_module, 'chart_time_albums_top', None)
-        self.chart_time_albums_bott = getattr(self.stats_module, 'chart_time_albums_bott', None)
+        # Albums page widgets - TAMBIÉN ESTOS
+        # self.widget_time_albums_top = getattr(self.stats_module, 'widget_time_albums_top', None) 
+        # self.widget_time_albums_bott = getattr(self.stats_module, 'widget_time_albums_bott', None)
+        # self.table_time_albums_top = getattr(self.stats_module, 'table_time_albums_top', None)
+        # self.table_time_albums_bott = getattr(self.stats_module, 'table_time_albums_bott', None)
+        # self.chart_time_albums_top = getattr(self.stats_module, 'chart_time_albums_top', None)
+        # self.chart_time_albums_bott = getattr(self.stats_module, 'chart_time_albums_bott', None)
         
-        # Labels page widgets
-        self.widget_time_labels_top = getattr(self.stats_module, 'widget_time_labels_top', None)
-        self.widget_time_labels_bott = getattr(self.stats_module, 'widget_time_labels_bott', None)
-        self.table_time_labels_top = getattr(self.stats_module, 'table_time_labels_top', None)
-        self.table_time_labels_bott = getattr(self.stats_module, 'table_time_labels_bott', None)
-        self.chart_time_labels_top = getattr(self.stats_module, 'chart_time_labels_top', None)
-        self.chart_time_labels_bott = getattr(self.stats_module, 'chart_time_labels_bott', None)
-   
+        # Labels page widgets - Y ESTOS
+        # self.widget_time_labels_top = getattr(self.stats_module, 'widget_time_labels_top', None)
+        # self.widget_time_labels_bott = getattr(self.stats_module, 'widget_time_labels_bott', None)
+        # self.table_time_labels_top = getattr(self.stats_module, 'table_time_labels_top', None)
+        # self.table_time_labels_bott = getattr(self.stats_module, 'table_time_labels_bott', None)
+        # self.chart_time_labels_top = getattr(self.stats_module, 'chart_time_labels_top', None)
+        # self.chart_time_labels_bott = getattr(self.stats_module, 'chart_time_labels_bott', None)
+
         # Genres page widgets
         self.widget_time_genres_top = getattr(self.stats_module, 'widget_time_genres_top', None)
         self.widget_time_genres_bott = getattr(self.stats_module, 'widget_time_genres_bott', None)
         self.table_time_genres = getattr(self.stats_module, 'table_time_genres', None)
-        #self.table_time_genres_bott = getattr(self.stats_module, 'table_time_genres_bott', None)
-        self.chart_time_genres_top = getattr(self.stats_module, 'chart_time_genres_top', None)
+        self.chart_time_genres_top = getattr(self.stats_module, 'chart_time_genres', None)
         self.chart_time_genres_bott = getattr(self.stats_module, 'chart_time_genres_bott', None)
         
         # Feeds page widgets
         self.widget_time_feeds_top = getattr(self.stats_module, 'widget_time_feeds_top', None)
         self.widget_time_feeds_bott = getattr(self.stats_module, 'widget_time_feeds_bott', None)
-        self.table_time_feeds_top = getattr(self.stats_module, 'table_time_feeds_top', None)
+        self.table_time_feeds_top = getattr(self.stats_module, 'table_time_feeds', None)
         self.table_time_feeds_bott = getattr(self.stats_module, 'table_time_feeds_bott', None)
-        self.chart_time_feeds_top = getattr(self.stats_module, 'chart_time_feeds_top', None)
+        self.chart_time_feeds_top = getattr(self.stats_module, 'chart_time_feeds', None)
         self.chart_time_feeds_bott = getattr(self.stats_module, 'chart_time_feeds_bott', None)
-        
-        # Listens page widgets
 
     def _default_clear_layout(self, layout):
         """Default implementation of clear_layout."""
@@ -138,13 +136,44 @@ class TimeSubmodule:
     def setup_connections(self):
         """Set up UI signal connections."""
         if self.time_button_artist:
+            try:
+                self.time_button_artist.clicked.disconnect()
+            except:
+                pass
             self.time_button_artist.clicked.connect(self.show_artists_page)
+            logging.info("Botón de artistas conectado")
         
         if self.time_button_album:
+            try:
+                self.time_button_album.clicked.disconnect()
+            except:
+                pass
             self.time_button_album.clicked.connect(self.show_albums_page)
+            logging.info("Botón de álbumes conectado")
             
         if self.time_button_labels:
+            try:
+                self.time_button_labels.clicked.disconnect()
+            except:
+                pass
             self.time_button_labels.clicked.connect(self.show_labels_page)
+            logging.info("Botón de sellos conectado")
+            
+        if self.time_button_genres:
+            try:
+                self.time_button_genres.clicked.disconnect()
+            except:
+                pass
+            self.time_button_genres.clicked.connect(self.show_genres_page)
+            logging.info("Botón de géneros conectado")
+            
+        if self.time_button_feeds:
+            try:
+                self.time_button_feeds.clicked.disconnect()
+            except:
+                pass
+            self.time_button_feeds.clicked.connect(self.show_feeds_page)
+            logging.info("Botón de feeds conectado")
     
   
     def load_time_stats(self):
@@ -153,18 +182,25 @@ class TimeSubmodule:
             logging.error("No database connection available")
             return
         
-        # Access widgets through the parent module
-        stackedWidget_time = getattr(self.stats_module, 'stackedWidget_time', None)
-        time_page_inicio = getattr(self.stats_module, 'time_page_inicio', None)
+        logging.info("Cargando estadísticas de tiempo...")
         
         # Load data for each category
-        self.load_artist_time_data()
-        self.load_album_time_data()
-        self.load_label_time_data()
+        try:
+            self.load_artist_time_data()
+            self.load_album_time_data() 
+            self.load_label_time_data()
+            logging.info("Datos temporales cargados correctamente")
+        except Exception as e:
+            logging.error(f"Error cargando datos temporales: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
         
         # Make sure we're on the first page
-        if stackedWidget_time and time_page_inicio:
-            stackedWidget_time.setCurrentWidget(time_page_inicio)
+        if self.stackedWidget_time and self.time_page_inicio:
+            self.stackedWidget_time.setCurrentWidget(self.time_page_inicio)
+            logging.info("Página de inicio establecida")
+        else:
+            logging.error("No se pudo establecer la página de inicio")
     
     def show_artists_page(self):
         """Show the artists time statistics page."""
@@ -346,48 +382,95 @@ class TimeSubmodule:
             import traceback
             logging.error(traceback.format_exc())
     
+    
+        
+    def show_genres_page(self):
+        """Show the genres time statistics page."""
+        if self.stackedWidget_time and self.time_page_genres:
+            self.stackedWidget_time.setCurrentWidget(self.time_page_genres)
+            self.update_genres_view()
+
+    def show_feeds_page(self):
+        """Show the feeds time statistics page.""" 
+        if self.stackedWidget_time and self.time_page_feeds:
+            self.stackedWidget_time.setCurrentWidget(self.time_page_feeds)
+            self.update_feeds_view()
+
+    def update_genres_view(self):
+        """Update the genres time statistics view."""
+        try:
+            self.load_genre_time_data()
+        except Exception as e:
+            logging.error(f"Error updating genres view: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
+    def update_feeds_view(self):
+        """Update the feeds time statistics view.""" 
+        try:
+            self.load_feeds_time_data()
+            self.load_feeds_decade_data()
+        except Exception as e:
+            logging.error(f"Error updating feeds view: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+
     def update_artists_view(self):
-        """Update the artists time statistics view."""
+        """Update the artists time statistics view with splitters."""
         # Make sure we have data
         if not self.artist_year_data or not self.artist_decade_data:
             self.load_artist_time_data()
         
-        # Update top table with years
-        if self.table_time_artists_top:
-            self.table_time_artists_top.clear()
-            self.table_time_artists_top.setColumnCount(2)
-            self.table_time_artists_top.setHorizontalHeaderLabels(["Año", "Artistas"])
+        # Create splitter for top section (years) - buscar dinámicamente
+        widget_time_artists_top = self.find_widget_safely('widget_time_artists_top')
+        if widget_time_artists_top:
+            # Clear existing layout
+            if widget_time_artists_top.layout():
+                self.clear_layout(widget_time_artists_top.layout())
+            else:
+                widget_time_artists_top.setLayout(QHBoxLayout())
             
-            self.table_time_artists_top.setRowCount(len(self.artist_year_data))
-            for i, (year, count) in enumerate(self.artist_year_data):
-                self.table_time_artists_top.setItem(i, 0, QTableWidgetItem(str(year)))
-                self.table_time_artists_top.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Create horizontal splitter for table and chart
+            top_splitter = QSplitter(Qt.Orientation.Horizontal)
             
-            self.table_time_artists_top.resizeColumnsToContents()
-        
-        # Update bottom table with decades
-        if self.table_time_artists_bott:
-            self.table_time_artists_bott.clear()
-            self.table_time_artists_bott.setColumnCount(2)
-            self.table_time_artists_bott.setHorizontalHeaderLabels(["Década", "Artistas"])
+            # Table widget for years
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
             
-            self.table_time_artists_bott.setRowCount(len(self.artist_decade_data))
-            for i, (decade, count) in enumerate(self.artist_decade_data):
-                decade_label = f"{decade}s"
-                self.table_time_artists_bott.setItem(i, 0, QTableWidgetItem(decade_label))
-                self.table_time_artists_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Add title
+            title_label = QLabel("Artistas por Año de Formación")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
             
-            self.table_time_artists_bott.resizeColumnsToContents()
-        
-        # Create artist formation year chart for top section
-        if self.chart_time_artists_top:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_artists_top)
-            self.clear_layout(chart_layout)
+            # Configure table - buscar dinámicamente
+            table_time_artists_top = self.find_widget_safely('table_time_artists_top')
+            if table_time_artists_top:
+                table_time_artists_top.clear()
+                table_time_artists_top.setColumnCount(2)
+                table_time_artists_top.setHorizontalHeaderLabels(["Año", "Artistas"])
+                
+                table_time_artists_top.setRowCount(len(self.artist_year_data))
+                for i, (year, count) in enumerate(self.artist_year_data):
+                    table_time_artists_top.setItem(i, 0, QTableWidgetItem(str(year)))
+                    table_time_artists_top.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_artists_top.resizeColumnsToContents()
+                table_layout.addWidget(table_time_artists_top)
+                
+                # Connect table click handler
+                try:
+                    table_time_artists_top.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_artists_top.itemClicked.connect(
+                    lambda item: self.show_artists_by_year(int(table_time_artists_top.item(item.row(), 0).text()))
+                )
             
-            # Title
-            title = QLabel("Artistas por Año de Formación")
-            title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(title)
+            # Chart widget for years
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create chart
             year_chart = ChartFactory.create_bar_chart(
@@ -399,16 +482,70 @@ class TimeSubmodule:
             
             if year_chart:
                 chart_layout.addWidget(year_chart)
-        
-        # Create decade chart for bottom section
-        if self.chart_time_artists_bott:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_artists_bott)
-            self.clear_layout(chart_layout)
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
             
-            # Title
-            decade_title = QLabel("Artistas por Década de Formación")
-            decade_title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(decade_title)
+            # Add widgets to splitter
+            top_splitter.addWidget(table_widget)
+            top_splitter.addWidget(chart_widget)
+            top_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_artists_top.layout().addWidget(top_splitter)
+        
+        # Create splitter for bottom section (decades) - buscar dinámicamente
+        widget_time_artists_bott = self.find_widget_safely('widget_time_artists_bott')
+        if widget_time_artists_bott:
+            # Clear existing layout
+            if widget_time_artists_bott.layout():
+                self.clear_layout(widget_time_artists_bott.layout())
+            else:
+                widget_time_artists_bott.setLayout(QHBoxLayout())
+            
+            # Create horizontal splitter for table and chart
+            bottom_splitter = QSplitter(Qt.Orientation.Horizontal)
+            
+            # Table widget for decades
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Add title
+            title_label = QLabel("Artistas por Década de Formación")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
+            
+            # Configure table - buscar dinámicamente
+            table_time_artists_bott = self.find_widget_safely('table_time_artists_bott')
+            if table_time_artists_bott:
+                table_time_artists_bott.clear()
+                table_time_artists_bott.setColumnCount(2)
+                table_time_artists_bott.setHorizontalHeaderLabels(["Década", "Artistas"])
+                
+                table_time_artists_bott.setRowCount(len(self.artist_decade_data))
+                for i, (decade, count) in enumerate(self.artist_decade_data):
+                    decade_label = f"{decade}s"
+                    table_time_artists_bott.setItem(i, 0, QTableWidgetItem(decade_label))
+                    table_time_artists_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_artists_bott.resizeColumnsToContents()
+                table_layout.addWidget(table_time_artists_bott)
+                
+                # Connect table click handler
+                try:
+                    table_time_artists_bott.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_artists_bott.itemClicked.connect(
+                    lambda item: self.show_artists_by_decade(int(table_time_artists_bott.item(item.row(), 0).text().replace('s', '')))
+                )
+            
+            # Chart widget for decades
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create decade chart
             decade_chart = ChartFactory.create_pie_chart(
@@ -418,69 +555,75 @@ class TimeSubmodule:
             
             if decade_chart:
                 chart_layout.addWidget(decade_chart)
-        
-        # Connect table click handlers
-        if self.table_time_artists_top:
-            try:
-                self.table_time_artists_top.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_artists_top.itemClicked.connect(
-                lambda item: self.show_artists_by_year(int(self.table_time_artists_top.item(item.row(), 0).text()))
-            )
-        
-        if self.table_time_artists_bott:
-            try:
-                self.table_time_artists_bott.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_artists_bott.itemClicked.connect(
-                lambda item: self.show_artists_by_decade(int(self.table_time_artists_bott.item(item.row(), 0).text().replace('s', '')))
-            )
-    
- 
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
+            
+            # Add widgets to splitter
+            bottom_splitter.addWidget(table_widget)
+            bottom_splitter.addWidget(chart_widget)
+            bottom_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_artists_bott.layout().addWidget(bottom_splitter)
+
     def update_albums_view(self):
-        """Update the albums time statistics view."""
+        """Update the albums time statistics view with splitters."""
         # Make sure we have data
         if not self.album_year_data or not self.album_decade_data:
             self.load_album_time_data()
         
-        # Update top table with years
-        if self.table_time_albums_top:
-            self.table_time_albums_top.clear()
-            self.table_time_albums_top.setColumnCount(2)
-            self.table_time_albums_top.setHorizontalHeaderLabels(["Año", "Álbumes"])
+        # Create splitter for top section (years) - buscar dinámicamente
+        widget_time_albums_top = self.find_widget_safely('widget_time_albums_top')
+        if widget_time_albums_top:
+            # Clear existing layout
+            if widget_time_albums_top.layout():
+                self.clear_layout(widget_time_albums_top.layout())
+            else:
+                widget_time_albums_top.setLayout(QHBoxLayout())
             
-            self.table_time_albums_top.setRowCount(len(self.album_year_data))
-            for i, (year, count) in enumerate(self.album_year_data):
-                self.table_time_albums_top.setItem(i, 0, QTableWidgetItem(str(year)))
-                self.table_time_albums_top.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Create horizontal splitter for table and chart
+            top_splitter = QSplitter(Qt.Orientation.Horizontal)
             
-            self.table_time_albums_top.resizeColumnsToContents()
-        
-        # Update bottom table with decades
-        if self.table_time_albums_bott:
-            self.table_time_albums_bott.clear()
-            self.table_time_albums_bott.setColumnCount(2)
-            self.table_time_albums_bott.setHorizontalHeaderLabels(["Década", "Álbumes"])
+            # Table widget for years
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
             
-            self.table_time_albums_bott.setRowCount(len(self.album_decade_data))
-            for i, (decade, count) in enumerate(self.album_decade_data):
-                decade_label = f"{decade}s"
-                self.table_time_albums_bott.setItem(i, 0, QTableWidgetItem(decade_label))
-                self.table_time_albums_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Add title
+            title_label = QLabel("Álbumes por Año de Lanzamiento")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
             
-            self.table_time_albums_bott.resizeColumnsToContents()
-        
-        # Create album release year chart for top section
-        if self.chart_time_albums_top:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_albums_top)
-            self.clear_layout(chart_layout)
+            # Configure table - buscar dinámicamente
+            table_time_albums_top = self.find_widget_safely('table_time_albums_top')
+            if table_time_albums_top:
+                table_time_albums_top.clear()
+                table_time_albums_top.setColumnCount(2)
+                table_time_albums_top.setHorizontalHeaderLabels(["Año", "Álbumes"])
+                
+                table_time_albums_top.setRowCount(len(self.album_year_data))
+                for i, (year, count) in enumerate(self.album_year_data):
+                    table_time_albums_top.setItem(i, 0, QTableWidgetItem(str(year)))
+                    table_time_albums_top.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_albums_top.resizeColumnsToContents()
+                table_layout.addWidget(table_time_albums_top)
+                
+                # Connect table click handler
+                try:
+                    table_time_albums_top.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_albums_top.itemClicked.connect(
+                    lambda item: self.show_albums_by_year(table_time_albums_top.item(item.row(), 0).text())
+                )
             
-            # Title
-            title = QLabel("Álbumes por Año de Lanzamiento")
-            title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(title)
+            # Chart widget for years
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create chart - use line chart for chronological data
             year_chart = ChartFactory.create_line_chart(
@@ -492,16 +635,70 @@ class TimeSubmodule:
             
             if year_chart:
                 chart_layout.addWidget(year_chart)
-        
-        # Create decade chart for bottom section
-        if self.chart_time_albums_bott:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_albums_bott)
-            self.clear_layout(chart_layout)
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
             
-            # Title
-            decade_title = QLabel("Álbumes por Década de Lanzamiento")
-            decade_title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(decade_title)
+            # Add widgets to splitter
+            top_splitter.addWidget(table_widget)
+            top_splitter.addWidget(chart_widget)
+            top_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_albums_top.layout().addWidget(top_splitter)
+        
+        # Create splitter for bottom section (decades) - buscar dinámicamente
+        widget_time_albums_bott = self.find_widget_safely('widget_time_albums_bott')
+        if widget_time_albums_bott:
+            # Clear existing layout
+            if widget_time_albums_bott.layout():
+                self.clear_layout(widget_time_albums_bott.layout())
+            else:
+                widget_time_albums_bott.setLayout(QHBoxLayout())
+            
+            # Create horizontal splitter for table and chart
+            bottom_splitter = QSplitter(Qt.Orientation.Horizontal)
+            
+            # Table widget for decades
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Add title
+            title_label = QLabel("Álbumes por Década de Lanzamiento")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
+            
+            # Configure table - buscar dinámicamente
+            table_time_albums_bott = self.find_widget_safely('table_time_albums_bott')
+            if table_time_albums_bott:
+                table_time_albums_bott.clear()
+                table_time_albums_bott.setColumnCount(2)
+                table_time_albums_bott.setHorizontalHeaderLabels(["Década", "Álbumes"])
+                
+                table_time_albums_bott.setRowCount(len(self.album_decade_data))
+                for i, (decade, count) in enumerate(self.album_decade_data):
+                    decade_label = f"{decade}s"
+                    table_time_albums_bott.setItem(i, 0, QTableWidgetItem(decade_label))
+                    table_time_albums_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_albums_bott.resizeColumnsToContents()
+                table_layout.addWidget(table_time_albums_bott)
+                
+                # Connect table click handler
+                try:
+                    table_time_albums_bott.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_albums_bott.itemClicked.connect(
+                    lambda item: self.show_albums_by_decade(int(table_time_albums_bott.item(item.row(), 0).text().replace('s', '')))
+                )
+            
+            # Chart widget for decades
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create decade chart
             decade_chart = ChartFactory.create_bar_chart(
@@ -513,70 +710,75 @@ class TimeSubmodule:
             
             if decade_chart:
                 chart_layout.addWidget(decade_chart)
-        
-        # Connect table click handlers
-        if self.table_time_albums_top:
-            try:
-                self.table_time_albums_top.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_albums_top.itemClicked.connect(
-                lambda item: self.show_albums_by_year(self.table_time_albums_top.item(item.row(), 0).text())
-            )
-        
-        if self.table_time_albums_bott:
-            try:
-                self.table_time_albums_bott.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_albums_bott.itemClicked.connect(
-                lambda item: self.show_albums_by_decade(int(self.table_time_albums_bott.item(item.row(), 0).text().replace('s', '')))
-            )
-    
-
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
+            
+            # Add widgets to splitter
+            bottom_splitter.addWidget(table_widget)
+            bottom_splitter.addWidget(chart_widget)
+            bottom_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_albums_bott.layout().addWidget(bottom_splitter)
 
     def update_labels_view(self):
-        """Update the labels time statistics view."""
+        """Update the labels time statistics view with splitters."""
         # Make sure we have data
         if not self.label_year_data or not self.label_decade_data:
             self.load_label_time_data()
         
-        # Update top table with years
-        if self.table_time_labels_top:
-            self.table_time_labels_top.clear()
-            self.table_time_labels_top.setColumnCount(2)
-            self.table_time_labels_top.setHorizontalHeaderLabels(["Año", "Sellos"])
+        # Create splitter for top section (years) - buscar dinámicamente
+        widget_time_labels_top = self.find_widget_safely('widget_time_labels_top')
+        if widget_time_labels_top:
+            # Clear existing layout
+            if widget_time_labels_top.layout():
+                self.clear_layout(widget_time_labels_top.layout())
+            else:
+                widget_time_labels_top.setLayout(QHBoxLayout())
             
-            self.table_time_labels_top.setRowCount(len(self.label_year_data))
-            for i, (year, count) in enumerate(self.label_year_data):
-                self.table_time_labels_top.setItem(i, 0, QTableWidgetItem(str(year)))
-                self.table_time_labels_top.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Create horizontal splitter for table and chart
+            top_splitter = QSplitter(Qt.Orientation.Horizontal)
             
-            self.table_time_labels_top.resizeColumnsToContents()
-        
-        # Update bottom table with decades
-        if self.table_time_labels_bott:
-            self.table_time_labels_bott.clear()
-            self.table_time_labels_bott.setColumnCount(2)
-            self.table_time_labels_bott.setHorizontalHeaderLabels(["Década", "Sellos"])
+            # Table widget for years
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
             
-            self.table_time_labels_bott.setRowCount(len(self.label_decade_data))
-            for i, (decade, count) in enumerate(self.label_decade_data):
-                decade_label = f"{decade}s"
-                self.table_time_labels_bott.setItem(i, 0, QTableWidgetItem(decade_label))
-                self.table_time_labels_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+            # Add title
+            title_label = QLabel("Sellos por Año de Fundación")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
             
-            self.table_time_labels_bott.resizeColumnsToContents()
-        
-        # Create label foundation year chart for top section
-        if self.chart_time_labels_top:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_labels_top)
-            self.clear_layout(chart_layout)
+            # Configure table - buscar dinámicamente
+            table_time_labels_top = self.find_widget_safely('table_time_labels_top')
+            if table_time_labels_top:
+                table_time_labels_top.clear()
+                table_time_labels_top.setColumnCount(2)
+                table_time_labels_top.setHorizontalHeaderLabels(["Año", "Sellos"])
+                
+                table_time_labels_top.setRowCount(len(self.label_year_data))
+                for i, (year, count) in enumerate(self.label_year_data):
+                    table_time_labels_top.setItem(i, 0, QTableWidgetItem(str(year)))
+                    table_time_labels_top.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_labels_top.resizeColumnsToContents()
+                table_layout.addWidget(table_time_labels_top)
+                
+                # Connect table click handler
+                try:
+                    table_time_labels_top.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_labels_top.itemClicked.connect(
+                    lambda item: self.show_labels_by_year(int(table_time_labels_top.item(item.row(), 0).text()))
+                )
             
-            # Title
-            title = QLabel("Sellos por Año de Fundación")
-            title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(title)
+            # Chart widget for years
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create chart
             year_chart = ChartFactory.create_bar_chart(
@@ -588,16 +790,70 @@ class TimeSubmodule:
             
             if year_chart:
                 chart_layout.addWidget(year_chart)
-        
-        # Create decade chart for bottom section
-        if self.chart_time_labels_bott:
-            chart_layout = self.ensure_widget_has_layout(self.chart_time_labels_bott)
-            self.clear_layout(chart_layout)
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
             
-            # Title
-            decade_title = QLabel("Sellos por Década de Fundación")
-            decade_title.setStyleSheet("font-size: 14px; font-weight: bold;")
-            chart_layout.addWidget(decade_title)
+            # Add widgets to splitter
+            top_splitter.addWidget(table_widget)
+            top_splitter.addWidget(chart_widget)
+            top_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_labels_top.layout().addWidget(top_splitter)
+        
+        # Create splitter for bottom section (decades) - buscar dinámicamente
+        widget_time_labels_bott = self.find_widget_safely('widget_time_labels_bott')
+        if widget_time_labels_bott:
+            # Clear existing layout
+            if widget_time_labels_bott.layout():
+                self.clear_layout(widget_time_labels_bott.layout())
+            else:
+                widget_time_labels_bott.setLayout(QHBoxLayout())
+            
+            # Create horizontal splitter for table and chart
+            bottom_splitter = QSplitter(Qt.Orientation.Horizontal)
+            
+            # Table widget for decades
+            table_widget = QWidget()
+            table_layout = QVBoxLayout(table_widget)
+            table_layout.setContentsMargins(0, 0, 0, 0)
+            
+            # Add title
+            title_label = QLabel("Sellos por Década de Fundación")
+            title_label.setStyleSheet("font-size: 14px; font-weight: bold;")
+            table_layout.addWidget(title_label)
+            
+            # Configure table - buscar dinámicamente
+            table_time_labels_bott = self.find_widget_safely('table_time_labels_bott')
+            if table_time_labels_bott:
+                table_time_labels_bott.clear()
+                table_time_labels_bott.setColumnCount(2)
+                table_time_labels_bott.setHorizontalHeaderLabels(["Década", "Sellos"])
+                
+                table_time_labels_bott.setRowCount(len(self.label_decade_data))
+                for i, (decade, count) in enumerate(self.label_decade_data):
+                    decade_label = f"{decade}s"
+                    table_time_labels_bott.setItem(i, 0, QTableWidgetItem(decade_label))
+                    table_time_labels_bott.setItem(i, 1, QTableWidgetItem(str(count)))
+                
+                table_time_labels_bott.resizeColumnsToContents()
+                table_layout.addWidget(table_time_labels_bott)
+                
+                # Connect table click handler
+                try:
+                    table_time_labels_bott.itemClicked.disconnect()
+                except:
+                    pass
+                table_time_labels_bott.itemClicked.connect(
+                    lambda item: self.show_labels_by_decade(int(table_time_labels_bott.item(item.row(), 0).text().replace('s', '')))
+                )
+            
+            # Chart widget for decades
+            chart_widget = QWidget()
+            chart_layout = QVBoxLayout(chart_widget)
+            chart_layout.setContentsMargins(0, 0, 0, 0)
             
             # Create decade chart
             decade_chart = ChartFactory.create_pie_chart(
@@ -607,29 +863,28 @@ class TimeSubmodule:
             
             if decade_chart:
                 chart_layout.addWidget(decade_chart)
-        
-        # Connect table click handlers
-        if self.table_time_labels_top:
-            try:
-                self.table_time_labels_top.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_labels_top.itemClicked.connect(
-                lambda item: self.show_labels_by_year(int(self.table_time_labels_top.item(item.row(), 0).text()))
-            )
-        
-        if self.table_time_labels_bott:
-            try:
-                self.table_time_labels_bott.itemClicked.disconnect()
-            except:
-                pass
-            self.table_time_labels_bott.itemClicked.connect(
-                lambda item: self.show_labels_by_decade(int(self.table_time_labels_bott.item(item.row(), 0).text().replace('s', '')))
-            )
+            else:
+                error_label = QLabel("No se pudo crear el gráfico")
+                error_label.setStyleSheet("color: red;")
+                chart_layout.addWidget(error_label)
+            
+            # Add widgets to splitter
+            bottom_splitter.addWidget(table_widget)
+            bottom_splitter.addWidget(chart_widget)
+            bottom_splitter.setSizes([300, 500])  # Initial proportions
+            
+            # Add splitter to main layout
+            widget_time_labels_bott.layout().addWidget(bottom_splitter)
 
     def show_artists_by_year(self, year):
         """Show artists formed in a specific year in the top chart area."""
         if not self.conn:
+            return
+            
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_artists_top')
+        if not chart_widget:
+            logging.error("chart_time_artists_top widget not found or invalid")
             return
             
         cursor = self.conn.cursor()
@@ -650,8 +905,12 @@ class TimeSubmodule:
             
             artists = cursor.fetchall()
             
-            if artists and self.chart_time_artists_top:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_artists_top)
+            if artists:
+                chart_layout = self.safe_ensure_widget_layout(chart_widget)
+                if not chart_layout:
+                    logging.error("Could not ensure layout for chart_time_artists_top")
+                    return
+                    
                 self.clear_layout(chart_layout)
                 
                 title = QLabel(f"Artistas Formados en {year}")
@@ -659,23 +918,40 @@ class TimeSubmodule:
                 chart_layout.addWidget(title)
                 
                 # Create a pie chart showing distribution
-                chart_data = [(name, albums or 0) for name, origin, albums in artists]
-                chart = ChartFactory.create_pie_chart(
-                    chart_data,
-                    f"Artistas Formados en {year}",
-                    limit=15
-                )
-                
-                if chart:
-                    chart_layout.addWidget(chart)
+                chart_data = [(name, albums or 0) for name, origin, albums in artists if albums and albums > 0]
+                if chart_data:
+                    chart = ChartFactory.create_pie_chart(
+                        chart_data,
+                        f"Artistas Formados en {year}",
+                        limit=15
+                    )
+                    
+                    if chart:
+                        chart_layout.addWidget(chart)
+                    else:
+                        no_chart = QLabel("No se pudo crear el gráfico")
+                        no_chart.setStyleSheet("color: red;")
+                        chart_layout.addWidget(no_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de álbumes para artistas formados en {year}")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    chart_layout.addWidget(no_data)
+                    
         except Exception as e:
             logging.error(f"Error showing artists by year {year}: {e}")
             import traceback
             logging.error(traceback.format_exc())
 
     def show_artists_by_decade(self, decade):
-        """Show artists formed in a specific decade in the bottom chart area."""
+        """Show artists formed in a specific decade with multiple charts."""
         if not self.conn:
+            return
+            
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_artists_bott')
+        if not chart_widget:
+            logging.error("chart_time_artists_bott widget not found or invalid")
             return
             
         cursor = self.conn.cursor()
@@ -698,15 +974,32 @@ class TimeSubmodule:
             
             artists = cursor.fetchall()
             
-            if artists and self.chart_time_artists_bott:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_artists_bott)
+            if artists:
+                chart_layout = self.safe_ensure_widget_layout(chart_widget)
+                if not chart_layout:
+                    logging.error("Could not ensure layout for chart_time_artists_bott")
+                    return
+                    
                 self.clear_layout(chart_layout)
                 
+                # Create vertical splitter for multiple charts
+                main_splitter = QSplitter(Qt.Orientation.Vertical)
+                
+                # Title
                 title = QLabel(f"Artistas Formados en los {decade}s")
                 title.setStyleSheet("font-size: 14px; font-weight: bold;")
                 chart_layout.addWidget(title)
                 
-                # Create a pie chart showing country distribution
+                # First chart: Country distribution
+                country_widget = QWidget()
+                country_layout = QVBoxLayout(country_widget)
+                country_layout.setContentsMargins(0, 0, 0, 0)
+                
+                country_title = QLabel("Distribución por País")
+                country_title.setStyleSheet("font-weight: bold;")
+                country_layout.addWidget(country_title)
+                
+                # Create country data
                 country_data = {}
                 for _, origin, _, _ in artists:
                     if origin:
@@ -723,7 +1016,50 @@ class TimeSubmodule:
                     )
                     
                     if country_chart:
-                        chart_layout.addWidget(country_chart)
+                        country_layout.addWidget(country_chart)
+                else:
+                    no_data = QLabel("No hay datos de países")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    country_layout.addWidget(no_data)
+                
+                # Second chart: Albums distribution
+                albums_widget = QWidget()
+                albums_layout = QVBoxLayout(albums_widget)
+                albums_layout.setContentsMargins(0, 0, 0, 0)
+                
+                albums_title = QLabel("Distribución por Álbumes")
+                albums_title.setStyleSheet("font-weight: bold;")
+                albums_layout.addWidget(albums_title)
+                
+                # Create albums data
+                albums_data = [(name, total_albums or 0) for name, _, _, total_albums in artists if total_albums and total_albums > 0]
+                albums_data.sort(key=lambda x: x[1], reverse=True)
+                albums_data = albums_data[:15]  # Top 15
+                
+                if albums_data:
+                    albums_chart = ChartFactory.create_bar_chart(
+                        albums_data,
+                        f"Artistas con más álbumes ({decade}s)",
+                        x_label="Artista",
+                        y_label="Álbumes"
+                    )
+                    
+                    if albums_chart:
+                        albums_layout.addWidget(albums_chart)
+                else:
+                    no_data = QLabel("No hay datos de álbumes")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    albums_layout.addWidget(no_data)
+                
+                # Add widgets to splitter
+                main_splitter.addWidget(country_widget)
+                main_splitter.addWidget(albums_widget)
+                main_splitter.setSizes([300, 300])  # Equal sizes
+                
+                chart_layout.addWidget(main_splitter)
+                
         except Exception as e:
             logging.error(f"Error showing artists by decade {decade}: {e}")
             import traceback
@@ -732,6 +1068,12 @@ class TimeSubmodule:
     def show_albums_by_year(self, year):
         """Show albums released in a specific year in the top chart area."""
         if not self.conn:
+            return
+            
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_albums_top')
+        if not chart_widget:
+            logging.error("chart_time_albums_top widget not found or invalid")
             return
             
         cursor = self.conn.cursor()
@@ -752,8 +1094,12 @@ class TimeSubmodule:
             
             albums = cursor.fetchall()
             
-            if albums and self.chart_time_albums_top:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_albums_top)
+            if albums:
+                chart_layout = self.safe_ensure_widget_layout(chart_widget)
+                if not chart_layout:
+                    logging.error("Could not ensure layout for chart_time_albums_top")
+                    return
+                    
                 self.clear_layout(chart_layout)
                 
                 title = QLabel(f"Álbumes Lanzados en {year}")
@@ -779,6 +1125,16 @@ class TimeSubmodule:
                     
                     if artist_chart:
                         chart_layout.addWidget(artist_chart)
+                    else:
+                        no_chart = QLabel("No se pudo crear el gráfico")
+                        no_chart.setStyleSheet("color: red;")
+                        chart_layout.addWidget(no_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de artistas para álbumes de {year}")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    chart_layout.addWidget(no_data)
+                    
         except Exception as e:
             logging.error(f"Error showing albums by year {year}: {e}")
             import traceback
@@ -787,6 +1143,12 @@ class TimeSubmodule:
     def show_albums_by_decade(self, decade):
         """Show albums released in a specific decade in the bottom chart area."""
         if not self.conn:
+            return
+            
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_albums_bott')
+        if not chart_widget:
+            logging.error("chart_time_albums_bott widget not found or invalid")
             return
             
         cursor = self.conn.cursor()
@@ -816,10 +1178,14 @@ class TimeSubmodule:
             
             genres = cursor.fetchall()
             
-            if genres and self.chart_time_albums_bott:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_albums_bott)
-                self.clear_layout(chart_layout)
+            chart_layout = self.safe_ensure_widget_layout(chart_widget)
+            if not chart_layout:
+                logging.error("Could not ensure layout for chart_time_albums_bott")
+                return
                 
+            self.clear_layout(chart_layout)
+            
+            if genres:
                 title = QLabel(f"Géneros de Álbumes de los {decade}s")
                 title.setStyleSheet("font-size: 14px; font-weight: bold;")
                 chart_layout.addWidget(title)
@@ -832,6 +1198,16 @@ class TimeSubmodule:
                 
                 if genre_chart:
                     chart_layout.addWidget(genre_chart)
+                else:
+                    no_chart = QLabel("No se pudo crear el gráfico")
+                    no_chart.setStyleSheet("color: red;")
+                    chart_layout.addWidget(no_chart)
+            else:
+                no_data = QLabel(f"No hay datos de géneros para álbumes de los {decade}s")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                chart_layout.addWidget(no_data)
+                    
         except Exception as e:
             logging.error(f"Error showing albums by decade {decade}: {e}")
             import traceback
@@ -840,6 +1216,12 @@ class TimeSubmodule:
     def show_labels_by_year(self, year):
         """Show labels founded in a specific year in the top chart area."""
         if not self.conn:
+            return
+            
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_labels_top')
+        if not chart_widget:
+            logging.error("chart_time_labels_top widget not found or invalid")
             return
             
         cursor = self.conn.cursor()
@@ -860,8 +1242,12 @@ class TimeSubmodule:
             
             labels = cursor.fetchall()
             
-            if labels and self.chart_time_labels_top:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_labels_top)
+            if labels:
+                chart_layout = self.safe_ensure_widget_layout(chart_widget)
+                if not chart_layout:
+                    logging.error("Could not ensure layout for chart_time_labels_top")
+                    return
+                    
                 self.clear_layout(chart_layout)
                 
                 title = QLabel(f"Sellos Fundados en {year}")
@@ -886,6 +1272,12 @@ class TimeSubmodule:
                     
                     if country_chart:
                         chart_layout.addWidget(country_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de países para sellos fundados en {year}")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    chart_layout.addWidget(no_data)
+                    
         except Exception as e:
             logging.error(f"Error showing labels by year {year}: {e}")
             import traceback
@@ -896,9 +1288,22 @@ class TimeSubmodule:
         if not self.conn:
             return
             
+        # Buscar el widget dinámicamente
+        chart_widget = self.find_widget_safely('chart_time_labels_bott')
+        if not chart_widget:
+            logging.error("chart_time_labels_bott widget not found or invalid")
+            return
+            
         cursor = self.conn.cursor()
         
         try:
+            chart_layout = self.safe_ensure_widget_layout(chart_widget)
+            if not chart_layout:
+                logging.error("Could not ensure layout for chart_time_labels_bott")
+                return
+                
+            self.clear_layout(chart_layout)
+            
             cursor.execute("""
                 SELECT 
                     mb_type, 
@@ -918,10 +1323,7 @@ class TimeSubmodule:
             
             types = cursor.fetchall()
             
-            if types and self.chart_time_labels_bott:
-                chart_layout = self.ensure_widget_has_layout(self.chart_time_labels_bott)
-                self.clear_layout(chart_layout)
-                
+            if types:
                 title = QLabel(f"Tipos de Sellos de los {decade}s")
                 title.setStyleSheet("font-size: 14px; font-weight: bold;")
                 chart_layout.addWidget(title)
@@ -970,6 +1372,12 @@ class TimeSubmodule:
                     
                     if album_chart:
                         chart_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel(f"No hay datos de sellos para la década {decade}s")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                chart_layout.addWidget(no_data)
+                
         except Exception as e:
             logging.error(f"Error showing labels by decade {decade}: {e}")
             import traceback
@@ -1142,702 +1550,710 @@ class TimeSubmodule:
                 except ValueError:
                     pass
 
-def load_feeds_time_data(self):
-    """Loads temporal statistics about feeds (by year and decade)."""
-    if not self.conn:
-        return
-        
-    cursor = self.conn.cursor()
-    
-    # Create containers for the data
-    year_chart_container = self.chart_time_feeds
-    table_feeds = self.table_time_feeds
-    
-    # Clear any existing content
-    layout = self.ensure_widget_has_layout(year_chart_container)
-    self.clear_layout(layout)
-    
-    # Configure the table
-    if table_feeds:
-        table_feeds.setColumnCount(3)
-        table_feeds.setHorizontalHeaderLabels(["Año", "Feed", "Publicaciones"])
-        table_feeds.setRowCount(0)
-    
-    try:
-        # Query artist formation years data
-        cursor.execute("""
-            SELECT 
-                ar.formed_year as year, 
-                COUNT(f.id) as feed_count
-            FROM 
-                feeds f
-            JOIN 
-                artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
-            WHERE 
-                ar.formed_year IS NOT NULL AND ar.formed_year > 0
-            GROUP BY 
-                ar.formed_year
-            ORDER BY 
-                ar.formed_year;
-        """)
-        
-        artist_year_data = cursor.fetchall()
-        
-        # Query album release years data
-        cursor.execute("""
-            SELECT 
-                SUBSTR(a.year, 1, 4) as year, 
-                COUNT(f.id) as feed_count
-            FROM 
-                feeds f
-            JOIN 
-                albums a ON f.entity_id = a.id AND f.entity_type = 'album'
-            WHERE 
-                a.year IS NOT NULL AND a.year != ''
-                AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
-            GROUP BY 
-                year
-            ORDER BY 
-                year;
-        """)
-        
-        album_year_data = cursor.fetchall()
-        
-        # Create a splitter for the two charts
-        splitter = QSplitter(Qt.Orientation.Horizontal)
-        
-        # Create container for artist feeds chart
-        artist_container = QWidget()
-        artist_layout = QVBoxLayout(artist_container)
-        artist_title = QLabel("Feeds por Año de Formación de Artistas")
-        artist_title.setStyleSheet("font-weight: bold; font-size: 14px;")
-        artist_layout.addWidget(artist_title)
-        
-        # Create container for album feeds chart
-        album_container = QWidget()
-        album_layout = QVBoxLayout(album_container)
-        album_title = QLabel("Feeds por Año de Lanzamiento de Álbumes")
-        album_title.setStyleSheet("font-weight: bold; font-size: 14px;")
-        album_layout.addWidget(album_title)
-        
-        # Create and add charts
-        if artist_year_data:
-            artist_chart = ChartFactory.create_pie_chart(
-                artist_year_data,
-                "Feeds por Año de Formación"
-            )
-            if artist_chart:
-                artist_layout.addWidget(artist_chart)
-        else:
-            no_data = QLabel("No hay datos de feeds por año de formación")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray;")
-            artist_layout.addWidget(no_data)
+    def load_feeds_time_data(self):
+        """Loads temporal statistics about feeds (by year and decade)."""
+        if not self.conn:
+            return
             
-        if album_year_data:
-            album_chart = ChartFactory.create_pie_chart(
-                album_year_data,
-                "Feeds por Año de Lanzamiento"
-            )
-            if album_chart:
-                album_layout.addWidget(album_chart)
-        else:
-            no_data = QLabel("No hay datos de feeds por año de lanzamiento")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray;")
-            album_layout.addWidget(no_data)
-            
-        # Add containers to splitter
-        splitter.addWidget(artist_container)
-        splitter.addWidget(album_container)
+        cursor = self.conn.cursor()
         
-        # Add splitter to main layout
-        layout.addWidget(splitter)
+        # Create containers for the data - buscar dinámicamente
+        year_chart_container = self.find_widget_safely('chart_time_feeds')
+        table_feeds = self.find_widget_safely('table_time_feeds')
         
-        # Fill the table with combined year data
+        if not year_chart_container:
+            logging.error("chart_time_feeds widget not found")
+            return
+        
+        # Clear any existing content
+        layout = self.ensure_widget_has_layout(year_chart_container)
+        self.clear_layout(layout)
+        
+        # Configure the table
         if table_feeds:
-            # Combine the data from both sources
-            year_data = {}
-            
-            # Process artist data
-            for year, count in artist_year_data:
-                if year not in year_data:
-                    year_data[year] = {"artist": 0, "album": 0}
-                year_data[year]["artist"] = count
-            
-            # Process album data
-            for year, count in album_year_data:
-                if year not in year_data:
-                    year_data[year] = {"artist": 0, "album": 0}
-                year_data[year]["album"] = count
-            
-            # Fill the table
-            table_feeds.setRowCount(len(year_data) * 2)  # Two rows per year (artist and album)
-            row_index = 0
-            
-            for year, counts in sorted(year_data.items()):
-                if counts["artist"] > 0:
-                    table_feeds.setItem(row_index, 0, QTableWidgetItem(str(year)))
-                    table_feeds.setItem(row_index, 1, QTableWidgetItem("Artistas"))
-                    table_feeds.setItem(row_index, 2, QTableWidgetItem(str(counts["artist"])))
-                    row_index += 1
-                
-                if counts["album"] > 0:
-                    table_feeds.setItem(row_index, 0, QTableWidgetItem(str(year)))
-                    table_feeds.setItem(row_index, 1, QTableWidgetItem("Álbumes"))
-                    table_feeds.setItem(row_index, 2, QTableWidgetItem(str(counts["album"])))
-                    row_index += 1
-            
-            # Adjust row count if needed
-            if row_index < table_feeds.rowCount():
-                table_feeds.setRowCount(row_index)
-            
-            # Resize columns
-            table_feeds.resizeColumnsToContents()
-            
-            # Connect table selection
-            try:
-                table_feeds.itemClicked.disconnect()
-            except:
-                pass
-            table_feeds.itemClicked.connect(self.on_feed_year_selected)
+            table_feeds.setColumnCount(3)
+            table_feeds.setHorizontalHeaderLabels(["Año", "Feed", "Publicaciones"])
+            table_feeds.setRowCount(0)
         
-        # Now load the decade data
-        self.load_feeds_decade_data()
-        
-    except Exception as e:
-        logging.error(f"Error loading feed time data: {e}")
-        import traceback
-        logging.error(traceback.format_exc())
-        
-        error_label = QLabel(f"Error cargando datos de feeds por tiempo: {str(e)}")
-        error_label.setStyleSheet("color: red;")
-        layout.addWidget(error_label)
-
-def load_feeds_decade_data(self):
-    """Loads decade-based feed statistics."""
-    if not self.conn:
-        return
-        
-    cursor = self.conn.cursor()
-    
-    # Define the containers
-    chart_container = self.chart_time_feeds_bott
-    table_feeds_bott = self.table_time_feeds_bott
-    
-    # Clear any existing content
-    layout = self.ensure_widget_has_layout(chart_container)
-    self.clear_layout(layout)
-    
-    # Configure the table
-    if table_feeds_bott:
-        table_feeds_bott.setColumnCount(3)
-        table_feeds_bott.setHorizontalHeaderLabels(["Década", "Feed", "Publicaciones"])
-        table_feeds_bott.setRowCount(0)
-    
-    try:
-        # Query artist formation decades data
-        cursor.execute("""
-            SELECT 
-                (formed_year / 10) * 10 as decade, 
-                COUNT(f.id) as feed_count
-            FROM 
-                feeds f
-            JOIN 
-                artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
-            WHERE 
-                ar.formed_year IS NOT NULL AND ar.formed_year > 0
-            GROUP BY 
-                decade
-            ORDER BY 
-                decade;
-        """)
-        
-        artist_decade_data = cursor.fetchall()
-        
-        # Query album release decades data
-        cursor.execute("""
-            SELECT 
-                (CAST(SUBSTR(a.year, 1, 4) AS INTEGER) / 10) * 10 as decade, 
-                COUNT(f.id) as feed_count
-            FROM 
-                feeds f
-            JOIN 
-                albums a ON f.entity_id = a.id AND f.entity_type = 'album'
-            WHERE 
-                a.year IS NOT NULL AND a.year != ''
-                AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
-            GROUP BY 
-                decade
-            ORDER BY 
-                decade;
-        """)
-        
-        album_decade_data = cursor.fetchall()
-        
-        # Create a splitter for the two charts
-        splitter = QSplitter(Qt.Orientation.Horizontal)
-        
-        # Create container for artist feeds chart
-        artist_container = QWidget()
-        artist_layout = QVBoxLayout(artist_container)
-        artist_title = QLabel("Feeds por Década de Formación de Artistas")
-        artist_title.setStyleSheet("font-weight: bold; font-size: 14px;")
-        artist_layout.addWidget(artist_title)
-        
-        # Create container for album feeds chart
-        album_container = QWidget()
-        album_layout = QVBoxLayout(album_container)
-        album_title = QLabel("Feeds por Década de Lanzamiento de Álbumes")
-        album_title.setStyleSheet("font-weight: bold; font-size: 14px;")
-        album_layout.addWidget(album_title)
-        
-        # Prepare data for charts
-        artist_chart_data = [(f"{decade}s", count) for decade, count in artist_decade_data]
-        album_chart_data = [(f"{decade}s", count) for decade, count in album_decade_data]
-        
-        # Create and add charts
-        if artist_chart_data:
-            artist_chart = ChartFactory.create_pie_chart(
-                artist_chart_data,
-                "Feeds por Década de Formación"
-            )
-            if artist_chart:
-                artist_layout.addWidget(artist_chart)
-        else:
-            no_data = QLabel("No hay datos de feeds por década de formación")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray;")
-            artist_layout.addWidget(no_data)
-            
-        if album_chart_data:
-            album_chart = ChartFactory.create_pie_chart(
-                album_chart_data,
-                "Feeds por Década de Lanzamiento"
-            )
-            if album_chart:
-                album_layout.addWidget(album_chart)
-        else:
-            no_data = QLabel("No hay datos de feeds por década de lanzamiento")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray;")
-            album_layout.addWidget(no_data)
-            
-        # Add containers to splitter
-        splitter.addWidget(artist_container)
-        splitter.addWidget(album_container)
-        
-        # Add splitter to main layout
-        layout.addWidget(splitter)
-        
-        # Fill the table with combined decade data
-        if table_feeds_bott:
-            # Combine the data from both sources
-            decade_data = {}
-            
-            # Process artist data
-            for decade, count in artist_decade_data:
-                decade_str = f"{decade}s"
-                if decade_str not in decade_data:
-                    decade_data[decade_str] = {"artist": 0, "album": 0}
-                decade_data[decade_str]["artist"] = count
-            
-            # Process album data
-            for decade, count in album_decade_data:
-                decade_str = f"{decade}s"
-                if decade_str not in decade_data:
-                    decade_data[decade_str] = {"artist": 0, "album": 0}
-                decade_data[decade_str]["album"] = count
-            
-            # Fill the table
-            table_feeds_bott.setRowCount(len(decade_data) * 2)  # Two rows per decade (artist and album)
-            row_index = 0
-            
-            for decade, counts in sorted(decade_data.items()):
-                if counts["artist"] > 0:
-                    table_feeds_bott.setItem(row_index, 0, QTableWidgetItem(decade))
-                    table_feeds_bott.setItem(row_index, 1, QTableWidgetItem("Artistas"))
-                    table_feeds_bott.setItem(row_index, 2, QTableWidgetItem(str(counts["artist"])))
-                    row_index += 1
-                
-                if counts["album"] > 0:
-                    table_feeds_bott.setItem(row_index, 0, QTableWidgetItem(decade))
-                    table_feeds_bott.setItem(row_index, 1, QTableWidgetItem("Álbumes"))
-                    table_feeds_bott.setItem(row_index, 2, QTableWidgetItem(str(counts["album"])))
-                    row_index += 1
-            
-            # Adjust row count if needed
-            if row_index < table_feeds_bott.rowCount():
-                table_feeds_bott.setRowCount(row_index)
-            
-            # Resize columns
-            table_feeds_bott.resizeColumnsToContents()
-            
-            # Connect table selection
-            try:
-                table_feeds_bott.itemClicked.disconnect()
-            except:
-                pass
-            table_feeds_bott.itemClicked.connect(self.on_feed_decade_selected)
-            
-    except Exception as e:
-        logging.error(f"Error loading feed decade data: {e}")
-        import traceback
-        logging.error(traceback.format_exc())
-        
-        error_label = QLabel(f"Error cargando datos de feeds por década: {str(e)}")
-        error_label.setStyleSheet("color: red;")
-        layout.addWidget(error_label)
-
-def on_feed_year_selected(self, item):
-    """Handle selection of a year in the feeds table."""
-    row = item.row()
-    if self.table_time_feeds:
-        year_item = self.table_time_feeds.item(row, 0)
-        feed_type_item = self.table_time_feeds.item(row, 1)
-        
-        if year_item and feed_type_item:
-            try:
-                year = year_item.text()
-                feed_type = feed_type_item.text()
-                self.show_feeds_by_year(year, feed_type)
-            except Exception as e:
-                logging.error(f"Error handling feed year selection: {e}")
-                import traceback
-                logging.error(traceback.format_exc())
-
-def on_feed_decade_selected(self, item):
-    """Handle selection of a decade in the feeds decade table."""
-    row = item.row()
-    if self.table_time_feeds_bott:
-        decade_item = self.table_time_feeds_bott.item(row, 0)
-        feed_type_item = self.table_time_feeds_bott.item(row, 1)
-        
-        if decade_item and feed_type_item:
-            try:
-                decade = decade_item.text().replace('s', '')  # Remove 's' from '1990s'
-                feed_type = feed_type_item.text()
-                self.show_feeds_by_decade(decade, feed_type)
-            except Exception as e:
-                logging.error(f"Error handling feed decade selection: {e}")
-                import traceback
-                logging.error(traceback.format_exc())
-
-def show_feeds_by_year(self, year, feed_type):
-    """Show feeds detail for a specific year."""
-    if not self.conn:
-        return
-        
-    # Get the chart container for displaying year details
-    chart_container = self.chart_time_feeds
-    
-    # Ensure it has a layout
-    layout = self.ensure_widget_has_layout(chart_container)
-    
-    # Clear the container
-    self.clear_layout(layout)
-    
-    cursor = self.conn.cursor()
-    try:
-        # Different query based on feed type
-        if feed_type == "Artistas":
-            # Get feeds for artists formed in the specified year
+        try:
+            # Query artist formation years data
             cursor.execute("""
                 SELECT 
-                    ar.name as entity_name, 
-                    f.feed_name,
+                    ar.formed_year as year, 
                     COUNT(f.id) as feed_count
                 FROM 
                     feeds f
                 JOIN 
                     artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
                 WHERE 
-                    ar.formed_year = ?
+                    ar.formed_year IS NOT NULL AND ar.formed_year > 0
                 GROUP BY 
-                    entity_name, f.feed_name
+                    ar.formed_year
                 ORDER BY 
-                    feed_count DESC;
-            """, (year,))
-        else:  # "Álbumes"
-            # Get feeds for albums released in the specified year
+                    ar.formed_year;
+            """)
+            
+            artist_year_data = cursor.fetchall()
+            
+            # Query album release years data
             cursor.execute("""
                 SELECT 
-                    a.name as entity_name, 
-                    f.feed_name,
+                    SUBSTR(a.year, 1, 4) as year, 
                     COUNT(f.id) as feed_count
                 FROM 
                     feeds f
                 JOIN 
                     albums a ON f.entity_id = a.id AND f.entity_type = 'album'
                 WHERE 
-                    SUBSTR(a.year, 1, 4) = ?
+                    a.year IS NOT NULL AND a.year != ''
+                    AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
                 GROUP BY 
-                    entity_name, f.feed_name
+                    year
                 ORDER BY 
-                    feed_count DESC;
-            """, (year,))
-        
-        results = cursor.fetchall()
-        
-        # Create charts based on results
-        if results:
-            # Title for the section
-            title = QLabel(f"Feeds de {feed_type} del año {year}")
-            title.setStyleSheet("font-weight: bold; font-size: 16px;")
-            layout.addWidget(title)
+                    year;
+            """)
             
-            # Create splitter for entity and feed charts
+            album_year_data = cursor.fetchall()
+            
+            # Create a splitter for the two charts
             splitter = QSplitter(Qt.Orientation.Horizontal)
             
-            # Entity chart container
-            entity_container = QWidget()
-            entity_layout = QVBoxLayout(entity_container)
-            entity_title = QLabel(f"{feed_type} con más feeds")
-            entity_title.setStyleSheet("font-weight: bold;")
-            entity_layout.addWidget(entity_title)
+            # Create container for artist feeds chart
+            artist_container = QWidget()
+            artist_layout = QVBoxLayout(artist_container)
+            artist_title = QLabel("Feeds por Año de Formación de Artistas")
+            artist_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            artist_layout.addWidget(artist_title)
             
-            # Feed chart container
-            feed_container = QWidget()
-            feed_layout = QVBoxLayout(feed_container)
-            feed_title = QLabel("Distribución por feed")
-            feed_title.setStyleSheet("font-weight: bold;")
-            feed_layout.addWidget(feed_title)
+            # Create container for album feeds chart
+            album_container = QWidget()
+            album_layout = QVBoxLayout(album_container)
+            album_title = QLabel("Feeds por Año de Lanzamiento de Álbumes")
+            album_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            album_layout.addWidget(album_title)
             
-            # Aggregate data for charts
-            entity_data = {}
-            feed_data = {}
-            
-            for entity, feed_name, count in results:
-                # Aggregate for entity chart
-                if entity in entity_data:
-                    entity_data[entity] += count
-                else:
-                    entity_data[entity] = count
-                
-                # Aggregate for feed chart
-                if feed_name in feed_data:
-                    feed_data[feed_name] += count
-                else:
-                    feed_data[feed_name] = count
-            
-            # Convert to list of tuples for charts
-            entity_chart_data = sorted([(entity, count) for entity, count in entity_data.items()], key=lambda x: x[1], reverse=True)
-            feed_chart_data = sorted([(feed, count) for feed, count in feed_data.items()], key=lambda x: x[1], reverse=True)
-            
-            # Create and add entity chart
-            if entity_chart_data:
-                # Limit to top 15 for better visualization
-                chart_data = entity_chart_data[:15] if len(entity_chart_data) > 15 else entity_chart_data
-                entity_chart = ChartFactory.create_pie_chart(
-                    chart_data,
-                    f"{feed_type} con más feeds en {year}"
+            # Create and add charts
+            if artist_year_data:
+                artist_chart = ChartFactory.create_pie_chart(
+                    artist_year_data,
+                    "Feeds por Año de Formación"
                 )
-                if entity_chart:
-                    entity_layout.addWidget(entity_chart)
+                if artist_chart:
+                    artist_layout.addWidget(artist_chart)
             else:
-                no_data = QLabel(f"No hay datos de {feed_type.lower()} para el año {year}")
+                no_data = QLabel("No hay datos de feeds por año de formación")
                 no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 no_data.setStyleSheet("color: gray;")
-                entity_layout.addWidget(no_data)
-            
-            # Create and add feed chart
-            if feed_chart_data:
-                # Limit to top 15 for better visualization
-                chart_data = feed_chart_data[:15] if len(feed_chart_data) > 15 else feed_chart_data
-                feed_chart = ChartFactory.create_pie_chart(
-                    chart_data,
-                    f"Feeds para {feed_type.lower()} de {year}"
+                artist_layout.addWidget(no_data)
+                
+            if album_year_data:
+                album_chart = ChartFactory.create_pie_chart(
+                    album_year_data,
+                    "Feeds por Año de Lanzamiento"
                 )
-                if feed_chart:
-                    feed_layout.addWidget(feed_chart)
+                if album_chart:
+                    album_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel("No hay datos de feeds por año de lanzamiento")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                album_layout.addWidget(no_data)
+                
+            # Add containers to splitter
+            splitter.addWidget(artist_container)
+            splitter.addWidget(album_container)
+            
+            # Add splitter to main layout
+            layout.addWidget(splitter)
+            
+            # Fill the table with combined year data
+            if table_feeds:
+                # Combine the data from both sources
+                year_data = {}
+                
+                # Process artist data
+                for year, count in artist_year_data:
+                    if year not in year_data:
+                        year_data[year] = {"artist": 0, "album": 0}
+                    year_data[year]["artist"] = count
+                
+                # Process album data
+                for year, count in album_year_data:
+                    if year not in year_data:
+                        year_data[year] = {"artist": 0, "album": 0}
+                    year_data[year]["album"] = count
+                
+                # Fill the table
+                table_feeds.setRowCount(len(year_data) * 2)  # Two rows per year (artist and album)
+                row_index = 0
+                
+                for year, counts in sorted(year_data.items()):
+                    if counts["artist"] > 0:
+                        table_feeds.setItem(row_index, 0, QTableWidgetItem(str(year)))
+                        table_feeds.setItem(row_index, 1, QTableWidgetItem("Artistas"))
+                        table_feeds.setItem(row_index, 2, QTableWidgetItem(str(counts["artist"])))
+                        row_index += 1
+                    
+                    if counts["album"] > 0:
+                        table_feeds.setItem(row_index, 0, QTableWidgetItem(str(year)))
+                        table_feeds.setItem(row_index, 1, QTableWidgetItem("Álbumes"))
+                        table_feeds.setItem(row_index, 2, QTableWidgetItem(str(counts["album"])))
+                        row_index += 1
+                
+                # Adjust row count if needed
+                if row_index < table_feeds.rowCount():
+                    table_feeds.setRowCount(row_index)
+                
+                # Resize columns
+                table_feeds.resizeColumnsToContents()
+                
+                # Connect table selection
+                try:
+                    table_feeds.itemClicked.disconnect()
+                except:
+                    pass
+                table_feeds.itemClicked.connect(self.on_feed_year_selected)
+            
+            # Now load the decade data
+            self.load_feeds_decade_data()
+            
+        except Exception as e:
+            logging.error(f"Error loading feed time data: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error cargando datos de feeds por tiempo: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def load_feeds_decade_data(self):
+        """Loads decade-based feed statistics."""
+        if not self.conn:
+            return
+            
+        cursor = self.conn.cursor()
+        
+        # Define the containers - buscar dinámicamente
+        chart_container = self.find_widget_safely('chart_time_feeds_bott')
+        table_feeds_bott = self.find_widget_safely('table_time_feeds_bott')
+        
+        if not chart_container:
+            logging.error("chart_time_feeds_bott widget not found")
+            return
+        
+        # Clear any existing content
+        layout = self.ensure_widget_has_layout(chart_container)
+        self.clear_layout(layout)
+        
+        # Configure the table
+        if table_feeds_bott:
+            table_feeds_bott.setColumnCount(3)
+            table_feeds_bott.setHorizontalHeaderLabels(["Década", "Feed", "Publicaciones"])
+            table_feeds_bott.setRowCount(0)
+        
+        try:
+            # Query artist formation decades data
+            cursor.execute("""
+                SELECT 
+                    (formed_year / 10) * 10 as decade, 
+                    COUNT(f.id) as feed_count
+                FROM 
+                    feeds f
+                JOIN 
+                    artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
+                WHERE 
+                    ar.formed_year IS NOT NULL AND ar.formed_year > 0
+                GROUP BY 
+                    decade
+                ORDER BY 
+                    decade;
+            """)
+            
+            artist_decade_data = cursor.fetchall()
+            
+            # Query album release decades data
+            cursor.execute("""
+                SELECT 
+                    (CAST(SUBSTR(a.year, 1, 4) AS INTEGER) / 10) * 10 as decade, 
+                    COUNT(f.id) as feed_count
+                FROM 
+                    feeds f
+                JOIN 
+                    albums a ON f.entity_id = a.id AND f.entity_type = 'album'
+                WHERE 
+                    a.year IS NOT NULL AND a.year != ''
+                    AND SUBSTR(a.year, 1, 4) GLOB '[0-9][0-9][0-9][0-9]'
+                GROUP BY 
+                    decade
+                ORDER BY 
+                    decade;
+            """)
+            
+            album_decade_data = cursor.fetchall()
+            
+            # Create a splitter for the two charts
+            splitter = QSplitter(Qt.Orientation.Horizontal)
+            
+            # Create container for artist feeds chart
+            artist_container = QWidget()
+            artist_layout = QVBoxLayout(artist_container)
+            artist_title = QLabel("Feeds por Década de Formación de Artistas")
+            artist_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            artist_layout.addWidget(artist_title)
+            
+            # Create container for album feeds chart
+            album_container = QWidget()
+            album_layout = QVBoxLayout(album_container)
+            album_title = QLabel("Feeds por Década de Lanzamiento de Álbumes")
+            album_title.setStyleSheet("font-weight: bold; font-size: 14px;")
+            album_layout.addWidget(album_title)
+            
+            # Prepare data for charts
+            artist_chart_data = [(f"{decade}s", count) for decade, count in artist_decade_data]
+            album_chart_data = [(f"{decade}s", count) for decade, count in album_decade_data]
+            
+            # Create and add charts
+            if artist_chart_data:
+                artist_chart = ChartFactory.create_pie_chart(
+                    artist_chart_data,
+                    "Feeds por Década de Formación"
+                )
+                if artist_chart:
+                    artist_layout.addWidget(artist_chart)
+            else:
+                no_data = QLabel("No hay datos de feeds por década de formación")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                artist_layout.addWidget(no_data)
+                
+            if album_chart_data:
+                album_chart = ChartFactory.create_pie_chart(
+                    album_chart_data,
+                    "Feeds por Década de Lanzamiento"
+                )
+                if album_chart:
+                    album_layout.addWidget(album_chart)
+            else:
+                no_data = QLabel("No hay datos de feeds por década de lanzamiento")
+                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                no_data.setStyleSheet("color: gray;")
+                album_layout.addWidget(no_data)
+                
+            # Add containers to splitter
+            splitter.addWidget(artist_container)
+            splitter.addWidget(album_container)
+            
+            # Add splitter to main layout
+            layout.addWidget(splitter)
+            
+            # Fill the table with combined decade data
+            if table_feeds_bott:
+                # Combine the data from both sources
+                decade_data = {}
+                
+                # Process artist data
+                for decade, count in artist_decade_data:
+                    decade_str = f"{decade}s"
+                    if decade_str not in decade_data:
+                        decade_data[decade_str] = {"artist": 0, "album": 0}
+                    decade_data[decade_str]["artist"] = count
+                
+                # Process album data
+                for decade, count in album_decade_data:
+                    decade_str = f"{decade}s"
+                    if decade_str not in decade_data:
+                        decade_data[decade_str] = {"artist": 0, "album": 0}
+                    decade_data[decade_str]["album"] = count
+                
+                # Fill the table
+                table_feeds_bott.setRowCount(len(decade_data) * 2)  # Two rows per decade (artist and album)
+                row_index = 0
+                
+                for decade, counts in sorted(decade_data.items()):
+                    if counts["artist"] > 0:
+                        table_feeds_bott.setItem(row_index, 0, QTableWidgetItem(decade))
+                        table_feeds_bott.setItem(row_index, 1, QTableWidgetItem("Artistas"))
+                        table_feeds_bott.setItem(row_index, 2, QTableWidgetItem(str(counts["artist"])))
+                        row_index += 1
+                    
+                    if counts["album"] > 0:
+                        table_feeds_bott.setItem(row_index, 0, QTableWidgetItem(decade))
+                        table_feeds_bott.setItem(row_index, 1, QTableWidgetItem("Álbumes"))
+                        table_feeds_bott.setItem(row_index, 2, QTableWidgetItem(str(counts["album"])))
+                        row_index += 1
+                
+                # Adjust row count if needed
+                if row_index < table_feeds_bott.rowCount():
+                    table_feeds_bott.setRowCount(row_index)
+                
+                # Resize columns
+                table_feeds_bott.resizeColumnsToContents()
+                
+                # Connect table selection
+                try:
+                    table_feeds_bott.itemClicked.disconnect()
+                except:
+                    pass
+                table_feeds_bott.itemClicked.connect(self.on_feed_decade_selected)
+                
+        except Exception as e:
+            logging.error(f"Error loading feed decade data: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error cargando datos de feeds por década: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def on_feed_year_selected(self, item):
+        """Handle selection of a year in the feeds table."""
+        row = item.row()
+        if self.table_time_feeds:
+            year_item = self.table_time_feeds.item(row, 0)
+            feed_type_item = self.table_time_feeds.item(row, 1)
+            
+            if year_item and feed_type_item:
+                try:
+                    year = year_item.text()
+                    feed_type = feed_type_item.text()
+                    self.show_feeds_by_year(year, feed_type)
+                except Exception as e:
+                    logging.error(f"Error handling feed year selection: {e}")
+                    import traceback
+                    logging.error(traceback.format_exc())
+
+    def on_feed_decade_selected(self, item):
+        """Handle selection of a decade in the feeds decade table."""
+        row = item.row()
+        if self.table_time_feeds_bott:
+            decade_item = self.table_time_feeds_bott.item(row, 0)
+            feed_type_item = self.table_time_feeds_bott.item(row, 1)
+            
+            if decade_item and feed_type_item:
+                try:
+                    decade = decade_item.text().replace('s', '')  # Remove 's' from '1990s'
+                    feed_type = feed_type_item.text()
+                    self.show_feeds_by_decade(decade, feed_type)
+                except Exception as e:
+                    logging.error(f"Error handling feed decade selection: {e}")
+                    import traceback
+                    logging.error(traceback.format_exc())
+
+    def show_feeds_by_year(self, year, feed_type):
+        """Show feeds detail for a specific year."""
+        if not self.conn:
+            return
+            
+        # Get the chart container for displaying year details
+        chart_container = self.chart_time_feeds
+        
+        # Ensure it has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear the container
+        self.clear_layout(layout)
+        
+        cursor = self.conn.cursor()
+        try:
+            # Different query based on feed type
+            if feed_type == "Artistas":
+                # Get feeds for artists formed in the specified year
+                cursor.execute("""
+                    SELECT 
+                        ar.name as entity_name, 
+                        f.feed_name,
+                        COUNT(f.id) as feed_count
+                    FROM 
+                        feeds f
+                    JOIN 
+                        artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
+                    WHERE 
+                        ar.formed_year = ?
+                    GROUP BY 
+                        entity_name, f.feed_name
+                    ORDER BY 
+                        feed_count DESC;
+                """, (year,))
+            else:  # "Álbumes"
+                # Get feeds for albums released in the specified year
+                cursor.execute("""
+                    SELECT 
+                        a.name as entity_name, 
+                        f.feed_name,
+                        COUNT(f.id) as feed_count
+                    FROM 
+                        feeds f
+                    JOIN 
+                        albums a ON f.entity_id = a.id AND f.entity_type = 'album'
+                    WHERE 
+                        SUBSTR(a.year, 1, 4) = ?
+                    GROUP BY 
+                        entity_name, f.feed_name
+                    ORDER BY 
+                        feed_count DESC;
+                """, (year,))
+            
+            results = cursor.fetchall()
+            
+            # Create charts based on results
+            if results:
+                # Title for the section
+                title = QLabel(f"Feeds de {feed_type} del año {year}")
+                title.setStyleSheet("font-weight: bold; font-size: 16px;")
+                layout.addWidget(title)
+                
+                # Create splitter for entity and feed charts
+                splitter = QSplitter(Qt.Orientation.Horizontal)
+                
+                # Entity chart container
+                entity_container = QWidget()
+                entity_layout = QVBoxLayout(entity_container)
+                entity_title = QLabel(f"{feed_type} con más feeds")
+                entity_title.setStyleSheet("font-weight: bold;")
+                entity_layout.addWidget(entity_title)
+                
+                # Feed chart container
+                feed_container = QWidget()
+                feed_layout = QVBoxLayout(feed_container)
+                feed_title = QLabel("Distribución por feed")
+                feed_title.setStyleSheet("font-weight: bold;")
+                feed_layout.addWidget(feed_title)
+                
+                # Aggregate data for charts
+                entity_data = {}
+                feed_data = {}
+                
+                for entity, feed_name, count in results:
+                    # Aggregate for entity chart
+                    if entity in entity_data:
+                        entity_data[entity] += count
+                    else:
+                        entity_data[entity] = count
+                    
+                    # Aggregate for feed chart
+                    if feed_name in feed_data:
+                        feed_data[feed_name] += count
+                    else:
+                        feed_data[feed_name] = count
+                
+                # Convert to list of tuples for charts
+                entity_chart_data = sorted([(entity, count) for entity, count in entity_data.items()], key=lambda x: x[1], reverse=True)
+                feed_chart_data = sorted([(feed, count) for feed, count in feed_data.items()], key=lambda x: x[1], reverse=True)
+                
+                # Create and add entity chart
+                if entity_chart_data:
+                    # Limit to top 15 for better visualization
+                    chart_data = entity_chart_data[:15] if len(entity_chart_data) > 15 else entity_chart_data
+                    entity_chart = ChartFactory.create_pie_chart(
+                        chart_data,
+                        f"{feed_type} con más feeds en {year}"
+                    )
+                    if entity_chart:
+                        entity_layout.addWidget(entity_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de {feed_type.lower()} para el año {year}")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    entity_layout.addWidget(no_data)
+                
+                # Create and add feed chart
+                if feed_chart_data:
+                    # Limit to top 15 for better visualization
+                    chart_data = feed_chart_data[:15] if len(feed_chart_data) > 15 else feed_chart_data
+                    feed_chart = ChartFactory.create_pie_chart(
+                        chart_data,
+                        f"Feeds para {feed_type.lower()} de {year}"
+                    )
+                    if feed_chart:
+                        feed_layout.addWidget(feed_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} del año {year}")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    feed_layout.addWidget(no_data)
+                
+                # Add containers to splitter
+                splitter.addWidget(entity_container)
+                splitter.addWidget(feed_container)
+                
+                # Add splitter to main layout
+                layout.addWidget(splitter)
+                
             else:
                 no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} del año {year}")
                 no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                no_data.setStyleSheet("color: gray;")
-                feed_layout.addWidget(no_data)
-            
-            # Add containers to splitter
-            splitter.addWidget(entity_container)
-            splitter.addWidget(feed_container)
-            
-            # Add splitter to main layout
-            layout.addWidget(splitter)
-            
-        else:
-            no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} del año {year}")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray; font-size: 14px;")
-            layout.addWidget(no_data)
-            
-    except Exception as e:
-        logging.error(f"Error showing feeds by year: {e}")
-        import traceback
-        logging.error(traceback.format_exc())
-        
-        error_label = QLabel(f"Error: {str(e)}")
-        error_label.setStyleSheet("color: red;")
-        layout.addWidget(error_label)
-
-def show_feeds_by_decade(self, decade, feed_type):
-    """Show feeds detail for a specific decade."""
-    if not self.conn:
-        return
-        
-    # Get the chart container for displaying decade details
-    chart_container = self.chart_time_feeds_bott
-    
-    # Ensure it has a layout
-    layout = self.ensure_widget_has_layout(chart_container)
-    
-    # Clear the container
-    self.clear_layout(layout)
-    
-    cursor = self.conn.cursor()
-    try:
-        # Convert decade to integer for calculations
-        decade_int = int(decade)
-        decade_start = decade_int
-        decade_end = decade_int + 9
-        
-        # Different query based on feed type
-        if feed_type == "Artistas":
-            # Get feeds for artists formed in the specified decade
-            cursor.execute("""
-                SELECT 
-                    ar.name as entity_name, 
-                    f.feed_name,
-                    COUNT(f.id) as feed_count
-                FROM 
-                    feeds f
-                JOIN 
-                    artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
-                WHERE 
-                    ar.formed_year >= ? AND ar.formed_year <= ?
-                GROUP BY 
-                    entity_name, f.feed_name
-                ORDER BY 
-                    feed_count DESC;
-            """, (decade_start, decade_end))
-        else:  # "Álbumes"
-            # Get feeds for albums released in the specified decade
-            cursor.execute("""
-                SELECT 
-                    a.name as entity_name, 
-                    f.feed_name,
-                    COUNT(f.id) as feed_count
-                FROM 
-                    feeds f
-                JOIN 
-                    albums a ON f.entity_id = a.id AND f.entity_type = 'album'
-                WHERE 
-                    CAST(SUBSTR(a.year, 1, 4) AS INTEGER) >= ? 
-                    AND CAST(SUBSTR(a.year, 1, 4) AS INTEGER) <= ?
-                GROUP BY 
-                    entity_name, f.feed_name
-                ORDER BY 
-                    feed_count DESC;
-            """, (decade_start, decade_end))
-        
-        results = cursor.fetchall()
-        
-        # Create charts based on results
-        if results:
-            # Title for the section
-            title = QLabel(f"Feeds de {feed_type} de la década {decade}s")
-            title.setStyleSheet("font-weight: bold; font-size: 16px;")
-            layout.addWidget(title)
-            
-            # Create splitter for entity and feed charts
-            splitter = QSplitter(Qt.Orientation.Horizontal)
-            
-            # Entity chart container
-            entity_container = QWidget()
-            entity_layout = QVBoxLayout(entity_container)
-            entity_title = QLabel(f"{feed_type} con más feeds")
-            entity_title.setStyleSheet("font-weight: bold;")
-            entity_layout.addWidget(entity_title)
-            
-            # Feed chart container
-            feed_container = QWidget()
-            feed_layout = QVBoxLayout(feed_container)
-            feed_title = QLabel("Distribución por feed")
-            feed_title.setStyleSheet("font-weight: bold;")
-            feed_layout.addWidget(feed_title)
-            
-            # Aggregate data for charts
-            entity_data = {}
-            feed_data = {}
-            
-            for entity, feed_name, count in results:
-                # Aggregate for entity chart
-                if entity in entity_data:
-                    entity_data[entity] += count
-                else:
-                    entity_data[entity] = count
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
                 
-                # Aggregate for feed chart
-                if feed_name in feed_data:
-                    feed_data[feed_name] += count
+        except Exception as e:
+            logging.error(f"Error showing feeds by year: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
+            
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
+
+    def show_feeds_by_decade(self, decade, feed_type):
+        """Show feeds detail for a specific decade."""
+        if not self.conn:
+            return
+            
+        # Get the chart container for displaying decade details
+        chart_container = self.chart_time_feeds_bott
+        
+        # Ensure it has a layout
+        layout = self.ensure_widget_has_layout(chart_container)
+        
+        # Clear the container
+        self.clear_layout(layout)
+        
+        cursor = self.conn.cursor()
+        try:
+            # Convert decade to integer for calculations
+            decade_int = int(decade)
+            decade_start = decade_int
+            decade_end = decade_int + 9
+            
+            # Different query based on feed type
+            if feed_type == "Artistas":
+                # Get feeds for artists formed in the specified decade
+                cursor.execute("""
+                    SELECT 
+                        ar.name as entity_name, 
+                        f.feed_name,
+                        COUNT(f.id) as feed_count
+                    FROM 
+                        feeds f
+                    JOIN 
+                        artists ar ON f.entity_id = ar.id AND f.entity_type = 'artist'
+                    WHERE 
+                        ar.formed_year >= ? AND ar.formed_year <= ?
+                    GROUP BY 
+                        entity_name, f.feed_name
+                    ORDER BY 
+                        feed_count DESC;
+                """, (decade_start, decade_end))
+            else:  # "Álbumes"
+                # Get feeds for albums released in the specified decade
+                cursor.execute("""
+                    SELECT 
+                        a.name as entity_name, 
+                        f.feed_name,
+                        COUNT(f.id) as feed_count
+                    FROM 
+                        feeds f
+                    JOIN 
+                        albums a ON f.entity_id = a.id AND f.entity_type = 'album'
+                    WHERE 
+                        CAST(SUBSTR(a.year, 1, 4) AS INTEGER) >= ? 
+                        AND CAST(SUBSTR(a.year, 1, 4) AS INTEGER) <= ?
+                    GROUP BY 
+                        entity_name, f.feed_name
+                    ORDER BY 
+                        feed_count DESC;
+                """, (decade_start, decade_end))
+            
+            results = cursor.fetchall()
+            
+            # Create charts based on results
+            if results:
+                # Title for the section
+                title = QLabel(f"Feeds de {feed_type} de la década {decade}s")
+                title.setStyleSheet("font-weight: bold; font-size: 16px;")
+                layout.addWidget(title)
+                
+                # Create splitter for entity and feed charts
+                splitter = QSplitter(Qt.Orientation.Horizontal)
+                
+                # Entity chart container
+                entity_container = QWidget()
+                entity_layout = QVBoxLayout(entity_container)
+                entity_title = QLabel(f"{feed_type} con más feeds")
+                entity_title.setStyleSheet("font-weight: bold;")
+                entity_layout.addWidget(entity_title)
+                
+                # Feed chart container
+                feed_container = QWidget()
+                feed_layout = QVBoxLayout(feed_container)
+                feed_title = QLabel("Distribución por feed")
+                feed_title.setStyleSheet("font-weight: bold;")
+                feed_layout.addWidget(feed_title)
+                
+                # Aggregate data for charts
+                entity_data = {}
+                feed_data = {}
+                
+                for entity, feed_name, count in results:
+                    # Aggregate for entity chart
+                    if entity in entity_data:
+                        entity_data[entity] += count
+                    else:
+                        entity_data[entity] = count
+                    
+                    # Aggregate for feed chart
+                    if feed_name in feed_data:
+                        feed_data[feed_name] += count
+                    else:
+                        feed_data[feed_name] = count
+                
+                # Convert to list of tuples for charts
+                entity_chart_data = sorted([(entity, count) for entity, count in entity_data.items()], key=lambda x: x[1], reverse=True)
+                feed_chart_data = sorted([(feed, count) for feed, count in feed_data.items()], key=lambda x: x[1], reverse=True)
+                
+                # Create and add entity chart
+                if entity_chart_data:
+                    # Limit to top 15 for better visualization
+                    chart_data = entity_chart_data[:15] if len(entity_chart_data) > 15 else entity_chart_data
+                    entity_chart = ChartFactory.create_pie_chart(
+                        chart_data,
+                        f"{feed_type} con más feeds en {decade}s"
+                    )
+                    if entity_chart:
+                        entity_layout.addWidget(entity_chart)
                 else:
-                    feed_data[feed_name] = count
-            
-            # Convert to list of tuples for charts
-            entity_chart_data = sorted([(entity, count) for entity, count in entity_data.items()], key=lambda x: x[1], reverse=True)
-            feed_chart_data = sorted([(feed, count) for feed, count in feed_data.items()], key=lambda x: x[1], reverse=True)
-            
-            # Create and add entity chart
-            if entity_chart_data:
-                # Limit to top 15 for better visualization
-                chart_data = entity_chart_data[:15] if len(entity_chart_data) > 15 else entity_chart_data
-                entity_chart = ChartFactory.create_pie_chart(
-                    chart_data,
-                    f"{feed_type} con más feeds en {decade}s"
-                )
-                if entity_chart:
-                    entity_layout.addWidget(entity_chart)
-            else:
-                no_data = QLabel(f"No hay datos de {feed_type.lower()} para la década {decade}s")
-                no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                no_data.setStyleSheet("color: gray;")
-                entity_layout.addWidget(no_data)
-            
-            # Create and add feed chart
-            if feed_chart_data:
-                # Limit to top 15 for better visualization
-                chart_data = feed_chart_data[:15] if len(feed_chart_data) > 15 else feed_chart_data
-                feed_chart = ChartFactory.create_pie_chart(
-                    chart_data,
-                    f"Feeds para {feed_type.lower()} de {decade}s"
-                )
-                if feed_chart:
-                    feed_layout.addWidget(feed_chart)
+                    no_data = QLabel(f"No hay datos de {feed_type.lower()} para la década {decade}s")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    entity_layout.addWidget(no_data)
+                
+                # Create and add feed chart
+                if feed_chart_data:
+                    # Limit to top 15 for better visualization
+                    chart_data = feed_chart_data[:15] if len(feed_chart_data) > 15 else feed_chart_data
+                    feed_chart = ChartFactory.create_pie_chart(
+                        chart_data,
+                        f"Feeds para {feed_type.lower()} de {decade}s"
+                    )
+                    if feed_chart:
+                        feed_layout.addWidget(feed_chart)
+                else:
+                    no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} de la década {decade}s")
+                    no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                    no_data.setStyleSheet("color: gray;")
+                    feed_layout.addWidget(no_data)
+                
+                # Add containers to splitter
+                splitter.addWidget(entity_container)
+                splitter.addWidget(feed_container)
+                
+                # Add splitter to main layout
+                layout.addWidget(splitter)
+                
             else:
                 no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} de la década {decade}s")
                 no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                no_data.setStyleSheet("color: gray;")
-                feed_layout.addWidget(no_data)
+                no_data.setStyleSheet("color: gray; font-size: 14px;")
+                layout.addWidget(no_data)
+                
+        except Exception as e:
+            logging.error(f"Error showing feeds by decade: {e}")
+            import traceback
+            logging.error(traceback.format_exc())
             
-            # Add containers to splitter
-            splitter.addWidget(entity_container)
-            splitter.addWidget(feed_container)
-            
-            # Add splitter to main layout
-            layout.addWidget(splitter)
-            
-        else:
-            no_data = QLabel(f"No hay datos de feeds para {feed_type.lower()} de la década {decade}s")
-            no_data.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            no_data.setStyleSheet("color: gray; font-size: 14px;")
-            layout.addWidget(no_data)
-            
-    except Exception as e:
-        logging.error(f"Error showing feeds by decade: {e}")
-        import traceback
-        logging.error(traceback.format_exc())
-        
-        error_label = QLabel(f"Error: {str(e)}")
-        error_label.setStyleSheet("color: red;")
-        layout.addWidget(error_label)
+            error_label = QLabel(f"Error: {str(e)}")
+            error_label.setStyleSheet("color: red;")
+            layout.addWidget(error_label)
 
 
     def load_genre_time_data(self):
@@ -1847,9 +2263,13 @@ def show_feeds_by_decade(self, decade, feed_type):
             
         cursor = self.conn.cursor()
         
-        # Create containers for the data
-        year_chart_container = self.chart_time_genres
-        table_genres = self.table_time_genres
+        # Create containers for the data - buscar dinámicamente
+        year_chart_container = self.find_widget_safely('chart_time_genres')
+        table_genres = self.find_widget_safely('table_time_genres')
+        
+        if not year_chart_container:
+            logging.error("chart_time_genres widget not found")
+            return
         
         # Clear any existing content
         layout = self.ensure_widget_has_layout(year_chart_container)
@@ -2445,3 +2865,166 @@ def show_feeds_by_decade(self, decade, feed_type):
             error_label = QLabel(f"Error: {str(e)}")
             error_label.setStyleSheet("color: red;")
             layout.addWidget(error_label)
+
+
+    def create_table_chart_splitter(self, table_data, chart_data, chart_type, title, 
+                                table_headers, x_label="", y_label="", orientation=Qt.Orientation.Horizontal):
+        """
+        Utility method to create a splitter with table and chart.
+        
+        Args:
+            table_data: Data for the table [(col1, col2), ...]
+            chart_data: Data for the chart [(label, value), ...]
+            chart_type: 'pie', 'bar', or 'line'
+            title: Title for both table and chart
+            table_headers: Headers for the table columns
+            x_label: X-axis label for chart
+            y_label: Y-axis label for chart
+            orientation: Splitter orientation
+        
+        Returns:
+            QSplitter: Configured splitter with table and chart
+        """
+        splitter = QSplitter(orientation)
+        
+        # Table widget
+        table_widget = QWidget()
+        table_layout = QVBoxLayout(table_widget)
+        table_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Add title for table
+        table_title = QLabel(f"Tabla: {title}")
+        table_title.setStyleSheet("font-size: 12px; font-weight: bold;")
+        table_layout.addWidget(table_title)
+        
+        # Create table
+        table = QTableWidget()
+        table.setColumnCount(len(table_headers))
+        table.setHorizontalHeaderLabels(table_headers)
+        table.setRowCount(len(table_data))
+        
+        for i, row_data in enumerate(table_data):
+            for j, cell_data in enumerate(row_data):
+                table.setItem(i, j, QTableWidgetItem(str(cell_data)))
+        
+        table.resizeColumnsToContents()
+        table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
+        table_layout.addWidget(table)
+        
+        # Chart widget
+        chart_widget = QWidget()
+        chart_layout = QVBoxLayout(chart_widget)
+        chart_layout.setContentsMargins(0, 0, 0, 0)
+        
+        # Add title for chart
+        chart_title = QLabel(f"Gráfico: {title}")
+        chart_title.setStyleSheet("font-size: 12px; font-weight: bold;")
+        chart_layout.addWidget(chart_title)
+        
+        # Create chart based on type
+        if chart_type == 'pie':
+            chart = ChartFactory.create_pie_chart(chart_data, title)
+        elif chart_type == 'bar':
+            chart = ChartFactory.create_bar_chart(chart_data, title, x_label, y_label)
+        elif chart_type == 'line':
+            chart = ChartFactory.create_line_chart(chart_data, title, x_label, y_label)
+        else:
+            chart = None
+        
+        if chart:
+            chart_layout.addWidget(chart)
+        else:
+            error_label = QLabel("No se pudo crear el gráfico")
+            error_label.setStyleSheet("color: red;")
+            chart_layout.addWidget(error_label)
+        
+        # Add widgets to splitter
+        splitter.addWidget(table_widget)
+        splitter.addWidget(chart_widget)
+        
+        # Set initial proportions
+        if orientation == Qt.Orientation.Horizontal:
+            splitter.setSizes([300, 500])
+        else:
+            splitter.setSizes([200, 400])
+        
+        # Configure splitter properties
+        splitter.setChildrenCollapsible(True)
+        splitter.setStretchFactor(0, 1)
+        splitter.setStretchFactor(1, 2)  # Chart gets more space
+        
+        return splitter
+
+    def safe_ensure_widget_layout(self, widget, layout_type=QVBoxLayout):
+        """
+        Versión segura de ensure_widget_has_layout que verifica si el widget es válido.
+        """
+        try:
+            # Verificar si el widget sigue siendo válido
+            if widget is None:
+                logging.error("Widget is None")
+                return None
+                
+            # Intentar acceder a una propiedad del widget para verificar que no ha sido eliminado
+            try:
+                _ = widget.objectName()
+            except RuntimeError:
+                logging.error("Widget has been deleted, cannot ensure layout")
+                return None
+                
+            # Si el widget es válido, proceder normalmente
+            layout = widget.layout()
+            if layout is None:
+                layout = layout_type()
+                widget.setLayout(layout)
+                logging.info(f"Created new layout for {widget.objectName()}")
+            
+            return layout
+            
+        except Exception as e:
+            logging.error(f"Error ensuring widget layout: {e}")
+            return None
+
+    def find_widget_safely(self, widget_name):
+        """
+        Encuentra un widget de forma segura usando findChild recursivamente.
+        Esto evita referencias obsoletas cuando los widgets son recreados.
+        """
+        try:
+            # Primero intentar buscar desde el módulo principal
+            widget = self.stats_module.findChild(QWidget, widget_name)
+            
+            if not widget:
+                # Si no se encuentra, buscar desde el stackedWidget_time específicamente
+                if hasattr(self.stats_module, 'stackedWidget_time'):
+                    stacked_widget = self.stats_module.stackedWidget_time
+                    widget = stacked_widget.findChild(QWidget, widget_name)
+            
+            if not widget:
+                # Si aún no se encuentra, buscar en todas las páginas del stacked widget
+                if hasattr(self.stats_module, 'stackedWidget_time'):
+                    stacked_widget = self.stats_module.stackedWidget_time
+                    for i in range(stacked_widget.count()):
+                        page = stacked_widget.widget(i)
+                        if page:
+                            widget = page.findChild(QWidget, widget_name)
+                            if widget:
+                                break
+            
+            if widget:
+                # Verificar que el widget es válido
+                try:
+                    _ = widget.objectName()
+                    logging.debug(f"Found widget {widget_name}")
+                    return widget
+                except RuntimeError:
+                    logging.error(f"Widget {widget_name} found but invalid")
+                    return None
+            else:
+                logging.error(f"Widget {widget_name} not found")
+                return None
+                
+        except Exception as e:
+            logging.error(f"Error finding widget {widget_name}: {e}")
+            return None

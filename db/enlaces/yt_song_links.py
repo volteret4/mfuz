@@ -31,13 +31,12 @@ class DiscogsLinksModule:
     y guardarlos en la base de datos.
     """
     
+
     def __init__(self, config=None):
         # Inicialización básica
         self.config = config or {}
-        self.logger = logging.getLogger(__name__)
-        self.setup_logging()
         
-        # Configuración
+        # Configuración ANTES de setup_logging
         self.db_path = self.config.get('db_path')
         self.discogs_token = self.config.get('discogs_token')
         self.lastfm_api_key = self.config.get('lastfm_api_key')
@@ -56,6 +55,10 @@ class DiscogsLinksModule:
         # Tipos de entidades para procesar
         self.entity_types = self.config.get('entity_types', ['songs', 'albums', 'artists'])
         
+        # Ahora configurar logging DESPUÉS de tener db_path
+        self.logger = logging.getLogger(__name__)
+        self.setup_logging()
+        
         # Verificar dependencias
         if self.use_lastfm and not HAS_BS4:
             self.logger.warning("BeautifulSoup no está instalado. La funcionalidad de Last.fm será limitada.")
@@ -66,7 +69,7 @@ class DiscogsLinksModule:
             
         # Inicializar caché
         self.cache = self.load_cache()
-        
+
     def setup_logging(self):
         """Configurar el logging"""
         try:
@@ -91,6 +94,7 @@ class DiscogsLinksModule:
             print(f"Error al configurar logging: {e}")  # Fallback si no podemos configurar el logger
             # Intentar configurar un logger básico
             logging.basicConfig(level=logging.INFO)
+            self.logger = logging.getLogger(__name__)
     
     def load_cache(self):
         """Cargar caché de búsquedas anteriores"""
@@ -282,12 +286,20 @@ class DiscogsLinksModule:
         """Buscar enlaces usando múltiples fuentes"""
         result = {}
         
+        # Crear clave de caché
+        cache_key = f"links|{artist}|{title}|{album or ''}"
+        
+        # Si force_update es False y tenemos resultado en caché, usarlo
+        if not self.force_update and cache_key in self.cache:
+            cached_result = self.cache[cache_key]
+            if cached_result:
+                return cached_result
+        
         # Buscar en Discogs primero si está habilitado
         if self.use_discogs and self.discogs_token:
             try:
                 discogs_result = self.search_discogs_release(title, artist, album)
                 if discogs_result:
-                    # Solo guardar youtube_url ya que discogs_url no existe en song_links
                     if 'youtube_url' in discogs_result:
                         result['youtube_url'] = discogs_result['youtube_url']
             except Exception as e:
@@ -298,13 +310,15 @@ class DiscogsLinksModule:
             try:
                 lastfm_result = self.search_lastfm_track(title, artist)
                 if lastfm_result:
-                    # Actualizar solo campos que no tenemos ya
                     for key, value in lastfm_result.items():
                         if key in ['youtube_url', 'lastfm_url'] and (key not in result or not result[key]):
                             result[key] = value
             except Exception as e:
                 self.logger.error(f"Error al buscar en Last.fm: {e}")
-                
+        
+        # Guardar resultado en caché
+        self.cache[cache_key] = result if result else None
+        
         return result if result else None
     
     def get_songs_to_process(self):
@@ -346,13 +360,28 @@ class DiscogsLinksModule:
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
+            # Consulta base
             query = """
-                SELECT a.id, a.name as album_name, ar.name as artist_name, a.discogs_url, a.year
+                SELECT DISTINCT a.id, a.name as album_name, ar.name as artist_name, a.discogs_url, a.year
                 FROM albums a
                 JOIN artists ar ON a.artist_id = ar.id
+                JOIN songs s ON s.album = a.name AND s.artist = ar.name
                 WHERE a.discogs_url IS NOT NULL AND a.discogs_url != ''
-                LIMIT ?
             """
+            
+            # Si missing_only está activado, filtrar álbumes que tengan canciones sin enlaces de YouTube
+            if self.missing_only:
+                query += """
+                    AND EXISTS (
+                        SELECT 1 FROM songs s2 
+                        LEFT JOIN song_links sl ON s2.id = sl.song_id
+                        WHERE s2.album = a.name 
+                        AND s2.artist = ar.name 
+                        AND (sl.youtube_url IS NULL OR sl.youtube_url = '')
+                    )
+                """
+            
+            query += " LIMIT ?"
             
             cursor.execute(query, (self.batch_size,))
             albums = [dict(row) for row in cursor.fetchall()]
@@ -364,7 +393,7 @@ class DiscogsLinksModule:
             return []
             
     def get_songs_from_album(self, album_id):
-        """Obtener todas las canciones de un álbum"""
+        """Obtener canciones de un álbum que necesitan enlaces de YouTube"""
         try:
             conn = sqlite3.connect(self.db_path)
             conn.row_factory = sqlite3.Row
@@ -381,13 +410,19 @@ class DiscogsLinksModule:
                 
             album_name = album_row['name']
             
-            # Ahora buscamos canciones con ese nombre de álbum
+            # Consulta base para obtener canciones
             query = """
                 SELECT s.id, s.title, s.artist, s.track_number
                 FROM songs s
+                LEFT JOIN song_links sl ON s.id = sl.song_id
                 WHERE s.album = ?
-                ORDER BY s.track_number, s.title
             """
+            
+            # Si missing_only está activado, solo obtener canciones sin enlaces de YouTube
+            if self.missing_only:
+                query += " AND (sl.youtube_url IS NULL OR sl.youtube_url = '')"
+            
+            query += " ORDER BY s.track_number, s.title"
             
             cursor.execute(query, (album_name,))
             songs = [dict(row) for row in cursor.fetchall()]
@@ -397,6 +432,7 @@ class DiscogsLinksModule:
         except Exception as e:
             self.logger.error(f"Error al obtener canciones del álbum {album_id}: {e}")
             return []
+
             
     def get_release_id_from_url(self, discogs_url):
         """Extrae el ID de release de una URL de Discogs"""
@@ -441,50 +477,138 @@ class DiscogsLinksModule:
             return response
             
         return None
+  
+
+    def normalize_title(self, title):
+        """Normalizar título para comparación"""
+        if not title:
+            return ""
         
+        # Convertir a minúsculas
+        title = title.lower()
+        
+        # Remover caracteres especiales y números de track
+        title = re.sub(r'^[\d\.\-\s]+', '', title)  # Remover números al inicio
+        title = re.sub(r'[^\w\s]', ' ', title)      # Remover puntuación
+        title = re.sub(r'\s+', ' ', title)          # Normalizar espacios
+        title = title.strip()
+        
+        # Remover palabras comunes que pueden confundir
+        common_words = ['official', 'video', 'audio', 'hd', 'hq', 'lyrics', 'live', 'version']
+        words = title.split()
+        filtered_words = [w for w in words if w not in common_words]
+        
+        return ' '.join(filtered_words)
+
+    def calculate_similarity(self, str1, str2):
+        """Calcular similitud entre dos strings usando múltiples métodos"""
+        if not str1 or not str2:
+            return 0.0
+        
+        str1_norm = self.normalize_title(str1)
+        str2_norm = self.normalize_title(str2)
+        
+        # Método 1: Coincidencia exacta después de normalización
+        if str1_norm == str2_norm:
+            return 1.0
+        
+        # Método 2: Una cadena contiene completamente a la otra
+        if str1_norm in str2_norm or str2_norm in str1_norm:
+            shorter = min(len(str1_norm), len(str2_norm))
+            longer = max(len(str1_norm), len(str2_norm))
+            return shorter / longer if longer > 0 else 0.0
+        
+        # Método 3: Coincidencia de palabras
+        words1 = set(str1_norm.split())
+        words2 = set(str2_norm.split())
+        
+        if not words1 or not words2:
+            return 0.0
+        
+        intersection = words1.intersection(words2)
+        union = words1.union(words2)
+        
+        # Jaccard similarity
+        jaccard = len(intersection) / len(union) if union else 0.0
+        
+        # Bonus si las primeras palabras coinciden
+        first_word_bonus = 0.2 if (words1 and words2 and 
+                                list(words1)[0] == list(words2)[0]) else 0.0
+        
+        return min(jaccard + first_word_bonus, 1.0)
+
     def match_songs_to_videos(self, songs, videos):
         """Emparejar canciones con videos basándose en el título"""
         song_video_mapping = {}
         
+        self.logger.info(f"  Intentando emparejar {len(songs)} canciones con {len(videos)} videos")
+        
+        # Debug: mostrar algunos títulos
+        if songs:
+            self.logger.debug(f"  Ejemplos de canciones: {[s['title'] for s in songs[:3]]}")
+        if videos:
+            self.logger.debug(f"  Ejemplos de videos: {[v.get('title', 'Sin título') for v in videos[:3]]}")
+        
         for song in songs:
-            song_title = song['title'].lower()
+            song_title = song['title']
             best_match = None
-            best_score = 0
+            best_score = 0.0
+            
+            self.logger.debug(f"    Buscando match para: '{song_title}'")
             
             for video in videos:
-                video_title = video.get('title', '').lower()
+                video_title = video.get('title', '')
                 
-                # Buscar coincidencia exacta primero
-                if song_title in video_title or video_title in song_title:
-                    score = len(song_title) / max(len(song_title), len(video_title))
-                    if score > best_score:
-                        best_score = score
-                        best_match = video
-                
-                # Si no hay coincidencia exacta, intentar con palabras clave
-                elif best_score < 0.7:  # Umbral para considerar coincidencias parciales
-                    song_words = set(song_title.split())
-                    video_words = set(video_title.split())
-                    common_words = song_words.intersection(video_words)
+                if not video_title:
+                    continue
                     
-                    if common_words:
-                        score = len(common_words) / max(len(song_words), len(video_words))
-                        if score > best_score:
-                            best_score = score
-                            best_match = video
+                # Calcular similitud
+                score = self.calculate_similarity(song_title, video_title)
+                
+                self.logger.debug(f"      vs '{video_title}' -> score: {score:.3f}")
+                
+                if score > best_score:
+                    best_score = score
+                    best_match = video
             
-            # Solo considerar coincidencias con un score mínimo
-            if best_score > 0.5:
+            # Umbral más bajo para aceptar coincidencias
+            threshold = 0.3
+            if best_score >= threshold:
                 song_video_mapping[song['id']] = {
                     'video': best_match,
                     'score': best_score
                 }
+                self.logger.debug(f"    ✓ Match encontrado: {best_score:.3f}")
+            else:
+                self.logger.debug(f"    ✗ Sin match suficiente (mejor: {best_score:.3f})")
         
+        self.logger.info(f"  Emparejados {len(song_video_mapping)} de {len(songs)} canciones")
         return song_video_mapping
+
+    # También agregar este método de depuración
+    def debug_album_content(self, album, songs, videos):
+        """Método para debuggear el contenido del álbum"""
+        self.logger.info(f"=== DEBUG ÁLBUM: {album['artist_name']} - {album['album_name']} ===")
         
+        self.logger.info("CANCIONES:")
+        for i, song in enumerate(songs[:10]):  # Mostrar máximo 10
+            self.logger.info(f"  {i+1}. '{song['title']}'")
+        
+        self.logger.info("VIDEOS:")
+        for i, video in enumerate(videos[:10]):  # Mostrar máximo 10
+            self.logger.info(f"  {i+1}. '{video.get('title', 'Sin título')}'")
+        
+        self.logger.info("=" * 50)
+
+    # Modificar process_album_videos para incluir debug
     def process_album_videos(self):
         """Procesar videos de álbumes que ya tienen URL de Discogs"""
         albums = self.get_albums_with_discogs_url()
+        
+        if not albums:
+            self.logger.info("No se encontraron álbumes para procesar (todos tienen enlaces o no cumplen criterios)")
+            return
+            
         self.logger.info(f"Procesando videos para {len(albums)} álbumes con URL de Discogs")
         
         for i, album in enumerate(albums):
@@ -514,52 +638,84 @@ class DiscogsLinksModule:
                 
             self.logger.info(f"  Encontrados {len(youtube_videos)} videos de YouTube")
             
-            # Obtener todas las canciones del álbum
+            # Obtener canciones del álbum que necesitan enlaces
             songs = self.get_songs_from_album(album['id'])
             if not songs:
-                self.logger.warning(f"  No se encontraron canciones para este álbum")
+                self.logger.info(f"  No se encontraron canciones que necesiten enlaces para este álbum")
                 continue
                 
-            self.logger.info(f"  Encontradas {len(songs)} canciones en el álbum")
+            self.logger.info(f"  Encontradas {len(songs)} canciones que necesitan enlaces")
+            
+            # Debug del contenido
+            self.debug_album_content(album, songs, youtube_videos)
             
             # Emparejar canciones con videos
             song_video_mapping = self.match_songs_to_videos(songs, youtube_videos)
             
+            if not song_video_mapping:
+                self.logger.warning(f"  No se pudieron emparejar canciones con videos")
+                continue
+            
             # Actualizar enlaces en la base de datos
+            updated_count = 0
             for song_id, match_info in song_video_mapping.items():
                 video = match_info['video']
                 score = match_info['score']
                 
                 song_title = next((s['title'] for s in songs if s['id'] == song_id), "Desconocido")
-                self.logger.info(f"  Emparejado: '{song_title}' con '{video.get('title', 'Sin título')}' (Score: {score:.2f})")
+                self.logger.info(f"  ✓ Emparejado: '{song_title}' con '{video.get('title', 'Sin título')}' (Score: {score:.2f})")
                 
                 # Actualizar en song_links
                 self.update_song_links(song_id, {
                     'youtube_url': video.get('uri')
                 })
+                updated_count += 1
+            
+            self.logger.info(f"  Actualizados {updated_count} enlaces de YouTube")
             
             # Guardar caché periódicamente
             if (i + 1) % 5 == 0:
                 self.save_cache()
     
+
     def update_song_links(self, song_id, data):
         """Actualizar links de canciones en la base de datos"""
         if not data:
             return
             
         conn = sqlite3.connect(self.db_path)
+        conn.row_factory = sqlite3.Row  # Importante: esto hace que fetchone() devuelva un Row object
         cursor = conn.cursor()
         
         # Verificar si ya existe un registro para esta canción
-        cursor.execute("SELECT 1 FROM song_links WHERE song_id = ?", (song_id,))
-        exists = cursor.fetchone()
+        cursor.execute("SELECT youtube_url, lastfm_url FROM song_links WHERE song_id = ?", (song_id,))
+        existing = cursor.fetchone()
         
-        if exists:
+        if existing:
+            # Si force_update es False, no actualizar campos que ya tienen datos
+            if not self.force_update:
+                # Filtrar datos para no sobrescribir enlaces existentes
+                filtered_data = {}
+                for key, value in data.items():
+                    if key == 'youtube_url' and existing['youtube_url']:
+                        self.logger.debug(f"    Saltando youtube_url para song_id {song_id} (ya existe)")
+                        continue  # Ya tiene youtube_url, no actualizar
+                    if key == 'lastfm_url' and existing['lastfm_url']:
+                        self.logger.debug(f"    Saltando lastfm_url para song_id {song_id} (ya existe)")
+                        continue  # Ya tiene lastfm_url, no actualizar
+                    filtered_data[key] = value
+                data = filtered_data
+                
+                # Si no hay nada que actualizar, salir
+                if not data:
+                    self.logger.debug(f"    Sin datos que actualizar para song_id {song_id}")
+                    conn.close()
+                    return
+            
             # Actualizar registro existente
             update_fields = []
             params = []
             
-            # Usar las columnas que existen en la tabla song_links
             for field, data_field in [
                 ("youtube_url", "youtube_url"),
                 ("lastfm_url", "lastfm_url")
@@ -567,18 +723,19 @@ class DiscogsLinksModule:
                 if data_field in data and data[data_field]:
                     update_fields.append(f"{field} = ?")
                     params.append(data[data_field])
+                    self.logger.debug(f"    Actualizando {field} para song_id {song_id}")
                 
             if update_fields:
                 params.append(song_id)
-                query = f"UPDATE song_links SET {', '.join(update_fields)} WHERE song_id = ?"
+                query = f"UPDATE song_links SET {', '.join(update_fields)}, links_updated = CURRENT_TIMESTAMP WHERE song_id = ?"
                 cursor.execute(query, params)
+                self.logger.debug(f"    Ejecutando UPDATE para song_id {song_id}")
         else:
             # Crear nuevo registro
             fields = ["song_id"]
             values = [song_id]
             placeholders = ["?"]
             
-            # Usar las columnas que existen en la tabla song_links
             for field, data_field in [
                 ("youtube_url", "youtube_url"),
                 ("lastfm_url", "lastfm_url")
@@ -587,10 +744,17 @@ class DiscogsLinksModule:
                     fields.append(field)
                     values.append(data[data_field])
                     placeholders.append("?")
+                    self.logger.debug(f"    Insertando {field} para song_id {song_id}")
                 
             if len(fields) > 1:  # Al menos un campo además de song_id
+                # Agregar timestamp
+                fields.append("links_updated")
+                values.append(None)  # SQLite manejará CURRENT_TIMESTAMP
+                placeholders.append("CURRENT_TIMESTAMP")
+                
                 query = f"INSERT INTO song_links ({', '.join(fields)}) VALUES ({', '.join(placeholders)})"
                 cursor.execute(query, values)
+                self.logger.debug(f"    Ejecutando INSERT para song_id {song_id}")
         
         conn.commit()
         conn.close()
@@ -759,6 +923,9 @@ class DiscogsLinksModule:
             self.logger.error(f"Error durante la ejecución: {e}", exc_info=True)
         
         self.logger.info("=== Proceso completado ===\n")
+
+
+
 
 
 def main(config=None):

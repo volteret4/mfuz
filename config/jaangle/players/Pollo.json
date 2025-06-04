@@ -1,0 +1,55 @@
+{
+  "player_name": "Pollo",
+  "created_date": "/home/huan/gits/pollo/music-fuzzy",
+  "hotkeys": {
+    "0": 49,
+    "1": 50,
+    "2": 51,
+    "3": 52,
+    "4": 53,
+    "5": 54,
+    "6": 55,
+    "7": 56
+  },
+  "filters": {
+    "excluded_artists": [],
+    "excluded_albums": [],
+    "excluded_genres": [],
+    "excluded_folders": [],
+    "session_filters": null
+  },
+  "game_settings": {
+    "music_origin": "local",
+    "spotify_user": "pollolpc",
+    "listenbrainz_user": "guevifrito",
+    "quiz_duration_minutes": 5,
+    "song_duration_seconds": 30,
+    "pause_between_songs": 5,
+    "options_count": 4,
+    "min_song_duration": 60,
+    "start_from_beginning_chance": 0.3,
+    "avoid_last_seconds": 15
+  },
+  "advanced_settings": {
+    "penalty_seconds": 3,
+    "reward_seconds": 1,
+    "favorite_penalty": 10,
+    "min_font_size": 8,
+    "max_font_size": 16,
+    "show_album_art": true,
+    "show_progress_details": true,
+    "cache_size": 200,
+    "preload_songs": 5,
+    "auto_backup": false,
+    "enable_debug": false
+  },
+  "statistics": {
+    "games_played": 0,
+    "total_questions": 0,
+    "correct_answers": 0,
+    "accuracy": 0.0,
+    "total_time_played": 0,
+    "favorite_genre": null,
+    "last_played": null
+  }
+}

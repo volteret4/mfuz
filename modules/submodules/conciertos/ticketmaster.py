@@ -41,7 +41,7 @@ class TicketmasterService:
         # Si no hay caché válido, consultar API
         params = {
             "keyword": artist_name,
-            
+            "classificationName": "music",  # Añadir este parámetro que faltaba
             "countryCode": country_code,
             "size": size,
             "sort": "date,asc",
@@ -58,19 +58,34 @@ class TicketmasterService:
             
             concerts = []
             for event in data['_embedded']['events']:
+                # Extraer datos del venue con manejo de errores
+                venue_data = event.get('_embedded', {}).get('venues', [{}])[0]
+                
+                # Construir dirección desde los datos del venue
+                address_parts = []
+                if venue_data.get('address', {}).get('line1'):
+                    address_parts.append(venue_data['address']['line1'])
+                
+                if venue_data.get('postalCode'):
+                    address_parts.append(venue_data['postalCode'])
+                
+                address = ', '.join(address_parts)
+                
                 # Extraer datos relevantes
                 concert = {
                     'artist': artist_name,
                     'name': event.get('name', 'No title'),
-                    'venue': event.get('_embedded', {}).get('venues', [{}])[0].get('name', 'Unknown venue'),
-                    'city': event.get('_embedded', {}).get('venues', [{}])[0].get('city', {}).get('name', 'Unknown city'),
+                    'venue': venue_data.get('name', 'Unknown venue'),
+                    'address': address,  # Añadir dirección
+                    'city': venue_data.get('city', {}).get('name', 'Unknown city'),
                     'date': event.get('dates', {}).get('start', {}).get('localDate', 'Unknown date'),
                     'time': event.get('dates', {}).get('start', {}).get('localTime', ''),
                     'image': next((img.get('url', '') for img in event.get('images', []) 
                             if img.get('ratio') == '16_9' and img.get('width') > 500), 
                             event.get('images', [{}])[0].get('url', '') if event.get('images') else ''),
                     'url': event.get('url', ''),
-                    'id': event.get('id', '')  # Add this line to include the event ID
+                    'id': event.get('id', ''),
+                    'source': 'Ticketmaster'  # Añadir fuente explícitamente
                 }
                 concerts.append(concert)
             
@@ -83,6 +98,9 @@ class TicketmasterService:
             return [], f"Error en la solicitud: {str(e)}"
         except ValueError as e:
             return [], f"Error procesando respuesta: {str(e)}"
+        except Exception as e:
+            import traceback
+            return [], f"Error inesperado: {str(e)}\n{traceback.format_exc()}"
     
     def _get_cache_file_path(self, artist_name, country_code):
         """Generar ruta al archivo de caché para un artista y país"""
@@ -166,6 +184,3 @@ class TicketmasterService:
             # Limpiar todos los cachés
             for file in self.cache_dir.glob("ticketmaster_*.json"):
                 file.unlink()
-
-
-

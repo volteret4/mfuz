@@ -8,9 +8,18 @@ from pathlib import Path
 import json
 import re
 from datetime import datetime, timedelta
+import sys 
+import os
 
+import sys
+import os
 
-from db.musicbrainz import mb_artist_info
+# Añadir el directorio root al path ANTES de importar
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
+
+# Ahora sí importar
+import db.musicbrainz.mb_artist_info
+mb_artist_info = db.musicbrainz.mb_artist_info
 
 class SetlistfmService:
     def __init__(self, api_key, cache_dir, cache_duration=24, db_path=None, config=None):

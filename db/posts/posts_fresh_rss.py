@@ -425,7 +425,13 @@ class FreshRSSContentFinder():
             else:
                 print("No hay progreso para guardar. Saliendo.")
                 sys.exit(0)
-        
+        def search_whole_word(term, text):
+            """Busca una palabra completa en el texto, ignorando mayúsculas/minúsculas"""
+            # Escapar caracteres especiales de regex en el término de búsqueda
+            escaped_term = re.escape(term)
+            # Usar word boundaries (\b) para buscar palabras completas
+            pattern = r'\b' + escaped_term + r'\b'
+            return re.search(pattern, text, re.IGNORECASE) is not None
         # Registrar el manejador para SIGINT (Ctrl+C)
         signal.signal(signal.SIGINT, signal_handler)
 
@@ -459,80 +465,80 @@ class FreshRSSContentFinder():
                 posts = self.get_posts(feed_id)
                 logger.info(f"  - {len(posts)} posts obtenidos para analizar")
                 
-                # Buscar coincidencias en cada post
-                for post in posts:
-                    # Añadir feed al post para referencia posterior
-                    post['feed'] = feed_title
-                    post['category'] = category
-                    
-                    # Verificar si el post debe ser ignorado
-                    if self._should_ignore_post(post):
+        # Buscar coincidencias en cada post
+        for post in posts:
+            # Añadir feed al post para referencia posterior
+            post['feed'] = feed_title
+            post['category'] = category
+            
+            # Verificar si el post debe ser ignorado
+            if self._should_ignore_post(post):
+                continue
+            
+            content = f"{post['title']} {post['content']}"  # Sin .lower() aquí
+            
+            # Buscar coincidencias de artistas
+            if self.search_artists:
+                for artist in search_terms['artists']:
+                    artist_name = artist['name']
+                    # Saltarse términos cortos a menos que se permita explícitamente
+                    if len(artist_name) <= 4 and not self.search_short_terms:
                         continue
-                    
-                    content = f"{post['title']} {post['content']}".lower()
-                    
-                    # Buscar coincidencias de artistas
-                    if self.search_artists:
-                        for artist in search_terms['artists']:
-                            artist_name = artist['name'].lower()
-                            # Saltarse términos cortos a menos que se permita explícitamente
-                            if len(artist_name) <= 4 and not self.search_short_terms:
-                                continue
-                                
-                            # Buscar el nombre completo del artista como una frase
-                            if artist_name in content:
-                                artist_id = artist['id']
-                                if artist_id not in entity_posts['artists']:
-                                    entity_posts['artists'][artist_id] = {
-                                        'name': artist['name'],
-                                        'posts': []
-                                    }
-                                # Verificar que no esté duplicado
-                                post_urls = [p['url'] for p in entity_posts['artists'][artist_id]['posts']]
-                                if post['url'] not in post_urls:
-                                    entity_posts['artists'][artist_id]['posts'].append(post)
-                    
-                    # Buscar coincidencias de álbumes
-                    if self.search_albums:
-                        for album in search_terms['albums']:
-                            album_name = album['name'].lower()
-                            # Saltarse términos cortos a menos que se permita explícitamente
-                            if len(album_name) <= 4 and not self.search_short_terms:
-                                continue
-                                
-                            # Buscar el nombre completo del álbum como una frase
-                            if album_name in content:
-                                album_id = album['id']
-                                if album_id not in entity_posts['albums']:
-                                    entity_posts['albums'][album_id] = {
-                                        'name': album['name'],
-                                        'posts': []
-                                    }
-                                # Verificar que no esté duplicado
-                                post_urls = [p['url'] for p in entity_posts['albums'][album_id]['posts']]
-                                if post['url'] not in post_urls:
-                                    entity_posts['albums'][album_id]['posts'].append(post)
-                    
-                    # Buscar coincidencias de sellos
-                    if self.search_labels:
-                        for label in search_terms['labels']:
-                            label_name = label['name'].lower()
-                            # Saltarse términos cortos a menos que se permita explícitamente
-                            if len(label_name) <= 4 and not self.search_short_terms:
-                                continue
-                                
-                            # Buscar el nombre completo del sello como una frase
-                            if label_name in content:
-                                label_id = label['id']
-                                if label_id not in entity_posts['labels']:
-                                    entity_posts['labels'][label_id] = {
-                                        'name': label['name'],
-                                        'posts': []
-                                    }
-                                # Verificar que no esté duplicado
-                                post_urls = [p['url'] for p in entity_posts['labels'][label_id]['posts']]
-                                if post['url'] not in post_urls:
-                                    entity_posts['labels'][label_id]['posts'].append(post)
+                        
+                    # Buscar el nombre completo del artista como palabra completa
+                    if search_whole_word(artist_name, content):
+                        artist_id = artist['id']
+                        if artist_id not in entity_posts['artists']:
+                            entity_posts['artists'][artist_id] = {
+                                'name': artist['name'],
+                                'posts': []
+                            }
+                        # Verificar que no esté duplicado
+                        post_urls = [p['url'] for p in entity_posts['artists'][artist_id]['posts']]
+                        if post['url'] not in post_urls:
+                            entity_posts['artists'][artist_id]['posts'].append(post)
+            
+            # Buscar coincidencias de álbumes
+            if self.search_albums:
+                for album in search_terms['albums']:
+                    album_name = album['name']
+                    # Saltarse términos cortos a menos que se permita explícitamente
+                    if len(album_name) <= 4 and not self.search_short_terms:
+                        continue
+                        
+                    # Buscar el nombre completo del álbum como palabra completa
+                    if search_whole_word(album_name, content):
+                        album_id = album['id']
+                        if album_id not in entity_posts['albums']:
+                            entity_posts['albums'][album_id] = {
+                                'name': album['name'],
+                                'posts': []
+                            }
+                        # Verificar que no esté duplicado
+                        post_urls = [p['url'] for p in entity_posts['albums'][album_id]['posts']]
+                        if post['url'] not in post_urls:
+                            entity_posts['albums'][album_id]['posts'].append(post)
+            
+            # Buscar coincidencias de sellos
+            if self.search_labels:
+                for label in search_terms['labels']:
+                    label_name = label['name']
+                    # Saltarse términos cortos a menos que se permita explícitamente
+                    if len(label_name) <= 4 and not self.search_short_terms:
+                        continue
+                        
+                    # Buscar el nombre completo del sello como palabra completa
+                    if search_whole_word(label_name, content):
+                        label_id = label['id']
+                        if label_id not in entity_posts['labels']:
+                            entity_posts['labels'][label_id] = {
+                                'name': label['name'],
+                                'posts': []
+                            }
+                        # Verificar que no esté duplicado
+                        post_urls = [p['url'] for p in entity_posts['labels'][label_id]['posts']]
+                        if post['url'] not in post_urls:
+                            entity_posts['labels'][label_id]['posts'].append(post)
         
         # Guardar el cache actualizado
         self._save_cache()

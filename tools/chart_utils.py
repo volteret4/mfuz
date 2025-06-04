@@ -24,7 +24,18 @@ CHART_COLORS = [
 
 class ChartFactory:
     """Factory class for creating charts with proper fallbacks"""
-    
+    CHART_COLORS = [
+        "#cba6f7",  # Purple
+        "#f5c2e7",  # Pink
+        "#89dceb",  # Cyan
+        "#a6e3a1",  # Green
+        "#f9e2af",  # Yellow
+        "#fab387",  # Peach
+        "#eba0ac",  # Red
+        "#89b4fa",  # Blue
+    ]
+
+
     @staticmethod
     def is_charts_available():
         """Check if the Qt Charts module is available"""

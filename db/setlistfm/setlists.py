@@ -36,6 +36,18 @@ def create_table(conn):
         last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
+    
+    # Crear tabla para tracking de búsquedas vacías
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS artists_setlistfm_searches (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        artist_id INTEGER NOT NULL UNIQUE,
+        artist_name TEXT NOT NULL,
+        last_search_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        found_setlists INTEGER DEFAULT 0,
+        search_method TEXT
+    )
+    ''')
     conn.commit()
 
 def create_places_table(conn):
@@ -189,9 +201,103 @@ def save_setlists(conn, artist_id, artist_name, setlists):
     
     conn.commit()
 
+
+
+def should_skip_artist(conn, artist_id, force_update=False, year=0):
+    """Determina si se debe omitir un artista basado en búsquedas recientes sin resultados"""
+    if force_update or year > 0:
+        return False
+    
+    cursor = conn.cursor()
+    
+    # Verificar si se buscó recientemente sin encontrar nada
+    cursor.execute('''
+    SELECT last_search_date, found_setlists 
+    FROM artists_setlistfm_searches 
+    WHERE artist_id = ? AND found_setlists = 0
+    AND datetime(last_search_date) > datetime('now', '-30 days')
+    ''', (artist_id,))
+    
+    result = cursor.fetchone()
+    if result:
+        last_search, found = result
+        print(f"  Omitiendo artista (búsqueda reciente sin resultados: {last_search})")
+        return True
+    
+    return False
+
+def update_search_tracking(conn, artist_id, artist_name, found_setlists, search_method):
+    """Actualiza el tracking de búsquedas para un artista"""
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute('''
+        INSERT OR REPLACE INTO artists_setlistfm_searches
+        (artist_id, artist_name, last_search_date, found_setlists, search_method)
+        VALUES (?, ?, ?, ?, ?)
+        ''', (
+            artist_id, artist_name, 
+            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            found_setlists, search_method
+        ))
+        conn.commit()
+    except Exception as e:
+        print(f"Error al actualizar tracking de búsqueda para {artist_name}: {e}")
+
+def update_setlistfm_ids_before_search(conn, api_key, force_update=False):
+    """Actualiza los setlistfm_id ANTES de buscar setlists"""
+    print("\n=== Actualizando IDs de setlist.fm ANTES de buscar setlists ===")
+    
+    # Añadir columna si no existe
+    add_setlistfm_id_column(conn)
+    
+    cursor = conn.cursor()
+    
+    # Obtener artistas con MBID pero sin setlistfm_id
+    if force_update:
+        cursor.execute("SELECT id, name, mbid FROM artists WHERE mbid IS NOT NULL")
+    else:
+        cursor.execute("SELECT id, name, mbid FROM artists WHERE mbid IS NOT NULL AND (setlistfm_id IS NULL OR setlistfm_id = '')")
+    
+    artists = cursor.fetchall()
+    total_artists = len(artists)
+    
+    if total_artists == 0:
+        print("No hay artistas que necesiten actualización de setlistfm_id")
+        return
+    
+    print(f"Actualizando setlistfm_id para {total_artists} artistas...")
+    
+    updated = 0
+    for i, (artist_id, artist_name, mbid) in enumerate(artists, 1):
+        print(f"  Obteniendo ID para {artist_name} ({i}/{total_artists})")
+        
+        setlistfm_id = get_setlistfm_id_by_mbid(mbid, api_key)
+        
+        if setlistfm_id:
+            try:
+                cursor.execute("UPDATE artists SET setlistfm_id = ? WHERE id = ?", (setlistfm_id, artist_id))
+                conn.commit()
+                updated += 1
+                print(f"    ✓ ID actualizado: {setlistfm_id}")
+            except Exception as e:
+                print(f"    ✗ Error al actualizar: {e}")
+        else:
+            print(f"    - No se encontró ID de setlist.fm")
+        
+        # Respetar límites de la API
+        time.sleep(0.5)
+    
+    print(f"Actualizaciones de IDs completadas: {updated} de {total_artists} artistas")
+
+# Función process_artist modificada
 def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_update=False, interactive=False, year=0):
     """Procesa los setlists de un artista, primero por MBID y luego por nombre si es necesario"""
     cursor = conn.cursor()
+    
+    # Verificar si debemos omitir este artista por búsqueda reciente sin resultados
+    if should_skip_artist(conn, artist_id, force_update, year):
+        return
     
     # Verificar si ya tenemos setlists de este artista (si estamos filtrando por año, no omitir)
     if year == 0:
@@ -214,12 +320,15 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
     else:
         print(f"Procesando setlists para {artist_name}...")
     
+    total_setlists_found = 0
+    search_method = ""
+    
     # Estrategia 1: Buscar por MBID primero
     found_by_mbid = False
     if artist_mbid:
         print(f"  Intentando búsqueda por MBID: {artist_mbid}")
         page = 1
-        total_setlists = 0
+        setlists_by_mbid = 0
         
         while True:
             print(f"  Página {page} (MBID)...")
@@ -232,7 +341,8 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
             save_setlists(conn, artist_id, artist_name, setlists)
             found_by_mbid = True
             
-            total_setlists += len(setlists)
+            setlists_by_mbid += len(setlists)
+            total_setlists_found += len(setlists)
             
             # Verificar si hay más páginas
             total = response.get('total', 0)
@@ -247,10 +357,11 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
             time.sleep(0.5)
         
         if found_by_mbid:
+            search_method = "MBID"
             if year > 0:
-                print(f"Guardados {total_setlists} setlists para {artist_name} del año {year} mediante MBID")
+                print(f"Guardados {setlists_by_mbid} setlists para {artist_name} del año {year} mediante MBID")
             else:
-                print(f"Guardados {total_setlists} setlists para {artist_name} mediante MBID")
+                print(f"Guardados {setlists_by_mbid} setlists para {artist_name} mediante MBID")
     
     # Estrategia 2: Si no hay MBID o no se encontraron resultados, buscar por nombre
     if not artist_mbid or not found_by_mbid:
@@ -260,7 +371,7 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
             print(f"  No se encontraron resultados por MBID para {artist_name}, buscando por nombre")
         
         page = 1
-        total_setlists = 0
+        setlists_by_name = 0
         
         while True:
             print(f"  Página {page} (nombre)...")
@@ -272,7 +383,8 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
             
             save_setlists(conn, artist_id, artist_name, setlists)
             
-            total_setlists += len(setlists)
+            setlists_by_name += len(setlists)
+            total_setlists_found += len(setlists)
             
             # Verificar si hay más páginas
             total = response.get('total', 0)
@@ -286,10 +398,26 @@ def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_upd
             # Respetar los límites de la API (máximo 2 llamadas por segundo)
             time.sleep(0.5)
         
-        if year > 0:
-            print(f"Guardados {total_setlists} setlists para {artist_name} del año {year} mediante nombre")
-        else:
-            print(f"Guardados {total_setlists} setlists para {artist_name} mediante nombre")
+        if setlists_by_name > 0:
+            if search_method:
+                search_method += " + nombre"
+            else:
+                search_method = "nombre"
+            
+            if year > 0:
+                print(f"Guardados {setlists_by_name} setlists para {artist_name} del año {year} mediante nombre")
+            else:
+                print(f"Guardados {setlists_by_name} setlists para {artist_name} mediante nombre")
+    
+    # Si no se especificó método de búsqueda, usar el apropiado
+    if not search_method:
+        search_method = "MBID" if artist_mbid else "nombre"
+    
+    # Actualizar tracking de búsqueda
+    update_search_tracking(conn, artist_id, artist_name, total_setlists_found, search_method)
+    
+    if total_setlists_found == 0:
+        print(f"  No se encontraron setlists para {artist_name}")
             
 def process_places(conn, force_update=False):
     """Procesa los lugares de conciertos a partir de los setlists"""
@@ -507,6 +635,9 @@ def main(config=None):
     # Verificar si solo se deben actualizar los IDs de setlist.fm
     setlistfm_id_only = config.get('setlistfm_id', False)
     
+    # NUEVO: Verificar si se deben actualizar IDs antes de buscar
+    update_ids = config.get('update_ids', False)
+    
     # Conectar a la base de datos
     conn = sqlite3.connect(db_path)
     
@@ -533,6 +664,10 @@ def main(config=None):
             # Crear la tabla si no existe
             create_table(conn)
             
+            # NUEVO: Actualizar IDs de setlist.fm antes de buscar si se especifica
+            if update_ids:
+                update_setlistfm_ids_before_search(conn, api_key, force_update)
+            
             # Obtener todos los artistas con sus MBIDs
             artists = get_artists(conn)
             
@@ -555,9 +690,6 @@ def main(config=None):
             # Procesar lugares si se ha especificado
             if process_places_flag:
                 process_places(conn, force_update)
-            
-            # Actualizar setlistfm_ids si se ha especificado
-            update_setlistfm_ids(conn, api_key, force_update)
     
     finally:
         conn.close()
