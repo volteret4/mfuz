@@ -4,7 +4,7 @@
 # Description: Complementa db_musica.py añadiendo enlaces a servicios externos (Spotify, YouTube, MusicBrainz, Discogs, RateYourMusic, Bandcamp)
 #              para artistas y álbumes en la base de datos musical.
 # Author: basado en el trabajo de volteret4
-# Dependencies: - python3, sqlite3, dotenv, spotipy, musicbrainzngs, discogs_client, google-api-python-client
+# Dependencies: - python3, sqlite3, spotipy, musicbrainzngs, discogs_client, google-api-python-client
 # TODO: - arreglar spotify url e id de album
 #       - copiar artist
 #       - anadir bandcamp

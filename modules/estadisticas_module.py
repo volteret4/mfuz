@@ -13,9 +13,9 @@ import logging
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import BaseModule, PROJECT_ROOT
 from tools.chart_utils import ChartFactory
-from functions.stats.callbacks_submodule import StatsCallbackHandler
-from functions.stats.feeds_callbacks import FeedsCallbackHandler
-from functions.stats.time_callbacks import TimeCallbackHandler
+from tools.stats.callbacks_submodule import StatsCallbackHandler
+from tools.stats.feeds_callbacks import FeedfunctionssCallbackHandler
+from tools.stats.time_callbacks import TimeCallbackHandler
 
 module_path = str(Path(__file__).parent / "submodules" / "stats")
 if module_path not in sys.path:

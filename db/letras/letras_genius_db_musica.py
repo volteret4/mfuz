@@ -275,7 +275,7 @@ class MultiLyricsManager:
         if force_update:
             state_file = "lyrics_update_state_force.json"
         else:
-            state_file = "lyrics_update_state_normal.json"
+            state_file = f"{PROJECT_ROOT}/.content/logs/db/letras/lyrics_update_state_normal.json"
         
         with open(state_file, 'w', encoding='utf-8') as f:
             json.dump(state, f, ensure_ascii=False, indent=2)
@@ -285,7 +285,7 @@ class MultiLyricsManager:
     def load_state(self, force_update=False):
         """Carga el estado anterior si existe."""
         # Determinar qué archivo de estado cargar
-        state_file = "lyrics_update_state_force.json" if force_update else "lyrics_update_state_normal.json"
+        state_file = f"{PROJECT_ROOT}/.content/logs/db/letras/lyrics_update_state_force.json" if force_update else f"{PROJECT_ROOT}/.content/logs/db/letras/lyrics_update_state_normal.json"
         
         if os.path.exists(state_file):
             try:

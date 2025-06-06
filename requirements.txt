@@ -1,0 +1,38 @@
+
+beautifulsoup4==4.9.3
+
+
+lxml==5.4.0                 # enlaces_artistas_album
+
+lyricsgenius==3.2.0         # letras_genius_db
+Markdown==3.7               # Modulo estadisticas; 
+musicbrainzngs==0.7.1       # DB: scrobbles_lastfm, enlaces_artista_album, mb_artist_info, mb_song_info, 
+                            # Modulos: 
+
+mutagen==1.47.0             # DB: db_musica_path
+numpy==2.2.6                # DB: portadas_artistas
+
+
+playwright==1.51.0          # DB: enlaces,enlaces_albumes  posts,scraper
+
+pylast==5.5.0               # db: enlaces,enlaces_artista_album   
+                            # Módulos: muspy   
+                        
+
+
+PyQt6==6.9.0                # Todos los módulos
+python3_discogs_client==2.7.1 # db: enlaces_artista_album   enlaces,redes_sociales   tools,discogs_login
+PyYAML==6.0.2               # Todos los módulos
+readability_lxml==0.8.1     # db: tools
+
+selenium==4.33.0            # modulos coniertos spotify
+spotipy==2.25.0
+
+thread==2.0.5               # Todos los modulos
+
+
+undetected_chromedriver==3.5.5      # db: equipboard
+
+urllib3_secure_extra==0.1.0 # Todos los modulos
+
+yt_dlp==2025.5.22

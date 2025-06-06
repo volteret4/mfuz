@@ -274,7 +274,7 @@ class DatabaseEditor(BaseModule):
     def save_column_order_directly(self):
         """Guarda el orden de columnas directamente en el archivo de configuración."""
         try:
-            config_path = getattr(self.tab_manager, 'config_path', 'config.json')
+            config_path = getattr(self.tab_manager, 'config', 'config_editor_db.json')
             
             # Cargar configuración existente
             if os.path.exists(config_path):

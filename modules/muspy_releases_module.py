@@ -77,7 +77,7 @@ logger = logging.getLogger("MuspyArtistModule")
 
 # Intentar configurar un logger mejor si está disponible
 try:
-    from loggin_helper import setup_module_logger
+    from tools.muspy.loggin_helper import setup_module_logger
     logger = setup_module_logger(
         module_name="MuspyArtistModule",
         log_level="INFO",
@@ -312,7 +312,7 @@ class MuspyArtistModule(BaseModule):
         # Set up better logger if enabled
         if self.enable_logging:
             try:
-                from loggin_helper import setup_module_logger
+                from tools.muspy.loggin_helper import setup_module_logger
                 self.logger = setup_module_logger(
                     module_name=self.module_name,
                     log_level=self.log_level,
