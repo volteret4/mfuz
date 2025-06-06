@@ -12,6 +12,12 @@ import logging
 from datetime import datetime
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, WebDriverException
+import time
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -76,14 +82,115 @@ def create_equipboard_details_table(cursor):
         logger.error(f"Error creando tabla: {e}")
         raise
 
+
+
+def setup_chrome_driver(headless=True):
+    """Configura el driver de Chrome no detectado"""
+    try:
+        options = uc.ChromeOptions()
+        
+        # Configuraciones básicas
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-extensions')
+        options.add_argument('--disable-plugins')
+        options.add_argument('--disable-images')  # Para cargar más rápido
+        options.add_argument('--disable-javascript-harmony-shipping')
+        options.add_argument('--disable-background-timer-throttling')
+        options.add_argument('--disable-renderer-backgrounding')
+        options.add_argument('--disable-backgrounding-occluded-windows')
+        
+        # User agent realista
+        options.add_argument('--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36')
+        
+        if headless:
+            options.add_argument('--headless=new')
+            logger.info("🔧 Chrome configurado en modo headless")
+        else:
+            logger.info("🔧 Chrome configurado en modo visible para debug")
+        
+        # Crear driver
+        driver = uc.Chrome(options=options, version_main=None)
+        driver.set_page_load_timeout(30)
+        driver.implicitly_wait(10)
+        
+        logger.info("✅ Chrome driver inicializado correctamente")
+        return driver
+        
+    except Exception as e:
+        logger.error(f"❌ Error configurando Chrome driver: {e}")
+        raise
+
+def scroll_and_load_page(driver, url, max_scrolls=5):
+    """Carga la página y hace scroll para obtener todo el contenido"""
+    try:
+        logger.debug(f"📱 Cargando página: {url}")
+        driver.get(url)
+        
+        # Esperar a que cargue el contenido inicial
+        WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.TAG_NAME, "body"))
+        )
+        
+        # Scroll gradual para cargar contenido dinámico
+        last_height = driver.execute_script("return document.body.scrollHeight")
+        scrolls_done = 0
+        
+        while scrolls_done < max_scrolls:
+            # Scroll hacia abajo
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            
+            # Esperar a que cargue nuevo contenido
+            time.sleep(2)
+            
+            # Verificar si hay nuevo contenido
+            new_height = driver.execute_script("return document.body.scrollHeight")
+            
+            if new_height == last_height:
+                # No hay más contenido nuevo, hacer algunos scrolls adicionales por si acaso
+                if scrolls_done < 2:
+                    scrolls_done += 1
+                    continue
+                else:
+                    break
+            
+            last_height = new_height
+            scrolls_done += 1
+            logger.debug(f"📜 Scroll {scrolls_done}/{max_scrolls} - Altura: {new_height}")
+        
+        # Scroll de vuelta arriba para asegurar que todo esté cargado
+        driver.execute_script("window.scrollTo(0, 0);")
+        time.sleep(1)
+        
+        # Hacer un último scroll completo
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(2)
+        
+        logger.debug(f"✅ Página cargada completamente después de {scrolls_done} scrolls")
+        return True
+        
+    except TimeoutException:
+        logger.warning(f"⏰ Timeout cargando {url}")
+        return False
+    except WebDriverException as e:
+        logger.error(f"❌ Error WebDriver en {url}: {e}")
+        return False
+    except Exception as e:
+        logger.error(f"❌ Error inesperado cargando {url}: {e}")
+        return False
+
+
 def get_instruments_to_process(cursor, force_update=False, limit=None):
     """Obtiene instrumentos que necesitan procesamiento detallado"""
     if force_update:
-        # Si force_update, procesar todos los instrumentos
+        # Si force_update, procesar todos los instrumentos con equipment_url
         query = """
             SELECT id, equipment_id, equipment_name, equipment_url 
             FROM equipboard_instruments 
-            WHERE equipment_url IS NOT NULL
+            WHERE equipment_url IS NOT NULL 
+            AND equipment_url != ''
+            AND equipment_url LIKE '%equipboard.com%'
         """
     else:
         # Solo procesar instrumentos que no han sido procesados
@@ -92,6 +199,8 @@ def get_instruments_to_process(cursor, force_update=False, limit=None):
             FROM equipboard_instruments ei 
             LEFT JOIN equipboard_details ed ON ei.equipment_id = ed.equipment_id 
             WHERE ei.equipment_url IS NOT NULL 
+            AND ei.equipment_url != ''
+            AND ei.equipment_url LIKE '%equipboard.com%'
             AND ed.equipment_id IS NULL
         """
     
@@ -99,7 +208,11 @@ def get_instruments_to_process(cursor, force_update=False, limit=None):
         query += f" LIMIT {limit}"
     
     cursor.execute(query)
-    return cursor.fetchall()
+    results = cursor.fetchall()
+    
+    logger.info(f"🎯 Encontrados {len(results)} instrumentos para procesar")
+    return results
+
 
 def extract_price_information(soup, page_text):
     """Extrae información de precios"""
@@ -486,20 +599,25 @@ def calculate_quality_score(details):
     
     return min(score, 100)
 
-def extract_instrument_details(equipment_url, session):
-    """Extrae información detallada de un instrumento"""
+def extract_instrument_details(equipment_url, driver):
+    """Extrae información detallada de un instrumento usando Chrome driver"""
     detailed_info = {}
     
     try:
-        logger.debug(f"Extrayendo detalles de {equipment_url}")
+        logger.debug(f"🔍 Extrayendo detalles de {equipment_url}")
         
-        response = session.get(equipment_url, timeout=15)
-        if response.status_code != 200:
-            logger.warning(f"Error HTTP {response.status_code} para {equipment_url}")
+        # Cargar página con scroll
+        if not scroll_and_load_page(driver, equipment_url):
+            logger.warning(f"⚠️ No se pudo cargar completamente {equipment_url}")
             return {}
         
-        soup = BeautifulSoup(response.content, 'html.parser')
+        # Obtener HTML completo después del scroll
+        page_source = driver.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
         page_text = soup.get_text()
+        
+        # Extraer información usando las funciones existentes
+        # (todas las funciones extract_* existentes funcionarán igual)
         
         # Extraer información de precios
         price_info = extract_price_information(soup, page_text)
@@ -537,16 +655,35 @@ def extract_instrument_details(equipment_url, session):
         if comments:
             detailed_info['user_comments'] = comments
         
+        # Intentar extraer información adicional que puede estar cargada dinámicamente
+        try:
+            # Buscar elementos específicos que podrían haberse cargado con JavaScript
+            price_elements = driver.find_elements(By.CSS_SELECTOR, "[class*='price'], [class*='cost']")
+            for elem in price_elements:
+                try:
+                    price_text = elem.text.strip()
+                    if price_text and '$' in price_text:
+                        # Intentar extraer precio si no se obtuvo antes
+                        if not detailed_info.get('min_price'):
+                            price_match = re.search(r'\$([0-9,]+\.?[0-9]*)', price_text)
+                            if price_match:
+                                detailed_info['min_price'] = float(price_match.group(1).replace(',', ''))
+                                break
+                except:
+                    continue
+        except:
+            pass
+        
         # Calcular calidad
         detailed_info['data_quality_score'] = calculate_quality_score(detailed_info)
-        detailed_info['extraction_method'] = 'detailed_page_analysis'
+        detailed_info['extraction_method'] = 'chrome_driver_with_scroll'
         
-        logger.debug(f"Calidad de datos: {detailed_info.get('data_quality_score', 0)}/100")
+        logger.debug(f"📊 Calidad de datos: {detailed_info.get('data_quality_score', 0)}/100")
         
         return detailed_info
         
     except Exception as e:
-        logger.error(f"Error extrayendo detalles de {equipment_url}: {e}")
+        logger.error(f"❌ Error extrayendo detalles de {equipment_url}: {e}")
         return {}
 
 def save_instrument_details(cursor, instrument_id, equipment_id, equipment_name, equipment_url, details):
@@ -581,8 +718,11 @@ def save_instrument_details(cursor, instrument_id, equipment_id, equipment_name,
     except Exception as e:
         logger.error(f"Error guardando detalles: {e}")
 
-def process_instruments_details(database_path, force_update=False, limit=None):
-    """Procesa los detalles de los instrumentos"""
+
+def process_instruments_details(database_path, force_update=False, limit=None, headless=True):
+    """Procesa los detalles de los instrumentos usando Chrome driver"""
+    driver = None
+    
     try:
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
@@ -594,25 +734,22 @@ def process_instruments_details(database_path, force_update=False, limit=None):
         instruments = get_instruments_to_process(cursor, force_update, limit)
         
         if not instruments:
-            logger.info("No hay instrumentos para procesar")
+            logger.info("✅ No hay instrumentos para procesar")
             return
         
         logger.info(f"🚀 Procesando detalles de {len(instruments)} instrumentos")
         
-        # Configurar sesión
-        session = requests.Session()
-        session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        })
+        # Configurar Chrome driver
+        driver = setup_chrome_driver(headless=headless)
         
         stats = {'processed': 0, 'with_details': 0, 'errors': 0}
         
         for i, (instrument_id, equipment_id, equipment_name, equipment_url) in enumerate(instruments, 1):
             try:
-                logger.info(f"[{i}/{len(instruments)}] Procesando: {equipment_name}")
+                logger.info(f"[{i}/{len(instruments)}] 🎸 Procesando: {equipment_name}")
                 
-                # Extraer detalles
-                details = extract_instrument_details(equipment_url, session)
+                # Extraer detalles usando Chrome driver
+                details = extract_instrument_details(equipment_url, driver)
                 
                 if details:
                     # Guardar detalles
@@ -626,33 +763,52 @@ def process_instruments_details(database_path, force_update=False, limit=None):
                 
                 stats['processed'] += 1
                 
-                # Commit cada 10 instrumentos
-                if i % 10 == 0:
+                # Commit cada 5 instrumentos (menos frecuente por la latencia del driver)
+                if i % 5 == 0:
                     conn.commit()
                     logger.info(f"💾 Progreso guardado: {i}/{len(instruments)}")
                 
-                # Pausa para no sobrecargar el servidor
-                time.sleep(3)
+                # Pausa entre requests para evitar detección
+                time.sleep(5)
                 
             except Exception as e:
                 logger.error(f"❌ Error procesando {equipment_name}: {e}")
                 stats['errors'] += 1
+                
+                # Si hay muchos errores consecutivos, reiniciar driver
+                if stats['errors'] > 3 and stats['errors'] % 3 == 0:
+                    logger.warning("🔄 Reiniciando Chrome driver por errores múltiples...")
+                    try:
+                        driver.quit()
+                        time.sleep(2)
+                        driver = setup_chrome_driver(headless=headless)
+                    except:
+                        logger.error("❌ No se pudo reiniciar el driver")
+                        break
+                
                 continue
         
         conn.commit()
         
-        logger.info(f"\n=== ESTADÍSTICAS FINALES ===")
+        logger.info(f"\n=== 📊 ESTADÍSTICAS FINALES ===")
         logger.info(f"Instrumentos procesados: {stats['processed']}")
         logger.info(f"Con detalles extraídos: {stats['with_details']}")
         logger.info(f"Errores: {stats['errors']}")
+        logger.info(f"Tasa de éxito: {(stats['with_details']/stats['processed']*100) if stats['processed'] > 0 else 0:.1f}%")
         
     except Exception as e:
-        logger.error(f"Error en procesamiento: {e}")
+        logger.error(f"❌ Error en procesamiento: {e}")
     finally:
-        if 'session' in locals():
-            session.close()
+        if driver:
+            try:
+                driver.quit()
+                logger.info("🔧 Chrome driver cerrado")
+            except:
+                pass
         if 'conn' in locals():
             conn.close()
+
+
 
 def get_details_stats(database_path):
     """Muestra estadísticas de detalles extraídos"""
@@ -861,7 +1017,7 @@ def export_details_to_json(database_path, output_file):
             conn.close()
 
 def main(config=None):
-    """Función principal"""
+    """Función principal actualizada"""
     if config is None:
         import argparse
         
@@ -872,11 +1028,19 @@ def main(config=None):
         parser.add_argument('--db-path', type=str, default='db/sqlite/musica.sqlite')
         parser.add_argument('--limit', type=int, help='Límite de instrumentos a procesar')
         parser.add_argument('--force-update', action='store_true')
+        parser.add_argument('--headless', action='store_true', default=True, 
+                           help='Ejecutar Chrome en modo headless (default: True)')
+        parser.add_argument('--visible', action='store_true', 
+                           help='Ejecutar Chrome en modo visible para debug')
         parser.add_argument('--search-term', type=str, help='Término de búsqueda')
         parser.add_argument('--output', type=str, default='equipboard_details.json')
         
         args = parser.parse_args()
         config = vars(args)
+    
+    # Si se especifica --visible, desactivar headless
+    if config.get('visible'):
+        config['headless'] = False
     
     action = config.get('action', 'extract')
     
@@ -884,7 +1048,8 @@ def main(config=None):
         process_instruments_details(
             database_path=config.get('db_path', 'db/sqlite/musica.sqlite'),
             force_update=config.get('force_update', False),
-            limit=config.get('limit')
+            limit=config.get('limit'),
+            headless=config.get('headless', True)
         )
     elif action == 'stats':
         get_details_stats(config.get('db_path', 'db/sqlite/musica.sqlite'))
