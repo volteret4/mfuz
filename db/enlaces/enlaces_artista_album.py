@@ -32,7 +32,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import musicbrainzngs
 import discogs_client
-from googleapiclient.discovery import build
+#from googleapiclient.discovery import build
 
 
 # Adaptador personalizado para datetime
