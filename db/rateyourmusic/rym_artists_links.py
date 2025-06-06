@@ -33,6 +33,7 @@ class RateYourMusicSearcher:
             max_retries: Máximo número de reintentos para rate limiting
         """
         self.db_path = Path(db_path)
+        self.create_rym_artists_table()
         self.searxng_url = searxng_url.rstrip('/')
         self.delay = delay
         self.max_retries = max_retries
@@ -51,6 +52,32 @@ class RateYourMusicSearcher:
             'errors': 0,
             'rate_limits': 0
         }
+
+
+    def create_rym_artists_table(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        # Eliminar la tabla si existe y crearla de nuevo
+        cursor.execute("DROP TABLE IF EXISTS rym_artists")
+        
+        cursor.execute("""
+            CREATE TABLE rym_artists (
+                id INTEGER PRIMARY KEY,
+                artist_id INTEGER,
+                artist_name TEXT NOT NULL,
+                rym_url TEXT,
+                found_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                last_checked TIMESTAMP,
+                status TEXT DEFAULT 'found',
+                album_count INTEGER DEFAULT 0,
+                rating_count INTEGER DEFAULT 0,
+                avg_rating REAL DEFAULT 0
+            )
+        """)
+        
+        conn.commit()
+        conn.close()
 
     def get_artists_without_rym_url(self, limit=None):
         """Obtiene artistas que no tienen URL de RateYourMusic"""
@@ -261,11 +288,26 @@ class RateYourMusicSearcher:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
+            # Actualizar tabla artists
             cursor.execute(
                 "UPDATE artists SET rateyourmusic_url = ? WHERE id = ?",
                 (rym_url, artist_id)
             )
             
+            # Obtener nombre del artista
+            cursor.execute("SELECT name FROM artists WHERE id = ?", (artist_id,))
+            result = cursor.fetchone()
+            artist_name = result[0] if result else "Unknown"
+            
+            # Insertar en rym_artists
+            cursor.execute(
+                """
+                INSERT INTO rym_artists (artist_id, artist_name, rym_url, found_date, status)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP, 'found')
+                """,
+                (artist_id, artist_name, rym_url)
+            )
+
             conn.commit()
             conn.close()
             
@@ -299,6 +341,7 @@ class RateYourMusicSearcher:
             limit: Límite de artistas a procesar (None para todos)
             skip_existing: Si saltar artistas que ya tienen URL
         """
+        self.create_rym_artists_table()
         logger.info("=== Iniciando búsqueda de URLs de RateYourMusic ===")
         
         # Obtener estadísticas iniciales
@@ -356,6 +399,9 @@ class RateYourMusicSearcher:
         if self.stats['searches_performed'] > 0:
             success_rate = (self.stats['urls_found'] / self.stats['searches_performed']) * 100
             logger.info(f"Tasa de éxito: {success_rate:.1f}%")
+
+
+
 
 def main(config=None):
     """Función principal compatible con db_creator.py"""
@@ -419,7 +465,7 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description='Buscar URLs de RateYourMusic para artistas')
-    parser.add_argument('--db-path', default='data/music.db', help='Ruta a la base de datos')
+    parser.add_argument('--db-path', default='db/sqlite/musica_local.sqlite', help='Ruta a la base de datos')
     parser.add_argument('--searxng-url', default='https://searx.tiekoetter.com', help='URL de SearXNG')
     parser.add_argument('--delay', type=float, default=5.0, help='Retraso entre búsquedas (segundos)')
     parser.add_argument('--max-retries', type=int, default=3, help='Máximo reintentos para rate limiting')
