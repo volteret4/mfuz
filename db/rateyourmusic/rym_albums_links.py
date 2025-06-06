@@ -3,6 +3,7 @@ from time import sleep
 from urllib.parse import quote
 import sqlite3
 from bs4 import BeautifulSoup
+import re
 
 def process_artist(artist_id, artist_name, config, conn):
     log_level = config.get('log_level', 'INFO')
@@ -20,8 +21,7 @@ def process_artist(artist_id, artist_name, config, conn):
     # Debug: Check current RYM albums for this artist
     cursor.execute("""
         SELECT COUNT(*) FROM rym_albums ra 
-        JOIN musicbrainz_discography md ON ra.album_id = md.album_id 
-        WHERE md.artist_id = ?
+        WHERE ra.artist_id = ?
     """, (artist_id,))
     existing_rym_count = cursor.fetchone()[0]
     print(f"[DEBUG] Artist {artist_name} already has {existing_rym_count} RYM albums in database")
@@ -59,43 +59,47 @@ def process_artist(artist_id, artist_name, config, conn):
             for link in soup.find_all('a', href=True):
                 href = link['href']
                 if 'rateyourmusic.com/release/' in href:
-                    # Clean and normalize the URL
-                    try:
-                        # Remove any query parameters and fragments
-                        clean_url = href.split('?')[0].split('#')[0]
-                        
-                        # Split URL to get parts
-                        url_parts = clean_url.rstrip('/').split('/')
-                        
-                        # Find the release part and extract base URL
-                        release_index = -1
-                        for i, part in enumerate(url_parts):
-                            if part == 'release':
-                                release_index = i
-                                break
-                        
-                        if release_index >= 0 and release_index + 3 < len(url_parts):
-                            # Extract only the base album URL: /release/type/artist/album
-                            base_parts = url_parts[:release_index + 4]  # Keep only up to album name
-                            base_url = '/'.join(base_parts) + '/'
-                            
-                            # Ensure it's a proper album URL (not reviews, charts, etc.)
-                            if len(base_parts) == release_index + 4:  # Exactly the right number of parts
-                                # Only add if we haven't seen this base URL before
-                                if base_url not in processed_base_urls:
-                                    processed_base_urls.add(base_url)
-                                    results.append({'url': base_url})
-                                    if href != base_url:
-                                        print(f"[DEBUG] Normalized URL: {href} -> {base_url}")
+                            # Clean and normalize the URL
+                            try:
+                                # Remove any query parameters and fragments
+                                clean_url = href.split('?')[0].split('#')[0]
+                                
+                                # Normalize different language domains to main domain
+                                clean_url = re.sub(r'://\w{2}\.rateyourmusic\.com', '://rateyourmusic.com', clean_url)
+
+                                
+                                # Split URL to get parts
+                                url_parts = clean_url.rstrip('/').split('/')
+                                
+                                # Find the release part and extract base URL
+                                release_index = -1
+                                for i, part in enumerate(url_parts):
+                                    if part == 'release':
+                                        release_index = i
+                                        break
+                                
+                                if release_index >= 0 and release_index + 3 < len(url_parts):
+                                    # Extract only the base album URL: /release/type/artist/album
+                                    base_parts = url_parts[:release_index + 4]  # Keep only up to album name
+                                    base_url = '/'.join(base_parts) + '/'
+                                    
+                                    # Ensure it's a proper album URL (not reviews, charts, etc.)
+                                    if len(base_parts) == release_index + 4:  # Exactly the right number of parts
+                                        # Only add if we haven't seen this base URL before
+                                        if base_url not in processed_base_urls:
+                                            processed_base_urls.add(base_url)
+                                            results.append({'url': base_url})
+                                            if href != base_url:
+                                                print(f"[DEBUG] Normalized URL: {href} -> {base_url}")
+                                        else:
+                                            print(f"[DEBUG] Skipping duplicate base URL: {base_url}")
+                                    else:
+                                        print(f"[DEBUG] Skipping non-base URL: {href}")
                                 else:
-                                    print(f"[DEBUG] Skipping duplicate base URL: {base_url}")
-                            else:
-                                print(f"[DEBUG] Skipping non-base URL: {href}")
-                        else:
-                            print(f"[DEBUG] Malformed URL structure, skipping: {href}")
-                    except Exception as e:
-                        print(f"[DEBUG] Error processing URL {href}: {e}")
-                        continue
+                                    print(f"[DEBUG] Malformed URL structure, skipping: {href}")
+                            except Exception as e:
+                                print(f"[DEBUG] Error processing URL {href}: {e}")
+                                continue
             
             print(f"[DEBUG] Page {page}: Found {len(results)} unique RYM links in HTML")
             
@@ -144,24 +148,38 @@ def process_artist(artist_id, artist_name, config, conn):
                                 album_name_in_albums = album[2] if album[2] else mb_title
                                 print(f"[DEBUG] Found matching album in musicbrainz_discography: album_id={album_id}, mb_title={mb_title}")
                                 
-                                # Check if this album already has a RYM URL to avoid duplicates
-                                cursor.execute("SELECT id FROM rym_albums WHERE album_id = ?", (album_id,))
+                                # Check if this exact URL already exists (regardless of album_id)
+                                cursor.execute("SELECT id, album_id FROM rym_albums WHERE rym_url = ?", (rym_url,))
+                                existing_url = cursor.fetchone()
+                                
+                                if existing_url:
+                                    print(f"[DEBUG] URL already exists (ID: {existing_url[0]}, album_id: {existing_url[1]}) - skipping: {rym_url}")
+                                    continue
+                                
+                                # Also check if this album_id already has ANY RYM URL
+                                cursor.execute("SELECT id, rym_url FROM rym_albums WHERE album_id = ?", (album_id,))
                                 existing_album = cursor.fetchone()
                                 
-                                if not existing_album:
-                                    print(f"[DEBUG] Inserting new RYM album: album_id={album_id}, url={rym_url}")
-                                    # Insert new album URL (only album_id and rym_url as per schema)
+                                if existing_album:
+                                    print(f"[DEBUG] Album {album_name_in_albums} already has RYM URL (ID: {existing_album[0]}): {existing_album[1]} - skipping new URL: {rym_url}")
+                                    continue
+                                
+                                # If we get here, neither the URL nor the album_id exist
+                                print(f"[DEBUG] Inserting new RYM album: album_id={album_id}, artist_id={artist_id}, url={rym_url}")
+                                try:
+                                    # Insert new album URL with artist_id and timestamp
                                     cursor.execute("""
-                                        INSERT INTO rym_albums (album_id, rym_url) 
-                                        VALUES (?, ?)
-                                    """, (album_id, rym_url))
+                                        INSERT INTO rym_albums (album_id, artist_id, rym_url, actualizado) 
+                                        VALUES (?, ?, ?, datetime('now'))
+                                    """, (album_id, artist_id, rym_url))
                                     conn.commit()  # Commit immediately after each insertion
                                     albums_found += 1
                                     page_albums_found += 1
                                     
                                     print(f"[SUCCESS] Added {album_name_in_albums} (MB: {mb_title}) - {rym_url}")
-                                else:
-                                    print(f"[DEBUG] Album {album_name_in_albums} (MB: {mb_title}) already has RYM URL (ID: {existing_album[0]})")
+                                except sqlite3.IntegrityError as e:
+                                    print(f"[WARNING] Failed to insert due to constraint violation: {e} - URL: {rym_url}")
+                                    continue
                             else:
                                 print(f"[DEBUG] No matching album found in musicbrainz_discography for: {album_name_from_url}")
                         else:
@@ -217,10 +235,41 @@ def main(config):
     tables = cursor.fetchall()
     print(f"[DEBUG] Found tables: {[t[0] for t in tables]}")
     
-    # Debug: Check if rym_albums table exists and its structure
+    # Check and update rym_albums table structure
     cursor.execute("PRAGMA table_info(rym_albums)")
     rym_table_info = cursor.fetchall()
-    print(f"[DEBUG] rym_albums table structure: {rym_table_info}")
+    column_names = [col[1] for col in rym_table_info]
+    print(f"[DEBUG] rym_albums current columns: {column_names}")
+    
+    # Add missing columns if they don't exist
+    if 'artist_id' not in column_names:
+        print("[DEBUG] Adding artist_id column to rym_albums table")
+        cursor.execute("ALTER TABLE rym_albums ADD COLUMN artist_id INTEGER")
+        conn.commit()
+    
+    if 'actualizado' not in column_names:
+        print("[DEBUG] Adding actualizado column to rym_albums table")
+        # SQLite doesn't allow CURRENT_TIMESTAMP as default when adding column to existing table
+        cursor.execute("ALTER TABLE rym_albums ADD COLUMN actualizado TIMESTAMP")
+        conn.commit()
+        
+        # Update existing rows to have a timestamp
+        cursor.execute("UPDATE rym_albums SET actualizado = CURRENT_TIMESTAMP WHERE actualizado IS NULL")
+        conn.commit()
+        print("[DEBUG] Updated existing rows with current timestamp")
+    
+    # Create unique index for URL if it doesn't exist
+    try:
+        cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_rym_albums_url ON rym_albums(rym_url)")
+        conn.commit()
+        print("[DEBUG] Created unique index for rym_url")
+    except Exception as e:
+        print(f"[DEBUG] Index creation skipped or failed: {e}")
+    
+    # Get updated table structure
+    cursor.execute("PRAGMA table_info(rym_albums)")
+    rym_table_info_updated = cursor.fetchall()
+    print(f"[DEBUG] rym_albums final structure: {rym_table_info_updated}")
 
     # Retrieve all artists
     cursor.execute("SELECT COUNT(*) FROM artists")
@@ -243,7 +292,7 @@ def main(config):
             SELECT a.id, a.name 
             FROM artists a
             JOIN musicbrainz_discography md ON a.id = md.artist_id
-            LEFT JOIN rym_albums ra ON md.album_id = ra.album_id
+            LEFT JOIN rym_albums ra ON a.id = ra.artist_id
             WHERE ra.id IS NULL
             GROUP BY a.id, a.name
         """)

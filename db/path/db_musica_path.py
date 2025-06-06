@@ -50,6 +50,9 @@ class MusicLibraryManager:
         )
         self.logger = logging.getLogger(__name__)
         
+        # Crear el directorio padre de la base de datos si no existe
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        
         # Initialize database - asegúrate de que esto se ejecute
         self.init_database()
         
@@ -58,37 +61,38 @@ class MusicLibraryManager:
 
 
 
-    def _verify_tables_exist(self):
-        """Verifica que todas las tablas necesarias existen, y las crea si no."""
-        conn = sqlite3.connect(self.db_path)
-        c = conn.cursor()
-        
-        required_tables = ['songs', 'artists', 'albums', 'genres', 'lyrics', 'song_links']
-        
-        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        existing_tables = [table[0] for table in c.fetchall()]
-        
-        for table in required_tables:
-            if table not in existing_tables:
-                self.logger.warning(f"Tabla {table} no encontrada. Reinicializando base de datos.")
-                self.init_database(create_indices=True)
-                break
-        
-        conn.close()
+
+
 
     def init_database(self, create_indices=False):
         """Initialize SQLite database with comprehensive tables and optionally create indices."""
+        
+        # Crear el directorio si no existe
+        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Verificar si el archivo de base de datos existe
+        db_exists = self.db_path.exists()
+        
+        if not db_exists:
+            self.logger.info(f"Creando nueva base de datos en: {self.db_path}")
+        
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
-        # Check for existing tables
-        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        existing_tables = [table[0] for table in c.fetchall()]
+        # Habilitar claves foráneas
+        c.execute("PRAGMA foreign_keys = ON")
         
-        # Songs table
+        # Check for existing tables solo si la DB ya existía
+        existing_tables = []
+        if db_exists:
+            c.execute("SELECT name FROM sqlite_master WHERE type='table'")
+            existing_tables = [table[0] for table in c.fetchall()]
+        
+        # Songs table - crear siempre si no existe
         if 'songs' not in existing_tables:
+            self.logger.info("Creando tabla 'songs'...")
             c.execute('''
-                CREATE TABLE IF NOT EXISTS songs (
+                CREATE TABLE songs (
                     id INTEGER PRIMARY KEY,
                     file_path TEXT UNIQUE,
                     title TEXT,
@@ -117,40 +121,22 @@ class MusicLibraryManager:
                     replay_gain_album_peak REAL,
                     album_art_path_denorm TEXT,
                     has_lyrics INTEGER DEFAULT 0,
-                    origen TEXT DEFAULT 'local'
+                    origen TEXT DEFAULT 'local',
+                    musicbrainz_artistid TEXT,
+                    musicbrainz_recordingid TEXT,
+                    musicbrainz_albumartistid TEXT,
+                    musicbrainz_releasegroupid TEXT
                 )
             ''')
         else:
-            # Check existing columns in songs table
-            c.execute("PRAGMA table_info(songs)")
-            columns = {col[1] for col in c.fetchall()}
-            
-            # Add new columns if they don't exist
-            new_columns = {
-                'added_timestamp': 'TIMESTAMP',
-                'added_day': 'INTEGER',
-                'added_week': 'INTEGER',
-                'added_month': 'INTEGER',
-                'added_year': 'INTEGER',
-                'duration': 'REAL',
-                'lyrics_id': 'INTEGER',
-                'replay_gain_track_gain': 'REAL',
-                'replay_gain_track_peak': 'REAL',
-                'replay_gain_album_gain': 'REAL',
-                'replay_gain_album_peak': 'REAL',
-                'album_art_path_denorm': 'TEXT',
-                'has_lyrics': 'INTEGER DEFAULT 0',
-                'origen': 'TEXT DEFAULT "local"'
-            }
-            
-            for col_name, col_type in new_columns.items():
-                if col_name not in columns:
-                    c.execute(f"ALTER TABLE songs ADD COLUMN {col_name} {col_type}")
+            # Verificar y añadir columnas faltantes
+            self._add_missing_columns_to_songs(c)
         
-        # Artists table
+        # Artists table - crear siempre si no existe
         if 'artists' not in existing_tables:
+            self.logger.info("Creando tabla 'artists'...")
             c.execute('''
-                CREATE TABLE IF NOT EXISTS artists (
+                CREATE TABLE artists (
                     id INTEGER PRIMARY KEY,
                     name TEXT UNIQUE,
                     bio TEXT,
@@ -175,44 +161,20 @@ class MusicLibraryManager:
                     added_week INTEGER,
                     added_month INTEGER,
                     added_year INTEGER,
-                    origen TEXT DEFAULT 'local'
+                    origen TEXT DEFAULT 'local',
+                    aliases TEXT,
+                    member_of TEXT
                 )
             ''')
         else:
-            # Check existing columns in artists table
-            c.execute("PRAGMA table_info(artists)")
-            artist_columns = {col[1] for col in c.fetchall()}
-            
-            # Add new columns if they don't exist
-            new_artist_columns = {
-                'spotify_url': 'TEXT',
-                'youtube_url': 'TEXT',
-                'musicbrainz_url': 'TEXT',
-                'discogs_url': 'TEXT',
-                'rateyourmusic_url': 'TEXT',
-                'links_updated': 'TIMESTAMP',
-                'wikipedia_url': 'TEXT',
-                'wikipedia_content': 'TEXT',
-                'wikipedia_updated': 'TIMESTAMP',
-                'mbid': 'TEXT',
-                'aliases': 'TEXT',
-                'member_of': 'TEXT',
-                'added_timestamp': 'TIMESTAMP',
-                'added_day': 'INTEGER',
-                'added_week': 'INTEGER',
-                'added_month': 'INTEGER',
-                'added_year': 'INTEGER',
-                'origen': 'TEXT DEFAULT "local"'
-            }
-            
-            for col_name, col_type in new_artist_columns.items():
-                if col_name not in artist_columns:
-                    c.execute(f"ALTER TABLE artists ADD COLUMN {col_name} {col_type}")
+            # Verificar y añadir columnas faltantes
+            self._add_missing_columns_to_artists(c)
         
-        # Albums table
+        # Albums table - crear siempre si no existe
         if 'albums' not in existing_tables:
+            self.logger.info("Creando tabla 'albums'...")
             c.execute('''
-                CREATE TABLE IF NOT EXISTS albums (
+                CREATE TABLE albums (
                     id INTEGER PRIMARY KEY,
                     artist_id INTEGER,
                     name TEXT,
@@ -241,159 +203,311 @@ class MusicLibraryManager:
                     added_month INTEGER,
                     added_year INTEGER,
                     origen TEXT DEFAULT 'local',
+                    musicbrainz_albumid TEXT,
+                    musicbrainz_albumartistid TEXT,
+                    musicbrainz_releasegroupid TEXT,
+                    catalognumber TEXT,
+                    media TEXT,
+                    discnumber TEXT,
+                    releasecountry TEXT,
+                    originalyear INTEGER,
+                    producers TEXT,
+                    engineers TEXT,
+                    mastering_engineers TEXT,
+                    credits TEXT,
                     FOREIGN KEY(artist_id) REFERENCES artists(id),
                     UNIQUE(artist_id, name)
                 )
             ''')
         else:
-            # Check existing columns in albums table
-            c.execute("PRAGMA table_info(albums)")
-            album_columns = {col[1] for col in c.fetchall()}
+            # Verificar y añadir columnas faltantes
+            self._add_missing_columns_to_albums(c)
             
-            # Add new columns if they don't exist
-            new_album_columns = {
-                'spotify_url': 'TEXT',
-                'spotify_id': 'TEXT',
-                'youtube_url': 'TEXT',
-                'musicbrainz_url': 'TEXT',
-                'discogs_url': 'TEXT',
-                'rateyourmusic_url': 'TEXT',
-                'links_updated': 'TIMESTAMP',
-                'wikipedia_url': 'TEXT',
-                'wikipedia_content': 'TEXT',
-                'wikipedia_updated': 'TIMESTAMP',
-                'mbid': 'TEXT',
-                'folder_path': 'TEXT',
-                'bitrate_range': 'TEXT',
-                'producers': 'TEXT',
-                'engineers': 'TEXT',
-                'mastering_engineers': 'TEXT',
-                'credits': 'JSON',
-                'added_timestamp': 'TIMESTAMP',
-                'added_day': 'INTEGER',
-                'added_week': 'INTEGER',
-                'added_month': 'INTEGER',
-                'added_year': 'INTEGER',
-                'origen': 'TEXT DEFAULT "local"'
-            }
-            
-            for col_name, col_type in new_album_columns.items():
-                if col_name not in album_columns:
-                    c.execute(f"ALTER TABLE albums ADD COLUMN {col_name} {col_type}")
+        # Genres table
+        if 'genres' not in existing_tables:
+            self.logger.info("Creando tabla 'genres'...")
+            c.execute('''
+                CREATE TABLE genres (
+                    id INTEGER PRIMARY KEY,
+                    name TEXT UNIQUE,
+                    description TEXT,
+                    related_genres TEXT,
+                    origin_year INTEGER
+                )
+            ''')
         
+        # Lyrics table
+        if 'lyrics' not in existing_tables:
+            self.logger.info("Creando tabla 'lyrics'...")
+            c.execute('''
+                CREATE TABLE lyrics (
+                    id INTEGER PRIMARY KEY,
+                    track_id INTEGER,
+                    lyrics TEXT,
+                    source TEXT DEFAULT 'Genius',
+                    last_updated TIMESTAMP,
+                    FOREIGN KEY(track_id) REFERENCES songs(id)
+                )
+            ''')
             
-            
-            # Genres table
-            if 'genres' not in existing_tables:
-                c.execute('''
-                    CREATE TABLE IF NOT EXISTS genres (
-                        id INTEGER PRIMARY KEY,
-                        name TEXT UNIQUE,
-                        description TEXT,
-                        related_genres TEXT,
-                        origin_year INTEGER
-                    )
-                ''')
-            
-            # Lyrics table
-            if 'lyrics' not in existing_tables:
-                c.execute('''
-                    CREATE TABLE IF NOT EXISTS lyrics (
-                        id INTEGER PRIMARY KEY,
-                        track_id INTEGER,
-                        lyrics TEXT,
-                        source TEXT DEFAULT 'Genius',
-                        last_updated TIMESTAMP,
-                        FOREIGN KEY(track_id) REFERENCES songs(id)
-                    )
-                ''')
-                
-            # Song Links table
-            if 'song_links' not in existing_tables:
-                c.execute('''
-                    CREATE TABLE IF NOT EXISTS song_links (
-                        id INTEGER PRIMARY KEY,
-                        song_id INTEGER,
-                        spotify_url TEXT,
-                        spotify_id TEXT,
-                        lastfm_url TEXT,
-                        links_updated TIMESTAMP,
-                        youtube_url TEXT,
-                        musicbrainz_url TEXT,
-                        musicbrainz_recording_id TEXT,
-                        FOREIGN KEY(song_id) REFERENCES songs(id)
-                    )
-                ''')
-            else:
-                # Check existing columns in song_links table
-                c.execute("PRAGMA table_info(song_links)")
-                song_links_columns = {col[1] for col in c.fetchall()}
-                
-                # Add new columns if they don't exist
-                new_song_links_columns = {
-                    'spotify_url': 'TEXT',
-                    'spotify_id': 'TEXT',
-                    'lastfm_url': 'TEXT',
-                    'links_updated': 'TIMESTAMP',
-                    'youtube_url': 'TEXT',
-                    'musicbrainz_url': 'TEXT',
-                    'musicbrainz_recording_id': 'TEXT'
-                }
-                
-                for col_name, col_type in new_song_links_columns.items():
-                    if col_name not in song_links_columns:
-                        c.execute(f"ALTER TABLE song_links ADD COLUMN {col_name} {col_type}")
-            
-            # Create FTS tables if they don't exist
-            if 'songs_fts' not in existing_tables:
-                c.execute('''
-                    CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(
-                        title, artist, album, genre,
-                        content=songs, content_rowid=id
-                    )
-                ''')
-            
-            if 'lyrics_fts' not in existing_tables:
-                c.execute('''
-                    CREATE VIRTUAL TABLE IF NOT EXISTS lyrics_fts USING fts5(
-                        lyrics,
-                        content=lyrics, content_rowid=id
-                    )
-                ''')
-            
-            if 'song_fts' not in existing_tables:
-                c.execute('''
-                    CREATE VIRTUAL TABLE IF NOT EXISTS song_fts USING fts5(
-                        id, title, artist, album, genre
-                    )
-                ''')
-            
-            if 'artist_fts' not in existing_tables:
-                c.execute('''
-                    CREATE VIRTUAL TABLE IF NOT EXISTS artist_fts USING fts5(
-                        id, name, bio, tags
-                    )
-                ''')
-            
-            if 'album_fts' not in existing_tables:
-                c.execute('''
-                    CREATE VIRTUAL TABLE IF NOT EXISTS album_fts USING fts5(
-                        id, name, genre
-                    )
-                ''')
-            
-            # Create indices if requested
-            if create_indices:
-                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)")
-                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_album ON songs(album)")
-                c.execute("CREATE INDEX IF NOT EXISTS idx_songs_genre ON songs(genre)")
-                c.execute("CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)")
-                c.execute("CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)")
-                c.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
-            
-            conn.commit()
+        # Song Links table
+        if 'song_links' not in existing_tables:
+            self.logger.info("Creando tabla 'song_links'...")
+            c.execute('''
+                CREATE TABLE song_links (
+                    id INTEGER PRIMARY KEY,
+                    song_id INTEGER,
+                    spotify_url TEXT,
+                    spotify_id TEXT,
+                    lastfm_url TEXT,
+                    links_updated TIMESTAMP,
+                    youtube_url TEXT,
+                    musicbrainz_url TEXT,
+                    musicbrainz_recording_id TEXT,
+                    bandcamp_url TEXT,
+                    soundcloud_url TEXT,
+                    boomkat_url TEXT,
+                    FOREIGN KEY(song_id) REFERENCES songs(id)
+                )
+            ''')
+        else:
+            # Verificar y añadir columnas faltantes
+            self._add_missing_columns_to_song_links(c)
+        
+        # Create FTS tables if they don't exist
+        self._create_fts_tables(c, existing_tables)
+        
+        # Create indices if requested or if it's a new database
+        if create_indices or not db_exists:
+            self._create_basic_indices(c)
+        
+        conn.commit()
+        conn.close()
+        
+        if not db_exists:
+            self.logger.info("Base de datos creada exitosamente")
+
+    def _add_missing_columns_to_songs(self, cursor):
+        """Añadir columnas faltantes a la tabla songs"""
+        cursor.execute("PRAGMA table_info(songs)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        # Lista de todas las columnas que deberían existir
+        required_columns = {
+            'added_timestamp': 'TIMESTAMP',
+            'added_day': 'INTEGER',
+            'added_week': 'INTEGER', 
+            'added_month': 'INTEGER',
+            'added_year': 'INTEGER',
+            'duration': 'REAL',
+            'lyrics_id': 'INTEGER',
+            'replay_gain_track_gain': 'REAL',
+            'replay_gain_track_peak': 'REAL',
+            'replay_gain_album_gain': 'REAL',
+            'replay_gain_album_peak': 'REAL',
+            'album_art_path_denorm': 'TEXT',
+            'has_lyrics': 'INTEGER DEFAULT 0',
+            'origen': 'TEXT DEFAULT "local"',
+            'musicbrainz_artistid': 'TEXT',
+            'musicbrainz_recordingid': 'TEXT',
+            'musicbrainz_albumartistid': 'TEXT',
+            'musicbrainz_releasegroupid': 'TEXT'
+        }
+        
+        for col_name, col_type in required_columns.items():
+            if col_name not in columns:
+                try:
+                    cursor.execute(f"ALTER TABLE songs ADD COLUMN {col_name} {col_type}")
+                    self.logger.info(f"Añadida columna '{col_name}' a tabla songs")
+                except sqlite3.OperationalError as e:
+                    self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
+    def _add_missing_columns_to_artists(self, cursor):
+        """Añadir columnas faltantes a la tabla artists"""
+        cursor.execute("PRAGMA table_info(artists)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        required_columns = {
+            'spotify_url': 'TEXT',
+            'youtube_url': 'TEXT',
+            'musicbrainz_url': 'TEXT',
+            'discogs_url': 'TEXT',
+            'rateyourmusic_url': 'TEXT',
+            'links_updated': 'TIMESTAMP',
+            'wikipedia_url': 'TEXT',
+            'wikipedia_content': 'TEXT',
+            'wikipedia_updated': 'TIMESTAMP',
+            'mbid': 'TEXT',
+            'aliases': 'TEXT',
+            'member_of': 'TEXT',
+            'added_timestamp': 'TIMESTAMP',
+            'added_day': 'INTEGER',
+            'added_week': 'INTEGER',
+            'added_month': 'INTEGER',
+            'added_year': 'INTEGER',
+            'origen': 'TEXT DEFAULT "local"'
+        }
+        
+        for col_name, col_type in required_columns.items():
+            if col_name not in columns:
+                try:
+                    cursor.execute(f"ALTER TABLE artists ADD COLUMN {col_name} {col_type}")
+                    self.logger.info(f"Añadida columna '{col_name}' a tabla artists")
+                except sqlite3.OperationalError as e:
+                    self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
+    def _add_missing_columns_to_albums(self, cursor):
+        """Añadir columnas faltantes a la tabla albums"""
+        cursor.execute("PRAGMA table_info(albums)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        required_columns = {
+            'spotify_url': 'TEXT',
+            'spotify_id': 'TEXT',
+            'youtube_url': 'TEXT',
+            'musicbrainz_url': 'TEXT',
+            'discogs_url': 'TEXT',
+            'rateyourmusic_url': 'TEXT',
+            'links_updated': 'TIMESTAMP',
+            'wikipedia_url': 'TEXT',
+            'wikipedia_content': 'TEXT',
+            'wikipedia_updated': 'TIMESTAMP',
+            'mbid': 'TEXT',
+            'folder_path': 'TEXT',
+            'bitrate_range': 'TEXT',
+            'producers': 'TEXT',
+            'engineers': 'TEXT',
+            'mastering_engineers': 'TEXT',
+            'credits': 'TEXT',
+            'added_timestamp': 'TIMESTAMP',
+            'added_day': 'INTEGER',
+            'added_week': 'INTEGER',
+            'added_month': 'INTEGER',
+            'added_year': 'INTEGER',
+            'origen': 'TEXT DEFAULT "local"',
+            'musicbrainz_albumid': 'TEXT',
+            'musicbrainz_albumartistid': 'TEXT',
+            'musicbrainz_releasegroupid': 'TEXT',
+            'catalognumber': 'TEXT',
+            'media': 'TEXT',
+            'discnumber': 'TEXT',
+            'releasecountry': 'TEXT',
+            'originalyear': 'INTEGER'
+        }
+        
+        for col_name, col_type in required_columns.items():
+            if col_name not in columns:
+                try:
+                    cursor.execute(f"ALTER TABLE albums ADD COLUMN {col_name} {col_type}")
+                    self.logger.info(f"Añadida columna '{col_name}' a tabla albums")
+                except sqlite3.OperationalError as e:
+                    self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
+    def _add_missing_columns_to_song_links(self, cursor):
+        """Añadir columnas faltantes a la tabla song_links"""
+        cursor.execute("PRAGMA table_info(song_links)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        required_columns = {
+            'spotify_url': 'TEXT',
+            'spotify_id': 'TEXT',
+            'lastfm_url': 'TEXT',
+            'links_updated': 'TIMESTAMP',
+            'youtube_url': 'TEXT',
+            'musicbrainz_url': 'TEXT',
+            'musicbrainz_recording_id': 'TEXT',
+            'bandcamp_url': 'TEXT',
+            'soundcloud_url': 'TEXT',
+            'boomkat_url': 'TEXT'
+        }
+        
+        for col_name, col_type in required_columns.items():
+            if col_name not in columns:
+                try:
+                    cursor.execute(f"ALTER TABLE song_links ADD COLUMN {col_name} {col_type}")
+                    self.logger.info(f"Añadida columna '{col_name}' a tabla song_links")
+                except sqlite3.OperationalError as e:
+                    self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
+    def _create_fts_tables(self, cursor, existing_tables):
+        """Crear tablas FTS si no existen"""
+        if 'songs_fts' not in existing_tables:
+            cursor.execute('''
+                CREATE VIRTUAL TABLE songs_fts USING fts5(
+                    title, artist, album, genre,
+                    content=songs, content_rowid=id
+                )
+            ''')
+        
+        if 'lyrics_fts' not in existing_tables:
+            cursor.execute('''
+                CREATE VIRTUAL TABLE lyrics_fts USING fts5(
+                    lyrics,
+                    content=lyrics, content_rowid=id
+                )
+            ''')
+        
+        if 'song_fts' not in existing_tables:
+            cursor.execute('''
+                CREATE VIRTUAL TABLE song_fts USING fts5(
+                    id, title, artist, album, genre
+                )
+            ''')
+        
+        if 'artist_fts' not in existing_tables:
+            cursor.execute('''
+                CREATE VIRTUAL TABLE artist_fts USING fts5(
+                    id, name, bio, tags
+                )
+            ''')
+        
+        if 'album_fts' not in existing_tables:
+            cursor.execute('''
+                CREATE VIRTUAL TABLE album_fts USING fts5(
+                    id, name, genre
+                )
+            ''')
+
+    def _create_basic_indices(self, cursor):
+        """Crear índices básicos necesarios"""
+        basic_indices = [
+            "CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)",
+            "CREATE INDEX IF NOT EXISTS idx_songs_album ON songs(album)",
+            "CREATE INDEX IF NOT EXISTS idx_songs_genre ON songs(genre)",
+            "CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)",
+            "CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)",
+            "CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)",
+            "CREATE INDEX IF NOT EXISTS idx_songs_file_path ON songs(file_path)",
+            "CREATE INDEX IF NOT EXISTS idx_artists_name ON artists(name)",
+            "CREATE INDEX IF NOT EXISTS idx_albums_name ON albums(name)"
+        ]
+        
+        for index_query in basic_indices:
+            try:
+                cursor.execute(index_query)
+            except sqlite3.OperationalError as e:
+                self.logger.warning(f"No se pudo crear índice: {e}")
+
+    def _verify_tables_exist(self):
+        """Verifica que todas las tablas necesarias existen, y las crea si no."""
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        required_tables = ['songs', 'artists', 'albums', 'genres', 'lyrics', 'song_links']
+        
+        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        existing_tables = [table[0] for table in c.fetchall()]
+        
+        missing_tables = [table for table in required_tables if table not in existing_tables]
+        
+        if missing_tables:
+            self.logger.warning(f"Tablas faltantes detectadas: {missing_tables}. Reinicializando base de datos.")
             conn.close()
-        
+            self.init_database(create_indices=True)
+        else:
+            conn.close()
+            self.logger.info("Todas las tablas necesarias están presentes")
+            
 
     def create_indices(self):
         """Crea índices optimizados para mejorar el rendimiento de consultas."""

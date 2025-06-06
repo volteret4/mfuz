@@ -102,81 +102,87 @@ class RateYourMusicSearcher:
         
         return artists
 
+
     def search_artist_on_rym(self, artist_name):
         """
-        Busca un artista en RateYourMusic usando SearXNG con manejo de rate limiting
+        Busca un artista en RateYourMusic usando SearXNG con mejor debugging y manejo de errores
         
         Returns:
             str or None: URL de RateYourMusic si se encuentra, None si no
         """
-        max_retries = 3
-        base_wait_time = 5  # segundos base para esperar en rate limit
+        max_retries = self.max_retries
+        base_wait_time = 2
         
         for attempt in range(max_retries):
             try:
                 # Construir query de búsqueda para RateYourMusic
                 search_query = f"site:rateyourmusic.com {artist_name}"
                 
-                # Parámetros para SearXNG
+                # Parámetros para SearXNG - cambiar a HTML para evitar problemas
                 params = {
                     'q': search_query,
-                    'format': 'html',
-                    'categories': 'general'
+                    'format': 'html',  # Cambiar a HTML por defecto
+                    'categories': 'general',
+                    'engines': 'google,bing,duckduckgo'  # Especificar motores
+                }
+                
+                # Headers más completos para evitar bloqueos
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
                 }
                 
                 # Realizar búsqueda
                 search_url = f"{self.searxng_url}/search"
-                logger.info(f"Buscando: {artist_name} (intento {attempt + 1}/{max_retries})")
+                logger.debug(f"Buscando: {artist_name} (intento {attempt + 1}/{max_retries})")
                 logger.debug(f"URL: {search_url}")
                 logger.debug(f"Query: {search_query}")
                 
-                response = self.session.get(search_url, params=params, timeout=30)
+                response = self.session.get(search_url, params=params, headers=headers, timeout=15)
+                
+                # Debug de la respuesta
+                logger.debug(f"Status code: {response.status_code}")
+                logger.debug(f"Response headers: {dict(response.headers)}")
                 
                 # Manejar rate limiting
                 if response.status_code == 429:
-                    wait_time = base_wait_time * (2 ** attempt)  # Backoff exponencial
+                    wait_time = base_wait_time * (2 ** attempt)
                     logger.warning(f"Rate limit alcanzado para '{artist_name}'. Esperando {wait_time} segundos...")
                     self.stats['rate_limits'] += 1
                     time.sleep(wait_time)
                     continue
                 
-                response.raise_for_status()
-                
-                # Parsear resultados HTML
-                soup = BeautifulSoup(response.text, 'html.parser')
-                
-                # Buscar resultados en la estructura HTML de SearXNG
-                # Los resultados suelen estar en elementos con clase 'result'
-                results = soup.find_all('article', class_='result')
-                
-                if not results:
-                    # Intentar con selector alternativo
-                    results = soup.find_all('div', class_='result')
-                
-                rym_urls = []
-                
-                for result in results:
-                    # Buscar el enlace en el resultado
-                    link_element = result.find('a')
-                    if not link_element:
-                        continue
-                        
-                    url = link_element.get('href', '')
+                # Manejar 403 Forbidden
+                if response.status_code == 403:
+                    logger.warning(f"Acceso prohibido (403) para '{artist_name}'. Probablemente bloqueado por headers.")
+                    # Intentar con diferentes headers o sin parámetros específicos
+                    simple_params = {'q': search_query}
+                    simple_headers = {'User-Agent': 'Mozilla/5.0 (compatible; SearchBot/1.0)'}
                     
-                    # Verificar si es una URL de RateYourMusic válida
-                    if self.is_valid_rym_artist_url(url):
-                        # Verificar que el nombre del artista coincida aproximadamente
-                        if self.artist_name_matches(artist_name, url, result.get_text()):
-                            rym_urls.append(url)
+                    response = self.session.get(search_url, params=simple_params, headers=simple_headers, timeout=15)
+                    logger.debug(f"Intento simplificado - Status code: {response.status_code}")
+                    
+                    if response.status_code != 200:
+                        logger.warning(f"Sigue fallando después del intento simplificado para '{artist_name}'")
+                        continue
+                
+                if response.status_code != 200:
+                    logger.warning(f"Status code no exitoso: {response.status_code} para '{artist_name}'")
+                    logger.debug(f"Response content: {response.text[:500]}...")
+                    continue  # Cambiar return por continue para intentar de nuevo
+                
+                # Siempre parsear como HTML ya que cambiamos el formato
+                rym_urls = self._parse_html_results(response.text, artist_name)
                 
                 if rym_urls:
-                    # Retornar la primera URL válida encontrada
-                    best_url = self.select_best_rym_url(rym_urls, artist_name)
-                    logger.info(f"✓ Encontrado para '{artist_name}': {best_url}")
-                    return best_url
+                    logger.info(f"✓ Encontrado para '{artist_name}': {rym_urls}")
+                    return rym_urls
                 else:
-                    logger.info(f"✗ No encontrado para '{artist_name}'")
-                    return None
+                    logger.debug(f"✗ No encontrado para '{artist_name}' en intento {attempt + 1}")
                     
             except requests.exceptions.HTTPError as e:
                 if e.response.status_code == 429:
@@ -188,69 +194,179 @@ class RateYourMusicSearcher:
                 else:
                     logger.error(f"Error HTTP en la búsqueda para '{artist_name}': {e}")
                     self.stats['errors'] += 1
-                    return None
+                    continue  # Continuar con el siguiente intento
             except requests.exceptions.RequestException as e:
                 logger.error(f"Error en la búsqueda para '{artist_name}': {e}")
                 self.stats['errors'] += 1
-                return None
+                if attempt < max_retries - 1:
+                    time.sleep(base_wait_time)
+                    continue
             except Exception as e:
                 logger.error(f"Error inesperado buscando '{artist_name}': {e}")
                 self.stats['errors'] += 1
-                return None
+                continue
         
         # Si llegamos aquí, agotamos todos los intentos
-        logger.error(f"Máximo de intentos agotado para '{artist_name}' debido a rate limiting")
+        logger.error(f"Máximo de intentos agotado para '{artist_name}'")
         self.stats['errors'] += 1
         return None
+
+    def _parse_html_results(self, html_content, artist_name):
+        """Parsea resultados HTML y extrae URLs de RateYourMusic"""
+        try:
+            soup = BeautifulSoup(html_content, 'html.parser')
+            
+            # Múltiples selectores para diferentes versiones de SearXNG
+            result_selectors = [
+                'article.result',
+                'div.result',
+                '.result',
+                'article',
+                'div[class*="result"]',
+                'h3 a',  # Enlaces directos en títulos
+                'a[href*="rateyourmusic.com"]'  # Enlaces directos a RYM
+            ]
+            
+            rym_urls = []
+            
+            # Primero buscar enlaces directos a RateYourMusic
+            direct_links = soup.find_all('a', href=True)
+            for link in direct_links:
+                url = link.get('href', '')
+                if self.is_valid_rym_artist_url(url):
+                    title_text = link.get_text() or ''
+                    # Buscar texto del contexto (div padre, etc.)
+                    parent_text = ''
+                    parent = link.find_parent()
+                    if parent:
+                        parent_text = parent.get_text()
+                    
+                    combined_text = f"{title_text} {parent_text}"
+                    
+                    if self.artist_name_matches(artist_name, url, combined_text):
+                        rym_urls.append(url)
+                        logger.debug(f"URL directa válida encontrada: {url}")
+            
+            # Si no encontramos enlaces directos, buscar en resultados estructurados
+            if not rym_urls:
+                for selector in result_selectors:
+                    results = soup.select(selector)
+                    if not results:
+                        continue
+                        
+                    logger.debug(f"Usando selector '{selector}', encontrados {len(results)} resultados")
+                    
+                    for result in results:
+                        # Buscar enlaces en el resultado
+                        links = result.find_all('a', href=True)
+                        for link in links:
+                            url = link.get('href', '')
+                            text = result.get_text()
+                            
+                            logger.debug(f"Examinando URL: {url}")
+                            
+                            if self.is_valid_rym_artist_url(url):
+                                if self.artist_name_matches(artist_name, url, text):
+                                    rym_urls.append(url)
+                                    logger.debug(f"URL válida encontrada en HTML: {url}")
+                    
+                    # Si encontramos URLs, no necesitamos probar otros selectores
+                    if rym_urls:
+                        break
+            
+            if rym_urls:
+                best_url = self.select_best_rym_url(rym_urls, artist_name)
+                logger.info(f"✓ Encontrado en HTML para '{artist_name}': {best_url}")
+                return best_url
+            else:
+                logger.debug(f"No se encontraron URLs válidas en HTML para '{artist_name}'")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Error parseando HTML para '{artist_name}': {e}")
+            return None
+
+
 
     def is_valid_rym_artist_url(self, url):
         """Verifica si una URL es válida de RateYourMusic para artistas"""
         if not url or not isinstance(url, str):
             return False
             
-        # Normalizar URL
-        url = url.lower()
+        # Limpiar URL
+        url = url.strip()
         
         # Debe ser de rateyourmusic.com
-        if 'rateyourmusic.com' not in url:
+        if 'rateyourmusic.com' not in url.lower():
             return False
             
         # Patrones válidos para páginas de artistas
         artist_patterns = [
             r'rateyourmusic\.com/artist/',
             r'rateyourmusic\.com/artist\.php',
+            r'rateyourmusic\.com/music/artist/',
         ]
         
         for pattern in artist_patterns:
-            if re.search(pattern, url):
+            if re.search(pattern, url.lower()):
                 return True
+        
+        # Excluir URLs que definitivamente NO son de artistas
+        exclude_patterns = [
+            r'/release/',
+            r'/album/',
+            r'/ep/',
+            r'/single/',
+            r'/chart/',
+            r'/list/',
+            r'/review/',
+            r'/board/',
+            r'/user/',
+        ]
+        
+        for pattern in exclude_patterns:
+            if re.search(pattern, url.lower()):
+                return False
                 
         return False
 
+
+
+
     def artist_name_matches(self, search_name, url, result_text):
         """
-        Verifica si el resultado corresponde al artista buscado
+        Verifica si el resultado corresponde al artista buscado con mejor lógica
         """
         search_name_clean = self.clean_artist_name(search_name)
         result_text_clean = self.clean_artist_name(result_text)
         url_clean = self.clean_artist_name(url)
         
-        # Verificación exacta
+        logger.debug(f"Comparando: '{search_name_clean}' vs '{result_text_clean[:100]}...'")
+        
+        # Verificación exacta (case insensitive)
         if search_name_clean.lower() in result_text_clean.lower():
+            logger.debug("Match exacto en texto")
             return True
             
         # Verificación en URL
         if search_name_clean.lower() in url_clean.lower():
+            logger.debug("Match exacto en URL")
             return True
-            
-        # Verificación por palabras clave
-        search_words = set(search_name_clean.lower().split())
-        result_words = set(result_text_clean.lower().split())
         
-        # Al menos 70% de las palabras deben coincidir
-        if search_words and len(search_words.intersection(result_words)) / len(search_words) >= 0.7:
-            return True
+        # Verificación por palabras (más flexible)
+        search_words = set(word.lower() for word in search_name_clean.split() if len(word) > 2)
+        result_words = set(word.lower() for word in result_text_clean.split())
+        
+        if search_words:
+            matches = search_words.intersection(result_words)
+            match_ratio = len(matches) / len(search_words)
+            logger.debug(f"Match ratio: {match_ratio:.2f} ({matches})")
             
+            # Relajar el criterio: 50% de las palabras deben coincidir
+            if match_ratio >= 0.5:
+                logger.debug("Match por palabras clave")
+                return True
+        
         return False
 
     def clean_artist_name(self, name):
@@ -341,8 +457,9 @@ class RateYourMusicSearcher:
             limit: Límite de artistas a procesar (None para todos)
             skip_existing: Si saltar artistas que ya tienen URL
         """
-        self.create_rym_artists_table()
         logger.info("=== Iniciando búsqueda de URLs de RateYourMusic ===")
+        logger.info(f"Límite configurado: {limit}")
+        logger.info(f"Skip existing: {skip_existing}")
         
         # Obtener estadísticas iniciales
         self.get_statistics()
@@ -356,6 +473,7 @@ class RateYourMusicSearcher:
             
         logger.info(f"Procesando {len(artists)} artistas...")
         logger.info(f"Retraso entre búsquedas: {self.delay} segundos")
+        logger.info(f"URL de SearXNG: {self.searxng_url}")
         
         for i, (artist_id, artist_name) in enumerate(artists, 1):
             try:
@@ -403,25 +521,141 @@ class RateYourMusicSearcher:
 
 
 
+# DEBUG
+    def test_searxng_connection(self):
+        """Prueba la conexión con SearXNG con debugging mejorado"""
+        try:
+            test_url = f"{self.searxng_url}/search"
+            params = {
+                'q': 'test rateyourmusic',
+                'format': 'html',
+                'categories': 'general'
+            }
+            
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            }
+            
+            logger.info(f"Probando conexión con SearXNG: {self.searxng_url}")
+            response = self.session.get(test_url, params=params, headers=headers, timeout=10)
+            
+            logger.info(f"Status: {response.status_code}")
+            logger.info(f"Headers de respuesta: {dict(list(response.headers.items())[:5])}")  # Primeros 5 headers
+            
+            if response.status_code == 200:
+                # Verificar si hay contenido útil
+                content_preview = response.text[:500]
+                logger.info(f"✓ SearXNG responde correctamente. Preview: {content_preview[:100]}...")
+                
+                # Buscar indicadores de que SearXNG está funcionando
+                if 'searx' in response.text.lower() or 'results' in response.text.lower():
+                    logger.info("✓ Parece ser una respuesta válida de SearXNG")
+                    return True
+                else:
+                    logger.warning("⚠️ La respuesta no parece ser de SearXNG")
+                    return False
+            elif response.status_code == 403:
+                logger.error("✗ Error 403: Acceso prohibido. Posible problema de configuración o bloqueo.")
+                logger.error("Sugerencias:")
+                logger.error("1. Verificar que SearXNG permite búsquedas externas")
+                logger.error("2. Revisar configuración de rate limiting")
+                logger.error("3. Verificar que el puerto 8485 esté correcto")
+                return False
+            else:
+                logger.error(f"✗ SearXNG error: {response.status_code}")
+                logger.error(f"Response: {response.text[:200]}...")
+                return False
+                
+        except Exception as e:
+            logger.error(f"✗ Error conectando con SearXNG: {e}")
+            return False
+
+    def test_single_search(self, artist_name="radiohead"):
+        """Prueba una búsqueda individual para debugging"""
+        logger.info(f"=== Prueba de búsqueda para: {artist_name} ===")
+        
+        # Probar conexión primero
+        if not self.test_searxng_connection():
+            return None
+        
+        # Realizar búsqueda de prueba
+        result = self.search_artist_on_rym(artist_name)
+        
+        if result:
+            logger.info(f"✓ Prueba exitosa: {result}")
+        else:
+            logger.warning(f"✗ No se encontró resultado para {artist_name}")
+        
+        return result
+            
+        # Limpiar URL
+        url = url.strip()
+        
+        # Debe ser de rateyourmusic.com
+        if 'rateyourmusic.com' not in url.lower():
+            return False
+            
+        # Patrones válidos para páginas de artistas
+        artist_patterns = [
+            r'rateyourmusic\.com/artist/',
+            r'rateyourmusic\.com/artist\.php',
+            r'rateyourmusic\.com/music/artist/',
+        ]
+        
+        for pattern in artist_patterns:
+            if re.search(pattern, url.lower()):
+                return True
+        
+        # Excluir URLs que definitivamente NO son de artistas
+        exclude_patterns = [
+            r'/release/',
+            r'/album/',
+            r'/ep/',
+            r'/single/',
+            r'/chart/',
+            r'/list/',
+            r'/review/',
+            r'/board/',
+            r'/user/',
+        ]
+        
+        for pattern in exclude_patterns:
+            if re.search(pattern, url.lower()):
+                return False
+                
+        return False
+
+
 def main(config=None):
     """Función principal compatible con db_creator.py"""
     
-    # Usar configuración global si no se pasa como parámetro
+    # Si no se pasa configuración como parámetro, usar la global CONFIG
     if config is None:
-        config = CONFIG
+        global CONFIG
+        config = CONFIG if CONFIG else {}
     
     # Configuración por defecto
     default_config = {
         'db_path': 'data/music.db',
         'searxng_url': 'https://searx.tiekoetter.com',
-        'delay': 5.0,  # Aumentado por defecto
+        'delay': 5.0,
         'max_retries': 3,
         'limit': None,
+        'skip_existing': True,
         'log_level': 'INFO'
     }
     
-    # Combinar configuración
-    final_config = {**default_config, **config}
+    # Combinar configuración (config tiene prioridad sobre defaults)
+    if config is None:
+        final_config = default_config
+        logger.info(f"Configuración predeterminada (editar json para personalizar): {final_config}")
+    else:
+        final_config = config
+        logger.info(f"Configuración recibida: {config}")
+    
+    
+    # Debug: mostrar configuración recibida
     
     # Configurar logging
     log_level = getattr(logging, final_config.get('log_level', 'INFO').upper())
@@ -460,27 +694,3 @@ def main(config=None):
         logger.error(f"❌ Error en el proceso: {e}")
         return 1
 
-if __name__ == "__main__":
-    # Configuración para ejecución independiente
-    import argparse
-    
-    parser = argparse.ArgumentParser(description='Buscar URLs de RateYourMusic para artistas')
-    parser.add_argument('--db-path', default='db/sqlite/musica_local.sqlite', help='Ruta a la base de datos')
-    parser.add_argument('--searxng-url', default='https://searx.tiekoetter.com', help='URL de SearXNG')
-    parser.add_argument('--delay', type=float, default=5.0, help='Retraso entre búsquedas (segundos)')
-    parser.add_argument('--max-retries', type=int, default=3, help='Máximo reintentos para rate limiting')
-    parser.add_argument('--limit', type=int, help='Límite de artistas a procesar')
-    parser.add_argument('--log-level', default='INFO', choices=['DEBUG', 'INFO', 'WARNING', 'ERROR'])
-    
-    args = parser.parse_args()
-    
-    config = {
-        'db_path': args.db_path,
-        'searxng_url': args.searxng_url,
-        'delay': args.delay,
-        'max_retries': args.max_retries,
-        'limit': args.limit,
-        'log_level': args.log_level
-    }
-    
-    exit(main(config))
