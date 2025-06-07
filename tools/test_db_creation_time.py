@@ -9,6 +9,7 @@ import time
 import sys
 from pathlib import Path
 import argparse
+import sqlite3 
 
 def load_config(config_path):
     """Cargar configuración desde archivo JSON"""
