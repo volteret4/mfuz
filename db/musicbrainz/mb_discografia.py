@@ -14,6 +14,7 @@ from datetime import datetime
 import sys
 import os
 
+
 # Configuración de la API de MusicBrainz
 MB_BASE_URL = "https://musicbrainz.org/ws/2"
 USER_AGENT = "MusicDiscoveryApp/1.0 (https://github.com/yourusername/musicapp)"
@@ -349,11 +350,11 @@ def main(config=None):
         
         print(f"\nEncontrados {total_artists} artistas para procesar")
         
-        if interactive and total_artists > 10:
-            response = input(f"¿Procesar {total_artists} artistas? (y/N): ")
-            if response.lower() != 'y':
-                print("Cancelado por el usuario")
-                return 0
+        # if interactive and total_artists > 10:
+        #     response = input(f"¿Procesar {total_artists} artistas? (y/N): ")
+        #     if response.lower() != 'y':
+        #         print("Cancelado por el usuario")
+        #         return 0
         
         # Procesar cada artista
         success_count = 0

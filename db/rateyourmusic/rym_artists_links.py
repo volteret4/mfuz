@@ -103,6 +103,52 @@ class RateYourMusicSearcher:
         return artists
 
 
+    def get_artists_with_rym_url_missing_entry(self):
+        """Obtiene artistas que tienen URL de RateYourMusic pero no entrada en rym_artists"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        query = """
+        SELECT a.id, a.name, a.rateyourmusic_url
+        FROM artists a
+        LEFT JOIN rym_artists ra ON a.id = ra.artist_id
+        WHERE a.rateyourmusic_url IS NOT NULL 
+        AND a.rateyourmusic_url != ''
+        AND ra.artist_id IS NULL
+        ORDER BY a.id
+        """
+        
+        cursor.execute(query)
+        artists = cursor.fetchall()
+        conn.close()
+        
+        return artists
+
+    def create_rym_entry_for_existing_url(self, artist_id, artist_name, rym_url):
+        """Crea entrada en rym_artists para un artista que ya tiene URL"""
+        try:
+            conn = sqlite3.connect(self.db_path)
+            cursor = conn.cursor()
+            
+            # Insertar en rym_artists
+            cursor.execute(
+                """
+                INSERT INTO rym_artists (artist_id, artist_name, rym_url, found_date, status)
+                VALUES (?, ?, ?, CURRENT_TIMESTAMP, 'found')
+                """,
+                (artist_id, artist_name, rym_url)
+            )
+
+            conn.commit()
+            conn.close()
+            
+            logger.debug(f"Creada entrada en rym_artists para artista {artist_id}: {rym_url}")
+            
+        except sqlite3.Error as e:
+            logger.error(f"Error creando entrada en rym_artists para artista {artist_id}: {e}")
+            self.stats['errors'] += 1
+
+
     def search_artist_on_rym(self, artist_name):
         """
         Busca un artista en RateYourMusic usando SearXNG con mejor debugging y manejo de errores
@@ -464,14 +510,25 @@ class RateYourMusicSearcher:
         # Obtener estadísticas iniciales
         self.get_statistics()
         
+        # NUEVO: Primero procesar artistas que ya tienen URL pero no entrada en rym_artists
+        existing_artists = self.get_artists_with_rym_url_missing_entry()
+        if existing_artists:
+            logger.info(f"Encontrados {len(existing_artists)} artistas con URL existente sin entrada en rym_artists")
+            for artist_id, artist_name, rym_url in existing_artists:
+                logger.info(f"Creando entrada para: {artist_name}")
+                self.create_rym_entry_for_existing_url(artist_id, artist_name, rym_url)
+                self.stats['urls_found'] += 1
+        
         # Obtener artistas sin URL de RYM
         artists = self.get_artists_without_rym_url(limit)
         
         if not artists:
             logger.info("No hay artistas sin URL de RateYourMusic para procesar")
+            if existing_artists:
+                logger.info("✅ Se procesaron entradas existentes correctamente")
             return
             
-        logger.info(f"Procesando {len(artists)} artistas...")
+        logger.info(f"Procesando {len(artists)} artistas sin URL...")
         logger.info(f"Retraso entre búsquedas: {self.delay} segundos")
         logger.info(f"URL de SearXNG: {self.searxng_url}")
         
