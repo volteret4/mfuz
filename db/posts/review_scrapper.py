@@ -561,7 +561,7 @@ def extraer_contenido_con_aclarar(url, service_type):
         str: Contenido extraído o None si hubo un error
     """
     try:
-        raw_content = db.posts.aclarar_contenido.get_full_content(url, service_type)
+        raw_content = tools.aclarar_contenido.get_full_content(url, service_type)
         
         # Procesar según el tipo de servicio
         if service_type in ['mercury', 'readability']:
