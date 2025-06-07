@@ -16,7 +16,7 @@ import random
 
 
 # Importamos aclarar_contenido.py para usar su función
-sys.path.append(os.path.join(os.path.dirname(__file__)))
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(__file__))))
 import tools.aclarar_contenido
 
 
