@@ -16,8 +16,8 @@ import random
 
 
 # Importamos aclarar_contenido.py para usar su función
-#sys.path.append(os.path.join(os.path.dirname(__file__), 'tools'))
-import db.tools.aclarar_contenido
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+import tools.aclarar_contenido
 
 
 def verificar_y_crear_tablas(conn, cursor):
