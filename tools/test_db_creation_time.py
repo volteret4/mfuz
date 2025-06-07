@@ -10,6 +10,26 @@ import sys
 from pathlib import Path
 import argparse
 import sqlite3 
+from collections import defaultdict
+
+
+def format_file_size(size_bytes):
+    """Formatear tamaño de archivo en formato legible"""
+    if size_bytes == 0:
+        return "0 B"
+    
+    size_names = ["B", "KB", "MB", "GB", "TB"]
+    i = 0
+    size = float(size_bytes)
+    
+    while size >= 1024.0 and i < len(size_names) - 1:
+        size /= 1024.0
+        i += 1
+    
+    if i == 0:
+        return f"{int(size)} {size_names[i]}"
+    else:
+        return f"{size:.2f} {size_names[i]}"
 
 def load_config(config_path):
     """Cargar configuración desde archivo JSON"""
@@ -87,7 +107,6 @@ def run_single_script(script_name, original_config, temp_config_path, db_path):
             'after_snapshot': None
         }
 
-
 def format_time(seconds):
     """Formatear tiempo en formato legible"""
     if seconds < 60:
@@ -114,13 +133,28 @@ def extract_all_scripts(config_data):
 
 def get_db_snapshot(db_path):
     """Crear un snapshot del estado actual de la base de datos"""
+    # Verificar si la base de datos existe
+    if not Path(db_path).exists():
+        print(f"Base de datos {db_path} no existe, creando snapshot vacío")
+        return {
+            'tables': {},
+            'total_rows': 0,
+            'db_exists': False,
+            'file_size': 0
+        }
+    
     try:
+        # Obtener tamaño del archivo
+        file_size = Path(db_path).stat().st_size
+        
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         
         snapshot = {
             'tables': {},
-            'total_rows': 0
+            'total_rows': 0,
+            'db_exists': True,
+            'file_size': file_size
         }
         
         # Obtener lista de tablas
@@ -155,7 +189,13 @@ def get_db_snapshot(db_path):
         
     except Exception as e:
         print(f"Error al crear snapshot de {db_path}: {e}")
-        return None
+        return {
+            'tables': {},
+            'total_rows': 0,
+            'db_exists': False,
+            'file_size': 0
+        }
+
 
 
 def compare_snapshots(before_snapshot, after_snapshot):
@@ -163,12 +203,51 @@ def compare_snapshots(before_snapshot, after_snapshot):
     if not before_snapshot or not after_snapshot:
         return None
     
+    # Caso especial: BD no existía antes pero sí después (primera creación)
+    if not before_snapshot.get('db_exists', True) and after_snapshot.get('db_exists', True):
+        return {
+            'database_created': True,
+            'new_tables': list(after_snapshot['tables'].keys()),
+            'new_columns': {},
+            'modified_columns': {},
+            'row_changes': {table: {'before': 0, 'after': data['row_count'], 'difference': data['row_count']} 
+                          for table, data in after_snapshot['tables'].items()},
+            'total_row_change': after_snapshot['total_rows'],
+            'file_size_change': {
+                'before': 0,
+                'after': after_snapshot['file_size'],
+                'difference': after_snapshot['file_size']
+            }
+        }
+    
+    # Caso especial: BD existía antes pero no después (¿eliminada?)
+    if before_snapshot.get('db_exists', True) and not after_snapshot.get('db_exists', True):
+        return {
+            'database_deleted': True,
+            'new_tables': [],
+            'new_columns': {},
+            'modified_columns': {},
+            'row_changes': {},
+            'total_row_change': -before_snapshot['total_rows'],
+            'file_size_change': {
+                'before': before_snapshot['file_size'],
+                'after': 0,
+                'difference': -before_snapshot['file_size']
+            }
+        }
+    
+    # Caso normal: comparación entre dos BD existentes
     changes = {
         'new_tables': [],
         'new_columns': defaultdict(list),
         'modified_columns': defaultdict(list),
         'row_changes': {},
-        'total_row_change': after_snapshot['total_rows'] - before_snapshot['total_rows']
+        'total_row_change': after_snapshot['total_rows'] - before_snapshot['total_rows'],
+        'file_size_change': {
+            'before': before_snapshot['file_size'],
+            'after': after_snapshot['file_size'],
+            'difference': after_snapshot['file_size'] - before_snapshot['file_size']
+        }
     }
     
     # Detectar nuevas tablas
@@ -219,6 +298,22 @@ def format_changes_report(script_name, changes, execution_time):
     report += f"CAMBIOS EN BD - {script_name} ({format_time(execution_time)})\n"
     report += f"{'='*60}\n"
     
+    # Caso especial: creación de base de datos
+    if changes.get('database_created'):
+        report += f"🆕 BASE DE DATOS CREADA\n"
+        report += f"📋 TABLAS INICIALES ({len(changes['new_tables'])}):\n"
+        for table in changes['new_tables']:
+            report += f"  + {table}\n"
+        report += f"📈 TOTAL FILAS INICIALES: +{changes['total_row_change']:,} filas\n"
+        report += f"💾 TAMAÑO INICIAL: {format_file_size(changes['file_size_change']['after'])}\n"
+        return report
+    
+    # Caso especial: eliminación de base de datos
+    if changes.get('database_deleted'):
+        report += f"🗑️  BASE DE DATOS ELIMINADA\n"
+        report += f"💾 TAMAÑO PERDIDO: {format_file_size(changes['file_size_change']['before'])}\n"
+        return report
+    
     # Nuevas tablas
     if changes['new_tables']:
         report += f"📋 NUEVAS TABLAS ({len(changes['new_tables'])}):\n"
@@ -261,7 +356,18 @@ def format_changes_report(script_name, changes, execution_time):
         symbol = "+" if total_change > 0 else ""
         report += f"📈 TOTAL FILAS: {symbol}{total_change:,} filas\n"
     
+    # Cambio de tamaño de archivo
+    size_change = changes.get('file_size_change', {})
+    if size_change and size_change['difference'] != 0:
+        before_size = format_file_size(size_change['before'])
+        after_size = format_file_size(size_change['after'])
+        diff_size = size_change['difference']
+        symbol = "+" if diff_size > 0 else ""
+        diff_formatted = format_file_size(abs(diff_size))
+        report += f"💾 TAMAÑO BD: {before_size} → {after_size} ({symbol}{diff_formatted})\n"
+    
     return report
+
 
 
 
@@ -296,6 +402,13 @@ def main():
         sys.exit(1)
     
     print(f"Base de datos: {db_path}")
+    
+    # Mostrar tamaño inicial de la BD si existe
+    if Path(db_path).exists():
+        initial_size = Path(db_path).stat().st_size
+        print(f"Tamaño inicial de BD: {format_file_size(initial_size)}")
+    else:
+        print("Base de datos no existe - será creada durante el proceso")
     
     # Obtener lista de scripts a probar
     if args.scripts:
@@ -366,6 +479,13 @@ def main():
             print(f"{result['script']:<40} {format_time(result['execution_time']):>15} - {result['stderr'][:30]}...")
     
     print(f"\n⏱️  TIEMPO TOTAL DE PRUEBAS: {format_time(total_execution_time)}")
+    
+    # Mostrar tamaño final de la BD
+    if Path(db_path).exists():
+        final_size = Path(db_path).stat().st_size
+        print(f"💾 TAMAÑO FINAL DE BD: {format_file_size(final_size)}")
+    else:
+        print("💾 Base de datos no existe al final del proceso")
     
     # Guardar reporte detallado
     with open(args.output, 'w', encoding='utf-8') as f:
