@@ -134,8 +134,20 @@ def extract_all_scripts(config_data):
 def get_db_snapshot(db_path):
     """Crear un snapshot del estado actual de la base de datos"""
     # Verificar si la base de datos existe
-    if not Path(db_path).exists():
-        print(f"Base de datos {db_path} no existe, creando snapshot vacío")
+    db_file = Path(db_path)
+    
+    if not db_file.exists():
+        print(f"✓ Base de datos {db_path} no existe, creando snapshot vacío")
+        return {
+            'tables': {},
+            'total_rows': 0,
+            'db_exists': False,
+            'file_size': 0
+        }
+    
+    # Verificar si tenemos permisos para leer el archivo
+    if not db_file.is_file():
+        print(f"✗ Error: {db_path} existe pero no es un archivo válido")
         return {
             'tables': {},
             'total_rows': 0,
@@ -145,10 +157,15 @@ def get_db_snapshot(db_path):
     
     try:
         # Obtener tamaño del archivo
-        file_size = Path(db_path).stat().st_size
+        file_size = db_file.stat().st_size
+        print(f"✓ Archivo encontrado: {format_file_size(file_size)}")
         
+        # Intentar conectar a la BD
         conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
+        
+        # Verificar que es una BD SQLite válida
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' LIMIT 1")
         
         snapshot = {
             'tables': {},
@@ -160,35 +177,59 @@ def get_db_snapshot(db_path):
         # Obtener lista de tablas
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
         tables = [row[0] for row in cursor.fetchall()]
+        print(f"✓ Encontradas {len(tables)} tablas")
         
         for table in tables:
-            # Obtener estructura de la tabla (columnas)
-            cursor.execute(f"PRAGMA table_info({table})")
-            columns = {}
-            for col_info in cursor.fetchall():
-                col_id, col_name, col_type, not_null, default_val, pk = col_info
-                columns[col_name] = {
-                    'type': col_type,
-                    'not_null': not_null,
-                    'default': default_val,
-                    'primary_key': pk
+            try:
+                # Obtener estructura de la tabla (columnas)
+                cursor.execute(f"PRAGMA table_info({table})")
+                columns = {}
+                for col_info in cursor.fetchall():
+                    col_id, col_name, col_type, not_null, default_val, pk = col_info
+                    columns[col_name] = {
+                        'type': col_type,
+                        'not_null': not_null,
+                        'default': default_val,
+                        'primary_key': pk
+                    }
+                
+                # Obtener número de filas
+                cursor.execute(f"SELECT COUNT(*) FROM `{table}`")
+                row_count = cursor.fetchone()[0]
+                
+                snapshot['tables'][table] = {
+                    'columns': columns,
+                    'row_count': row_count
                 }
-            
-            # Obtener número de filas
-            cursor.execute(f"SELECT COUNT(*) FROM {table}")
-            row_count = cursor.fetchone()[0]
-            
-            snapshot['tables'][table] = {
-                'columns': columns,
-                'row_count': row_count
-            }
-            snapshot['total_rows'] += row_count
+                snapshot['total_rows'] += row_count
+                
+            except Exception as table_error:
+                print(f"⚠️  Error procesando tabla {table}: {table_error}")
+                # Continuar con las demás tablas
+                continue
         
         conn.close()
+        print(f"✓ Snapshot completado: {len(snapshot['tables'])} tablas, {snapshot['total_rows']:,} filas")
         return snapshot
         
+    except sqlite3.DatabaseError as db_error:
+        print(f"✗ Error de BD SQLite: {db_error}")
+        return {
+            'tables': {},
+            'total_rows': 0,
+            'db_exists': False,
+            'file_size': 0
+        }
+    except PermissionError:
+        print(f"✗ Error de permisos: no se puede acceder a {db_path}")
+        return {
+            'tables': {},
+            'total_rows': 0,
+            'db_exists': False,
+            'file_size': 0
+        }
     except Exception as e:
-        print(f"Error al crear snapshot de {db_path}: {e}")
+        print(f"✗ Error inesperado al crear snapshot de {db_path}: {e}")
         return {
             'tables': {},
             'total_rows': 0,
