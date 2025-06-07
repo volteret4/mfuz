@@ -12,6 +12,7 @@ musicbrainzngs==0.7.1       # DB: scrobbles_lastfm, enlaces_artista_album, mb_ar
 mutagen==1.47.0             # DB: db_musica_path
 numpy==2.2.6                # DB: portadas_artistas
 
+Pillow==11.2.1              # DB: img 
 
 playwright==1.51.0          # DB: enlaces,enlaces_albumes  posts,scraper
 

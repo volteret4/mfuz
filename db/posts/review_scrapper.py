@@ -20,6 +20,152 @@ import random
 import db.tools.aclarar_contenido
 
 
+def verificar_y_crear_tablas(conn, cursor):
+    """
+    Verifica y crea todas las tablas necesarias si no existen
+    
+    Args:
+        conn: Conexión a la base de datos
+        cursor: Cursor de la base de datos
+        
+    Returns:
+        bool: True si todo se creó correctamente
+    """
+    try:
+        # Crear tabla feeds básica si no existe
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS feeds (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                entity_type TEXT NOT NULL,
+                entity_id INTEGER NOT NULL,
+                feed_name TEXT NOT NULL,
+                post_title TEXT NOT NULL,
+                post_url TEXT NOT NULL,
+                post_date TIMESTAMP,
+                content TEXT,
+                added_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        print("✓ Tabla feeds verificada/creada")
+        
+        # Crear columna origen si no existe
+        crear_columna_origen_si_no_existe(cursor)
+        
+        # Crear tabla album_metacritic si no existe
+        crear_tabla_metacritic(cursor)
+        
+        # Crear tabla album_aoty si no existe
+        crear_tabla_aoty(cursor)
+        
+        # Commit de todas las creaciones
+        conn.commit()
+        print("✓ Todas las tablas verificadas/creadas exitosamente")
+        return True
+        
+    except sqlite3.Error as e:
+        print(f"Error al verificar/crear tablas: {e}")
+        conn.rollback()
+        return False
+
+
+
+def buscar_album_en_db(conn, cursor, album_id, album_name, artist_name, content_service, archivo_errores=None):
+    """
+    Busca un álbum en AnyDecentMusic y guarda las reseñas encontradas
+    """
+    # Asegurar que las tablas existen antes de procesar
+    verificar_y_crear_tablas(conn, cursor)
+    
+    # Resto de la función original...
+    termino_busqueda = artist_name
+    url_busqueda = f"http://www.anydecentmusic.com/search-results.aspx?search={urllib.parse.quote(termino_busqueda)}"
+    
+    print(f"Buscando álbum: {album_name}")
+    print(f"Artista: {artist_name}")
+    print(f"URL de búsqueda: {url_busqueda}")
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    }
+    
+    try:
+        respuesta = requests.get(url_busqueda, headers=headers)
+        respuesta.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Error al realizar la petición: {e}")
+        return 0
+    
+    soup = BeautifulSoup(respuesta.text, 'html.parser')
+    resultados = soup.select('form > div > div > div > ul > li > div')
+    
+    if not resultados:
+        print("No se encontraron resultados para la búsqueda.")
+        return 0
+    
+    print(f"Se encontraron {len(resultados)} resultados.")
+    
+    album_encontrado = False
+    enlaces_guardados = 0
+    
+    for idx, resultado in enumerate(resultados, 1):
+        artista_elemento = resultado.select_one('a:nth-of-type(2) > h2')
+        album_elemento = resultado.select_one('a:nth-of-type(3) > h3')
+        
+        if artista_elemento and album_elemento:
+            nombre_artista = artista_elemento.text.strip()
+            nombre_album = album_elemento.text.strip()
+            
+            print(f"Resultado {idx}: {nombre_artista} - {nombre_album}")
+            
+            if (artist_name.lower() in nombre_artista.lower() and 
+                album_name.lower() in nombre_album.lower()):
+                print(f"¡Coincidencia encontrada! Artista: {nombre_artista}, Álbum: {nombre_album}")
+                album_encontrado = True
+                
+                album_url_elemento = resultado.select_one('a:nth-of-type(3)')
+                if album_url_elemento and album_url_elemento.has_attr('href'):
+                    album_url = album_url_elemento['href']
+                    album_url_completa = f"http://www.anydecentmusic.com/{album_url}"
+                    print(f"URL del álbum: {album_url_completa}")
+                    
+                    enlaces_validos, enlaces_error = extraer_enlaces_album(album_url_completa)
+                    
+                    if archivo_errores and enlaces_error:
+                        guardar_errores_enlace(archivo_errores, nombre_artista, nombre_album, enlaces_error)
+                    
+                    if enlaces_validos:
+                        print(f"Se encontraron {len(enlaces_validos)} enlaces de reseñas.")
+                        
+                        for enlace in enlaces_validos:
+                            url = enlace['url']
+                            estado = enlace['estado']
+                            
+                            print(f"Procesando enlace: {url}")
+                            
+                            feed_name = extraer_dominio(url)
+                            post_title = obtener_titulo_pagina(url)
+                            contenido = extraer_contenido_con_aclarar(url, content_service)
+                            
+                            if contenido:
+                                post_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                                guardado = guardar_feed(conn, cursor, 'album', album_id, feed_name, 
+                                                      post_title, url, post_date, contenido)
+                                
+                                if guardado:
+                                    enlaces_guardados += 1
+                                    print(f"Reseña guardada: {feed_name} - {post_title}")
+                            else:
+                                print(f"No se pudo extraer contenido de {url}")
+                    else:
+                        print("No se encontraron enlaces de reseñas válidos.")
+    
+    if not album_encontrado:
+        print(f"No se encontró el álbum '{album_name}' para el artista '{artist_name}'.")
+    
+    return enlaces_guardados
+
+
+
 def extraer_enlaces_album(url_album):
     """
     Accede a la página del álbum y extrae todos los enlaces "Read Review".
@@ -654,7 +800,60 @@ def buscar_album_metacritic_mejorado(artist_name, album_name):
     
     print(f"✗ No se encontró el álbum en Metacritic")
     return None
-
+def procesar_albums(db_path, content_service, archivo_errores=None, inicio_id=0, lote=50, pausa=2):
+    """
+    Procesa múltiples álbumes para buscar sus reseñas
+    """
+    conn, cursor = conectar_db(db_path)
+    
+    # Verificar y crear todas las tablas necesarias al inicio
+    if not verificar_y_crear_tablas(conn, cursor):
+        print("❌ Error al verificar/crear tablas. Abortando.")
+        conn.close()
+        return 0, 0
+    
+    # Obtener todos los álbumes
+    todos_albums = obtener_albums(cursor)
+    
+    # Filtrar álbumes para comenzar desde inicio_id
+    albums_a_procesar = [a for a in todos_albums if a['id'] >= inicio_id]
+    
+    print(f"Se procesarán {len(albums_a_procesar)} álbumes, comenzando desde ID {inicio_id}")
+    
+    # Estadísticas
+    albums_procesados = 0
+    resenas_totales = 0
+    
+    # Procesar por lotes
+    for i in range(0, len(albums_a_procesar), lote):
+        lote_actual = albums_a_procesar[i:i+lote]
+        print(f"\n=== Procesando lote {i//lote + 1} ({len(lote_actual)} álbumes) ===")
+        
+        for album in lote_actual:
+            print(f"\nProcesando álbum ID {album['id']}: {album['artist']} - {album['name']}")
+            
+            # Buscar reseñas para este álbum
+            resenas = buscar_album_en_db(conn, cursor, album['id'], album['name'], 
+                                       album['artist'], content_service, archivo_errores)
+            
+            # Actualizar estadísticas
+            albums_procesados += 1
+            resenas_totales += resenas
+            
+            # Pausa para evitar sobrecargar el servidor
+            if albums_procesados < len(albums_a_procesar):
+                print(f"Esperando {pausa} segundos antes de la próxima búsqueda...")
+                time.sleep(pausa)
+        
+        # Resumen del lote
+        print(f"\n--- Resumen lote {i//lote + 1} ---")
+        print(f"Álbumes procesados: {albums_procesados}")
+        print(f"Reseñas encontradas: {resenas_totales}")
+    
+    # Cerrar conexión
+    conn.close()
+    
+    return albums_procesados, resenas_totales
 
 # Añadir estas opciones a tu configuración
 def procesar_albums_con_anti_deteccion(db_path, content_service, config):
@@ -3826,7 +4025,7 @@ def verificar_url_aoty_mejorado(url):
 
 def main(config=None):
     """
-    Función principal final con force_update, columna origen y todas las mejoras
+    Función principal con verificación y creación automática de tablas
     """
     print("🎵 Iniciando recolección COMPLETA de reseñas de álbumes...")
     
@@ -3862,7 +4061,7 @@ def main(config=None):
     archivo_errores = config.get('archivo_errores')
     include_metacritic = config.get('include_metacritic', True)
     include_aoty = config.get('include_aoty', True)
-    force_update = config.get('force_update', False)  # ¡NUEVA OPCIÓN!
+    force_update = config.get('force_update', False)
     google_api_key = config.get('google_api_key')
     google_cx = config.get('google_cx')
     
@@ -3875,22 +4074,21 @@ def main(config=None):
     print(f"  🎯 Incluir Metacritic: {include_metacritic}")
     print(f"  🏆 Incluir Album of the Year: {include_aoty}")
     print(f"  🔄 Force update: {'ACTIVADO' if force_update else 'DESACTIVADO'}")
-    print(f"  🏷️  Columna origen: ACTIVADA")
-    print(f"  🚫 Filtrado de URLs de streaming: ACTIVADO")
-    print(f"  🎵 Extracción específica por sitio: ACTIVADO")
-    
-    if google_api_key and google_cx:
-        print(f"  ✅ Google API disponible para AOTY")
-    else:
-        print(f"  ⚠️  Google API no configurado, usando método alternativo para AOTY")
-    
-    if archivo_errores:
-        print(f"  📄 Archivo de errores: {archivo_errores}")
     
     # Verificar existencia de la base de datos
     if not os.path.exists(db_path):
         print(f"❌ Error: La base de datos {db_path} no existe")
         return
+    
+    # Verificar y crear tablas antes de procesar
+    conn, cursor = conectar_db(db_path)
+    if not verificar_y_crear_tablas(conn, cursor):
+        print("❌ Error al verificar/crear tablas. Abortando.")
+        conn.close()
+        return
+    conn.close()
+    
+    print("✅ Tablas verificadas/creadas correctamente")
     
     # Iniciar procesamiento completo
     try:
@@ -3901,45 +4099,16 @@ def main(config=None):
         )
         
         print(f"\n{'='*80}")
-        print(f"🎉 RESUMEN FINAL COMPLETO CON TODAS LAS MEJORAS")
+        print(f"🎉 RESUMEN FINAL COMPLETO")
         print(f"{'='*80}")
         print(f"📊 Álbumes procesados: {albums_procesados}")
-        print(f"⏭️  Álbumes saltados (ya procesados): {albums_saltados}")
-        print(f"📄 Reseñas totales encontradas: {resenas_encontradas}")
-        
-        if albums_procesados > 0:
-            print(f"📈 Promedio reseñas/álbum procesado: {(resenas_encontradas/albums_procesados):.1f}")
-        
-        print(f"\n📋 DESGLOSE POR FUENTE:")
-        print(f"🌍 AnyDecentMusic: {anydecentmusic_encontrados} álbumes ({(anydecentmusic_encontrados/albums_procesados*100):.1f}%)")
+        print(f"⏭️  Álbumes saltados: {albums_saltados}")
+        print(f"📄 Reseñas encontradas: {resenas_encontradas}")
+        print(f"🌍 AnyDecentMusic: {anydecentmusic_encontrados}")
         if include_metacritic:
-            print(f"🎯 Metacritic: {metacritic_encontrados} álbumes ({(metacritic_encontrados/albums_procesados*100):.1f}%)")
+            print(f"🎯 Metacritic: {metacritic_encontrados}")
         if include_aoty:
-            print(f"🏆 Album of the Year: {aoty_encontrados} álbumes ({(aoty_encontrados/albums_procesados*100):.1f}%)")
-        
-        print(f"\n✨ MEJORAS APLICADAS:")
-        print(f"🔄 Force update: {'Procesó todo nuevamente' if force_update else 'Saltó álbumes ya procesados'}")
-        print(f"🏷️  Columna origen: Todas las reseñas etiquetadas por fuente")
-        print(f"🚫 URLs de streaming: Automáticamente filtradas")
-        print(f"🎯 Extracción específica: AllMusic, SputnikMusic, Pitchfork, etc.")
-        print(f"📄 Contenido mejorado: Reseñas reales vs. metadata")
-        
-        # Mostrar estadísticas por origen
-        conn, cursor = conectar_db(db_path)
-        print(f"\n📊 ESTADÍSTICAS POR ORIGEN:")
-        
-        for origen in ['review_anydecentmusic', 'review_metacritic', 'review_aoty']:
-            cursor.execute("""
-                SELECT COUNT(*) as count FROM feeds 
-                WHERE entity_type = 'album' AND origen = ?
-            """, (origen,))
-            count = cursor.fetchone()['count']
-            print(f"   {origen}: {count} reseñas")
-        
-        conn.close()
-        
-        print(f"{'='*80}")
-        print(f"🎵 Proceso completado exitosamente")
+            print(f"🏆 Album of the Year: {aoty_encontrados}")
         print(f"{'='*80}")
         
     except Exception as e:
