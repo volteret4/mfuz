@@ -23,9 +23,10 @@ sqlite3.register_adapter(datetime, adapt_datetime)
 load_dotenv()
 
 class MultiLyricsManager:
-    def __init__(self, db_path, batch_size=1000):
+    def __init__(self, db_path, batch_size=1000, config=None):
         self.db_path = db_path
         self.batch_size = batch_size
+        self.config = config or {}  # Almacenar la configuración pasada
         
         # Logging configuration
         logging.basicConfig(
@@ -35,13 +36,15 @@ class MultiLyricsManager:
         self.logger = logging.getLogger(__name__)
         
         # Genius API initialization (como backup)
-        genius_token = os.getenv("GENIUS_ACCESS_TOKEN")
+        # Cambiar de os.getenv a self.config.get
+        genius_token = self.config.get("genius_access_token")
         if genius_token:
             self.genius = lyricsgenius.Genius(genius_token, timeout=10, sleep_time=1.0)
             self.genius.verbose = False
         else:
             self.genius = None
-            self.logger.warning("GENIUS_ACCESS_TOKEN no encontrado. Genius no estará disponible como fuente de respaldo.")
+            self.logger.warning("genius_access_token no encontrado en configuración. Genius no estará disponible como fuente de respaldo.")
+        
         
         # Archivo de estado para pausar/continuar
         self.state_file = PROJECT_ROOT / '.content' / 'logs' / 'db' / 'lyrics_update_state.json'
@@ -160,10 +163,10 @@ class MultiLyricsManager:
     
     def get_lyrics_from_happi(self, artist, title):
         """Intenta obtener letras usando Happi API."""
-        happi_key = os.getenv("HAPPI_API_KEY")
+        # Cambiar de os.getenv a self.config.get
+        happi_key = self.config.get("happi_api_key")
         if not happi_key:
             return None, None
-            
         base_url = "https://api.happi.dev/v1/music"
         
         try:
@@ -194,7 +197,8 @@ class MultiLyricsManager:
     
     def get_lyrics_from_musixmatch(self, artist, title):
         """Intenta obtener letras usando Musixmatch API."""
-        musixmatch_key = os.getenv("MUSIXMATCH_API_KEY")
+        # Cambiar de os.getenv a self.config.get
+        musixmatch_key = self.config.get("musixmatch_api_key")
         if not musixmatch_key:
             return None, None
             
@@ -523,7 +527,7 @@ def main(config=None):
                 
             # Combinar configuraciones comunes y específicas
             final_config.update(json_config.get("common", {}))
-            final_config.update(json_config.get("lyrics_updater", {}))
+            final_config.update(json_config.get("letras/letras_genius_ovh", {}))
         
         # Los argumentos de línea de comandos tienen mayor prioridad
         arg_dict = vars(args)

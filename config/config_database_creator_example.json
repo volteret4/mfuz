@@ -104,7 +104,7 @@
       "guardar_url_albums": true,
       "force_update": false
     },
-    "letras/letras_genius_db_musica": {
+    "letras/letras_genius_ovh": {
       "batch_size": 38000,
       "no_resume": true
   

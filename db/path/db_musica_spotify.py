@@ -367,14 +367,15 @@ class MusicSpotifyManager:
             )
         ''')
         
-        # Tabla genres
+        # Tabla genres - GÉNEROS SIN UNIQUE para permitir múltiples orígenes
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS genres (
                 id INTEGER PRIMARY KEY,
-                name TEXT UNIQUE,
+                name TEXT,
                 description TEXT,
                 related_genres TEXT,
-                origin_year INTEGER
+                origin_year INTEGER,
+                origen TEXT
             )
         ''')
         
@@ -481,6 +482,13 @@ class MusicSpotifyManager:
             cursor.execute("ALTER TABLE songs ADD COLUMN added_month INTEGER")
         if 'added_year' not in song_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN added_year INTEGER")
+        
+        # NUEVA VERIFICACIÓN: origen en tabla genres
+        cursor.execute("PRAGMA table_info(genres)")
+        genre_columns = {col[1] for col in cursor.fetchall()}
+        
+        if 'origen' not in genre_columns:
+            cursor.execute("ALTER TABLE genres ADD COLUMN origen TEXT")
 
     def get_followed_artists(self):
         """
@@ -733,12 +741,15 @@ class MusicSpotifyManager:
                 artist_id = cursor.lastrowid
                 self.logger.info(f"Insertado nuevo artista '{artist_data['name']}' en la base de datos")
             
-            # Insertar géneros en la tabla genres
+            # Insertar géneros en la tabla genres con origen
             if artist_data.get('genres'):
+                origen_spotify = f"spotify_{self.user_id}"
                 for genre in artist_data['genres']:
+                    # Siempre insertar el género como nuevo registro con origen spotify
+                    # No verificar duplicados por nombre, permitir múltiples entradas del mismo género con diferentes orígenes
                     cursor.execute('''
-                        INSERT OR IGNORE INTO genres (name) VALUES (?)
-                    ''', (genre,))
+                        INSERT INTO genres (name, origen) VALUES (?, ?)
+                    ''', (genre, origen_spotify))
             
             conn.commit()
             return artist_id

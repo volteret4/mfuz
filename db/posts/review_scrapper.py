@@ -17,7 +17,7 @@ import random
 
 # Importamos aclarar_contenido.py para usar su función
 #sys.path.append(os.path.join(os.path.dirname(__file__), 'tools'))
-import db.posts.aclarar_contenido
+import db.tools.aclarar_contenido
 
 
 def extraer_enlaces_album(url_album):

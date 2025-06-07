@@ -1,16 +1,31 @@
 import os
 import sqlite3
 import sys
+import argparse
 from datetime import datetime
-import sys
 
-# Configuración de la base de datos
-DB_PATH = sys.argv[1]  # Reemplaza con la ruta real a tu base de datos
+def parse_arguments():
+    """Parsea los argumentos de la línea de comandos."""
+    parser = argparse.ArgumentParser(
+        description='Elimina álbumes de la base de datos cuyos archivos ya no existen'
+    )
+    parser.add_argument(
+        'db_path', 
+        help='Ruta a la base de datos SQLite'
+    )
+    parser.add_argument(
+        '--interactivo', 
+        choices=['true', 'false'], 
+        default='true',
+        help='Modo interactivo (true) o automático (false). Por defecto: true'
+    )
+    
+    return parser.parse_args()
 
-def conectar_bd():
+def conectar_bd(db_path):
     """Establece conexión con la base de datos."""
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         return conn
     except sqlite3.Error as e:
@@ -101,11 +116,17 @@ def eliminar_albumes(conn, albumes_a_eliminar):
 
 def main():
     """Función principal del script."""
+    args = parse_arguments()
+    
+    # Determinar si es modo interactivo
+    modo_interactivo = args.interactivo == 'true'
+    
     print("=== Verificación de álbumes con archivos inexistentes ===")
     print(f"Fecha de ejecución: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"Modo: {'Interactivo' if modo_interactivo else 'Automático'}")
     print("Conectando a la base de datos...")
     
-    conn = conectar_bd()
+    conn = conectar_bd(args.db_path)
     
     print("Verificando álbumes...")
     albumes_a_eliminar = verificar_albumes(conn)
@@ -117,8 +138,17 @@ def main():
         for album_id, info in albumes_a_eliminar.items():
             print(f"- {info['artist_name']} - {info['album_name']} (ID: {album_id})")
         
-        confirmacion = input("\n¿Desea eliminar estos álbumes de la base de datos? (s/n): ")
-        if confirmacion.lower() == 's':
+        # Determinar si proceder con la eliminación
+        proceder = False
+        
+        if modo_interactivo:
+            confirmacion = input("\n¿Desea eliminar estos álbumes de la base de datos? (s/n): ")
+            proceder = confirmacion.lower() == 's'
+        else:
+            print("\nModo automático: Eliminando álbumes sin confirmación...")
+            proceder = True
+        
+        if proceder:
             print("\nEliminando álbumes...")
             eliminar_albumes(conn, albumes_a_eliminar)
             print("\nProceso completado. Se eliminaron los álbumes de la base de datos.")

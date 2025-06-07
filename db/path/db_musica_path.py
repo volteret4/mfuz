@@ -232,9 +232,13 @@ class MusicLibraryManager:
                     name TEXT UNIQUE,
                     description TEXT,
                     related_genres TEXT,
-                    origin_year INTEGER
+                    origin_year INTEGER,
+                    origen TEXT DEFAULT 'metadata'
                 )
             ''')
+        else:
+            # Verificar y añadir columna 'origen' si no existe
+            self._add_missing_columns_to_genres(c)
         
         # Lyrics table
         if 'lyrics' not in existing_tables:
@@ -428,6 +432,24 @@ class MusicLibraryManager:
                     self.logger.info(f"Añadida columna '{col_name}' a tabla song_links")
                 except sqlite3.OperationalError as e:
                     self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
+    def _add_missing_columns_to_genres(self, cursor):
+        """Añadir columnas faltantes a la tabla genres"""
+        cursor.execute("PRAGMA table_info(genres)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        required_columns = {
+            'origen': 'TEXT DEFAULT "metadata"'
+        }
+        
+        for col_name, col_type in required_columns.items():
+            if col_name not in columns:
+                try:
+                    cursor.execute(f"ALTER TABLE genres ADD COLUMN {col_name} {col_type}")
+                    self.logger.info(f"Añadida columna '{col_name}' a tabla genres")
+                except sqlite3.OperationalError as e:
+                    self.logger.warning(f"No se pudo añadir columna {col_name}: {e}")
+
 
     def _create_fts_tables(self, cursor, existing_tables):
         """Crear tablas FTS si no existen"""
@@ -1570,41 +1592,29 @@ class MusicLibraryManager:
             ))
 
     def _update_genre_info(self, cursor, genre_name):
-        """Update genre information if not exists."""
+        """Update genre information if not exists, ensuring origen column exists."""
         if not genre_name or genre_name == 'Unknown':
             return
-            
-        cursor.execute("SELECT * FROM genres WHERE name = ?", (genre_name,))
+        
+        # Verificar si existe la columna 'origen' en la tabla genres
+        cursor.execute("PRAGMA table_info(genres)")
+        columns = {col[1] for col in cursor.fetchall()}
+        
+        # Añadir columna 'origen' si no existe
+        if 'origen' not in columns:
+            try:
+                cursor.execute("ALTER TABLE genres ADD COLUMN origen TEXT DEFAULT 'metadata'")
+                self.logger.info("Añadida columna 'origen' a tabla genres")
+            except sqlite3.OperationalError as e:
+                self.logger.warning(f"No se pudo añadir columna origen a genres: {e}")
+        
+        # Verificar si el género ya existe
+        cursor.execute("SELECT id FROM genres WHERE name = ?", (genre_name,))
         if not cursor.fetchone():
             cursor.execute('''
-                INSERT INTO genres (name) VALUES (?)
-            ''', (genre_name,))
+                INSERT INTO genres (name, origen) VALUES (?, ?)
+            ''', (genre_name, 'metadata'))
 
-    # def get_lastfm_artist_info(self, artist_name: str) -> Optional[Dict]:
-    #     """Retrieve comprehensive LastFM artist information."""
-    #     try:
-    #         artist = self.network.get_artist(artist_name)
-            
-    #         return {
-    #             'name': artist_name,
-    #             'bio': artist.get_bio_summary(),
-    #             'tags': json.dumps([tag.item.name for tag in artist.get_top_tags()]),
-    #             'similar_artists': json.dumps([similar.item.name for similar in artist.get_similar()]),
-    #             'last_updated': datetime.now(),
-    #             'origin': None,  # LastFM doesn't directly provide this
-    #             'formed_year': None  # LastFM doesn't directly provide this
-    #         }
-    #     except Exception as e:
-    #         self.logger.error(f"LastFM artist info error for {artist_name}: {str(e)}")
-    #         return {
-    #             'name': artist_name,
-    #             'bio': '',
-    #             'tags': json.dumps([]),
-    #             'similar_artists': json.dumps([]),
-    #             'last_updated': datetime.now(),
-    #             'origin': None,
-    #             'formed_year': None
-    #         }
     
     def _parse_db_datetime(self, datetime_str):
         """Safely parse datetime strings from database."""
@@ -1687,6 +1697,285 @@ class MusicLibraryManager:
         finally:
             conn.close()
 
+    def sync_database_with_filesystem(self):
+        """
+        Sincroniza la base de datos con el sistema de archivos:
+        - Elimina registros de archivos que ya no existen
+        - Actualiza rutas de archivos que se han movido
+        - Elimina rutas de imágenes que ya no existen
+        - Marca como 'antiguo_local' artistas/álbumes cuyos archivos ya no existen
+        """
+        conn = sqlite3.connect(self.db_path)
+        c = conn.cursor()
+        
+        try:
+            self.logger.info("Iniciando sincronización de la base de datos con el sistema de archivos...")
+            start_time = datetime.now()
+            
+            # 1. Obtener todos los archivos de la base de datos
+            c.execute("SELECT id, file_path FROM songs WHERE file_path IS NOT NULL")
+            db_files = c.fetchall()
+            
+            # 2. Crear un mapeo de todos los archivos existentes en el sistema
+            self.logger.info("Escaneando archivos en el sistema de archivos...")
+            existing_files = {}  # {filename: [full_paths]} - puede haber múltiples archivos con el mismo nombre
+            files_by_path = {}   # {full_path: True}
+            
+            for file_path in self.root_path.rglob('*'):
+                if file_path.suffix.lower() in self.supported_formats and file_path.is_file():
+                    full_path = str(file_path.absolute())
+                    filename = file_path.name
+                    
+                    # Manejar múltiples archivos con el mismo nombre
+                    if filename not in existing_files:
+                        existing_files[filename] = []
+                    existing_files[filename].append(full_path)
+                    files_by_path[full_path] = True
+            
+            # Contadores para el reporte
+            deleted_songs = 0
+            moved_songs = 0
+            orphaned_albums = 0
+            orphaned_artists = 0
+            cleaned_images = 0
+            
+            # 3. Procesar cada archivo en la base de datos
+            songs_to_delete = []
+            songs_to_update = []
+            
+            for song_id, db_file_path in db_files:
+                if not db_file_path:
+                    continue
+                    
+                db_path_obj = Path(db_file_path)
+                
+                # Verificar si el archivo existe en la ruta original
+                if db_file_path in files_by_path:
+                    continue  # El archivo está en su lugar correcto
+                
+                # El archivo no está en su lugar original
+                filename = db_path_obj.name
+                
+                # Buscar si el archivo se ha movido a otra ubicación
+                if filename in existing_files:
+                    # Buscar la mejor coincidencia para archivos con el mismo nombre
+                    possible_paths = existing_files[filename]
+                    
+                    # Si solo hay una posibilidad, usarla
+                    if len(possible_paths) == 1:
+                        new_path = possible_paths[0]
+                        if new_path != db_file_path:
+                            # Verificar que esta nueva ruta no esté ya en la base de datos
+                            c.execute("SELECT id FROM songs WHERE file_path = ?", (new_path,))
+                            if not c.fetchone():
+                                songs_to_update.append((song_id, new_path, db_file_path))
+                                moved_songs += 1
+                                self.logger.debug(f"Archivo movido: {db_file_path} -> {new_path}")
+                            else:
+                                # La nueva ruta ya existe, eliminar este registro duplicado
+                                songs_to_delete.append(song_id)
+                                deleted_songs += 1
+                                self.logger.debug(f"Archivo duplicado eliminado: {db_file_path}")
+                    else:
+                        # Múltiples archivos con el mismo nombre - usar heurística para encontrar el mejor match
+                        best_match = None
+                        best_score = 0
+                        
+                        for potential_path in possible_paths:
+                            # Verificar que esta ruta no esté ya en la base de datos
+                            c.execute("SELECT id FROM songs WHERE file_path = ?", (potential_path,))
+                            if c.fetchone():
+                                continue  # Esta ruta ya está ocupada
+                            
+                            # Calcular similitud basada en estructura de carpetas
+                            old_parts = Path(db_file_path).parts
+                            new_parts = Path(potential_path).parts
+                            
+                            # Contar partes comunes desde el final (artista/album son más importantes)
+                            common_parts = 0
+                            for i in range(1, min(len(old_parts), len(new_parts))):
+                                if old_parts[-i] == new_parts[-i]:
+                                    common_parts += 1
+                                else:
+                                    break
+                            
+                            if common_parts > best_score:
+                                best_score = common_parts
+                                best_match = potential_path
+                        
+                        if best_match and best_match != db_file_path:
+                            songs_to_update.append((song_id, best_match, db_file_path))
+                            moved_songs += 1
+                            self.logger.debug(f"Archivo movido (mejor coincidencia): {db_file_path} -> {best_match}")
+                        else:
+                            # No se encontró una buena coincidencia
+                            songs_to_delete.append(song_id)
+                            deleted_songs += 1
+                            self.logger.debug(f"Archivo sin coincidencia eliminado: {db_file_path}")
+                else:
+                    # El archivo ya no existe
+                    songs_to_delete.append(song_id)
+                    deleted_songs += 1
+                    self.logger.debug(f"Archivo eliminado: {db_file_path}")
+            
+            # 4. Actualizar rutas de archivos movidos
+            if songs_to_update:
+                self.logger.info(f"Actualizando rutas de {len(songs_to_update)} archivos movidos...")
+                for song_id, new_path, old_path in songs_to_update:
+                    # Verificar si la nueva ruta ya existe en la base de datos
+                    c.execute("SELECT id FROM songs WHERE file_path = ? AND id != ?", (new_path, song_id))
+                    existing_song = c.fetchone()
+                    
+                    if existing_song:
+                        # Ya existe una canción con esa ruta, eliminar la duplicada
+                        self.logger.warning(f"Ruta duplicada encontrada: {new_path}. Eliminando registro duplicado (ID: {song_id})")
+                        # Eliminar de song_links
+                        c.execute("DELETE FROM song_links WHERE song_id = ?", (song_id,))
+                        # Eliminar de lyrics
+                        c.execute("DELETE FROM lyrics WHERE track_id = ?", (song_id,))
+                        # Eliminar la canción duplicada
+                        c.execute("DELETE FROM songs WHERE id = ?", (song_id,))
+                        deleted_songs += 1
+                    else:
+                        # Actualizar la ruta del archivo
+                        c.execute("UPDATE songs SET file_path = ? WHERE id = ?", (new_path, song_id))
+                        
+                        # Actualizar folder_path si ha cambiado
+                        new_folder = str(Path(new_path).parent)
+                        c.execute("UPDATE songs SET folder_path = ? WHERE id = ?", (new_folder, song_id))
+            
+            # 5. Eliminar canciones que ya no existen
+            if songs_to_delete:
+                self.logger.info(f"Eliminando {len(songs_to_delete)} canciones que ya no existen...")
+                for song_id in songs_to_delete:
+                    # Eliminar de song_links
+                    c.execute("DELETE FROM song_links WHERE song_id = ?", (song_id,))
+                    # Eliminar de lyrics
+                    c.execute("DELETE FROM lyrics WHERE track_id = ?", (song_id,))
+                    # Eliminar la canción
+                    c.execute("DELETE FROM songs WHERE id = ?", (song_id,))
+            
+            # 6. Limpiar álbumes huérfanos y actualizar origen
+            self.logger.info("Limpiando álbumes huérfanos...")
+            
+            # Encontrar álbumes sin canciones
+            c.execute("""
+                SELECT a.id, a.name, a.artist_id, a.folder_path, a.album_art_path
+                FROM albums a
+                LEFT JOIN songs s ON (s.album = a.name AND s.artist = (SELECT name FROM artists WHERE id = a.artist_id))
+                WHERE s.id IS NULL
+            """)
+            orphaned_albums_data = c.fetchall()
+            
+            for album_id, album_name, artist_id, folder_path, album_art_path in orphaned_albums_data:
+                # Marcar como antiguo_local
+                c.execute("UPDATE albums SET origen = 'antiguo_local' WHERE id = ?", (album_id,))
+                orphaned_albums += 1
+                
+                # Limpiar folder_path y album_art_path
+                c.execute("UPDATE albums SET folder_path = NULL, album_art_path = NULL WHERE id = ?", (album_id,))
+            
+            # 7. Limpiar artistas huérfanos y actualizar origen
+            self.logger.info("Limpiando artistas huérfanos...")
+            
+            # Encontrar artistas que no tienen canciones pero tienen álbumes con origen 'antiguo_local'
+            c.execute("""
+                SELECT ar.id, ar.name
+                FROM artists ar
+                LEFT JOIN songs s ON s.artist = ar.name OR s.album_artist = ar.name
+                WHERE s.id IS NULL
+                AND EXISTS (
+                    SELECT 1 FROM albums al 
+                    WHERE al.artist_id = ar.id AND al.origen = 'antiguo_local'
+                )
+            """)
+            orphaned_artists_data = c.fetchall()
+            
+            for artist_id, artist_name in orphaned_artists_data:
+                # Solo marcar como antiguo_local si NO tiene canciones activas
+                c.execute("""
+                    SELECT COUNT(*) FROM songs 
+                    WHERE artist = ? OR album_artist = ?
+                """, (artist_name, artist_name))
+                active_songs = c.fetchone()[0]
+                
+                if active_songs == 0:
+                    c.execute("UPDATE artists SET origen = 'antiguo_local' WHERE id = ?", (artist_id,))
+                    orphaned_artists += 1
+            
+            # 8. Limpiar rutas de imágenes que ya no existen
+            self.logger.info("Limpiando rutas de imágenes inexistentes...")
+            
+            # Limpiar album_art_path en albums
+            c.execute("SELECT id, album_art_path FROM albums WHERE album_art_path IS NOT NULL")
+            albums_with_art = c.fetchall()
+            
+            for album_id, art_path in albums_with_art:
+                if art_path and not Path(art_path).exists():
+                    c.execute("UPDATE albums SET album_art_path = NULL WHERE id = ?", (album_id,))
+                    cleaned_images += 1
+            
+            # Limpiar album_art_path_denorm en songs
+            c.execute("SELECT id, album_art_path_denorm FROM songs WHERE album_art_path_denorm IS NOT NULL")
+            songs_with_art = c.fetchall()
+            
+            for song_id, art_path in songs_with_art:
+                if art_path and not Path(art_path).exists():
+                    c.execute("UPDATE songs SET album_art_path_denorm = NULL WHERE id = ?", (song_id,))
+                    cleaned_images += 1
+            
+            # 9. Actualizar folder_path en albums basado en las canciones existentes
+            self.logger.info("Actualizando folder_path en álbumes...")
+            c.execute("""
+                SELECT a.id, a.name, ar.name as artist_name
+                FROM albums a
+                JOIN artists ar ON a.artist_id = ar.id
+                WHERE a.origen != 'antiguo_local'
+            """)
+            active_albums = c.fetchall()
+            
+            for album_id, album_name, artist_name in active_albums:
+                # Obtener las rutas de carpetas actuales para este álbum
+                c.execute("""
+                    SELECT DISTINCT file_path FROM songs 
+                    WHERE album = ? AND (artist = ? OR album_artist = ?)
+                """, (album_name, artist_name, artist_name))
+                
+                song_paths = c.fetchall()
+                if song_paths:
+                    folder_paths = set()
+                    for path_tuple in song_paths:
+                        if path_tuple[0]:
+                            folder_path = str(Path(path_tuple[0]).parent)
+                            folder_paths.add(folder_path)
+                    
+                    if folder_paths:
+                        folder_paths_str = ";".join(folder_paths)
+                        c.execute("UPDATE albums SET folder_path = ? WHERE id = ?", 
+                                (folder_paths_str, album_id))
+            
+            # Commit todos los cambios
+            conn.commit()
+            
+            # Reporte final
+            duration = (datetime.now() - start_time).total_seconds()
+            self.logger.info("=== Reporte de sincronización ===")
+            self.logger.info(f"Tiempo transcurrido: {duration:.2f} segundos")
+            self.logger.info(f"Canciones eliminadas: {deleted_songs}")
+            self.logger.info(f"Canciones con rutas actualizadas: {moved_songs}")
+            self.logger.info(f"Álbumes marcados como 'antiguo_local': {orphaned_albums}")
+            self.logger.info(f"Artistas marcados como 'antiguo_local': {orphaned_artists}")
+            self.logger.info(f"Rutas de imágenes limpiadas: {cleaned_images}")
+            self.logger.info("Sincronización completada exitosamente")
+            
+        except Exception as e:
+            self.logger.error(f"Error durante la sincronización: {str(e)}")
+            conn.rollback()
+            raise
+        
+        finally:
+            conn.close()
+
 
 
 def main(config=None):
@@ -1727,6 +2016,8 @@ def main(config=None):
     if config.get('update_schema', False):
         manager.update_schema()
 
+    if config.get('sync_filesystem', False):
+        manager.sync_database_with_filesystem()
     
     if config.get('optimize', False):
         manager.optimize_database()
