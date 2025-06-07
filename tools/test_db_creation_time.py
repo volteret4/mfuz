@@ -20,7 +20,7 @@ def save_config_temp(config_data, temp_path):
     with open(temp_path, 'w', encoding='utf-8') as f:
         json.dump(config_data, f, indent=2, ensure_ascii=False)
 
-def 
+
 def run_single_script(script_name, original_config, temp_config_path, db_path):
     """Ejecutar un script individual y medir su tiempo y cambios en BD"""
     # Crear configuración temporal con solo este script
