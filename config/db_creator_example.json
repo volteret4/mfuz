@@ -1,0 +1,381 @@
+{
+    "scripts_order": [
+      "setlistfm/setlists",
+      "libros/epubs",
+      "enlaces/redes_sociales",
+      "rateyourmusic/rym_artists_links",
+      "rateyourmusic/rym_albums_links",
+      "discogs/discografia_releases_info",
+      "discogs/artists_info",
+      "musicbrainz/mb_discografia",
+      "posts/equipboard_artists",
+      "posts/equipboard_instruments",
+      "posts/equipboard_details",
+      "enlaces/enlaces_canciones",
+      "wiki/wikilinks_desde_mb",
+      "path/db_musica_path",
+      "enlaces/enlaces_artista_album",
+      "posts/review_scrapper",
+      "posts/menciones",
+      "posts/posts_fresh_rss",
+      "musicbrainz/mb_release_group",
+      "listenbrainz/listens_listenbrainz",
+      "musicbrainz/mb_data_canciones"
+    ],
+    "common": {
+      "db_path": "/home/huan/gits/pollo/music-fuzzy/db/sqlite/musica_local.sqlite",
+      "lastfm_api_key": "",
+      "lastfm_user": "paqueradejere",
+      "youtube_api_key": "",
+      "discogs_token": "",
+      "google_api_key": "",
+      "google_cx": "",
+      "setlistfm_apikey": "",
+      "spotify_client_id": "",
+      "spotify_client_secret": "",
+      "spotify_redirect_uri": "http://localhost:8998",
+      "rate_limit": 0.5
+    },
+    "path/db_musica_path": {
+      "root_path": "/mnt/NFS/moode/moode/",
+      "force_update": false,
+      "update_replay_gain": false,
+      "update_schema": false,
+      "update_bitrates": false,
+      "quick_scan": false,
+      "optimize": false
+    },
+    "path/db_musica_spotify": {
+      "skip_existing_artists": true,
+      "force_update": false
+    },
+  
+  
+  
+    "enlaces/enlaces_artista_album": {
+      "force_update": false,
+      "disable_services": [
+        "bandcamp",
+        "youtube",
+        "rateyourmusic"
+        
+      ],
+      "summary_only": false,
+      "days": false,
+      "older_only": false,
+      "artist": false,
+      "missing_only": true
+    },
+    "enlaces/enlaces_canciones": {
+      "checkpoint_path": ".content/cache/db/enlaces/enlaces_canciones.json",
+      "services": [
+        "lastfm",
+        "spotify"
+      ],
+      "limit": "1000"
+    },
+    "enlaces/redes_sociales": {
+      "force_update": false,
+      "missing_only": true,
+      "batch_size": 10000,
+      "rate_limit": 3,
+      "max_retries": 3,
+      "concurrent_workers": 1,
+      "user_agent": "MusicDatabaseApp/1.0"
+    },
+    "enlaces/yt_song_links": {
+      "entity_types": ["songs"],
+      "missing_only": true,
+      "force_update": false,
+      "batch_size": 100000,
+      "rate_limit": 1.1,
+      "max_retries": 3,
+      "cache_file": ".content/cache/discogs_links_cache.json",
+      "log_file": ".content/logs/discogs_links.log"
+    },
+  
+  
+    "img/portadas_artistas": {
+      "images_folder": ".content/artistas_img",
+      "albums_folder": ".content/albums_img",
+      "descargar_img_artistas": true,
+      "descargar_img_albums": true,
+      "guardar_url_artistas": true,
+      "guardar_url_albums": true,
+      "force_update": false
+    },
+    "letras/letras_genius_db_musica": {
+      "batch_size": 38000,
+      "no_resume": true
+  
+    },
+    "wiki/wikilinks_desde_mb": {
+      "log_file": ".content/logs/wikilinks_desde_mb_super-auto.log",
+      "user_agent": "YourMusicApp/1.0",
+      "type": "artists",
+      "modo": "super-auto",
+      "mb_username": "guevifrito",
+      "mb_password": "",
+      "force_update": false
+  
+    },
+    "lastfm_escuchas": {
+      "output_json": ".content/cache/scrobbles_lastfm.json",
+      "interactive": false,
+      "force_update": false,
+      "cache_dir": ".content/cache/lastfm_escuchas.json"
+    },
+    "listenbrainz/listens_listenbrainz": {
+      "user": "guevifrito",
+      "token": "",
+      "output_json": ".content/cache/listens_listenbrainz.json",
+      "limit_process": 95000,
+      "mbid_matching": true,
+      "backfill": true,
+      "analyze_mismatches": true,
+      "force_update": false,
+      "reprocess_existing": true,
+      "use_all_matching": false,
+      "enhanced_matching": true,
+      "fuzzy_matching": false,
+      "normalize_strings": true
+      
+    },
+  
+  
+  
+    "rateyourmusic/rym_artists_links": {
+      "searxng_url": "https://searx.be/",
+      "delay": 0.1,
+      "max_retries": 3,
+      "limit": 5000,
+      "skip_existing": false
+    },
+    "rateyourmusic/rym_artist_info": {
+      "delay": 2.0,
+      "limit": null,
+      "headless": true,
+      "force_update": false,
+      "max_retries": 3,
+      "log_level": "INFO"
+    },
+    "rateyourmusic/rym_albums_links": {
+      "searxng_url": "https://searx.be/",
+      "delay": 0.2,
+      "max_retries": 3,
+      "limit": "None",
+      "log_level": "INFO"
+    },
+  
+  
+    "musicbrainz/mb_sellos": {
+      "mode": "auto",                  
+      "skip_existing": true,         
+      "force_update": false,            
+      "update_wikipedia": true,         
+      "batch_size": 100,                 
+      "update_wikipedia_urls": false,   
+      "repair_schema": false,           
+      "target_label_mbid": null,        
+      "search_query": null,             
+      "process_relationships": true,    
+      "fetch_discogs_data": true,       
+      "user_agent": "MyMusicApp/1.0",
+      "max_retries": 3,                 
+      "retry_delay": 2,                 
+      "concurrent_workers": 1,          
+      "log_level": "INFO" 
+    },
+    "musicbrainz/mb_data_canciones": {
+  
+    },
+    "musicbrainz/mb_release_group": {
+      "limit": 0,
+      "mode": "schema-only",
+      "force_update": false,
+      "cache_file": ".content/cache/mb_release_group.log",
+      "skip_propierties": [
+        "image",
+        "P123",
+        "P456",
+        "P31"
+      ]
+      
+    },
+  
+  
+  
+    
+  
+    "discogs/discografia_masters": {
+      "force_update": false,
+      "rol_principal": false,
+      "accepted_formats": ["album",
+                           "ep",
+                           "single",
+                           "LP",
+                           "mini album",
+                           "compilation",
+                           "maxi single",
+                           "box set",
+                           "vinyl",
+                           "cd",
+                           "cassette",
+                           "digital",
+                           "flexi disc",
+                           "limited edition",
+                           "reissue",
+                           "promo",
+                           "remix",
+                           "live",
+                           "demo",
+                           "mixtape",
+                           "soundtrack"
+                          ]
+    },
+    "discogs/artists_info": {
+      "force_update": false
+    },
+    "discogs/discografia_releases_info": {
+      "force_update": false
+    },
+    "musicbrainz/mb_discografia": {
+      "force_update": false,
+      "artist_limit": null,
+      "interactive": false
+    },
+  
+  
+  
+  
+    "setlistfm/setlists": {
+      "interactive": false,
+      "force_update": false,
+      "limit": 0,
+      "new": true,
+      "process_places": true
+    },
+    "posts/review_scrapper": {
+      "force_update": false,
+      "content_service": "readability",
+      "tamano_lote": 100,
+      "pausa": 3,
+      "inicio_id": 314,
+      "archivo_errores": ".content/logs/review_scrapper_errors.txt",
+      "include_metacritic": true,
+      "include_aoty": true
+    },
+    "posts/posts_fresh_rss": {
+      "freshrss_url": "https://freshrss.pollete.duckdns.org", 
+      "freshrss_username": "pollo",
+      "freshrss_password": "",
+      "freshrss_cache_path": ".content/cache/freshrss_cache.json",
+      "search_entities": ["artists", "albums", "labels"],
+      "categories": ["Blogs", "Revistas", "Wallabag"],
+      "output_path": ".content/log/resultados_freshrss_db.json",
+      "search_short_terms": "false",
+      "ignore_patterns": [
+        "Opus (Mix)",
+        "best-albums-of",
+        "The 40 best albums of 2023",
+        "mix-for-nts-radio",
+        "[Mix for NTS Radio]",
+        "my favorite songs",
+        "weekly playlist",
+        "monthly mix",
+        "podcast",
+        "dj set",
+        "22 favorite releases",
+        "favorite releases"
+      ]
+    },
+    "posts/menciones":{
+      "force_update": false
+    },
+  
+      
+  
+  
+    
+  
+    "charts/uk_csv": {
+      "generos": true,
+      "type": "all",
+      "force_update": false,
+      "rate_limit": 1.5,
+      "specialized": true
+    },
+    "charts/billboard_csv": {
+      "generos": true,
+      "type": "all",
+      "force_update": false,
+      "rate_limit": 1.5,
+      "discogs_token": "",
+      "musicbrainz_user_agent": "BillboardScraper/1.0 (frodobolson@disroot.org)"
+    },
+    "charts/spain_charts": {
+      "generos": true,
+      "type": "all",
+      "force_update": false,
+      "rate_limit": 1.5,
+      "country": "mexico",
+      "start_year": 1959,
+      "end_year": 2024,
+      "include_radio_charts": true,
+      "include_streaming_charts": true,
+      "output_dir": ".content/charts/spain"
+    },
+    "charts/uk_indie_nme": {
+      "generos": true,
+      "force_update": false,
+      "rate_limit": 1.5,
+      "indie_years": [1999, 2000, 2001, 2002, 2007, 2020, 2021, 2022, 2023],
+      "nme_decades": ["60s", "70s", "80s"],
+      "include_indie": true,
+      "include_nme": true
+    },
+  
+  
+  
+  
+    "posts/equipboard_artists": {
+      "action": "search",
+      "limit": null
+    },
+    "posts/equipboard_instruments": {
+      "action": "extract",
+      "limit": null,
+      "force_update": false,
+      "no-headless": true
+    },
+    "posts/equipboard_details": {
+      "action": "extract",
+      "headless": false,
+      "limit": null
+    },
+    "libros/epubs": {
+      "epub_folder": "/mnt/windows/FTP/moviles/books/music/",
+      "force_update": false,
+      "min_context_chars": 30,
+      "max_context_chars": 2000,
+      "case_sensitive": false
+    },
+  
+  
+    
+  
+  
+  
+  
+    "enlaces/preview_url_spotify": {
+      "test_playback": false
+    },
+    "enlaces/enlaces_albumes": {
+      "missing_only": true,
+      "delay_between_requests": 1.1
+    },
+    "optimiza_db_lastpass": {
+  
+    }
+   
+  }
