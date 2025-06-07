@@ -238,63 +238,23 @@ class MusicSpotifyManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
         
-        # Verificar si las tablas necesarias existen
-        c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        existing_tables = [table[0] for table in c.fetchall()]
+        # Crear todas las tablas necesarias primero
+        self._create_tables(c)
+        
+        # Luego verificar y actualizar esquema
         self._verify_schema(c)
-        # Si no existe la tabla songs, creamos todas las tablas necesarias
-        if 'songs' not in existing_tables:
-            self.logger.info("Inicializando base de datos desde cero...")
-            self._create_tables(c)
-        else:
-            self.logger.info("Base de datos existente encontrada, verificando esquema...")
-            self._verify_schema(c)
         
         conn.commit()
         conn.close()
 
     def _create_tables(self, cursor):
         """Crea las tablas necesarias en la base de datos."""
-        # Tabla songs
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS songs (
-                id INTEGER PRIMARY KEY,
-                file_path TEXT,
-                title TEXT,
-                track_number INTEGER,
-                artist TEXT,
-                album_artist TEXT,
-                album TEXT,
-                date TEXT,
-                genre TEXT,
-                label TEXT,
-                mbid TEXT,
-                bitrate INTEGER,
-                bit_depth INTEGER,
-                sample_rate INTEGER,
-                last_modified TIMESTAMP,
-                added_timestamp TIMESTAMP,
-                added_day INTEGER,
-                added_week INTEGER,
-                added_month INTEGER,
-                added_year INTEGER,
-                duration REAL,
-                lyrics_id INTEGER,
-                replay_gain_track_gain REAL,
-                replay_gain_track_peak REAL,
-                replay_gain_album_gain REAL,
-                replay_gain_album_peak REAL,
-                album_art_path_denorm TEXT,
-                has_lyrics INTEGER DEFAULT 0,
-                origen TEXT DEFAULT 'spotify'
-            )
-        ''')
         
         # Tabla artists
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS artists (
                 id INTEGER PRIMARY KEY,
-                name TEXT UNIQUE,
+                name TEXT,
                 bio TEXT,
                 tags TEXT,
                 similar_artists TEXT,
@@ -317,11 +277,17 @@ class MusicSpotifyManager:
                 aliases TEXT,
                 lastfm_url TEXT,
                 origen TEXT DEFAULT 'spotify',
+                website TEXT,
                 added_timestamp TIMESTAMP,
                 added_day INTEGER,
                 added_week INTEGER,
                 added_month INTEGER,
-                added_year INTEGER
+                added_year INTEGER,
+                img TEXT,
+                img_urls TEXT,
+                img_paths TEXT,
+                jaangle_ready BOOLEAN DEFAULT 1,
+                spotify_popularity INTEGER
             )
         ''')
         
@@ -354,7 +320,7 @@ class MusicSpotifyManager:
                 producers TEXT,
                 engineers TEXT,
                 mastering_engineers TEXT,
-                credits JSON,
+                credits TEXT,
                 lastfm_url TEXT,
                 origen TEXT DEFAULT 'spotify',
                 added_timestamp TIMESTAMP,
@@ -362,12 +328,62 @@ class MusicSpotifyManager:
                 added_week INTEGER,
                 added_month INTEGER,
                 added_year INTEGER,
-                FOREIGN KEY(artist_id) REFERENCES artists(id),
-                UNIQUE(artist_id, name)
+                album_art_urls TEXT,
+                musicbrainz_albumid TEXT,
+                musicbrainz_albumartistid TEXT,
+                musicbrainz_releasegroupid TEXT,
+                catalognumber TEXT,
+                media TEXT,
+                discnumber TEXT,
+                releasecountry TEXT,
+                originalyear INTEGER,
+                FOREIGN KEY(artist_id) REFERENCES artists(id)
             )
         ''')
         
-        # Tabla genres - GÉNEROS SIN UNIQUE para permitir múltiples orígenes
+        # Tabla songs
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS songs (
+                id INTEGER PRIMARY KEY,
+                file_path TEXT,
+                title TEXT,
+                track_number INTEGER,
+                artist TEXT,
+                album_artist TEXT,
+                album TEXT,
+                date TEXT,
+                genre TEXT,
+                label TEXT,
+                mbid TEXT,
+                bitrate INTEGER,
+                bit_depth INTEGER,
+                sample_rate INTEGER,
+                last_modified TIMESTAMP,
+                added_timestamp TIMESTAMP,
+                added_week INTEGER,
+                added_month INTEGER,
+                added_year INTEGER,
+                duration REAL,
+                lyrics_id INTEGER,
+                replay_gain_track_gain REAL,
+                replay_gain_track_peak REAL,
+                replay_gain_album_gain REAL,
+                replay_gain_album_peak REAL,
+                album_art_path_denorm TEXT,
+                has_lyrics INTEGER DEFAULT 0,
+                origen TEXT DEFAULT 'spotify',
+                reproducciones INTEGER DEFAULT 1,
+                fecha_reproducciones TEXT,
+                scrobbles_ids TEXT,
+                added_day INTEGER,
+                musicbrainz_artistid TEXT,
+                musicbrainz_recordingid TEXT,
+                musicbrainz_albumartistid TEXT,
+                musicbrainz_releasegroupid TEXT
+            )
+        ''')
+        
+        # Tabla genres
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS genres (
                 id INTEGER PRIMARY KEY,
@@ -406,16 +422,22 @@ class MusicSpotifyManager:
                 bandcamp_url TEXT,
                 soundcloud_url TEXT,
                 boomkat_url TEXT,
+                preview_url TEXT,
+                listenbrainz_preview_url TEXT,
                 FOREIGN KEY(song_id) REFERENCES songs(id)
             )
         ''')
         
-        # Tablas FTS (Full Text Search)
-        cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(title, artist, album, genre, content=songs, content_rowid=id)')
-        cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS lyrics_fts USING fts5(lyrics, content=lyrics, content_rowid=id)')
-        cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS song_fts USING fts5(id, title, artist, album, genre)')
-        cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS artist_fts USING fts5(id, name, bio, tags)')
-        cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS album_fts USING fts5(id, name, genre)')
+        # Tablas FTS (Full Text Search) - solo si no existen
+        try:
+            cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS songs_fts USING fts5(title, artist, album, genre, content=songs, content_rowid=id)')
+            cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS lyrics_fts USING fts5(lyrics, content=lyrics, content_rowid=id)')
+            cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS song_fts USING fts5(id, title, artist, album, genre)')
+            cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS artist_fts USING fts5(id, name, bio, tags)')
+            cursor.execute('CREATE VIRTUAL TABLE IF NOT EXISTS album_fts USING fts5(id, name, genre)')
+        except Exception as e:
+            # Las tablas FTS pueden fallar si ya existen, esto es normal
+            pass
         
         # Crear índices
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_songs_artist ON songs(artist)")
@@ -424,36 +446,31 @@ class MusicSpotifyManager:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_albums_artist_id ON albums(artist_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_lyrics_track_id ON lyrics(track_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_song_links_song_id ON song_links(song_id)")
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_artists_name ON artists(name)")
+
+
 
     def _verify_schema(self, cursor):
         """Verifica que el esquema de la base de datos es correcto y lo actualiza si es necesario."""
+        
+        # Verificar si las tablas existen primero
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        existing_tables = {table[0] for table in cursor.fetchall()}
+        
+        # Si no existen las tablas principales, salir (ya se crearon en _create_tables)
+        required_tables = {'artists', 'albums', 'songs', 'genres', 'lyrics', 'song_links'}
+        if not required_tables.issubset(existing_tables):
+            self.logger.info("Tablas principales creadas correctamente")
+            return
+        
         # Verificar origen en tabla artists
         cursor.execute("PRAGMA table_info(artists)")
         artist_columns = {col[1] for col in cursor.fetchall()}
         
-        # if 'origen' not in artist_columns:
-        #     cursor.execute("ALTER TABLE artists ADD COLUMN origen TEXT DEFAULT 'local'")
-        
-        # Verificar origen en tabla albums
-        cursor.execute("PRAGMA table_info(albums)")
-        album_columns = {col[1] for col in cursor.fetchall()}
-        
-        # if 'origen' not in album_columns:
-        #     cursor.execute("ALTER TABLE albums ADD COLUMN origen TEXT DEFAULT 'local'")
-
-        # Verificar timestamps en albums
-        if 'added_timestamp' not in album_columns:
-            cursor.execute("ALTER TABLE albums ADD COLUMN added_timestamp TIMESTAMP")
-        if 'added_day' not in album_columns:
-            cursor.execute("ALTER TABLE albums ADD COLUMN added_day INTEGER")
-        if 'added_week' not in album_columns:
-            cursor.execute("ALTER TABLE albums ADD COLUMN added_week INTEGER")
-        if 'added_month' not in album_columns:
-            cursor.execute("ALTER TABLE albums ADD COLUMN added_month INTEGER")
-        if 'added_year' not in album_columns:
-            cursor.execute("ALTER TABLE albums ADD COLUMN added_year INTEGER")
-
-        # Verificar timestamps en artists
+        if 'origen' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN origen TEXT DEFAULT 'spotify'")
+        if 'spotify_popularity' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN spotify_popularity INTEGER")
         if 'added_timestamp' not in artist_columns:
             cursor.execute("ALTER TABLE artists ADD COLUMN added_timestamp TIMESTAMP")
         if 'added_day' not in artist_columns:
@@ -464,14 +481,58 @@ class MusicSpotifyManager:
             cursor.execute("ALTER TABLE artists ADD COLUMN added_month INTEGER")
         if 'added_year' not in artist_columns:
             cursor.execute("ALTER TABLE artists ADD COLUMN added_year INTEGER")
-        if 'spotify_popularity' not in artist_columns:
-            cursor.execute("ALTER TABLE artists ADD COLUMN spotify_popularity INTEGER")
-            
+        if 'website' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN website TEXT")
+        if 'img' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN img TEXT")
+        if 'img_urls' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN img_urls TEXT")
+        if 'img_paths' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN img_paths TEXT")
+        if 'jaangle_ready' not in artist_columns:
+            cursor.execute("ALTER TABLE artists ADD COLUMN jaangle_ready BOOLEAN DEFAULT 1")
+        
         # Verificar origen en tabla albums
+        cursor.execute("PRAGMA table_info(albums)")
+        album_columns = {col[1] for col in cursor.fetchall()}
+        
+        if 'origen' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN origen TEXT DEFAULT 'spotify'")
+        if 'added_timestamp' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN added_timestamp TIMESTAMP")
+        if 'added_day' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN added_day INTEGER")
+        if 'added_week' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN added_week INTEGER")
+        if 'added_month' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN added_month INTEGER")
+        if 'added_year' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN added_year INTEGER")
+        if 'album_art_urls' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN album_art_urls TEXT")
+        if 'musicbrainz_albumid' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN musicbrainz_albumid TEXT")
+        if 'musicbrainz_albumartistid' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN musicbrainz_albumartistid TEXT")
+        if 'musicbrainz_releasegroupid' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN musicbrainz_releasegroupid TEXT")
+        if 'catalognumber' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN catalognumber TEXT")
+        if 'media' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN media TEXT")
+        if 'discnumber' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN discnumber TEXT")
+        if 'releasecountry' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN releasecountry TEXT")
+        if 'originalyear' not in album_columns:
+            cursor.execute("ALTER TABLE albums ADD COLUMN originalyear INTEGER")
+        
+        # Verificar origen en tabla songs
         cursor.execute("PRAGMA table_info(songs)")
         song_columns = {col[1] for col in cursor.fetchall()}
 
-        # Verificar timestamps en songs
+        if 'origen' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN origen TEXT DEFAULT 'spotify'")
         if 'added_timestamp' not in song_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN added_timestamp TIMESTAMP")
         if 'added_day' not in song_columns:
@@ -482,14 +543,36 @@ class MusicSpotifyManager:
             cursor.execute("ALTER TABLE songs ADD COLUMN added_month INTEGER")
         if 'added_year' not in song_columns:
             cursor.execute("ALTER TABLE songs ADD COLUMN added_year INTEGER")
+        if 'reproducciones' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN reproducciones INTEGER DEFAULT 1")
+        if 'fecha_reproducciones' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN fecha_reproducciones TEXT")
+        if 'scrobbles_ids' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN scrobbles_ids TEXT")
+        if 'musicbrainz_artistid' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN musicbrainz_artistid TEXT")
+        if 'musicbrainz_recordingid' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN musicbrainz_recordingid TEXT")
+        if 'musicbrainz_albumartistid' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN musicbrainz_albumartistid TEXT")
+        if 'musicbrainz_releasegroupid' not in song_columns:
+            cursor.execute("ALTER TABLE songs ADD COLUMN musicbrainz_releasegroupid TEXT")
         
-        # NUEVA VERIFICACIÓN: origen en tabla genres
+        # Verificar origen en tabla genres
         cursor.execute("PRAGMA table_info(genres)")
         genre_columns = {col[1] for col in cursor.fetchall()}
         
         if 'origen' not in genre_columns:
             cursor.execute("ALTER TABLE genres ADD COLUMN origen TEXT")
-
+        
+        # Verificar song_links
+        cursor.execute("PRAGMA table_info(song_links)")
+        song_link_columns = {col[1] for col in cursor.fetchall()}
+        
+        if 'preview_url' not in song_link_columns:
+            cursor.execute("ALTER TABLE song_links ADD COLUMN preview_url TEXT")
+        if 'listenbrainz_preview_url' not in song_link_columns:
+            cursor.execute("ALTER TABLE song_links ADD COLUMN listenbrainz_preview_url TEXT")
     def get_followed_artists(self):
         """
         Obtiene la lista de artistas seguidos por el usuario en Spotify.
