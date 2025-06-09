@@ -556,7 +556,7 @@ def add_item_to_queue(self, item):
         
         # Verificar si es un tipo reproducible (canción/track)
         item_type = item_data.get('type', '').lower()
-        if item_type not in ['track', 'song', 'canción']:
+        if item_type not in ['track', 'song', 'canción', 'album']:
             # Si es un artista o álbum con hijos, añadir todas las canciones
             if item.childCount() > 0:
                 tracks_added = 0

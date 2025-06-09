@@ -2,7 +2,7 @@ import os
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import ( QMenu, QTreeWidgetItem, QDialog, QMessageBox, QLineEdit, QApplication,
                             QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QDialogButtonBox, QFrame, QDialog,
-                            QComboBox, QCheckBox, QListWidgetItem
+                            QComboBox, QCheckBox, QListWidgetItem, QRadioButton
                             )
 from PyQt6.QtCore import Qt, QSize, QThreadPool
 import traceback
@@ -224,7 +224,7 @@ def setup_unified_playlist_menu(self):
     """Configura el menú del botón unificado de playlists"""
     try:
         # Create the main menu in the main thread
-        from PyQt6.QtCore import QMetaObject, Qt
+        from PyQt6.QtCore import QMetaObject, Qt, QThread
         
         # Definir el método que se ejecutará en el hilo principal
         def _create_menu_in_main_thread():
@@ -1545,14 +1545,27 @@ def _setup_service_checkboxes(parent_instance, dialog):
                 value = value.lower() == 'true'
             checkbox.setChecked(value)
 
-    # Set the urlplaylist_only_local checkbox
-    only_local_checkbox = dialog.findChild(QCheckBox, 'urlplaylist_only_local')
-    if only_local_checkbox:
-        # Set state from parent instance
-        only_local_checkbox.setChecked(parent_instance.urlplaylist_only_local)
-        parent_instance.log(f"Setting urlplaylist_only_local checkbox to: {parent_instance.urlplaylist_only_local}")
-    else:
-        parent_instance.log("urlplaylist_only_local checkbox not found in dialog")
+    filter_mode = getattr(parent_instance, 'urlplaylist_filter_mode', 'all')
+        
+    # Find radio buttons
+    radio_all = dialog.findChild(QRadioButton, 'urlplaylist_filter_all')
+    radio_local = dialog.findChild(QRadioButton, 'urlplaylist_filter_local') 
+    radio_db = dialog.findChild(QRadioButton, 'urlplaylist_filter_db')
+    radio_online = dialog.findChild(QRadioButton, 'urlplaylist_filter_online')
+    
+    # Set the appropriate radio button
+    if radio_all and filter_mode == 'all':
+        radio_all.setChecked(True)
+    elif radio_local and filter_mode == 'local':
+        radio_local.setChecked(True)
+    elif radio_db and filter_mode == 'db':
+        radio_db.setChecked(True)
+    elif radio_online and filter_mode == 'online':
+        radio_online.setChecked(True)
+    elif radio_all:  # Default fallback
+        radio_all.setChecked(True)
+    
+    parent_instance.log(f"Setting filter mode radio buttons to: {filter_mode}")
 
     # Set the playlist view radio buttons
     if hasattr(dialog, 'pl_unidas') and hasattr(dialog, 'pl_separadas'):

@@ -452,7 +452,7 @@ class UrlPlayer(BaseModule):
 
     def _start_async_initialization(self):
         """Inicia procesos de inicialización en hilos separados"""
-        import threading
+        import threading  # FIXED: Use threading instead of QThread for this
         
         # Crear hilos con nombres descriptivos para facilitar depuración
         api_thread = threading.Thread(target=self._initialize_apis, name="_initialize_apis", daemon=True)
@@ -651,12 +651,14 @@ class UrlPlayer(BaseModule):
         from modules.submodules.url_playlist.spotify_manager import setup_spotify
         
         # Verificar que estamos en el hilo principal
-        from PyQt6.QtCore import QThread, QCoreApplication
+        from PyQt6.QtCore import QThread, QCoreApplication  # FIXED: Import both together
         if QThread.currentThread() != QCoreApplication.instance().thread():
             self.log("Error: Spotify initialization must be performed from the main thread")
             return False
         
         self.log("Initializing Spotify from main thread...")
+        
+        return setup_spotify(self)
         
         return setup_spotify(self)
 
@@ -1402,7 +1404,9 @@ class UrlPlayer(BaseModule):
             self.search_spotify_content(query)
             return
         
-        # Resto del código original de perform_search para otras búsquedas...
+        # FIXED: Import QThread at the top before using it
+        from PyQt6.QtCore import QThread
+        
         # Cancelar búsqueda anterior si está en progreso
         if hasattr(self, '_current_search_thread') and self._current_search_thread is not None:
             if isinstance(self._current_search_thread, QThread) and self._current_search_thread.isRunning():
@@ -1430,18 +1434,17 @@ class UrlPlayer(BaseModule):
             self.show_loading_indicator(True)
         self.searchButton.setEnabled(False)
         
-        # Obtener el estado de only_local
-        only_local = getattr(self, 'urlplaylist_only_local', False)
+        # NEW: Get current filter mode instead of only_local
+        filter_mode = getattr(self, 'urlplaylist_filter_mode', 'all')
         
         # Crear QThread y worker para la búsqueda
-        from PyQt6.QtCore import QThread
         from modules.submodules.url_playlist.search_workers import SearchWorker
         
         # Crear un nuevo QThread
         self._current_search_thread = QThread()
         
-        # Crear el worker y moverlo al hilo
-        self._search_worker = SearchWorker(self, query, only_local)
+        # NEW: Pass filter_mode instead of only_local
+        self._search_worker = SearchWorker(self, query, filter_mode)
         self._search_worker.moveToThread(self._current_search_thread)
         
         # Conectar señales
@@ -1962,7 +1965,8 @@ class UrlPlayer(BaseModule):
                 'show_rss_playlists': getattr(self, 'show_rss_playlists', True),
                 
                 # Añadir configuración de urlplaylist_only_local
-                'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
+                'urlplaylist_filter_mode': getattr(self, 'urlplaylist_filter_mode', 'all'),
+                #'urlplaylist_only_local': getattr(self, 'urlplaylist_only_local', False),
                 
                 # Añadir configuración de sincronización automática
                 'sync_at_boot': getattr(self, 'sync_at_boot', False),
@@ -1992,7 +1996,7 @@ class UrlPlayer(BaseModule):
             
             # Añadir valores de depuración
             self.log(f"Guardando configuración - Vista unificada: {new_settings['playlist_unified_view']}")
-            self.log(f"Guardando configuración - Only local: {new_settings['urlplaylist_only_local']}")
+            self.log(f"Guardando configuración - Only local: {new_settings['urlplaylist_filter_mode']}")
             self.log(f"Guardando configuración - Sync at boot: {new_settings['sync_at_boot']}")
             self.log(f"Guardando configuración - Paths convertidas a strings simples")
             
@@ -2615,10 +2619,24 @@ class UrlPlayer(BaseModule):
             self.show_rss_playlists = dialog.blogs_checkbox.isChecked()
             
             # Save "Only Local" setting
-            only_local_checkbox = dialog.findChild(QCheckBox, 'urlplaylist_only_local')
-            if only_local_checkbox:
-                self.urlplaylist_only_local = only_local_checkbox.isChecked()
-                self.log(f"Set urlplaylist_only_local to: {self.urlplaylist_only_local}")
+            radio_all = dialog.findChild(QRadioButton, 'urlplaylist_filter_all')
+            radio_local = dialog.findChild(QRadioButton, 'urlplaylist_filter_local')
+            radio_db = dialog.findChild(QRadioButton, 'urlplaylist_filter_db') 
+            radio_online = dialog.findChild(QRadioButton, 'urlplaylist_filter_online')
+            
+            if radio_local and radio_local.isChecked():
+                self.urlplaylist_filter_mode = 'local'
+            elif radio_db and radio_db.isChecked():
+                self.urlplaylist_filter_mode = 'db'
+            elif radio_online and radio_online.isChecked():
+                self.urlplaylist_filter_mode = 'online'
+            else:  # radio_all or default
+                self.urlplaylist_filter_mode = 'all'
+            
+            self.log(f"Set urlplaylist_filter_mode to: {self.urlplaylist_filter_mode}")
+            
+            # For backwards compatibility, update the old setting too
+            self.urlplaylist_only_local = (self.urlplaylist_filter_mode == 'local')
 
             # Last.fm username
             if hasattr(dialog, 'entrada_usuario'):

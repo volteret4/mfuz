@@ -175,13 +175,13 @@ class SearchWorker(QObject):
     external_results_ready = pyqtSignal(dict)
     error = pyqtSignal(str)
 
-    def __init__(self, parent, query, only_local):
+    def __init__(self, parent, query, filter_mode='all'):
         super().__init__()
         self.parent = parent
         self.query = query
-        self.only_local = only_local
         self._stop_requested = False
-        self.only_local = (filter_mode == 'local')
+        self.only_local = (filter_mode)
+        self.filter_mode = filter_mode
 
     def log(self, message):
         """Método seguro para registrar mensajes en el TextEdit y en la consola."""
