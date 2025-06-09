@@ -1888,9 +1888,11 @@ def connect_lastfm_controls(self):
 def load_lastfm_cache_if_exists(self):
     """Versión optimizada para cargar caché de Last.fm con validación de tiempo"""
     try:
+        # Importar time al inicio de la función
+        import time
+        
         # Si ya hemos cargado la caché recientemente, no lo hacemos de nuevo
         if hasattr(self, '_lastfm_cache_loaded_time'):
-            import time
             if time.time() - self._lastfm_cache_loaded_time < 600:  # 10 minutos
                 self.log("Cache de Last.fm ya cargada recientemente")
                 return True

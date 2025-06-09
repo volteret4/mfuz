@@ -8,6 +8,7 @@ import subprocess
 import threading
 from pathlib import Path
 import resources_rc
+import spotipy
 
 from PyQt6 import uic
 from PyQt6.QtWidgets import (
