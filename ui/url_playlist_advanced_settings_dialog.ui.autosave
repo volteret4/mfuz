@@ -444,7 +444,7 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QRadioButton" name="lastfm_agent">
+                    <widget class="QRadioButton" name="urlplaylist_only_local">
                      <property name="toolTip">
                       <string>Mostrará solo resultados que provengan de tu biblioteca digital</string>
                      </property>
@@ -458,7 +458,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="listenbrainz_agent">
+                    <widget class="QRadioButton" name="urlplaylist_only_db">
                      <property name="text">
                       <string>Solo en la base de datos</string>
                      </property>
@@ -469,7 +469,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="listenbrainz_agent_2">
+                    <widget class="QRadioButton" name="urlplaylist_only_online">
                      <property name="text">
                       <string>Solo online</string>
                      </property>

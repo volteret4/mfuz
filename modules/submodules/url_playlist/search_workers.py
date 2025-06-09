@@ -181,7 +181,8 @@ class SearchWorker(QObject):
         self.query = query
         self.only_local = only_local
         self._stop_requested = False
-        
+        self.only_local = (filter_mode == 'local')
+
     def log(self, message):
         """Método seguro para registrar mensajes en el TextEdit y en la consola."""
         # Siempre imprimir en la consola
@@ -205,7 +206,11 @@ class SearchWorker(QObject):
         try:
             # Primero buscar en la base de datos para resultados rápidos
             from modules.submodules.url_playlist.db_manager import search_database_links
-            db_links = search_database_links(self.parent, self.parent.db_path, self.query, "all")
+            
+            # NEW: Only search database if filter allows it
+            db_links = {}
+            if self.filter_mode in ['all', 'local', 'db']:
+                db_links = search_database_links(self.parent, self.parent.db_path, self.query, "all")
             
             if self._stop_requested:
                 self.finished.emit()
@@ -213,30 +218,54 @@ class SearchWorker(QObject):
             
             if db_links:
                 try:
-                    # Procesar resultados para la base de datos
-                    results = self._process_database_results(db_links)
+                    # NEW: Process results with filter mode
+                    results = self._process_database_results_with_filter(db_links)
                     
-                    # Emitir señal con resultados
-                    self.db_results_ready.emit(results)
+                    if results:
+                        self.db_results_ready.emit(results)
                     
                 except Exception as proc_error:
                     self.error.emit(f"Error al procesar resultados de BD: {str(proc_error)}")
             
-            # Si se solicita detener, no continuar con búsqueda externa
-            if self._stop_requested or self.only_local:
+            # NEW: Handle external search based on filter mode
+            if self._stop_requested:
                 self.finished.emit()
                 return
-            
-            # Si llegamos aquí, realizar búsqueda externa
-            try:
-                self._perform_external_search()
-            except Exception as search_error:
-                self.error.emit(f"Error en búsqueda externa: {str(search_error)}")
                 
+            if self.filter_mode in ['all', 'online']:
+                try:
+                    self._perform_external_search()
+                except Exception as search_error:
+                    self.error.emit(f"Error en búsqueda externa: {str(search_error)}")
+                    
         except Exception as e:
             self.error.emit(f"Error general en búsqueda: {str(e)}")
         finally:
             self.finished.emit()
+
+
+    def _process_database_results_with_filter(self, db_links):
+        """NEW: Process database results with the new filter system"""
+        try:
+            from modules.submodules.url_playlist.db_manager import _process_database_results
+            all_results = _process_database_results(self.parent, db_links)
+            
+            if self.filter_mode == 'all':
+                return all_results
+            elif self.filter_mode == 'local':
+                # Filter for items with origen='local' only
+                return [r for r in all_results if r.get('origen') == 'local']
+            elif self.filter_mode == 'db':
+                # Return all database results regardless of origen
+                return all_results
+            else:  # online mode
+                # Return empty list (no database results for online-only)
+                return []
+                
+        except Exception as e:
+            self.error.emit(f"Error procesando resultados con filtro: {str(e)}")
+            return []
+
 
     def _process_database_results(self, db_links):
         """Procesa los resultados de la base de datos"""

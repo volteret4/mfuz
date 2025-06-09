@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout, QHBoxLayout, QFrame, QSizePolicy, QApplication, QDialog, QComboBox, QProgressDialog,
     QStackedWidget, QSlider, QSpinBox, QRadioButton
 )
-from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize, QTimer
+from PyQt6.QtCore import Qt, QProcess, pyqtSignal, QUrl, QRunnable, pyqtSlot, QObject, QThreadPool, QSize, QTimer, QThread
 from PyQt6.QtGui import QIcon, QMovie
 
 # Añadir ruta raíz al path
@@ -2171,6 +2171,10 @@ class UrlPlayer(BaseModule):
         
         self.sync_at_boot = False
 
+        self.urlplaylist_filter_mode = 'all'  # 'all', 'local', 'db', 'online'
+        # Keep for backwards compatibility during transition
+        self.urlplaylist_only_local = False
+
         # Create necessary directories
         os.makedirs(os.path.dirname(self.spotify_token_path), exist_ok=True)
         os.makedirs(os.path.dirname(self.spotify_playlist_path), exist_ok=True)
@@ -2552,7 +2556,26 @@ class UrlPlayer(BaseModule):
             self.show_spotify_playlists = module_args.get('show_spotify_playlists', True)
             self.show_rss_playlists = module_args.get('show_rss_playlists', True)
             
-            # Additional your existing code...
+            
+            # NEW: Load new filter mode (with backwards compatibility)
+            if 'urlplaylist_filter_mode' in module_args:
+                self.urlplaylist_filter_mode = module_args['urlplaylist_filter_mode']
+            elif 'urlplaylist_only_local' in module_args:
+                # Backwards compatibility: convert old setting to new system
+                old_value = module_args['urlplaylist_only_local']
+                if isinstance(old_value, str):
+                    old_value = old_value.lower() == 'true'
+                
+                if old_value:
+                    self.urlplaylist_filter_mode = 'local'
+                else:
+                    self.urlplaylist_filter_mode = 'all'
+                
+                self.log(f"Converted old urlplaylist_only_local={old_value} to filter_mode={self.urlplaylist_filter_mode}")
+            else:
+                self.urlplaylist_filter_mode = 'all'
+            
+            self.log(f"Loaded urlplaylist_filter_mode: {self.urlplaylist_filter_mode}")
             
             self.log("Module settings loaded successfully")
         except Exception as e:
@@ -3603,4 +3626,24 @@ class UrlPlayer(BaseModule):
             self.log(f"Error buscando álbumes y canciones en Spotify: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+            return False
+
+
+    def save_to_spotify_playlist(self):
+        """Muestra el diálogo para guardar la cola actual en una playlist de Spotify"""
+        if not hasattr(self, 'sp') or not self.sp:
+            QMessageBox.warning(self, "Error", "Spotify no está configurado o autenticado")
+            return False
+        
+        if not hasattr(self, 'current_playlist') or not self.current_playlist:
+            QMessageBox.warning(self, "Error", "No hay canciones en la cola para guardar")
+            return False
+        
+        try:
+            # Crear y mostrar el diálogo de Spotify
+            from modules.submodules.url_playlist.ui_helpers import show_spotify_save_dialog
+            return show_spotify_save_dialog(self)
+        except Exception as e:
+            self.log(f"Error al mostrar diálogo de Spotify: {str(e)}")
+            QMessageBox.critical(self, "Error", f"Error al mostrar diálogo: {str(e)}")
             return False

@@ -552,6 +552,25 @@ def add_tracks_to_spotify_playlist(self, playlist_id, playlist_name):
         QMessageBox.warning(self, "Error", f"Error añadiendo canciones a la playlist: {str(e)}")
         return False
 
+def search_spotify_track_uri(self, search_query):
+    """Busca una canción en Spotify y devuelve su URI"""
+    try:
+        if not hasattr(self, 'sp') or not self.sp:
+            return None
+            
+        results = api_call_with_retry(self, self.sp.search, q=search_query, type='track', limit=1)
+        
+        if results['tracks']['items']:
+            track = results['tracks']['items'][0]
+            return track['uri']
+        
+        return None
+        
+    except Exception as e:
+        self.log(f"Error buscando track en Spotify: {str(e)}")
+        return None
+
+
 def load_spotify_playlists(self, force_update=False):
     """Load user Spotify playlists from cache or Spotify"""
     if not hasattr(self, 'sp') or not self.sp:

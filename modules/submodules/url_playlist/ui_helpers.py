@@ -185,7 +185,8 @@ def setup_context_menus(self):
     """Set up context menus for tree and list widgets"""
     # Set custom context menu for treeWidget
     self.treeWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
-    self.treeWidget.customContextMenuRequested.connect(show_tree_context_menu)
+    self.treeWidget.customContextMenuRequested.connect(lambda pos: show_tree_context_menu(self, pos))
+    
     
     # Set custom context menu for listWidget
     self.listWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -2050,11 +2051,13 @@ def show_tree_context_menu(self, position):
         return
         
     # Get the item data
+    from PyQt6.QtCore import Qt
     item_data = item.data(0, Qt.ItemDataRole.UserRole)
     if not item_data:
         return
     
     # Create the menu
+    from PyQt6.QtWidgets import QMenu
     menu = QMenu(self)
     
     # Different options based on item type
@@ -2090,25 +2093,26 @@ def show_tree_context_menu(self, position):
     # Handle actions based on item type
     if isinstance(item_data, dict) and 'type' in item_data:
         if item_data['type'] == 'track':
-            if action == play_action:
-                self.play_item(item)
-            elif action == add_to_queue_action:
+            if action.text() == "Reproducir":
+                from modules.submodules.url_playlist.media_utils import play_item
+                play_item(self, item)
+            elif action.text() == "Añadir a cola":
+                from modules.submodules.url_playlist.media_utils import add_item_to_queue
                 add_item_to_queue(self, item)
-            elif action == copy_url_action:
-                # Actualizar para usar 'url' de track_data
+            elif action.text() == "Copiar URL":
                 track_url = item_data.get('url', '')
                 self.copy_text_to_clipboard(track_url)
-            elif hasattr(self, 'spotify_authenticated') and self.spotify_authenticated and action == add_to_spotify_action:
+            elif hasattr(self, 'spotify_authenticated') and self.spotify_authenticated and action.text() == "Añadir a playlist de Spotify":
                 self.add_to_spotify_playlist(item_data)
                 
         elif item_data['type'] == 'playlist':
-            if action == play_playlist_action:
+            if action.text() == "Reproducir playlist":
                 self.play_rss_playlist(item_data)
-            elif action == add_all_to_queue_action:
+            elif action.text() == "Añadir todo a cola":
                 self.add_rss_playlist_to_queue(item)
-            elif 'state' in item_data and item_data['state'] == 'pending' and action == mark_listened_action:
-                self.move_rss_playlist_to_listened(item_data)
-
+            elif 'state' in item_data and item_data['state'] == 'pending' and action.text() == "Marcar como escuchada":
+                from modules.submodules.url_playlist.playlist_manager import move_rss_playlist_to_listened
+                move_rss_playlist_to_listened(self, item_data)
 
 def on_tree_selection_changed(self):
     """Handle selection changes in the tree widget with optimized loading"""
@@ -2180,3 +2184,154 @@ def _load_item_info(self, item_data):
         
     except Exception as e:
         self.log(f"Error loading item info: {str(e)}")
+
+
+def show_spotify_save_dialog(self):
+    """Muestra el diálogo específico para guardar en playlists de Spotify"""
+    try:
+        # Cargar el diálogo desde el UI file
+        dialog = QDialog(self)
+        ui_file = Path(PROJECT_ROOT, "ui", "url_playlist_create_playlist_dialog.ui")
+        
+        if not os.path.exists(ui_file):
+            self.log(f"UI file not found: {ui_file}")
+            return _show_fallback_spotify_dialog(self)
+        
+        # Cargar UI y configurar para Spotify
+        uic.loadUi(ui_file, dialog)
+        
+        # Configurar el diálogo para Spotify
+        dialog.setWindowTitle("Guardar en Spotify")
+        dialog.title_label.setText("Crear nueva playlist de Spotify")
+        dialog.title_label_2.setText("Añadir a playlist existente")
+        
+        # Configurar el combobox con playlists existentes
+        _populate_spotify_playlists_combo(self, dialog.comboBox)
+        
+        # Conectar botones específicos
+        dialog.pushButton_2.clicked.connect(lambda: _create_new_spotify_playlist(self, dialog))
+        dialog.pushButton.clicked.connect(lambda: _add_to_existing_spotify_playlist(self, dialog))
+        
+        # Mostrar el diálogo
+        dialog.exec()
+        return True
+        
+    except Exception as e:
+        self.log(f"Error en show_spotify_save_dialog: {str(e)}")
+        import traceback
+        self.log(traceback.format_exc())
+        return False
+
+
+def _populate_spotify_playlists_combo(self, combo):
+    """Llena el combobox con las playlists de Spotify del usuario"""
+    try:
+        combo.clear()
+        combo.addItem("Seleccionar playlist...")
+        
+        if not hasattr(self, 'spotify_playlists') or not self.spotify_playlists:
+            # Intentar cargar playlists
+            from modules.submodules.url_playlist.spotify_manager import load_spotify_playlists
+            if not load_spotify_playlists(self):
+                combo.addItem("Error cargando playlists")
+                return
+        
+        # Añadir playlists del usuario
+        for name, playlist_data in self.spotify_playlists.items():
+            combo.addItem(QIcon(":/services/spotify"), name)
+            
+    except Exception as e:
+        self.log(f"Error poblando combo de Spotify: {str(e)}")
+        combo.addItem("Error cargando playlists")
+
+def _create_new_spotify_playlist(self, dialog):
+    """Crea una nueva playlist de Spotify con las canciones de la cola"""
+    try:
+        # Obtener nombre y descripción
+        playlist_name = dialog.playlist_name_edit.text().strip()
+        description = dialog.description_edit.text().strip()
+        
+        if not playlist_name:
+            QMessageBox.warning(dialog, "Error", "Debe introducir un nombre para la playlist")
+            return
+        
+        # Importar funciones de Spotify
+        from modules.submodules.url_playlist.spotify_manager import create_spotify_playlist, add_tracks_to_spotify_playlist
+        
+        # Crear la playlist
+        result = create_spotify_playlist(self, playlist_name, public=False, description=description)
+        
+        if result:
+            # Buscar la playlist recién creada para obtener su ID
+            playlist_id = None
+            if hasattr(self, 'spotify_playlists') and playlist_name in self.spotify_playlists:
+                playlist_id = self.spotify_playlists[playlist_name]['id']
+            
+            if playlist_id:
+                # Añadir canciones a la nueva playlist
+                if add_tracks_to_spotify_playlist(self, playlist_id, playlist_name):
+                    dialog.accept()
+                    QMessageBox.information(self, "Éxito", f"Playlist '{playlist_name}' creada y guardada en Spotify")
+                else:
+                    QMessageBox.warning(self, "Error", "Playlist creada pero no se pudieron añadir las canciones")
+            else:
+                QMessageBox.warning(self, "Error", "Playlist creada pero no se pudo obtener su ID")
+        else:
+            QMessageBox.warning(self, "Error", "No se pudo crear la playlist en Spotify")
+            
+    except Exception as e:
+        self.log(f"Error creando nueva playlist de Spotify: {str(e)}")
+        QMessageBox.critical(dialog, "Error", f"Error creando playlist: {str(e)}")
+
+def _add_to_existing_spotify_playlist(self, dialog):
+    """Añade las canciones de la cola a una playlist existente de Spotify"""
+    try:
+        # Obtener playlist seleccionada
+        selected_text = dialog.comboBox.currentText()
+        
+        if selected_text == "Seleccionar playlist..." or not selected_text:
+            QMessageBox.warning(dialog, "Error", "Debe seleccionar una playlist")
+            return
+        
+        # Buscar la playlist y obtener su ID
+        if not hasattr(self, 'spotify_playlists') or selected_text not in self.spotify_playlists:
+            QMessageBox.warning(dialog, "Error", "Playlist no encontrada")
+            return
+        
+        playlist_data = self.spotify_playlists[selected_text]
+        playlist_id = playlist_data['id']
+        
+        # Añadir canciones a la playlist
+        from modules.submodules.url_playlist.spotify_manager import add_tracks_to_spotify_playlist
+        
+        if add_tracks_to_spotify_playlist(self, playlist_id, selected_text):
+            dialog.accept()
+            QMessageBox.information(self, "Éxito", f"Canciones añadidas a la playlist '{selected_text}'")
+        else:
+            QMessageBox.warning(self, "Error", "No se pudieron añadir las canciones a la playlist")
+            
+    except Exception as e:
+        self.log(f"Error añadiendo a playlist existente: {str(e)}")
+        QMessageBox.critical(dialog, "Error", f"Error añadiendo canciones: {str(e)}")
+
+def _show_fallback_spotify_dialog(self):
+    """Diálogo de respaldo si no se encuentra el archivo UI"""
+    playlist_name, ok = QInputDialog.getText(
+        self,
+        "Crear Playlist de Spotify",
+        "Nombre de la nueva playlist:",
+        QLineEdit.EchoMode.Normal,
+        ""
+    )
+    
+    if ok and playlist_name:
+        from modules.submodules.url_playlist.spotify_manager import create_spotify_playlist, add_tracks_to_spotify_playlist
+        
+        # Crear playlist y añadir canciones
+        if create_spotify_playlist(self, playlist_name):
+            if hasattr(self, 'spotify_playlists') and playlist_name in self.spotify_playlists:
+                playlist_id = self.spotify_playlists[playlist_name]['id']
+                add_tracks_to_spotify_playlist(self, playlist_id, playlist_name)
+                return True
+    
+    return False
