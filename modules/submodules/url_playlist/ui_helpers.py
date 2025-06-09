@@ -1066,7 +1066,7 @@ def clear_playlist(self):
         self.current_track_index = -1
         
         # Stop any current playback
-        self.stop_playback()
+        stop_playback(self)
         
         self.log("Cola de reproducción limpiada")
 
@@ -1629,12 +1629,12 @@ def display_wiki_info(self, result_data):
         self.info_wiki_textedit.setHtml(loading_html)
         
         # Cambiar al tab de info_wiki para mostrar la información
-        if hasattr(self, 'tabWidget') and self.tabWidget:
-            # Buscar el índice del tab info_wiki
-            for i in range(self.tabWidget.count()):
-                if self.tabWidget.tabText(i) == "Info Wiki":
-                    self.tabWidget.setCurrentIndex(i)
-                    break
+        # if hasattr(self, 'tabWidget') and self.tabWidget:
+        #     # Buscar el índice del tab info_wiki
+        #     for i in range(self.tabWidget.count()):
+        #         if self.tabWidget.tabText(i) == "Info Wiki":
+        #             self.tabWidget.setCurrentIndex(i)
+        #             break
         
         # Extraer datos básicos del elemento
         item_type = result_data.get('type', '').lower()

@@ -813,7 +813,7 @@ class UrlPlayer(BaseModule):
         
         # Conectar señales críticas
         self.connect_critical_signals()
-
+        self._setup_drag_and_drop()
 
     def _setup_non_critical_widgets(self):
         """Configura los widgets no críticos que pueden cargarse después"""
@@ -1003,6 +1003,148 @@ class UrlPlayer(BaseModule):
             self.log(f"Error al conectar señales adicionales: {str(e)}")
             import traceback
             self.log(traceback.format_exc())
+
+    def _setup_drag_and_drop(self):
+        """Configura drag and drop específicamente para el listWidget dentro del scrollArea"""
+        try:
+            from PyQt6.QtCore import Qt
+            from PyQt6.QtWidgets import QAbstractItemView
+            from PyQt6.QtGui import QDragEnterEvent, QDragMoveEvent, QDropEvent
+            
+            # Configurar tree widget como origen del drag
+            if hasattr(self, 'treeWidget') and self.treeWidget:
+                self.treeWidget.setDragEnabled(True)
+                self.treeWidget.setDragDropMode(QAbstractItemView.DragDropMode.DragOnly)
+                self.treeWidget.setDefaultDropAction(Qt.DropAction.CopyAction)
+                self.treeWidget.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+                
+                # Configurar el startDrag personalizado
+                original_startDrag = self.treeWidget.startDrag
+                
+                def custom_startDrag(supportedActions):
+                    self.log("Starting custom drag operation")
+                    # Marcar que estamos iniciando un drag desde nuestro treeWidget
+                    self._dragging_from_tree = True
+                    return original_startDrag(supportedActions)
+                
+                self.treeWidget.startDrag = custom_startDrag
+            
+            # Configurar list widget como destino del drop
+            if hasattr(self, 'listWidget') and self.listWidget:
+                self.listWidget.setAcceptDrops(True)
+                self.listWidget.setDragDropMode(QAbstractItemView.DragDropMode.DropOnly)
+                self.listWidget.setDefaultDropAction(Qt.DropAction.CopyAction)
+                
+                # Crear manejadores personalizados más robustos
+                def enhanced_dragEnterEvent(event):
+                    self.log("Enhanced dragEnterEvent called")
+                    try:
+                        # Verificar si tenemos el flag de drag desde nuestro tree
+                        if hasattr(self, '_dragging_from_tree') and self._dragging_from_tree:
+                            self.log("Drag from our tree detected - accepting")
+                            event.setDropAction(Qt.DropAction.CopyAction)
+                            event.accept()
+                            return
+                        
+                        # Verificar mimeData como respaldo
+                        if event.mimeData():
+                            formats = event.mimeData().formats()
+                            self.log(f"Available mime formats: {formats}")
+                            
+                            # Aceptar si tenemos cualquier formato de Qt de items
+                            if any('qabstractitemmodeldatalist' in fmt.lower() for fmt in formats):
+                                self.log("Accepting based on mime format")
+                                event.setDropAction(Qt.DropAction.CopyAction)
+                                event.accept()
+                            else:
+                                self.log("No suitable mime format found")
+                                event.ignore()
+                        else:
+                            self.log("No mimeData available")
+                            event.ignore()
+                            
+                    except Exception as e:
+                        self.log(f"Error in enhanced_dragEnterEvent: {str(e)}")
+                        event.ignore()
+
+                def enhanced_dragMoveEvent(event):
+                    try:
+                        # Si ya aceptamos el dragEnter, continuar aceptando
+                        if hasattr(self, '_dragging_from_tree') and self._dragging_from_tree:
+                            event.setDropAction(Qt.DropAction.CopyAction)
+                            event.accept()
+                        elif event.mimeData() and any('qabstractitemmodeldatalist' in fmt.lower() 
+                                                    for fmt in event.mimeData().formats()):
+                            event.setDropAction(Qt.DropAction.CopyAction)
+                            event.accept()
+                        else:
+                            event.ignore()
+                    except Exception as e:
+                        self.log(f"Error in enhanced_dragMoveEvent: {str(e)}")
+                        event.ignore()
+
+                def enhanced_dropEvent(event):
+                    self.log("Enhanced dropEvent called")
+                    try:
+                        # Limpiar el flag de drag
+                        if hasattr(self, '_dragging_from_tree'):
+                            self._dragging_from_tree = False
+                        
+                        # Verificar que tenemos elementos seleccionados
+                        if not hasattr(self, 'treeWidget') or not self.treeWidget:
+                            self.log("No treeWidget available")
+                            event.ignore()
+                            return
+                        
+                        selected_items = self.treeWidget.selectedItems()
+                        if not selected_items:
+                            self.log("No selected items in tree")
+                            event.ignore()
+                            return
+                        
+                        self.log(f"Processing drop for {len(selected_items)} items")
+                        
+                        # Añadir elementos a la cola
+                        items_added = 0
+                        for item in selected_items:
+                            from modules.submodules.url_playlist.media_utils import add_item_to_queue
+                            if add_item_to_queue(self, item):
+                                items_added += 1
+                        
+                        if items_added > 0:
+                            self.log(f"Successfully added {items_added} items via drag and drop")
+                            event.setDropAction(Qt.DropAction.CopyAction)
+                            event.accept()
+                        else:
+                            self.log("No items could be added")
+                            event.ignore()
+                            
+                    except Exception as e:
+                        self.log(f"Error in enhanced_dropEvent: {str(e)}")
+                        import traceback
+                        self.log(traceback.format_exc())
+                        event.ignore()
+                
+                # Asignar los manejadores personalizados
+                self.listWidget.dragEnterEvent = enhanced_dragEnterEvent
+                self.listWidget.dragMoveEvent = enhanced_dragMoveEvent
+                self.listWidget.dropEvent = enhanced_dropEvent
+                
+                self.log("Enhanced drag and drop configured for scrollArea listWidget")
+            
+            # También configurar el scrollArea para aceptar drops si es necesario
+            if hasattr(self, 'playlist_scrollArea'):
+                self.playlist_scrollArea.setAcceptDrops(True)
+            
+            return True
+            
+        except Exception as e:
+            self.log(f"Error configurando enhanced drag and drop: {str(e)}")
+            import traceback
+            self.log(traceback.format_exc())
+            return False
+
+ 
 
     def _check_and_run_auto_sync(self):
         """Verifica si debe ejecutar sincronización automática al iniciar"""
@@ -2748,28 +2890,49 @@ class UrlPlayer(BaseModule):
 
 
     def toggle_play_pause(self):
-        """Toggle between play and pause"""
-        from modules.submodules.url_playlist.media_utils import play_from_index, add_to_queue
+        """Launch independent player with playlist"""
+        # Si no hay playlist, intentar añadir el elemento seleccionado
         if not hasattr(self, 'current_playlist') or not self.current_playlist:
-            # Nothing in playlist, try to add the selected item
-            add_to_queue(self)
+            if self.listWidget.count() > 0:
+                # Reconstruir playlist desde el listWidget
+                self.rebuild_playlist_from_listwidget()
+            else:
+                # Intentar añadir desde la selección del árbol
+                from modules.submodules.url_playlist.media_utils import add_to_queue
+                add_to_queue(self)
+                
             if not self.current_playlist:
                 self.log("Nothing to play")
                 return
         
-        if not self.is_playing:
-            # If we have a current track, play/resume it
-            if self.current_track_index >= 0 and self.current_track_index < len(self.current_playlist):
-                if self.player_manager.is_playing:
-                    self.player_manager.resume()
-                else:
-                    play_from_index(self, self.current_track_index)
-            else:
-                # Start from the beginning
-                play_from_index(self, 0)
+        # Verificar que tenemos un player_manager
+        if not hasattr(self, 'player_manager') or not self.player_manager:
+            self.log("No player manager available")
+            return
+        
+        # IMPORTANTE: Solo lanzar reproductor independiente, NO el integrado
+        success = self.player_manager.play_playlist_detached(self.current_playlist)
+        
+        if success:
+            self.log(f"Launched independent player with {len(self.current_playlist)} tracks")
+            
+            # Cambiar icono temporalmente para indicar que se lanzó
+            original_icon = self.play_button.icon()
+            self.play_button.setIcon(QIcon(":/services/b_pause"))
+            
+            # Restaurar icono después de 2 segundos
+            QTimer.singleShot(2000, lambda: self.play_button.setIcon(original_icon))
+            
+            # Mostrar mensaje de confirmación
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.information(
+                self, 
+                "Reproductor Lanzado", 
+                f"Se ha lanzado MPV como proceso independiente con {len(self.current_playlist)} pistas.\n\n"
+                "El reproductor seguirá funcionando aunque cierres esta aplicación."
+            )
         else:
-            # Pause current playback
-            self.player_manager.pause()
+            self.log("Failed to launch independent player")
 
     def play_next(self):
         """Play the next track in the playlist"""
@@ -2783,7 +2946,7 @@ class UrlPlayer(BaseModule):
         if next_index >= len(self.current_playlist):
             next_index = 0
         
-        self.play_from_index(next_index)
+        play_from_index(self, next_index)
 
     def play_previous(self):
         """Play the previous track in the playlist"""
@@ -2797,7 +2960,7 @@ class UrlPlayer(BaseModule):
         if prev_index < 0:
             prev_index = len(self.current_playlist) - 1
         
-        self.play_from_index(prev_index)
+        play_from_index(self, prev_index)
 
     def highlight_current_track(self):
         """Highlight the currently playing track in the list"""

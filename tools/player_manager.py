@@ -93,7 +93,7 @@ class PlayerManager(QObject):
                 'player_name': 'mpv',
                 'player_path': self._find_player_path('mpv'),
                 'player_temp_dir': os.path.expanduser('~/.config/mpv/_mpv_socket'),
-                'args': '--input-ipc-server={socket_path}'
+                'args': '--input-ipc-server={socket_path} --no-terminal --really-quiet'
             }
             self._logger("Using default MPV player configuration")
             return
@@ -329,7 +329,7 @@ class PlayerManager(QObject):
             return False
     
     def handle_output(self):
-        """Handle standard output from the player process"""
+        """Handle standard output from the player process with filtering"""
         if not self.player_process:
             return
             
@@ -337,10 +337,54 @@ class PlayerManager(QObject):
         output = bytes(data).decode('utf-8', errors='replace').strip()
         
         if output:
-            self._logger(f"Player output: {output}")
+            # Filter out verbose MPV messages we don't need
+            filtered_lines = []
+            for line in output.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                # Skip common verbose messages
+                skip_patterns = [
+                    'AV: ',  # Audio/Video sync info
+                    'V: ',   # Video frame info
+                    'A: ',   # Audio frame info
+                    '[ffmpeg/',  # FFmpeg verbose output
+                    '[lavf]',    # libavformat messages
+                    '[ao/',      # Audio output messages
+                    '[vo/',      # Video output messages
+                    'Cache: ',   # Cache status
+                    '(+',        # Frame timing info
+                    'Dropped: ', # Dropped frames
+                    'FPS: ',     # FPS info
+                    '[statusline]', # Status line updates
+                ]
+                
+                # Check if line should be skipped
+                should_skip = any(pattern in line for pattern in skip_patterns)
+                
+                if not should_skip:
+                    # Only log important messages
+                    important_patterns = [
+                        'Playing: ',
+                        'File: ',
+                        'Title: ',
+                        'Artist: ',
+                        'Album: ',
+                        'Exiting',
+                        'EOF reached',
+                        'Finished playback',
+                    ]
+                    
+                    if any(pattern in line for pattern in important_patterns):
+                        filtered_lines.append(line)
+            
+            # Only log if we have important messages
+            if filtered_lines:
+                self._logger(f"Player: {'; '.join(filtered_lines)}")
     
     def handle_error(self):
-        """Handle standard error from the player process"""
+        """Handle standard error from the player process with filtering"""
         if not self.player_process:
             return
             
@@ -348,10 +392,41 @@ class PlayerManager(QObject):
         error = bytes(data).decode('utf-8', errors='replace').strip()
         
         if error:
-            self._logger(f"Player error: {error}")
-            # Only emit error signal for significant errors, not warnings
-            if "error:" in error.lower() or "failed:" in error.lower():
-                self.playback_error.emit(error)
+            # Filter out non-critical error messages
+            filtered_errors = []
+            for line in error.split('\n'):
+                line = line.strip()
+                if not line:
+                    continue
+                    
+                # Skip verbose error patterns
+                skip_error_patterns = [
+                    '[ffmpeg/',
+                    '[lavf]',
+                    '[ao/',
+                    '[vo/',
+                    'deprecated',
+                    'Using hardware',
+                    'Selected audio codec',
+                    'Selected video codec',
+                    'Stream #',
+                    'Duration: ',
+                    'encoder         :',
+                    'creation_time   :',
+                ]
+                
+                should_skip = any(pattern in line for pattern in skip_error_patterns)
+                
+                if not should_skip:
+                    # Only care about actual errors
+                    if any(keyword in line.lower() for keyword in ['error', 'failed', 'cannot', 'unable']):
+                        filtered_errors.append(line)
+            
+            # Only log and emit signals for real errors
+            if filtered_errors:
+                error_msg = '; '.join(filtered_errors)
+                self._logger(f"Player error: {error_msg}")
+                self.playback_error.emit(error_msg)
     
     def handle_finished(self, exit_code, exit_status):
         """Handle the player process finishing"""
@@ -434,3 +509,113 @@ class PlayerManager(QObject):
         except Exception as e:
             self._logger(f"Error al buscar posición aleatoria: {e}")
             return False
+
+
+    def create_temp_playlist_file(self, tracks):
+        """Create a temporary playlist file for MPV"""
+        try:
+            import tempfile
+            
+            # Create a temporary playlist file
+            temp_fd, temp_path = tempfile.mkstemp(suffix='.m3u8', prefix='mpv_playlist_')
+            
+            with os.fdopen(temp_fd, 'w', encoding='utf-8') as f:
+                f.write("#EXTM3U\n")
+                
+                for track in tracks:
+                    # Write track info
+                    title = track.get('title', 'Unknown')
+                    artist = track.get('artist', 'Unknown Artist')
+                    duration = track.get('duration', -1)
+                    
+                    f.write(f"#EXTINF:{duration},{artist} - {title}\n")
+                    
+                    # Write the URL/path
+                    url = track.get('file_path') or track.get('url', '')
+                    if url:
+                        f.write(f"{url}\n")
+            
+            self._logger(f"Created temporary playlist: {temp_path}")
+            return temp_path
+            
+        except Exception as e:
+            self._logger(f"Error creating playlist file: {e}")
+            return None
+
+    def play_playlist_detached(self, tracks):
+        """Launch MPV as an independent process with the full playlist"""
+        if not tracks:
+            self._logger("No tracks to play")
+            return False
+        
+        # Create temporary playlist file
+        playlist_path = self.create_temp_playlist_file(tracks)
+        if not playlist_path:
+            return False
+        
+        try:
+            # Get player path
+            player_path = self.current_player.get('player_path', 'mpv')
+            
+            # Build arguments for independent playback
+            args = [
+                player_path,
+                '--force-window=yes',           # Always show window
+                '--keep-open=yes',              # Keep open after playlist ends
+                '--loop-playlist=inf',          # Loop playlist infinitely
+                '--shuffle=no',                 # Don't shuffle by default
+                '--volume=70',                  # Set reasonable volume
+                '--title=Music Player',         # Window title
+                '--geometry=800x600',           # Window size
+                '--ontop=no',                   # Don't stay on top
+                '--no-terminal',                # Don't show terminal output
+                '--really-quiet',               # Minimize output
+                playlist_path                   # The playlist file
+            ]
+            
+            # Launch as completely independent process - FIXED
+            if platform.system() == 'Windows':
+                # Windows method
+                process = subprocess.Popen(
+                    args,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    stdin=subprocess.DEVNULL,
+                    creationflags=subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
+                )
+            else:
+                # Linux/Unix method - CORREGIDO
+                process = subprocess.Popen(
+                    args,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    stdin=subprocess.DEVNULL,
+                    start_new_session=True,     # Start in new session
+                    # Removido preexec_fn que causaba el error
+                )
+            
+            # Don't store the process reference - let it be truly independent
+            self._logger(f"Launched independent MPV with {len(tracks)} tracks (PID: {process.pid})")
+            
+            # Schedule cleanup of temp file after a delay
+            QTimer.singleShot(10000, lambda: self._cleanup_temp_file(playlist_path))  # Aumentado a 10 segundos
+            
+            return True
+            
+        except Exception as e:
+            self._logger(f"Error launching independent player: {e}")
+            # Clean up temp file on error
+            try:
+                os.unlink(playlist_path)
+            except:
+                pass
+            return False
+
+    def _cleanup_temp_file(self, file_path):
+        """Clean up temporary playlist file"""
+        try:
+            if os.path.exists(file_path):
+                os.unlink(file_path)
+                self._logger(f"Cleaned up temporary playlist file: {file_path}")
+        except Exception as e:
+            self._logger(f"Error cleaning up temp file: {e}")
