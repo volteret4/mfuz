@@ -16,14 +16,14 @@ class TicketmasterService:
         # Crear directorio de caché si no existe
         self.cache_dir.mkdir(parents=True, exist_ok=True)
     
-    def search_concerts(self, artist_name, country_code="ES", size=50):
+    def search_concerts_paginated(self, artist_name, country_code="ES", max_results=200):
         """
-        Buscar conciertos para un artista en un país específico, primero en caché y luego en API
+        Buscar conciertos con paginación automática para obtener todos los resultados
         
         Args:
             artist_name (str): Nombre del artista a buscar
             country_code (str): Código de país ISO (ES, US, etc.)
-            size (int): Número máximo de resultados
+            max_results (int): Máximo número de resultados a obtener (para evitar bucles infinitos)
             
         Returns:
             tuple: (lista de conciertos, mensaje)
@@ -31,131 +31,243 @@ class TicketmasterService:
         if not self.api_key:
             return [], "No se ha configurado API Key para Ticketmaster"
         
-        # Comprobar si tenemos resultado en caché válido
+        # Comprobar caché primero
         cache_file = self._get_cache_file_path(artist_name, country_code)
         cached_data = self._load_from_cache(cache_file)
         
         if cached_data:
             return cached_data, f"Se encontraron {len(cached_data)} conciertos para {artist_name} (caché)"
         
-        # Si no hay caché válido, consultar API
-        # Parámetros exactos que funcionan en tu curl
-        params = {
-            "keyword": artist_name,
-            "countrycode": country_code.lower(),  # Minúsculas como en tu curl
-            "size": size,
-            "apikey": self.api_key  # Sin parámetros adicionales primero
-        }
+        all_concerts = []
+        page = 0
+        page_size = 50  # Tamaño óptimo por página
+        total_pages = None
+        total_elements = None
         
         try:
-            print(f"Consultando Ticketmaster API para {artist_name} con parámetros: {params}")
-            response = requests.get(self.base_url, params=params, timeout=30)
-            response.raise_for_status()
-            
-            # Verificar si la respuesta tiene contenido
-            if not response.content:
-                return [], f"Respuesta vacía de la API para {artist_name}"
-            
-            data = response.json()
-            
-            # Verificar estructura de respuesta según documentación oficial
-            if '_embedded' not in data:
+            while len(all_concerts) < max_results:
+                # Parámetros para esta página
+                params = {
+                    "keyword": artist_name,
+                    "countrycode": country_code.lower(),
+                    "size": str(page_size),
+                    "page": str(page),
+                    "apikey": self.api_key
+                }
+                
+                print(f"Consultando página {page + 1} para {artist_name}...")
+                
+                response = requests.get(self.base_url, params=params, timeout=30)
+                response.raise_for_status()
+                
+                if not response.content:
+                    break
+                
+                data = response.json()
+                
+                # Verificar errores
+                if 'fault' in data:
+                    fault_msg = data['fault'].get('faultstring', 'Error de autenticación')
+                    return [], f"Error de autenticación: {fault_msg}"
+                
                 if 'errors' in data:
                     error_msg = data['errors'][0].get('detail', 'Error desconocido')
                     return [], f"Error de API: {error_msg}"
-                elif 'fault' in data:
-                    fault_msg = data['fault'].get('faultstring', 'Error de autenticación')
-                    return [], f"Error de autenticación: {fault_msg}"
-                else:
-                    return [], f"No se encontraron eventos para {artist_name}"
+                
+                # Verificar estructura
+                if '_embedded' not in data or 'events' not in data['_embedded']:
+                    break
+                
+                events = data['_embedded']['events']
+                
+                # Información de paginación
+                if 'page' in data:
+                    page_info = data['page']
+                    total_pages = page_info.get('totalPages', 1)
+                    total_elements = page_info.get('totalElements', len(events))
+                    current_page = page_info.get('number', page)
+                    
+                    print(f"Página {current_page + 1}/{total_pages} - {len(events)} eventos en esta página")
+                
+                # Procesar eventos de esta página
+                page_concerts = []
+                for event in events:
+                    try:
+                        concert = self._process_event(event, artist_name)
+                        if concert:
+                            page_concerts.append(concert)
+                    except Exception as e:
+                        print(f"Error procesando evento: {e}")
+                        continue
+                
+                all_concerts.extend(page_concerts)
+                
+                # Verificar si hay más páginas
+                if total_pages and page >= total_pages - 1:
+                    print(f"Última página alcanzada ({page + 1}/{total_pages})")
+                    break
+                
+                if len(events) < page_size:
+                    print("Página incompleta, no hay más resultados")
+                    break
+                
+                # Pasar a la siguiente página
+                page += 1
+                
+                # Pausa entre requests para no sobrecargar la API
+                import time
+                time.sleep(0.2)
             
-            if 'events' not in data['_embedded']:
-                return [], f"No hay eventos disponibles para {artist_name}"
+            # Guardar en caché si hay resultados
+            if all_concerts:
+                self._save_to_cache(cache_file, all_concerts)
             
-            events = data['_embedded']['events']
-            concerts = []
+            # Mensaje informativo
+            message_parts = [f"Se encontraron {len(all_concerts)} conciertos para {artist_name}"]
+            if total_elements and total_elements > len(all_concerts):
+                message_parts.append(f"(limitado a {max_results} de {total_elements} totales)")
+            if total_pages and total_pages > 1:
+                message_parts.append(f"({page + 1} páginas consultadas)")
             
-            for event in events:
-                try:
-                    # Extraer datos del venue con manejo de errores mejorado
-                    venues = event.get('_embedded', {}).get('venues', [])
-                    venue_data = venues[0] if venues else {}
-                    
-                    # Construir dirección desde los datos del venue
-                    address_parts = []
-                    address_obj = venue_data.get('address', {})
-                    if address_obj.get('line1'):
-                        address_parts.append(address_obj['line1'])
-                    if address_obj.get('line2'):
-                        address_parts.append(address_obj['line2'])
-                    if venue_data.get('postalCode'):
-                        address_parts.append(venue_data['postalCode'])
-                    
-                    address = ', '.join(address_parts)
-                    
-                    # Extraer fecha y hora con mejor manejo
-                    dates = event.get('dates', {})
-                    start_date = dates.get('start', {})
-                    local_date = start_date.get('localDate', 'Unknown date')
-                    local_time = start_date.get('localTime', '')
-                    
-                    # Extraer imagen con mejor lógica
-                    images = event.get('images', [])
-                    image_url = ''
-                    if images:
-                        # Buscar imagen 16:9 con buena resolución
-                        for img in images:
-                            if (img.get('ratio') == '16_9' and 
-                                img.get('width', 0) > 500 and 
-                                img.get('width', 0) < 1200):
-                                image_url = img.get('url', '')
-                                break
-                        
-                        # Si no se encontró imagen ideal, usar la primera disponible
-                        if not image_url and images:
-                            image_url = images[0].get('url', '')
-                    
-                    # Extraer ciudad con manejo mejorado
-                    city_obj = venue_data.get('city', {})
-                    city_name = city_obj.get('name', 'Unknown city')
-                    
-                    # Crear objeto concierto
-                    concert = {
-                        'artist': artist_name,
-                        'name': event.get('name', 'No title'),
-                        'venue': venue_data.get('name', 'Unknown venue'),
-                        'address': address,
-                        'city': city_name,
-                        'date': local_date,
-                        'time': local_time,
-                        'image': image_url,
-                        'url': event.get('url', ''),
-                        'id': event.get('id', ''),
-                        'source': 'Ticketmaster'
-                    }
-                    concerts.append(concert)
-                    
-                except Exception as e:
-                    print(f"Error procesando evento: {e}")
-                    continue
-            
-            # Guardar en caché solo si hay resultados
-            if concerts:
-                self._save_to_cache(cache_file, concerts)
-            
-            return concerts, f"Se encontraron {len(concerts)} conciertos para {artist_name}"
+            return all_concerts, " ".join(message_parts)
             
         except requests.exceptions.Timeout:
-            return [], f"Timeout al conectar con Ticketmaster para {artist_name}"
+            return all_concerts, f"Timeout - se obtuvieron {len(all_concerts)} conciertos parciales"
         except requests.exceptions.RequestException as e:
-            return [], f"Error en la solicitud: {str(e)}"
-        except ValueError as e:
-            return [], f"Error procesando respuesta JSON: {str(e)}"
+            return all_concerts, f"Error en solicitud - se obtuvieron {len(all_concerts)} conciertos parciales: {str(e)}"
         except Exception as e:
             import traceback
-            error_trace = traceback.format_exc()
-            print(f"Error inesperado: {error_trace}")
-            return [], f"Error inesperado: {str(e)}"
+            print(f"Error inesperado: {traceback.format_exc()}")
+            return all_concerts, f"Error inesperado - se obtuvieron {len(all_concerts)} conciertos parciales: {str(e)}"
+
+    def _process_event(self, event, artist_name):
+        """
+        Procesar un evento individual y convertirlo en formato de concierto
+        
+        Args:
+            event (dict): Datos del evento de Ticketmaster
+            artist_name (str): Nombre del artista
+            
+        Returns:
+            dict: Datos del concierto procesados o None si hay error
+        """
+        try:
+            # Extraer datos del venue
+            venues = event.get('_embedded', {}).get('venues', [])
+            venue_data = venues[0] if venues else {}
+            
+            # Construir dirección
+            address_parts = []
+            address_obj = venue_data.get('address', {})
+            if address_obj.get('line1'):
+                address_parts.append(address_obj['line1'])
+            if address_obj.get('line2'):
+                address_parts.append(address_obj['line2'])
+            if venue_data.get('postalCode'):
+                address_parts.append(venue_data['postalCode'])
+            
+            address = ', '.join(address_parts)
+            
+            # Extraer fecha y hora
+            dates = event.get('dates', {})
+            start_date = dates.get('start', {})
+            local_date = start_date.get('localDate', 'Unknown date')
+            local_time = start_date.get('localTime', '')
+            
+            # Extraer imagen
+            images = event.get('images', [])
+            image_url = ''
+            if images:
+                # Buscar imagen ideal (16:9, resolución media)
+                for img in images:
+                    if (img.get('ratio') == '16_9' and 
+                        img.get('width', 0) > 500 and 
+                        img.get('width', 0) < 1200):
+                        image_url = img.get('url', '')
+                        break
+                
+                # Fallback a primera imagen disponible
+                if not image_url:
+                    image_url = images[0].get('url', '')
+            
+            # Extraer ciudad
+            city_obj = venue_data.get('city', {})
+            city_name = city_obj.get('name', 'Unknown city')
+            
+            # Crear objeto concierto
+            concert = {
+                'artist': artist_name,
+                'name': event.get('name', 'No title'),
+                'venue': venue_data.get('name', 'Unknown venue'),
+                'address': address,
+                'city': city_name,
+                'date': local_date,
+                'time': local_time,
+                'image': image_url,
+                'url': event.get('url', ''),
+                'id': event.get('id', ''),
+                'source': 'Ticketmaster'
+            }
+            
+            return concert
+            
+        except Exception as e:
+            print(f"Error procesando evento individual: {e}")
+            return None
+
+    def search_concerts(self, artist_name, country_code="ES", size=50):
+        """
+        Método original actualizado para usar paginación por defecto
+        
+        Args:
+            artist_name (str): Nombre del artista a buscar
+            country_code (str): Código de país ISO (ES, US, etc.)
+            size (int): Número máximo de resultados (se usa como límite total)
+            
+        Returns:
+            tuple: (lista de conciertos, mensaje)
+        """
+        # Usar la función paginada con el size como límite máximo
+        return self.search_concerts_paginated(artist_name, country_code, max_results=size)
+
+    def get_pagination_info(self, artist_name, country_code="ES"):
+        """
+        Obtener información de paginación sin descargar todos los resultados
+        
+        Args:
+            artist_name (str): Nombre del artista
+            country_code (str): Código de país
+            
+        Returns:
+            dict: Información de paginación (total_pages, total_elements, etc.)
+        """
+        params = {
+            "keyword": artist_name,
+            "countrycode": country_code.lower(),
+            "size": "1",  # Solo necesitamos info de paginación
+            "page": "0",
+            "apikey": self.api_key
+        }
+        
+        try:
+            response = requests.get(self.base_url, params=params, timeout=15)
+            response.raise_for_status()
+            data = response.json()
+            
+            if 'page' in data:
+                page_info = data['page']
+                return {
+                    'total_pages': page_info.get('totalPages', 0),
+                    'total_elements': page_info.get('totalElements', 0),
+                    'size': page_info.get('size', 0),
+                    'has_multiple_pages': page_info.get('totalPages', 0) > 1
+                }
+            
+            return {'total_pages': 0, 'total_elements': 0, 'size': 0, 'has_multiple_pages': False}
+            
+        except Exception as e:
+            print(f"Error obteniendo información de paginación: {e}")
+            return {'error': str(e)}
     
     def _get_cache_file_path(self, artist_name, country_code):
         """Generar ruta al archivo de caché para un artista y país"""
