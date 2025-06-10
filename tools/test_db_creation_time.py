@@ -7,11 +7,271 @@ import json
 import subprocess
 import time
 import sys
+import os
+import hashlib
 from pathlib import Path
 import argparse
 import sqlite3 
 from collections import defaultdict
 
+
+
+def get_filesystem_snapshot(project_root='.', excluded_dirs=None, excluded_extensions=None):
+    """
+    Crear un snapshot del estado actual del sistema de archivos del proyecto
+    
+    Args:
+        project_root: Ruta raíz del proyecto
+        excluded_dirs: Lista de directorios a excluir (ej: ['.git', '__pycache__', '.venv'])
+        excluded_extensions: Lista de extensiones a excluir (ej: ['.pyc', '.log'])
+    """
+    if excluded_dirs is None:
+        excluded_dirs = {'.git', '__pycache__', '.venv', 'venv', '.pytest_cache', 
+                        'node_modules', '.mypy_cache', '.tox', 'dist', 'build'}
+    
+    if excluded_extensions is None:
+        excluded_extensions = {'.pyc', '.pyo', '.pyd', '__pycache__'}
+    
+    snapshot = {
+        'files': {},
+        'directories': set(),
+        'total_files': 0,
+        'total_size': 0,
+        'project_root': str(Path(project_root).resolve())
+    }
+    
+    project_path = Path(project_root).resolve()
+    
+    try:
+        for root, dirs, files in os.walk(project_path):
+            # Filtrar directorios excluidos
+            dirs[:] = [d for d in dirs if d not in excluded_dirs]
+            
+            current_path = Path(root)
+            relative_path = current_path.relative_to(project_path)
+            
+            # Añadir directorio al snapshot
+            snapshot['directories'].add(str(relative_path))
+            
+            for file in files:
+                file_path = current_path / file
+                relative_file_path = file_path.relative_to(project_path)
+                
+                # Filtrar archivos por extensión
+                if file_path.suffix.lower() in excluded_extensions:
+                    continue
+                
+                try:
+                    stat_info = file_path.stat()
+                    
+                    # Calcular hash del archivo para detectar cambios de contenido
+                    file_hash = None
+                    if stat_info.st_size < 10 * 1024 * 1024:  # Solo hash para archivos < 10MB
+                        try:
+                            with open(file_path, 'rb') as f:
+                                file_hash = hashlib.md5(f.read()).hexdigest()
+                        except (PermissionError, OSError):
+                            file_hash = None
+                    
+                    snapshot['files'][str(relative_file_path)] = {
+                        'size': stat_info.st_size,
+                        'mtime': stat_info.st_mtime,
+                        'hash': file_hash,
+                        'extension': file_path.suffix.lower()
+                    }
+                    
+                    snapshot['total_files'] += 1
+                    snapshot['total_size'] += stat_info.st_size
+                    
+                except (PermissionError, OSError, FileNotFoundError):
+                    # Archivo no accesible, saltarlo
+                    continue
+    
+    except Exception as e:
+        print(f"⚠️  Error creando snapshot del sistema de archivos: {e}")
+        return None
+    
+    snapshot['directories'] = sorted(list(snapshot['directories']))
+    print(f"✓ Snapshot FS creado: {snapshot['total_files']} archivos, {format_file_size(snapshot['total_size'])}")
+    
+    return snapshot
+
+
+def compare_filesystem_snapshots(before_snapshot, after_snapshot):
+    """
+    Comparar dos snapshots del sistema de archivos y detectar cambios
+    """
+    if not before_snapshot or not after_snapshot:
+        return None
+    
+    changes = {
+        'new_files': [],
+        'deleted_files': [],
+        'modified_files': [],
+        'new_directories': [],
+        'deleted_directories': [],
+        'size_changes': {
+            'before': before_snapshot['total_size'],
+            'after': after_snapshot['total_size'],
+            'difference': after_snapshot['total_size'] - before_snapshot['total_size']
+        },
+        'file_count_change': after_snapshot['total_files'] - before_snapshot['total_files']
+    }
+    
+    before_files = set(before_snapshot['files'].keys())
+    after_files = set(after_snapshot['files'].keys())
+    before_dirs = set(before_snapshot['directories'])
+    after_dirs = set(after_snapshot['directories'])
+    
+    # Detectar archivos nuevos y eliminados
+    changes['new_files'] = sorted(list(after_files - before_files))
+    changes['deleted_files'] = sorted(list(before_files - after_files))
+    
+    # Detectar directorios nuevos y eliminados
+    changes['new_directories'] = sorted(list(after_dirs - before_dirs))
+    changes['deleted_directories'] = sorted(list(before_dirs - after_dirs))
+    
+    # Detectar archivos modificados
+    common_files = before_files.intersection(after_files)
+    for file_path in common_files:
+        before_file = before_snapshot['files'][file_path]
+        after_file = after_snapshot['files'][file_path]
+        
+        # Comparar por hash si está disponible, sino por mtime y size
+        if before_file['hash'] and after_file['hash']:
+            if before_file['hash'] != after_file['hash']:
+                changes['modified_files'].append({
+                    'path': file_path,
+                    'change_type': 'content',
+                    'size_before': before_file['size'],
+                    'size_after': after_file['size'],
+                    'size_diff': after_file['size'] - before_file['size']
+                })
+        else:
+            # Fallback: comparar por timestamp y tamaño
+            if (before_file['mtime'] != after_file['mtime'] or 
+                before_file['size'] != after_file['size']):
+                changes['modified_files'].append({
+                    'path': file_path,
+                    'change_type': 'timestamp_or_size',
+                    'size_before': before_file['size'],
+                    'size_after': after_file['size'],
+                    'size_diff': after_file['size'] - before_file['size']
+                })
+    
+    return changes
+
+
+def format_filesystem_changes_report(script_name, fs_changes, execution_time):
+    """
+    Formatear un reporte legible de cambios en el sistema de archivos
+    """
+    if not fs_changes:
+        return f"\n{script_name}: Sin cambios detectados en el sistema de archivos"
+    
+    # Verificar si hay cambios significativos
+    has_changes = (fs_changes['new_files'] or fs_changes['deleted_files'] or 
+                   fs_changes['modified_files'] or fs_changes['new_directories'] or 
+                   fs_changes['deleted_directories'])
+    
+    if not has_changes:
+        return f"\n{script_name}: Sin cambios detectados en el sistema de archivos"
+    
+    report = f"\n{'='*60}\n"
+    report += f"CAMBIOS EN SISTEMA DE ARCHIVOS - {script_name} ({format_time(execution_time)})\n"
+    report += f"{'='*60}\n"
+    
+    # Nuevas directorios
+    if fs_changes['new_directories']:
+        report += f"📁 NUEVOS DIRECTORIOS ({len(fs_changes['new_directories'])}):\n"
+        for directory in fs_changes['new_directories']:
+            report += f"  + {directory}/\n"
+        report += "\n"
+    
+    # Directorios eliminados
+    if fs_changes['deleted_directories']:
+        report += f"🗑️  DIRECTORIOS ELIMINADOS ({len(fs_changes['deleted_directories'])}):\n"
+        for directory in fs_changes['deleted_directories']:
+            report += f"  - {directory}/\n"
+        report += "\n"
+    
+    # Archivos nuevos
+    if fs_changes['new_files']:
+        report += f"📄 ARCHIVOS NUEVOS ({len(fs_changes['new_files'])}):\n"
+        # Agrupar por extensión para mejor visualización
+        files_by_ext = defaultdict(list)
+        for file_path in fs_changes['new_files']:
+            ext = Path(file_path).suffix.lower() or '(sin extensión)'
+            files_by_ext[ext].append(file_path)
+        
+        for ext, files in sorted(files_by_ext.items()):
+            report += f"  {ext} ({len(files)}):\n"
+            for file_path in files[:5]:  # Mostrar máximo 5 archivos por extensión
+                report += f"    + {file_path}\n"
+            if len(files) > 5:
+                report += f"    ... y {len(files) - 5} más\n"
+        report += "\n"
+    
+    # Archivos eliminados
+    if fs_changes['deleted_files']:
+        report += f"🗑️  ARCHIVOS ELIMINADOS ({len(fs_changes['deleted_files'])}):\n"
+        for file_path in fs_changes['deleted_files'][:10]:  # Mostrar máximo 10
+            report += f"  - {file_path}\n"
+        if len(fs_changes['deleted_files']) > 10:
+            report += f"  ... y {len(fs_changes['deleted_files']) - 10} más\n"
+        report += "\n"
+    
+    # Archivos modificados
+    if fs_changes['modified_files']:
+        report += f"✏️  ARCHIVOS MODIFICADOS ({len(fs_changes['modified_files'])}):\n"
+        # Ordenar por cambio de tamaño para mostrar los más significativos primero
+        sorted_modified = sorted(fs_changes['modified_files'], 
+                               key=lambda x: abs(x.get('size_diff', 0)), reverse=True)
+        
+        for file_info in sorted_modified[:10]:  # Mostrar máximo 10
+            path = file_info['path']
+            size_diff = file_info.get('size_diff', 0)
+            
+            if size_diff != 0:
+                size_change = f" ({'+' if size_diff > 0 else ''}{format_file_size(abs(size_diff))})"
+            else:
+                size_change = ""
+                
+            report += f"  ~ {path}{size_change}\n"
+        
+        if len(fs_changes['modified_files']) > 10:
+            report += f"  ... y {len(fs_changes['modified_files']) - 10} más\n"
+        report += "\n"
+    
+    # Resumen de cambios
+    file_count_change = fs_changes['file_count_change']
+    if file_count_change != 0:
+        symbol = "+" if file_count_change > 0 else ""
+        report += f"📊 TOTAL ARCHIVOS: {symbol}{file_count_change}\n"
+    
+    # Cambio de tamaño total
+    size_change = fs_changes['size_changes']['difference']
+    if size_change != 0:
+        symbol = "+" if size_change > 0 else ""
+        report += f"💾 TAMAÑO TOTAL: {symbol}{format_file_size(abs(size_change))}\n"
+    
+    return report
+
+
+def get_project_root_from_config(config_data):
+    """
+    Intentar determinar la ruta raíz del proyecto desde la configuración
+    """
+    # Buscar pistas en la configuración sobre la ubicación del proyecto
+    db_path = config_data.get('common', {}).get('db_path', '')
+    
+    if db_path:
+        # Usar el directorio padre de la base de datos como aproximación
+        db_parent = Path(db_path).parent
+        return str(db_parent) if db_parent != Path('.') else '.'
+    
+    # Fallback: usar directorio actual
+    return '.'
 
 def format_file_size(size_bytes):
     """Formatear tamaño de archivo en formato legible"""
@@ -42,8 +302,8 @@ def save_config_temp(config_data, temp_path):
         json.dump(config_data, f, indent=2, ensure_ascii=False)
 
 
-def run_single_script(script_name, original_config, temp_config_path, db_path):
-    """Ejecutar un script individual y medir su tiempo y cambios en BD"""
+def run_single_script(script_name, original_config, temp_config_path, db_path, project_root='.'):
+    """Ejecutar un script individual y medir su tiempo, cambios en BD y sistema de archivos"""
     # Crear configuración temporal con solo este script
     temp_config = original_config.copy()
     temp_config['scripts_order'] = [script_name]
@@ -55,9 +315,12 @@ def run_single_script(script_name, original_config, temp_config_path, db_path):
     print(f"Ejecutando: {script_name}")
     print(f"{'='*60}")
     
-    # Crear snapshot ANTES de ejecutar
+    # Crear snapshots ANTES de ejecutar
     print("Creando snapshot de BD antes de ejecutar...")
-    before_snapshot = get_db_snapshot(db_path)
+    before_db_snapshot = get_db_snapshot(db_path)
+    
+    print("Creando snapshot del sistema de archivos antes de ejecutar...")
+    before_fs_snapshot = get_filesystem_snapshot(project_root)
     
     # Ejecutar el comando y medir tiempo
     start_time = time.time()
@@ -71,12 +334,16 @@ def run_single_script(script_name, original_config, temp_config_path, db_path):
         end_time = time.time()
         execution_time = end_time - start_time
         
-        # Crear snapshot DESPUÉS de ejecutar
+        # Crear snapshots DESPUÉS de ejecutar
         print("Creando snapshot de BD después de ejecutar...")
-        after_snapshot = get_db_snapshot(db_path)
+        after_db_snapshot = get_db_snapshot(db_path)
+        
+        print("Creando snapshot del sistema de archivos después de ejecutar...")
+        after_fs_snapshot = get_filesystem_snapshot(project_root)
         
         # Analizar cambios
-        changes = compare_snapshots(before_snapshot, after_snapshot)
+        db_changes = compare_snapshots(before_db_snapshot, after_db_snapshot)
+        fs_changes = compare_filesystem_snapshots(before_fs_snapshot, after_fs_snapshot)
         
         success = result.returncode == 0
         
@@ -87,9 +354,12 @@ def run_single_script(script_name, original_config, temp_config_path, db_path):
             'stdout': result.stdout,
             'stderr': result.stderr,
             'returncode': result.returncode,
-            'db_changes': changes,
-            'before_snapshot': before_snapshot,
-            'after_snapshot': after_snapshot
+            'db_changes': db_changes,
+            'fs_changes': fs_changes,
+            'before_db_snapshot': before_db_snapshot,
+            'after_db_snapshot': after_db_snapshot,
+            'before_fs_snapshot': before_fs_snapshot,
+            'after_fs_snapshot': after_fs_snapshot
         }
         
     except Exception as e:
@@ -103,8 +373,11 @@ def run_single_script(script_name, original_config, temp_config_path, db_path):
             'stderr': f'ERROR: {str(e)}',
             'returncode': -2,
             'db_changes': None,
-            'before_snapshot': before_snapshot,
-            'after_snapshot': None
+            'fs_changes': None,
+            'before_db_snapshot': before_db_snapshot,
+            'after_db_snapshot': None,
+            'before_fs_snapshot': before_fs_snapshot,
+            'after_fs_snapshot': None
         }
 
 def format_time(seconds):
@@ -424,7 +697,10 @@ def main():
                        help='Archivo temporal para configuración')
     parser.add_argument('--db-changes-report', default='db_changes_report.txt',
                        help='Archivo de salida para el reporte de cambios en BD')
-    
+    parser.add_argument('--fs-changes-report', default='filesystem_changes_report.txt',
+                   help='Archivo de salida para el reporte de cambios en sistema de archivos')
+    parser.add_argument('--project-root', default='.',
+                   help='Ruta raíz del proyecto para monitorear cambios de archivos')
     args = parser.parse_args()
     
     # Verificar que existe el archivo de configuración
@@ -451,6 +727,9 @@ def main():
     else:
         print("Base de datos no existe - será creada durante el proceso")
     
+
+
+
     # Obtener lista de scripts a probar
     if args.scripts:
         scripts_to_test = args.scripts
@@ -472,7 +751,7 @@ def main():
             print(f"ADVERTENCIA: Script '{script}' no encontrado en configuración")
             continue
             
-        result = run_single_script(script, config_data, args.temp_config, db_path)
+        result = run_single_script(script, config_data, args.temp_config, db_path, args.project_root)
         results.append(result)
         
         # Mostrar resultado inmediato
@@ -482,6 +761,10 @@ def main():
         # Mostrar cambios inmediatamente
         if result['db_changes']:
             print(format_changes_report(script, result['db_changes'], result['execution_time']))
+
+        # Mostrar cambios de sistema de archivos inmediatamente
+        if result['fs_changes']:
+            print(format_filesystem_changes_report(script, result['fs_changes'], result['execution_time']))
         
         if not result['success'] and result['stderr']:
             print(f"Error: {result['stderr'][:200]}...")
@@ -535,6 +818,9 @@ def main():
         f.write(f"Fecha: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"Configuración: {args.config}\n")
         f.write(f"Base de datos: {db_path}\n")
+
+        f.write(f"Fecha: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+        f.write(f"Proyecto: {args.project_root}\n\n")
         f.write(f"Total de scripts probados: {len(results)}\n")
         f.write(f"Scripts exitosos: {len(successful_results)}\n")
         f.write(f"Scripts fallidos: {len(failed_results)}\n")
@@ -548,7 +834,10 @@ def main():
             f.write(f"Tiempo: {format_time(result['execution_time'])}\n")
             f.write(f"Éxito: {'Sí' if result['success'] else 'No'}\n")
             f.write(f"Código de retorno: {result['returncode']}\n")
-            
+            if result['fs_changes']:
+                f.write(format_filesystem_changes_report(result['script'], result['fs_changes'], result['execution_time']))
+                f.write("\n")
+
             if result['stderr']:
                 f.write(f"Error:\n{result['stderr']}\n")
                 
@@ -563,12 +852,18 @@ def main():
         f.write("=" * 80 + "\n\n")
         f.write(f"Fecha: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"Base de datos: {db_path}\n\n")
-        
         for result in results:
             if result['db_changes']:
                 f.write(format_changes_report(result['script'], result['db_changes'], result['execution_time']))
                 f.write("\n")
-    
+        f.write("REPORTE DE CAMBIOS EN SISTEMA DE ARCHIVOS\n")
+        f.write("=" * 80 + "\n\n")        
+        for result in results:
+            if result['fs_changes']:
+                f.write(format_filesystem_changes_report(result['script'], result['fs_changes'], result['execution_time']))
+                f.write("\n")
+
+        print(f"📋 Reporte de cambios en FS guardado en: {args.fs_changes_report}")
     print(f"\n📋 Reporte detallado guardado en: {args.output}")
     print(f"📋 Reporte de cambios en BD guardado en: {args.db_changes_report}")
 
