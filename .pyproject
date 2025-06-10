@@ -145,7 +145,7 @@
         "ui/fuzzy/music_fuzzy_module.ui",
         "ui/fuzzy/music_fuzzy_advanced_settings.ui",
 
-        "ui/conciertos_module.ui",
+
         "ui/config_editor.ui",
         "ui/database_editor.ui",
 
@@ -178,6 +178,7 @@
         "ui/muspy/lastfm_bluesky_dialog.ui",
         "ui/muspy/muspy_credentials.ui",
         "ui/stats/estadisticas_module.ui",
+        "ui/conciertos/conciertos_module.ui",
         "ui/conciertos/conciertos_advanced_settings.ui"
     ]
 }

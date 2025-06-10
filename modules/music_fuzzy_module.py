@@ -215,18 +215,41 @@ class MusicFuzzyModule(BaseModule):
             print("No se encontraron todos los controles de filtro de tiempo")
 
 
+
     def _connect_feed_tab_buttons(self):
         """Connect the feed tab navigation buttons."""
+        # Encontrar todos los botones
         artists_button = self.findChild(QPushButton, "artists_pushButton")
         albums_button = self.findChild(QPushButton, "albums_pushButton")
         menciones_button = self.findChild(QPushButton, "menciones_pushButton")
+        libros_button = self.findChild(QPushButton, "libros_pushButton")  # AÑADIDO
+        conciertos_button = self.findChild(QPushButton, "conciertos_pushButton")  # AÑADIDO
+        instrumentos_button = self.findChild(QPushButton, "instrumentos_pushButton")  # AÑADIDO
         stack_widget = self.findChild(QStackedWidget, "stackedWidget_feeds")
         
-        if artists_button and albums_button and menciones_button and stack_widget:
+        # Verificar que todos los botones y el widget existen
+        if (artists_button and albums_button and menciones_button and libros_button and 
+            conciertos_button and instrumentos_button and stack_widget):
             # Connect buttons to switch between feed tabs
             artists_button.clicked.connect(lambda: stack_widget.setCurrentIndex(0))
             albums_button.clicked.connect(lambda: stack_widget.setCurrentIndex(1))
             menciones_button.clicked.connect(lambda: stack_widget.setCurrentIndex(2))
+            libros_button.clicked.connect(lambda: stack_widget.setCurrentIndex(3))  # AÑADIDO
+            conciertos_button.clicked.connect(lambda: stack_widget.setCurrentIndex(4))  # AÑADIDO
+            instrumentos_button.clicked.connect(lambda: stack_widget.setCurrentIndex(5))  # AÑADIDO
+            print("Todos los botones de feeds conectados correctamente")
+        else:
+            print("ERROR: No se pudieron encontrar todos los botones de feeds o el stackedWidget")
+            # Debug: mostrar qué botones faltan
+            missing = []
+            if not artists_button: missing.append("artists_pushButton")
+            if not albums_button: missing.append("albums_pushButton")
+            if not menciones_button: missing.append("menciones_pushButton")
+            if not libros_button: missing.append("libros_pushButton")
+            if not conciertos_button: missing.append("conciertos_pushButton")
+            if not instrumentos_button: missing.append("instrumentos_pushButton")
+            if not stack_widget: missing.append("stackedWidget_feeds")
+            print(f"Widgets faltantes: {missing}")
 
     def _connect_additional_signals(self):
         """Connect signals that depend on initialized components"""

@@ -9,14 +9,34 @@ import importlib
 # Verificar si existe el módulo themes.py
 themes_path = Path(__file__).parent / "themes" / "themes.py"
 if themes_path.exists():
-    # Importar dinámicamente el módulo themes.py
-    spec = importlib.util.spec_from_file_location("themes", themes_path)
-    themes_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(themes_module)
-    THEMES = themes_module.THEMES
-    apply_theme_function = themes_module.apply_theme
+    try:
+        # Importar dinámicamente el módulo themes.py
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("themes", themes_path)
+        themes_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(themes_module)
+        
+        # Importar las funciones correctas del nuevo sistema
+        THEMES = themes_module.THEMES
+        apply_theme_to_widget_function = getattr(themes_module, 'apply_theme_to_widget', None)
+        apply_effects_to_widget_function = getattr(themes_module, 'apply_effects_to_widget', None)
+        setup_objectnames_function = getattr(themes_module, 'setup_objectnames_for_theme', None)
+        
+        print("Sistema de temas centralizado cargado correctamente")
+    except Exception as e:
+        print(f"Error cargando sistema de temas: {e}")
+        themes_module = None
+        apply_theme_to_widget_function = None
+        apply_effects_to_widget_function = None
+        setup_objectnames_function = None
 else:
-    # Definición de temas fallback si no existe themes.py
+    themes_module = None
+    apply_theme_to_widget_function = None
+    apply_effects_to_widget_function = None
+    setup_objectnames_function = None
+
+# Definición de temas fallback si no existe themes.py o falla la carga
+if themes_module is None:
     THEMES = {
         "Tokyo Night": {  # Tokyo Night
             'bg': '#1a1b26',
@@ -27,43 +47,25 @@ else:
             'selection': '#364A82',
             'button_hover': '#3d59a1'
         },
-        "Solarized Dark": {  # Solarized Dark
-            'bg': '#002b36',
-            'fg': '#839496',
-            'accent': '#268bd2',
-            'secondary_bg': '#073642',
-            'border': '#586e75',
-            'selection': '#2d4b54',
-            'button_hover': '#4b6e83'
+        "Material Light": {
+            'bg': '#ffffff',
+            'fg': '#212121',
+            'accent': '#6200ee',
+            'secondary_bg': '#f5f5f5',
+            'border': '#e0e0e0',
+            'selection': '#e3f2fd',
+            'button_hover': '#ede7f6'
         },
-        "Monokai": {  # Monokai
-            'bg': '#272822',
-            'fg': '#f8f8f2',
-            'accent': '#a6e22e',
-            'secondary_bg': '#3e3d32',
-            'border': '#75715e',
-            'selection': '#49483e',
-            'button_hover': '#5c6370'
+        "Material Dark": {
+            'bg': '#121212',
+            'fg': '#eeeeee',
+            'accent': '#bb86fc',
+            'secondary_bg': '#1e1e1e',
+            'border': '#333333',
+            'selection': '#3700b3',
+            'button_hover': '#3d4048'
         },
-        "Catppuccin": {  # Catppuccin Mocha
-            'bg': '#1e1e2e',
-            'fg': '#cdd6f4',
-            'accent': '#89b4fa',
-            'secondary_bg': '#313244',
-            'border': '#6c7086',
-            'selection': '#45475a',
-            'button_hover': '#585b70'
-        },
-        "Dracula": {  # Dracula
-            'bg': '#282a36',
-            'fg': '#f8f8f2',
-            'accent': '#bd93f9',
-            'secondary_bg': '#44475a',
-            'border': '#6272a4',
-            'selection': '#44475a',
-            'button_hover': '#50fa7b'
-        },
-        "Nord": {  # Nord
+        "Nord": {
             'bg': '#2e3440',
             'fg': '#eceff4',
             'accent': '#88c0d0',
@@ -71,17 +73,10 @@ else:
             'border': '#4c566a',
             'selection': '#434c5e',
             'button_hover': '#5e81ac'
-        },
-        "Synthwave": {  # Synthwave
-            'bg': '#262335',
-            'fg': '#f8f8f2',
-            'accent': '#ff8adc',
-            'secondary_bg': '#3b315e',
-            'border': '#7d77a9',
-            'selection': '#4b3c83',
-            'button_hover': '#fe5f86'
         }
     }
+
+
 class BaseModule(QWidget):
     """Clase base para todos los módulos."""
     def __init__(self, parent=None, theme='Tokyo Night', **kwargs):
@@ -115,6 +110,13 @@ class BaseModule(QWidget):
         
         self.init_ui()
         self.apply_theme()
+
+        # Aplicar efectos adicionales si el sistema centralizado está disponible
+        try:
+            if apply_effects_to_widget_function is not None:
+                apply_effects_to_widget_function(self)
+        except Exception as e:
+            print(f"Error aplicando efectos: {e}")
 
     def init_ui(self):
         """
@@ -170,7 +172,8 @@ class BaseModule(QWidget):
 
     def apply_theme(self, theme_name: Optional[str] = None):
         """
-        Aplica un tema al módulo usando el sistema centralizado de temas.
+        Aplica un tema al módulo usando ÚNICAMENTE el sistema centralizado de temas.
+        NO aplica estilos adicionales, solo usa el CSS de themes.py
         
         Args:
             theme_name (str, optional): Nombre del tema a aplicar. 
@@ -184,107 +187,37 @@ class BaseModule(QWidget):
         if self.current_theme not in self.themes:
             self.current_theme = list(self.themes.keys())[0]
 
-        # Usar el sistema de temas centralizado si está disponible
+        # SOLO usar el sistema de temas centralizado
         try:
-            # Si estamos en un entorno con themes.py cargado
-            if 'apply_theme_function' in globals():
-                # Añadir objectName al widget si no lo tiene para facilitar estilos específicos
+            if apply_theme_to_widget_function is not None:
+                # Añadir objectName al widget si no lo tiene
                 if not self.objectName():
-                    self.setObjectName(self.__class__.__name__.lower())
+                    module_class_name = self.__class__.__name__.lower()
+                    self.setObjectName(module_class_name)
                     
-                # Usar la función centralizada
-                apply_theme_function(self, self.current_theme)
+                # Configurar objectNames automáticamente
+                if setup_objectnames_function is not None:
+                    setup_objectnames_function(self)
+                
+                # Usar ÚNICAMENTE la función centralizada - NO añadir CSS adicional
+                apply_theme_to_widget_function(self, self.current_theme)
+                
+                # Aplicar efectos si están disponibles
+                if apply_effects_to_widget_function is not None:
+                    apply_effects_to_widget_function(self)
+                
+                print(f"Tema '{self.current_theme}' aplicado via sistema centralizado")
                 return
+                
         except Exception as e:
             print(f"Error al aplicar tema centralizado: {e}")
-            pass
+            traceback.print_exc()
         
-        # Fallback al método anterior si el sistema centralizado falla
-        theme = self.themes[self.current_theme]
-        
-        # Aplicar estilo base reducido
-        self.setStyleSheet(f"""
-            /* Estilos básicos - para compatibilidad */
-            QLabel {{
-                color: {theme['fg']};
-            }}
-            
-            QPushButton {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: 1px solid {theme['border']};
-                border-radius: 4px;
-                padding: 5px;
-            }}
-            
-            QPushButton:hover {{
-                background-color: {theme['button_hover']};
-            }}
-        """)
+        # Si no hay sistema centralizado, NO aplicar ningún estilo
+        # Dejar que Qt use sus estilos por defecto
+        print(f"Sistema de temas centralizado no disponible. Widget sin tema personalizado.")
 
-        # Aplicar tema a widgets hijos específicos
-        self._apply_theme_to_children(self, theme)
 
-    def _apply_theme_to_children(self, parent, theme):
-        """
-        Aplica recursivamente el tema a los widgets hijos.
-        Este método ahora es de respaldo, el sistema principal está en themes.py.
-        
-        Args:
-            parent (QWidget): Widget padre para iniciar la aplicación del tema
-            theme (dict): Diccionario de colores del tema
-        """
-        for child in parent.findChildren(QWidget):
-            try:
-                # Asignar objectName si no lo tiene
-                if not child.objectName() and child.__class__.__name__ in ['QTableWidget', 'QTableView', 'QTreeWidget', 'QPushButton', 'QFrame']:
-                    # Generar un nombre basado en la clase y un contador
-                    child_type = child.__class__.__name__.lower()
-                    child.setObjectName(f"{child_type}_{id(child) % 10000}")
-                
-                # Primero llamar a apply_theme si el widget lo tiene
-                if hasattr(child, 'apply_theme'):
-                    child.apply_theme(self.current_theme)
-                    continue
-                    
-                # Aplicar estilos específicos solo para ciertos tipos de widgets
-                # como medida de compatibilidad
-                if isinstance(child, (QTableWidget, QTableView)):
-                    child.setStyleSheet(f"""
-                        QTableWidget, QTableView {{
-                            background-color: {theme['secondary_bg']};
-                            color: {theme['fg']};
-                            gridline-color: {theme['border']};
-                            border: none;
-                        }}
-                        
-                        QHeaderView::section {{
-                            background-color: {theme['secondary_bg']};
-                            color: {theme['fg']};
-                            border: 1px solid {theme['border']};
-                        }}
-                    """)
-                    
-                    # Configuración adicional para tablas
-                    if hasattr(child, 'setAlternatingRowColors'):
-                        child.setAlternatingRowColors(True)
-                    
-                elif isinstance(child, QProgressBar):
-                    child.setStyleSheet(f"""
-                        QProgressBar {{
-                            text-align: center;
-                            border: 1px solid {theme['border']};
-                            border-radius: 3px;
-                            background-color: {theme['secondary_bg']};
-                            color: {theme['fg']};
-                        }}
-                        QProgressBar::chunk {{
-                            background-color: {theme['accent']};
-                        }}
-                    """)
-                    
-            except Exception as e:
-                print(f"Advertencia: No se pudo aplicar el tema a {child}: {e}")
 
     def set_tab_manager(self, tab_manager):
         """Establece la referencia al gestor de pestañas y actualiza el registro de módulos"""

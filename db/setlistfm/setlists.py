@@ -77,6 +77,48 @@ def get_artists(conn):
     cursor.execute("SELECT id, name, mbid FROM artists")
     return cursor.fetchall()
 
+
+
+def is_date_after(setlist_date, from_date):
+    """Compara si la fecha del setlist es posterior a from_date"""
+    if not setlist_date or not from_date:
+        return True
+    
+    try:
+        # Convertir ambas fechas a formato comparable (YYYY-MM-DD)
+        def parse_date(date_str):
+            if '-' in date_str:
+                parts = date_str.split('-')
+                if len(parts) == 3:
+                    if len(parts[0]) == 4:  # YYYY-MM-DD
+                        return date_str
+                    elif len(parts[2]) == 4:  # DD-MM-YYYY
+                        return f"{parts[2]}-{parts[1].zfill(2)}-{parts[0].zfill(2)}"
+            return date_str
+        
+        setlist_normalized = parse_date(setlist_date)
+        from_normalized = parse_date(from_date)
+        
+        return setlist_normalized > from_normalized
+    except:
+        return True  # En caso de error, incluir el setlist
+
+
+def filter_setlists_by_date(setlists, from_date):
+    """Filtra setlists que sean posteriores a from_date"""
+    if not from_date:
+        return setlists
+    
+    filtered = []
+    for setlist in setlists:
+        event_date = setlist.get('eventDate', '')
+        if is_date_after(event_date, from_date):
+            filtered.append(setlist)
+    
+    return filtered
+
+
+
 def get_latest_setlist_date(conn, artist_id):
     """Obtiene la fecha del setlist más reciente para un artista"""
     cursor = conn.cursor()
@@ -87,7 +129,20 @@ def get_latest_setlist_date(conn, artist_id):
     ''', (artist_id,))
     
     result = cursor.fetchone()
-    return result[0] if result and result[0] else None
+    if result and result[0]:
+        # Convertir la fecha al formato correcto antes de devolverla
+        raw_date = result[0]
+        # Si la fecha está en formato DD-MM-YYYY, devolverla tal como está
+        if '-' in raw_date and len(raw_date.split('-')) == 3:
+            parts = raw_date.split('-')
+            if len(parts[2]) == 4:  # DD-MM-YYYY
+                return raw_date
+            elif len(parts[0]) == 4:  # YYYY-MM-DD, convertir
+                year, month, day = parts
+                return f"{day.zfill(2)}-{month.zfill(2)}-{year}"
+        return raw_date
+    return None
+
 
 def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0, from_date=None, retry_count=0):
     """Obtiene los setlists de un artista por MBID de la API de setlist.fm"""
@@ -105,11 +160,16 @@ def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0, from_date=None, retry_
     if year > 0:
         params['year'] = year
     
-    # Añadir filtro de fecha si se especifica (formato dd-mm-yyyy)
+    # NO usar filtro de fecha - la API de setlist.fm no soporta rangos de fechas
+    # El filtrado se hará después al procesar los resultados
     if from_date:
-        params['date'] = f"{from_date}/"  # Buscar desde esta fecha en adelante
+        print(f"    Filtrando setlists posteriores a: {from_date} (filtrado local)")
     
-    response = requests.get(url, headers=headers, params=params)
+    try:
+        response = requests.get(url, headers=headers, params=params)
+    except requests.RequestException as e:
+        print(f"Error de conexión para MBID {mbid}: {e}")
+        return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     if response.status_code == 404:
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
@@ -130,6 +190,7 @@ def fetch_setlists_by_mbid(mbid, api_key, page=1, year=0, from_date=None, retry_
     
     return response.json()
 
+
 def fetch_setlists_by_name(artist_name, api_key, page=1, year=0, from_date=None, retry_count=0):
     """Obtiene los setlists de un artista por nombre de la API de setlist.fm"""
     url = f"https://api.setlist.fm/rest/1.0/search/setlists"
@@ -146,11 +207,16 @@ def fetch_setlists_by_name(artist_name, api_key, page=1, year=0, from_date=None,
     if year > 0:
         params['year'] = year
     
-    # Añadir filtro de fecha si se especifica (formato dd-mm-yyyy)
+    # NO usar filtro de fecha - la API de setlist.fm no soporta rangos de fechas
+    # El filtrado se hará después al procesar los resultados
     if from_date:
-        params['date'] = f"{from_date}/"  # Buscar desde esta fecha en adelante
+        print(f"    Filtrando setlists posteriores a: {from_date} (filtrado local)")
     
-    response = requests.get(url, headers=headers, params=params)
+    try:
+        response = requests.get(url, headers=headers, params=params)
+    except requests.RequestException as e:
+        print(f"Error de conexión para {artist_name}: {e}")
+        return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     if response.status_code == 404:
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
@@ -170,23 +236,217 @@ def fetch_setlists_by_name(artist_name, api_key, page=1, year=0, from_date=None,
         return {"setlist": [], "total": 0, "page": 1, "itemsPerPage": 20}
     
     return response.json()
+
+
+def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_update=False, interactive=False, year=0, new_only=False):
+    """Procesa los setlists de un artista, primero por MBID y luego por nombre si es necesario"""
+    cursor = conn.cursor()
+    
+    # Verificar si debemos omitir este artista por búsqueda reciente sin resultados
+    if should_skip_artist(conn, artist_id, force_update, year, new_only):
+        return
+    
+    # Obtener la fecha del último setlist para buscar solo nuevos
+    from_date = None
+    if not force_update and year == 0:
+        latest_date = get_latest_setlist_date(conn, artist_id)
+        if latest_date:
+            from_date = latest_date  # Ya viene en formato correcto
+            print(f"  Buscando setlists desde: {latest_date}")
+    
+    # Verificar si ya tenemos setlists de este artista (si estamos filtrando por año, no omitir)
+    if year == 0 and not new_only:
+        cursor.execute("SELECT COUNT(*) FROM artists_setlistfm WHERE artist_id = ?", (artist_id,))
+        count = cursor.fetchone()[0]
+        
+        if count > 0 and not force_update:
+            if interactive:
+                update = input(f"Ya existen {count} setlists para {artist_name}. ¿Actualizar? (s/n): ")
+                if update.lower() != 's':
+                    print(f"Omitiendo {artist_name}...")
+                    return
+            else:
+                print(f"Buscando setlists nuevos para {artist_name} (tiene {count} setlists)...")
+    
+    # Si estamos filtrando por año, mostrar mensaje apropiado
+    if year > 0:
+        print(f"Procesando setlists para {artist_name} del año {year}...")
+    else:
+        print(f"Procesando setlists para {artist_name}...")
+    
+    total_setlists_found = 0
+    search_method = ""
+    
+    # Estrategia 1: Buscar por MBID primero
+    found_by_mbid = False
+    if artist_mbid:
+        print(f"  Intentando búsqueda por MBID: {artist_mbid}")
+        page = 1
+        setlists_by_mbid = 0
+        
+        while True:
+            print(f"  Página {page} (MBID)...")
+            response = fetch_setlists_by_mbid(artist_mbid, api_key, page, year, from_date)
+            
+            setlists = response.get('setlist', [])
+            if not setlists:
+                break
+            
+            # Filtrar por fecha localmente si es necesario
+            if from_date:
+                setlists = filter_setlists_by_date(setlists, from_date)
+                if setlists:
+                    print(f"    Después del filtro de fecha: {len(setlists)} setlists")
+            
+            # Filtrar setlists que ya existen en la base de datos
+            new_setlists = []
+            for setlist in setlists:
+                setlist_id = setlist.get('id', '')
+                cursor.execute("SELECT id FROM artists_setlistfm WHERE setlist_id = ?", (setlist_id,))
+                if not cursor.fetchone():
+                    new_setlists.append(setlist)
+            
+            if new_setlists:
+                save_setlists(conn, artist_id, artist_name, new_setlists)
+                found_by_mbid = True
+                
+                setlists_by_mbid += len(new_setlists)
+                total_setlists_found += len(new_setlists)
+                print(f"    Guardados {len(new_setlists)} setlists nuevos de {len(setlists)} encontrados")
+            else:
+                print(f"    No hay setlists nuevos en esta página")
+            
+            # Si estamos filtrando por fecha y no hay resultados nuevos, podemos parar
+            # ya que los setlists vienen ordenados por fecha (más recientes primero)
+            if from_date and not new_setlists and len(setlists) > 0:
+                print(f"    No hay setlists más recientes, terminando búsqueda")
+                break
+            
+            # Verificar si hay más páginas
+            total = response.get('total', 0)
+            items_per_page = response.get('itemsPerPage', 20)
+            total_pages = (total + items_per_page - 1) // items_per_page
+            
+            if page >= total_pages:
+                break
+            
+            page += 1
+            # Respetar los límites de la API (máximo 2 llamadas por segundo)
+            time.sleep(0.5)
+        
+        if found_by_mbid:
+            search_method = "MBID"
+            if year > 0:
+                print(f"Guardados {setlists_by_mbid} setlists nuevos para {artist_name} del año {year} mediante MBID")
+            else:
+                print(f"Guardados {setlists_by_mbid} setlists nuevos para {artist_name} mediante MBID")
+    
+    # Estrategia 2: Si no hay MBID o no se encontraron resultados, buscar por nombre
+    if not artist_mbid or not found_by_mbid:
+        if not artist_mbid:
+            print(f"  No hay MBID disponible para {artist_name}, buscando por nombre")
+        else:
+            print(f"  No se encontraron resultados por MBID para {artist_name}, buscando por nombre")
+        
+        page = 1
+        setlists_by_name = 0
+        
+        while True:
+            print(f"  Página {page} (nombre)...")
+            response = fetch_setlists_by_name(artist_name, api_key, page, year, from_date)
+            
+            setlists = response.get('setlist', [])
+            if not setlists:
+                break
+            
+            # Filtrar por fecha localmente si es necesario
+            if from_date:
+                setlists = filter_setlists_by_date(setlists, from_date)
+                if setlists:
+                    print(f"    Después del filtro de fecha: {len(setlists)} setlists")
+            
+            # Filtrar setlists que ya existen en la base de datos
+            new_setlists = []
+            for setlist in setlists:
+                setlist_id = setlist.get('id', '')
+                cursor.execute("SELECT id FROM artists_setlistfm WHERE setlist_id = ?", (setlist_id,))
+                if not cursor.fetchone():
+                    new_setlists.append(setlist)
+            
+            if new_setlists:
+                save_setlists(conn, artist_id, artist_name, new_setlists)
+                
+                setlists_by_name += len(new_setlists)
+                total_setlists_found += len(new_setlists)
+                print(f"    Guardados {len(new_setlists)} setlists nuevos de {len(setlists)} encontrados")
+            else:
+                print(f"    No hay setlists nuevos en esta página")
+            
+            # Si estamos filtrando por fecha y no hay resultados nuevos, podemos parar
+            if from_date and not new_setlists and len(setlists) > 0:
+                print(f"    No hay setlists más recientes, terminando búsqueda")
+                break
+            
+            # Verificar si hay más páginas
+            total = response.get('total', 0)
+            items_per_page = response.get('itemsPerPage', 20)
+            total_pages = (total + items_per_page - 1) // items_per_page
+            
+            if page >= total_pages:
+                break
+            
+            page += 1
+            # Respetar los límites de la API (máximo 2 llamadas por segundo)
+            # Respetar los límites de la API (máximo 2 llamadas por segundo)
+            time.sleep(0.5)
+        
+        if setlists_by_name > 0:
+            if search_method:
+                search_method += " + nombre"
+            else:
+                search_method = "nombre"
+            
+            if year > 0:
+                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} del año {year} mediante nombre")
+            else:
+                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} mediante nombre")
+    
+    # Si no se especificó método de búsqueda, usar el apropiado
+    if not search_method:
+        search_method = "MBID" if artist_mbid else "nombre"
+    
+    # Actualizar tracking de búsqueda
+    update_search_tracking(conn, artist_id, artist_name, total_setlists_found, search_method)
+    
+    if total_setlists_found == 0:
+        print(f"  No se encontraron setlists nuevos para {artist_name}")# Respetar los límites de la API (máximo 2 llamadas por segundo)
+        time.sleep(0.5)
+        
+        if setlists_by_name > 0:
+            if search_method:
+                search_method += " + nombre"
+            else:
+                search_method = "nombre"
+            
+            if year > 0:
+                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} del año {year} mediante nombre")
+            else:
+                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} mediante nombre")
+    
+    # Si no se especificó método de búsqueda, usar el apropiado
+    if not search_method:
+        search_method = "MBID" if artist_mbid else "nombre"
+    
+    # Actualizar tracking de búsqueda
+    update_search_tracking(conn, artist_id, artist_name, total_setlists_found, search_method)
+    
+    if total_setlists_found == 0:
+        print(f"  No se encontraron setlists nuevos para {artist_name}")
+
+
     
 
-def convert_date_format(date_str):
-    """Convierte fecha de formato DD-MM-YYYY a DD-MM-YYYY para la API"""
-    if not date_str:
-        return None
-    
-    try:
-        # Si la fecha está en formato ISO (YYYY-MM-DD), convertir a DD-MM-YYYY
-        if '-' in date_str and len(date_str.split('-')[0]) == 4:
-            year, month, day = date_str.split('-')
-            return f"{day}-{month}-{year}"
-        else:
-            # Asumir que ya está en formato DD-MM-YYYY
-            return date_str
-    except:
-        return None
+
 
 
 def save_setlists(conn, artist_id, artist_name, setlists):
@@ -343,164 +603,41 @@ def update_setlistfm_ids_before_search(conn, api_key, force_update=False):
     print(f"Actualizaciones de IDs completadas: {updated} de {total_artists} artistas")
 
 
-def process_artist(conn, artist_id, artist_name, artist_mbid, api_key, force_update=False, interactive=False, year=0, new_only=False):
-    """Procesa los setlists de un artista, primero por MBID y luego por nombre si es necesario"""
-    cursor = conn.cursor()
+def convert_date_format(date_str):
+    """Convierte fecha de formato DD-MM-YYYY a DD-MM-YYYY para la API"""
+    if not date_str:
+        return None
     
-    # Verificar si debemos omitir este artista por búsqueda reciente sin resultados
-    if should_skip_artist(conn, artist_id, force_update, year, new_only):
-        return
-    
-    # Obtener la fecha del último setlist para buscar solo nuevos
-    from_date = None
-    if not force_update and year == 0:
-        latest_date = get_latest_setlist_date(conn, artist_id)
-        if latest_date:
-            from_date = convert_date_format(latest_date)
-            print(f"  Buscando setlists desde: {latest_date}")
-    
-    # Verificar si ya tenemos setlists de este artista (si estamos filtrando por año, no omitir)
-    if year == 0 and not new_only:
-        cursor.execute("SELECT COUNT(*) FROM artists_setlistfm WHERE artist_id = ?", (artist_id,))
-        count = cursor.fetchone()[0]
+    try:
+        # Si la fecha está en formato ISO (YYYY-MM-DD), convertir a DD-MM-YYYY
+        if '-' in date_str and len(date_str.split('-')[0]) == 4:
+            year, month, day = date_str.split('-')
+            return f"{day.zfill(2)}-{month.zfill(2)}-{year}"
+        # Si la fecha ya está en formato DD-MM-YYYY, verificar y corregir formato
+        elif '-' in date_str and len(date_str.split('-')) == 3:
+            parts = date_str.split('-')
+            # Verificar si es DD-MM-YYYY
+            if len(parts[2]) == 4:
+                day, month, year = parts
+                return f"{day.zfill(2)}-{month.zfill(2)}-{year}"
+            # Si es MM-DD-YYYY, convertir
+            elif len(parts[0]) == 2 and len(parts[1]) == 2:
+                day, month, year = parts
+                return f"{day.zfill(2)}-{month.zfill(2)}-{year}"
         
-        if count > 0 and not force_update:
-            if interactive:
-                update = input(f"Ya existen {count} setlists para {artist_name}. ¿Actualizar? (s/n): ")
-                if update.lower() != 's':
-                    print(f"Omitiendo {artist_name}...")
-                    return
-            else:
-                print(f"Buscando setlists nuevos para {artist_name} (tiene {count} setlists)...")
-    
-    # Si estamos filtrando por año, mostrar mensaje apropiado
-    if year > 0:
-        print(f"Procesando setlists para {artist_name} del año {year}...")
-    else:
-        print(f"Procesando setlists para {artist_name}...")
-    
-    total_setlists_found = 0
-    search_method = ""
-    
-    # Estrategia 1: Buscar por MBID primero
-    found_by_mbid = False
-    if artist_mbid:
-        print(f"  Intentando búsqueda por MBID: {artist_mbid}")
-        page = 1
-        setlists_by_mbid = 0
-        
-        while True:
-            print(f"  Página {page} (MBID)...")
-            response = fetch_setlists_by_mbid(artist_mbid, api_key, page, year, from_date)
-            
-            setlists = response.get('setlist', [])
-            if not setlists:
-                break
-            
-            # Filtrar setlists que ya existen en la base de datos
-            new_setlists = []
-            for setlist in setlists:
-                setlist_id = setlist.get('id', '')
-                cursor.execute("SELECT id FROM artists_setlistfm WHERE setlist_id = ?", (setlist_id,))
-                if not cursor.fetchone():
-                    new_setlists.append(setlist)
-            
-            if new_setlists:
-                save_setlists(conn, artist_id, artist_name, new_setlists)
-                found_by_mbid = True
-                
-                setlists_by_mbid += len(new_setlists)
-                total_setlists_found += len(new_setlists)
-                print(f"    Guardados {len(new_setlists)} setlists nuevos de {len(setlists)} encontrados")
-            else:
-                print(f"    No hay setlists nuevos en esta página")
-            
-            # Verificar si hay más páginas
-            total = response.get('total', 0)
-            items_per_page = response.get('itemsPerPage', 20)
-            total_pages = (total + items_per_page - 1) // items_per_page
-            
-            if page >= total_pages:
-                break
-            
-            page += 1
-            # Respetar los límites de la API (máximo 2 llamadas por segundo)
-            time.sleep(0.5)
-        
-        if found_by_mbid:
-            search_method = "MBID"
-            if year > 0:
-                print(f"Guardados {setlists_by_mbid} setlists nuevos para {artist_name} del año {year} mediante MBID")
-            else:
-                print(f"Guardados {setlists_by_mbid} setlists nuevos para {artist_name} mediante MBID")
-    
-    # Estrategia 2: Si no hay MBID o no se encontraron resultados, buscar por nombre
-    if not artist_mbid or not found_by_mbid:
-        if not artist_mbid:
-            print(f"  No hay MBID disponible para {artist_name}, buscando por nombre")
-        else:
-            print(f"  No se encontraron resultados por MBID para {artist_name}, buscando por nombre")
-        
-        page = 1
-        setlists_by_name = 0
-        
-        while True:
-            print(f"  Página {page} (nombre)...")
-            response = fetch_setlists_by_name(artist_name, api_key, page, year, from_date)
-            
-            setlists = response.get('setlist', [])
-            if not setlists:
-                break
-            
-            # Filtrar setlists que ya existen en la base de datos
-            new_setlists = []
-            for setlist in setlists:
-                setlist_id = setlist.get('id', '')
-                cursor.execute("SELECT id FROM artists_setlistfm WHERE setlist_id = ?", (setlist_id,))
-                if not cursor.fetchone():
-                    new_setlists.append(setlist)
-            
-            if new_setlists:
-                save_setlists(conn, artist_id, artist_name, new_setlists)
-                
-                setlists_by_name += len(new_setlists)
-                total_setlists_found += len(new_setlists)
-                print(f"    Guardados {len(new_setlists)} setlists nuevos de {len(setlists)} encontrados")
-            else:
-                print(f"    No hay setlists nuevos en esta página")
-            
-            # Verificar si hay más páginas
-            total = response.get('total', 0)
-            items_per_page = response.get('itemsPerPage', 20)
-            total_pages = (total + items_per_page - 1) // items_per_page
-            
-            if page >= total_pages:
-                break
-            
-            page += 1
-            # Respetar los límites de la API (máximo 2 llamadas por segundo)
-            time.sleep(0.5)
-        
-        if setlists_by_name > 0:
-            if search_method:
-                search_method += " + nombre"
-            else:
-                search_method = "nombre"
-            
-            if year > 0:
-                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} del año {year} mediante nombre")
-            else:
-                print(f"Guardados {setlists_by_name} setlists nuevos para {artist_name} mediante nombre")
-    
-    # Si no se especificó método de búsqueda, usar el apropiado
-    if not search_method:
-        search_method = "MBID" if artist_mbid else "nombre"
-    
-    # Actualizar tracking de búsqueda
-    update_search_tracking(conn, artist_id, artist_name, total_setlists_found, search_method)
-    
-    if total_setlists_found == 0:
-        print(f"  No se encontraron setlists nuevos para {artist_name}")
+        # Asumir que ya está en formato correcto
+        return date_str
+    except Exception as e:
+        print(f"Error al convertir fecha {date_str}: {e}")
+        return None
+
+
+
+
+
+
+
+
 
 
 def get_artists_for_new_mode(conn):
@@ -629,8 +766,8 @@ def get_setlistfm_id_by_mbid(mbid, api_key, retry_count=0):
             print(f"Rate limit alcanzado para MBID {mbid} después de 2 intentos, saltando al siguiente artista...")
             return None
             
-        print(f"Rate limit alcanzado para MBID {mbid}, esperando 60 segundos... (intento {retry_count + 1}/2)")
-        time.sleep(60)
+        print(f"Rate limit alcanzado para MBID {mbid}, esperando 10 segundos... (intento {retry_count + 1}/2)")
+        time.sleep(10)
         return get_setlistfm_id_by_mbid(mbid, api_key, retry_count + 1)
     
     if response.status_code != 200:

@@ -124,27 +124,7 @@ def extract_text_from_xhtml(xhtml_content):
         text = unescape(text)
         return ' '.join(text.split())
 
-def get_artists_from_db(db_path):
-    """Obtiene la lista de artistas de la base de datos, excluyendo nombres problemáticos"""
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, name FROM artists WHERE name IS NOT NULL AND name != ''")
-    all_artists = cursor.fetchall()
-    
-    conn.close()
-    
-    # Filtrar artistas problemáticos
-    special_artists = get_special_artists_list()
-    filtered_artists = [(artist_id, name) for artist_id, name in all_artists 
-                       if name.lower() not in special_artists]
-    
-    print(f"Artistas totales: {len(all_artists)}, después de filtrar: {len(filtered_artists)}")
-    if len(all_artists) != len(filtered_artists):
-        excluded = len(all_artists) - len(filtered_artists)
-        print(f"Excluidos {excluded} artistas con nombres problemáticos")
-    
-    return filtered_artists
+
 
 
 def create_artists_books_table(db_path):
@@ -175,12 +155,15 @@ def create_artists_books_table(db_path):
     conn.commit()
     conn.close()
 
+
+
+
 def find_artist_references(text, artist_name, min_context=100, max_context=500, case_sensitive=False):
     """
     Busca referencias al artista en el texto y extrae el contexto
     Retorna una lista de párrafos que contienen menciones
     Busca palabras completas, no subcadenas
-    Mejorado para detectar separaciones de párrafos correctamente
+    Versión mejorada que respeta límites de oraciones y párrafos
     """
     # Crear patrón regex para palabras completas
     pattern_flags = re.IGNORECASE if not case_sensitive else 0
@@ -193,66 +176,266 @@ def find_artist_references(text, artist_name, min_context=100, max_context=500, 
     for match in re.finditer(pattern, text, pattern_flags):
         pos = match.start()
         
-        # Buscar el inicio del párrafo
-        context_start = pos
-        # Buscar hacia atrás hasta encontrar separador de párrafo o límite
-        while context_start > 0 and context_start > pos - max_context:
-            # Buscar separadores: ". " seguido de mayúscula, ".\n", ".\r\n", o saltos de línea múltiples
-            char = text[context_start]
-            if char in '\n\r':
-                # Verificar si hay múltiples saltos de línea (separación de párrafo)
-                line_breaks = 0
-                temp_pos = context_start
-                while temp_pos >= 0 and text[temp_pos] in '\n\r\t ':
-                    if text[temp_pos] in '\n\r':
-                        line_breaks += 1
-                    temp_pos -= 1
-                if line_breaks >= 2 or context_start == 0:
-                    context_start += 1
-                    break
-            elif context_start > 1 and text[context_start-1:context_start+1] == '. ':
-                # Verificar si después del punto y espacio hay mayúscula (nueva oración)
-                if context_start + 1 < len(text) and text[context_start + 1].isupper():
-                    break
-            context_start -= 1
+        # Extraer contexto inteligente
+        context = extract_smart_context(text, pos, len(artist_name), min_context, max_context)
         
-        # Buscar el final del párrafo
-        context_end = pos + len(artist_name)
-        while context_end < len(text) and context_end < pos + len(artist_name) + max_context:
-            char = text[context_end]
-            if char in '\n\r':
-                # Verificar si hay múltiples saltos de línea (separación de párrafo)
-                line_breaks = 0
-                temp_pos = context_end
-                while temp_pos < len(text) and text[temp_pos] in '\n\r\t ':
-                    if text[temp_pos] in '\n\r':
-                        line_breaks += 1
-                    temp_pos += 1
-                if line_breaks >= 2:
-                    break
-            elif context_end > 0 and text[context_end-1:context_end+1] == '. ':
-                # Verificar si después del punto y espacio hay mayúscula (nueva oración)
-                if context_end + 1 < len(text) and text[context_end + 1].isupper():
-                    context_end -= 1  # Incluir el punto pero no el espacio
-                    break
-            context_end += 1
-        
-        # Extraer y limpiar el contexto
-        context = text[context_start:context_end].strip()
-        
-        # Limpiar espacios múltiples y saltos de línea dentro del párrafo
-        context = re.sub(r'\s+', ' ', context)
-        
-        # Verificar que el contexto tenga un tamaño mínimo
-        if len(context) < min_context:
+        if not context or len(context) < min_context:
             continue
         
         # Evitar duplicados muy similares
-        if not any(abs(len(context) - len(ref)) < 50 and context[:100] == ref[:100] 
-                  for ref in references):
+        if not any(are_contexts_similar(context, ref) for ref in references):
             references.append(context)
     
     return references
+
+def extract_smart_context(text, match_pos, match_len, min_context, max_context):
+    """
+    Extrae contexto inteligente alrededor de una coincidencia
+    Prioriza oraciones completas y párrafos coherentes
+    """
+    # Primero intentar extraer por párrafos
+    context = extract_paragraph_context(text, match_pos, match_len, max_context)
+    
+    # Si el párrafo es muy corto, expandir por oraciones
+    if len(context) < min_context:
+        context = extract_sentence_context(text, match_pos, match_len, min_context, max_context)
+    
+    # Si aún es corto, usar ventana de caracteres como último recurso
+    if len(context) < min_context:
+        context = extract_character_window(text, match_pos, match_len, max_context)
+    
+    return clean_context(context)
+
+def extract_paragraph_context(text, match_pos, match_len, max_context):
+    """
+    Extrae el párrafo completo que contiene la coincidencia
+    """
+    # Buscar inicio del párrafo
+    start_pos = match_pos
+    while start_pos > 0:
+        # Buscar doble salto de línea o inicio de texto
+        if start_pos >= 2 and text[start_pos-2:start_pos] in ['\n\n', '\r\n\r\n']:
+            break
+        elif start_pos >= 1 and text[start_pos-1] == '\n':
+            # Verificar si hay línea vacía anterior
+            line_start = start_pos - 1
+            while line_start > 0 and text[line_start-1] not in '\n\r':
+                line_start -= 1
+            if line_start == start_pos - 1:  # Línea vacía
+                break
+        start_pos -= 1
+    
+    # Buscar final del párrafo
+    end_pos = match_pos + match_len
+    while end_pos < len(text):
+        # Buscar doble salto de línea o final de texto
+        if end_pos < len(text) - 1 and text[end_pos:end_pos+2] in ['\n\n', '\r\n\r\n']:
+            break
+        elif text[end_pos] == '\n':
+            # Verificar si la siguiente línea está vacía
+            if end_pos + 1 < len(text) and text[end_pos + 1] in '\n\r':
+                break
+        end_pos += 1
+    
+    # Limitar tamaño máximo
+    context = text[start_pos:end_pos].strip()
+    if len(context) > max_context:
+        # Si es muy largo, usar estrategia de oraciones
+        return extract_sentence_context(text, match_pos, match_len, max_context // 2, max_context)
+    
+    return context
+
+def extract_sentence_context(text, match_pos, match_len, min_context, max_context):
+    """
+    Extrae contexto basado en oraciones completas
+    """
+    # Buscar inicio de la oración que contiene la coincidencia
+    start_pos = find_sentence_start(text, match_pos)
+    
+    # Buscar final de la oración que contiene la coincidencia
+    end_pos = find_sentence_end(text, match_pos + match_len)
+    
+    # Expandir hacia atrás si es necesario
+    while len(text[start_pos:end_pos]) < min_context and start_pos > 0:
+        new_start = find_sentence_start(text, start_pos - 1)
+        if new_start == start_pos:  # No se pudo retroceder más
+            break
+        start_pos = new_start
+        if len(text[start_pos:end_pos]) > max_context:
+            break
+    
+    # Expandir hacia adelante si es necesario
+    while len(text[start_pos:end_pos]) < min_context and end_pos < len(text):
+        new_end = find_sentence_end(text, end_pos + 1)
+        if new_end == end_pos:  # No se pudo avanzar más
+            break
+        end_pos = new_end
+        if len(text[start_pos:end_pos]) > max_context:
+            break
+    
+    # Truncar si es muy largo
+    context = text[start_pos:end_pos]
+    if len(context) > max_context:
+        # Mantener la coincidencia centrada
+        match_relative_pos = match_pos - start_pos
+        half_max = max_context // 2
+        
+        if match_relative_pos > half_max:
+            # Recortar desde el inicio
+            new_start = start_pos + (match_relative_pos - half_max)
+            new_start = find_sentence_start(text, new_start)
+            context = text[new_start:start_pos + min(len(context), max_context)]
+        else:
+            # Recortar desde el final
+            context = context[:max_context]
+            last_period = context.rfind('.')
+            if last_period > len(context) - 50:  # Si el punto está cerca del final
+                context = context[:last_period + 1]
+    
+    return context
+
+def find_sentence_start(text, pos):
+    """
+    Encuentra el inicio de la oración que contiene la posición dada
+    """
+    if pos <= 0:
+        return 0
+    
+    # Buscar hacia atrás por terminadores de oración
+    current_pos = pos
+    while current_pos > 0:
+        char = text[current_pos]
+        prev_char = text[current_pos - 1] if current_pos > 0 else ''
+        
+        # Terminadores de oración: . ! ? seguidos de espacio y mayúscula
+        if prev_char in '.!?' and char in ' \n\r\t':
+            # Verificar que después del espacio hay mayúscula o número
+            next_pos = current_pos
+            while next_pos < len(text) and text[next_pos] in ' \n\r\t':
+                next_pos += 1
+            if next_pos < len(text) and (text[next_pos].isupper() or text[next_pos].isdigit()):
+                return next_pos
+        
+        # Inicio de párrafo
+        elif char == '\n' and current_pos > 0:
+            # Verificar si es inicio de párrafo (línea anterior vacía o inicio de texto)
+            line_start = current_pos - 1
+            while line_start > 0 and text[line_start] not in '\n\r':
+                line_start -= 1
+            if line_start == current_pos - 1:  # Línea vacía anterior
+                next_pos = current_pos + 1
+                while next_pos < len(text) and text[next_pos] in ' \t':
+                    next_pos += 1
+                if next_pos < len(text):
+                    return next_pos
+        
+        current_pos -= 1
+    
+    return 0
+
+def find_sentence_end(text, pos):
+    """
+    Encuentra el final de la oración que contiene la posición dada
+    """
+    if pos >= len(text):
+        return len(text)
+    
+    current_pos = pos
+    while current_pos < len(text):
+        char = text[current_pos]
+        
+        # Terminadores de oración
+        if char in '.!?':
+            # Verificar que no es una abreviación común
+            if not is_abbreviation(text, current_pos):
+                # Buscar el final real (después de espacios)
+                end_pos = current_pos + 1
+                while end_pos < len(text) and text[end_pos] in ' \t':
+                    end_pos += 1
+                return end_pos
+        
+        # Final de párrafo
+        elif char == '\n':
+            # Verificar si es final de párrafo (línea siguiente vacía o final de texto)
+            if current_pos + 1 >= len(text):
+                return len(text)
+            elif text[current_pos + 1] in '\n\r':
+                return current_pos
+        
+        current_pos += 1
+    
+    return len(text)
+
+def is_abbreviation(text, pos):
+    """
+    Verifica si un punto es parte de una abreviación común
+    """
+    if pos < 1:
+        return False
+    
+    # Verificar abreviaciones comunes
+    abbreviations = ['Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Sr', 'Jr', 'vs', 'etc', 'i.e', 'e.g']
+    
+    for abbr in abbreviations:
+        start = pos - len(abbr)
+        if start >= 0 and text[start:pos] == abbr:
+            return True
+    
+    # Verificar si es una inicial (una letra seguida de punto)
+    if pos >= 1 and text[pos-1].isupper():
+        if pos == 1 or not text[pos-2].isalpha():
+            return True
+    
+    return False
+
+def extract_character_window(text, match_pos, match_len, max_context):
+    """
+    Extrae una ventana de caracteres como último recurso
+    """
+    half_window = max_context // 2
+    start_pos = max(0, match_pos - half_window)
+    end_pos = min(len(text), match_pos + match_len + half_window)
+    
+    return text[start_pos:end_pos]
+
+def clean_context(context):
+    """
+    Limpia el contexto extraído
+    """
+    if not context:
+        return ""
+    
+    # Limpiar espacios múltiples y saltos de línea
+    context = re.sub(r'\s+', ' ', context.strip())
+    
+    # Asegurar que empiece con mayúscula si es posible
+    if context and context[0].islower():
+        # Buscar si hay una oración completa
+        first_period = context.find('. ')
+        if first_period > 0 and first_period < len(context) // 2:
+            context = context[first_period + 2:]
+    
+    return context.strip()
+
+def are_contexts_similar(context1, context2, similarity_threshold=0.8):
+    """
+    Verifica si dos contextos son demasiado similares
+    """
+    if not context1 or not context2:
+        return False
+    
+    # Comparar primeras y últimas palabras
+    words1 = context1.split()
+    words2 = context2.split()
+    
+    if len(words1) < 3 or len(words2) < 3:
+        return context1[:50] == context2[:50]
+    
+    # Verificar solapamiento significativo
+    start_match = words1[:3] == words2[:3]
+    end_match = words1[-3:] == words2[-3:]
+    
+    return start_match and end_match
 
 
 # Modificaciones para epubs.py
@@ -430,6 +613,7 @@ def get_special_artists_list():
         "true",
         "false",
         "easy",
+        "can",
         "hard"
     ]
 

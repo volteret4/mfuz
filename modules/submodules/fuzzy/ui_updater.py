@@ -1,9 +1,13 @@
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import os
-from PyQt6.QtWidgets import QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget, QWidget, QSizePolicy
+from PyQt6.QtWidgets import (QLabel, QGroupBox, QTextEdit, QPushButton, QStackedWidget, 
+                            QWidget, QSizePolicy, QTableWidget, QTableWidgetItem, QHeaderView)
 from pathlib import Path
 import sys
+import json
+import webbrowser
+from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from base_module import PROJECT_ROOT
@@ -571,6 +575,7 @@ class UIUpdater:
         """Update album link buttons based on available links."""
         self.parent.link_manager.update_album_links(album)
 
+        
     def load_artist_feeds(self, artist_id, album_id=None, song_id=None):
         """Load and display feeds based on what was selected.
         
@@ -592,6 +597,7 @@ class UIUpdater:
             artist_feeds = []
             album_feeds = []
             mention_feeds = []
+            libros_feeds = []  # NUEVO
             
             # Si tenemos un song_id, conseguimos su album_id
             if song_id and not album_id:
@@ -665,11 +671,51 @@ class UIUpdater:
                 """, (artist_id,))
                 
                 mention_feeds = cursor.fetchall()
+                
+                # NUEVO: Cargar libros para el artista
+                cursor.execute("""
+                    SELECT id, book_title, book_author, genre, page_count, char_count, content, updated_at
+                    FROM artists_books
+                    WHERE artist_id = ?
+                    ORDER BY updated_at DESC
+                """, (artist_id,))
+                
+                libros_feeds = cursor.fetchall()
+
+
+                # NUEVO: Cargar setlists para el artista
+                cursor.execute("""
+                    SELECT id, artist_name, setlist_id, eventDate, venue_name, city_name, 
+                        city_state, country_name, url, tour, sets, last_updated
+                    FROM artists_setlistfm
+                    WHERE artist_id = ?
+                    ORDER BY eventDate DESC
+                """, (artist_id,))
+
+                conciertos_feeds = cursor.fetchall()
+
+                # NUEVO: Cargar instrumentos para el artista
+                cursor.execute("""
+                    SELECT ei.id, ei.equipment_name, ei.equipment_url, ei.brand, 
+                        ei.model, ei.equipment_type, ei.extraction_date,
+                        ed.min_price, ed.average_price, ed.max_price, ed.price_tier,
+                        ed.stores_available, ed.total_reviews, ed.review_score,
+                        ed.detailed_description, ed.specifications
+                    FROM equipboard_instruments ei
+                    LEFT JOIN equipboard_details ed ON ei.equipment_id = ed.equipment_id
+                    WHERE ei.artist_id = ?
+                    ORDER BY ei.equipment_type, ei.equipment_name
+                """, (artist_id,))
+
+                instrumentos_feeds = cursor.fetchall()
             
-            # Actualizar los tres grupos de feeds
+            # Actualizar los cuatro grupos de feeds  # MODIFICADO
             self._update_feed_group('artistas', artist_feeds)
             self._update_feed_group('albums', album_feeds)
             self._update_feed_group('menciones', mention_feeds)
+            self._update_feed_group('libros', libros_feeds)
+            self._update_feed_group('conciertos', conciertos_feeds)
+            self._update_feed_group('instrumentos', instrumentos_feeds)
             
             # Asegurarse de que la página de feeds esté disponible
             if hasattr(self.parent, 'info_panel_stacked') and self.parent.info_panel_stacked:
@@ -693,78 +739,450 @@ class UIUpdater:
         finally:
             conn.close()
 
+
+    
+    def _populate_concerts_table(self, table_widget, concerts):
+        """Populate the concerts table with concert data."""
+        from PyQt6.QtWidgets import QTableWidget, QTableWidgetItem, QHeaderView
+        from PyQt6.QtCore import Qt
+        from datetime import datetime
+        import json
+        import sys
+        import os
+        
+        # Importar las clases personalizadas para ordenación
+        sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+        from submodules.muspy.table_widgets import DateTableWidgetItem, NumericTableWidgetItem
+        
+        # Clear existing content
+        table_widget.clear()
+        
+        if not concerts:
+            table_widget.setRowCount(1)
+            table_widget.setColumnCount(1)
+            table_widget.setItem(0, 0, QTableWidgetItem("No hay conciertos disponibles"))
+            return
+        
+        # Definir las columnas
+        headers = ["Fecha", "Venue", "Ciudad", "País", "Tour", "Tracklist", "URL"]
+        table_widget.setColumnCount(len(headers))
+        table_widget.setHorizontalHeaderLabels(headers)
+        
+        # Configurar número de filas
+        table_widget.setRowCount(len(concerts))
+        
+        # Poblar la tabla
+        for row, concert in enumerate(concerts):
+            # DEBUG: Imprimir el primer concierto para ver la estructura
+            if row == 0:
+                print(f"Estructura del concierto: {concert}")
+                print(f"Tipo de concert: {type(concert)}")
+            
+            # Los datos vienen como tuplas, usar índices según la consulta SQL:
+            # SELECT id, artist_name, setlist_id, eventDate, venue_name, city_name, 
+            #        city_state, country_name, url, tour, sets, last_updated
+            
+            # Fecha (índice 3: eventDate)
+            event_date = concert[3] if len(concert) > 3 and concert[3] else ''
+            if event_date:
+                try:
+                    # Intentar parsear la fecha desde el formato DD-MM-YYYY al formato YYYY-MM-DD
+                    parsed_date = datetime.strptime(event_date, '%d-%m-%Y')
+                    formatted_date = parsed_date.strftime('%Y-%m-%d')  # Formato para ordenación
+                    # Usar DateTableWidgetItem con el formato correcto para ordenación
+                    date_item = DateTableWidgetItem(formatted_date, "%Y-%m-%d")
+                    # Cambiar el texto mostrado al formato original pero mantener la ordenación correcta
+                    date_item.setData(Qt.ItemDataRole.DisplayRole, event_date)  # Mostrar DD-MM-YYYY
+                except ValueError:
+                    # Si no se puede parsear, usar como texto normal
+                    date_item = QTableWidgetItem(event_date)
+            else:
+                date_item = QTableWidgetItem("Sin fecha")
+            
+            # Guardar datos completos del concierto en el primer item de la fila
+            # Convertir tupla a diccionario para facilitar el acceso
+            concert_dict = {
+                'id': concert[0],
+                'artist_name': concert[1],
+                'setlist_id': concert[2],
+                'eventDate': concert[3],
+                'venue_name': concert[4],
+                'city_name': concert[5],
+                'city_state': concert[6],
+                'country_name': concert[7],
+                'url': concert[8],
+                'tour': concert[9],
+                'sets': concert[10],
+                'last_updated': concert[11]
+            }
+            date_item.setData(Qt.ItemDataRole.UserRole + 1, concert_dict)
+            table_widget.setItem(row, 0, date_item)
+            
+            # Venue (índice 4: venue_name)
+            venue_name = concert[4] if len(concert) > 4 and concert[4] else 'Venue desconocido'
+            table_widget.setItem(row, 1, QTableWidgetItem(venue_name))
+            
+            # Ciudad (índices 5: city_name, 6: city_state)
+            city_parts = []
+            if len(concert) > 5 and concert[5]:  # city_name
+                city_parts.append(concert[5])
+            if len(concert) > 6 and concert[6]:  # city_state
+                city_parts.append(concert[6])
+            city = ", ".join(city_parts) if city_parts else "Ciudad desconocida"
+            table_widget.setItem(row, 2, QTableWidgetItem(city))
+            
+            # País (índice 7: country_name)
+            country = concert[7] if len(concert) > 7 and concert[7] else 'País desconocido'
+            table_widget.setItem(row, 3, QTableWidgetItem(country))
+            
+            # Tour (índice 9: tour)
+            tour = concert[9] if len(concert) > 9 and concert[9] else ''
+            table_widget.setItem(row, 4, QTableWidgetItem(tour))
+            
+            # Tracklist (índice 10: sets)
+            sets_data = concert[10] if len(concert) > 10 and concert[10] else ''
+            tracklist = self._format_setlist(sets_data)
+            tracklist_item = QTableWidgetItem(tracklist)
+            tracklist_item.setToolTip(tracklist)  # Tooltip para ver el tracklist completo
+            table_widget.setItem(row, 5, tracklist_item)
+            
+            # URL (índice 8: url)
+            url = concert[8] if len(concert) > 8 and concert[8] else ''
+            if url:
+                url_item = QTableWidgetItem("Ver en setlist.fm")
+                url_item.setData(Qt.ItemDataRole.UserRole, url)  # Guardar URL en los datos del item
+                url_item.setToolTip(url)
+            else:
+                url_item = QTableWidgetItem("")
+            table_widget.setItem(row, 6, url_item)
+        
+        # Configurar el comportamiento de la tabla
+        table_widget.setSortingEnabled(True)  # Habilitar ordenación
+        table_widget.setAlternatingRowColors(True)  # Filas alternas con colores diferentes
+        table_widget.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)  # Seleccionar filas completas
+        
+        # Ajustar el ancho de las columnas
+        header = table_widget.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)  # Fecha
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)  # Venue
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)  # Ciudad
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.ResizeToContents)  # País
+        header.setSectionResizeMode(4, QHeaderView.ResizeMode.ResizeToContents)  # Tour
+        header.setSectionResizeMode(5, QHeaderView.ResizeMode.Stretch)  # Tracklist (expandir)
+        header.setSectionResizeMode(6, QHeaderView.ResizeMode.ResizeToContents)  # URL
+        
+        # Conectar doble clic para abrir URLs
+        table_widget.itemDoubleClicked.connect(self._handle_concert_item_double_click)
+
+
+
+
+    def _format_setlist(self, sets_data):
+        """Format the setlist data into a readable string."""
+        if not sets_data:
+            return "Sin setlist"
+        
+        try:
+            # Si es string JSON, parsearlo
+            if isinstance(sets_data, str):
+                sets_json = json.loads(sets_data)
+            else:
+                sets_json = sets_data
+                
+            if not sets_json or not isinstance(sets_json, list):
+                return "Sin setlist"
+            
+            # Extraer canciones de todos los sets
+            all_songs = []
+            for set_info in sets_json:
+                if isinstance(set_info, dict) and 'song' in set_info:
+                    songs = set_info['song']
+                    if isinstance(songs, list):
+                        for song in songs:
+                            if isinstance(song, dict):
+                                song_name = song.get('@name', 'Canción desconocida')
+                                # Verificar si es un encore
+                                if set_info.get('@encore') == '1':
+                                    song_name = f"(Encore) {song_name}"
+                                all_songs.append(song_name)
+                            elif isinstance(song, str):
+                                all_songs.append(song)
+                    elif isinstance(songs, dict):
+                        song_name = songs.get('@name', 'Canción desconocida')
+                        if set_info.get('@encore') == '1':
+                            song_name = f"(Encore) {song_name}"
+                        all_songs.append(song_name)
+            
+            if all_songs:
+                # Limitar a las primeras 3 canciones para la vista de tabla
+                if len(all_songs) > 3:
+                    display_songs = all_songs[:3]
+                    return f"{' • '.join(display_songs)} ... (+{len(all_songs)-3} más)"
+                else:
+                    return ' • '.join(all_songs)
+            else:
+                return "Sin setlist"
+                
+        except (json.JSONDecodeError, TypeError, KeyError) as e:
+            # Si hay error parseando, intentar mostrar como texto plano
+            if isinstance(sets_data, str) and len(sets_data) > 0:
+                # Truncar si es muy largo
+                if len(sets_data) > 100:
+                    return sets_data[:100] + "..."
+                return sets_data
+            return "Error en setlist"
+
+
+
+    def _show_full_setlist_dialog(self, concert_data):
+        """Show full setlist in a dialog."""
+        from PyQt6.QtWidgets import QDialog, QVBoxLayout, QTextEdit, QPushButton, QLabel
+        from PyQt6.QtCore import Qt
+        
+        dialog = QDialog(self.parent)
+        dialog.setWindowTitle("Setlist Completo")
+        dialog.setMinimumSize(500, 400)
+        
+        layout = QVBoxLayout()
+        
+        # Información del concierto
+        concert_info = f"""
+        <h3>{concert_data.get('eventDate', 'Fecha desconocida')} - {concert_data.get('venue_name', 'Venue desconocido')}</h3>
+        <p><strong>Ubicación:</strong> {concert_data.get('city_name', '')}, {concert_data.get('country_name', '')}</p>
+        {f"<p><strong>Tour:</strong> {concert_data.get('tour', '')}</p>" if concert_data.get('tour') else ""}
+        """
+        
+        info_label = QLabel(concert_info)
+        info_label.setTextFormat(Qt.TextFormat.RichText)
+        layout.addWidget(info_label)
+        
+        # Setlist completo
+        text_edit = QTextEdit()
+        text_edit.setReadOnly(True)
+        
+        full_setlist = self._format_full_setlist(concert_data.get('sets', ''))
+        text_edit.setHtml(full_setlist)
+        
+        layout.addWidget(text_edit)
+        
+        # Botón cerrar
+        close_button = QPushButton("Cerrar")
+        close_button.clicked.connect(dialog.close)
+        layout.addWidget(close_button)
+        
+        dialog.setLayout(layout)
+        dialog.exec()
+
+
+    def _format_full_setlist(self, sets_data):
+        """Format the complete setlist data into HTML."""
+        if not sets_data:
+            return "<p>Sin setlist disponible</p>"
+        
+        try:
+            if isinstance(sets_data, str):
+                sets_json = json.loads(sets_data)
+            else:
+                sets_json = sets_data
+                
+            if not sets_json or not isinstance(sets_json, list):
+                return "<p>Sin setlist disponible</p>"
+            
+            html_content = "<h4>Setlist:</h4>"
+            
+            for i, set_info in enumerate(sets_json):
+                if isinstance(set_info, dict) and 'song' in set_info:
+                    # Determinar el tipo de set
+                    if set_info.get('@encore') == '1':
+                        html_content += "<h5>🎵 Encore:</h5>"
+                    elif i == 0:
+                        html_content += "<h5>🎵 Set Principal:</h5>"
+                    else:
+                        html_content += f"<h5>🎵 Set {i + 1}:</h5>"
+                    
+                    html_content += "<ol>"
+                    
+                    songs = set_info['song']
+                    if isinstance(songs, list):
+                        for song in songs:
+                            if isinstance(song, dict):
+                                song_name = song.get('@name', 'Canción desconocida')
+                                # Añadir información adicional si está disponible
+                                if song.get('@tape') == '1':
+                                    song_name += " (Playback)"
+                                html_content += f"<li>{song_name}</li>"
+                            elif isinstance(song, str):
+                                html_content += f"<li>{song}</li>"
+                    elif isinstance(songs, dict):
+                        song_name = songs.get('@name', 'Canción desconocida')
+                        if songs.get('@tape') == '1':
+                            song_name += " (Playback)"
+                        html_content += f"<li>{song_name}</li>"
+                    
+                    html_content += "</ol>"
+            
+            return html_content
+            
+        except (json.JSONDecodeError, TypeError, KeyError) as e:
+            # Si hay error, mostrar como texto plano
+            if isinstance(sets_data, str) and len(sets_data) > 0:
+                return f"<pre>{sets_data}</pre>"
+            return "<p>Error procesando setlist</p>"
+
+
+
+    def _handle_concert_item_double_click(self, item):
+        """Handle double click on concert table items."""
+        from PyQt6.QtCore import Qt
+        import webbrowser
+        
+        # Si se hace doble clic en la columna URL (columna 6)
+        if item.column() == 6:
+            url = item.data(Qt.ItemDataRole.UserRole)
+            if url:
+                try:
+                    webbrowser.open(url)
+                except Exception as e:
+                    print(f"Error abriendo URL: {e}")
+        else:
+            # Para otras columnas, mostrar información detallada del setlist
+            row = item.row()
+            table = item.tableWidget()
+            tracklist_item = table.item(row, 5)  # Columna del tracklist
+            if tracklist_item:
+                # Aquí podrías mostrar un diálogo con el setlist completo
+                full_tracklist = tracklist_item.toolTip()
+                print(f"Setlist completo: {full_tracklist}")  # Por ahora solo imprimir
+
+
     def _update_feed_group(self, group_type, feeds):
         """Update a specific feed group with content."""
-        # Encontrar el grupo, texto y etiqueta apropiados
-        group_box = None
-        text_edit = None
-        label = None
-        
+        # Encontrar el widget apropiado para este grupo
         if group_type == 'artistas':
-            group_box = self.parent.findChild(QGroupBox, "groupBox_artists")
             text_edit = self.parent.findChild(QTextEdit, "artistas_textEdit")
-            label = self.parent.findChild(QLabel, "artistas_label")
         elif group_type == 'albums':
-            group_box = self.parent.findChild(QGroupBox, "groupBox_albums")
             text_edit = self.parent.findChild(QTextEdit, "albums_textEdit")
-            label = self.parent.findChild(QLabel, "albums_label")
         elif group_type == 'menciones':
-            group_box = self.parent.findChild(QGroupBox, "groupBox_menciones")
             text_edit = self.parent.findChild(QTextEdit, "menciones_textEdit")
-            label = self.parent.findChild(QLabel, "menciones_label")
-        
-        if not group_box or not text_edit:
-            print(f"No se pudieron encontrar los elementos UI para el tipo de grupo: {group_type}")
+        elif group_type == 'libros':
+            text_edit = self.parent.findChild(QTextEdit, "libros_textEdit")
+        elif group_type == 'conciertos':
+            # Para conciertos usar QTableWidget en lugar de QTextEdit
+            table_widget = self.parent.findChild(QTableWidget, "conciertos_tableWidget")
+            if table_widget:
+                self._populate_concerts_table(table_widget, feeds)
+            else:
+                print("No se encontró conciertos_tableWidget")
+            return
+        elif group_type == 'instrumentos':
+            text_edit = self.parent.findChild(QTextEdit, "instrumentos_textEdit")
+        else:
             return
         
-        # Limpiar contenido existente
+        if not text_edit:
+            print(f"No se encontró widget para {group_type}")
+            return
+        
+        # Clear existing content
         text_edit.clear()
         
-        # Si no se encontraron feeds, mostrar un mensaje
-        if not feeds or len(feeds) == 0:
-            text_edit.setHtml(f"<p>No hay feeds de {group_type} disponibles para este artista</p>")
-            if label:
-                label.setText(f"{group_type.capitalize()} (0)")
-            group_box.setTitle(f"{group_type.capitalize()} (0)")
+        if not feeds:
+            text_edit.setPlainText(f"No hay datos de {group_type} disponibles.")
             return
         
-        # Actualizar la etiqueta con el recuento
-        if label:
-            label.setText(f"{group_type.capitalize()} ({len(feeds)})")
-        
-        # Actualizar el título del group box
-        group_box.setTitle(f"{group_type.capitalize()} ({len(feeds)})")
-        
-        # Construir el contenido HTML para los feeds
+        # Construir contenido HTML (resto del código igual para otros tipos)
         html_content = ""
         
-        for feed in feeds:
-            title = feed['post_title'] if 'post_title' in feed.keys() and feed['post_title'] else "Sin título"
-            url = feed['post_url'] if 'post_url' in feed.keys() and feed['post_url'] else "#"
-            content = feed['content'] if 'content' in feed.keys() and feed['content'] else "Sin contenido"
-            post_date = feed['post_date'] if 'post_date' in feed.keys() and feed['post_date'] else ""
-            feed_name = feed['feed_name'] if 'feed_name' in feed.keys() and feed['feed_name'] else "Fuente desconocida"
-            
-            # Extraer dominio de la URL para mostrar
-            domain = ""
-            import re
-            if url and url != "#":
-                match = re.search(r'https?://(?:www\.)?([^/]+)', url)
-                if match:
-                    domain = match.group(1)
-            
-            # Formatear la entrada del feed como HTML
-            html_content += f"""
-            <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
-                <h3><a href="{url}" style="text-decoration:none;">{title}</a> 
-                <span style="font-size:small;">({domain})</span></h3>
-                <div style="font-size:small; color:#666;">Fuente: {feed_name} | Fecha: {post_date}</div>
-                <div style="margin-top: 5px;">{content}</div>
-            </div>
-            """
+        if group_type == 'instrumentos':  # Formatear instrumentos
+            for instrumento in feeds:
+                equipment_name = instrumento['equipment_name'] if 'equipment_name' in instrumento.keys() and instrumento['equipment_name'] else "Instrumento desconocido"
+                brand = instrumento['brand'] if 'brand' in instrumento.keys() and instrumento['brand'] else ""
+                model = instrumento['model'] if 'model' in instrumento.keys() and instrumento['model'] else ""
+                equipment_type = instrumento['equipment_type'] if 'equipment_type' in instrumento.keys() and instrumento['equipment_type'] else ""
+                url = instrumento['equipment_url'] if 'equipment_url' in instrumento.keys() and instrumento['equipment_url'] else "#"
+                
+                # Información de precios si está disponible
+                price_info = ""
+                if 'average_price' in instrumento.keys() and instrumento['average_price']:
+                    price_info = f"Precio promedio: ${instrumento['average_price']:.2f}"
+                    if 'min_price' in instrumento.keys() and instrumento['min_price']:
+                        price_info += f" (${instrumento['min_price']:.2f} - ${instrumento['max_price']:.2f})"
+                
+                # Información de reviews
+                review_info = ""
+                if 'review_score' in instrumento.keys() and instrumento['review_score']:
+                    review_info = f"Rating: {instrumento['review_score']:.1f}/5"
+                    if 'total_reviews' in instrumento.keys() and instrumento['total_reviews']:
+                        review_info += f" ({instrumento['total_reviews']} reviews)"
+                
+                # Descripción detallada
+                description = ""
+                if 'detailed_description' in instrumento.keys() and instrumento['detailed_description']:
+                    description = f"<div style='margin-top: 5px;'>{instrumento['detailed_description']}</div>"
+                
+                html_content += f"""
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                    <h3><a href="{url}" style="text-decoration:none;">{equipment_name}</a></h3>
+                    <div style="font-size:small; color:#666;">
+                        {f"Marca: {brand}" if brand else ""} 
+                        {f" | Modelo: {model}" if model else ""} 
+                        {f" | Tipo: {equipment_type}" if equipment_type else ""}
+                    </div>
+                    {f"<div style='font-size:small; color:#009900;'>{price_info}</div>" if price_info else ""}
+                    {f"<div style='font-size:small; color:#ff6600;'>{review_info}</div>" if review_info else ""}
+                    {description}
+                </div>
+                """
+                
+        elif group_type == 'libros':  # Formatear libros
+            for libro in feeds:
+                title = libro['book_title'] if 'book_title' in libro.keys() and libro['book_title'] else "Título desconocido"
+                author = libro['book_author'] if 'book_author' in libro.keys() and libro['book_author'] else "Autor desconocido"
+                genre = libro['genre'] if 'genre' in libro.keys() and libro['genre'] else ""
+                updated_at = libro['updated_at'] if 'updated_at' in libro.keys() and libro['updated_at'] else ""
+                content = libro['content'] if 'content' in libro.keys() and libro['content'] else ""
+                page_count = libro['page_count'] if 'page_count' in libro.keys() and libro['page_count'] else 0
+                char_count = libro['char_count'] if 'char_count' in libro.keys() and libro['char_count'] else 0
+                
+                html_content += f"""
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                    <h3>{title} - {author}</h3>
+                    <div style="font-size:small; color:#666;">
+                        Género: {genre} | Páginas: {page_count} | Caracteres: {char_count} | Actualizado: {updated_at}
+                    </div>
+                    <div style="margin-top: 5px;">{content}</div>
+                </div>
+                """
+        else:  # Para feeds normales (artistas, albums, menciones)
+            # Mantener el código existente para los otros tipos
+            for feed in feeds:
+                title = feed['post_title'] if 'post_title' in feed.keys() and feed['post_title'] else "Sin título"
+                url = feed['post_url'] if 'post_url' in feed.keys() and feed['post_url'] else "#"
+                content = feed['content'] if 'content' in feed.keys() and feed['content'] else "Sin contenido"
+                post_date = feed['post_date'] if 'post_date' in feed.keys() and feed['post_date'] else ""
+                feed_name = feed['feed_name'] if 'feed_name' in feed.keys() and feed['feed_name'] else "Fuente desconocida"
+                
+                domain = ""
+                import re
+                if url and url != "#":
+                    match = re.search(r'https?://(?:www\.)?([^/]+)', url)
+                    if match:
+                        domain = match.group(1)
+                
+                html_content += f"""
+                <div style="margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">
+                    <h3><a href="{url}" style="text-decoration:none;">{title}</a> 
+                    <span style="font-size:small;">({domain})</span></h3>
+                    <div style="font-size:small; color:#666;">Fuente: {feed_name} | Fecha: {post_date}</div>
+                    <div style="margin-top: 5px;">{content}</div>
+                </div>
+                """
         
         # Actualizar el texto con contenido formateado
         text_edit.setHtml(html_content)
+
+
+
 
     def _connect_feed_buttons(self):
         """Connect the feed navigation buttons if not already connected."""
@@ -772,9 +1190,13 @@ class UIUpdater:
         artists_button = self.parent.findChild(QPushButton, "artists_pushButton")
         albums_button = self.parent.findChild(QPushButton, "albums_pushButton")
         menciones_button = self.parent.findChild(QPushButton, "menciones_pushButton")
+        libros_button = self.parent.findChild(QPushButton, "libros_pushButton")
+        conciertos_button = self.parent.findChild(QPushButton, "conciertos_pushButton")  # NUEVO
+        instrumentos_button = self.parent.findChild(QPushButton, "instrumentos_pushButton")  # NUEVO
         stack_widget = self.parent.findChild(QStackedWidget, "stackedWidget_feeds")
         
-        if artists_button and albums_button and menciones_button and stack_widget:
+        if (artists_button and albums_button and menciones_button and libros_button and 
+            conciertos_button and instrumentos_button and stack_widget):  # MODIFICADO
             # Verificar si ya están conectados
             if hasattr(self, '_feed_buttons_connected') and self._feed_buttons_connected:
                 return
@@ -783,6 +1205,9 @@ class UIUpdater:
             artists_button.clicked.connect(lambda: stack_widget.setCurrentIndex(0))
             albums_button.clicked.connect(lambda: stack_widget.setCurrentIndex(1))
             menciones_button.clicked.connect(lambda: stack_widget.setCurrentIndex(2))
+            libros_button.clicked.connect(lambda: stack_widget.setCurrentIndex(3))
+            conciertos_button.clicked.connect(lambda: stack_widget.setCurrentIndex(4))  # NUEVO
+            instrumentos_button.clicked.connect(lambda: stack_widget.setCurrentIndex(5))  # NUEVO
             
             # Marcar como conectados para evitar múltiples conexiones
             self._feed_buttons_connected = True
@@ -802,3 +1227,58 @@ class UIUpdater:
                 self._clear_layout(child_layout)
 
 
+    def load_artist_setlists(self, artist_id):
+        """Cargar información de conciertos/setlists para el artista."""
+        if not artist_id:
+            return []
+        
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return []
+        
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id, artist_name, setlist_id, eventDate, venue_name, city_name, 
+                    city_state, country_name, url, tour, sets, last_updated
+                FROM artists_setlistfm
+                WHERE artist_id = ?
+                ORDER BY eventDate DESC
+            """, (artist_id,))
+            
+            return cursor.fetchall()
+        except Exception as e:
+            print(f"Error loading setlists: {e}")
+            return []
+        finally:
+            conn.close()
+
+    def load_artist_instruments(self, artist_id):
+        """Cargar información de instrumentos del artista desde equipboard."""
+        if not artist_id:
+            return []
+        
+        conn = self.parent.db_manager._get_connection()
+        if not conn:
+            return []
+        
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT ei.id, ei.equipment_name, ei.equipment_url, ei.brand, 
+                    ei.model, ei.equipment_type, ei.extraction_date,
+                    ed.min_price, ed.average_price, ed.max_price, ed.price_tier,
+                    ed.stores_available, ed.total_reviews, ed.review_score,
+                    ed.detailed_description, ed.specifications
+                FROM equipboard_instruments ei
+                LEFT JOIN equipboard_details ed ON ei.equipment_id = ed.equipment_id
+                WHERE ei.artist_id = ?
+                ORDER BY ei.equipment_type, ei.equipment_name
+            """, (artist_id,))
+            
+            return cursor.fetchall()
+        except Exception as e:
+            print(f"Error loading instruments: {e}")
+            return []
+        finally:
+            conn.close()

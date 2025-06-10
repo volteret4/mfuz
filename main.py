@@ -267,6 +267,25 @@ class TabManager(QMainWindow):
         self.init_ui()
         self.load_modules()     
 
+        # Cargar el sistema de temas centralizado
+        try:
+            from themes.themes import THEMES as CENTRALIZED_THEMES, init_theme_system
+            self.available_themes = list(CENTRALIZED_THEMES.keys())
+            
+            # Obtener tema seleccionado de la configuración
+            self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
+            if self.current_theme not in self.available_themes:
+                self.current_theme = self.available_themes[0]  # Usar el primer tema si no es válido
+                
+            print(f"Sistema de temas centralizado cargado con {len(self.available_themes)} temas")
+                
+        except ImportError as e:
+            print(f"No se pudo cargar el sistema centralizado de temas: {e}")
+            # Fallback a los temas definidos en base_module
+            self.available_themes = list(THEMES.keys())
+            self.current_theme = self.config.get('tema_seleccionado', 'Tokyo Night')
+            if self.current_theme not in self.available_themes:
+                self.current_theme = self.available_themes[0]
 
     def init_ui(self):
         """Inicializa la interfaz principal."""
@@ -446,6 +465,20 @@ class TabManager(QMainWindow):
                                 # Add to tab manager
                                 self.tab_widget.addTab(module_instance, module_name)
                                 self.tabs[module_name] = module_instance
+                                
+                                # NUEVO: Aplicar efectos de tema al módulo recién cargado
+                                try:
+                                    from themes.themes import apply_effects_to_widget, setup_objectnames_for_theme
+                                    
+                                    # Configurar objectNames automáticamente si no están configurados
+                                    setup_objectnames_for_theme(module_instance)
+                                    
+                                    # Aplicar efectos
+                                    apply_effects_to_widget(module_instance)
+                                    
+                                except ImportError:
+                                    pass  # Si no está disponible, continuar sin efectos
+                                
                                 print(f"Módulo {module_name} cargado correctamente")
                             except Exception as e:
                                 print(f"Error instanciando el módulo {module_name}: {e}")
@@ -479,9 +512,12 @@ class TabManager(QMainWindow):
             self.tabs[module_name].apply_theme(new_theme)
 
 
+# REEMPLAZAR completamente el método apply_theme en TabManager
+
     def apply_theme(self, theme_name=None):
         """
-        Aplica el tema especificado a toda la aplicación.
+        Aplica el tema especificado usando ÚNICAMENTE el sistema centralizado.
+        NO aplica CSS adicional, solo usa themes.py
         
         Args:
             theme_name (str, optional): Nombre del tema a aplicar.
@@ -495,100 +531,28 @@ class TabManager(QMainWindow):
         if self.current_theme not in self.available_themes:
             self.current_theme = self.available_themes[0]
         
-        # Intentar usar el sistema centralizado de temas
+        # Usar ÚNICAMENTE el sistema centralizado de temas
         try:
-            from themes.themes import init_theme_system
+            from themes.themes import init_theme_system, apply_effects_to_widget
             
-            # Establecer el objectName de la ventana principal para poder aplicar estilos específicos
+            # Establecer el objectName de la ventana principal
             if not self.objectName():
                 self.setObjectName("main_window")
             
-            # Aplicar el tema a nivel de aplicación
+            # Aplicar el tema a nivel de aplicación usando SOLO themes.py
             init_theme_system(QApplication.instance(), self.current_theme)
             
-            # No es necesario hacer más, ya que init_theme_system aplica el tema a toda la aplicación
+            # Aplicar efectos a la ventana principal
+            apply_effects_to_widget(self)
+            
+            print(f"Tema '{self.current_theme}' aplicado correctamente via sistema centralizado")
             return
+            
         except (ImportError, AttributeError) as e:
-            print(f"No se pudo cargar el sistema centralizado de temas: {e}")
-        
-        # Fallback: Usar el método antiguo
-        theme = THEMES.get(self.current_theme, THEMES['Tokyo Night'])
-        
-        # Aplicar estilos básicos
-        self.setStyleSheet(f"""
-            /* Estilos base */
-            QWidget {{
-                background-color: {theme['bg']};
-                color: {theme['fg']};
-                font-family: "Segoe UI", "Noto Fonts Emoji", sans-serif;
-                font-size: 10pt;
-            }}
+            print(f"Error: Sistema centralizado de temas no disponible: {e}")
+            print("ADVERTENCIA: No se aplicará ningún tema. Usando estilos por defecto de Qt.")
+            # NO aplicar ningún CSS de fallback - dejar estilos por defecto
 
-            /* Quitar bordes de todos los frames */
-            QFrame, QGroupBox {{
-                border: none;
-                border-radius: 4px;
-            }}
-
-            /* Campos de entrada de texto */
-            QLineEdit, QTextEdit {{
-                border: 1px solid;
-                border-radius: 4px;
-                padding: 8px;
-                background-color: {theme['bg']};
-            }}
-
-            /* Botones */
-            QPushButton {{
-                background-color: {theme['bg']};
-                border: 2px;
-                border-radius: 19px;
-            }}
-            
-            QPushButton:hover {{
-                background-color: {theme['button_hover']};
-                margin: 1px;
-                margin-top: 0px;
-                margin-bottom: 2px;
-            }}
-            
-            QPushButton:pressed {{
-                background-color: {theme['selection']};
-                border: none;
-            }}
-
-            /* Listas y árboles */
-            QTreeWidget, QListWidget {{
-                background-color: {theme['bg']};
-                border: none;
-                border-radius: 4px;
-            }}
-
-            /* Tabs */
-            QTabWidget::pane {{
-                border: none;
-                background-color: {theme['secondary_bg']};
-                border-radius: 4px;
-            }}
-
-            QTabBar::tab {{
-                background-color: {theme['secondary_bg']};
-                color: {theme['fg']};
-                border: none;
-                padding: 8px 16px;
-                border-top-left-radius: 4px;
-                border-top-right-radius: 4px;
-            }}
-
-            QTabBar::tab:selected {{
-                background-color: {theme['button_hover']};
-                color: {theme['fg']};
-            }}
-
-            QTabBar::tab:hover:!selected {{
-                background-color: {theme['secondary_bg']};
-            }}
-        """)
 
 
     def reload_application(self):
@@ -646,10 +610,20 @@ class TabManager(QMainWindow):
                     module_config = next((m for m in config['modules'] if m['name'] == module_name), None)
                     
                     if not enable_individual_themes or (module_config and 'tema_seleccionado' not in module_config.get('args', {})):
-                        module.apply_theme(new_theme)
+                        # NUEVO: Usar la función corregida
+                        try:
+                            from themes.themes import apply_theme_to_widget
+                            apply_theme_to_widget(module, new_theme)
+                        except ImportError:
+                            module.apply_theme(new_theme)  # Fallback al método del módulo
                     else:
                         # If individual themes are enabled and a specific theme is set, keep that theme
-                        module.apply_theme(module_config['args'].get('tema_seleccionado', new_theme))
+                        specific_theme = module_config['args'].get('tema_seleccionado', new_theme)
+                        try:
+                            from themes.themes import apply_theme_to_widget
+                            apply_theme_to_widget(module, specific_theme)
+                        except ImportError:
+                            module.apply_theme(specific_theme)  # Fallback
                 
                 # Update config file
                 config['tema_seleccionado'] = new_theme

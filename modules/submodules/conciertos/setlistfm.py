@@ -14,38 +14,178 @@ import os
 import sys
 import os
 
-# Añadir el directorio root al path ANTES de importar
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 
-# Ahora sí importar
-import db.musicbrainz.mb_artist_info
-mb_artist_info = db.musicbrainz.mb_artist_info
 
+def _setup_imports():
+    """
+    Configurar imports de manera robusta evitando conflictos entre módulos
+    """
+    import sys
+    import os
+    from pathlib import Path
+    
+    # Método 1: Intentar obtener PROJECT_ROOT del contexto actual
+    project_root = None
+    
+    # Si estamos siendo importados desde el módulo principal, usar su PROJECT_ROOT
+    try:
+        # Buscar en los módulos ya cargados
+        for module_name, module in sys.modules.items():
+            if hasattr(module, 'PROJECT_ROOT'):
+                project_root = str(module.PROJECT_ROOT)
+                print(f"Found PROJECT_ROOT from module {module_name}: {project_root}")
+                break
+    except Exception as e:
+        print(f"Error getting PROJECT_ROOT from modules: {e}")
+    
+    # Método 2: Calcular desde la ubicación actual del archivo
+    if not project_root:
+        try:
+            current_file = Path(__file__)
+            # setlistfm.py está en: PROJECT_ROOT/modules/submodules/conciertos/
+            # Necesitamos subir 4 niveles para llegar a PROJECT_ROOT
+            potential_root = current_file.parent.parent.parent.parent
+            
+            # Verificar que es realmente PROJECT_ROOT buscando archivos característicos
+            if (potential_root / 'main.py').exists() or (potential_root / 'config').exists():
+                project_root = str(potential_root)
+                print(f"Calculated PROJECT_ROOT from file location: {project_root}")
+        except Exception as e:
+            print(f"Error calculating PROJECT_ROOT: {e}")
+    
+    # Método 3: Buscar en directorios padre hasta encontrar main.py
+    if not project_root:
+        try:
+            current_dir = Path(__file__).parent
+            for _ in range(6):  # Buscar hasta 6 niveles arriba
+                if (current_dir / 'main.py').exists():
+                    project_root = str(current_dir)
+                    print(f"Found PROJECT_ROOT by searching upwards: {project_root}")
+                    break
+                current_dir = current_dir.parent
+                if str(current_dir) == str(current_dir.parent):  # Llegamos al root del sistema
+                    break
+        except Exception as e:
+            print(f"Error searching for PROJECT_ROOT upwards: {e}")
+    
+    # Si encontramos PROJECT_ROOT, añadirlo al path
+    if project_root:
+        if project_root not in sys.path:
+            sys.path.insert(0, project_root)
+            print(f"Added {project_root} to sys.path")
+        return project_root
+    
+    print("WARNING: Could not determine PROJECT_ROOT")
+    return None
+
+def _import_mb_artist_info():
+    """
+    Importar mb_artist_info de manera segura con múltiples fallbacks
+    """
+    try:
+        import sys
+        # Configurar el path primero
+        project_root = _setup_imports()
+        
+        # Intentar la importación directa
+        try:
+            import db.musicbrainz.mb_artist_info as mb_artist_info
+            print("Successfully imported mb_artist_info directly")
+            return mb_artist_info
+        except ImportError as e:
+            print(f"Direct import failed: {e}")
+        
+        # Intentar importación absoluta si tenemos PROJECT_ROOT
+        if project_root:
+            try:
+                # Añadir la ruta específica del módulo mb_artist_info
+                mb_path = os.path.join(project_root, 'db', 'musicbrainz')
+                if mb_path not in sys.path:
+                    sys.path.insert(0, mb_path)
+                
+                import mb_artist_info
+                print("Successfully imported mb_artist_info from specific path")
+                return mb_artist_info
+            except ImportError as e:
+                print(f"Specific path import failed: {e}")
+        
+        # Último intento: importación relativa desde la ubicación actual
+        try:
+            import sys
+            current_dir = os.path.dirname(__file__)
+            mb_dir = os.path.join(current_dir, '..', '..', '..', 'db', 'musicbrainz')
+            mb_dir = os.path.abspath(mb_dir)
+            
+            if os.path.exists(mb_dir) and mb_dir not in sys.path:
+                sys.path.insert(0, mb_dir)
+                import mb_artist_info
+                print("Successfully imported mb_artist_info via relative path")
+                return mb_artist_info
+        except Exception as e:
+            print(f"Relative path import failed: {e}")
+        
+        print("All import attempts failed - mb_artist_info not available")
+        return None
+        
+    except Exception as e:
+        print(f"Critical error in _import_mb_artist_info: {e}")
+        return None
+
+# Realizar la importación al cargar el módulo
+mb_artist_info = _import_mb_artist_info()
 class SetlistfmService:
     def __init__(self, api_key, cache_dir, cache_duration=24, db_path=None, config=None):
-        """Initialize the Setlist.fm service"""
+        """Initialize the Setlist.fm service - versión mejorada sin conflictos"""
         self.api_key = api_key
         self.cache_dir = cache_dir
         self.cache_duration = cache_duration
         self.base_url = "https://api.setlist.fm/rest/1.0/search/setlists"
         self.db_path = db_path
-        logging.basicConfig(level=logging.INFO)
-        self.logger = logging.getLogger(__name__)
         
-        # Configurar MusicBrainz si se proporciona config
-        if config:
-            # Crear diccionario de credenciales MusicBrainz
-            user_agent_config = config.get('user_agent', {})
-            mb_config = {
-                'user_agent': user_agent_config,
-                'cache_directory': config.get('cache_directory')
-            }
+        # Configurar logging de manera más específica para evitar conflictos
+        import logging
+        
+        # Crear un logger específico para este módulo
+        self.logger = logging.getLogger(f"{__name__}.SetlistfmService")
+        if not self.logger.handlers:
+            handler = logging.StreamHandler()
+            formatter = logging.Formatter('[%(name)s] %(levelname)s: %(message)s')
+            handler.setFormatter(formatter)
+            self.logger.addHandler(handler)
+            self.logger.setLevel(logging.INFO)
+        
+        # Verificar que mb_artist_info se importó correctamente
+        global mb_artist_info
+        if mb_artist_info is None:
+            self.logger.warning("MusicBrainz module not available - some features will be limited")
+            self.mb_available = False
+        else:
+            self.mb_available = True
+            self.logger.info("MusicBrainz module loaded successfully")
             
-            # Configurar MusicBrainz con las credenciales correctas
-            mb_artist_info.setup_musicbrainz(
-                user_agent=user_agent_config,
-                cache_directory=config.get('cache_directory')
-            )
+            # Configurar MusicBrainz si se proporciona config
+            if config:
+                try:
+                    # Crear diccionario de credenciales MusicBrainz
+                    user_agent_config = config.get('user_agent', {})
+                    mb_config = {
+                        'user_agent': user_agent_config,
+                        'cache_directory': config.get('cache_directory')
+                    }
+                    
+                    # Configurar MusicBrainz con las credenciales correctas
+                    if hasattr(mb_artist_info, 'setup_musicbrainz'):
+                        mb_artist_info.setup_musicbrainz(
+                            user_agent=user_agent_config,
+                            cache_directory=config.get('cache_directory')
+                        )
+                        self.logger.info("MusicBrainz configured successfully")
+                    else:
+                        self.logger.warning("MusicBrainz module doesn't have setup_musicbrainz method")
+                except Exception as e:
+                    self.logger.warning(f"Error configuring MusicBrainz: {e}")
+                    self.mb_available = False
+
 
 
 
@@ -80,19 +220,23 @@ class SetlistfmService:
         return None
         
     def get_artist_setlistfm_id(self, artist_name):
-        """Obtiene el ID de Setlist.fm para un artista"""
+        """
+        Obtiene el ID de Setlist.fm para un artista - versión mejorada con mejor aislamiento
+        """
         if not self.db_path:
             self.logger.info(f"No DB path configured for {artist_name}")
             return None
             
         try:
-            # Conectar a la base de datos
+            # Conectar a la base de datos con manejo de errores mejorado
+            import sqlite3
+            
             conn = sqlite3.connect(self.db_path)
             conn.row_factory = sqlite3.Row
             cursor = conn.cursor()
             
             # Buscar setlistfm_id en la tabla artists
-            cursor.execute("SELECT setlistfm_id FROM artists WHERE name = ?", (artist_name,))
+            cursor.execute("SELECT setlist_id FROM artists_setlistfm WHERE artist_name = ?", (artist_name,))
             result = cursor.fetchone()
             
             if result and result['setlistfm_id']:
@@ -106,11 +250,11 @@ class SetlistfmService:
             
             if result and result['mbid']:
                 self.logger.info(f"Found MBID for {artist_name}: {result['mbid']}")
-                setlistfm_id = self.get_setlistfm_id_by_mbid(result['mbid'])
+                setlistfm_id = self._get_setlistfm_id_by_mbid(result['mbid'])
                 if setlistfm_id:
                     self.logger.info(f"Obtained setlistfm_id from MBID for {artist_name}: {setlistfm_id}")
                     # Actualizar la tabla artists con el setlistfm_id
-                    cursor.execute("UPDATE artists SET setlistfm_id = ? WHERE name = ?", 
+                    cursor.execute("UPDATE artists_setlistfm SET setlist_id = ? WHERE artist_name = ?", 
                                 (setlistfm_id, artist_name))
                     conn.commit()
                 conn.close()
@@ -118,35 +262,119 @@ class SetlistfmService:
             
             conn.close()
             
-            # Si no existe mbid, obtenerlo y buscar en Setlist.fm
-            self.logger.info(f"No MBID found for {artist_name}, searching in MusicBrainz...")
-            mb_results = mb_artist_info.search_artist_in_musicbrainz(artist_name)
-            
-            if mb_results and mb_results[0] and 'id' in mb_results[0]:
-                mbid = mb_results[0]['id']
-                self.logger.info(f"Found new MBID for {artist_name}: {mbid}")
-                setlistfm_id = self.get_setlistfm_id_by_mbid(mbid)
+            # Si no existe mbid, obtenerlo usando MusicBrainz (solo si está disponible)
+            if not self.mb_available:
+                self.logger.info(f"MusicBrainz not available, cannot search for {artist_name}")
+                return None
                 
-                if setlistfm_id:
-                    self.logger.info(f"Obtained setlistfm_id for {artist_name}: {setlistfm_id}")
-                    # Actualizar la tabla artists
-                    conn = sqlite3.connect(self.db_path)
-                    cursor = conn.cursor()
-                    cursor.execute("""UPDATE artists 
-                                    SET mbid = ?, setlistfm_id = ? 
-                                    WHERE name = ?""", 
-                                (mbid, setlistfm_id, artist_name))
-                    conn.commit()
-                    conn.close()
+            self.logger.info(f"No MBID found for {artist_name}, searching in MusicBrainz...")
+            
+            # Usar el módulo global mb_artist_info de manera segura
+            global mb_artist_info
+            if mb_artist_info and hasattr(mb_artist_info, 'search_artist_in_musicbrainz'):
+                mb_results = mb_artist_info.search_artist_in_musicbrainz(artist_name)
+                
+                if mb_results and mb_results[0] and 'id' in mb_results[0]:
+                    mbid = mb_results[0]['id']
+                    self.logger.info(f"Found new MBID for {artist_name}: {mbid}")
+                    setlistfm_id = self._get_setlistfm_id_by_mbid(mbid)
                     
-                return setlistfm_id
+                    if setlistfm_id:
+                        self.logger.info(f"Obtained setlistfm_id for {artist_name}: {setlistfm_id}")
+                        # Actualizar la tabla artists
+                        conn = sqlite3.connect(self.db_path)
+                        cursor = conn.cursor()
+                        cursor.execute("""UPDATE artists_setlistfm SET setlist_id = ? WHERE artist_name = ?""", 
+                                    (setlistfm_id, artist_name))
+                        conn.commit()
+                        conn.close()                              
+                        # cursor.execute("""UPDATE artists mbid = ? WHERE name = ?""", 
+                        #             (mbid, artist_name))
+                        # conn.commit()
+                        # conn.close()
+                        
+                    return setlistfm_id
+                else:
+                    self.logger.info(f"No MBID found in MusicBrainz for {artist_name}")
             else:
-                self.logger.info(f"No MBID found in MusicBrainz for {artist_name}")
+                self.logger.warning("MusicBrainz search function not available")
                     
         except Exception as e:
-            self.logger.error(f"Error searching MusicBrainz for {artist_name}: {e}")
+            self.logger.error(f"Error searching for artist {artist_name}: {e}")
+            import traceback
+            self.logger.debug(traceback.format_exc())
             
         return None
+
+
+    def _get_setlistfm_id_by_mbid(self, mbid):
+        """
+        Obtiene el setlistfm_id de un artista usando su MBID - versión robusta
+        """
+        try:
+            import requests
+            import time
+            import re
+            
+            url = f"https://api.setlist.fm/rest/1.0/search/artists"
+            headers = {
+                'Accept': 'application/json',
+                'x-api-key': self.api_key,
+                'User-Agent': 'SetlistfmService/1.0'  # Añadir User-Agent
+            }
+            params = {
+                'artistMbid': mbid,
+                'p': 1,
+                'sort': 'sortName'
+            }
+            
+            response = requests.get(url, headers=headers, params=params, timeout=30)
+            
+            if response.status_code == 404:
+                self.logger.info(f"Artist not found in Setlist.fm for MBID {mbid}")
+                return None
+            
+            if response.status_code == 429:  # Too Many Requests
+                self.logger.warning(f"Rate limit reached for MBID {mbid}, waiting...")
+                time.sleep(60)
+                # Reintentar una vez más
+                response = requests.get(url, headers=headers, params=params, timeout=30)
+                if response.status_code != 200:
+                    self.logger.error(f"Still rate limited after waiting for MBID {mbid}")
+                    return None
+            
+            if response.status_code != 200:
+                self.logger.error(f"HTTP {response.status_code} getting setlistfm_id for MBID {mbid}")
+                return None
+            
+            data = response.json()
+            artists = data.get('artist', [])
+            
+            if artists and len(artists) > 0:
+                artist_url = artists[0].get('url')
+                if artist_url:
+                    # Extraer el ID de la URL
+                    # https://www.setlist.fm/setlists/the-beatles-23d6a88b.html
+                    match = re.search(r'-([0-9a-f]+)\.html$', artist_url)
+                    if match:
+                        setlistfm_id = match.group(1)
+                        self.logger.info(f"Extracted setlistfm_id {setlistfm_id} from URL {artist_url}")
+                        return setlistfm_id
+                    else:
+                        self.logger.warning(f"Could not extract ID from URL: {artist_url}")
+                else:
+                    self.logger.warning(f"No URL found for artist with MBID {mbid}")
+            else:
+                self.logger.info(f"No artists found for MBID {mbid}")
+            
+            return None
+            
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f"Request error getting setlistfm_id for MBID {mbid}: {e}")
+            return None
+        except Exception as e:
+            self.logger.error(f"Unexpected error getting setlistfm_id for MBID {mbid}: {e}")
+            return None
 
     def get_upcoming_concerts(self, artist_name, country_code="ES"):
         """Obtiene conciertos próximos mediante web scraping y enriquece con datos del venue"""
@@ -395,12 +623,27 @@ class SetlistfmService:
             pass
     
     def clear_cache(self):
-        """Clear all cache files for this service"""
+        """Clear all cache files for this service - versión mejorada"""
         try:
-            for file in self.cache_dir.glob("setlistfm_*.json"):
-                file.unlink()
+            import glob
+            import os
+            
+            # Usar glob para encontrar archivos de caché específicos de setlistfm
+            cache_pattern = os.path.join(self.cache_dir, "setlistfm_*.json")
+            cache_files = glob.glob(cache_pattern)
+            
+            removed_count = 0
+            for file_path in cache_files:
+                try:
+                    os.unlink(file_path)
+                    removed_count += 1
+                except Exception as e:
+                    self.logger.warning(f"Could not remove cache file {file_path}: {e}")
+            
+            self.logger.info(f"Cleared {removed_count} setlistfm cache files")
             return True
-        except Exception:
+        except Exception as e:
+            self.logger.error(f"Error clearing cache: {e}")
             return False
 
 

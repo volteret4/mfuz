@@ -33,7 +33,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="conciertos_search_box">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -59,11 +59,14 @@
           <height>32</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Busca conciertos por artista, ciudad,...</string>
+        </property>
         <property name="text">
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../images.qrc">
+         <iconset resource="../../images.qrc">
           <normaloff>:/services/musico</normaloff>:/services/musico</iconset>
         </property>
         <property name="iconSize">
@@ -79,8 +82,14 @@
       </item>
       <item>
        <widget class="QCheckBox" name="advanced_settings">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="toolTip">
+         <string/>
+        </property>
         <property name="text">
-         <string>Más</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
@@ -121,23 +130,6 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>País (código):</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="country_code_input">
-           <property name="maximumSize">
-            <size>
-             <width>50</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QComboBox" name="source_combo">
            <property name="minimumSize">
             <size>
@@ -145,12 +137,15 @@
              <height>30</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Elige que artistas quieres añadir a la búsqueda masiva</string>
+           </property>
            <item>
             <property name="text">
              <string>Artistas de la base de datos</string>
             </property>
             <property name="icon">
-             <iconset resource="../images.qrc">
+             <iconset resource="../../images.qrc">
               <normaloff>:/services/db_ol</normaloff>:/services/db_ol</iconset>
             </property>
            </item>
@@ -159,7 +154,7 @@
              <string>Artistas de muspy</string>
             </property>
             <property name="icon">
-             <iconset resource="../images.qrc">
+             <iconset resource="../../images.qrc">
               <normaloff>:/services/cuernos</normaloff>:/services/cuernos</iconset>
             </property>
            </item>
@@ -168,7 +163,7 @@
              <string>Artisas Spotify</string>
             </property>
             <property name="icon">
-             <iconset resource="../images.qrc">
+             <iconset resource="../../images.qrc">
               <normaloff>:/services/spotify_ol</normaloff>:/services/spotify_ol</iconset>
             </property>
            </item>
@@ -177,7 +172,7 @@
              <string>Artistas de lastfm</string>
             </property>
             <property name="icon">
-             <iconset resource="../images.qrc">
+             <iconset resource="../../images.qrc">
               <normaloff>:/services/lastfm_ol</normaloff>:/services/lastfm_ol</iconset>
             </property>
            </item>
@@ -186,10 +181,39 @@
              <string>Artistas de musicbrainz</string>
             </property>
             <property name="icon">
-             <iconset resource="../images.qrc">
+             <iconset resource="../../images.qrc">
               <normaloff>:/services/musicbrainz</normaloff>:/services/musicbrainz</iconset>
             </property>
            </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="select_file_btn">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Seleccionar un archivo con un artista por linea para añadir a la búsqueda masiva</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../images.qrc">
+             <normaloff>:/services/b_link</normaloff>:/services/b_link</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item>
@@ -206,11 +230,14 @@
              <height>32</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Busqueda masiva de tus artistas seleccionados</string>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/trompeta</normaloff>:/services/trompeta</iconset>
            </property>
            <property name="iconSize">
@@ -238,11 +265,14 @@
              <height>32</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>Añade los eventos seleccionados al calendario</string>
+           </property>
            <property name="text">
             <string/>
            </property>
            <property name="icon">
-            <iconset resource="../images.qrc">
+            <iconset resource="../../images.qrc">
              <normaloff>:/services/cal_Red</normaloff>:/services/cal_Red</iconset>
            </property>
            <property name="iconSize">
@@ -257,43 +287,57 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="debug_btn_2">
-           <property name="text">
-            <string>api</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="debug_btn">
-           <property name="text">
-            <string>response</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="clear_cache_btn">
-           <property name="text">
-            <string>borrar cache</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QPushButton" name="paginas_btn">
-           <property name="text">
-            <string>Log/Tabla</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="select_file_btn">
            <property name="maximumSize">
             <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Mostrar ajustes avanzados</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../images.qrc">
+             <normaloff>:/services/code_circulo</normaloff>:/services/code_circulo</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
              <width>30</width>
-             <height>16777215</height>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ajustes_button">
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
             </size>
            </property>
            <property name="text">
-            <string>...</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../../images.qrc">
+             <normaloff>:/services/b_plus_cross</normaloff>:/services/b_plus_cross</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -441,7 +485,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../images.qrc"/>
+  <include location="../../images.qrc"/>
  </resources>
  <connections/>
 </ui>

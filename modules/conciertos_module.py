@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton, QListWidget, QListWidgetItem, QApplication
-from PyQt6.QtWidgets import QLabel, QWidget, QCheckBox, QMenu, QAbstractItemView, QTableWidget, QTableWidgetItem
+from PyQt6.QtWidgets import QLabel, QWidget, QCheckBox, QMenu, QAbstractItemView, QTableWidget, QTableWidgetItem, QComboBox
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, QThread, pyqtSignal, QUrl
 from PyQt6.QtGui import QDesktopServices, QPixmap, QAction, QShortcut, QKeySequence
@@ -169,8 +169,8 @@ class ConciertosModule(BaseModule):
 
 
         # Añadir mensaje al campo de búsqueda si está vacío
-        if hasattr(self, 'lineEdit') and not self.lineEdit.text():
-            self.lineEdit.setPlaceholderText("Buscar artistas individualmente")
+        if hasattr(self, 'conciertos_search_box') and not self.conciertos_search_box.text():
+            self.conciertos_search_box.setPlaceholderText("Buscar artistas individualmente")
         
         # Configurar combobox de fuentes si está vacío
         if hasattr(self, 'source_combo') and self.source_combo.count() == 0:
@@ -196,29 +196,71 @@ class ConciertosModule(BaseModule):
         self.log_area.append(f"Ticketmaster service exists: {hasattr(self, 'ticketmaster_service')}")
         self.log_area.append(f"Spotify service exists: {hasattr(self, 'spotify_service')}")
         self.log_area.append(f"Setlistfm service exists: {hasattr(self, 'setlistfm_service')}")
+
+        self.chrome_config = self.config.get('chrome', {})
+        self.chrome_headless = self.chrome_config.get('headless', True)  # Por defecto True
+
+        # Pasar configuración de Chrome al servicio de Spotify
+        if self.spotify_enabled:
+            from modules.submodules.conciertos.spotify import SpotifyService
+            
+            # Verificar credenciales antes de intentar inicializar
+            if not self.spotify_client_id or not self.spotify_client_secret:
+                self.log_area.append("Error: Credenciales de Spotify no configuradas")
+                self.log_area.append(f"Client ID: {'Configurado' if self.spotify_client_id else 'No configurado'}")
+                self.log_area.append(f"Client Secret: {'Configurado' if self.spotify_client_secret else 'No configurado'}")
+                self.spotify_enabled = False
+            else:
+                try:
+                    self.spotify_service = SpotifyService(
+                        client_id=self.spotify_client_id,
+                        client_secret=self.spotify_client_secret,
+                        redirect_uri=self.spotify_redirect_uri,
+                        cache_dir=self.cache_dir,
+                        cache_duration=24,
+                        chrome_headless=self.chrome_headless  # Nueva opción
+                    )
+                    
+                    if self.spotify_service.setup():
+                        self.log_area.append("Servicio de Spotify inicializado correctamente")
+                    else:
+                        self.spotify_enabled = False
+                        self.log_area.append("Error en la configuración de Spotify")
+                        if hasattr(self.spotify_service, 'last_error'):
+                            self.log_area.append(f"Detalle del error: {self.spotify_service.last_error}")
+                except Exception as e:
+                    self.spotify_enabled = False
+                    self.log_area.append(f"Excepción al inicializar Spotify: {str(e)}")
+                    import traceback
+                    self.log_area.append(traceback.format_exc())
     
     def init_ui(self):
         """Inicializar la UI desde el archivo .ui"""
         if hasattr(self, 'concerts_tree'):
             self.concerts_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
             self.concerts_tree.resizeColumnsToContents()
-        ui_file = Path(PROJECT_ROOT, "ui", "conciertos_module.ui")
+        ui_file = Path(PROJECT_ROOT, "ui", "conciertos", "conciertos_module.ui")
         try:
             uic.loadUi(ui_file, self)
-             # Hide the advanced settings groupbox by default
-            self.global_config_group.setVisible(False)
+            
+            # IMPORTANTE: Forzar estado inicial DESPUÉS de cargar UI y ANTES de conectar señales
+            # Hacer esto SIN triggear la señal
+            self.advanced_settings.blockSignals(True)  # Bloquear señales temporalmente
+            self.advanced_settings.setChecked(False)   # Desmarcar checkbox
+            self.widget_7.setVisible(False)            # Ocultar widget_7
+            self.advanced_settings.blockSignals(False) # Reactivar señales
+            
 
-            # Set checkbox initial state to match visibility
-            self.advanced_settings.setChecked(False)
             
             # Configurar el placeholder del campo de búsqueda
-            self.lineEdit.setPlaceholderText("Buscar artistas individualmente")
-           
+            self.conciertos_search_box.setPlaceholderText("Buscar artistas individualmente")
+        
             return True
         except Exception as e:
             print(f"Error cargando UI: {e}")
             traceback.print_exc()
             return False
+
 
     def setup_keyboard_shortcuts(self):
         """
@@ -235,15 +277,15 @@ class ConciertosModule(BaseModule):
         shortcut_search = QShortcut(QKeySequence("Ctrl+F"), self)
         shortcut_search.activated.connect(self.focus_search_box)
         
-        # Conectar evento de Enter en lineEdit para realizar búsqueda
-        if hasattr(self, 'lineEdit'):
-            self.lineEdit.returnPressed.connect(self.search_from_lineedit)
+        # Conectar evento de Enter en conciertos_search_box para realizar búsqueda
+        if hasattr(self, 'conciertos_search_box'):
+            self.conciertos_search_box.returnPressed.connect(self.search_from_lineedit)
         
     def focus_search_box(self):
         """Establecer foco en el cuadro de búsqueda"""
-        if hasattr(self, 'lineEdit'):
-            self.lineEdit.setFocus()
-            self.lineEdit.selectAll()  # Selecciona todo el texto actual para facilitar reemplazo
+        if hasattr(self, 'conciertos_search_box'):
+            self.conciertos_search_box.setFocus()
+            self.conciertos_search_box.selectAll()  # Selecciona todo el texto actual para facilitar reemplazo
 
 
     def connect_signals(self):
@@ -255,14 +297,14 @@ class ConciertosModule(BaseModule):
         self.pushButton.clicked.connect(self.search_concerts)
         
         # Conectar entrada de texto para búsqueda individual
-        self.lineEdit.textChanged.connect(self.on_search_text_changed)
+        self.conciertos_search_box.textChanged.connect(self.on_search_text_changed)
         
                 
         # Conectar botón de selección de archivo
         self.select_file_btn.clicked.connect(self.select_artists_file)
 
         self.paginas_btn.clicked.connect(self.toggle_stacked_widget_page)
-        self.clear_cache_btn.clicked.connect(self.clear_all_cache)
+        #self.clear_cache_btn.clicked.connect(self.clear_all_cache)
         self.buscar_searchbox.clicked.connect(self.search_from_lineedit)
         self.concerts_tree.cellClicked.connect(self.on_concert_selected)
 
@@ -292,18 +334,116 @@ class ConciertosModule(BaseModule):
         self.advanced_settings.stateChanged.connect(self.toggle_advanced_settings)
 
         # Debug buttons connections if they exist
-        if hasattr(self, 'debug_btn'):
-            self.debug_btn.clicked.connect(lambda: self.debug_ticketmaster_api(self.lineEdit.text()))
+        # if hasattr(self, 'debug_btn'):
+        #     self.debug_btn.clicked.connect(lambda: self.debug_ticketmaster_api(self.lineEdit.text()))
         
-        if hasattr(self, 'debug_btn_2'):
-            self.debug_btn_2.clicked.connect(lambda: self.debug_ticketmaster_response(self.lineEdit.text()))
+        # if hasattr(self, 'debug_btn_2'):
+        #     self.debug_btn_2.clicked.connect(lambda: self.debug_ticketmaster_response(self.lineEdit.text()))
 
-        
+        # Conectar botón de ajustes avanzados para abrir diálogo
+        if hasattr(self, 'ajustes_button'):
+            self.ajustes_button.clicked.connect(self.show_advanced_settings_dialog)
 
     def toggle_advanced_settings(self, state):
-        """Toggle visibility of advanced settings based on checkbox state"""
+        """Toggle visibility of the entire widget_7 based on checkbox state"""
         # Qt.Checked is equal to 2
-        self.global_config_group.setVisible(state == 2)
+        show_advanced = (state == 2)
+        
+        # Debug: imprimir qué está pasando
+        print(f"toggle_advanced_settings called with state: {state}, show_advanced: {show_advanced}")
+        
+        # Mostrar/ocultar todo el widget_7 que contiene todos los botones
+        if hasattr(self, 'widget_7'):
+            self.widget_7.setVisible(show_advanced)
+            print(f"widget_7 visibility set to: {show_advanced}")
+            
+            # Debug: listar todos los botones dentro de widget_7
+            if show_advanced:
+                print("Botones en widget_7:")
+                for child in self.widget_7.findChildren(QPushButton):
+                    print(f"  - {child.objectName()}: {child.text()}")
+                for child in self.widget_7.findChildren(QComboBox):
+                    print(f"  - {child.objectName()}: ComboBox")
+        else:
+            print("ERROR: widget_7 no encontrado!")
+
+    def show_advanced_settings_dialog(self):
+        """Mostrar diálogo de ajustes avanzados"""
+        dialog = AdvancedSettingsDialog(self, self.config)
+        dialog.exec()
+
+
+    def apply_config_changes(self, updated_config):
+        """Aplicar cambios de configuración desde el diálogo"""
+        try:
+            # Actualizar configuración interna
+            self.config.update(updated_config)
+            
+            # Actualizar variables específicas
+            self.default_country = updated_config.get('country_code', 'ES')
+            
+            # Reinicializar servicios con nueva configuración
+            self.reinitialize_services(updated_config)
+            
+            # Actualizar UI
+            self.update_ui_state()
+            
+            self.log_area.append("Configuración actualizada correctamente")
+            self.log_area.append(f"Código de país actualizado a: {self.default_country}")
+            
+        except Exception as e:
+            self.log_area.append(f"Error aplicando cambios de configuración: {e}")
+
+
+    def reinitialize_services(self, config):
+        """Reinicializar servicios con nueva configuración"""
+        apis = config.get('apis', {})
+        
+        # Reinicializar Ticketmaster
+        ticketmaster_config = apis.get('ticketmaster', {})
+        self.ticketmaster_enabled = ticketmaster_config.get('enabled', 'False').lower() == 'true'
+        self.ticketmaster_api_key = ticketmaster_config.get('api_key', '')
+        
+        if self.ticketmaster_enabled and self.ticketmaster_api_key:
+            try:
+                self.ticketmaster_service = TicketmasterService(
+                    api_key=self.ticketmaster_api_key,
+                    cache_dir=self.cache_dir,
+                    cache_duration=24
+                )
+                self.log_area.append("Servicio de Ticketmaster reinicializado")
+            except Exception as e:
+                self.log_area.append(f"Error reinicializando Ticketmaster: {e}")
+        
+        # Reinicializar Setlist.fm
+        setlistfm_config = apis.get('setlistfm', {})
+        self.setlistfm_enabled = setlistfm_config.get('enabled', 'False').lower() == 'true'
+        self.setlistfm_apikey = setlistfm_config.get('setlistfm_apikey', '')
+        
+        if self.setlistfm_enabled and self.setlistfm_apikey:
+            try:
+                self.setlistfm_service = SetlistfmService(
+                    api_key=self.setlistfm_apikey,
+                    cache_dir=self.cache_dir,
+                    cache_duration=24,
+                    db_path=self.db_path,
+                    config=setlistfm_config
+                )
+                self.log_area.append("Servicio de Setlist.fm reinicializado")
+            except Exception as e:
+                self.log_area.append(f"Error reinicializando Setlist.fm: {e}")
+        
+        # Reinicializar Spotify
+        spotify_config = apis.get('spotify', {})
+        self.spotify_enabled = spotify_config.get('enabled', 'False').lower() == 'true'
+        
+        if self.spotify_enabled:
+            try:
+                # Spotify usa credenciales globales, solo necesitamos actualizar el estado enabled
+                if hasattr(self, 'spotify_service'):
+                    self.log_area.append("Servicio de Spotify actualizado")
+            except Exception as e:
+                self.log_area.append(f"Error actualizando Spotify: {e}")
 
 
     def select_all_concerts(self):
@@ -334,15 +474,15 @@ class ConciertosModule(BaseModule):
             return
         
         # Obtener el texto del lineEdit
-        artist_name = self.lineEdit.text().strip()
+        artist_name = self.conciertos_search_box.text().strip()
         
         # Verificar que hay texto y no es el placeholder
         if not artist_name or artist_name == "Buscar artistas individualmente":
             self.log_area.append("Introduce el nombre de un artista para buscar")
             return
         
-        # Obtener código de país
-        country_code = self.country_code_input.text() or self.default_country
+        # Obtener código de país usando método centralizado
+        country_code = self.get_country_code()
         
         # Verificar APIs habilitadas
         enabled_apis = self._get_enabled_apis()
@@ -519,7 +659,7 @@ class ConciertosModule(BaseModule):
     def on_source_changed(self, index):
         """Manejar cambio en el origen de los artistas"""
         # Restablecer el área de búsqueda
-        self.lineEdit.clear()
+        self.conciertos_search_box.clear()
         
         if index == 0:  # Artistas de la base de datos
             self.show_db_artists_dialog()
@@ -1127,8 +1267,8 @@ class ConciertosModule(BaseModule):
     def update_ui_state(self):
         """Actualizar el estado de la UI basado en configuración"""
         # Establecer valor predeterminado para país
-        if not self.country_code_input.text():
-            self.country_code_input.setText(self.default_country)
+        # if not self.country_code_input.text():
+        #     self.country_code_input.setText(self.default_country)
         
         # Verificar si la API está habilitada
         if not self.ticketmaster_enabled:
@@ -1395,7 +1535,8 @@ class ConciertosModule(BaseModule):
             self.log_area.append("API de Ticketmaster no está habilitada")
             return
         
-        country_code = self.country_code_input.text() or self.default_country
+        # Usar método centralizado para obtener código de país
+        country_code = self.get_country_code()
         self.log_area.append(f"Depurando respuesta de Ticketmaster para: {artist_name} en {country_code}")
         
         # Realizar llamada directa a Ticketmaster
@@ -1434,14 +1575,14 @@ class ConciertosModule(BaseModule):
         except Exception as e:
             self.log_area.append(f"Error depurando Ticketmaster: {str(e)}")
 
-
     def debug_ticketmaster_api(self, artist_name):
         """Método para depurar directamente la API de Ticketmaster"""
         if not self.ticketmaster_api_key:
             self.log_area.append("No hay API key configurada para Ticketmaster")
             return
         
-        country_code = self.country_code_input.text() or self.default_country
+        # Usar método centralizado para obtener código de país
+        country_code = self.get_country_code()
         self.log_area.append(f"Depurando API de Ticketmaster para '{artist_name}' en '{country_code}'")
         
         # Construir URL y parámetros directamente
@@ -1528,7 +1669,6 @@ class ConciertosModule(BaseModule):
             import traceback
             self.log_area.append(f"Error depurando API: {str(e)}")
             self.log_area.append(traceback.format_exc())
-
 
     def clear_all_cache(self):
         """Clear all concert cache"""
@@ -1875,3 +2015,192 @@ class ConciertosModule(BaseModule):
         
         # Join all lines with CRLF as per ICS spec
         return "\r\n".join(ics_content)
+
+    def get_country_code(self):
+        """
+        Obtener código de país desde configuración o valor por defecto
+        
+        Returns:
+            str: Código de país (por defecto 'ES')
+        """
+        # Intentar obtener de configuración actual
+        if hasattr(self, 'config') and self.config:
+            return self.config.get('country_code', self.default_country)
+        
+        # Fallback al valor por defecto
+        return getattr(self, 'default_country', 'ES')
+
+
+
+class AdvancedSettingsDialog(QDialog):
+    """Diálogo para configurar ajustes avanzados de APIs"""
+    
+    def __init__(self, parent=None, config=None):
+        super().__init__(parent)
+        self.parent = parent
+        self.config = config or {}
+        self.init_ui()
+        self.load_settings()
+    
+    def init_ui(self):
+        """Inicializar la UI desde el archivo .ui"""
+        if hasattr(self, 'concerts_tree'):
+            self.concerts_tree.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+            self.concerts_tree.resizeColumnsToContents()
+        ui_file = Path(PROJECT_ROOT, "ui", "conciertos", "conciertos_advanced_settings.ui")
+        try:
+            uic.loadUi(ui_file, self)
+            self.setWindowTitle("Configuración Avanzada - Conciertos")
+            self.connect_signals()
+            return True
+        except Exception as e:
+            print(f"Error cargando UI de ajustes: {e}")
+            return False
+    
+    def connect_signals(self):
+        """Conectar señales del diálogo"""
+        # Conectar botones del QDialogButtonBox
+        self.buttonBox.accepted.connect(self.accept_settings)
+        self.buttonBox.rejected.connect(self.reject)
+        
+        # Conectar botones de debug si existen
+        if hasattr(self, 'debug_btn'):
+            self.debug_btn.clicked.connect(self.debug_response)
+        
+        if hasattr(self, 'debug_btn_2'):
+            self.debug_btn_2.clicked.connect(self.debug_api)
+        
+        if hasattr(self, 'clear_cache_btn'):
+            self.clear_cache_btn.clicked.connect(self.clear_cache)
+        
+        if hasattr(self, 'select_file_btn'):
+            self.select_file_btn.clicked.connect(self.select_file)
+    
+    def load_settings(self):
+        """Cargar configuración actual en los campos del diálogo"""
+        if not self.config:
+            return
+        
+        # Cargar código de país
+        country_code = self.config.get('country_code', 'ES')
+        if hasattr(self, 'country_code_input'):
+            self.country_code_input.setText(country_code)
+        
+        # Cargar configuración de APIs
+        apis = self.config.get('apis', {})
+        
+        # Ticketmaster
+        ticketmaster = apis.get('ticketmaster', {})
+        if hasattr(self, 'checkBox'):  # Ticketmaster activo
+            self.checkBox.setChecked(ticketmaster.get('enabled', 'False').lower() == 'true')
+        if hasattr(self, 'conciertos_search_box'):  # API Key Ticketmaster
+            self.conciertos_search_box.setText(ticketmaster.get('api_key', ''))
+        
+        # Setlist.fm
+        setlistfm = apis.get('setlistfm', {})
+        if hasattr(self, 'checkBox_2'):  # Setlist.fm activo
+            self.checkBox_2.setChecked(setlistfm.get('enabled', 'False').lower() == 'true')
+        if hasattr(self, 'lineEdit_2'):  # API Key Setlist.fm
+            self.lineEdit_2.setText(setlistfm.get('setlistfm_apikey', ''))
+        
+        # Spotify
+        spotify = apis.get('spotify', {})
+        if hasattr(self, 'checkBox_3'):  # Spotify activo
+            self.checkBox_3.setChecked(spotify.get('enabled', 'False').lower() == 'true')
+        if hasattr(self, 'lineEdit_3'):  # Placeholder para Spotify (podría ser Client ID)
+            # Como Spotify usa credenciales globales, podrías mostrar el Client ID como referencia
+            global_config = getattr(self.parent, 'global_config', {})
+            client_id = global_config.get('spotify_client_id', '')
+            self.lineEdit_3.setText(client_id[:20] + '...' if len(client_id) > 20 else client_id)
+            self.lineEdit_3.setReadOnly(True)  # Solo lectura ya que se configura globalmente
+
+
+
+    def accept_settings(self):
+        """Guardar configuración y cerrar diálogo"""
+        try:
+            # Actualizar configuración del módulo
+            updated_config = self.get_updated_config()
+            
+            # Aplicar cambios al módulo padre
+            if self.parent:
+                self.parent.apply_config_changes(updated_config)
+            
+            self.accept()
+        except Exception as e:
+            print(f"Error guardando configuración: {e}")
+            # Mostrar mensaje de error al usuario
+            from PyQt6.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "Error", f"Error guardando configuración: {str(e)}")
+    
+    def get_updated_config(self):
+        """Obtener configuración actualizada desde los campos del diálogo"""
+        updated_config = self.config.copy()
+        
+        # Actualizar código de país
+        if hasattr(self, 'country_code_input'):
+            updated_config['country_code'] = self.country_code_input.text().strip() or 'ES'
+        
+        # Asegurar que existe la sección apis
+        if 'apis' not in updated_config:
+            updated_config['apis'] = {}
+        
+        apis = updated_config['apis']
+        
+        # Actualizar Ticketmaster
+        if 'ticketmaster' not in apis:
+            apis['ticketmaster'] = {}
+        
+        if hasattr(self, 'checkBox'):
+            apis['ticketmaster']['enabled'] = 'True' if self.checkBox.isChecked() else 'False'
+        if hasattr(self, 'conciertos_search_box'):
+            apis['ticketmaster']['api_key'] = self.conciertos_search_box.text().strip()
+        
+        # Actualizar Setlist.fm
+        if 'setlistfm' not in apis:
+            apis['setlistfm'] = {}
+        
+        if hasattr(self, 'checkBox_2'):
+            apis['setlistfm']['enabled'] = 'True' if self.checkBox_2.isChecked() else 'False'
+        if hasattr(self, 'lineEdit_2'):
+            apis['setlistfm']['setlistfm_apikey'] = self.lineEdit_2.text().strip()
+        
+        # Actualizar Spotify
+        if 'spotify' not in apis:
+            apis['spotify'] = {}
+        
+        if hasattr(self, 'checkBox_3'):
+            apis['spotify']['enabled'] = 'True' if self.checkBox_3.isChecked() else 'False'
+        
+        return updated_config
+    
+    def clear_cache(self):
+        """Llamar al método de limpiar caché del módulo padre"""
+        if self.parent and hasattr(self.parent, 'clear_all_cache'):
+            self.parent.clear_all_cache()
+            # Opcionalmente cerrar el diálogo después de limpiar caché
+            # self.accept()
+
+    def debug_response(self):
+        """Llamar al método de debug de respuesta del módulo padre"""
+        if self.parent and hasattr(self.parent, 'debug_ticketmaster_response'):
+            artist_name = getattr(self.parent, 'conciertos_search_box', None)
+            if artist_name and artist_name.text().strip():
+                self.parent.debug_ticketmaster_response(artist_name.text())
+            else:
+                # Si no hay texto en el lineEdit principal, usar un valor por defecto o pedir al usuario
+                self.parent.debug_ticketmaster_response("test")
+
+    def debug_api(self):
+        """Llamar al método de debug de API del módulo padre"""
+        if self.parent and hasattr(self.parent, 'debug_ticketmaster_api'):
+            artist_name = getattr(self.parent, 'conciertos_search_box', None)
+            if artist_name and artist_name.text().strip():
+                self.parent.debug_ticketmaster_api(artist_name.text())
+            else:
+                self.parent.debug_ticketmaster_api("test")
+    
+    def select_file(self):
+        """Llamar al método de seleccionar archivo del módulo padre"""
+        if self.parent and hasattr(self.parent, 'select_artists_file'):
+            self.parent.select_artists_file()
