@@ -79,6 +79,7 @@ def main():
                         pass  # Mantener como string
                 cli_params[key] = value
 
+   
     # Ejecutar cada script
     for script_name in scripts_to_run:
         script_path = Path(PROJECT_ROOT, "db", f"{script_name}.py")
@@ -96,11 +97,17 @@ def main():
         # Añadir parámetros de línea de comandos (tienen prioridad)
         script_config.update(cli_params)
         
-        # Filtrar los parámetros vacíos y false
+        # Filtrar los parámetros vacíos y false, EXCEPTO parámetros específicos
+        # que necesitan preservar el valor False
+        preserve_false_params = ['headless', 'force_update', 'interactive']
+        
         filtered_config = {}
         for key, value in script_config.items():
-            # Solo incluir valores que no sean cadenas vacías ni False
-            if value != "" and value is not False:
+            # Preservar parámetros específicos incluso si son False
+            if key in preserve_false_params:
+                filtered_config[key] = value
+            # Para otros parámetros, filtrar cadenas vacías y False
+            elif value != "" and value is not False:
                 filtered_config[key] = value
 
         try:

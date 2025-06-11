@@ -90,8 +90,8 @@
       "batch_size": 100000,
       "rate_limit": 1.1,
       "max_retries": 3,
-      "cache_file": ".content/cache/discogs_links_cache.json",
-      "log_file": ".content/logs/discogs_links.log"
+      "cache_file": ".content/cache/db/yt_song_links/discogs_links_cache.json",
+      "log_file": ".content/logs/db/yt_song_links/discogs_links.log"
     },
   
   
@@ -110,7 +110,7 @@
   
     },
     "wiki/wikilinks_desde_mb": {
-      "log_file": ".content/logs/wikilinks_desde_mb_super-auto.log",
+      "log_file": ".content/logs/db/wikilinks/wikilinks_desde_mb.log",
       "user_agent": "YourMusicApp/1.0",
       "type": "artists",
       "modo": "super-auto",
@@ -120,15 +120,15 @@
   
     },
     "lastfm_escuchas": {
-      "output_json": ".content/cache/scrobbles_lastfm.json",
+      "output_json": ".content/cache/db/lastfm_escuchas/scrobbles_lastfm.json",
       "interactive": false,
       "force_update": false,
-      "cache_dir": ".content/cache/lastfm_escuchas.json"
+      "cache_dir": ".content/db/lastfm_escuchas/"
     },
     "listenbrainz/listens_listenbrainz": {
       "user": "guevifrito",
       "token": "",
-      "output_json": ".content/cache/listens_listenbrainz.json",
+      "output_json": ".content/cache/db/listenbrainz/listens_listenbrainz.json",
       "limit_process": 95000,
       "mbid_matching": true,
       "backfill": true,
@@ -193,7 +193,7 @@
       "limit": 0,
       "mode": "schema-only",
       "force_update": false,
-      "cache_file": ".content/cache/mb_release_group.log",
+      "cache_file": ".content/cache/db/musicbrainz/mb_release_group.log",
       "skip_propierties": [
         "image",
         "P123",
@@ -261,7 +261,7 @@
       "tamano_lote": 100,
       "pausa": 3,
       "inicio_id": 314,
-      "archivo_errores": ".content/logs/review_scrapper_errors.txt",
+      "archivo_errores": ".content/logs/db/review_scrapper/review_scrapper_errors.txt",
       "include_metacritic": true,
       "include_aoty": true
     },
@@ -269,10 +269,10 @@
       "freshrss_url": "https://freshrss.pollete.duckdns.org", 
       "freshrss_username": "pollo",
       "freshrss_password": "",
-      "freshrss_cache_path": ".content/cache/freshrss_cache.json",
+      "freshrss_cache_path": ".content/cache/db/posts/freshrss_cache.json",
       "search_entities": ["artists", "albums", "labels"],
       "categories": ["Blogs", "Revistas", "Wallabag"],
-      "output_path": ".content/log/resultados_freshrss_db.json",
+      "output_path": ".content/log/db/posts/resultados_freshrss_db.json",
       "search_short_terms": "false",
       "ignore_patterns": [
         "Opus (Mix)",

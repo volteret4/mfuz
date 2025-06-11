@@ -62,6 +62,7 @@ def create_equipboard_details_table(cursor):
             polyphony INTEGER,
             oscillators INTEGER,
             year_made INTEGER,
+            number_of_keys INTEGER,  -- Nueva columna añadida
             
             -- Control de calidad
             data_quality_score INTEGER,
@@ -72,6 +73,16 @@ def create_equipboard_details_table(cursor):
             UNIQUE(equipment_id)
         )''')
         
+        # Añadir columna number_of_keys si no existe (para bases de datos existentes)
+        try:
+            cursor.execute('ALTER TABLE equipboard_details ADD COLUMN number_of_keys INTEGER')
+            logger.info("Columna number_of_keys añadida a equipboard_details")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e).lower():
+                logger.debug("Columna number_of_keys ya existe")
+            else:
+                logger.warning(f"No se pudo añadir columna number_of_keys: {e}")
+        
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_equipboard_details_instrument ON equipboard_details (instrument_id)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_equipboard_details_equipment_id ON equipboard_details (equipment_id)')
         cursor.execute('CREATE INDEX IF NOT EXISTS idx_equipboard_details_quality ON equipboard_details (data_quality_score)')
@@ -81,6 +92,17 @@ def create_equipboard_details_table(cursor):
     except Exception as e:
         logger.error(f"Error creando tabla: {e}")
         raise
+
+
+def get_table_columns(cursor, table_name):
+    """Obtiene las columnas existentes de una tabla"""
+    try:
+        cursor.execute(f"PRAGMA table_info({table_name})")
+        columns = [row[1] for row in cursor.fetchall()]
+        return set(columns)
+    except Exception as e:
+        logger.warning(f"Error obteniendo columnas de {table_name}: {e}")
+        return set()
 
 
 
@@ -686,10 +708,14 @@ def extract_instrument_details(equipment_url, driver):
         logger.error(f"❌ Error extrayendo detalles de {equipment_url}: {e}")
         return {}
 
+
 def save_instrument_details(cursor, instrument_id, equipment_id, equipment_name, equipment_url, details):
     """Guarda los detalles del instrumento en la base de datos"""
     try:
-        # Preparar datos
+        # Obtener columnas existentes en la tabla
+        existing_columns = get_table_columns(cursor, 'equipboard_details')
+        
+        # Preparar datos básicos
         data = {
             'instrument_id': instrument_id,
             'equipment_id': equipment_id,
@@ -697,11 +723,19 @@ def save_instrument_details(cursor, instrument_id, equipment_id, equipment_name,
             'equipment_url': equipment_url
         }
         
-        # Añadir detalles extraídos
-        data.update(details)
+        # Añadir detalles extraídos, pero solo si la columna existe
+        for key, value in details.items():
+            if key in existing_columns and value is not None:
+                data[key] = value
+            elif key not in existing_columns and value is not None:
+                logger.debug(f"Columna '{key}' no existe en equipboard_details, saltando...")
         
         # Filtrar valores nulos
         data = {k: v for k, v in data.items() if v is not None}
+        
+        if not data:
+            logger.warning("No hay datos válidos para insertar")
+            return
         
         # Construir query
         columns = list(data.keys())
@@ -714,9 +748,37 @@ def save_instrument_details(cursor, instrument_id, equipment_id, equipment_name,
         '''
         
         cursor.execute(query, values)
+        logger.debug(f"Guardados detalles para {equipment_name} con {len(data)} campos")
         
     except Exception as e:
-        logger.error(f"Error guardando detalles: {e}")
+        logger.error(f"Error guardando detalles para {equipment_name}: {e}")
+        # Log de datos que intentaban insertarse para debug
+        logger.debug(f"Datos que fallaron: {list(details.keys()) if details else 'Sin detalles'}")
+
+
+def add_missing_columns_to_details_table(cursor):
+    """Añade columnas faltantes a la tabla equipboard_details"""
+    missing_columns = [
+        ('number_of_keys', 'INTEGER'),
+        ('wattage', 'INTEGER'),
+        ('frequency_response', 'TEXT'),
+        ('connectivity', 'TEXT'),
+        ('dimensions', 'TEXT'),
+        ('weight', 'REAL')
+    ]
+    
+    for column_name, column_type in missing_columns:
+        try:
+            cursor.execute(f'ALTER TABLE equipboard_details ADD COLUMN {column_name} {column_type}')
+            logger.info(f"Columna {column_name} añadida a equipboard_details")
+        except sqlite3.OperationalError as e:
+            if "duplicate column name" in str(e).lower():
+                logger.debug(f"Columna {column_name} ya existe")
+            else:
+                logger.warning(f"No se pudo añadir columna {column_name}: {e}")
+
+
+
 
 
 def process_instruments_details(database_path, force_update=False, limit=None, headless=True):
@@ -727,8 +789,9 @@ def process_instruments_details(database_path, force_update=False, limit=None, h
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
         
-        # Crear tabla
+        # Crear tabla y añadir columnas faltantes
         create_equipboard_details_table(cursor)
+        add_missing_columns_to_details_table(cursor)
         
         # Obtener instrumentos a procesar
         instruments = get_instruments_to_process(cursor, force_update, limit)

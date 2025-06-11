@@ -68,8 +68,11 @@ def create_equipboard_instruments_table(cursor):
 # REEMPLAZA tu función setup_selenium_driver con esta versión corregida:
 
 def setup_selenium_driver(headless=True):
-    """Configura driver con compatibilidad mejorada"""
+    """Configura driver con compatibilidad mejorada y logging de headless"""
     try:
+        # Log del estado headless al inicio
+        logger.info(f"🔧 Configurando driver - Headless: {headless}")
+        
         if UNDETECTED_AVAILABLE:
             options = uc.ChromeOptions()
             logger.info("🔧 Usando undetected-chromedriver")
@@ -77,13 +80,14 @@ def setup_selenium_driver(headless=True):
             options = Options()
             logger.info("🔧 Usando selenium normal con evasión mejorada")
         
+        # Aplicar modo headless según el parámetro
         if headless:
             options.add_argument("--headless=new")
-            logger.info("🔇 Modo headless activado")
+            logger.info("🔇 Modo headless ACTIVADO")
         else:
-            logger.info("🖥️ Modo con interfaz gráfica activado")
+            logger.info("🖥️ Modo con interfaz gráfica ACTIVADO")
         
-        # Opciones básicas compatibles con undetected_chromedriver
+        # ... resto de opciones igual ...
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
@@ -131,17 +135,19 @@ def setup_selenium_driver(headless=True):
         
         driver.set_page_load_timeout(45)
         
+        # Log de confirmación final
+        mode_text = "headless" if headless else "con interfaz"
         if UNDETECTED_AVAILABLE:
-            logger.info("✅ Driver undetected-chrome configurado exitosamente")
+            logger.info(f"✅ Driver undetected-chrome configurado exitosamente ({mode_text})")
         else:
-            logger.info("✅ Driver selenium mejorado configurado exitosamente")
+            logger.info(f"✅ Driver selenium mejorado configurado exitosamente ({mode_text})")
         
         return driver
         
     except Exception as e:
         logger.error(f"Error configurando driver: {e}")
         
-        # Fallback: intentar con opciones mínimas
+        # Fallback con logging
         try:
             logger.info("🔄 Intentando configuración fallback...")
             
@@ -161,7 +167,8 @@ def setup_selenium_driver(headless=True):
                 driver = webdriver.Chrome(options=options)
             
             driver.set_page_load_timeout(45)
-            logger.info("✅ Driver fallback configurado exitosamente")
+            mode_text = "headless" if headless else "con interfaz"
+            logger.info(f"✅ Driver fallback configurado exitosamente ({mode_text})")
             return driver
             
         except Exception as fallback_error:
@@ -278,9 +285,9 @@ def handle_cloudflare_improved(driver, max_wait=30):
 
 
 def verify_page_content(driver, artist_name, max_wait=10):
-    """Verifica que la página cargada sea válida para el artista"""
+    """Verificación mejorada del contenido de la página"""
     try:
-        logger.info(f"🔍 Verificando contenido para {artist_name}")
+        logger.info(f"🔍 Verificando contenido mejorado para {artist_name}")
         
         wait_time = 0
         while wait_time < max_wait:
@@ -289,74 +296,67 @@ def verify_page_content(driver, artist_name, max_wait=10):
                 current_url = driver.current_url.lower()
                 page_title = driver.title.lower()
                 
-                # Verificar si es una página de error o redirección
+                # Verificar indicadores de error específicos de Equipboard
                 error_indicators = [
-                    'sign up for equipboard',
-                    'create your equipboard account',
-                    'join equipboard',
                     'page not found',
                     '404',
                     'artist not found',
-                    'no gear found'
+                    'no gear found',
+                    'sign up for equipboard',
+                    'create your equipboard account',
+                    'join equipboard',
+                    'this page does not exist'
                 ]
                 
                 if any(indicator in page_source for indicator in error_indicators):
                     logger.warning(f"⚠️ Página de error detectada para {artist_name}")
                     return False
                 
-                # Verificar contenido positivo más específico
-                gear_indicators = [
+                # Verificar contenido positivo específico de Equipboard
+                positive_indicators = [
+                    'gear and equipment',
                     'uses this',
-                    'gear',
-                    'equipment',
-                    'instruments',
-                    'setup',
-                    'studio gear',
-                    'bass',
-                    'guitar',
-                    'synth',
-                    'drums',
-                    'microphone',
-                    'amp'
+                    'studio equipment',
+                    'find relevant music gear',
+                    'music gear like',
+                    '/items/',  # URLs de equipos
+                    'equipment including'
                 ]
                 
-                has_gear_content = any(indicator in page_source for indicator in gear_indicators)
+                has_positive_content = any(indicator in page_source for indicator in positive_indicators)
                 
-                # Verificar que no sea página genérica
-                generic_indicators = [
-                    'select an artist',
-                    'browse artists',
-                    'find your favorite artist',
-                    'search for artists'
-                ]
+                # Verificar que la URL corresponde al artista correcto
+                artist_slug = artist_name.lower().replace(' ', '-').replace('(', '').replace(')', '')
+                is_correct_artist = artist_slug in current_url
                 
-                is_generic = any(indicator in page_source for indicator in generic_indicators)
+                # Verificar que hay elementos de equipo en la página
+                gear_elements = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/items/']"))
                 
-                if has_gear_content and not is_generic:
-                    logger.info(f"✅ Contenido válido confirmado para {artist_name}")
+                if has_positive_content and (is_correct_artist or gear_elements > 0):
+                    logger.info(f"✅ Contenido válido confirmado para {artist_name} (elementos: {gear_elements})")
                     return True
-                elif is_generic:
-                    logger.warning(f"⚠️ Página genérica detectada para {artist_name}")
-                    return False
-                else:
-                    # Dar más tiempo para que cargue
-                    time.sleep(2)
-                    wait_time += 2
-                    
+                
+                # Si no hay contenido válido, esperar más tiempo
+                time.sleep(2)
+                wait_time += 2
+                
             except Exception as e:
                 logger.warning(f"Error verificando contenido: {e}")
                 time.sleep(1)
                 wait_time += 1
         
-        # Verificación final menos estricta
+        # Verificación final relajada
         try:
             final_source = driver.page_source.lower()
-            # Si al menos tiene contenido de equipboard y no es error, aceptar
-            if 'equipboard' in final_source and len(final_source) > 2000:
-                logger.info(f"✅ Página aceptada con verificación relajada para {artist_name}")
+            final_gear_count = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/items/']"))
+            
+            # Aceptar si hay al menos algunos elementos de gear o contenido de equipboard
+            if ('equipboard' in final_source and len(final_source) > 2000) or final_gear_count > 0:
+                logger.info(f"✅ Página aceptada con verificación relajada para {artist_name} (elementos: {final_gear_count})")
                 return True
-        except:
-            pass
+                
+        except Exception as e:
+            logger.debug(f"Error en verificación final: {e}")
         
         logger.warning(f"⚠️ No se pudo verificar contenido válido para {artist_name}")
         return False
@@ -410,7 +410,7 @@ def debug_page_content(driver, artist_name):
 
 
 def smart_page_load(driver, url, artist_name, max_retries=2, debug_mode=False):
-    """Carga de página con validación de contenido y debug opcional"""
+    """Carga de página mejorada con mejor validación"""
     validated_url = validate_and_fix_url(url, artist_name)
     if not validated_url:
         logger.error(f"❌ URL no válida para {artist_name}: {url}")
@@ -432,11 +432,11 @@ def smart_page_load(driver, url, artist_name, max_retries=2, debug_mode=False):
                 debug_page_content(driver, artist_name)
             
             # Manejar Cloudflare con detección mejorada
-            if not handle_cloudflare_improved(driver, max_wait=10):
+            if not handle_cloudflare_improved(driver, max_wait=15):
                 logger.warning(f"⚠️ Problema con Cloudflare en intento {attempt + 1}")
                 continue
             
-            # Verificar contenido
+            # Usar verificación mejorada
             if verify_page_content(driver, artist_name):
                 logger.info("✅ Página cargada y validada exitosamente")
                 return True
@@ -455,108 +455,225 @@ def smart_page_load(driver, url, artist_name, max_retries=2, debug_mode=False):
 
 
 def extract_instruments_data(driver, artist_name):
-    """Extrae los datos de instrumentos filtrand elementos de navegación"""
+    """Extrae los datos de instrumentos con selectores básicos"""
     instruments = []
     processed_ids = set()
     
     try:
-        # Usar selectores específicos para equipboard
-        gear_selectors = [
-            "a[href*='/gear/']",
-            "a[href*='/items/']"
-        ]
+        # Selector básico para enlaces de equipos
+        gear_elements = driver.find_elements(By.CSS_SELECTOR, "a[href*='/items/']")
+        logger.info(f"🔍 Elementos encontrados: {len(gear_elements)}")
         
-        for selector in gear_selectors:
+        for element in gear_elements:
             try:
-                elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                logger.info(f"🔍 Selector '{selector}': {len(elements)} elementos encontrados")
+                gear_href = element.get_attribute('href')
                 
-                for element in elements:
-                    try:
-                        gear_href = element.get_attribute('href')
-                        equipment_name = element.text.strip()
-                        
-                        # Extraer texto del elemento si está vacío
-                        if not equipment_name:
-                            try:
-                                equipment_name = element.get_attribute('title') or ""
-                                if not equipment_name:
-                                    child = element.find_element(By.CSS_SELECTOR, "span, div, h1, h2, h3, h4")
-                                    equipment_name = child.text.strip()
-                            except:
-                                continue
-                        
-                        if not gear_href or not equipment_name or len(equipment_name) < 3:
-                            continue
-                        
-                        # Filtrar elementos de navegación y botones "Add gear"
-                        nav_terms = [
-                            'gear', 'equipment', 'view all', 'more', 'add gear', 'show more', 
-                            'load more', 'add music gear', 'new', 'add', 'create', 'submit'
-                        ]
-                        if equipment_name.lower() in nav_terms:
-                            continue
-                        
-                        # Filtrar URLs que contengan '/new', '/add' o '/create'
-                        if any(term in gear_href.lower() for term in ['/new', '/add', '/create', '/submit']):
-                            logger.debug(f"⏭️ Saltando URL de creación: {gear_href}")
-                            continue
-                        
-                        # Extraer ID del equipo
-                        gear_match = re.search(r'/(gear|items)/([^/?#]+)', gear_href)
-                        if not gear_match:
-                            continue
-                        
-                        equipment_id = gear_match.group(2)
-                        
-                        # Filtrar IDs que sean claramente de navegación
-                        if equipment_id.lower() in ['new', 'add', 'create', 'submit']:
-                            continue
-                        
-                        if equipment_id in processed_ids:
-                            continue
-                        processed_ids.add(equipment_id)
-                        
-                        # Extraer información básica
-                        brand, model = parse_brand_model_simple(equipment_name)
-                        equipment_type = infer_equipment_type_simple(equipment_name)
-                        
-                        instrument_data = {
-                            'artist_name': artist_name,
-                            'equipment_id': equipment_id,
-                            'equipment_name': equipment_name,
-                            'equipment_url': gear_href,
-                            'brand': brand,
-                            'model': model,
-                            'equipment_type': equipment_type
-                        }
-                        
-                        instruments.append(instrument_data)
-                        
-                    except Exception as e:
-                        logger.debug(f"Error procesando elemento individual: {e}")
+                # Validar URL básica
+                if not gear_href or 'equipboard.com' not in gear_href:
+                    continue
+                
+                # Extraer nombre del equipo
+                equipment_name = element.text.strip()
+                if not equipment_name or len(equipment_name) < 2:
+                    # Intentar obtener de title
+                    equipment_name = element.get_attribute('title') or ""
+                    if not equipment_name or len(equipment_name) < 2:
                         continue
-                        
+                
+                # Filtrar elementos de navegación obvios
+                if any(term in equipment_name.lower() for term in ['add gear', 'sign up', 'login', 'view all']):
+                    continue
+                
+                # Extraer ID del equipo
+                equipment_id = extract_equipment_id(gear_href)
+                if not equipment_id or equipment_id in processed_ids:
+                    continue
+                
+                processed_ids.add(equipment_id)
+                
+                # Extraer marca y modelo básico
+                brand, model = parse_brand_model_simple(equipment_name)
+                equipment_type = infer_equipment_type_simple(equipment_name)
+                
+                instrument_data = {
+                    'artist_name': artist_name,
+                    'equipment_id': equipment_id,
+                    'equipment_name': equipment_name.strip(),
+                    'equipment_url': gear_href,
+                    'brand': brand,
+                    'model': model,
+                    'equipment_type': equipment_type
+                }
+                
+                instruments.append(instrument_data)
+                
             except Exception as e:
-                logger.warning(f"Error con selector {selector}: {e}")
+                logger.debug(f"Error procesando elemento: {e}")
                 continue
         
-        # Eliminar duplicados por nombre + tipo
+        logger.info(f"🎯 Instrumentos únicos procesados: {len(instruments)}")
+        return instruments
+        
+    except Exception as e:
+        logger.error(f"❌ Error extrayendo datos: {e}")
+        return []
+
+
+
+def extract_equipment_id(gear_href):
+    """Extrae el ID del equipo desde la URL"""
+    try:
+        # Patrones para URLs de Equipboard
+        patterns = [
+            r'/items/([^/?#]+)',  # /items/equipment-name
+            r'/gear/([^/?#]+)',   # /gear/equipment-name (por si acaso)
+            r'equipment[/_-]id[=:]([^&/?#]+)',  # parámetros con equipment_id
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, gear_href)
+            if match:
+                equipment_id = match.group(1)
+                # Limpiar IDs problemáticos
+                if equipment_id.lower() not in ['new', 'add', 'create', 'submit', 'edit']:
+                    return equipment_id
+        
+        return None
+        
+    except Exception as e:
+        logger.debug(f"Error extrayendo ID de equipo: {e}")
+        return None
+
+def is_navigation_element(equipment_name, gear_href):
+    """Determina si un elemento es de navegación y debe ser filtrado"""
+    try:
+        name_lower = equipment_name.lower()
+        href_lower = gear_href.lower() if gear_href else ""
+        
+        # Términos de navegación
+        nav_terms = [
+            'add gear', 'add music gear', 'add equipment', 'add your gear',
+            'view all', 'show all', 'see all', 'load more', 'show more',
+            'gear setup', 'your setup', 'create setup', 'new setup',
+            'sign up', 'login', 'register', 'follow', 'subscribe'
+        ]
+        
+        # Verificar términos exactos
+        if name_lower in nav_terms:
+            return True
+        
+        # Verificar términos parciales
+        nav_partial = ['add', 'create', 'new', 'edit', 'setup', 'follow']
+        if any(term in name_lower for term in nav_partial) and len(equipment_name.split()) <= 2:
+            return True
+        
+        # Verificar URLs problemáticas
+        problem_urls = ['/new', '/add', '/create', '/edit', '/signup', '/login']
+        if any(term in href_lower for term in problem_urls):
+            return True
+        
+        return False
+        
+    except Exception as e:
+        logger.debug(f"Error verificando navegación: {e}")
+        return False
+
+def remove_duplicate_instruments(instruments):
+    """Elimina instrumentos duplicados basándose en múltiples criterios"""
+    try:
         unique_instruments = []
-        seen_combinations = set()
+        seen_ids = set()
+        seen_names = set()
         
         for instrument in instruments:
-            combo_key = f"{instrument['equipment_name'].lower()}-{instrument['equipment_type']}"
-            if combo_key not in seen_combinations:
-                seen_combinations.add(combo_key)
-                unique_instruments.append(instrument)
+            equipment_id = instrument.get('equipment_id', '')
+            equipment_name = instrument.get('equipment_name', '').lower().strip()
+            
+            # Crear clave única combinando ID y nombre normalizado
+            normalized_name = re.sub(r'\s+', ' ', equipment_name)
+            unique_key = f"{equipment_id}|{normalized_name}"
+            
+            # Evitar duplicados por ID
+            if equipment_id and equipment_id in seen_ids:
+                continue
+            
+            # Evitar duplicados por nombre muy similar
+            if equipment_name and equipment_name in seen_names:
+                continue
+            
+            # Verificar similitud con nombres existentes (para casos como "Guitar" vs "guitar")
+            is_similar = False
+            for existing_name in seen_names:
+                if equipment_name and existing_name:
+                    # Verificar si son muy similares (diferencia solo en mayúsculas/espacios)
+                    if normalized_name == re.sub(r'\s+', ' ', existing_name):
+                        is_similar = True
+                        break
+            
+            if is_similar:
+                continue
+            
+            # Agregar a las listas únicas
+            if equipment_id:
+                seen_ids.add(equipment_id)
+            if equipment_name:
+                seen_names.add(equipment_name)
+            
+            unique_instruments.append(instrument)
         
-        logger.info(f"🎯 Instrumentos únicos extraídos: {len(unique_instruments)}")
         return unique_instruments
         
     except Exception as e:
-        logger.error(f"❌ Error extrayendo datos de instrumentos: {e}")
-        return []
+        logger.error(f"Error eliminando duplicados: {e}")
+        return instruments
+  
+
+def extract_equipment_name(element):
+    """Extrae el nombre del equipo de diferentes fuentes en el elemento"""
+    try:
+        # Intentar obtener texto directo del elemento
+        equipment_name = element.text.strip()
+        
+        if equipment_name and len(equipment_name) > 2:
+            return equipment_name
+        
+        # Intentar obtener de atributos
+        for attr in ['title', 'aria-label', 'data-title', 'alt']:
+            name = element.get_attribute(attr)
+            if name and len(name.strip()) > 2:
+                return name.strip()
+        
+        # Buscar en elementos hijos con texto
+        try:
+            for child_selector in ['span', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'p', '.gear-name', '.equipment-name']:
+                try:
+                    child = element.find_element(By.CSS_SELECTOR, child_selector)
+                    child_text = child.text.strip()
+                    if child_text and len(child_text) > 2:
+                        return child_text
+                except:
+                    continue
+        except:
+            pass
+        
+        # Último recurso: extraer del href
+        href = element.get_attribute('href')
+        if href:
+            # Extraer nombre del slug en la URL
+            parts = href.split('/')
+            for part in reversed(parts):
+                if part and part not in ['items', 'gear', 'equipboard.com']:
+                    # Convertir slug a nombre legible
+                    name = part.replace('-', ' ').replace('_', ' ').title()
+                    if len(name) > 2:
+                        return name
+        
+        return ""
+        
+    except Exception as e:
+        logger.debug(f"Error extrayendo nombre de equipo: {e}")
+        return ""
+
 
 
 def restart_driver(driver, headless=True):
@@ -591,52 +708,40 @@ def restart_driver(driver, headless=True):
 
 
 def extract_instruments_from_page(driver, artist_name, artist_url):
-    """Versión simplificada sin scrolls excesivos"""
+    """Versión ultra-simplificada de extracción de instrumentos"""
     try:
-        logger.info(f"🎵 Extrayendo instrumentos de {artist_url}")
+        logger.info(f"🎵 Procesando {artist_name}")
+        logger.info(f"🌐 Cargando: {artist_url}")
         
-        # Cargar página con estrategia mejorada
-        if not smart_page_load(driver, artist_url, artist_name, debug_mode=False):
-            logger.error(f"❌ No se pudo cargar la página para {artist_name}")
-            return []
+        # 1. Cargar la página directamente
+        driver.get(artist_url)
+        logger.info("✅ Página cargada")
         
-        # Verificar contenido válido básico
-        try:
-            WebDriverWait(driver, 10).until(
-                lambda d: 'equipboard' in d.page_source.lower() and len(d.page_source) > 2000
-            )
-        except:
-            logger.warning(f"⚠️ Contenido de equipboard no detectado para {artist_name}")
-            return []
+        # 2. Esperar random entre 3-5s
+        wait_time = random.uniform(3, 5)
+        logger.info(f"⏳ Esperando {wait_time:.1f}s...")
+        time.sleep(wait_time)
         
-        # Pausa inicial mínima
-        time.sleep(random.uniform(2, 3))
+        # 3. Scroll hasta el final 3 veces
+        logger.info("📜 Realizando 3 scrolls...")
+        for i in range(3):
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(random.uniform(1, 2))
+            logger.info(f"📜 Scroll {i+1}/3 completado")
         
-        # Contar elementos iniciales
-        initial_count = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/gear/'], a[href*='/items/']"))
-        logger.info(f"🎸 Instrumentos iniciales detectados: {initial_count}")
+        # 4. Buscar y hacer click en LOAD MORE hasta que no aparezca más
+        load_more_clicks = handle_load_more_button(driver, max_clicks=15)
+        logger.info(f"🔄 Clicks en LOAD MORE: {load_more_clicks}")
         
-        # Manejar LOAD MORE de forma conservadora
-        if initial_count > 0:
-            load_more_clicks = handle_load_more_button(driver, max_clicks=8)
-        else:
-            logger.warning(f"⚠️ No se detectaron instrumentos iniciales")
-            load_more_clicks = 0
-        
-        # Contar elementos finales
-        final_count = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/gear/'], a[href*='/items/']"))
-        logger.info(f"🎸 Resultado final: {initial_count} → {final_count} instrumentos")
-        
-        # Extraer instrumentos
+        # 5. Obtener instrumentos
         instruments = extract_instruments_data(driver, artist_name)
+        logger.info(f"🎯 Instrumentos encontrados: {len(instruments)}")
         
-        logger.info(f"🎯 Extracción completada: {len(instruments)} instrumentos para {artist_name}")
         return instruments
         
     except Exception as e:
-        logger.error(f"❌ Error extrayendo instrumentos para {artist_name}: {e}")
+        logger.error(f"❌ Error procesando {artist_name}: {e}")
         return []
-
 
 
 def parse_brand_model_simple(equipment_name):
@@ -903,7 +1008,8 @@ def process_artists_instruments(database_path, force_update=False, limit=None, h
     driver = None
     try:
         logger.info("🔄 Iniciando process_artists_instruments")
-        
+        logger.info(f"🎯 Parámetro headless recibido: {headless} (tipo: {type(headless)})")
+
         conn = sqlite3.connect(database_path)
         cursor = conn.cursor()
         logger.info("✅ Conexión a base de datos establecida")
@@ -921,7 +1027,7 @@ def process_artists_instruments(database_path, force_update=False, limit=None, h
         logger.info(f"🚀 Procesando instrumentos de {len(artists)} artistas")
         
         # Configurar driver inicial
-        logger.info("🔧 Configurando driver inicial...")
+        logger.info(f"🔧 Configurando driver inicial con headless={headless}...")
         driver = setup_selenium_driver(headless=headless)
         if not driver:
             logger.error("❌ No se pudo crear driver inicial")
@@ -1089,130 +1195,51 @@ def perform_complete_scroll(driver, max_scrolls=20):
 
 # REEMPLAZA tu función handle_load_more_button con esta versión mejorada:
 
-def handle_load_more_button(driver, max_clicks=20):
-    """Versión mejorada con scroll más agresivo"""
-    clicks_count = 0
-    no_progress_count = 0
+def handle_load_more_button(driver, max_clicks=15):
+    """Manejo simplificado de botones LOAD MORE"""
+    clicks = 0
     
     try:
-        logger.info("🔄 Buscando botones LOAD MORE...")
-        
-        # Hacer scroll completo primero para cargar contenido inicial
-        perform_complete_scroll(driver, max_scrolls=5)
-        
-        while clicks_count < max_clicks and no_progress_count < 3:
-            # Scroll hasta el final antes de buscar botón
+        for _ in range(max_clicks):
+            # Scroll al final
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(random.uniform(2, 3))
+            time.sleep(2)
             
+            # Buscar botón LOAD MORE con selector simple
             load_more_button = None
-            xpath_patterns = [
-                "//button[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'load more')]",
-                "//a[contains(translate(text(), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'load more')]",
-                "//button[contains(@class, 'load') or contains(@class, 'more')]",
-                "//div[contains(@class, 'load-more')]//button",
-                "//div[contains(@class, 'show-more')]//button",
-            ]
-            
-            for xpath in xpath_patterns:
-                try:
-                    elements = driver.find_elements(By.XPATH, xpath)
-                    for element in elements:
-                        if (element.is_displayed() and element.is_enabled() and 
-                            element.size['height'] > 0 and element.size['width'] > 0):
-                            load_more_button = element
+            try:
+                buttons = driver.find_elements(By.XPATH, "//button[contains(text(), 'Load More') or contains(text(), 'load more') or contains(text(), 'LOAD MORE')]")
+                if buttons:
+                    for button in buttons:
+                        if button.is_displayed() and button.is_enabled():
+                            load_more_button = button
                             break
-                    if load_more_button:
-                        break
-                except Exception:
-                    continue
+            except:
+                pass
             
+            # Si no hay botón, terminar
             if not load_more_button:
-                logger.info(f"🔚 No más botones LOAD MORE (clicks: {clicks_count})")
+                logger.info(f"🔚 No más botones LOAD MORE (clicks realizados: {clicks})")
                 break
             
+            # Hacer click
             try:
-                current_gear_count = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/gear/'], a[href*='/items/']"))
+                driver.execute_script("arguments[0].click();", load_more_button)
+                clicks += 1
+                logger.info(f"🔄 Click #{clicks} en LOAD MORE")
                 
-                # Scroll hasta el botón con más precisión
-                driver.execute_script("""
-                    arguments[0].scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center'
-                    });
-                """, load_more_button)
-                time.sleep(random.uniform(2, 3))
-                
-                # Hover antes del click
-                try:
-                    ActionChains(driver).move_to_element(load_more_button).pause(random.uniform(0.5, 1.0)).perform()
-                except:
-                    pass
-                
-                # Click con múltiples métodos de fallback
-                click_success = False
-                for method in ['click', 'js_click', 'action_click']:
-                    try:
-                        if method == 'click':
-                            load_more_button.click()
-                        elif method == 'js_click':
-                            driver.execute_script("arguments[0].click();", load_more_button)
-                        elif method == 'action_click':
-                            ActionChains(driver).click(load_more_button).perform()
-                        
-                        click_success = True
-                        break
-                    except Exception as e:
-                        logger.debug(f"Método {method} falló: {e}")
-                        continue
-                
-                if not click_success:
-                    logger.warning("❌ No se pudo hacer click en LOAD MORE")
-                    break
-                
-                clicks_count += 1
-                logger.info(f"🔄 Clic #{clicks_count} en LOAD MORE")
-                
-                # Espera más larga para cargar contenido
-                wait_time = random.uniform(4, 8)
-                time.sleep(wait_time)
-                
-                # Scroll agresivo después del click para cargar todo
-                perform_complete_scroll(driver, max_scrolls=3)
-                
-                # Verificar progreso
-                new_gear_count = len(driver.find_elements(By.CSS_SELECTOR, "a[href*='/gear/'], a[href*='/items/']"))
-                
-                if new_gear_count > current_gear_count:
-                    logger.info(f"📈 Contenido cargado: {current_gear_count} → {new_gear_count}")
-                    no_progress_count = 0
-                else:
-                    no_progress_count += 1
-                    logger.warning(f"⚠️ Sin progreso #{no_progress_count}/3")
-                    
-                    # Intentar scroll más agresivo si no hay progreso
-                    if no_progress_count < 3:
-                        logger.info("🚀 Intentando scroll más agresivo...")
-                        for _ in range(5):
-                            driver.execute_script("window.scrollBy(0, 1000);")
-                            time.sleep(1)
-                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                        time.sleep(3)
+                # Esperar que cargue contenido
+                time.sleep(random.uniform(3, 5))
                 
             except Exception as e:
-                logger.error(f"❌ Error procesando botón LOAD MORE: {e}")
+                logger.warning(f"❌ Error haciendo click en LOAD MORE: {e}")
                 break
         
-        # Scroll final completo para asegurar todo cargado
-        logger.info("📜 Realizando scroll final completo...")
-        perform_complete_scroll(driver, max_scrolls=10)
-        
-        logger.info(f"🎯 LOAD MORE completado: {clicks_count} clics realizados")
-        return clicks_count
+        return clicks
         
     except Exception as e:
-        logger.error(f"❌ Error en manejo de LOAD MORE: {e}")
-        return clicks_count
+        logger.error(f"❌ Error en handle_load_more_button: {e}")
+        return clicks
 
 # MODIFICA la función extract_instruments_from_page_debug para incluir mejor scroll:
 
@@ -1470,12 +1497,56 @@ def validate_and_fix_url(artist_url, artist_name):
         logger.error(f"Error validando URL: {e}")
         return None
 
-
+def normalize_headless_param(headless_value):
+    """
+    Normaliza el parámetro headless a boolean desde diferentes tipos de entrada
+    Acepta: bool, str ('true'/'false'), int (0/1)
+    """
+    try:
+        logger.debug(f"🔍 Normalizando headless_value: {headless_value} (tipo: {type(headless_value)})")
+        
+        # Si ya es boolean, devolverlo directamente
+        if isinstance(headless_value, bool):
+            logger.debug(f"✅ Ya es boolean: {headless_value}")
+            return headless_value
+        
+        # Si es string, convertir correctamente
+        if isinstance(headless_value, str):
+            str_value = headless_value.lower().strip()
+            # Valores que significan FALSE (no headless = mostrar interfaz)
+            false_values = ['false', '0', 'no', 'off', 'f']
+            # Valores que significan TRUE (headless = sin interfaz)
+            true_values = ['true', '1', 'yes', 'on', 't']
+            
+            if str_value in false_values:
+                logger.debug(f"✅ String '{headless_value}' interpretado como FALSE")
+                return False
+            elif str_value in true_values:
+                logger.debug(f"✅ String '{headless_value}' interpretado como TRUE")
+                return True
+            else:
+                logger.warning(f"⚠️ String '{headless_value}' no reconocido, usando True por defecto")
+                return True
+        
+        # Si es número, convertir
+        if isinstance(headless_value, (int, float)):
+            result = bool(headless_value)
+            logger.debug(f"✅ Número {headless_value} convertido a {result}")
+            return result
+        
+        # Default en caso de valor no reconocido
+        logger.warning(f"⚠️ Valor headless no reconocido: {headless_value} (tipo: {type(headless_value)}), usando True por defecto")
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Error normalizando parámetro headless: {e}")
+        return True
 
 def main(config=None):
-    """Función principal"""
+    """Función principal con manejo corregido de argumentos headless"""
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
     logger.setLevel(logging.DEBUG)
+    
     if config is None:
         import argparse
         
@@ -1484,22 +1555,37 @@ def main(config=None):
         parser.add_argument('--db_path', type=str, default='db/sqlite/musica.sqlite')
         parser.add_argument('--limit', type=int, help='Límite de artistas a procesar')
         parser.add_argument('--force-update', action='store_true')
-        parser.add_argument('--headless', action='store_true', default=True)
-        parser.add_argument('--no-headless', action='store_false', dest='headless')
+        
+        # Corregir el manejo de headless - usar string y convertir
+        parser.add_argument('--headless', type=str, default='true', 
+                          choices=['true', 'false'],
+                          help='Ejecutar en modo headless (true/false)')
         
         args = parser.parse_args()
         config = vars(args)
+    
+    # Debug del config recibido
+    logger.info(f"🔧 Config recibido: {config}")
+    raw_headless = config.get('headless', True)
+    logger.info(f"🔍 Valor headless RAW: {raw_headless} (tipo: {type(raw_headless)})")
+    
+    # Normalizar el parámetro headless
+    headless = normalize_headless_param(raw_headless)
+    config['headless'] = headless
+    
+    logger.info(f"🎯 Valor headless FINAL: {headless}")
     
     action = config.get('action', 'extract')
     
     if action == 'debug':
         debug_urls(config.get('db_path', 'db/sqlite/musica.sqlite'))
     elif action == 'extract':
+        logger.info(f"🚀 Iniciando extracción con headless={headless}")
         process_artists_instruments(
             database_path=config.get('db_path', 'db/sqlite/musica.sqlite'),
             force_update=config.get('force_update', False),
             limit=config.get('limit'),
-            headless=config.get('headless', True)
+            headless=headless
         )
     elif action == 'stats':
         get_instruments_stats(config.get('db_path', 'db/sqlite/musica.sqlite'))

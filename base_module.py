@@ -22,7 +22,7 @@ if themes_path.exists():
         apply_effects_to_widget_function = getattr(themes_module, 'apply_effects_to_widget', None)
         setup_objectnames_function = getattr(themes_module, 'setup_objectnames_for_theme', None)
         
-        print("Sistema de temas centralizado cargado correctamente")
+        #print("Sistema de temas centralizado cargado correctamente")
     except Exception as e:
         print(f"Error cargando sistema de temas: {e}")
         themes_module = None
@@ -215,7 +215,7 @@ class BaseModule(QWidget):
         
         # Si no hay sistema centralizado, NO aplicar ningún estilo
         # Dejar que Qt use sus estilos por defecto
-        print(f"Sistema de temas centralizado no disponible. Widget sin tema personalizado.")
+        #print(f"Sistema de temas centralizado no disponible. Widget sin tema personalizado.")
 
 
 

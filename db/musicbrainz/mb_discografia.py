@@ -300,20 +300,41 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
         print(f"  ERROR: Demasiados fallos ({failed}) procesando {artist_name}, no se guarda")
         return False
 
-def get_artists_to_process(conn, artist_limit=None):
-    """Obtiene la lista de artistas a procesar"""
+def get_artists_to_process(conn, artist_limit=None, skip_artists=None):
+    """Obtiene la lista de artistas a procesar, excluyendo los especificados"""
     cursor = conn.cursor()
     
-    query = """
+    # Lista por defecto de artistas a omitir si no se especifica
+    if skip_artists is None:
+        skip_artists = [
+            'varios artistas',
+            'various artists', 
+            'varios',
+            'various',
+            'compilation',
+            'v.a.',
+            'v/a',
+            'soundtrack'
+        ]
+    
+    # Crear placeholders para la consulta SQL
+    placeholders = ','.join(['?' for _ in skip_artists])
+    
+    query = f"""
         SELECT a.id, a.name, a.mbid 
         FROM artists a
+        WHERE LOWER(a.name) NOT IN ({placeholders})
+        AND a.name IS NOT NULL
+        AND TRIM(a.name) != ''
         ORDER BY a.id
     """
     
     if artist_limit:
         query += f" LIMIT {artist_limit}"
     
-    cursor.execute(query)
+    # Convertir skip_artists a minúsculas para la comparación
+    skip_artists_lower = [artist.lower() for artist in skip_artists]
+    cursor.execute(query, skip_artists_lower)
     return cursor.fetchall()
 
 def main(config=None):
@@ -327,10 +348,23 @@ def main(config=None):
     artist_limit = config.get('artist_limit', None)
     interactive = config.get('interactive', True)
     
+    # Nueva configuración para artistas a omitir
+    skip_artists = config.get('skip_artists', [
+        'varios artistas',
+        'various artists', 
+        'varios',
+        'various',
+        'compilation',
+        'v.a.',
+        'v/a',
+        'soundtrack'
+    ])
+    
     print("=== MusicBrainz Discography Fetcher ===")
     print(f"Base de datos: {db_path}")
     print(f"Force update: {force_update}")
     print(f"Límite de artistas: {artist_limit or 'Sin límite'}")
+    print(f"Artistas a omitir: {', '.join(skip_artists)}")
     
     # Verificar que existe la base de datos
     if not os.path.exists(db_path):
@@ -344,11 +378,11 @@ def main(config=None):
     conn = sqlite3.connect(db_path)
     
     try:
-        # Obtener artistas
-        artists = get_artists_to_process(conn, artist_limit)
+        # Obtener artistas (ahora con filtro)
+        artists = get_artists_to_process(conn, artist_limit, skip_artists)
         total_artists = len(artists)
         
-        print(f"\nEncontrados {total_artists} artistas para procesar")
+        print(f"\nEncontrados {total_artists} artistas para procesar (después de filtros)")
         
         # if interactive and total_artists > 10:
         #     response = input(f"¿Procesar {total_artists} artistas? (y/N): ")
