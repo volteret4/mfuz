@@ -8,7 +8,7 @@ import time
 import requests
 from datetime import datetime
 import lyricsgenius
-from dotenv import load_dotenv
+
 
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from base_module import PROJECT_ROOT
@@ -20,7 +20,6 @@ def adapt_datetime(dt):
 # Registrar el adaptador
 sqlite3.register_adapter(datetime, adapt_datetime)
 
-load_dotenv()
 
 class MultiLyricsManager:
     def __init__(self, db_path, batch_size=1000, config=None):
