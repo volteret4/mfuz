@@ -15,6 +15,8 @@ import sys
 import argparse
 import logging
 
+from base_module import PROJECT_ROOT
+
 # Configurar el atributo antes de crear QApplication
 QApplication.setAttribute(Qt.ApplicationAttribute.AA_ShareOpenGLContexts, True)
 
@@ -25,7 +27,31 @@ QCoreApplication.setAttribute(Qt.ApplicationAttribute.AA_UseDesktopOpenGL, True)
 # Crear la aplicación
 app = QApplication(sys.argv)
 
-
+def check_qt_dependencies_from_tools():
+    """
+    Importa y ejecuta el verificador de dependencias desde tools/qt_dependencies.py
+    """
+    try:
+        # Importar el módulo de verificación
+        tools_path = PROJECT_ROOT / "tools"
+        sys.path.insert(0, str(tools_path))
+        
+        import qt_dependencies
+        
+        # Ejecutar la verificación
+        return qt_dependencies.check_system_dependencies()
+        
+    except ImportError as e:
+        print(f"ADVERTENCIA: No se pudo importar qt_dependencies.py: {e}")
+        print("Continuando sin verificación de dependencias...")
+        return True
+    except Exception as e:
+        print(f"Error ejecutando verificación de dependencias: {e}")
+        return True
+    finally:
+        # Limpiar el path
+        if str(tools_path) in sys.path:
+            sys.path.remove(str(tools_path))
 
 def load_config_file(file_path):
     """Carga un archivo de configuración en formato JSON o YAML."""
@@ -766,6 +792,12 @@ class TabManager(QMainWindow):
         return False
 
 def main():
+    # NUEVO: Verificar dependencias Qt antes de crear QApplication
+    print("Verificando dependencias del sistema...")
+    if not check_qt_dependencies_from_tools():
+        print("ERROR: Dependencias faltantes. Instala los paquetes requeridos.")
+        sys.exit(1)
+    
     parser = argparse.ArgumentParser(description='Multi-Module Manager')
     parser.add_argument('config_path', help='Ruta al archivo de configuración (JSON o YAML)')
     parser.add_argument('--font', default='Inter', help='Fuente a usar en la interfaz')
@@ -774,8 +806,17 @@ def main():
                         choices=['true', 'false'],
                         default=None,
                         help='Habilitar logging detallado (true/false)')
+    parser.add_argument('--skip-deps', action='store_true', 
+                        help='Omitir verificación de dependencias')
     
     args = parser.parse_args()
+
+    # Permitir omitir verificación con --skip-deps
+    if not args.skip_deps:
+        print("Verificando dependencias del sistema...")
+        if not check_qt_dependencies_from_tools():
+            print("ERROR: Dependencias faltantes. Use --skip-deps para omitir esta verificación.")
+            sys.exit(1)
 
     # Verificar explícitamente que el archivo de configuración existe
     config_path = Path(args.config_path)
@@ -796,134 +837,6 @@ def main():
         print(f"ERROR FATAL: {e}")
         traceback.print_exc()
         sys.exit(1)
-    # Load configuration to potentially override logging setting
-    try:
-        config = load_config_file(args.config_path)
-        
-        # Determine logging state with multiple configuration options
-        if args.log is not None:
-            # CLI argument takes precedence
-            log_enabled = args.log.lower() == 'true'
-        else:
-            # Check for different logging configuration formats
-            logging_options = config.get('logging_options', ['true', 'false'])
-            logging_state = config.get('logging_state', 'false')
-            log_enabled = logging_state.lower() == 'true'
-
-    except Exception as e:
-        print(f"Error reading config: {e}")
-        log_enabled = False
-
-    # Configure logging if logging is enabled
-    if log_enabled:
-        # Importar nuestro formateador personalizado
-        try:
-            from terminal_logger import ColoredFormatter, COLORS
-            
-            # Obtener configuración detallada de logging
-            logging_level_str = config.get('logging_level', 'INFO')
-            log_types = config.get('log_types', ['ERROR', 'INFO', 'WARNING'])
-            
-            # Convertir nivel de string a constante de logging
-            level_map = {
-                'DEBUG': logging.DEBUG,
-                'INFO': logging.INFO,
-                'WARNING': logging.WARNING,
-                'ERROR': logging.ERROR,
-                'CRITICAL': logging.CRITICAL,
-                'UI': 15  # Nivel personalizado
-            }
-            logging_level = level_map.get(logging_level_str, logging.INFO)
-            
-            # Registrar nivel UI si no existe
-            if not hasattr(logging, 'UI'):
-                logging.addLevelName(15, 'UI')
-                
-                def ui_log(self, message, *args, **kwargs):
-                    self.log(15, message, *args, **kwargs)
-                
-                logging.Logger.ui = ui_log
-            
-            # Configurar logging básico con formato colorizado
-            ColoredFormatter = ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s')
-            
-            # Handlers
-            console_handler = logging.StreamHandler()
-            console_handler.setFormatter(ColoredFormatter('%(asctime)s - %(name)s [%(levelname)s] - %(message)s'))            
-
-            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
-
-            file_handler = logging.FileHandler(log_file)
-            file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-            
-            # Configurar root logger
-            root_logger = logging.getLogger()
-            root_logger.setLevel(logging_level)
-            root_logger.handlers = []  # Eliminar handlers existentes
-            root_logger.addHandler(console_handler)
-            root_logger.addHandler(file_handler)
-            
-            # Clase para redirigir stdout/stderr con colores según el módulo
-            class ColoredLoggerWriter:
-                def __init__(self, logger, level, module_name=None):
-                    self.logger = logger
-                    self.level = level
-                    self.module_name = module_name or 'STDOUT' if level == logging.INFO else 'STDERR'
-                    self.buffer = []
-                
-                def write(self, message):
-                    if message and message.strip():
-                        # Determinar el tipo de log basado en el nivel
-                        level_name = logging.getLevelName(self.level)
-                        color = COLORS.get(level_name, COLORS['RESET'])
-                        
-                        # Log con formato específico para stdout/stderr redirigido
-                        self.logger.log(self.level, f"[{self.module_name}] {message.rstrip()}")
-                
-                def flush(self):
-                    pass
-            
-            # Redirigir stdout y stderr 
-            sys.stdout = ColoredLoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
-            sys.stderr = ColoredLoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
-            
-            logging.info(f"Sistema de logging inicializado con nivel {logging_level_str}")
-            
-        except Exception as e:
-            log_file = PROJECT_ROOT / ".content" / "logs" / "tab_manager.log"
-            # Fallback al logging básico en caso de error
-            logging.basicConfig(
-                level=logging.DEBUG,
-                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                handlers=[
-                    logging.StreamHandler(),  # Print to console
-                    logging.FileHandler(log_file)  # Log to file
-                ]
-            )
-            
-            # Clase simple para redirigir stdout/stderr
-            class LoggerWriter:
-                def __init__(self, logger, level):
-                    self.logger = logger
-                    self.level = level
-                    self.buffer = []
-                
-                def write(self, message):
-                    if message.strip():
-                        self.logger.log(self.level, message.rstrip())
-                
-                def flush(self):
-                    pass
-            
-            sys.stdout = LoggerWriter(logging.getLogger('STDOUT'), logging.INFO)
-            sys.stderr = LoggerWriter(logging.getLogger('STDERR'), logging.ERROR)
-            
-            logging.error(f"Error configurando sistema de logging avanzado: {e}. Usando configuración básica.")
-    
-    app = QApplication(sys.argv)
-    manager = TabManager(args.config_path, font_family=args.font, font_size=args.font_size)
-    manager.show()
-    sys.exit(app.exec())
 
 
 if __name__ == '__main__':
