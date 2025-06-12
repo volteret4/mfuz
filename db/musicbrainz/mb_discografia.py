@@ -186,6 +186,45 @@ def find_matching_discogs(title, artist_id, conn):
     result = cursor.fetchone()
     return result[0] if result else None
 
+def clean_duplicates(conn):
+    """Elimina duplicados basados en artist_id y mbid, manteniendo el más reciente"""
+    cursor = conn.cursor()
+    
+    # Encontrar duplicados
+    cursor.execute("""
+        SELECT artist_id, mbid, COUNT(*) as count
+        FROM musicbrainz_discography 
+        WHERE title != '__PROCESSING_COMPLETE__'
+        GROUP BY artist_id, mbid 
+        HAVING COUNT(*) > 1
+    """)
+    
+    duplicates = cursor.fetchall()
+    
+    if not duplicates:
+        print("No se encontraron duplicados")
+        return
+    
+    print(f"Encontrados {len(duplicates)} grupos de duplicados")
+    
+    for artist_id, mbid, count in duplicates:
+        # Mantener solo el más reciente
+        cursor.execute("""
+            DELETE FROM musicbrainz_discography 
+            WHERE artist_id = ? AND mbid = ? AND id NOT IN (
+                SELECT id FROM musicbrainz_discography 
+                WHERE artist_id = ? AND mbid = ? 
+                ORDER BY last_updated DESC 
+                LIMIT 1
+            )
+        """, (artist_id, mbid, artist_id, mbid))
+        
+        deleted = cursor.rowcount
+        print(f"  Eliminados {deleted} duplicados para artist_id={artist_id}, mbid={mbid}")
+    
+    conn.commit()
+
+
 def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_update=False):
     """Procesa la discografía de un artista específico"""
     cursor = conn.cursor()
@@ -193,24 +232,13 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
     # Verificar si ya tenemos datos COMPLETOS de este artista
     if not force_update:
         cursor.execute("""
-            SELECT COUNT(*) FROM musicbrainz_discography 
-            WHERE artist_id = ? AND last_updated IS NOT NULL
+            SELECT 1 FROM musicbrainz_discography 
+            WHERE artist_id = ? AND title = '__PROCESSING_COMPLETE__'
         """, (artist_id,))
         
-        existing_count = cursor.fetchone()[0]
-        
-        if existing_count > 0:
-            # Verificar si hay una marca de "procesamiento completo"
-            cursor.execute("""
-                SELECT 1 FROM musicbrainz_discography 
-                WHERE artist_id = ? AND title = '__PROCESSING_COMPLETE__'
-            """, (artist_id,))
-            
-            if cursor.fetchone():
-                print(f"  Artista {artist_name} ya procesado completamente, saltando...")
-                return True
-            else:
-                print(f"  Artista {artist_name} tiene {existing_count} entries pero procesamiento incompleto, reprocesando...")
+        if cursor.fetchone():
+            print(f"  Artista {artist_name} ya procesado completamente, saltando...")
+            return True
     
     # Determinar MBID del artista
     mb_artist_id = artist_mbid
@@ -246,12 +274,17 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
     
     print(f"  Encontrados {len(release_groups)} release groups")
     
-    # Limpiar datos anteriores incompletos de este artista
-    cursor.execute("DELETE FROM musicbrainz_discography WHERE artist_id = ?", (artist_id,))
+    # Obtener MBIDs ya existentes para este artista
+    cursor.execute("""
+        SELECT mbid FROM musicbrainz_discography 
+        WHERE artist_id = ? AND title != '__PROCESSING_COMPLETE__'
+    """, (artist_id,))
+    existing_mbids = {row[0] for row in cursor.fetchall()}
     
     # Procesar cada release group
     processed = 0
     failed = 0
+    new_releases = 0
     
     for rg in release_groups:
         try:
@@ -261,11 +294,16 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
             secondary_types = ', '.join(rg.get('secondary-types', []))
             first_release_date = rg.get('first-release-date', '')
             
+            # Solo procesar si no existe ya
+            if mbid in existing_mbids:
+                processed += 1
+                continue
+            
             # Buscar coincidencias en tablas locales
             album_id = find_matching_album(title, artist_id, conn)
             discogs_id = find_matching_discogs(title, artist_id, conn)
             
-            # Insertar
+            # Insertar nuevo release
             cursor.execute("""
                 INSERT INTO musicbrainz_discography 
                 (artist_id, album_id, discogs_discography_id, mbid, title, 
@@ -275,6 +313,7 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
                   primary_type, first_release_date, secondary_types))
             
             processed += 1
+            new_releases += 1
             
         except Exception as e:
             print(f"    Error procesando release group {rg.get('title', 'Unknown')}: {e}")
@@ -283,7 +322,13 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
     
     # Solo marcar como completado si se procesaron exitosamente todos o la mayoría
     if failed == 0 or (processed > 0 and failed / (processed + failed) < 0.1):
-        # Insertar marca de procesamiento completo
+        # Eliminar marca anterior de procesamiento completo si existe
+        cursor.execute("""
+            DELETE FROM musicbrainz_discography 
+            WHERE artist_id = ? AND title = '__PROCESSING_COMPLETE__'
+        """, (artist_id,))
+        
+        # Insertar nueva marca de procesamiento completo
         cursor.execute("""
             INSERT INTO musicbrainz_discography 
             (artist_id, album_id, discogs_discography_id, mbid, title, 
@@ -292,7 +337,7 @@ def process_artist_discography(artist_id, artist_name, artist_mbid, conn, force_
         """, (artist_id, 'processing-complete', '__PROCESSING_COMPLETE__'))
         
         conn.commit()
-        print(f"  Procesados {processed} release groups para {artist_name} (completo)")
+        print(f"  Procesados {processed} release groups para {artist_name} ({new_releases} nuevos)")
         return True
     else:
         # No marcar como completo si hubo muchos errores
@@ -347,6 +392,7 @@ def main(config=None):
     force_update = config.get('force_update', False)
     artist_limit = config.get('artist_limit', None)
     interactive = config.get('interactive', True)
+    clean_existing_duplicates = config.get('clean_duplicates', True)
     
     # Nueva configuración para artistas a omitir
     skip_artists = config.get('skip_artists', [
@@ -378,17 +424,16 @@ def main(config=None):
     conn = sqlite3.connect(db_path)
     
     try:
+        # Limpiar duplicados existentes si se solicita
+        if clean_existing_duplicates:
+            print("\n=== Limpiando duplicados existentes ===")
+            clean_duplicates(conn)
+        
         # Obtener artistas (ahora con filtro)
         artists = get_artists_to_process(conn, artist_limit, skip_artists)
         total_artists = len(artists)
         
         print(f"\nEncontrados {total_artists} artistas para procesar (después de filtros)")
-        
-        # if interactive and total_artists > 10:
-        #     response = input(f"¿Procesar {total_artists} artistas? (y/N): ")
-        #     if response.lower() != 'y':
-        #         print("Cancelado por el usuario")
-        #         return 0
         
         # Procesar cada artista
         success_count = 0

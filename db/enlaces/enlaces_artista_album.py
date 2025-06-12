@@ -1362,8 +1362,8 @@ class MusicLinksManager:
         conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
-        # Actualizar MBID de artistas
-        c.execute("SELECT id, name FROM artists WHERE mbid IS NULL")
+        # Actualizar MBID de artistas - agregar filtro para nombres válidos
+        c.execute("SELECT id, name FROM artists WHERE mbid IS NULL AND name IS NOT NULL AND TRIM(name) != ''")
         artists_without_mbid = c.fetchall()
         
         self.logger.info(f"Processing {len(artists_without_mbid)} artists without MBID")
@@ -1371,9 +1371,14 @@ class MusicLinksManager:
         for i, (artist_id, artist_name) in enumerate(artists_without_mbid):
             try:
                 if i % 10 == 0:
-                    self.logger.info(f"Processing artist {i+1}/{len(artists_without_mbid)}")
+                    self.logger.info(f"Processing artist {i+1}/{len(artists_without_mbid)}: '{artist_name}'")
+                
+                # Validación adicional para asegurar que el nombre no está vacío
+                if not artist_name or not artist_name.strip():
+                    self.logger.warning(f"Skipping artist with ID {artist_id} - empty or null name")
+                    continue
                     
-                mbid = self._get_musicbrainz_artist_mbid(artist_name)
+                mbid = self._get_musicbrainz_artist_mbid(artist_name.strip())
                 if mbid:
                     c.execute("UPDATE artists SET mbid = ? WHERE id = ?", (mbid, artist_id))
                     conn.commit()
@@ -1388,12 +1393,14 @@ class MusicLinksManager:
                 # Still respect rate limiting on errors
                 time.sleep(1.1)
 
-        # Actualizar MBID de álbumes
+        # Actualizar MBID de álbumes - agregar filtros similares
         c.execute("""
             SELECT albums.id, albums.name, artists.name 
             FROM albums 
             JOIN artists ON albums.artist_id = artists.id 
-            WHERE albums.mbid IS NULL
+            WHERE albums.mbid IS NULL 
+            AND albums.name IS NOT NULL AND TRIM(albums.name) != ''
+            AND artists.name IS NOT NULL AND TRIM(artists.name) != ''
         """)
         albums_without_mbid = c.fetchall()
         
@@ -1402,9 +1409,14 @@ class MusicLinksManager:
         for i, (album_id, album_name, artist_name) in enumerate(albums_without_mbid):
             try:
                 if i % 10 == 0:
-                    self.logger.info(f"Processing album {i+1}/{len(albums_without_mbid)}")
+                    self.logger.info(f"Processing album {i+1}/{len(albums_without_mbid)}: '{album_name}' by '{artist_name}'")
+                
+                # Validación adicional
+                if not album_name or not album_name.strip() or not artist_name or not artist_name.strip():
+                    self.logger.warning(f"Skipping album with ID {album_id} - empty or null name")
+                    continue
                     
-                mbid = self._get_musicbrainz_album_mbid(artist_name, album_name)
+                mbid = self._get_musicbrainz_album_mbid(artist_name.strip(), album_name.strip())
                 if mbid:
                     c.execute("UPDATE albums SET mbid = ? WHERE id = ?", (mbid, album_id))
                     conn.commit()
@@ -1419,11 +1431,13 @@ class MusicLinksManager:
                 # Still respect rate limiting on errors
                 time.sleep(1.1)
 
-        # Actualizar MBID de canciones
+        # Actualizar MBID de canciones - agregar filtros similares
         c.execute("""
             SELECT id, title, artist, album 
             FROM songs 
             WHERE mbid IS NULL
+            AND title IS NOT NULL AND TRIM(title) != ''
+            AND artist IS NOT NULL AND TRIM(artist) != ''
         """)
         songs_without_mbid = c.fetchall()
         
@@ -1432,9 +1446,14 @@ class MusicLinksManager:
         for i, (song_id, title, artist, album) in enumerate(songs_without_mbid):
             try:
                 if i % 20 == 0:
-                    self.logger.info(f"Processing song {i+1}/{len(songs_without_mbid)}")
+                    self.logger.info(f"Processing song {i+1}/{len(songs_without_mbid)}: '{title}' by '{artist}'")
+                
+                # Validación adicional
+                if not title or not title.strip() or not artist or not artist.strip():
+                    self.logger.warning(f"Skipping song with ID {song_id} - empty or null title/artist")
+                    continue
                     
-                mbid = self._get_musicbrainz_recording_mbid(artist, title, album)
+                mbid = self._get_musicbrainz_recording_mbid(artist.strip(), title.strip(), album.strip() if album else None)
                 if mbid:
                     c.execute("UPDATE songs SET mbid = ? WHERE id = ?", (mbid, song_id))
                     conn.commit()
@@ -1470,18 +1489,27 @@ class MusicLinksManager:
         for table, count in mbids_found.items():
             self.logger.info(f"{table.capitalize()}: {count}")
 
-    # Update the _get_musicbrainz_artist_mbid function
     def _get_musicbrainz_artist_mbid(self, artist_name: str) -> Optional[str]:
-        """Obtiene el MBID de un artista desde MusicBrainz"""
+        """Obtiene el MBID de un artista desde MusicBrainz con filtro más estricto"""
         if 'musicbrainz' in self.disabled_services:
+            return None
+        
+        # Validación de entrada
+        if not artist_name or not artist_name.strip():
+            self.logger.warning("Empty or null artist name provided to _get_musicbrainz_artist_mbid")
             return None
         
         try:
             # Use proper sanitization for the artist name
-            safe_artist_name = artist_name.replace('"', '')
+            safe_artist_name = artist_name.strip().replace('"', '')
+            
+            # Verificar que no esté vacío después de limpiar
+            if not safe_artist_name:
+                self.logger.warning(f"Artist name became empty after sanitization: '{artist_name}'")
+                return None
             
             # More specific search query
-            result = musicbrainzngs.search_artists(artist=safe_artist_name, strict=False, limit=5)
+            result = musicbrainzngs.search_artists(artist=safe_artist_name, strict=False, limit=10)
             
             if result and 'artist-list' in result and len(result['artist-list']) > 0:
                 # Score the results to find best match
@@ -1493,30 +1521,199 @@ class MusicLinksManager:
                         continue
                         
                     result_name = artist['name']
-                    # Calculate similarity score
-                    score = self._similar_names_score(artist_name, result_name)
+                    # Calculate similarity score with stricter criteria
+                    score = self._calculate_strict_artist_score(artist_name, result_name)
+                    
+                    # Log for debugging
+                    self.logger.debug(f"Comparing '{artist_name}' vs '{result_name}': score {score}")
                     
                     # If we have a good enough match, use it
                     if score > best_score:
                         best_score = score
                         best_match = artist
                 
-                # If we have a good match, return the ID
-                if best_match and best_score > 0.7:
+                # Usar umbral más estricto para artistas (0.85 en lugar de 0.7)
+                if best_match and best_score >= 0.85:
                     self.logger.info(f"Found MBID for '{artist_name}': {best_match['id']} (score: {best_score})")
                     return best_match['id']
-                elif best_match:
-                    self.logger.info(f"Found possible MBID for '{artist_name}': {best_match['id']} (low score: {best_score})")
-                    return best_match['id']
-                    
+                else:
+                    self.logger.debug(f"No suitable MBID found for '{artist_name}' (best score: {best_score})")
+                        
             # If no good match found, log this information
-            self.logger.warning(f"No MBID found for artist: {artist_name}")
+            self.logger.debug(f"No MBID found for artist: {artist_name}")
             return None
         except Exception as e:
             self.logger.error(f"MusicBrainz artist MBID search error for {artist_name}: {str(e)}")
             # Add a sleep to respect rate limiting even on errors
             time.sleep(1.1)
             return None
+
+    def _calculate_strict_artist_score(self, query_name, result_name):
+        """Calcula puntuación estricta para coincidencia de artistas"""
+        from difflib import SequenceMatcher
+        
+        # Normalizar nombres
+        query_norm = self._normalize_name(query_name)
+        result_norm = self._normalize_name(result_name)
+        
+        # Si son exactamente iguales, puntuación perfecta
+        if query_norm == result_norm:
+            return 1.0
+        
+        # Verificar si uno está completamente contenido en el otro
+        # Solo dar puntuación alta si la diferencia es pequeña
+        if query_norm in result_norm:
+            # Penalizar si el resultado es mucho más largo que la consulta
+            length_ratio = len(query_norm) / len(result_norm)
+            if length_ratio > 0.7:  # Si la consulta es al menos 70% del resultado
+                return 0.9
+            else:
+                return 0.5  # Penalizar mucho si hay demasiada diferencia
+        
+        if result_norm in query_norm:
+            length_ratio = len(result_norm) / len(query_norm)
+            if length_ratio > 0.7:
+                return 0.9
+            else:
+                return 0.5
+        
+        # Usar SequenceMatcher para similitud general
+        base_score = SequenceMatcher(None, query_norm, result_norm).ratio()
+        
+        # Verificar coincidencia de palabras completas
+        query_words = set(query_norm.split())
+        result_words = set(result_norm.split())
+        
+        # Si no hay palabras en común, penalizar mucho
+        common_words = query_words.intersection(result_words)
+        if not common_words:
+            return min(base_score * 0.3, 0.4)  # Máximo 0.4 si no hay palabras comunes
+        
+        # Calcular ratio de palabras comunes
+        word_coverage = len(common_words) / len(query_words)
+        
+        # Para nombres cortos (1-2 palabras), requerir coincidencia completa
+        if len(query_words) <= 2:
+            if word_coverage < 1.0:  # No todas las palabras coinciden
+                return min(base_score * 0.5, 0.6)
+        
+        # Bonus por coincidencia de palabras, pero no demasiado
+        word_bonus = word_coverage * 0.2
+        final_score = min(base_score + word_bonus, 1.0)
+        
+        return final_score
+
+
+    def _get_musicbrainz_album_mbid(self, artist_name: str, album_name: str) -> Optional[str]:
+        """Obtiene el MBID de un álbum desde MusicBrainz con filtro más estricto"""
+        if 'musicbrainz' in self.disabled_services:
+            return None
+        
+        try:
+            # Use proper sanitization
+            safe_artist_name = artist_name.replace('"', '')
+            safe_album_name = album_name.replace('"', '')
+            
+            # Search for releases with both artist and album name
+            result = musicbrainzngs.search_releases(
+                artist=safe_artist_name, 
+                release=safe_album_name,
+                strict=False,
+                limit=15
+            )
+            
+            if result and 'release-list' in result and len(result['release-list']) > 0:
+                # Score the results to find best match
+                best_match = None
+                best_score = 0
+                
+                for release in result['release-list']:
+                    if 'id' not in release or 'title' not in release or 'artist-credit' not in release:
+                        continue
+                        
+                    release_title = release['title']
+                    
+                    # Extract artist name from artist-credit
+                    release_artist = ""
+                    for credit in release['artist-credit']:
+                        if isinstance(credit, dict) and 'artist' in credit and 'name' in credit['artist']:
+                            release_artist = credit['artist']['name']
+                            break
+                    
+                    if not release_artist:
+                        continue
+                    
+                    # Calculate similarity scores con criterios más estrictos
+                    title_score = self._calculate_strict_title_score(album_name, release_title)
+                    artist_score = self._calculate_strict_artist_score(artist_name, release_artist)
+                    
+                    # Combined score with more weight on both being good
+                    # Requerir que ambos scores sean razonablemente altos
+                    if artist_score < 0.6 or title_score < 0.6:
+                        combined_score = 0.0  # Rechazar si cualquiera es muy bajo
+                    else:
+                        combined_score = (title_score * 0.6) + (artist_score * 0.4)
+                    
+                    self.logger.debug(f"Album comparison: '{album_name}' vs '{release_title}' by '{artist_name}' vs '{release_artist}': title={title_score:.2f}, artist={artist_score:.2f}, combined={combined_score:.2f}")
+                    
+                    if combined_score > best_score:
+                        best_score = combined_score
+                        best_match = release
+                
+                # Usar umbral más estricto para álbumes (0.8 en lugar de 0.7)
+                if best_match and best_score >= 0.8:
+                    self.logger.info(f"Found MBID for album '{album_name}' by '{artist_name}': {best_match['id']} (score: {best_score})")
+                    return best_match['id']
+                else:
+                    self.logger.info(f"No suitable album MBID found for '{album_name}' by '{artist_name}' (best score: {best_score})")
+                    
+            self.logger.warning(f"No MBID found for album: {album_name} by {artist_name}")
+            return None
+        except Exception as e:
+            self.logger.error(f"MusicBrainz album MBID search error for {album_name}: {str(e)}")
+            # Add a sleep to respect rate limiting even on errors
+            time.sleep(1.1)
+            return None 
+
+
+    def _calculate_strict_title_score(self, query_title, result_title):
+        """Calcula puntuación estricta para coincidencia de títulos de álbum"""
+        from difflib import SequenceMatcher
+        
+        # Normalizar títulos
+        query_norm = self._normalize_name(query_title)
+        result_norm = self._normalize_name(result_title)
+        
+        # Si son exactamente iguales, puntuación perfecta
+        if query_norm == result_norm:
+            return 1.0
+        
+        # Para títulos, ser más estricto con la longitud
+        if query_norm in result_norm:
+            length_ratio = len(query_norm) / len(result_norm)
+            if length_ratio > 0.8:  # Más estricto para títulos
+                return 0.95
+            elif length_ratio > 0.6:
+                return 0.8
+            else:
+                return 0.4
+        
+        if result_norm in query_norm:
+            length_ratio = len(result_norm) / len(query_norm)
+            if length_ratio > 0.8:
+                return 0.95
+            elif length_ratio > 0.6:
+                return 0.8
+            else:
+                return 0.4
+        
+        # Usar SequenceMatcher
+        base_score = SequenceMatcher(None, query_norm, result_norm).ratio()
+        
+        # Para títulos, la similitud secuencial es más importante
+        return base_score
+
+
 
 # Add a helper function to calculate similarity score
     def _similar_names_score(self, name1, name2):
@@ -1554,78 +1751,9 @@ class MusicLinksManager:
         
         return name
 
-   # Update the _get_musicbrainz_album_mbid function
-    def _get_musicbrainz_album_mbid(self, artist_name: str, album_name: str) -> Optional[str]:
-        """Obtiene el MBID de un álbum desde MusicBrainz"""
-        if 'musicbrainz' in self.disabled_services:
-            return None
-        
-        try:
-            # Use proper sanitization
-            safe_artist_name = artist_name.replace('"', '')
-            safe_album_name = album_name.replace('"', '')
-            
-            # Search for releases with both artist and album name
-            result = musicbrainzngs.search_releases(
-                artist=safe_artist_name, 
-                release=safe_album_name,
-                strict=False,
-                limit=10
-            )
-            
-            if result and 'release-list' in result and len(result['release-list']) > 0:
-                # Score the results to find best match
-                best_match = None
-                best_score = 0
-                
-                for release in result['release-list']:
-                    if 'id' not in release or 'title' not in release or 'artist-credit' not in release:
-                        continue
-                        
-                    release_title = release['title']
-                    
-                    # Extract artist name from artist-credit
-                    release_artist = ""
-                    for credit in release['artist-credit']:
-                        if isinstance(credit, dict) and 'artist' in credit and 'name' in credit['artist']:
-                            release_artist = credit['artist']['name']
-                            break
-                    
-                    if not release_artist:
-                        continue
-                    
-                    # Calculate similarity scores
-                    title_score = self._similar_names_score(album_name, release_title)
-                    artist_score = self._similar_names_score(artist_name, release_artist)
-                    
-                    # Combined score with more weight on artist match
-                    combined_score = (title_score * 0.6) + (artist_score * 0.4)
-                    
-                    if combined_score > best_score:
-                        best_score = combined_score
-                        best_match = release
-                
-                # If we have a good match, return the ID
-                if best_match and best_score > 0.7:
-                    self.logger.info(f"Found MBID for album '{album_name}' by '{artist_name}': {best_match['id']} (score: {best_score})")
-                    return best_match['id']
-                elif best_match:
-                    self.logger.info(f"Found possible MBID for album '{album_name}': {best_match['id']} (low score: {best_score})")
-                    return best_match['id']
-                    
-            self.logger.warning(f"No MBID found for album: {album_name} by {artist_name}")
-            return None
-        except Exception as e:
-            self.logger.error(f"MusicBrainz album MBID search error for {album_name}: {str(e)}")
-            # Add a sleep to respect rate limiting even on errors
-            time.sleep(1.1)
-            return None
 
-
-
-    # Update the _get_musicbrainz_recording_mbid function
     def _get_musicbrainz_recording_mbid(self, artist: str, title: str, album: str) -> Optional[str]:
-        """Obtiene el MBID de una grabación desde MusicBrainz"""
+        """Obtiene el MBID de una grabación desde MusicBrainz con filtro más estricto"""
         if 'musicbrainz' in self.disabled_services:
             return None
         
@@ -1643,7 +1771,7 @@ class MusicLinksManager:
             query = ' AND '.join(query_parts)
             
             # Search with the combined query
-            result = musicbrainzngs.search_recordings(query=query, limit=5)
+            result = musicbrainzngs.search_recordings(query=query, limit=10)
             
             if result and 'recording-list' in result and len(result['recording-list']) > 0:
                 # Score the results to find best match
@@ -1667,25 +1795,28 @@ class MusicLinksManager:
                     if not recording_artist:
                         continue
                     
-                    # Calculate similarity scores
-                    title_score = self._similar_names_score(title, recording_title)
-                    artist_score = self._similar_names_score(artist, recording_artist)
+                    # Calculate similarity scores con criterios más estrictos
+                    title_score = self._calculate_strict_title_score(title, recording_title)
+                    artist_score = self._calculate_strict_artist_score(artist, recording_artist)
                     
-                    # Combined score with more weight on title match for recordings
-                    combined_score = (title_score * 0.7) + (artist_score * 0.3)
+                    # Para grabaciones, el título es más importante
+                    # Requerir que ambos scores sean buenos
+                    if artist_score < 0.6 or title_score < 0.7:
+                        combined_score = 0.0
+                    else:
+                        combined_score = (title_score * 0.7) + (artist_score * 0.3)
                     
                     if combined_score > best_score:
                         best_score = combined_score
                         best_match = recording
                 
-                # If we have a good match, return the ID
-                if best_match and best_score > 0.7:
+                # Usar umbral más estricto para grabaciones (0.8)
+                if best_match and best_score >= 0.8:
                     self.logger.info(f"Found recording MBID for '{title}' by '{artist}': {best_match['id']} (score: {best_score})")
                     return best_match['id']
-                elif best_match:
-                    self.logger.info(f"Found possible recording MBID for '{title}': {best_match['id']} (low score: {best_score})")
-                    return best_match['id']
-            
+                else:
+                    self.logger.info(f"No suitable recording MBID found for '{title}' by '{artist}' (best score: {best_score})")
+                
             self.logger.warning(f"No recording MBID found for: {title} by {artist}")
             return None
         except Exception as e:

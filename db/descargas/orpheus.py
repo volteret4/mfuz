@@ -24,15 +24,14 @@ class OrpheusTorrentsModule:
         self.authenticated = False
         
         # Configuración por defecto
+        self.db_path = self.config.get('db_path', '')
         self.orpheus_url = self.config.get('orpheus_url', 'https://orpheus.network')
         self.username = self.config.get('orpheus_username', '')
         self.password = self.config.get('orpheus_password', '')
         self.api_token = self.config.get('orpheus_api_token', '')
-       
-        self.rate_limit = self.config.get('rate_limit', 2.1)
+        self.rate_limit = self.config.get('rate_limit', 2.1)  # Respetando el límite de 5 req/10s
         self.force_update = self.config.get('force_update', False)
-        self.limit = self.config.get('limit', 0)
-        self.db_path = self.config.get('db_path', '')
+        self.limit = self.config.get('limit', 0)  # 0 = sin límite
         
         self.last_request_time = 0
         
@@ -124,44 +123,53 @@ class OrpheusTorrentsModule:
         except json.JSONDecodeError as e:
             self.logger.error(f"Error al decodificar JSON para artista {artist_name}: {e}")
             return None
+    def search_artist_torrents(self, artist_name):
+        """Busca todos los torrents disponibles para un artista en Orpheus"""
+        if not self.authenticated:
+            if not self.authenticate():
+                return None
 
-    def search_artist_general(self, artist_name):
-        """Búsqueda general de artista como fallback"""
+        self.rate_limit_request()
+        
         search_url = f"{self.orpheus_url}/ajax.php"
         params = {
             'action': 'browse',
-            'searchstr': artist_name,
-            'filter_cat[1]': 1  # Solo música
+            'searchstr': artist_name
         }
         
         try:
             response = self.session.get(search_url, params=params)
             response.raise_for_status()
+            
             data = response.json()
             
             if data.get('status') == 'success':
                 return data.get('response', {})
-            return None
+            else:
+                self.logger.warning(f"Búsqueda sin resultados para artista: {artist_name}")
+                return None
                 
-        except Exception as e:
-            self.logger.error(f"Error en búsqueda general para {artist_name}: {e}")
+        except requests.exceptions.RequestException as e:
+            self.logger.error(f"Error en la petición para {artist_name}: {e}")
+            return None
+        except json.JSONDecodeError as e:
+            self.logger.error(f"Error al decodificar JSON para {artist_name}: {e}")
             return None
 
+
     def get_artists_to_search(self):
-        """Obtiene artistas únicos de musicbrainz_discography para buscar su discografía"""
+        """Obtiene artistas únicos de musicbrainz_discography para buscar"""
         query = """
         SELECT DISTINCT 
-            a.id as artist_id,
-            a.name as artist_name,
-            COUNT(md.id) as album_count
-        FROM artists a
-        JOIN musicbrainz_discography md ON a.id = md.artist_id
-        LEFT JOIN orpheus_torrents ot ON a.id = ot.artist_id
+            md.artist_id,
+            a.name as artist_name
+        FROM musicbrainz_discography md
+        JOIN artists a ON md.artist_id = a.id
+        LEFT JOIN orpheus_torrents ot ON md.artist_id = ot.artist_id
         WHERE (ot.id IS NULL OR ?) 
             AND a.name IS NOT NULL
-            AND a.name != ''
-        GROUP BY a.id, a.name
-        ORDER BY album_count DESC, a.name
+            AND a.name NOT IN ('various artists', 'varios artistas', 'v.a.', 'compilation')
+        ORDER BY a.name
         """
         
         with self.get_db_connection() as conn:
@@ -170,6 +178,7 @@ class OrpheusTorrentsModule:
             
         self.logger.info(f"Encontrados {len(results)} artistas para buscar")
         return results
+
 
     def get_artist_albums_from_db(self, artist_id):
         """Obtiene todos los álbumes de un artista desde musicbrainz_discography"""
@@ -264,6 +273,7 @@ class OrpheusTorrentsModule:
         
         return best_match
 
+
     def create_orpheus_torrents_table(self):
         """Crea la tabla para almacenar información de torrents de Orpheus"""
         create_table_sql = """
@@ -271,6 +281,7 @@ class OrpheusTorrentsModule:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             artist_id INTEGER,
             album_id INTEGER,
+            musicbrainz_discography_id INTEGER,
             artist_name TEXT,
             album_name TEXT,
             torrent_name TEXT,
@@ -296,7 +307,8 @@ class OrpheusTorrentsModule:
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (artist_id) REFERENCES artists (id),
             FOREIGN KEY (album_id) REFERENCES albums (id),
-            UNIQUE(torrent_id, group_id)
+            FOREIGN KEY (musicbrainz_discography_id) REFERENCES musicbrainz_discography (id),
+            UNIQUE(torrent_id)
         )
         """
         
@@ -358,9 +370,113 @@ class OrpheusTorrentsModule:
         
         return base_url
 
-   
-    def save_torrent_data(self, artist_id, album_id, artist_name, album_name, search_results):
-        """Guarda los datos de torrents encontrados - versión optimizada"""
+    def find_matching_albums(self, artist_id, orpheus_album_name, orpheus_year):
+        """Encuentra álbumes coincidentes en musicbrainz_discography y albums"""
+        import re
+        
+        def normalize_title(title):
+            """Normaliza título para comparación"""
+            if not title:
+                return ""
+            # Convertir a minúsculas, quitar acentos y caracteres especiales
+            normalized = re.sub(r'[^\w\s]', '', title.lower())
+            normalized = re.sub(r'\s+', ' ', normalized).strip()
+            return normalized
+        
+        orpheus_normalized = normalize_title(orpheus_album_name)
+        
+        with self.get_db_connection() as conn:
+            # Buscar en musicbrainz_discography con diferentes niveles de coincidencia
+            mb_query = """
+            SELECT id, album_id, title, first_release_date
+            FROM musicbrainz_discography 
+            WHERE artist_id = ?
+            ORDER BY 
+                CASE 
+                    WHEN LOWER(title) = LOWER(?) THEN 1
+                    WHEN LOWER(title) LIKE LOWER(?) THEN 2
+                    ELSE 3
+                END,
+                ABS(CAST(SUBSTR(first_release_date, 1, 4) AS INTEGER) - ?) ASC
+            """
+            
+            cursor = conn.execute(mb_query, (
+                artist_id, 
+                orpheus_album_name, 
+                f"%{orpheus_album_name}%",
+                orpheus_year or 0
+            ))
+            mb_results = cursor.fetchall()
+            
+            # Buscar en albums también
+            album_query = """
+            SELECT id, name, year
+            FROM albums 
+            WHERE artist_id = ?
+            ORDER BY 
+                CASE 
+                    WHEN LOWER(name) = LOWER(?) THEN 1
+                    WHEN LOWER(name) LIKE LOWER(?) THEN 2
+                    ELSE 3
+                END,
+                ABS(COALESCE(CAST(year AS INTEGER), 0) - ?) ASC
+            """
+            
+            cursor = conn.execute(album_query, (
+                artist_id, 
+                orpheus_album_name, 
+                f"%{orpheus_album_name}%",
+                orpheus_year or 0
+            ))
+            album_results = cursor.fetchall()
+            
+        # Encontrar la mejor coincidencia
+        mb_discography_id = None
+        album_id = None
+        
+        # Buscar en musicbrainz_discography
+        for mb_id, mb_album_id, mb_title, mb_date in mb_results:
+            mb_normalized = normalize_title(mb_title)
+            
+            # Coincidencia exacta
+            if mb_normalized == orpheus_normalized:
+                mb_discography_id = mb_id
+                if mb_album_id:
+                    album_id = mb_album_id
+                break
+            
+            # Coincidencia parcial con umbral de similitud
+            if (orpheus_normalized in mb_normalized or 
+                mb_normalized in orpheus_normalized):
+                # Verificar que la similitud sea razonable
+                similarity = len(set(orpheus_normalized.split()) & set(mb_normalized.split()))
+                if similarity >= 1:  # Al menos una palabra en común
+                    mb_discography_id = mb_id
+                    if mb_album_id:
+                        album_id = mb_album_id
+                    break
+        
+        # Si no encontramos album_id desde musicbrainz_discography, buscar en albums directamente
+        if not album_id:
+            for alb_id, alb_name, alb_year in album_results:
+                alb_normalized = normalize_title(alb_name)
+                
+                if alb_normalized == orpheus_normalized:
+                    album_id = alb_id
+                    break
+                    
+                if (orpheus_normalized in alb_normalized or 
+                    alb_normalized in orpheus_normalized):
+                    similarity = len(set(orpheus_normalized.split()) & set(alb_normalized.split()))
+                    if similarity >= 1:
+                        album_id = alb_id
+                        break
+            
+        return mb_discography_id, album_id   
+
+
+    def save_torrent_data(self, artist_id, artist_name, search_results):
+        """Guarda los datos de torrents encontrados para un artista"""
         if not search_results or 'results' not in search_results:
             return 0
             
@@ -368,61 +484,89 @@ class OrpheusTorrentsModule:
         
         with self.get_db_connection() as conn:
             for result in search_results['results']:
-                group_info = result.get('group', {})
+                # En la API de Gazelle, la estructura puede variar
+                # Intentar obtener group_id de diferentes ubicaciones
+                group_id = None
+                group_info = {}
                 
-                # Información del grupo/álbum
-                group_id = group_info.get('groupId')
-                if not group_id:
-                    group_id = result.get('groupId') or result.get('group_id')
+                if 'groupId' in result:
+                    group_id = result['groupId']
+                    group_info = result
+                elif 'group' in result:
+                    group_info = result['group']
+                    group_id = group_info.get('groupId') or group_info.get('id')
                 
                 if not group_id:
-                    self.logger.warning(f"No se pudo obtener group_id para {artist_name} - {album_name}")
+                    self.logger.warning(f"No se pudo obtener group_id para resultado: {result.keys()}")
                     continue
                 
-                group_name = group_info.get('groupName', album_name)  # Usar album_name como fallback
-                group_year = group_info.get('groupYear', 0)
-                record_label = group_info.get('recordLabel', '')
-                catalogue_number = group_info.get('catalogueNumber', '')
+                # Información del grupo/álbum
+                group_name = group_info.get('groupName', '') or group_info.get('name', '')
+                group_year = group_info.get('groupYear', 0) or group_info.get('year', 0)
+                record_label = group_info.get('recordLabel', '') or group_info.get('label', '')
+                catalogue_number = group_info.get('catalogueNumber', '') or group_info.get('catNumber', '')
+                
+                # Buscar coincidencias en nuestras tablas
+                mb_discography_id, album_id = self.find_matching_albums(
+                    artist_id, group_name, group_year
+                )
+                
+                # Los torrents pueden estar en 'torrents' o directamente en el resultado
+                torrents_list = []
+                if 'torrents' in result:
+                    torrents_list = result['torrents']
+                elif 'torrent' in result:
+                    torrents_list = [result['torrent']]
+                else:
+                    # Si no hay lista de torrents, tratar el resultado como un torrent individual
+                    torrents_list = [result]
                 
                 # Procesar cada torrent en el grupo
-                torrents = result.get('torrents', [])
-                if not torrents:
-                    # Si no hay lista de torrents, crear una entrada básica
-                    torrents = [result] if result.get('torrentId') else []
-                
-                for torrent in torrents:
-                    torrent_id = torrent.get('torrentId')
+                for torrent in torrents_list:
+                    torrent_id = torrent.get('torrentId') or torrent.get('id')
                     
                     if not torrent_id:
+                        self.logger.warning(f"No se pudo obtener torrent_id para: {torrent.keys()}")
                         continue
-                    
-                    torrent_size = torrent.get('size', 0)
+                        
+                    # Verificar si ya existe este torrent
+                    cursor = conn.execute(
+                        "SELECT id FROM orpheus_torrents WHERE torrent_id = ?", 
+                        (torrent_id,)
+                    )
+                    if cursor.fetchone() and not self.force_update:
+                        continue
+                        
+                    # URL del post y del torrent
                     post_url = f"{self.orpheus_url}/torrents.php?id={group_id}"
-                    torrent_url = self.build_torrent_download_url(torrent_id, torrent_size)
+                    torrent_url = f"{self.orpheus_url}/torrents.php?action=download&id={torrent_id}"
                     
-                    torrent_name = f"{artist_name} - {group_name} ({group_year}) [{torrent.get('format', '')} {torrent.get('encoding', '')}]"
+                    # Nombre del torrent
+                    format_str = torrent.get('format', '') or torrent.get('encoding', '')
+                    encoding_str = torrent.get('encoding', '') or torrent.get('bitrate', '')
+                    torrent_name = f"{artist_name} - {group_name} ({group_year}) [{format_str} {encoding_str}]".strip()
                     
                     insert_sql = """
                     INSERT OR REPLACE INTO orpheus_torrents (
-                        artist_id, album_id, artist_name, album_name,
-                        torrent_name, torrent_id, group_id,
-                        post_url, torrent_url,
+                        artist_id, album_id, musicbrainz_discography_id,
+                        artist_name, album_name, torrent_name, 
+                        torrent_id, group_id, post_url, torrent_url,
                         media, format, encoding, size,
                         seeders, leechers, snatched,
                         year, record_label, catalogue_number,
                         scene, has_log, has_cue, log_score, freeTorrent,
                         last_updated
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """
                     
                     values = (
-                        artist_id, album_id, artist_name, album_name,
-                        torrent_name, torrent_id, group_id,
-                        post_url, torrent_url,
+                        artist_id, album_id, mb_discography_id,
+                        artist_name, group_name, torrent_name,
+                        torrent_id, group_id, post_url, torrent_url,
                         torrent.get('media', ''),
                         torrent.get('format', ''),
                         torrent.get('encoding', ''),
-                        torrent_size,
+                        torrent.get('size', 0),
                         torrent.get('seeders', 0),
                         torrent.get('leechers', 0),
                         torrent.get('snatched', 0),
@@ -440,13 +584,61 @@ class OrpheusTorrentsModule:
                     try:
                         conn.execute(insert_sql, values)
                         saved_count += 1
-                        self.logger.debug(f"Guardado torrent {torrent_id} para {artist_name} - {album_name}")
+                        
+                        self.logger.debug(f"Guardado torrent {torrent_id} para {group_name} (group_id: {group_id})")
+                        
+                        if mb_discography_id:
+                            self.logger.debug(f"Mapeado torrent {torrent_id} con musicbrainz_discography.id={mb_discography_id}")
+                        if album_id:
+                            self.logger.debug(f"Mapeado torrent {torrent_id} con albums.id={album_id}")
+                            
                     except sqlite3.Error as e:
                         self.logger.error(f"Error al guardar torrent {torrent_id}: {e}")
                         
             conn.commit()
             
         return saved_count
+
+    def process_artists(self):
+        """Procesa todos los artistas y busca sus torrents disponibles"""
+        artists = self.get_artists_to_search()
+        
+        if not artists:
+            self.logger.info("No hay artistas para procesar")
+            return
+            
+        # Aplicar límite si está configurado
+        if self.limit > 0:
+            artists = artists[:self.limit]
+            self.logger.info(f"Limitando búsqueda a {self.limit} artistas")
+            
+        total_found = 0
+        processed = 0
+        
+        for artist in artists:
+            artist_id, artist_name = artist
+            
+            self.logger.info(f"Buscando torrents para: {artist_name}")
+            
+            search_results = self.search_artist_torrents(artist_name)
+            
+            if search_results:
+                saved = self.save_torrent_data(artist_id, artist_name, search_results)
+                total_found += saved
+                if saved > 0:
+                    self.logger.info(f"Encontrados {saved} torrents para {artist_name}")
+                else:
+                    self.logger.info(f"Sin torrents nuevos para {artist_name}")
+            else:
+                self.logger.info(f"Sin resultados en Orpheus para {artist_name}")
+            
+            processed += 1
+            
+            if processed % 10 == 0:
+                self.logger.info(f"Progreso: {processed}/{len(artists)} artistas procesados, {total_found} torrents encontrados")
+                
+        self.logger.info(f"Proceso completado: {processed} artistas procesados, {total_found} torrents encontrados en total")
+
 
     def process_albums(self):
         """Procesa artistas completos en lugar de álbumes individuales"""
@@ -511,8 +703,11 @@ class OrpheusTorrentsModule:
                 COUNT(DISTINCT artist_id) as unique_artists,
                 COUNT(DISTINCT album_id) as unique_albums,
                 COUNT(DISTINCT group_id) as unique_groups,
+                COUNT(DISTINCT musicbrainz_discography_id) as mapped_mb_albums,
                 AVG(seeders) as avg_seeders,
-                COUNT(CASE WHEN freeTorrent = 1 THEN 1 END) as free_torrents
+                COUNT(CASE WHEN freeTorrent = 1 THEN 1 END) as free_torrents,
+                COUNT(CASE WHEN album_id IS NOT NULL THEN 1 END) as with_local_album,
+                COUNT(CASE WHEN musicbrainz_discography_id IS NOT NULL THEN 1 END) as with_mb_mapping
             FROM orpheus_torrents
             """
             cursor = conn.execute(stats_query)
@@ -523,8 +718,11 @@ class OrpheusTorrentsModule:
         self.logger.info(f"Artistas únicos: {stats[1]}")
         self.logger.info(f"Álbumes únicos: {stats[2]}")
         self.logger.info(f"Grupos únicos: {stats[3]}")
-        self.logger.info(f"Promedio de seeders: {stats[4]:.2f}")
-        self.logger.info(f"Torrents gratuitos: {stats[5]}")
+        self.logger.info(f"Álbumes mapeados con MusicBrainz: {stats[4]}")
+        self.logger.info(f"Promedio de seeders: {stats[5]:.2f}")
+        self.logger.info(f"Torrents gratuitos: {stats[6]}")
+        self.logger.info(f"Con álbum local: {stats[7]}")
+        self.logger.info(f"Con mapeo MusicBrainz: {stats[8]}")
 
 def main(config=None):
     """Función principal del script"""
@@ -540,8 +738,8 @@ def main(config=None):
         # Crear tabla si no existe
         module.create_orpheus_torrents_table()
         
-        # Procesar álbumes
-        module.process_albums()
+        # Procesar artistas
+        module.process_artists()
         
         # Mostrar estadísticas
         module.get_statistics()
@@ -563,7 +761,7 @@ if __name__ == "__main__":
     parser.add_argument('--username', type=str, help='Usuario de Orpheus')
     parser.add_argument('--password', type=str, help='Contraseña de Orpheus')
     parser.add_argument('--api-token', type=str, help='Token API de Orpheus')
-    parser.add_argument('--limit', type=int, default=0, help='Límite de álbumes a procesar')
+    parser.add_argument('--limit', type=int, default=0, help='Límite de artistas a procesar')
     parser.add_argument('--force-update', action='store_true', help='Forzar actualización de existentes')
     
     args = parser.parse_args()
