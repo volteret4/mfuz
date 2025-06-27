@@ -660,52 +660,103 @@ class RuTrackerModule:
         
         return info
 
-    def create_rutracker_torrents_table(self):
-        """Crea la tabla para almacenar información de torrents de RuTracker"""
-        create_table_sql = """
-        CREATE TABLE IF NOT EXISTS rutracker_torrents (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            artist_id INTEGER,
-            album_id INTEGER,
-            artist_name TEXT,
-            album_name TEXT,
-            torrent_title TEXT,
-            torrent_id TEXT,
-            post_url TEXT,
-            download_url TEXT,
-            format TEXT,
-            quality TEXT,
-            size INTEGER,
-            seeders INTEGER,
-            leechers INTEGER,
-            year INTEGER,
-            is_available BOOLEAN DEFAULT 1,
-            last_checked TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            first_found TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            times_unavailable INTEGER DEFAULT 0,
-            FOREIGN KEY (artist_id) REFERENCES artists (id),
-            FOREIGN KEY (album_id) REFERENCES albums (id),
-            UNIQUE(torrent_id)
-        )
+    def find_album_and_mb_discography_id(self, conn, artist_id, album_name, year=None):
+        """Busca el album_id y mb_discography_id correspondientes en la base de datos solo por nombre"""
+        if not album_name:
+            return None, None
+        
+        # Buscar primero en musicbrainz_discography por coincidencia exacta
+        query = """
+        SELECT md.id, md.album_id 
+        FROM musicbrainz_discography md
+        WHERE md.artist_id = ? AND LOWER(md.title) = LOWER(?)
         """
+        cursor = conn.execute(query, (artist_id, album_name))
+        result = cursor.fetchone()
         
-        # Crear índices para mejorar performance
-        create_indices_sql = [
-            "CREATE INDEX IF NOT EXISTS idx_rutracker_artist_id ON rutracker_torrents(artist_id)",
-            "CREATE INDEX IF NOT EXISTS idx_rutracker_album_id ON rutracker_torrents(album_id)",
-            "CREATE INDEX IF NOT EXISTS idx_rutracker_torrent_id ON rutracker_torrents(torrent_id)",
-            "CREATE INDEX IF NOT EXISTS idx_rutracker_available ON rutracker_torrents(is_available)",
-            "CREATE INDEX IF NOT EXISTS idx_rutracker_last_checked ON rutracker_torrents(last_checked)"
-        ]
+        if result:
+            mb_discography_id, album_id = result
+            return album_id, mb_discography_id
         
-        with self.get_db_connection() as conn:
-            conn.execute(create_table_sql)
-            for index_sql in create_indices_sql:
-                conn.execute(index_sql)
-            conn.commit()
-            self.logger.info("Tabla rutracker_torrents creada/verificada con índices")
+        # Buscar por coincidencia aproximada (contiene el nombre)
+        query = """
+        SELECT md.id, md.album_id 
+        FROM musicbrainz_discography md
+        WHERE md.artist_id = ? AND LOWER(md.title) LIKE LOWER(?)
+        ORDER BY LENGTH(md.title) ASC
+        LIMIT 1
+        """
+        cursor = conn.execute(query, (artist_id, f'%{album_name}%'))
+        result = cursor.fetchone()
+        
+        if result:
+            mb_discography_id, album_id = result
+            return album_id, mb_discography_id
+        
+        # Buscar coincidencia inversa (el nombre del torrent contiene el título del álbum)
+        query = """
+        SELECT md.id, md.album_id 
+        FROM musicbrainz_discography md
+        WHERE md.artist_id = ? AND LOWER(?) LIKE LOWER('%' || md.title || '%')
+        ORDER BY LENGTH(md.title) DESC
+        LIMIT 1
+        """
+        cursor = conn.execute(query, (artist_id, album_name))
+        result = cursor.fetchone()
+        
+        if result:
+            mb_discography_id, album_id = result
+            return album_id, mb_discography_id
+        
+        # Si no se encuentra en musicbrainz_discography, buscar solo en albums
+        album_id = self.find_album_id_fallback(conn, artist_id, album_name)
+        return album_id, None
 
+    def find_album_id_fallback(self, conn, artist_id, album_name):
+        """Busca el album_id en la tabla albums como fallback solo por nombre"""
+        if not album_name:
+            return None
+        
+        # Buscar por nombre exacto
+        query = """
+        SELECT id FROM albums 
+        WHERE artist_id = ? AND LOWER(name) = LOWER(?)
+        """
+        cursor = conn.execute(query, (artist_id, album_name))
+        result = cursor.fetchone()
+        
+        if result:
+            return result[0]
+        
+        # Buscar por nombre similar (contiene)
+        query = """
+        SELECT id FROM albums 
+        WHERE artist_id = ? AND LOWER(name) LIKE LOWER(?)
+        ORDER BY LENGTH(name) ASC
+        LIMIT 1
+        """
+        cursor = conn.execute(query, (artist_id, f'%{album_name}%'))
+        result = cursor.fetchone()
+        
+        if result:
+            return result[0]
+        
+        # Buscar coincidencia inversa
+        query = """
+        SELECT id FROM albums 
+        WHERE artist_id = ? AND LOWER(?) LIKE LOWER('%' || name || '%')
+        ORDER BY LENGTH(name) DESC
+        LIMIT 1
+        """
+        cursor = conn.execute(query, (artist_id, album_name))
+        result = cursor.fetchone()
+        
+        if result:
+            return result[0]
+        
+        return None
+
+    
     def get_artists_to_search(self):
         """Obtiene artistas para buscar según el modo de operación"""
         if self.config.get('update_mode', False):
@@ -723,38 +774,189 @@ class RuTrackerModule:
             GROUP BY a.id, a.name
             ORDER BY last_checked ASC NULLS FIRST, torrent_count DESC
             """
-        else:
-            # Modo inicial: buscar artistas sin torrents registrados
-            query = """
-            SELECT DISTINCT 
-                a.id as artist_id,
-                a.name as artist_name,
-                COUNT(md.id) as album_count
-            FROM artists a
-            JOIN musicbrainz_discography md ON a.id = md.artist_id
-            LEFT JOIN rutracker_torrents rt ON a.id = rt.artist_id
-            WHERE (rt.id IS NULL OR ?) 
-                AND a.name IS NOT NULL
-                AND a.name != ''
-            GROUP BY a.id, a.name
-            ORDER BY album_count DESC, a.name
-            """
-        
-        with self.get_db_connection() as conn:
-            if self.config.get('update_mode', False):
-                cursor = conn.execute(query)
-            else:
-                cursor = conn.execute(query, (self.force_update,))
-            results = cursor.fetchall()
             
-        mode_text = "actualización" if self.config.get('update_mode', False) else "búsqueda inicial"
+            with self.get_db_connection() as conn:
+                cursor = conn.execute(query)
+                results = cursor.fetchall()
+        else:
+            # Modo inicial: buscar artistas según configuración
+            if self.force_update:
+                # Si force_update es True, procesar TODOS los artistas
+                query = """
+                SELECT DISTINCT 
+                    a.id as artist_id,
+                    a.name as artist_name,
+                    COUNT(md.id) as album_count
+                FROM artists a
+                JOIN musicbrainz_discography md ON a.id = md.artist_id
+                WHERE a.name IS NOT NULL AND a.name != ''
+                GROUP BY a.id, a.name
+                ORDER BY album_count DESC, a.name
+                """
+                
+                with self.get_db_connection() as conn:
+                    cursor = conn.execute(query)
+                    results = cursor.fetchall()
+            else:
+                # Solo artistas SIN torrents registrados (comportamiento por defecto)
+                query = """
+                SELECT DISTINCT 
+                    a.id as artist_id,
+                    a.name as artist_name,
+                    COUNT(md.id) as album_count
+                FROM artists a
+                JOIN musicbrainz_discography md ON a.id = md.artist_id
+                LEFT JOIN rutracker_torrents rt ON a.id = rt.artist_id
+                WHERE rt.id IS NULL 
+                    AND a.name IS NOT NULL
+                    AND a.name != ''
+                GROUP BY a.id, a.name
+                ORDER BY album_count DESC, a.name
+                """
+                
+                with self.get_db_connection() as conn:
+                    cursor = conn.execute(query)
+                    results = cursor.fetchall()
+        
+        mode_text = "actualización" if self.config.get('update_mode', False) else ("búsqueda completa (todos los artistas)" if self.force_update else "búsqueda inicial (solo artistas sin torrents)")
         self.logger.info(f"Encontrados {len(results)} artistas para {mode_text}")
         return results
 
 
+    
+
+
+    def get_db_connection(self):
+        """Obtener conexión a la base de datos"""
+        try:
+            # Buscar la base de datos en varias ubicaciones posibles
+            db_paths = [
+                self.db_path,
+                Path(PROJECT_ROOT) / "db" / "sqlite" / "musica.sqlite",
+                Path(PROJECT_ROOT) / ".content" / "database" / "musica.sqlite",
+                Path(PROJECT_ROOT) / "music.db"
+            ]
+            
+            for db_path in db_paths:
+                if os.path.exists(str(db_path)):
+                    return sqlite3.connect(str(db_path))
+            
+            print(f"Base de datos no encontrada en ninguna ubicación")
+            return None
+        except Exception as e:
+            print(f"Error conectando a la base de datos: {str(e)}")
+            return None
+
+    
+    def save_torrent_data(self, artist_id, artist_name, torrent_results):
+        """Guarda los datos de torrents encontrados con gestión de duplicados mejorada"""
+        if not torrent_results:
+            return 0
+            
+        saved_count = 0
+        updated_count = 0
+        
+        with self.get_db_connection() as conn:
+            for torrent in torrent_results:
+                # Verificar si el torrent ya existe PARA ESTE ARTISTA específico
+                check_sql = """
+                SELECT id, is_available, artist_id 
+                FROM rutracker_torrents 
+                WHERE torrent_id = ? AND artist_id = ?
+                """
+                cursor = conn.execute(check_sql, (torrent['torrent_id'], artist_id))
+                existing = cursor.fetchone()
+                
+                # Buscar album_id y mb_discography_id solo por nombre
+                album_id, mb_discography_id = self.find_album_and_mb_discography_id(
+                    conn, artist_id, torrent['album_name']
+                )
+                
+                if existing:
+                    # Actualizar torrent existente SOLO para este artista
+                    existing_id, was_available, existing_artist_id = existing
+                    update_sql = """
+                    UPDATE rutracker_torrents SET
+                        album_id = ?, mb_discography_id = ?, album_name = ?,
+                        torrent_title = ?, post_url = ?, download_url = ?,
+                        format = ?, quality = ?, size = ?, seeders = ?, 
+                        leechers = ?, year = ?, is_available = 1,
+                        last_checked = CURRENT_TIMESTAMP, last_updated = CURRENT_TIMESTAMP,
+                        times_unavailable = 0
+                    WHERE id = ?
+                    """
+                    
+                    values = (
+                        album_id, mb_discography_id, torrent['album_name'],
+                        torrent['title'], torrent['post_url'], torrent['download_url'],
+                        torrent['format'], torrent['quality'], torrent['size'],
+                        torrent['seeders'], torrent['leechers'], torrent['year'],
+                        existing_id
+                    )
+                    
+                    conn.execute(update_sql, values)
+                    updated_count += 1
+                    
+                    if not was_available:
+                        self.logger.info(f"Torrent restaurado: {torrent['torrent_id']} - {artist_name}")
+                    else:
+                        self.logger.debug(f"Torrent actualizado: {torrent['torrent_id']} - {artist_name}")
+                else:
+                    # Verificar si el mismo torrent_id existe para OTRO artista
+                    check_other_sql = """
+                    SELECT id, artist_name 
+                    FROM rutracker_torrents 
+                    WHERE torrent_id = ? AND artist_id != ?
+                    """
+                    cursor = conn.execute(check_other_sql, (torrent['torrent_id'], artist_id))
+                    other_artist = cursor.fetchone()
+                    
+                    if other_artist:
+                        # El torrent existe para otro artista, crear entrada duplicada con sufijo
+                        new_torrent_id = f"{torrent['torrent_id']}_{artist_id}"
+                        self.logger.debug(f"Torrent {torrent['torrent_id']} ya existe para {other_artist[1]}, creando entrada para {artist_name} con ID {new_torrent_id}")
+                        torrent_id_to_use = new_torrent_id
+                    else:
+                        torrent_id_to_use = torrent['torrent_id']
+                    
+                    # Insertar nuevo torrent
+                    insert_sql = """
+                    INSERT INTO rutracker_torrents (
+                        artist_id, album_id, mb_discography_id, artist_name, album_name,
+                        torrent_title, torrent_id, post_url, download_url,
+                        format, quality, size, seeders, leechers, year,
+                        is_available, last_checked, last_updated, first_found,
+                        times_unavailable
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0)
+                    """
+                    
+                    values = (
+                        artist_id, album_id, mb_discography_id, artist_name, torrent['album_name'],
+                        torrent['title'], torrent_id_to_use, 
+                        torrent['post_url'], torrent['download_url'],
+                        torrent['format'], torrent['quality'], torrent['size'],
+                        torrent['seeders'], torrent['leechers'], torrent['year']
+                    )
+                    
+                    try:
+                        conn.execute(insert_sql, values)
+                        saved_count += 1
+                        if mb_discography_id:
+                            self.logger.debug(f"Nuevo torrent guardado con MB ID {mb_discography_id}: {torrent_id_to_use} - {artist_name} - {torrent['album_name']}")
+                        else:
+                            self.logger.debug(f"Nuevo torrent guardado sin MB match: {torrent_id_to_use} - {artist_name} - {torrent['album_name']}")
+                    except sqlite3.Error as e:
+                        self.logger.error(f"Error al guardar torrent {torrent_id_to_use}: {e}")
+                            
+            conn.commit()
+                    
+        if saved_count > 0 or updated_count > 0:
+            self.logger.info(f"Guardados: {saved_count} nuevos, {updated_count} actualizados para {artist_name}")
+        
+        return saved_count + updated_count
 
     def verify_torrent_availability(self, torrent_data):
-        """Verifica si un torrent específico sigue disponible"""
+        """Verifica si un torrent específico sigue disponible - mejorado para evitar conflicts"""
         torrent_id = torrent_data.get('torrent_id')
         post_url = torrent_data.get('post_url')
         
@@ -780,15 +982,15 @@ class RuTrackerModule:
             
             # Si llegamos aquí y el response es 200, probablemente está disponible
             return response.status_code == 200
-            
+                
         except Exception as e:
             self.logger.debug(f"Error verificando disponibilidad del torrent {torrent_id}: {e}")
             return False
 
     def update_torrent_availability(self):
-        """Actualiza el estado de disponibilidad de torrents existentes"""
+        """Actualiza el estado de disponibilidad de torrents existentes - mejorado para preservar todos los artistas"""
         query = """
-        SELECT torrent_id, post_url, artist_name, torrent_title
+        SELECT id, torrent_id, post_url, artist_name, torrent_title, artist_id
         FROM rutracker_torrents
         WHERE last_checked < datetime('now', '-7 days')
             OR (is_available = 0 AND last_checked < datetime('now', '-3 days'))
@@ -811,10 +1013,11 @@ class RuTrackerModule:
         available_count = 0
         unavailable_count = 0
         
-        for torrent_id, post_url, artist_name, title in torrents_to_check:
+        for row_id, torrent_id, post_url, artist_name, title, artist_id in torrents_to_check:
             torrent_data = {'torrent_id': torrent_id, 'post_url': post_url}
             is_available = self.verify_torrent_availability(torrent_data)
             
+            # Actualizar usando el ID único de la fila, no solo el torrent_id
             update_sql = """
             UPDATE rutracker_torrents 
             SET is_available = ?, 
@@ -823,11 +1026,11 @@ class RuTrackerModule:
                     WHEN ? = 0 THEN times_unavailable + 1 
                     ELSE 0 
                 END
-            WHERE torrent_id = ?
+            WHERE id = ?
             """
             
             with self.get_db_connection() as conn:
-                conn.execute(update_sql, (is_available, is_available, torrent_id))
+                conn.execute(update_sql, (is_available, is_available, row_id))
                 conn.commit()
             
             if is_available:
@@ -839,108 +1042,200 @@ class RuTrackerModule:
         
         self.logger.info(f"Verificación completada: {available_count} disponibles, {unavailable_count} no disponibles")
 
-
-    def get_db_connection(self):
-        """Obtener conexión a la base de datos"""
-        try:
-            # Buscar la base de datos en varias ubicaciones posibles
-            db_paths = [
-                self.db_path,
-                Path(PROJECT_ROOT) / "db" / "sqlite" / "musica.sqlite",
-                Path(PROJECT_ROOT) / ".content" / "database" / "musica.sqlite",
-                Path(PROJECT_ROOT) / "music.db"
+    def create_rutracker_torrents_table(self):
+        """Crea la tabla para almacenar información de torrents de RuTracker - mejorada para manejar duplicados"""
+        create_table_sql = """
+        CREATE TABLE IF NOT EXISTS rutracker_torrents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            artist_id INTEGER,
+            album_id INTEGER,
+            mb_discography_id INTEGER,
+            artist_name TEXT,
+            album_name TEXT,
+            torrent_title TEXT,
+            torrent_id TEXT,
+            post_url TEXT,
+            download_url TEXT,
+            format TEXT,
+            quality TEXT,
+            size INTEGER,
+            seeders INTEGER,
+            leechers INTEGER,
+            year INTEGER,
+            is_available BOOLEAN DEFAULT 1,
+            last_checked TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            first_found TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            times_unavailable INTEGER DEFAULT 0,
+            FOREIGN KEY (artist_id) REFERENCES artists (id),
+            FOREIGN KEY (album_id) REFERENCES albums (id),
+            FOREIGN KEY (mb_discography_id) REFERENCES musicbrainz_discography (id),
+            UNIQUE(torrent_id, artist_id)
+        )
+        """
+        
+        # Verificar si la tabla ya existe y necesita modificaciones
+        with self.get_db_connection() as conn:
+            # Verificar si la tabla existe
+            cursor = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='rutracker_torrents'")
+            table_exists = cursor.fetchone() is not None
+            
+            if table_exists:
+                # Verificar la estructura actual
+                cursor = conn.execute("PRAGMA table_info(rutracker_torrents)")
+                columns = [row[1] for row in cursor.fetchall()]
+                
+                # Verificar si necesita la columna mb_discography_id
+                if 'mb_discography_id' not in columns:
+                    conn.execute("ALTER TABLE rutracker_torrents ADD COLUMN mb_discography_id INTEGER")
+                    self.logger.info("Columna mb_discography_id agregada a rutracker_torrents")
+                
+                # Verificar constraint UNIQUE actual
+                cursor = conn.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='rutracker_torrents'")
+                table_sql = cursor.fetchone()[0]
+                
+                if 'UNIQUE(torrent_id, artist_id)' not in table_sql and 'UNIQUE(torrent_id)' in table_sql:
+                    # Necesitamos recrear la tabla para cambiar el constraint
+                    self.logger.info("Recreando tabla para cambiar constraint UNIQUE...")
+                    
+                    # Crear tabla temporal con nueva estructura
+                    conn.execute("""
+                    CREATE TABLE rutracker_torrents_new (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        artist_id INTEGER,
+                        album_id INTEGER,
+                        mb_discography_id INTEGER,
+                        artist_name TEXT,
+                        album_name TEXT,
+                        torrent_title TEXT,
+                        torrent_id TEXT,
+                        post_url TEXT,
+                        download_url TEXT,
+                        format TEXT,
+                        quality TEXT,
+                        size INTEGER,
+                        seeders INTEGER,
+                        leechers INTEGER,
+                        year INTEGER,
+                        is_available BOOLEAN DEFAULT 1,
+                        last_checked TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        first_found TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        times_unavailable INTEGER DEFAULT 0,
+                        FOREIGN KEY (artist_id) REFERENCES artists (id),
+                        FOREIGN KEY (album_id) REFERENCES albums (id),
+                        FOREIGN KEY (mb_discography_id) REFERENCES musicbrainz_discography (id),
+                        UNIQUE(torrent_id, artist_id)
+                    )
+                    """)
+                    
+                    # Copiar datos existentes
+                    conn.execute("""
+                    INSERT INTO rutracker_torrents_new 
+                    SELECT * FROM rutracker_torrents
+                    """)
+                    
+                    # Reemplazar tabla
+                    conn.execute("DROP TABLE rutracker_torrents")
+                    conn.execute("ALTER TABLE rutracker_torrents_new RENAME TO rutracker_torrents")
+                    
+                    self.logger.info("Tabla recreada con constraint UNIQUE(torrent_id, artist_id)")
+            else:
+                # Crear tabla nueva
+                conn.execute(create_table_sql)
+                self.logger.info("Tabla rutracker_torrents creada con constraint UNIQUE(torrent_id, artist_id)")
+            
+            # Crear índices para mejorar performance
+            create_indices_sql = [
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_artist_id ON rutracker_torrents(artist_id)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_album_id ON rutracker_torrents(album_id)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_mb_discography_id ON rutracker_torrents(mb_discography_id)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_torrent_id ON rutracker_torrents(torrent_id)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_available ON rutracker_torrents(is_available)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_last_checked ON rutracker_torrents(last_checked)",
+                "CREATE INDEX IF NOT EXISTS idx_rutracker_artist_torrent ON rutracker_torrents(artist_id, torrent_id)"
             ]
             
-            for db_path in db_paths:
-                if os.path.exists(str(db_path)):
-                    return sqlite3.connect(str(db_path))
+            for index_sql in create_indices_sql:
+                conn.execute(index_sql)
             
-            print(f"Base de datos no encontrada en ninguna ubicación")
-            return None
-        except Exception as e:
-            print(f"Error conectando a la base de datos: {str(e)}")
-            return None
-
-    def save_torrent_data(self, artist_id, artist_name, torrent_results):
-        """Guarda los datos de torrents encontrados con gestión de duplicados"""
-        if not torrent_results:
-            return 0
-            
-        saved_count = 0
-        updated_count = 0
-        
-        with self.get_db_connection() as conn:
-            for torrent in torrent_results:
-                # Verificar si el torrent ya existe
-                check_sql = "SELECT id, is_available FROM rutracker_torrents WHERE torrent_id = ?"
-                cursor = conn.execute(check_sql, (torrent['torrent_id'],))
-                existing = cursor.fetchone()
-                
-                # Intentar encontrar album_id si existe
-                album_id = self.find_album_id(conn, artist_id, torrent['album_name'], torrent['year'])
-                
-                if existing:
-                    # Actualizar torrent existente
-                    existing_id, was_available = existing
-                    update_sql = """
-                    UPDATE rutracker_torrents SET
-                        album_id = ?, artist_name = ?, album_name = ?,
-                        torrent_title = ?, post_url = ?, download_url = ?,
-                        format = ?, quality = ?, size = ?, seeders = ?, 
-                        leechers = ?, year = ?, is_available = 1,
-                        last_checked = CURRENT_TIMESTAMP, last_updated = CURRENT_TIMESTAMP,
-                        times_unavailable = 0
-                    WHERE torrent_id = ?
-                    """
-                    
-                    values = (
-                        album_id, artist_name, torrent['album_name'],
-                        torrent['title'], torrent['post_url'], torrent['download_url'],
-                        torrent['format'], torrent['quality'], torrent['size'],
-                        torrent['seeders'], torrent['leechers'], torrent['year'],
-                        torrent['torrent_id']
-                    )
-                    
-                    conn.execute(update_sql, values)
-                    updated_count += 1
-                    
-                    if not was_available:
-                        self.logger.info(f"Torrent restaurado: {torrent['torrent_id']} - {artist_name}")
-                    else:
-                        self.logger.debug(f"Torrent actualizado: {torrent['torrent_id']} - {artist_name}")
-                else:
-                    # Insertar nuevo torrent
-                    insert_sql = """
-                    INSERT INTO rutracker_torrents (
-                        artist_id, album_id, artist_name, album_name,
-                        torrent_title, torrent_id, post_url, download_url,
-                        format, quality, size, seeders, leechers, year,
-                        is_available, last_checked, last_updated, first_found,
-                        times_unavailable
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0)
-                    """
-                    
-                    values = (
-                        artist_id, album_id, artist_name, torrent['album_name'],
-                        torrent['title'], torrent['torrent_id'], 
-                        torrent['post_url'], torrent['download_url'],
-                        torrent['format'], torrent['quality'], torrent['size'],
-                        torrent['seeders'], torrent['leechers'], torrent['year']
-                    )
-                    
-                    try:
-                        conn.execute(insert_sql, values)
-                        saved_count += 1
-                        self.logger.debug(f"Nuevo torrent guardado: {torrent['torrent_id']} - {artist_name}")
-                    except sqlite3.Error as e:
-                        self.logger.error(f"Error al guardar torrent {torrent['torrent_id']}: {e}")
-                        
             conn.commit()
-                
-        if saved_count > 0 or updated_count > 0:
-            self.logger.info(f"Guardados: {saved_count} nuevos, {updated_count} actualizados para {artist_name}")
+            self.logger.info("Tabla rutracker_torrents verificada con índices optimizados")
+
+    def get_statistics(self):
+        """Obtiene estadísticas detalladas de la tabla rutracker_torrents - mejoradas para múltiples artistas"""
+        with self.get_db_connection() as conn:
+            stats_query = """
+            SELECT 
+                COUNT(*) as total_torrents,
+                COUNT(CASE WHEN is_available = 1 THEN 1 END) as available_torrents,
+                COUNT(CASE WHEN is_available = 0 THEN 1 END) as unavailable_torrents,
+                COUNT(DISTINCT artist_id) as unique_artists,
+                COUNT(DISTINCT album_id) as unique_albums,
+                COUNT(DISTINCT mb_discography_id) as unique_mb_discography,
+                COUNT(CASE WHEN mb_discography_id IS NOT NULL THEN 1 END) as torrents_with_mb_match,
+                AVG(CASE WHEN is_available = 1 THEN seeders END) as avg_seeders_available,
+                COUNT(CASE WHEN quality LIKE '%FLAC%' AND is_available = 1 THEN 1 END) as flac_available,
+                COUNT(CASE WHEN quality LIKE '%MP3%' AND is_available = 1 THEN 1 END) as mp3_available,
+                MIN(first_found) as oldest_torrent,
+                MAX(last_updated) as newest_torrent,
+                COUNT(DISTINCT torrent_id) as unique_torrent_ids,
+                COUNT(*) - COUNT(DISTINCT torrent_id) as duplicate_torrent_ids
+            FROM rutracker_torrents
+            """
+            cursor = conn.execute(stats_query)
+            stats = cursor.fetchone()
+            
+            # Top artistas con más torrents
+            top_artists_query = """
+            SELECT artist_name, COUNT(*) as torrent_count, 
+                COUNT(CASE WHEN is_available = 1 THEN 1 END) as available_count
+            FROM rutracker_torrents 
+            GROUP BY artist_id, artist_name
+            ORDER BY torrent_count DESC
+            LIMIT 10
+            """
+            cursor = conn.execute(top_artists_query)
+            top_artists = cursor.fetchall()
+            
+            # Estadísticas por formato
+            format_query = """
+            SELECT quality, COUNT(*) as count, AVG(seeders) as avg_seeders,
+                COUNT(DISTINCT artist_id) as artists_count
+            FROM rutracker_torrents 
+            WHERE is_available = 1 AND quality IS NOT NULL
+            GROUP BY quality
+            ORDER BY count DESC
+            """
+            cursor = conn.execute(format_query)
+            format_stats = cursor.fetchall()
+            
+        self.logger.info("=== Estadísticas de RuTracker Torrents ===")
+        self.logger.info(f"Total de torrents: {stats[0]}")
+        self.logger.info(f"Torrents únicos (por ID): {stats[12]}")
+        self.logger.info(f"Torrents duplicados (mismo ID, diferentes artistas): {stats[13]}")
+        self.logger.info(f"Torrents disponibles: {stats[1]}")
+        self.logger.info(f"Torrents no disponibles: {stats[2]}")
+        self.logger.info(f"Artistas únicos: {stats[3]}")
+        self.logger.info(f"Álbumes únicos: {stats[4]}")
+        self.logger.info(f"Registros MB únicos: {stats[5]}")
+        self.logger.info(f"Torrents con coincidencia MB: {stats[6]} ({(stats[6]/stats[0]*100):.1f}%)" if stats[0] > 0 else "Torrents con coincidencia MB: 0")
+        self.logger.info(f"Promedio de seeders (disponibles): {stats[7]:.2f}" if stats[7] else "Promedio de seeders: 0")
+        self.logger.info(f"Torrents FLAC disponibles: {stats[8]}")
+        self.logger.info(f"Torrents MP3 disponibles: {stats[9]}")
+        self.logger.info(f"Torrent más antiguo: {stats[10]}")
+        self.logger.info(f"Última actualización: {stats[11]}")
         
-        return saved_count + updated_count
+        if top_artists:
+            self.logger.info("\n=== Top 10 artistas con más torrents ===")
+            for artist_name, total, available in top_artists:
+                self.logger.info(f"{artist_name}: {total} torrents ({available} disponibles)")
+        
+        if format_stats:
+            self.logger.info("\n=== Distribución por formato (disponibles) ===")
+            for quality, count, avg_seeders, artists_count in format_stats[:10]:
+                self.logger.info(f"{quality}: {count} torrents de {artists_count} artistas (avg seeders: {avg_seeders:.1f})")
+
 
     def cleanup_old_unavailable_torrents(self):
         """Elimina torrents que han estado no disponibles durante mucho tiempo"""
@@ -1046,66 +1341,73 @@ class RuTrackerModule:
                     
         self.logger.info(f"Proceso completado: {processed} artistas procesados, {total_found} torrents procesados en total")
 
-    def get_statistics(self):
-        """Obtiene estadísticas detalladas de la tabla rutracker_torrents"""
-        with self.get_db_connection() as conn:
-            stats_query = """
-            SELECT 
-                COUNT(*) as total_torrents,
-                COUNT(CASE WHEN is_available = 1 THEN 1 END) as available_torrents,
-                COUNT(CASE WHEN is_available = 0 THEN 1 END) as unavailable_torrents,
-                COUNT(DISTINCT artist_id) as unique_artists,
-                COUNT(DISTINCT album_id) as unique_albums,
-                AVG(CASE WHEN is_available = 1 THEN seeders END) as avg_seeders_available,
-                COUNT(CASE WHEN quality LIKE '%FLAC%' AND is_available = 1 THEN 1 END) as flac_available,
-                COUNT(CASE WHEN quality LIKE '%MP3%' AND is_available = 1 THEN 1 END) as mp3_available,
-                MIN(first_found) as oldest_torrent,
-                MAX(last_updated) as newest_torrent
-            FROM rutracker_torrents
-            """
-            cursor = conn.execute(stats_query)
-            stats = cursor.fetchone()
-            
-            # Estadísticas adicionales por formato
-            format_query = """
-            SELECT quality, COUNT(*) as count, AVG(seeders) as avg_seeders
-            FROM rutracker_torrents 
-            WHERE is_available = 1 AND quality IS NOT NULL
-            GROUP BY quality
-            ORDER BY count DESC
-            """
-            cursor = conn.execute(format_query)
-            format_stats = cursor.fetchall()
-            
-        self.logger.info("=== Estadísticas de RuTracker Torrents ===")
-        self.logger.info(f"Total de torrents: {stats[0]}")
-        self.logger.info(f"Torrents disponibles: {stats[1]}")
-        self.logger.info(f"Torrents no disponibles: {stats[2]}")
-        self.logger.info(f"Artistas únicos: {stats[3]}")
-        self.logger.info(f"Álbumes únicos: {stats[4]}")
-        self.logger.info(f"Promedio de seeders (disponibles): {stats[5]:.2f}" if stats[5] else "Promedio de seeders: 0")
-        self.logger.info(f"Torrents FLAC disponibles: {stats[6]}")
-        self.logger.info(f"Torrents MP3 disponibles: {stats[7]}")
-        self.logger.info(f"Torrent más antiguo: {stats[8]}")
-        self.logger.info(f"Última actualización: {stats[9]}")
-        
-        if format_stats:
-            self.logger.info("\n=== Distribución por formato (disponibles) ===")
-            for quality, count, avg_seeders in format_stats[:10]:  # Top 10
-                self.logger.info(f"{quality}: {count} torrents (avg seeders: {avg_seeders:.1f})")
+ 
 
-def configure_update_mode(self):
-    """Configura el módulo para modo actualización si ya existen datos"""
-    with self.get_db_connection() as conn:
-        cursor = conn.execute("SELECT COUNT(*) FROM rutracker_torrents")
-        existing_count = cursor.fetchone()[0]
-    
-    if existing_count > 0 and not self.config.get('force_initial_mode', False):
-        self.config['update_mode'] = True
-        self.logger.info(f"Detectados {existing_count} torrents existentes. Activando modo actualización.")
-    else:
-        self.config['update_mode'] = False
-        self.logger.info("Modo búsqueda inicial activado.")
+    def configure_update_mode(self):
+        """Configura el módulo para modo actualización si ya existen datos"""
+        with self.get_db_connection() as conn:
+            cursor = conn.execute("SELECT COUNT(*) FROM rutracker_torrents")
+            existing_count = cursor.fetchone()[0]
+            
+            # Contar artistas con torrents vs artistas totales
+            cursor = conn.execute("""
+                SELECT 
+                    COUNT(DISTINCT rt.artist_id) as artists_with_torrents,
+                    (SELECT COUNT(*) FROM artists WHERE name IS NOT NULL AND name != '') as total_artists
+                FROM rutracker_torrents rt
+            """)
+            artists_with_torrents, total_artists = cursor.fetchone()
+        
+        # Si force_update está activo, NUNCA usar modo actualización
+        if self.force_update:
+            self.config['update_mode'] = False
+            self.logger.info(f"FORCE_UPDATE activo: Procesando TODOS los {total_artists} artistas (modo búsqueda completa)")
+            return
+        
+        # Si force_initial_mode está activo, forzar modo inicial
+        if self.config.get('force_initial_mode', False):
+            self.config['update_mode'] = False
+            remaining_artists = total_artists - artists_with_torrents
+            self.logger.info(f"FORCE_INITIAL_MODE activo: Procesando {remaining_artists} artistas restantes de {total_artists} totales")
+            return
+        
+        # Determinar modo automáticamente
+        if existing_count > 0:
+            self.config['update_mode'] = True
+            self.logger.info(f"Detectados {existing_count} torrents existentes para {artists_with_torrents}/{total_artists} artistas. Activando modo actualización.")
+        else:
+            self.config['update_mode'] = False
+            self.logger.info(f"No hay torrents existentes. Activando modo búsqueda inicial para {total_artists} artistas.")
+
+
+    def get_progress_summary(self):
+        """Obtiene un resumen del progreso actual"""
+        with self.get_db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT 
+                    COUNT(DISTINCT a.id) as total_artists,
+                    COUNT(DISTINCT rt.artist_id) as artists_with_torrents,
+                    COUNT(rt.id) as total_torrents,
+                    COUNT(CASE WHEN rt.is_available = 1 THEN 1 END) as available_torrents
+                FROM artists a
+                LEFT JOIN rutracker_torrents rt ON a.id = rt.artist_id
+                WHERE a.name IS NOT NULL AND a.name != ''
+            """)
+            total_artists, artists_with_torrents, total_torrents, available_torrents = cursor.fetchone()
+        
+        if total_artists > 0:
+            percentage = (artists_with_torrents / total_artists) * 100
+            self.logger.info(f"Progreso general: {artists_with_torrents}/{total_artists} artistas procesados ({percentage:.1f}%)")
+            self.logger.info(f"Total de torrents: {total_torrents} ({available_torrents} disponibles)")
+        
+        return {
+            'total_artists': total_artists,
+            'artists_with_torrents': artists_with_torrents,
+            'total_torrents': total_torrents,
+            'available_torrents': available_torrents,
+            'percentage_complete': percentage if total_artists > 0 else 0
+        }
+
 
 def main(config=None):
     """Función principal del script"""
@@ -1151,11 +1453,19 @@ def main(config=None):
         # Crear tabla si no existe
         module.create_rutracker_torrents_table()
         
+        # Mostrar progreso inicial
+        print("\n=== Estado inicial ===")
+        module.get_progress_summary()
+        
         # Configurar modo de operación automáticamente
         module.configure_update_mode()
         
         # Procesar artistas
         module.process_artists()
+        
+        # Mostrar progreso final
+        print("\n=== Estado final ===")
+        module.get_progress_summary()
         
         # Mostrar estadísticas
         module.get_statistics()

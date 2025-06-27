@@ -2098,26 +2098,6 @@ class MuspyArtistModule(BaseModule):
 
 
 
-
-    def show_progress_operation(self, operation_function, operation_args=None, title="Operación en progreso", 
-                                label_format="{current}/{total} - {status}", 
-                                cancel_button_text="Cancelar", 
-                                finish_message=None):
-        """Delegación al método implementado en progress_utils"""
-        from modules.submodules.muspy.progress_utils import show_progress_operation
-        return show_progress_operation(self, operation_function, operation_args, title, 
-                                    label_format, cancel_button_text, finish_message)
-
-
-    def cache_manager(self, cache_type, data=None, force_refresh=False, expiry_hours=24):
-        """Delegación al método implementado en cache_manager"""
-        return self.cache_manager.cache_manager(cache_type, data, force_refresh, expiry_hours)
-
-    def spotify_cache_manager(self, cache_key, data=None, force_refresh=False, expiry_hours=24):
-        """Delegación al método implementado en cache_manager"""
-        return self.cache_manager.spotify_cache_manager(cache_key, data, force_refresh, expiry_hours)
-
-
 # Gestores de carga de datos
 
     def load_artists_from_file(self):
@@ -2940,9 +2920,11 @@ class MuspyArtistModule(BaseModule):
         
         # Ejecutar con diálogo de progreso
         result = self.show_progress_operation(
-            fetch_releases,
+            self,
+            lambda update_progress: fetch_releases(update_progress),
             title="Obteniendo Próximos Lanzamientos",
-            label_format="{status}"
+            label_format="{status}",
+            finish_message="Operación completada"
         )
         
         # Procesar resultados
@@ -3076,9 +3058,11 @@ class MuspyArtistModule(BaseModule):
         
         # Ejecutar con diálogo de progreso
         result = self.show_progress_operation(
-            fetch_releases,
+            self,
+            lambda update_progress: fetch_releases(update_progress),
             title="Obteniendo Lanzamientos",
-            label_format="{status}"
+            label_format="{status}",
+            finish_message="Lanzamientos obtenidos"
         )
         
         # Procesar resultados

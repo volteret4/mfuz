@@ -95,6 +95,7 @@ class MusicLibraryManager:
                 CREATE TABLE songs (
                     id INTEGER PRIMARY KEY,
                     file_path TEXT UNIQUE,
+                    folder_path TEXT,
                     title TEXT,
                     track_number INTEGER,
                     artist TEXT,
@@ -298,6 +299,8 @@ class MusicLibraryManager:
         
         # Lista de todas las columnas que deberían existir
         required_columns = {
+            'file_path': 'TEXT',
+            'folder_path': 'TEXT',
             'added_timestamp': 'TIMESTAMP',
             'added_day': 'INTEGER',
             'added_week': 'INTEGER', 
@@ -1837,12 +1840,17 @@ class MusicLibraryManager:
                         c.execute("DELETE FROM songs WHERE id = ?", (song_id,))
                         deleted_songs += 1
                     else:
-                        # Actualizar la ruta del archivo
+                        # CORRECCIÓN: Actualizar solo la ruta del archivo
                         c.execute("UPDATE songs SET file_path = ? WHERE id = ?", (new_path, song_id))
                         
-                        # Actualizar folder_path si ha cambiado
-                        new_folder = str(Path(new_path).parent)
-                        c.execute("UPDATE songs SET folder_path = ? WHERE id = ?", (new_folder, song_id))
+                        # CORRECCIÓN: Si necesitas actualizar folder_path, hazlo en una consulta separada
+                        # Pero primero verifica si la tabla tiene esa columna
+                        c.execute("PRAGMA table_info(songs)")
+                        columns = {col[1] for col in c.fetchall()}
+                        
+                        if 'folder_path' in columns:
+                            new_folder = str(Path(new_path).parent)
+                            c.execute("UPDATE songs SET folder_path = ? WHERE id = ?", (new_folder, song_id))
             
             # 5. Eliminar canciones que ya no existen
             if songs_to_delete:

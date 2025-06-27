@@ -152,14 +152,14 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QPushButton" name="add_path_button">
+                      <widget class="QPushButton" name="action_add_path">
                        <property name="text">
                         <string>Add Path</string>
                        </property>
                       </widget>
                      </item>
                      <item>
-                      <widget class="QPushButton" name="remove_path_button">
+                      <widget class="QPushButton" name="action_remove_path">
                        <property name="text">
                         <string>Remove Path</string>
                        </property>

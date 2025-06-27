@@ -115,8 +115,8 @@ class ConfigEditorModule(BaseModule):
                     self.enable_individual_themes.isChecked()
                 ))
                 self.action_reload.clicked.connect(self.reload_config)
-                self.add_path_button.clicked.connect(self.add_shared_db_path)
-                self.remove_path_button.clicked.connect(self.remove_shared_db_path)
+                self.action_add_path.clicked.connect(self.add_shared_db_path)
+                self.action_remove_path.clicked.connect(self.remove_shared_db_path)
                 self.db_paths_dropdown.currentTextChanged.connect(self.update_db_path_input)
                 
                 # Add theme field to global group

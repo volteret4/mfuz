@@ -1,0 +1,266 @@
+global_theme_config:
+  enable_individual_themes: true
+  font_family: Noto Fonts Emoji
+  spotify_user:             # requerido 
+  spotify_client_id:        # requerido
+  spotify_client_secret:    # requerido
+  spotify_redirect_uri:     # requerido
+  spotify_playlist_path: .content/cache/spotify_playlist_path
+  lastfm_api_key:           # requerido
+  lastfm_username:          # requerido
+  musicbrainz_username:     # para las colecciones de musicbrainz
+  musicbrainz_password:     # para las colecciones de musicbrainz
+  bluesky_username:         # para buscar y seguir artistas en bluesky
+  bluesky_password:         # para buscar y seguir artistas en bluesky
+  muspy_username:           # requerido para buscar albumes nuevos
+  muspy_id:                 # requerido para buscar albumes nuevos
+  muspy_password:           # requerido para buscar albumes nuevos (token)
+  twitter_username:         # para buscar y seguir artistas en twiter WIP!!
+  twitter_client_id:        # para buscar y seguir artistas en twiter WIP!!
+  twitter_client_secret:    # para buscar y seguir artistas en twiter WIP!!
+  twitter_redirect_uri:     # para buscar y seguir artistas en twiter WIP!!
+  db_path: db/sqlite/musica.sqlite
+  local_playlist_path: .content/playlists/locales
+  shared_db_paths:
+    music_database: db/sqlite/musica.sqlite
+    mix_verano_98: /home/huan/Música/flac_test3.sqlite
+    db3: db/sqlite/musica.sqlite 
+  query_db_script_path: db/tools/consultar_items_db.py
+music_players:
+  selected_player:
+    fuzzy: deadbeef         # cualquier reproductor que funcione con playerctl, deadbeef requiere un plugin para ello
+    url_enlaces: mpv        # mpv es necesario para el juego, se puede usar como reproductor principal tambien
+  installed_players:
+    player_1:
+      player_name: mpv      # Puedes crear diferentes configuraciones para diferentes reproductores
+      player_path: /usr/bin/mpv
+      player_temp_dir: .config/mpv/_mpv_socket
+      player_config: .config/mpv/mpv.conf
+      args: -v --input-ipc-server=/home/huan/.config/mpv/_mpv_socket --force-window=yes
+    player_2:
+      player_name: mpv_no_video     # Necesitas una opción sin video para el juego
+      player_path: /usr/bin/mpv
+      player_temp_dir: .config/mpv/_mpv_socket
+      player_config: .config/mpv/mpv.conf
+      args: --no-video --input-ipc-server=/home/huan/.config/mpv/_mpv_socket      
+    player_3:
+      player_name: vlc              # vlc no funciona con ytdl, aun...
+      player_path: /usr/bin/vlc
+    player_4:
+      player_name: deadbeef
+      player_path: /usr/bin/deadbeef
+      player_temp_dir: null
+      player_config: null
+    player_5:
+      player_name: playerctl
+      player_path: /usr/bin/playerctl
+lastfm:
+  enabled: true
+  api_key:                  # requerido
+  api_secret:               # requerido
+  username:                 # requerido para identificar los scrobbles de que usuario
+spotify:
+  client_id: 
+  client_secret: 
+temas:
+- Tokyo Night
+- Solarized Dark
+- Monokai
+- Catppuccin
+- Dracula
+- Nord
+- Synthwave
+tema_seleccionado: Tokyo Night
+logging:
+- 'true'
+- 'false'
+logging_state: 'false'
+logging_options:
+  logging_state: 'true'
+  logging_level: ERROR
+  log_types:
+  - ERROR
+  - INFO
+  - WARNING
+  - UI
+  - DEBUG
+  log_to_file: true
+  log_filename: .content/logs/multi_module_manager.log
+  show_module_name: true
+  enable_colors: true
+modules:
+- name: Music Browser
+  path: modules/music_fuzzy_module.py
+  args:
+    db_path: db/sqlite/musica_local.sqlite
+    only_local_files: 'True'
+    font_family: Noto Fonts Emoji
+    artist_images_dir: .content/artistas_img
+    tema_seleccionado: Tokyo Night
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    hotkeys:
+      open_folder: Ctrl+O
+      play_selected: Return
+      spotify: Ctrl+S
+      jaangle: Ctrl+J
+      search_focus: Ctrl+F
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: Conciertos
+  path: modules/conciertos_module.py
+  args:
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    tema_seleccionado: Tokyo Night
+    config:
+      chrome:
+        headless: 'False'
+      country_code: es
+      artists_file: .content/artistas.txt
+      apis:
+        spotify:
+          enabled: 'False'    # requiere credenciales de spotify globales
+        ticketmaster:
+          enabled: 'False'
+          api_key:            # api requerida para buscar conciertos en ticketmaster
+        setlistfm:
+          enabled: 'True'
+          setlistfm_apikey:   # api requerida para buscar conciertos en setlistfm 
+          user_agent:
+            app: mfuzz
+            version: 1.0
+            contact: # mail
+        muspy:
+          enabled: 'True'
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: Config Editor
+  path: modules/config_editor_module.py
+  args:
+    config_path: config/config.yaml
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    - Catppuccin
+    - Dracula
+    - Nord
+    - Synthwave
+    tema_seleccionado: Synthwave
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: Muspy
+  path: modules/muspy_releases_module.py
+  args:
+    db_path: db/sqlite/musica.sqlite
+    query_db_script_path: db/tools/consultar_items_db.py
+    search_mbid_script_path: db/enlaces_artista_album.py
+    artists_file: .content/artistas.txt
+    muspy_username:                 # requerido            
+    muspy_api_key:                  # requerido 
+    muspy_id:                       # requerido
+    muspy_password:                 # requerido (token)
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    tema_seleccionado: Solarized Dark
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+modulos_desactivados:
+- name: Url Playlists
+  path: modules/url_playlist.py
+  args:
+    mpv_temp_dir: /home/huan/['/home/huan/gits/pollo/music-fuzzy', '.content', 'mpv',
+      '_mpv_socket']
+    pagination_value: 50
+    included_services:
+      bandcamp: 'True'
+      lastfm: 'True'
+      soundcloud: 'True'
+      youtube: 'True'
+      spotify: 'True'
+    db_path: db/sqlite/musica.sqlite
+    spotify_client_id:              # requerido      
+    spotify_client_secret:          # requerido
+    lastfm_api_key:                 # requerido
+    lastfm_username:                # requerido
+    playlist_unified_view: 'True'
+    show_local_playlists: 'True'
+    show_spotify_playlists: 'True'
+    show_rss_playlists: 'True'
+    urlplaylist_filter_mode: all
+    sync_at_boot: 'True'
+    scrobbles_limit: 2478
+    scrobbles_by_date: 'False'
+    service_priority_indices: '0'
+    freshrss_url:                   # requerido para crear playlists de rss
+    freshrss_user:                  # requerido para crear playlists de rss
+    freshrss_api_key:               # requerido para crear playlists de rss 
+    spotify_token_path: .content/cache/spotify_token.txt
+    spotify_playlist_path: .content/cache/spotify_playlist_path
+    lastfm_cache_path: .content/cache/lastfm_cache.json
+    rss_pending_dir: .content/playlists/blogs/pendiente
+    rss_listened_dir: .content/playlists/blogs/escuchado
+    local_playlist_path: .content/playlists/locales
+    exclude_spotify_from_local: 'True'
+    show_lastfm_scrobbles: 'False'
+- name: Estadísticas
+  path: modules/estadisticas_module.py
+  args:
+    tema_seleccionado: Tokyo Night
+    logging:
+      debug_enabled: 'True'
+      log_level: INFO
+      log_types: ERROR
+- name: Jaangle
+  path: modules/jaangle_module.py
+  args:
+    music_origin: local
+    theme: Tokyo Night
+    db_path: db/sqlite/musica.sqlite
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: Database Editor
+  path: modules/editor_module.py
+  args:
+    db_path: db/sqlite/musica.sqlite
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    tema_seleccionado: Monokai
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: Database Creator
+  path: modules/db_creator_ui_module.py
+  args:
+    config_file: config/db_creator_config.json
+    temas:
+    - Tokyo Night
+    - Solarized Dark
+    - Monokai
+    tema_seleccionado: Tokyo Night
+  logging:
+    debug_enabled: true
+    capture_stdout: true
+    log_color: '#7AA2F7'
+- name: placeholder
+  path: casa
