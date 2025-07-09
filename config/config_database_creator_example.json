@@ -3,7 +3,6 @@
     "path/db_musica_path",
     "enlaces/enlaces_artista_album",
     "enlaces/redes_sociales"
-        
   ],
 
   "common": {
@@ -45,7 +44,6 @@
       "discogs",
       "lastfm",
       "musicbrainz"
-      
     ],
     "summary_only": false,
     "days": false,
@@ -75,13 +73,7 @@
 
   "enlaces/enlaces_canciones": {
     "checkpoint_path": ".content/cache/db/enlaces/enlaces_canciones.json",
-    "services": [
-      "lastfm",
-      "spotify",
-      "bandcamp",
-      "soundcloud",
-      "youtube"
-    ],
+    "services": ["lastfm", "spotify", "bandcamp", "soundcloud", "youtube"],
     "limit": "100000"
   },
 
@@ -98,7 +90,7 @@
     "batch_size": 38000,
     "no_resume": true,
     "genius_access_token": "",
-    "happi_api_key": "", 
+    "happi_api_key": "",
     "musixmatch_api_key": ""
   },
   "wiki/wikilinks_desde_mb": {
@@ -109,7 +101,6 @@
     "mb_username": "",
     "mb_password": "",
     "force_update": false
-
   },
   "lastfm_escuchas": {
     "output_json": ".content/cache/db/lastfm_escuchas/scrobbles_lastfm.json",
@@ -131,69 +122,61 @@
     "enhanced_matching": true,
     "fuzzy_matching": false,
     "normalize_strings": true
-    
   },
 
   "musicbrainz/mb_sellos": {
-    "mode": "auto",                  
-    "skip_existing": true,         
-    "force_update": false,            
-    "update_wikipedia": true,         
-    "batch_size": 100,                 
-    "update_wikipedia_urls": false,   
-    "repair_schema": false,           
-    "target_label_mbid": null,        
-    "search_query": null,             
-    "process_relationships": true,    
-    "fetch_discogs_data": true,       
+    "mode": "auto",
+    "skip_existing": true,
+    "force_update": false,
+    "update_wikipedia": true,
+    "batch_size": 100,
+    "update_wikipedia_urls": false,
+    "repair_schema": false,
+    "target_label_mbid": null,
+    "search_query": null,
+    "process_relationships": true,
+    "fetch_discogs_data": true,
     "user_agent": "mfuzz/1.0",
-    "max_retries": 3,                 
-    "retry_delay": 2,                 
-    "concurrent_workers": 1,          
-    "log_level": "INFO" 
+    "max_retries": 3,
+    "retry_delay": 2,
+    "concurrent_workers": 1,
+    "log_level": "INFO"
   },
-  "musicbrainz/mb_data_canciones": {
-
-  },
+  "musicbrainz/mb_data_canciones": {},
   "musicbrainz/mb_release_group": {
     "limit": 0,
     "mode": "schema-only",
     "force_update": false,
     "cache_file": ".content/cache/db//musicbrainz/mb_release_group.log",
-    "skip_propierties": [
-      "image",
-      "P123",
-      "P456",
-      "P31"
-    ]
-    
+    "skip_propierties": ["image", "P123", "P456", "P31"]
   },
 
   "discogs/discografia_masters": {
     "force_update": false,
     "rol_principal": false,
-    "accepted_formats": ["album",
-                         "ep",
-                         "single",
-                         "LP",
-                         "mini album",
-                         "compilation",
-                         "maxi single",
-                         "box set",
-                         "vinyl",
-                         "cd",
-                         "cassette",
-                         "digital",
-                         "flexi disc",
-                         "limited edition",
-                         "reissue",
-                         "promo",
-                         "remix",
-                         "live",
-                         "demo",
-                         "mixtape",
-                         "soundtrack"
-                        ]
+    "accepted_formats": [
+      "album",
+      "ep",
+      "single",
+      "LP",
+      "mini album",
+      "compilation",
+      "maxi single",
+      "box set",
+      "vinyl",
+      "cd",
+      "cassette",
+      "digital",
+      "flexi disc",
+      "limited edition",
+      "reissue",
+      "promo",
+      "remix",
+      "live",
+      "demo",
+      "mixtape",
+      "soundtrack"
+    ]
   },
   "discogs/artists_info": {
     "force_update": false
@@ -208,7 +191,7 @@
     "interactive": false,
     "skip_artists": [
       "varios artistas",
-      "various artists", 
+      "various artists",
       "varios",
       "various",
       "compilation",
@@ -243,7 +226,7 @@
     "include_aoty": true
   },
   "posts/posts_fresh_rss": {
-    "freshrss_url": "", 
+    "freshrss_url": "",
     "freshrss_username": "",
     "freshrss_password": "",
     "freshrss_cache_path": ".content/cache/db/posts/freshrss_cache.json",
@@ -266,7 +249,7 @@
       "favorite releases"
     ]
   },
-  "posts/menciones":{
+  "posts/menciones": {
     "force_update": false
   },
 
@@ -365,16 +348,14 @@
     "missing_only": true,
     "delay_between_requests": 1.1
   },
-  "optimiza_db_lastpass": {
-
-  },
+  "optimiza_db_lastpass": {},
   "descargas/orpheus": {
     "orpheus_username": "",
-    "orpheus_password": "", 
+    "orpheus_password": "",
     "orpheus_api_token": "",
     "rate_limit": 2.1,
     "force_update": false,
-    "limit": 0 
+    "limit": 0
   },
   "similares/musicmap": {
     "headless": false,
@@ -387,23 +368,20 @@
   },
   "descargas/rutracker": {
     "force_update": false,
-    "update_mode": false,          
-    "force_initial_mode": true,     
-    "use_jackett": true,           
-    "rutracker_username": "",      
-    "rutracker_password": "",       
-    "jackett_url": "",   
-    "jackett_api_key": "",               
-    "jackett_indexer": "",      
+    "update_mode": false,
+    "force_initial_mode": true,
+    "use_jackett": true,
+    "rutracker_username": "",
+    "rutracker_password": "",
+    "jackett_url": "",
+    "jackett_api_key": "",
+    "jackett_indexer": "",
     "rate_limit": 3.0,
     "max_retries": 3,
     "retry_delay": 5,
-    "limit": 0,      
+    "limit": 0,
     "availability_check_limit": 100,
-    "max_unavailable_days": 30,     
+    "max_unavailable_days": 30,
     "max_unavailable_times": 5
-    
-
   }
- 
 }
