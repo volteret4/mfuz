@@ -3,7 +3,7 @@ import sys
 import argparse
 import json
 import importlib.util
-from base_module import BaseModule, PROJECT_ROOT
+from project_utils import PROJECT_ROOT
 from pathlib import Path
 
 def load_script_module(script_path):
@@ -38,7 +38,19 @@ def resolve_paths(config):
     """Wrapper para la función recursiva"""
     return resolve_paths_recursive(config, PROJECT_ROOT)
 
-def main():
+deffrom pathlib import Path
+
+def find_project_root(marker_files=('requirements.txt', 'base_module.py', 'music_padre.py', 'designer_module.py')):
+    """Busca la raíz del proyecto basándose en archivos distintivos."""
+    path = Path(__file__).resolve().parent  # Directorio donde está el módulo actual
+    while path != path.parent:
+        if any((path / marker).exists() for marker in marker_files):
+            return path
+        path = path.parent
+    return Path(__file__).resolve().parent.parent  # Fallback: asumir que estamos en un subdirectorio
+
+# Definir la raíz del proyecto
+PROJECT_ROOT = find_project_root() main():
     parser = argparse.ArgumentParser(description='Ejecuta la cadena de scripts')
     parser.add_argument('--config', required=True, help='Archivo de configuración JSON')
     parser.add_argument('--scripts', nargs='+', help='Scripts específicos a ejecutar')
@@ -79,7 +91,7 @@ def main():
                         pass  # Mantener como string
                 cli_params[key] = value
 
-   
+
     # Ejecutar cada script
     for script_name in scripts_to_run:
         script_path = Path(PROJECT_ROOT, "db", f"{script_name}.py")
@@ -93,14 +105,14 @@ def main():
         script_config = {}
         script_config.update(config.get("common", {}))
         script_config.update(config.get(script_name, {}))
-        
+
         # Añadir parámetros de línea de comandos (tienen prioridad)
         script_config.update(cli_params)
-        
+
         # Filtrar los parámetros vacíos y false, EXCEPTO parámetros específicos
         # que necesitan preservar el valor False
         preserve_false_params = ['headless', 'force_update', 'interactive']
-        
+
         filtered_config = {}
         for key, value in script_config.items():
             # Preservar parámetros específicos incluso si son False
